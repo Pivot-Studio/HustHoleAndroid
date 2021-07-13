@@ -80,4 +80,13 @@
     <string name="publishmessage_1">发树洞</string>
     <string name="publishmessage_2">发布</string>
     <string name="publishmessage_3">来，说点什么吧</string>
+
+    <string name="forum_1">洞主</string>
+    <string name="forum_2">全部评论</string>
+    
+
+    <string name="page2fragment_1">加入的小树林</string>
+    <string name="page2fragment_2">发现更多</string>
+    <string name="page2fragment_3"></string>
+    <string name="page2fragment_4"></string>
 </resources>

@@ -31,7 +31,12 @@ android {
 }
 
 dependencies {
+    // define a BOM and its version
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.1"))
 
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
 
 
     implementation  'com.scwang.smart:refresh-layout-kernel:2.0.3'      //核心必须依赖
