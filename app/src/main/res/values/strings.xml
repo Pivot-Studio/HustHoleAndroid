@@ -89,4 +89,10 @@
     <string name="page2fragment_2">发现更多</string>
     <string name="page2fragment_3"></string>
     <string name="page2fragment_4"></string>
+
+    <string name="page2_allforests_1">发现小树林</string>
+    <string name="page2_allforests_2">欢迎来到小树林！</string>
+    <string name="page2_allforests_3">小树林是聚集相同类型树洞的兴趣圈子。加入喜欢的小树林来倾诉你的思绪吧！</string>
+
+    <string name="page2_detailforest_1">最新</string>
 </resources>

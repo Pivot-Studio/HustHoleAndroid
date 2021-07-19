@@ -68,7 +68,7 @@ public class Page1Fragment extends Fragment {
 
         RefreshLayout refreshLayout = (RefreshLayout)rootView.findViewById(R.id.refreshLayout);
         refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
-        //refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override

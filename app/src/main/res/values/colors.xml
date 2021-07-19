@@ -11,6 +11,7 @@
     <color name="GrayScale_0">#000000</color>
     <color name="GrayScale_20">#343434</color>
     <color name="GrayScale_50">#7E7E7E</color>
+    <color name="GrayScale_70">#B1B1B1</color>
     <color name="GrayScale_80">#CBCBCB</color>
     <color name="GrayScale_95">#F3F3F3</color>
     <color name="GrayScale_100">#FFFFFF</color>
