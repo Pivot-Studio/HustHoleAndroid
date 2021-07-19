@@ -3,7 +3,7 @@
     package="com.example.hustholetest1">
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:networkSecurityConfig="@xml/network_security"
         android:allowBackup="true"
