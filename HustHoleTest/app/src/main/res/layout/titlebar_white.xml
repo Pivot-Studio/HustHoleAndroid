@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:orientation="horizontal"
+    android:background="@color/GrayScale_100">
+
+
+    <ImageView
+        android:id="@+id/backView"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_centerInParent="true"
+        android:onClick="onClick"
+        android:background="@drawable/back"
+        android:scaleType="center"
+        app:srcCompat="@drawable/back_black" />
+
+</LinearLayout>
