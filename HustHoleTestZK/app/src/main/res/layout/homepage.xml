@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout2"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/HH_BandColor_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/text0"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="@string/homepage_1"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0478"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.example.hustholetest1.Model.BaseViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        tools:layout_editor_absoluteX="170dp"/>
+
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:srcCompat="@drawable/bottombar" />
+
+    <!--<RadioGroup
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RadioButton
+            android:id="@+id/imageView6"
+            style="@style/Custom.TabRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+
+            android:layout_weight="1.0"
+            android:drawableTop="@drawable/bottombar_button1" />
+
+        <RadioButton
+            android:id="@+id/imageView4"
+            style="@style/Custom.TabRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_weight="1.4"
+            android:drawableTop="@drawable/bottombar_button2" />
+
+        <RadioButton
+            android:id="@+id/imageView5"
+            style="@style/Custom.TabRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+
+            android:layout_weight="1.4"
+            android:drawableTop="@drawable/bottombar_button3" />
+
+        <RadioButton
+            android:id="@+id/imageView7"
+            style="@style/Custom.TabRadioButton"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_weight="1.0"
+            android:drawableTop="@drawable/bottombar_button4" />
+    </RadioGroup>-->
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="58dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/imageView66"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_weight="1.0"
+            android:onClick="onClick">
+            <ImageView
+                android:id="@+id/imageView6"
+                style="@style/Custom.TabRadioButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginTop="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/bottombar_button1" />
+
+            <TextView
+                android:id="@+id/textView22"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="首页"
+                android:textSize="11sp"
+                android:textColor="@color/GrayScale_0"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView6" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/imageView44"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_weight="1.0"
+            android:onClick="onClick">
+        <ImageView
+            android:id="@+id/imageView4"
+            style="@style/Custom.TabRadioButton"
+            app:srcCompat="@drawable/bottombar_button2"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            />
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="小树林"
+                android:textSize="11sp"
+                android:textColor="@color/GrayScale_50"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_weight="1.0"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/imageView55"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_weight="1.0"
+            android:onClick="onClick">
+        <ImageView
+            android:id="@+id/imageView5"
+            style="@style/Custom.TabRadioButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bottombar_button3" />
+
+            <TextView
+                android:id="@+id/textView24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="通知"
+                android:textSize="11sp"
+                android:textColor="@color/GrayScale_50"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/imageView77"
+            android:layout_width="0dp"
+            android:layout_height="58dp"
+            android:layout_weight="1.0"
+            android:onClick="onClick">
+        <ImageView
+            android:id="@+id/imageView7"
+            style="@style/Custom.TabRadioButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bottombar_button4" />
+
+            <TextView
+                android:id="@+id/textView25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="我的"
+                android:textSize="11sp"
+                android:textColor="@color/GrayScale_50"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView7" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+    <!--<ImageView
+        android:id="@+id/imageView0"
+        style="@style/Custom.TabRadioButton"
+        android:layout_width="85dp"
+        android:layout_height="85dp"
+        android:layout_marginBottom="17dp"
+        android:onClick="onClick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/add" />-->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/imageView0"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="33dp"
+        android:backgroundTint="@color/HH_BandColor_1"
+        android:onClick="onClick"
+        android:src="@drawable/add"
+        app:borderWidth="0.0dip"
+        app:fabSize="auto"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
