@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="Gradle: com.githang:status-bar-compat:0.7@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/bd59aa10f3687d54d6979d74c957e87f/jetified-status-bar-compat-0.7/res" />
+      <root url="file://$USER_HOME$/.gradle/wrapper/dists/caches/transforms-2/files-2.1/d51724979a422c3c300c14b99e229594/jetified-status-bar-compat-0.7/res" />
+      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/caches/transforms-2/files-2.1/40d72639435918d0bc1184d2c3bb8d68/jetified-status-bar-compat-0.7/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/wrapper/dists/caches/transforms-2/files-2.1/40d72639435918d0bc1184d2c3bb8d68/jetified-status-bar-compat-0.7/res" />
+      <root url="file://$USER_HOME$/.gradle/wrapper/dists/caches/transforms-2/files-2.1/40d72639435918d0bc1184d2c3bb8d68/jetified-status-bar-compat-0.7/AndroidManifest.xml" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/caches/modules-2/files-2.1/com.githang/status-bar-compat/0.7/f63a8e4496dfc32b49f34e25c13b3b001a6c9bc9/status-bar-compat-0.7-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/caches/modules-2/files-2.1/com.githang/status-bar-compat/0.7/cdd1df9a800bc3fc83cb109a4390326dc626dae9/status-bar-compat-0.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,102 @@
+[
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\page4fragment.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\page4fragment.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\notification_item.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\notification_item.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\page3fragment.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\page3fragment.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\screen.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\screen.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\text.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\text.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\login_password.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\login_password.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\login_id.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\login_id.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\page1fragment.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\page1fragment.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\publishhole.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\publishhole.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\page2fragment.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\page2fragment.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\refresh_header.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\refresh_header.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\system_notification_item.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\system_notification_item.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\notification_item_header.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\notification_item_header.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\titlebar_white.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\titlebar_white.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\system_notification.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\system_notification.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\homepage.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\homepage.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\titlebar_green.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\titlebar_green.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\register_welcome.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\register_welcome.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\register.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\register.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\page1fragment_popupwindow1.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\page1fragment_popupwindow1.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\retrievepassword_vcode.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\retrievepassword_vcode.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\notification_item_footer.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\notification_item_footer.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\retrievepassword_modify.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\retrievepassword_modify.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\retrievepassword_forget.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\retrievepassword_forget.xml"
+    },
+    {
+        "merged": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\build\\intermediates\\incremental\\mergeDebugResources\\stripped.dir\\layout\\homepage_notice.xml",
+        "source": "D:\\Git repository\\HustHoleTest\\HustHoleTest\\app\\src\\main\\res\\layout\\homepage_notice.xml"
+    }
+]

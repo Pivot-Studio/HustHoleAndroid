@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="tag" />
+    <option name="TOOL_WINDOW_LOG_LEVEL" value="verbose" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
+  </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="NONE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3b477843-1110-409e-a850-0537aff7c8eb" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[VirtualDevicePath@D:\Androidsdk\.android\avd\Pixel_XL_API_30.avd]" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="HustHoleTest1" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="HustHoleTest1" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin Class" />
+        <option value="Class" />
+        <option value="layoutResourceFile" />
+        <option value="Interface" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="ProjectId" id="1vCq7okt31hdqi6W7pDJIwvwwuT" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="android-custom-viewD:/AAAAA_learnAndroidDevelop/HustHoleTest-master/app/src/main/java/com/example/hustholetest1/Model/BaseViewPager.java_SELECTED" value="BaseViewPager" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="multi-representation-previewD:/AAAAA_learnAndroidDevelop/HustHoleTest-master/app/src/main/java/com/example/hustholetest1/Model/BaseViewPager.java_selected" value="Custom views" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.project.gradle" />
+  </component>
+  <component name="RecentsManager">
+    <key name="android.template.280167335">
+      <recent name="com.example.hustholetest1.View.HomePage.fragment" />
+    </key>
+    <key name="android.template.1105160589">
+      <recent name="com.example.hustholetest1.View.HomePage.fragment" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="HustHoleTest1.app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="ALL_USERS" value="false" />
+      <option name="ALWAYS_INSTALL_WITH_PM" value="false" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
+      <option name="DEBUGGER_TYPE" value="Java" />
+      <Java />
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sample Java Methods" />
+        <option name="STARTUP_NATIVE_MEMORY_PROFILING_ENABLED" value="false" />
+        <option name="NATIVE_MEMORY_SAMPLE_RATE_BYTES" value="2048" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
+      <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3b477843-1110-409e-a850-0537aff7c8eb" name="Default Changelist" comment="" />
+      <created>1626076253547</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1626076253547</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="158" y="127" key="#PSD" timestamp="1626513433291">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="158" y="127" key="#PSD/0.0.1280.760@0.0.1280.760" timestamp="1626513433291" />
+    <state x="234" y="21" key="#Plugins" timestamp="1626082386827">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="234" y="21" key="#Plugins/0.0.1280.760@0.0.1280.760" timestamp="1626082386827" />
+    <state x="447" y="86" key="#com.intellij.ide.util.MemberChooser" timestamp="1627200995753">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="447" y="86" key="#com.intellij.ide.util.MemberChooser/0.0.1280.760@0.0.1280.760" timestamp="1627200995753" />
+    <state x="321" y="116" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1626076404676">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="321" y="116" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1280.760@0.0.1280.760" timestamp="1626076404676" />
+    <state x="418" y="248" width="444" height="272" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1626077052853">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="418" y="248" width="444" height="272" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1280.760@0.0.1280.760" timestamp="1626077052853" />
+    <state x="268" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1626404260514">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="268" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1280.760@0.0.1280.760" timestamp="1626404260514" />
+    <state x="372" y="130" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1626600615136">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="372" y="130" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1280.760@0.0.1280.760" timestamp="1626600615136" />
+    <state x="287" y="82" width="971" height="379" key="AVDManager" timestamp="1626493505389">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="287" y="82" width="971" height="379" key="AVDManager/0.0.1280.760@0.0.1280.760" timestamp="1626493505389" />
+    <state x="221" y="136" key="AndroidCreateResourceDirectoryDialog" timestamp="1626081368432">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="221" y="136" key="AndroidCreateResourceDirectoryDialog/0.0.1280.760@0.0.1280.760" timestamp="1626081368432" />
+    <state x="148" y="171" key="AndroidCreateResourceFileDialog" timestamp="1626078278704">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="148" y="171" key="AndroidCreateResourceFileDialog/0.0.1280.760@0.0.1280.760" timestamp="1626078278704" />
+    <state x="421" y="136" key="FileChooserDialogImpl" timestamp="1627214040603">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="421" y="136" key="FileChooserDialogImpl/0.0.1280.760@0.0.1280.760" timestamp="1627214040603" />
+    <state x="63" y="27" key="SettingsEditor" timestamp="1626757126135">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="63" y="27" key="SettingsEditor/0.0.1280.760@0.0.1280.760" timestamp="1626757126135" />
+    <state x="208" y="80" width="1027" height="510" maximized="true" key="dock-window-1" timestamp="1627174502593">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="208" y="80" width="1027" height="510" maximized="true" key="dock-window-1/0.0.1280.760@0.0.1280.760" timestamp="1627174502593" />
+    <state x="304" y="82" width="672" height="678" key="search.everywhere.popup" timestamp="1627178276843">
+      <screen x="0" y="0" width="1280" height="760" />
+    </state>
+    <state x="304" y="82" width="672" height="678" key="search.everywhere.popup/0.0.1280.760@0.0.1280.760" timestamp="1627178276843" />
+  </component>
+</project>

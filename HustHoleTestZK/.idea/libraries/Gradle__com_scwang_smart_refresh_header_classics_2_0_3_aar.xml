@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="Gradle: com.scwang.smart:refresh-header-classics:2.0.3@aar">
+    <CLASSES>
+      <root url="file://$USER_HOME$/.gradle/wrapper/dists/caches/transforms-2/files-2.1/fe484dedfc125f1cd4a5ed87e30013c9/jetified-refresh-header-classics-2.0.3/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/wrapper/dists/caches/transforms-2/files-2.1/fe484dedfc125f1cd4a5ed87e30013c9/jetified-refresh-header-classics-2.0.3/res" />
+      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/caches/transforms-2/files-2.1/fe484dedfc125f1cd4a5ed87e30013c9/jetified-refresh-header-classics-2.0.3/jars/classes.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/caches/modules-2/files-2.1/com.scwang.smart/refresh-header-classics/2.0.3/e0eaaf557a2caf49f34eff3a82e8df8b3fd96b8b/refresh-header-classics-2.0.3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/wrapper/dists/caches/modules-2/files-2.1/com.scwang.smart/refresh-header-classics/2.0.3/d4c5b89e05961a0de1edede048a14ebd4fdcabbe/refresh-header-classics-2.0.3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

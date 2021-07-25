@@ -1,0 +1,126 @@
+com/example/hustholetest1/databinding/RetrievepasswordForgetBinding.java
+ com.example.hustholetest1.databinding.RetrievepasswordForgetBinding
+com/example/hustholetest1/databinding/NotificationItemHeaderBinding.java
+ com.example.hustholetest1.databinding.NotificationItemHeaderBinding
+com/example/hustholetest1/databinding/Page1fragmentPopupwindow1Binding.java
+ com.example.hustholetest1.databinding.Page1fragmentPopupwindow1Binding
+com/example/hustholetest1/databinding/Page4fragmentBinding.java
+ com.example.hustholetest1.databinding.Page4fragmentBinding
+com/example/hustholetest1/databinding/LoginIdBinding.java
+ com.example.hustholetest1.databinding.LoginIdBinding
+com/example/hustholetest1/databinding/HomepageBinding.java
+ com.example.hustholetest1.databinding.HomepageBinding
+com/example/hustholetest1/View/HomePage/fragment/Page1Fragment.java
+ com.example.hustholetest1.View.HomePage.fragment.Page1Fragment
+ com.example.hustholetest1.View.HomePage.fragment.Page1Fragment$1
+ com.example.hustholetest1.View.HomePage.fragment.Page1Fragment$2
+ com.example.hustholetest1.View.HomePage.fragment.Page1Fragment$3
+ com.example.hustholetest1.View.HomePage.fragment.Page1Fragment$4
+ com.example.hustholetest1.View.HomePage.fragment.Page1Fragment$5
+ com.example.hustholetest1.View.HomePage.fragment.Page1Fragment$6
+ com.example.hustholetest1.View.HomePage.fragment.Page1Fragment$7
+ com.example.hustholetest1.View.HomePage.fragment.Page1Fragment$8
+ com.example.hustholetest1.View.HomePage.fragment.Page1Fragment$9
+com/example/hustholetest1/View/HomePage/Activity/PublishHoleActivity.java
+ com.example.hustholetest1.View.HomePage.Activity.PublishHoleActivity
+com/example/hustholetest1/Model/StandardRefreshHeader.java
+ com.example.hustholetest1.Model.StandardRefreshHeader
+ com.example.hustholetest1.Model.StandardRefreshHeader$1
+com/example/hustholetest1/BuildConfig.java
+ com.example.hustholetest1.BuildConfig
+com/example/hustholetest1/databinding/ScreenBinding.java
+ com.example.hustholetest1.databinding.ScreenBinding
+com/example/hustholetest1/View/HomePage/fragment/SystemNotification.java
+ com.example.hustholetest1.View.HomePage.fragment.SystemNotification
+com/example/hustholetest1/databinding/Page3fragmentBinding.java
+ com.example.hustholetest1.databinding.Page3fragmentBinding
+com/example/hustholetest1/databinding/SystemNotificationBinding.java
+ com.example.hustholetest1.databinding.SystemNotificationBinding
+com/example/hustholetest1/View/RetrievePassword/Activity/ForgetPasswordActivity.java
+ com.example.hustholetest1.View.RetrievePassword.Activity.ForgetPasswordActivity
+com/example/hustholetest1/Model/BaseViewPager.java
+ com.example.hustholetest1.Model.BaseViewPager
+com/example/hustholetest1/View/RegisterAndLogin/Activity/Login2Activity.java
+ com.example.hustholetest1.View.RegisterAndLogin.Activity.Login2Activity
+com/example/hustholetest1/databinding/RegisterWelcomeBinding.java
+ com.example.hustholetest1.databinding.RegisterWelcomeBinding
+com/example/hustholetest1/View/HomePage/fragment/ParseNotificationData.java
+ com.example.hustholetest1.View.HomePage.fragment.ParseNotificationData
+com/example/hustholetest1/databinding/PublishholeBinding.java
+ com.example.hustholetest1.databinding.PublishholeBinding
+com/example/hustholetest1/databinding/SystemNotificationItemBinding.java
+ com.example.hustholetest1.databinding.SystemNotificationItemBinding
+com/example/hustholetest1/databinding/NotificationItemBinding.java
+ com.example.hustholetest1.databinding.NotificationItemBinding
+com/example/hustholetest1/databinding/Page2fragmentBinding.java
+ com.example.hustholetest1.databinding.Page2fragmentBinding
+com/example/hustholetest1/databinding/TextBinding.java
+ com.example.hustholetest1.databinding.TextBinding
+com/example/hustholetest1/View/Service/ArcView.java
+ com.example.hustholetest1.View.Service.ArcView
+com/example/hustholetest1/View/RegisterAndLogin/Activity/WelcomeActivity.java
+ com.example.hustholetest1.View.RegisterAndLogin.Activity.WelcomeActivity
+com/example/hustholetest1/View/RegisterAndLogin/Activity/RegisterActivity.java
+ com.example.hustholetest1.View.RegisterAndLogin.Activity.RegisterActivity
+com/example/hustholetest1/View/HomePage/fragment/getScreenData.java
+ com.example.hustholetest1.View.HomePage.fragment.getScreenData
+com/example/hustholetest1/View/HomePage/NotificationBean.java
+ com.example.hustholetest1.View.HomePage.NotificationBean
+com/example/hustholetest1/View/HomePage/fragment/Page4Fragment.java
+ com.example.hustholetest1.View.HomePage.fragment.Page4Fragment
+com/example/hustholetest1/View/HomePage/fragment/Page2Fragment.java
+ com.example.hustholetest1.View.HomePage.fragment.Page2Fragment
+ com.example.hustholetest1.View.HomePage.fragment.Page2Fragment$1
+ com.example.hustholetest1.View.HomePage.fragment.Page2Fragment$2
+com/example/hustholetest1/databinding/Page1fragmentBinding.java
+ com.example.hustholetest1.databinding.Page1fragmentBinding
+com/example/hustholetest1/View/HomePage/fragment/NotificationAdapter.java
+ com.example.hustholetest1.View.HomePage.fragment.NotificationAdapter
+ com.example.hustholetest1.View.HomePage.fragment.NotificationAdapter$1
+ com.example.hustholetest1.View.HomePage.fragment.NotificationAdapter$BottomViewHolder
+ com.example.hustholetest1.View.HomePage.fragment.NotificationAdapter$ContentViewHolder
+ com.example.hustholetest1.View.HomePage.fragment.NotificationAdapter$HeaderViewHolder
+ com.example.hustholetest1.View.HomePage.fragment.NotificationAdapter$OnItemClickListener
+com/example/hustholetest1/databinding/HomepageNoticeBinding.java
+ com.example.hustholetest1.databinding.HomepageNoticeBinding
+com/example/hustholetest1/databinding/LoginPasswordBinding.java
+ com.example.hustholetest1.databinding.LoginPasswordBinding
+com/example/hustholetest1/databinding/RefreshHeaderBinding.java
+ com.example.hustholetest1.databinding.RefreshHeaderBinding
+com/example/hustholetest1/databinding/TitlebarWhiteBinding.java
+ com.example.hustholetest1.databinding.TitlebarWhiteBinding
+com/example/hustholetest1/View/RetrievePassword/Activity/VerificationCodeActivity.java
+ com.example.hustholetest1.View.RetrievePassword.Activity.VerificationCodeActivity
+ com.example.hustholetest1.View.RetrievePassword.Activity.VerificationCodeActivity$1
+com/example/hustholetest1/databinding/TitlebarGreenBinding.java
+ com.example.hustholetest1.databinding.TitlebarGreenBinding
+com/example/hustholetest1/View/HomePage/fragment/MyNotificationOkhttp.java
+ com.example.hustholetest1.View.HomePage.fragment.MyNotificationOkhttp
+com/example/hustholetest1/databinding/NotificationItemFooterBinding.java
+ com.example.hustholetest1.databinding.NotificationItemFooterBinding
+com/example/hustholetest1/databinding/RetrievepasswordVcodeBinding.java
+ com.example.hustholetest1.databinding.RetrievepasswordVcodeBinding
+com/example/hustholetest1/View/RegisterAndLogin/Activity/LoginActivity.java
+ com.example.hustholetest1.View.RegisterAndLogin.Activity.LoginActivity
+com/example/hustholetest1/View/RetrievePassword/Activity/ModifyPasswordActivity.java
+ com.example.hustholetest1.View.RetrievePassword.Activity.ModifyPasswordActivity
+com/example/hustholetest1/DataBindingTriggerClass.java
+ com.example.hustholetest1.DataBindingTriggerClass
+com/example/hustholetest1/databinding/RetrievepasswordModifyBinding.java
+ com.example.hustholetest1.databinding.RetrievepasswordModifyBinding
+com/example/hustholetest1/databinding/RegisterBinding.java
+ com.example.hustholetest1.databinding.RegisterBinding
+com/example/hustholetest1/Model/EditTextReaction.java
+ com.example.hustholetest1.Model.EditTextReaction
+ com.example.hustholetest1.Model.EditTextReaction$1
+com/example/hustholetest1/View/HomePage/fragment/Page3Fragment.java
+ com.example.hustholetest1.View.HomePage.fragment.Page3Fragment
+ com.example.hustholetest1.View.HomePage.fragment.Page3Fragment$1
+ com.example.hustholetest1.View.HomePage.fragment.Page3Fragment$2
+ com.example.hustholetest1.View.HomePage.fragment.Page3Fragment$2$1
+ com.example.hustholetest1.View.HomePage.fragment.Page3Fragment$3
+com/example/hustholetest1/View/HomePage/Activity/HomePageActivity.java
+ com.example.hustholetest1.View.HomePage.Activity.HomePageActivity
+ com.example.hustholetest1.View.HomePage.Activity.HomePageActivity$1
+ com.example.hustholetest1.View.HomePage.Activity.HomePageActivity$2
+ com.example.hustholetest1.View.HomePage.Activity.HomePageActivity$MyFragmentPagerAdapter
