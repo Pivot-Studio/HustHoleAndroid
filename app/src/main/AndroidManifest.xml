@@ -5,6 +5,7 @@
     <permission android:name="android.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="android.permission.INTERNET"/>
     <application
+
         android:networkSecurityConfig="@xml/network_security"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -19,7 +20,10 @@
         <activity android:name=".View.RegisterAndLogin.Activity.RegisterActivity"
                   android:launchMode="singleTask"
                   android:screenOrientation="portrait">
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity android:name=".View.RegisterAndLogin.Activity.LoginActivity"
                   android:launchMode="singleTask"
@@ -43,15 +47,32 @@
         </activity>
         <activity android:name=".View.HomePage.Activity.HomePageActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden">
         </activity>
         <activity android:name=".View.HomePage.Activity.Page2_AllForestsActivity"
+                  android:launchMode="singleTask"
                   android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
+        </activity>
+        <activity android:name=".View.HomePage.Activity.Page2_DetailAllForestsActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".View.HomePage.Activity.Page2_ApplyForestActivity"
+        android:launchMode="singleTask"
+        android:screenOrientation="portrait">
+
+    </activity>
+        <activity android:name=".View.HomePage.Activity.CommentActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+           >
+        </activity>
+        <activity android:name=".View.HomePage.Activity.PublishHoleActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            >
         </activity>
     </application>
 

@@ -114,43 +114,6 @@ public class Login2Activity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            /*try {
-                                Response response;
-                                OkHttpClient client = new OkHttpClient();//
-
-                                FormBody body = new FormBody.Builder()
-                                        .add("email", email)
-                                        .add("password", password)
-                                        .build();
-                                Request request = new Request.Builder()
-                                        .url("http://hustholetest.pivotstudio.cn/api/auth/register")
-                                        .post(body)
-                                        .build();
-
-                                response = client.newCall(request).execute();
-
-                                //Response response=client.newCall(request).execute();
-                                String json = response.body().string();
-                                JSONObject jsonObject = new JSONObject(json);
-                                //读取
-                                String condition = jsonObject.getString("msg");
-                                //String token = jsonObject.getString("token");
-                                System.out.println("状态:" + condition);
-                                showResponse(condition);
-                                // Log.d("TAG", sssss);
-                                if (condition.equals("注册成功")) {//判断账号密码是否正确
-                                    //登录成功进入主界面
-                                    Intent intent = new Intent(Login2Activity.this, RegisterActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                } else {
-                                    //登录失败给与账户或密码错误提示
-                                }
-                            } catch (Exception E) {
-                                E.printStackTrace();
-                                Log.d("TAG", "jjjjjj4");
-                            }*/
-
-
                             HashMap map = new HashMap();
                             map.put("email", email);
                             map.put("password", password);

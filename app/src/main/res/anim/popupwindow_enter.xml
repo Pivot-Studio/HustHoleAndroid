@@ -7,6 +7,7 @@
     android:toXScale="1"
     android:toYScale="1"
     android:duration="100"/>
+
 <!--
 <alpha xmlns:android="http://schemas.android.com/apk/res/android"
     android:fillAfter="false"

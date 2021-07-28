@@ -95,4 +95,38 @@
     <string name="page2_allforests_3">小树林是聚集相同类型树洞的兴趣圈子。加入喜欢的小树林来倾诉你的思绪吧！</string>
 
     <string name="page2_detailforest_1">最新</string>
+
+    <string name="forest_quit_notice_1">退出小树林</string>
+    <string name="forest_quit_notice_2">你确认要退出小树林？</string>
+    <string name="forest_quit_notice_3">取消</string>
+    <string name="forest_quit_notice_4">确认</string>
+
+    <string name="page2_applyforest_1">申请小树林</string>
+    <string name="page2_applyforest_2">没有找到想要加入的小树林？来向1037树洞运营组提交你的灵感吧！在你提交申请之后的七天内，我们会评估小树林是否可以被创建，并将结果通过系统通知告诉你。通过阅读小树林公约可以提高你申请的通过率噢~</string>
+    <string name="page2_applyforest_3">小树林名称</string>
+    <string name="page2_applyforest_4">输入小树林名称</string>
+    <string name="page2_applyforest_5">*字数超过限制，请控制在10个字以内</string>
+    <string name="page2_applyforest_6">小树林简介</string>
+    <string name="page2_applyforest_7">输入小树林简介</string>
+    <string name="page2_applyforest_8">说明：小树林简介用于阐释小树林的定位，引导树洞内容创作方向。请用简练的语言进行描述，不超过40字。</string>
+    <string name="page2_applyforest_9">*字数超过限制，请控制在40个字以内</string>
+    <string name="page2_applyforest_10">小树林图标</string>
+    <string name="page2_applyforest_11">小树林封面</string>
+    <string name="page2_applyforest_12">添加封面图片</string>
+    <string name="page2_applyforest_13">提交</string>
+
+
+    <string name="commment_1">洞主</string>
+    <string name="commment_2">全部评论</string>
+
+    <string name="publishhole_1">发树洞</string>
+    <string name="publishhole_2">未选择小树林</string>
+    <string name="publishhole_3">发布</string>
+    <string name="publishhole_4">让树洞倾听你的声音...</string>
+
+    <string name="publishhole_popupwindow_1">选择小树林</string>
+    <string name="publishhole_popupwindow_2">不选择任何小树林</string>
+    <string name="publishhole_popupwindow_3">选择</string>
+    <string name="publishhole_popupwindow_4">加入的小树林</string>
+    <string name="publishhole_popupwindow_5">热门小树林</string>
 </resources>

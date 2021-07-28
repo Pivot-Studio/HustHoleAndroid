@@ -18,13 +18,13 @@
 
     <TextView
         android:id="@+id/textView28"
-        android:layout_width="wrap_content"
-        android:layout_height="17dp"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:maxLength="6"
-        android:text="树洞树洞树洞树洞"
+        android:text="树洞"
         android:textColor="@color/GrayScale_50"
         android:textSize="11sp"
+        android:gravity="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/circleImageView" />

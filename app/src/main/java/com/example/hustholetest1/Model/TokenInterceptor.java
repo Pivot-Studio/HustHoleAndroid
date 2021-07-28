@@ -23,7 +23,6 @@ public class TokenInterceptor implements Interceptor {
     public okhttp3.Response intercept(Chain chain) throws IOException {
 
         //从SharePreferences中获取token
-        //SharedPreferences sharedPreferences =().getSharedPreferences("myConfig", Context.MODE_PRIVATE);
         SharedPreferences editor = context.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
         token = editor.getString("token", "");
         System.out.println("Bearer "+token);
@@ -32,8 +31,6 @@ public class TokenInterceptor implements Interceptor {
                 .addHeader("Authorization", "Bearer "+token)
                 .build();
         okhttp3.Response response = chain.proceed(request);
-
-        //Log.e("返回数据：",response.body().string());
         return response;
     }
 

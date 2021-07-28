@@ -26,6 +26,10 @@
         <item name="android:windowEnterAnimation">@anim/popupwindow_enter</item>
         <item name="android:windowExitAnimation">@anim/popupwindow_exit</item>
     </style>
+    <style name="Page2Anim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/context_menu_enter</item>
+        <item name="android:windowExitAnimation">@anim/context_menu_exit</item>
+    </style>
     <style name="popupwindow_button_click">
         <item name="android:background">@drawable/standard_button</item>
         <item name="android:textColor">@color/GrayScale_100</item>

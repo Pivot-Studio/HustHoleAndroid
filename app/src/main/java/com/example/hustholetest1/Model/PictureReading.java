@@ -17,9 +17,6 @@ import java.net.URL;
 public class PictureReading {//弃用
     public static Bitmap getBitmap(String path) throws IOException {
         Bitmap bitmap=null;
-        //new Thread(){
-           // @Override
-           // public void run(){
                 try {
                   URL url = new URL(path);
                   HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -32,13 +29,7 @@ public class PictureReading {//弃用
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            //}
-       // }.start();
-
         return bitmap;
-
-       // }
-        //return null;
     }
 
 }
