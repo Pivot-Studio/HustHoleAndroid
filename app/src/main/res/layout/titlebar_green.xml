@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="52dp"
+    android:orientation="horizontal"
+    android:background="@color/HH_BandColor_1">
+
+
+    <ImageView
+        android:id="@+id/backView"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_centerInParent="true"
+        android:onClick="onClick"
+        android:background="@drawable/back_green"
+        android:scaleType="center"
+        app:srcCompat="@drawable/back_black" />
+<TextView
+    android:id="@+id/mTextview"
+    android:layout_width="wrap_content"
+    android:layout_height="52dp"
+    android:gravity="center"
+    android:textSize="18sp"
+    android:textColor="@color/GrayScale_100"
+    android:text="@string/publishmessage_1"/>
+</LinearLayout>
