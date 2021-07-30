@@ -1,5 +1,6 @@
 package com.example.hustholetest1.View.HomePage.fragment;
 
+<<<<<<< HEAD
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -55,6 +56,23 @@ public class Page3Fragment extends Fragment {
     private Boolean hasInit = false;
 
     public String url = "http://hustholetest.pivotstudio.cn/api/notices/";
+=======
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+
+import com.example.hustholetest1.Model.StandardRefreshHeader;
+import com.example.hustholetest1.R;
+import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+
+public class Page3Fragment extends Fragment {
+>>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
     public static Page3Fragment newInstance() {
         Page3Fragment fragment = new Page3Fragment();
         return fragment;
@@ -62,6 +80,7 @@ public class Page3Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.page3fragment, container, false);
+<<<<<<< HEAD
         RefreshLayout refreshLayout = rootView.findViewById(R.id.refreshLayout);
         refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
        //refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
@@ -343,3 +362,26 @@ public class Page3Fragment extends Fragment {
 }
 
 
+=======
+        RefreshLayout refreshLayout = (RefreshLayout)rootView.findViewById(R.id.refreshLayout);
+        refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
+       // refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
+
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                refreshlayout.finishRefresh(4000/*,false*/);
+//传入false表示刷新失败
+            }
+        });
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshlayout) {
+                refreshlayout.finishLoadMore(4000/*,false*/);
+                //传入false表示加载失败
+            }
+        });
+        return rootView;
+    }
+}
+>>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1

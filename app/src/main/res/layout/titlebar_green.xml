@@ -18,8 +18,12 @@
         android:scaleType="center"
         app:srcCompat="@drawable/back_black" />
 <TextView
+<<<<<<< HEAD
     android:id="@+id/mTextview"
     android:layout_width="wrap_content"
+=======
+    android:layout_width="54dp"
+>>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
     android:layout_height="52dp"
     android:gravity="center"
     android:textSize="18sp"

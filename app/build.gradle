@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
 }
+<<<<<<< HEAD
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
@@ -16,6 +17,19 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+=======
+
+android {
+    compileSdkVersion "android-R"
+    buildToolsVersion "30.0.2"
+    defaultConfig {
+        applicationId "com.example.hustholetest1"
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+>>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -42,6 +56,7 @@ dependencies {
     implementation  'com.scwang.smart:refresh-header-classics:2.0.3'    //经典刷新头
     implementation 'com.githang:status-bar-compat:latest.integration'
 
+<<<<<<< HEAD
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.0-alpha-19'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
     implementation 'com.google.code.gson:gson:2.6.2'
@@ -62,4 +77,14 @@ dependencies {
 }
 repositories {
     mavenCentral()
+=======
+
+    implementation'com.android.support:appcompat-v7:26.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    testImplementation 'junit:junit:4.+'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+>>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
 }

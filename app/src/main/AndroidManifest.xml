@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.hustholetest1">
+<<<<<<< HEAD
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.INTERNET" />
+=======
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <permission android:name="android.permission.WRITE_SETTINGS"/>
+>>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
 
     <application
         android:allowBackup="true"
@@ -13,6 +18,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HustHoleTest1">
+<<<<<<< HEAD
 
         <meta-data
             android:name="design_width_in_dp"
@@ -60,6 +66,45 @@
         <activity android:name=".View.HomePage.fragment.SystemNotification"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"></activity>
+=======
+        <activity android:name=".View.RegisterAndLogin.Activity.WelcomeActivity"
+                  android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".View.RegisterAndLogin.Activity.RegisterActivity"
+                  android:launchMode="singleTask"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".View.RegisterAndLogin.Activity.LoginActivity"
+                  android:launchMode="singleTask"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".View.RegisterAndLogin.Activity.Login2Activity"
+                  android:launchMode="singleTask"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".View.RetrievePassword.Activity.ForgetPasswordActivity"
+                  android:launchMode="singleTask"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".View.RetrievePassword.Activity.VerificationCodeActivity"
+                  android:launchMode="singleTask"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".View.RetrievePassword.Activity.ModifyPasswordActivity"
+                  android:launchMode="singleTask"
+                  android:screenOrientation="portrait">
+        </activity>
+        <activity android:name=".View.HomePage.Activity.HomePageActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+
+        </activity>
+>>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
     </application>
 
 </manifest>
