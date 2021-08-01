@@ -50,8 +50,10 @@ import com.example.hustholetest1.Model.RequestInterface;
 import com.example.hustholetest1.Model.StandardRefreshHeader;
 import com.example.hustholetest1.Model.TokenInterceptor;
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.View.HomePage.fragment.Page2Fragment;
 import com.example.hustholetest1.View.RegisterAndLogin.Activity.RegisterActivity;
 import com.githang.statusbar.StatusBarCompat;
+import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
@@ -91,11 +93,12 @@ public class Page2_AllForestsActivity extends AppCompatActivity {
     private String[] title_list_2;//暂时储存所有纵向列表标题
     private String[][][] forest_list_0;//暂时储存所有文字
     private Bitmap[][][] bitmaps;//暂时储存所有图片
-    
+    private RefreshLayout refreshlayout1;
     private int tab2;//用于记录加载的横向整体数目
     private int number1[];//记录加载的各个横向列表的数目
     private boolean[] networkcondition;//记录是否加载过了，加载过了直接从forest_list_0和bitmaps中拿recyclerView翻阅达到一定长度再返回会重新加载
     private static final String key="key_1";
+    private Boolean refreshcondition=false;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page2_allforests);
@@ -103,6 +106,32 @@ public class Page2_AllForestsActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        RefreshLayout refreshLayout = (RefreshLayout)findViewById(R.id.refreshLayout);
+        refreshLayout.setRefreshHeader(new StandardRefreshHeader(Page2_AllForestsActivity.this));
+        refreshLayout.setRefreshFooter(new ClassicsFooter(Page2_AllForestsActivity.this));
+
+        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                refreshlayout1=refreshlayout;
+                refreshcondition=true;
+                Update0();
+
+//传入false表示刷新失败
+            }
+        });
+        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshlayout) {
+                refreshlayout.finishLoadMore(2000);//false
+                //传入false表示加载失败
+            }
+        });
+
+
+
+
+
         back= (ImageView) findViewById(R.id.backView);
         title=(TextView)findViewById(R.id.title);
         title.setText("发现小树林");
@@ -113,14 +142,7 @@ public class Page2_AllForestsActivity extends AppCompatActivity {
                                         startActivity(intent);
                                     }
                                 });
-        build=(Button)findViewById(R.id.build);
-        build.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Page2_AllForestsActivity.this, Page2_ApplyForestActivity.class);
-                startActivity(intent);
-            }
-        });
+
        /* RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
         refreshLayout.setRefreshHeader(new StandardRefreshHeader(Page2_AllForestsActivity.this));
         // refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
@@ -159,62 +181,66 @@ public class Page2_AllForestsActivity extends AppCompatActivity {
 
 
 
-        new Thread(new Runnable() {//加载纵向列表标题
-            @Override
-            public void run() {
-                Call<ResponseBody> call = request.getCall();//进行封装
-                Log.e(TAG, "token2：");
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        String json = "null";
-                        try {
-                            if (response.body() != null) {
-                                json = response.body().string();
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        String titlelist = null;
-                        try {
-
-                            JSONObject jsonObject = new JSONObject(json);
-                            JSONArray jsonArray =jsonObject.getJSONArray("types");
-                            title_list_2=new String[jsonArray.length()];
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                title_list_2[i] = jsonArray.getString(i);
-                                System.out.println(""+ title_list_2[i]);
-                            }
-                             number1=new int[title_list_2.length+1];
-                            Update();
-                            tab2=-1;
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable tr) {
-
-                    }
-
-
-                });
-            }
-        }).start();
 
 
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) { //表示未授权时
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
         }
-
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Update0();
+    }
+
+    public void Update0(){
+    new Thread(new Runnable() {//加载纵向列表标题
+        @Override
+        public void run() {
+            Call<ResponseBody> call = request.getCall();//进行封装
+            Log.e(TAG, "token2：");
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    String json = "null";
+                    try {
+                        if (response.body() != null) {
+                            json = response.body().string();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    String titlelist = null;
+                    try {
+
+                        JSONObject jsonObject = new JSONObject(json);
+                        JSONArray jsonArray =jsonObject.getJSONArray("types");
+                        title_list_2=new String[jsonArray.length()];
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            title_list_2[i] = jsonArray.getString(i);
+                            System.out.println(""+ title_list_2[i]);
+                        }
+                        number1=new int[title_list_2.length+1];
+                        Update();
+                        tab2=-1;
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable tr) {
+
+                }
 
 
-
+            });
+        }
+    }).start();
+}
     public void Update(){//加载标题所对应的所以小树林
             new Thread(new Runnable() {
                 @Override
@@ -268,7 +294,6 @@ public void Update2(){//加载热门小树林
     new Thread(new Runnable() {
         @Override
         public void run() {
-
             Call<ResponseBody> call2 = request.getCall2();//进行封装
             call2.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -294,14 +319,13 @@ public void Update2(){//加载热门小树林
                         for(int a=0;a<title_list_2.length;a++){
                               networkcondition[a]=false;
                         }
-
-
-
                         forest_list_0=new String[title_list_2.length+1][][];
                         bitmaps=new Bitmap[title_list_2.length+1][][];
-
                         recyclerView.setAdapter(new AllForestsAdapter());
-
+                        if(refreshcondition==true){
+                            refreshlayout1.finishRefresh();
+                            refreshcondition=false;
+                        }
 
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
@@ -386,7 +410,6 @@ public void Update2(){//加载热门小树林
 
         @Override
         protected void onPostExecute(Void unused) {
-
             //recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number,false));
             recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number,true));
 
@@ -419,9 +442,44 @@ public void Update2(){//加载热门小树林
 
 
 
-        public class AllForestsAdapter extends RecyclerView.Adapter<AllForestsAdapter.ViewHolder> {
+        public class AllForestsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+            public static final int ITEM_TYPE_HEADER = 0;
+            public static final int ITEM_TYPE_CONTENT = 1;
+            public static final int ITEM_TYPE_BOTTOM = 2;
+            private int mHeaderCount=1;//头部View个数
+            private Boolean more_condition=false;
+            private  ConstraintLayout morewhat0;
+            @Override
+            public int getItemViewType(int position) {
+                if (mHeaderCount != 0 && position < mHeaderCount) {
+//头部View
+                    return ITEM_TYPE_HEADER;
 
-            class ViewHolder extends RecyclerView.ViewHolder {
+                } else {
+//内容Vie
+                    return ITEM_TYPE_CONTENT;
+                }
+            }
+
+            public class HeadHolder extends RecyclerView.ViewHolder{
+                private Button build;
+                public HeadHolder(View view){
+                    super(view);
+                    build=(Button)view.findViewById(R.id.build);
+                    build.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(Page2_AllForestsActivity.this, Page2_ApplyForestActivity.class);
+                            startActivity(intent);
+                        }
+                    });
+
+                }
+                public void bind(int position){
+
+                }
+            }
+            public class ViewHolder extends RecyclerView.ViewHolder {
                 private TextView type;
                 private RecyclerView recyclerViewin;
                 private int position;
@@ -429,7 +487,7 @@ public void Update2(){//加载热门小树林
                     super(view);
                     type = (TextView) view.findViewById(R.id.textView45);
                     recyclerViewin = (RecyclerView) view.findViewById(R.id.recyclerView22);
-                    LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getBaseContext());
+                    LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(Page2_AllForestsActivity.this);
                     linearLayoutManager2.setOrientation(LinearLayoutManager.HORIZONTAL);
                     recyclerViewin.setLayoutManager(linearLayoutManager2);
 
@@ -444,6 +502,7 @@ public void Update2(){//加载热门小树林
 
                 public void bind(int position2) throws JSONException {
                     //if(networkcondition[position2]==false){
+                        position2=position2-1;
                         MyTaskParams II=new MyTaskParams(position2, recyclerViewin);
                         new DownloadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,II);
                         JSONArray jsonArray=Forest.getForest_list(position2);
@@ -482,26 +541,33 @@ public void Update2(){//加载热门小树林
 
             @NonNull
             @Override
-            public AllForestsAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.forestdetailiconlist_model, parent, false);
-                AllForestsAdapter.ViewHolder holder = new AllForestsAdapter.ViewHolder(view);
-                return holder;
+            public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                if (viewType ==ITEM_TYPE_HEADER) {
+                    return new AllForestsAdapter.HeadHolder(LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.page2_allforest_head,parent,false));
+                } else if (viewType == ITEM_TYPE_CONTENT) {
+                    return new AllForestsAdapter.ViewHolder(LayoutInflater.from(parent.getContext())
+                            .inflate(R.layout.forestdetailiconlist_model,parent,false));
+                }
+                return null;
             }
 
             @Override
-            public void onBindViewHolder(AllForestsAdapter.ViewHolder holder, int position) {
-                try {
-                    holder.bind(position);
-                } catch (JSONException e) {
-                    e.printStackTrace();
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                if (holder instanceof AllForestsAdapter.HeadHolder) {
+                    ((AllForestsAdapter.HeadHolder)holder).bind(position);
+                } else if (holder instanceof AllForestsAdapter.ViewHolder) {
+                    try {
+                        ((ViewHolder) holder).bind(position);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
-
             }
 
             @Override
             public int getItemCount() {
-                return (title_list_2.length+1);
+                return (title_list_2.length+2);
             }
         }
         public class AllForestsDetailAdapter extends RecyclerView.Adapter<AllForestsDetailAdapter.ViewHolder> {
@@ -539,6 +605,7 @@ public void Update2(){//加载热门小树林
                                 //mBuilder.setView(mView);
                                 Dialog dialog = new Dialog(Page2_AllForestsActivity.this);
                                 dialog.setContentView(mView);
+                                dialog.getWindow().setBackgroundDrawableResource(R.drawable.notice);
                                 TextView no = (TextView) mView.findViewById(R.id.textView47);
                                 TextView yes = (TextView) mView.findViewById(R.id.textView46);
                                 no.setOnClickListener(new View.OnClickListener() {

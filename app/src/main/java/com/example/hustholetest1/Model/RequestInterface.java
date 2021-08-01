@@ -58,5 +58,15 @@ public interface RequestInterface {//接口
 
     @GET
     Call<ResponseBody> search(@Url String url);
+    @DELETE
+    Call<ResponseBody> delete_hole(@Url String url);
+    @DELETE
+    Call<ResponseBody> delete_hole_2(@Url String url);
+    @POST
+    Call<ResponseBody> report(@Url String url);
+    @POST
+    Call<ResponseBody> report_2(@Url String url);
+
+
 }
 

@@ -9,6 +9,7 @@ import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,7 +71,7 @@ public class Page1Fragment extends Fragment {
     private ImageView imageView;
     private TextView textView;
     private boolean flag=false;
-    private PopupWindow popWindow,popupWindow2;
+    private PopupWindow popWindow,popupWindow2,popupWindow3;
     private ConstraintLayout constraintLayout;
     private RecyclerView recyclerView;
     private Retrofit retrofit;
@@ -120,6 +121,9 @@ public class Page1Fragment extends Fragment {
                     new Thread(new Runnable() {//加载纵向列表标题
                         @Override
                         public void run() {
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            // 隐藏软键盘
+                            imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
                             Call<ResponseBody> call = request.search("http://hustholetest.pivotstudio.cn//api/search/hole?keyword="+editText1.getText().toString()+"&start_id=0&list_size=10");//进行封装
                             Log.e(TAG, "token2：");
                             call.enqueue(new Callback<ResponseBody>() {
@@ -424,7 +428,7 @@ public class Page1Fragment extends Fragment {
                     detailforest[f][6] = sonObject.getInt("hole_id")+"";
                     //detailforest2[f][1] = sonObject.getString("image");
                     detailforest[f][8] = sonObject.getBoolean("is_follow")+"";
-                    //detailforest2[f][9] = sonObject.getBoolean("is_mine")+"";
+                    detailforest[f][9] = sonObject.getBoolean("is_mine")+"";
                     detailforest[f][10] = sonObject.getBoolean("is_reply")+"";
                     detailforest[f][11] = sonObject.getBoolean("is_thumbup")+"";
                     detailforest[f][12] = sonObject.getInt("reply_num")+"";
@@ -438,12 +442,14 @@ public class Page1Fragment extends Fragment {
     }
     public class HoleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         //private static List<Event> events;
+        private Boolean more_condition=false;
+        private  ConstraintLayout morewhat0;
         public class ViewHolder extends RecyclerView.ViewHolder {
-            private TextView content,created_timestamp,follow_num,reply_num,thumbup_num,hole_id;
-            private ImageView background_image_url,is_follow,is_reply,is_thumbup;
-            ConstraintLayout next;
+            private TextView content,created_timestamp,follow_num,reply_num,thumbup_num,hole_id,more_2;
+            private ImageView background_image_url,is_follow,is_reply,is_thumbup,more,more_1;
             private int position;
             private Button forest_name;
+            private ConstraintLayout morewhat,constraintLayout3;
             public ViewHolder(View view) {
                 super(view);
                 content=(TextView)view.findViewById(R.id.textView37);
@@ -456,6 +462,128 @@ public class Page1Fragment extends Fragment {
                 is_thumbup=(ImageView)view.findViewById(R.id.imageView13);
                 is_reply=(ImageView)view.findViewById(R.id.imageView14);
                 is_follow=(ImageView)view.findViewById(R.id.imageView15);
+                more=(ImageView)view.findViewById(R.id.imageView17);
+                more_1=(ImageView)view.findViewById(R.id.imageView34);
+                more_2=(TextView)view.findViewById(R.id.textView76);
+                morewhat=(ConstraintLayout)view.findViewById(R.id.morewhat);
+                constraintLayout3=(ConstraintLayout)view.findViewById(R.id.constraintLayout3);
+                morewhat.setVisibility(View.INVISIBLE);
+                more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                      if(more_condition==false){
+                          morewhat.setVisibility(View.VISIBLE);
+                          morewhat0=morewhat;
+                          more_condition=true;
+                      }else{
+                          morewhat0.setVisibility(View.INVISIBLE);
+                          morewhat.setVisibility(View.VISIBLE);
+                          morewhat0=morewhat;
+                      }
+
+                        /*View contentView3 = LayoutInflater.from(getActivity()).inflate(R.layout.more, null);
+                        popupWindow3=new PopupWindow(contentView3);
+
+                        popupWindow3.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+                        popupWindow3.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+                        contentView3.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                        int popupHeight = contentView3.getMeasuredHeight();
+                        int popupWidth = contentView3.getMeasuredWidth();
+
+
+                        int[] location = new int[2];
+                        more.getLocationOnScreen(location);
+
+                        popupWindow3.setAnimationStyle(R.style.contextMenuAnim);
+                        popupWindow3.showAtLocation(more, Gravity.NO_GRAVITY, (location[0] + more.getWidth() / 2) - popupWidth / 2, location[1] - popupHeight-70);
+*/
+
+                    }
+                });
+                morewhat.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v){
+                        morewhat.setVisibility(View.INVISIBLE);
+                        more_condition = false;
+                        if(detailforest[position][9].equals("true")){
+
+                            new Thread(new Runnable() {//加载纵向列表标题
+                                @Override
+                                public void run() {
+                                    Call<ResponseBody> call = request.delete_hole("http://hustholetest.pivotstudio.cn/api/holes/" + detailforest[position][6]);//进行封装
+                                    Log.e(TAG, "token2：");
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            String json = "null";
+                                            String returncondition=null;
+                                            if (response.body() != null) {
+                                                try {
+                                                    json = response.body().string();
+                                                    JSONObject jsonObject = new JSONObject(json);
+                                                    returncondition = jsonObject.getString("msg");
+                                                    Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                } catch (IOException | JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                                }
+                            }).start();
+                        }else{
+                            new Thread(new Runnable() {//加载纵向列表标题
+                                @Override
+                                public void run() {
+                                    Call<ResponseBody> call = request.report("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" + detailforest[position][6]+"&reply_local_id=-1");//进行封装
+                                    Log.e(TAG, "token2：");
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            String json = "null";
+                                            String returncondition=null;
+                                            if (response.body() != null) {
+                                                try {
+                                                    json = response.body().string();
+                                                    JSONObject jsonObject = new JSONObject(json);
+                                                    returncondition = jsonObject.getString("msg");
+                                                    Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                } catch (IOException | JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Toast.makeText(getContext(), "举报失败", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                                }
+                            }).start();
+
+
+
+                        }
+
+
+
+
+                    }
+                });
+
+
 
                 is_thumbup.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -567,7 +695,7 @@ public class Page1Fragment extends Fragment {
 
                 //forestname = (TextView) view.findViewById(R.id.textView28);
                 //forestphoto=(ImageView)view.findViewById(R.id.circleImageView);
-                view.setOnClickListener(new View.OnClickListener(){
+                constraintLayout3.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
                         Log.d("data[2]1",detailforest[position][2]);
@@ -578,12 +706,8 @@ public class Page1Fragment extends Fragment {
                 forest_name.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        /*for(int k=0;k<detailforest.length;k++){
-                            if(detailforest[position][5].equals(detailforest[k][7])){
-                                Intent intent = Page2_DetailAllForestsActivity.newIntent(getContext(), detailforest[k]);
+                                Intent intent = Page2_DetailAllForestsActivity.newIntent(getContext(), detailforest[position][4]);
                                 startActivity(intent);
-                            }
-                        }*/
                     }
                 });
             }
@@ -605,6 +729,10 @@ public class Page1Fragment extends Fragment {
                 hole_id.setText("#" + detailforest[position][6]);
                 if (detailforest[position][8].equals("true")) {
                     is_follow.setImageResource(R.mipmap.active_3);
+                }
+                if(detailforest[position][9].equals("true")){
+                    more_1.setImageResource(R.mipmap.vector6);
+                    more_2.setText("删除");
                 }
 
                 if (detailforest[position][10].equals("true")) {

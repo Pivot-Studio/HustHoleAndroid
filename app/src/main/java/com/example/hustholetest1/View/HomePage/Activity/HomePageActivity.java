@@ -15,11 +15,14 @@ import android.text.method.PasswordTransformationMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -144,6 +147,7 @@ public class HomePageActivity extends AppCompatActivity {
                 " <small><font color=\"#666666\">匿名社区的良好环境需要你我共同维护~感谢你的支持！</font></small><br><br>"+
                 "<small><font color=\"#00000000\">祝你在1037树洞玩得愉快。</font></small><br>");
         mEt_second_password.setText(Html.fromHtml(aa));
+
         //mEt_second_password.setMaxHeight(400);
         Button mBtn_ok = (Button) mView.findViewById(R.id.button);
 

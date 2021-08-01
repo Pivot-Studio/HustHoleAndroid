@@ -70,7 +70,8 @@ public class Page2Fragment extends Fragment {
     private String[][] detailforest,detailforest2;
     private Bitmap[][] bitmapss;
     private int number1=0;
-    private boolean networkcondition;
+    private String refreshcondition="false";
+    private RefreshLayout refreshlayout1;
 
     public static Page2Fragment newInstance() {
 
@@ -81,24 +82,27 @@ public class Page2Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.page2fragment, container, false);
-        /*RefreshLayout refreshLayout = (RefreshLayout)rootView.findViewById(R.id.refreshLayout);
+        RefreshLayout refreshLayout = (RefreshLayout)rootView.findViewById(R.id.refreshLayout);
         refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
         refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
 
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(4000);
+                refreshlayout1=refreshlayout;
+                refreshcondition="true";
+                update();
+
 //传入false表示刷新失败
-          /*  }
+            }
         });
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
                 refreshlayout.finishLoadMore(4000);//false
                 //传入false表示加载失败
-           /* }
-        });*/
+            }
+        });
 
 
         recyclerView2=(RecyclerView)rootView.findViewById(R.id.recyclerView);
@@ -119,6 +123,21 @@ public class Page2Fragment extends Fragment {
                 .build();
         Log.e(TAG, "token99：");
         request = retrofit.create(RequestInterface.class);//创建接口实例
+        //update();
+        return rootView;
+    }
+    public int number(){
+        number1++;
+        return number1;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        update();
+    }
+
+    public void update(){
 
         new Thread(new Runnable() {//加载纵向列表标题
             @Override
@@ -136,12 +155,12 @@ public class Page2Fragment extends Fragment {
                             }
                             JSONObject jsonObject = new JSONObject(json);
                             //读取
-                             jsonArray = jsonObject.getJSONArray("forests");
-                             detailforest=new String[jsonArray.length()][8];
-
+                            jsonArray = jsonObject.getJSONArray("forests");
+                            detailforest=new String[jsonArray.length()][8];
                             //bitmapss=new Bitmap[jsonArray.length()][2];
                             //for(int f=0;f<jsonArray.length();f++) {
-                                new DownloadTask2().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+                            new DownloadTask2().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+                            Log.d("???????????????????????",""+jsonArray);
                             //}
 
                         } catch (IOException | JSONException e) {
@@ -166,7 +185,7 @@ public class Page2Fragment extends Fragment {
                             if (response.body() != null) {
                                 json = response.body().string();
                             }
-                             jsonArray2 = new JSONArray(json);
+                            jsonArray2 = new JSONArray(json);
                             //jsonArray =response.body();
                             detailforest2=new String[jsonArray2.length()][14];
                             new DownloadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
@@ -186,21 +205,19 @@ public class Page2Fragment extends Fragment {
 
             }
         }).start();
-
-        return rootView;
     }
-    public int number(){
-        number1++;
-        return number1;
-    }
-
 
     private class DownloadTask extends AsyncTask<Void, Void, Void> {//用于加载图片
 
         @Override
         protected void onPostExecute(Void unused) {
             if(number()==2) {
+                if(refreshcondition.equals("true")) {
+                    refreshlayout1.finishRefresh();
+                    refreshcondition="false";
+                }
                 recyclerView2.setAdapter(new ForestHoleAdapter());
+                number1=0;
             }
         }
 
@@ -219,7 +236,7 @@ public class Page2Fragment extends Fragment {
                     detailforest2[f][6] = sonObject.getInt("hole_id")+"";
                     //detailforest2[f][1] = sonObject.getString("image");
                     detailforest2[f][8] = sonObject.getBoolean("is_follow")+"";
-                    //detailforest2[f][9] = sonObject.getBoolean("is_mine")+"";
+                    detailforest2[f][9] = sonObject.getBoolean("is_mine")+"";
                     detailforest2[f][10] = sonObject.getBoolean("is_reply")+"";
                     detailforest2[f][11] = sonObject.getBoolean("is_thumbup")+"";
                     detailforest2[f][12] = sonObject.getInt("reply_num")+"";
@@ -237,7 +254,12 @@ public class Page2Fragment extends Fragment {
         @Override
         protected void onPostExecute(Void unused) {
             if(number()==2) {
+                if(refreshcondition.equals("true")) {
+                    refreshlayout1.finishRefresh();
+                    refreshcondition="false";
+                }
                 recyclerView2.setAdapter(new ForestHoleAdapter());
+                number1=0;
             }
            // number1++;
            // if(jsonArray.length()==number1){
@@ -364,7 +386,8 @@ public class Page2Fragment extends Fragment {
         public static final int ITEM_TYPE_CONTENT = 1;
         public static final int ITEM_TYPE_BOTTOM = 2;
         private int mHeaderCount=1;//头部View个数
-
+        private Boolean more_condition=false;
+        private  ConstraintLayout morewhat0;
         @Override
         public int getItemViewType(int position) {
             if (mHeaderCount != 0 && position < mHeaderCount) {
@@ -399,10 +422,12 @@ public class Page2Fragment extends Fragment {
             }
         }
         public class ViewHolder extends RecyclerView.ViewHolder {
-            private TextView content,created_timestamp,forest_name,follow_num,reply_num,thumbup_num,hole_id;
-            private ImageView background_image_url,is_follow,is_reply,is_thumbup;
-            ConstraintLayout next;
+            private TextView content,created_timestamp,forest_name,follow_num,reply_num,thumbup_num,hole_id,more_2;
+            private ImageView background_image_url,is_follow,is_reply,is_thumbup,more,more_1;
+            ConstraintLayout morewhat;
             private int position;
+
+
             public ViewHolder(View view) {
                 super(view);
                 content=(TextView)view.findViewById(R.id.textView37);
@@ -416,6 +441,109 @@ public class Page2Fragment extends Fragment {
                 is_thumbup=(ImageView)view.findViewById(R.id.imageView13);
                 is_reply=(ImageView)view.findViewById(R.id.imageView14);
                 is_follow=(ImageView)view.findViewById(R.id.imageView15);
+
+
+                more=(ImageView)view.findViewById(R.id.imageView17);
+                more_1=(ImageView)view.findViewById(R.id.imageView34);
+                more_2=(TextView)view.findViewById(R.id.textView76);
+                morewhat=(ConstraintLayout)view.findViewById(R.id.morewhat);
+                morewhat.setVisibility(View.INVISIBLE);
+                more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(more_condition==false){
+                            morewhat.setVisibility(View.VISIBLE);
+                            morewhat0=morewhat;
+                            more_condition=true;
+                        }else{
+                            morewhat0.setVisibility(View.INVISIBLE);
+                            morewhat.setVisibility(View.VISIBLE);
+                            morewhat0=morewhat;
+                        }
+
+                        /*View contentView3 = LayoutInflater.from(getActivity()).inflate(R.layout.more, null);
+                        popupWindow3=new PopupWindow(contentView3);
+
+                        popupWindow3.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+                        popupWindow3.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+                        contentView3.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                        int popupHeight = contentView3.getMeasuredHeight();
+                        int popupWidth = contentView3.getMeasuredWidth();
+
+
+                        int[] location = new int[2];
+                        more.getLocationOnScreen(location);
+
+                        popupWindow3.setAnimationStyle(R.style.contextMenuAnim);
+                        popupWindow3.showAtLocation(more, Gravity.NO_GRAVITY, (location[0] + more.getWidth() / 2) - popupWidth / 2, location[1] - popupHeight-70);
+*/
+
+                    }
+                });
+                morewhat.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v){
+                        morewhat.setVisibility(View.INVISIBLE);
+                        more_condition = false;
+                        if(detailforest2[position-1][9].equals("true")){
+
+                            new Thread(new Runnable() {//加载纵向列表标题
+                                @Override
+                                public void run() {
+                                    Call<ResponseBody> call = request.delete_hole("http://hustholetest.pivotstudio.cn/api/holes/" + detailforest2[position-1][6]);//进行封装
+                                    Log.e(TAG, "token2：");
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                                }
+                            }).start();
+                        }else{
+                            new Thread(new Runnable() {//加载纵向列表标题
+                                @Override
+                                public void run() {
+                                    Call<ResponseBody> call = request.report("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" + detailforest2[position-1][6]+"&reply_local_id=-1");//进行封装
+                                    Log.e(TAG, "token2：");
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            Toast.makeText(getContext(), "举报成功", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Toast.makeText(getContext(), "举报失败", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                                }
+                            }).start();
+
+
+
+                        }
+
+
+
+
+                    }
+                });
+
+
+
+
+
 
                 is_thumbup.setOnClickListener(new View.OnClickListener(){
                     @Override
@@ -565,7 +693,10 @@ public class Page2Fragment extends Fragment {
                         if (detailforest2[position-1][8].equals("true")) {
                             is_follow.setImageResource(R.mipmap.active_3);
                         }
-
+                        if(detailforest2[position-1][9].equals("true")){
+                            more_1.setImageResource(R.mipmap.vector6);
+                            more_2.setText("删除");
+                        }
                         if (detailforest2[position-1][10].equals("true")) {
                             is_reply.setImageResource(R.mipmap.active_2);
                         }
@@ -586,7 +717,6 @@ public class Page2Fragment extends Fragment {
             }
 
         }
-
         public ForestHoleAdapter(){
 
         }

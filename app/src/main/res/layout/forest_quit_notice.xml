@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/notice"
     android:orientation="vertical"
-    android:background="#00000000"
     >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="316dp"
         android:layout_height="144dp"
         android:layout_gravity="center"
-        android:background="@drawable/homepage_notice"
+        android:background="@drawable/notice"
         android:gravity="center">
 
         <TextView

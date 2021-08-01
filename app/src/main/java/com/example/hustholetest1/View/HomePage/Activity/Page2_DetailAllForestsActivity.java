@@ -18,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -59,9 +60,11 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
     private String[][] detailforest;
    // private TextView title;
     private String[] data;
+    private String data_2;
     private RequestInterface request;
     private RecyclerView recyclerView;
     private static final String key="key_1";
+    private static final String key_2="key_2";
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.page2_detailforest);
@@ -87,16 +90,74 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+        TokenInterceptor.getContext(Page2_DetailAllForestsActivity.this);
+        //TokenInterceptor.getContext(RegisterActivity.this);
+        System.out.println("提交了context");
+        retrofit = new Retrofit.Builder()
+                .baseUrl("http://hustholetest.pivotstudio.cn/api/forests/")
+                .client(com.example.hustholetest1.Model.OkHttpUtil.getOkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        Log.e(TAG, "token99：");
+        request = retrofit.create(RequestInterface.class);//创建接口实例
+        Log.e(TAG, "token100：");
         data=getIntent().getStringArrayExtra(key);
+        if(data==null){
+          data_2=getIntent().getStringExtra(key_2);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Call<ResponseBody> call2 = request.detailholes( "http://hustholetest.pivotstudio.cn/api/forests/detail/"+data_2);//进行封装
+                    call2.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            String json = "null";
+                            if (response.body() != null) {
+                                try {
+                                    data=new String[8];
+                                    json = response.body().string();
+                                    JSONObject jsonObject = new JSONObject(json);
+                                    JSONArray jsonArray0 = jsonObject.getJSONArray("forests");
+                                    JSONObject sonObject = jsonArray0.getJSONObject(0);
+                                    data[0] = sonObject.getString("background_image_url");
+                                    data[1] = sonObject.getString("cover_url");
+                                    data[2] = sonObject.getString("description");
+                                    data[3] = sonObject.getInt("forest_id") + "";
+                                    data[4] = sonObject.getInt("hole_number") + "Huster . " + sonObject.getInt("joined_number") + "树洞";
+                                    data[5] = sonObject.getBoolean("joined")+"";
+                                    data[6] = sonObject.getString("last_active_time");
+                                    data[7] = sonObject.getString("name");
+                                    update();
+                                } catch (IOException | JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Toast.makeText(Page2_DetailAllForestsActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+            }).start();
+
+
+        }else{
+            update();
+        }
+
+        recyclerView = (RecyclerView)findViewById(R.id.RecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Page2_DetailAllForestsActivity.this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(linearLayoutManager);
+    }
+
+    private void update(){
         title.setText(data[7]);
         hole_and_number.setText(data[4]);
         content.setText(data[2]);
-
-
-
-
-
         if(data[5].equals("false")){
             button.setPadding(30,5,6,6);
             button.setBackground(getDrawable(R.drawable.forest_button));
@@ -125,6 +186,7 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
                     dialog.setContentView(mView);
                     TextView no = (TextView) mView.findViewById(R.id.textView47);
                     TextView yes = (TextView) mView.findViewById(R.id.textView46);
+                    dialog.getWindow().setBackgroundDrawableResource(R.drawable.notice);
                     no.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -210,17 +272,10 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
                 .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                 .into(head_2);
 
-        TokenInterceptor.getContext(Page2_DetailAllForestsActivity.this);
-        //TokenInterceptor.getContext(RegisterActivity.this);
-        System.out.println("提交了context");
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://hustholetest.pivotstudio.cn/api/forests/")
-                .client(com.example.hustholetest1.Model.OkHttpUtil.getOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        Log.e(TAG, "token99：");
-        request = retrofit.create(RequestInterface.class);//创建接口实例
-        Log.e(TAG, "token100：");
+
+
+
+
 
 
         new Thread(new Runnable() {//加载纵向列表标题
@@ -256,12 +311,6 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
                 });
             }
         }).start();
-
-        recyclerView = (RecyclerView)findViewById(R.id.RecyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(Page2_DetailAllForestsActivity.this);
-        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
     }
 
     private class DownloadTask extends AsyncTask<Void, Void, Void> {//用于加载图片
@@ -286,7 +335,7 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
                     detailforest[f][6] = sonObject.getInt("hole_id")+"";
                     //detailforest2[f][1] = sonObject.getString("image");
                     detailforest[f][8] = sonObject.getBoolean("is_follow")+"";
-                    //detailforest2[f][9] = sonObject.getBoolean("is_mine")+"";
+                    detailforest[f][9] = sonObject.getBoolean("is_mine")+"";
                     detailforest[f][10] = sonObject.getBoolean("is_reply")+"";
                     detailforest[f][11] = sonObject.getBoolean("is_thumbup")+"";
                     detailforest[f][12] = sonObject.getInt("reply_num")+"";
@@ -301,14 +350,16 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
 
     public class ForestHoleAdapter extends RecyclerView.Adapter<ForestHoleAdapter.ViewHolder>{
         //private static List<Event> events;
-
+        private Boolean more_condition=false;
+        private  ConstraintLayout morewhat0;
 
 
        public class ViewHolder extends RecyclerView.ViewHolder {
-            private TextView content,created_timestamp,follow_num,reply_num,thumbup_num,hole_id;
-            private ImageView is_follow,is_reply,is_thumbup;
-            ConstraintLayout next;
+            private TextView content,created_timestamp,follow_num,reply_num,thumbup_num,hole_id,more_2;
+            private ImageView is_follow,is_reply,is_thumbup,more,more_1;
+            ConstraintLayout morewhat;
             private int position;
+
             public ViewHolder(View view) {
                 super(view);
                 content=(TextView)view.findViewById(R.id.textView37);
@@ -322,6 +373,106 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
                 is_thumbup =(ImageView)view.findViewById(R.id.imageView13);
                 is_reply=(ImageView)view.findViewById(R.id.imageView14);
                 is_follow=(ImageView)view.findViewById(R.id.imageView15);
+
+                more=(ImageView)view.findViewById(R.id.imageView17);
+                more_1=(ImageView)view.findViewById(R.id.imageView34);
+                more_2=(TextView)view.findViewById(R.id.textView76);
+                morewhat=(ConstraintLayout)view.findViewById(R.id.morewhat);
+                morewhat.setVisibility(View.INVISIBLE);
+                more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(more_condition==false){
+                            morewhat.setVisibility(View.VISIBLE);
+                            morewhat0=morewhat;
+                            more_condition=true;
+                        }else{
+                            morewhat0.setVisibility(View.INVISIBLE);
+                            morewhat.setVisibility(View.VISIBLE);
+                            morewhat0=morewhat;
+                        }
+
+                        /*View contentView3 = LayoutInflater.from(getActivity()).inflate(R.layout.more, null);
+                        popupWindow3=new PopupWindow(contentView3);
+
+                        popupWindow3.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+                        popupWindow3.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+                        contentView3.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                        int popupHeight = contentView3.getMeasuredHeight();
+                        int popupWidth = contentView3.getMeasuredWidth();
+
+
+                        int[] location = new int[2];
+                        more.getLocationOnScreen(location);
+
+                        popupWindow3.setAnimationStyle(R.style.contextMenuAnim);
+                        popupWindow3.showAtLocation(more, Gravity.NO_GRAVITY, (location[0] + more.getWidth() / 2) - popupWidth / 2, location[1] - popupHeight-70);
+*/
+
+                    }
+                });
+                morewhat.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v){
+                        morewhat.setVisibility(View.INVISIBLE);
+                        more_condition = false;
+                        if(detailforest[position][9].equals("true")){
+
+                            new Thread(new Runnable() {//加载纵向列表标题
+                                @Override
+                                public void run() {
+                                    Call<ResponseBody> call = request.delete_hole("http://hustholetest.pivotstudio.cn/api/holes/" + detailforest[position][6]);//进行封装
+                                    Log.e(TAG, "token2：");
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            Toast.makeText(Page2_DetailAllForestsActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Toast.makeText(Page2_DetailAllForestsActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                                }
+                            }).start();
+                        }else{
+                            new Thread(new Runnable() {//加载纵向列表标题
+                                @Override
+                                public void run() {
+                                    Call<ResponseBody> call = request.report("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" + detailforest[position][6]+"&reply_local_id=-1");//进行封装
+                                    Log.e(TAG, "token2：");
+                                    call.enqueue(new Callback<ResponseBody>() {
+                                        @Override
+                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                            Toast.makeText(Page2_DetailAllForestsActivity.this, "举报成功", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                        @Override
+                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                            Toast.makeText(Page2_DetailAllForestsActivity.this, "举报失败", Toast.LENGTH_SHORT).show();
+
+                                        }
+                                    });
+                                }
+                            }).start();
+
+
+
+                        }
+
+
+
+
+                    }
+                });
+
+
+
                 //forestname = (TextView) view.findViewById(R.id.textView28);
                 //forestphoto=(ImageView)view.findViewById(R.id.circleImageView);
                 view.setOnClickListener(new View.OnClickListener(){
@@ -501,6 +652,11 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
     public static Intent newIntent(Context packageContext, String[] data){
         Intent intent = new Intent(packageContext, Page2_DetailAllForestsActivity.class);
         intent.putExtra(key,data);
+        return intent;
+    }
+    public static Intent newIntent(Context packageContext,String data){
+        Intent intent = new Intent(packageContext, Page2_DetailAllForestsActivity.class);
+        intent.putExtra(key_2,data);
         return intent;
     }
 }

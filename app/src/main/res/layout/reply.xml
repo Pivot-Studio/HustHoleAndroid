@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/GrayScale_100">
 
     <TextView
         android:id="@+id/textView65"
@@ -29,9 +30,43 @@
         app:layout_constraintStart_toEndOf="@+id/textView65"
         app:layout_constraintTop_toTopOf="@+id/textView65" />
 
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="@dimen/dp_340"
+        android:minWidth="@dimen/dp_340"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/reply_gray"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView65">
+
+
+        <TextView
+            android:id="@+id/textView99"
+            android:layout_width="@dimen/dp_320"
+            android:maxWidth="@dimen/dp_320"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+
+            android:text=""
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="320dp"
+        android:layout_width="@dimen/dp_340"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="6dp"
@@ -46,7 +81,8 @@
 
         <TextView
             android:id="@+id/textView99"
-            android:layout_width="320dp"
+            android:layout_width="@dimen/dp_330"
+            android:maxWidth="@dimen/dp_330"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text=""
@@ -57,7 +93,7 @@
             android:layout_width="match_parent"
             android:layout_height="10dp" />
     </LinearLayout>
-
+-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout5"
         android:layout_width="match_parent"
@@ -68,10 +104,10 @@
 
         <TextView
             android:id="@+id/textView69"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/dp_320"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:maxWidth="310dp"
+            android:layout_marginStart="6dp"
+            android:maxWidth="@dimen/dp_320"
             android:text="TextView"
             android:textColor="@color/GrayScale_20"
             android:textSize="14sp"
@@ -81,11 +117,11 @@
 
         <Button
             android:id="@+id/textView72"
-            android:layout_width="2dp"
+            android:layout_width="0.5dp"
             android:layout_height="wrap_content"
-            android:minHeight="10dp"
             android:layout_marginStart="22dp"
             android:background="@color/GrayScale_80"
+            android:minHeight="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -97,7 +133,8 @@
         android:layout_width="20dp"
         android:layout_height="25dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView70"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView71"
         app:layout_constraintEnd_toStartOf="@+id/textView70"
         app:srcCompat="@mipmap/inactive" />
 
@@ -105,7 +142,7 @@
         android:id="@+id/imageView28"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="7dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toTopOf="@+id/textView71"
@@ -134,5 +171,37 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/morewhat"
+        android:layout_width="@dimen/dp_158"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/more"
+        android:elevation="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
+        <ImageView
+            android:id="@+id/imageView34"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/vector4" />
+
+        <TextView
+            android:id="@+id/textView76"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:text="举报"
+            android:textColor="@color/GrayScale_20"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView34"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

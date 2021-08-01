@@ -97,6 +97,7 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="700dp"
+        android:background="@color/GrayScale_95"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout">
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:layout_width="match_parent"
