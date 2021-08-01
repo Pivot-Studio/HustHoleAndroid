@@ -1,16 +1,6 @@
 package com.example.hustholetest1.View.HomePage.fragment;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -19,6 +9,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hustholetest1.R;
 
@@ -33,7 +29,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import static com.example.hustholetest1.View.HomePage.fragment.Page3Fragment.removeCharAt;
-import static com.example.hustholetest1.View.HomePage.fragment.ParseNotificationData.parseJson;
 import static com.example.hustholetest1.View.HomePage.fragment.ParseNotificationData.parseSysJson;
 
 public class SystemNotification extends AppCompatActivity {

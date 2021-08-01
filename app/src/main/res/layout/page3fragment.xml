@@ -6,12 +6,8 @@
     android:id="@+id/refreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< HEAD
     app:layout_constraintTop_toBottomOf="@+id/linearLayout">
-=======
-    app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-  >
->>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
+    app:layout_constraintTop_toBottomOf="@+id/linearLayout" >
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -27,14 +23,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:background="@color/GrayScale_100"
-<<<<<<< HEAD
         app:layout_constraintTop_toBottomOf="@+id/textView21"
         android:clickable="true"
         android:onClick="onClick"
         android:visibility="visible">
-=======
-        app:layout_constraintTop_toBottomOf="@+id/textView21">
->>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
 
 
         <ImageView
@@ -71,10 +63,6 @@
             app:layout_constraintStart_toEndOf="@+id/imageView9" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
     <TextView
         android:id="@+id/textView16"
         android:layout_width="wrap_content"
@@ -105,8 +93,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<<<<<<< HEAD
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/notification"
         android:layout_width="match_parent"
@@ -115,8 +101,4 @@
         android:layout_marginTop="10dp">
     </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-=======
-</androidx.constraintlayout.widget.ConstraintLayout>
->>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
 </com.scwang.smart.refresh.layout.SmartRefreshLayout>
