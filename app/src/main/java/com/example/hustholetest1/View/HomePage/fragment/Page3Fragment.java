@@ -55,7 +55,6 @@ public class Page3Fragment extends Fragment {
     private Boolean hasInit = false;
 
     public String url = "http://hustholetest.pivotstudio.cn/api/notices/";
-
     public static Page3Fragment newInstance() {
         Page3Fragment fragment = new Page3Fragment();
         return fragment;
@@ -63,10 +62,9 @@ public class Page3Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.page3fragment, container, false);
-
         RefreshLayout refreshLayout = rootView.findViewById(R.id.refreshLayout);
         refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
-       //refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
+        //refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
 
         refreshLayout.setEnableLoadMore(true);
         refreshLayout.setEnableRefresh(true);
@@ -141,6 +139,7 @@ public class Page3Fragment extends Fragment {
 
         return rootView;
     }
+
 
     //弃
     /*private void loadData(final String url){
@@ -287,8 +286,7 @@ public class Page3Fragment extends Fragment {
                 "XVCJ9.eyJlbWFpbCI6IjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwZmM2NGNlZTM5ZTA1ZGJjNWI2ODViNDM2OWMyNTR" +
                 "iNDg5OTBkZmU1ZmQ5YTciLCJyb2xlIjoidXNlciIsInRpbWVTdGFtcCI6MTYyNjQ4OTE2Mn0.L_L0AFqPFEwoiQJHicJi3P4vy9aj_h" +
                 "x8E8aq0OkC74s").url(path).build();
-
-        Log.d(TAG, "getStringByOkhttp: request");
+        Log.d(TAG, "getStringByOkhttp: request ");
         try {
             Call call = client.newCall(request);
             Log.d(TAG, "getStringByOkhttp: call");
@@ -342,3 +340,5 @@ public class Page3Fragment extends Fragment {
         Log.d(TAG, "getStringByOkhttp: getResponseData: null");
     }
 }
+
+

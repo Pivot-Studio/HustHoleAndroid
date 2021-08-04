@@ -66,10 +66,6 @@
     <string name="homepage_6">我的</string>
 
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
     <string name="page1fragment_1">搜索树洞</string>
     <string name="page1fragment_2">树洞广场</string>
     <string name="page1fragment_3">关注</string>
@@ -79,11 +75,7 @@
 
     <string name="page3fragment_1">系统通知</string>
     <string name="page3fragment_2">还没有通知噢...</string>
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> 5120fd3ece4c260ad6591fbb941b715ac6c203c1
     <string name="publishmessage_1">发树洞</string>
     <string name="publishmessage_2">发布</string>
     <string name="publishmessage_3">来，说点什么吧</string>
