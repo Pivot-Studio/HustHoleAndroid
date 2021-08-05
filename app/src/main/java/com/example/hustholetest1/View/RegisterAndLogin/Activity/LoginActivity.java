@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -43,12 +44,16 @@ public class LoginActivity extends AppCompatActivity {
     }
     public void onClick(View v){
         Intent intent;
+        String email=editText1.getText().toString();
         switch (v.getId()) {
             case R.id.button4://下一步设置密码
-                if(true){//判断学号是否正确
-                    intent = new Intent(LoginActivity.this, Login2Activity.class);
-                    startActivity(intent);
-                }else{}//如果不正确，给予提示
+                if(Character.isUpperCase(email.charAt(0))||Character.isLowerCase(email.charAt(0))){//判断学号是否正确
+
+                     intent=Login2Activity.newIntent(LoginActivity.this,email);
+                     startActivity(intent);
+                }else{
+                    Toast.makeText(LoginActivity.this," 邮箱格式错误，请重新输入", Toast.LENGTH_SHORT).show();
+                }//如果不正确，给予提示
                 break;
             case R.id.textView5://已经注册
                 intent=new Intent(LoginActivity.this,RegisterActivity.class);

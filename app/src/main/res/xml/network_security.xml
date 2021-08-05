@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config><!--安卓9.0以上无法直接使用http-->
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

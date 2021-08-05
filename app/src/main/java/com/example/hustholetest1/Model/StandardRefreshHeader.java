@@ -3,6 +3,7 @@ package com.example.hustholetest1.Model;
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,6 +40,7 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
         mImage = (ImageView) view.findViewById(R.id.refresh_header);
         mImage2 = (ImageView) view.findViewById(R.id.refresh_header_2);
         mImage3 = (ImageView) view.findViewById(R.id.refresh_header_3);
+        Log.e("刷新：","刷心前");
     }
 
     @NonNull
@@ -66,6 +68,7 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
                 mImage.setImageResource(R.drawable.refresh_point);
                 mImage2.setImageResource(R.drawable.refresh_point);
                 mImage3.setImageResource(R.drawable.refresh_point);
+                Log.e("刷新：","PullDownToRefresh");
                 break;
             case Refreshing: //正在刷新。只调用一次
                 //状态切换为正在刷新状态时，设置图片资源为小人卖萌的动画并开始执行
@@ -78,9 +81,10 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
                 refreshingAnim2.start();
                 refreshingAnim3 = (AnimationDrawable) mImage3.getDrawable();
                 refreshingAnim3.start();
+                Log.e("刷新：","Refreshing");
                 break;
             case ReleaseToRefresh:
-
+                Log.e("刷新：","ReleaseToRefresh");
                 break;
         }
     }
@@ -91,12 +95,14 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
         // 结束动画
         if (pullDownAnim != null && pullDownAnim.isRunning()) {
             pullDownAnim.stop();
+            Log.e("刷新："," pullDownAnim.stop();");
 
         }
         if (refreshingAnim != null && refreshingAnim.isRunning()) {
             refreshingAnim.stop();
             refreshingAnim2.stop();
             refreshingAnim3.stop();
+            Log.e("刷新："," refreshingAnim n.stop();");
         }
         //重置状态
         hasSetPullDownAnim = false;

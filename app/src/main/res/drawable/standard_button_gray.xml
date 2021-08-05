@@ -13,8 +13,8 @@
         android:color="@color/HH_BandColor_1" />
     <!-- 圆角的幅度 -->
     <corners
-        android:topLeftRadius="13dip"
-        android:topRightRadius="13dip"
-        android:bottomLeftRadius="13dip"
-        android:bottomRightRadius="13dip"/>
+        android:topLeftRadius="15dip"
+        android:topRightRadius="15dip"
+        android:bottomLeftRadius="15dip"
+        android:bottomRightRadius="15dip"/>
 </shape>
