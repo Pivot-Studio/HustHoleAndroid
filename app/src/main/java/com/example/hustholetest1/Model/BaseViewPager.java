@@ -16,6 +16,7 @@ public class BaseViewPager extends ViewPager {//用来禁掉滑动
     }
 
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return false;
