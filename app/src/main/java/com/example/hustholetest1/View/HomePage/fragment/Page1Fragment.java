@@ -65,6 +65,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+
 public class Page1Fragment extends Fragment {
     private Button button1,button2;
     private EditText editText1;

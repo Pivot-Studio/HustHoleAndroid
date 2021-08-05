@@ -51,6 +51,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+
 public class Page2_DetailAllForestsActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private ImageView back,head,head_2;

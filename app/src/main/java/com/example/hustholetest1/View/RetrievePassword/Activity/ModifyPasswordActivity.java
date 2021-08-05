@@ -20,6 +20,7 @@ import com.githang.statusbar.StatusBarCompat;
 
 import java.util.UUID;
 
+
 public class ModifyPasswordActivity extends AppCompatActivity {
     private EditText editText1;
     private TextView textView1;

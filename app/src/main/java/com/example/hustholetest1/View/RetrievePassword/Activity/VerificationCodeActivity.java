@@ -29,6 +29,7 @@ import java.util.UUID;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+
 public class VerificationCodeActivity extends AppCompatActivity {
     private EditText editText1;
     private Button button1;

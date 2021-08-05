@@ -12,6 +12,7 @@ import com.example.hustholetest1.View.HomePage.Activity.HomePageActivity;
 import com.githang.statusbar.StatusBarCompat;
 
 
+
 public class WelcomeActivity extends AppCompatActivity {
     private Button button1,button2;
     @Override

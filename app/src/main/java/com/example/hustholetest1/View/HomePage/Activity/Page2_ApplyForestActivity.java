@@ -26,6 +26,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.hustholetest1.R;
 import com.githang.statusbar.StatusBarCompat;
 
+
 public class Page2_ApplyForestActivity extends AppCompatActivity {
     private TextView textView,text;
     private Button button;

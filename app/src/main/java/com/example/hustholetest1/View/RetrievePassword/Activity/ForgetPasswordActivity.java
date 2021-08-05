@@ -19,6 +19,7 @@ import com.githang.statusbar.StatusBarCompat;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+
 public class ForgetPasswordActivity extends AppCompatActivity {
     private TextView textView1;
     private Button button1;

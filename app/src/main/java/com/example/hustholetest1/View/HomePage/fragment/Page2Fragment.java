@@ -61,6 +61,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+
 public class Page2Fragment extends Fragment {
     private RecyclerView recyclerView,recyclerView2;
     private TextView textView;

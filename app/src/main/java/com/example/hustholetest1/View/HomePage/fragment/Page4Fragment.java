@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.hustholetest1.R;
 
+
 public class Page4Fragment extends Fragment {
     public static Page4Fragment newInstance() {
         Page4Fragment fragment = new Page4Fragment();

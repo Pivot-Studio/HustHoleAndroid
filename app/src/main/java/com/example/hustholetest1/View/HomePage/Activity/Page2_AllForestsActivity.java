@@ -83,6 +83,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
+
 public class Page2_AllForestsActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Retrofit retrofit;

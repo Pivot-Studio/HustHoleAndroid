@@ -14,6 +14,7 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
+
 public class Page3Fragment extends Fragment {
     public static Page3Fragment newInstance() {
         Page3Fragment fragment = new Page3Fragment();
