@@ -22,8 +22,8 @@
 
     <Button
         android:id="@+id/button"
-        android:layout_width="311dp"
-        android:layout_height="56dp"
+        android:layout_width="@dimen/dp_311"
+        android:layout_height="@dimen/dp_56"
         android:background="@drawable/button"
         android:text="@string/register_welcome_3"
         android:onClick="onClick"
@@ -38,9 +38,9 @@
 
     <Button
         android:id="@+id/button2"
-        android:layout_width="311dp"
-        android:layout_height="56dp"
-        android:layout_marginTop="20dp"
+        android:layout_width="@dimen/dp_311"
+        android:layout_height="@dimen/dp_56"
+        android:layout_marginTop="@dimen/dp_20"
         android:background="@drawable/standard_button_white"
 
         android:text="@string/register_welcome_4"
@@ -53,8 +53,8 @@
 
     <TextView
         android:id="@+id/button3"
-        android:layout_width="130dp"
-        android:layout_height="10dp"
+        android:layout_width="@dimen/dp_120"
+        android:layout_height="@dimen/dp_10"
         android:background="@drawable/block_line"
         app:layout_constraintBottom_toBottomOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="@+id/textView"
@@ -65,8 +65,8 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="221dp"
-        android:layout_height="45dp"
+        android:layout_width="@dimen/dp_221"
+        android:layout_height="@dimen/dp_45"
         android:text="@string/register_welcome_1"
         android:textColor="@color/GrayScale_20"
         android:textSize="30sp"

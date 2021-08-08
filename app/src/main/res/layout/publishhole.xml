@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -30,7 +31,7 @@
             android:id="@+id/imageView31"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="@dimen/dp_12"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -74,11 +75,12 @@
 
     <EditText
         android:id="@+id/editText5"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/dp_350"
         android:layout_height="wrap_content"
-        android:hint="@string/publishhole_4"
+        android:layout_marginTop="@dimen/dp_10"
         android:background="@null"
-
+        android:hint="@string/publishhole_4"
+        android:maxLength="1037"
         android:textColorHint="@color/GrayScale_70"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

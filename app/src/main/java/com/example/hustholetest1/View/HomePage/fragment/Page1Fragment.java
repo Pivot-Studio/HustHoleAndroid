@@ -722,7 +722,7 @@ public class Page1Fragment extends Fragment {
                 if(detailforest[position][5].equals("")){
                     forest_name.setVisibility(View.INVISIBLE);
                 }else {
-                    forest_name.setText("  "+detailforest[position][5]+"  ");
+                    forest_name.setText("  "+detailforest[position][5]+"   ");
                 }
                 follow_num.setText(detailforest[position][3]);
                 reply_num.setText(detailforest[position][12]);

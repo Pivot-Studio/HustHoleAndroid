@@ -49,6 +49,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -68,11 +69,18 @@ public class Page2Fragment extends Fragment {
     private Retrofit retrofit;
     private RequestInterface request;
     private JSONArray jsonArray,jsonArray2;
-    private String[][] detailforest,detailforest2;
+    private String[][] detailforest;
+    private ForestHoleAdapter adapter;
+    //private String[][] detailforest2;
+
+    private List<String[]> detailforest2=new ArrayList<String[]>();
+
+
     private Bitmap[][] bitmapss;
     private int number1=0;
-    private String refreshcondition="false";
-    private RefreshLayout refreshlayout1;
+    private int listsize=20;
+    private String refreshcondition="false",refreshcondition2="false";
+    private RefreshLayout refreshlayout1,refreshlayout2;
 
     public static Page2Fragment newInstance() {
 
@@ -92,6 +100,8 @@ public class Page2Fragment extends Fragment {
             public void onRefresh(RefreshLayout refreshlayout) {
                 refreshlayout1=refreshlayout;
                 refreshcondition="true";
+                listsize=20;
+                detailforest2=new ArrayList<String[]>();
                 update();
 
 //传入false表示刷新失败
@@ -100,8 +110,14 @@ public class Page2Fragment extends Fragment {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadMore(4000);//false
+                refreshlayout2=refreshlayout;
+                refreshcondition2="true";
+                listsize=listsize+20;
+                Log.d("listsize",""+listsize);
+                update();
+                //refreshlayout.finishLoadMore(4000);//false
                 //传入false表示加载失败
+
             }
         });
 
@@ -136,48 +152,50 @@ public class Page2Fragment extends Fragment {
     public void onResume() {
         super.onResume();
         update();
+        listsize=20;
     }
 
     public void update(){
-
         new Thread(new Runnable() {//加载纵向列表标题
             @Override
             public void run() {
                 Call<ResponseBody> call = request.joined();//进行封装
-                Call<ResponseBody> call2=request.holes();
+                Call<ResponseBody> call2=request.joined_holes("http://hustholetest.pivotstudio.cn/api/forests/holes?list_size=20&start_id="+(listsize-20)+"&is_last_reply=true");
                 Log.e(TAG, "token2：");
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        String json = "null";
-                        try {
-                            if (response.body() != null) {
-                                json = response.body().string();
-                            }
-                            JSONObject jsonObject = new JSONObject(json);
-                            //读取
-                            jsonArray = jsonObject.getJSONArray("forests");
-                            detailforest=new String[jsonArray.length()][8];
-                            //bitmapss=new Bitmap[jsonArray.length()][2];
-                            //for(int f=0;f<jsonArray.length();f++) {
-                            new DownloadTask2().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-                            Log.d("???????????????????????",""+jsonArray);
-                            //}
+                if(listsize==20||refreshcondition.equals("true")){
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            String json = "null";
+                            try {
+                                if (response.body() != null) {
+                                    json = response.body().string();
+                                }
+                                JSONObject jsonObject = new JSONObject(json);
+                                //读取
+                                jsonArray = jsonObject.getJSONArray("forests");
+                                detailforest = new String[jsonArray.length()][8];
+                                //bitmapss=new Bitmap[jsonArray.length()][2];
+                                //for(int f=0;f<jsonArray.length();f++) {
+                                new DownloadTask2().execute();
+                                Log.d("???????????????????????", "" + jsonArray);
+                                //}
 
-                        } catch (IOException | JSONException e) {
-                            e.printStackTrace();
+                            } catch (IOException | JSONException e) {
+                                e.printStackTrace();
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable tr) {
+
                         }
 
 
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable tr) {
-
-                    }
-
-
-                });
+                    });
+                }
                 call2.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -188,17 +206,21 @@ public class Page2Fragment extends Fragment {
                             }
                             jsonArray2 = new JSONArray(json);
                             //jsonArray =response.body();
-                            detailforest2=new String[jsonArray2.length()][14];
-                            new DownloadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-                            Log.d("???????????????????????",""+jsonArray2);
+                            //detailforest2=new String[jsonArray2.length()][14];
+                            new DownloadTask().execute();
+                           // Log.d("?????????????????????2", "" + jsonArray2);
 
                         } catch (JSONException | IOException e) {
                             e.printStackTrace();
                         }
                     }
+
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                        Toast.makeText(getContext(), "网络请求失败", Toast.LENGTH_SHORT).show();
+                        if (listsize!=20) {
+                           listsize=listsize-20;
+                        }
                     }
                 });
 
@@ -208,8 +230,9 @@ public class Page2Fragment extends Fragment {
         }).start();
     }
 
-    private class DownloadTask extends AsyncTask<Void, Void, Void> {//用于加载图片
 
+
+    private class DownloadTask extends AsyncTask<Void, Void, Void> {//用于加载图片
         @Override
         protected void onPostExecute(Void unused) {
             if(number()==2) {
@@ -217,17 +240,43 @@ public class Page2Fragment extends Fragment {
                     refreshlayout1.finishRefresh();
                     refreshcondition="false";
                 }
-                recyclerView2.setAdapter(new ForestHoleAdapter());
+                adapter=new ForestHoleAdapter();
+                recyclerView2.setAdapter(adapter);
                 number1=0;
             }
+            Log.d("状态1","sssss");
+            if(refreshlayout2!=null){
+                refreshlayout2.finishRefresh();
+                refreshlayout2=null;
+                refreshcondition2="false";
+                adapter.notifyDataSetChanged();
+                Log.d("AAA","ssss");
+                //recyclerView2.setAdapter(new ForestHoleAdapter());
+            }
         }
-
         @Override
         protected Void doInBackground(Void... voids) {
-
+            Log.d("状态2","sss");
             try {
                 for(int f=0;f<jsonArray2.length();f++) {
                     JSONObject sonObject = jsonArray2.getJSONObject(f);
+                    String[] list=new String[14];
+                    list[0] = sonObject.getString("background_image_url");
+                    list[1] = sonObject.getString("content");
+                    list[2] = sonObject.getString("created_timestamp");
+                    list[3] = sonObject.getInt("follow_num")+"";
+                    list[4] = sonObject.getInt("forest_id")+"";
+                    list[5] = sonObject.getString("forest_name");
+                    list[6] = sonObject.getInt("hole_id")+"";
+                    //detailforest2[f][1] = sonObject.getString("image");
+                    list[8] = sonObject.getBoolean("is_follow")+"";
+                    list[9] = sonObject.getBoolean("is_mine")+"";
+                    list[10] = sonObject.getBoolean("is_reply")+"";
+                    list[11] = sonObject.getBoolean("is_thumbup")+"";
+                    list[12] = sonObject.getInt("reply_num")+"";
+                    list[13] = sonObject.getInt("thumbup_num")+"";
+                    detailforest2.add(list);
+                    /*
                     detailforest2[f][0] = sonObject.getString("background_image_url");
                     detailforest2[f][1] = sonObject.getString("content");
                     detailforest2[f][2] = sonObject.getString("created_timestamp");
@@ -242,6 +291,8 @@ public class Page2Fragment extends Fragment {
                     detailforest2[f][11] = sonObject.getBoolean("is_thumbup")+"";
                     detailforest2[f][12] = sonObject.getInt("reply_num")+"";
                     detailforest2[f][13] = sonObject.getInt("thumbup_num")+"";
+
+                     */
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -251,7 +302,6 @@ public class Page2Fragment extends Fragment {
     }
 
     private class DownloadTask2 extends AsyncTask<Void, Void, Void> {//用于加载图片
-
         @Override
         protected void onPostExecute(Void unused) {
             if(number()==2) {
@@ -267,7 +317,6 @@ public class Page2Fragment extends Fragment {
 
             //}
         }
-
         @Override
         protected Void doInBackground(Void... voids) {
             //int allnumber=voids[0];
@@ -355,7 +404,7 @@ public class Page2Fragment extends Fragment {
         }
 
         public CircleForestsAdapter(){
-            Log.d(TAG,"数据传入了");
+            //Log.d(TAG,"数据传入了");
             //this.events=events;
         }
 
@@ -489,12 +538,12 @@ public class Page2Fragment extends Fragment {
                     public void onClick(View v){
                         morewhat.setVisibility(View.INVISIBLE);
                         more_condition = false;
-                        if(detailforest2[position-1][9].equals("true")){
-
+                        if(detailforest2.get(position-1)[9].equals("true")){
+                            //if(detailforest2[position-1][9].equals("true")){
                             new Thread(new Runnable() {//加载纵向列表标题
                                 @Override
                                 public void run() {
-                                    Call<ResponseBody> call = request.delete_hole("http://hustholetest.pivotstudio.cn/api/holes/" + detailforest2[position-1][6]);//进行封装
+                                    Call<ResponseBody> call = request.delete_hole("http://hustholetest.pivotstudio.cn/api/holes/" + detailforest2.get(position-1)[6]);//进行封装
                                     Log.e(TAG, "token2：");
                                     call.enqueue(new Callback<ResponseBody>() {
                                         @Override
@@ -514,7 +563,7 @@ public class Page2Fragment extends Fragment {
                             new Thread(new Runnable() {//加载纵向列表标题
                                 @Override
                                 public void run() {
-                                    Call<ResponseBody> call = request.report("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" + detailforest2[position-1][6]+"&reply_local_id=-1");//进行封装
+                                    Call<ResponseBody> call = request.report("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" + detailforest2.get(position-1)[6]+"&reply_local_id=-1");//进行封装
                                     Log.e(TAG, "token2：");
                                     call.enqueue(new Callback<ResponseBody>() {
                                         @Override
@@ -549,20 +598,20 @@ public class Page2Fragment extends Fragment {
                 is_thumbup.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        if(detailforest2[position-1][11].equals("false")){
+                        if(detailforest2.get(position-1)[11].equals("false")){
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/"+detailforest2[position-1][6]+"/-1");//进行封装
+                                Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/"+detailforest2.get(position-1)[6]+"/-1");//进行封装
                                 Log.e(TAG, "token2：");
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         is_thumbup.setImageResource(R.mipmap.active);
-                                        detailforest2[position-1][11]="true";
-                                        detailforest2[position-1][13]=(Integer.parseInt( detailforest2[position-1][13])+1)+"";
+                                        detailforest2.get(position-1)[11]="true";
+                                       detailforest2.get(position-1)[13]=(Integer.parseInt(detailforest2.get(position-1)[13])+1)+"";
 
-                                        thumbup_num.setText(detailforest2[position-1][13]);
+                                        thumbup_num.setText(detailforest2.get(position-1)[13]);
                                     }
 
                                     @Override
@@ -576,16 +625,16 @@ public class Page2Fragment extends Fragment {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/"+detailforest2[position-1][6]+"/-1");//进行封装
+                                    Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/"+detailforest2.get(position-1)[6]+"/-1");//进行封装
                                     Log.e(TAG, "token2：");
                                     call.enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                             is_thumbup.setImageResource(R.mipmap.inactive);
-                                            detailforest2[position-1][11]="false";
-                                            detailforest2[position-1][13]=(Integer.parseInt( detailforest2[position-1][13])-1)+"";
+                                           detailforest2.get(position-1)[11]="false";
+                                           detailforest2.get(position-1)[13]=(Integer.parseInt(detailforest2.get(position-1)[13])-1)+"";
 
-                                            thumbup_num.setText(detailforest2[position-1][13]);
+                                            thumbup_num.setText(detailforest2.get(position-1)[13]);
                                         }
 
                                         @Override
@@ -601,20 +650,20 @@ public class Page2Fragment extends Fragment {
                 is_follow.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        if(detailforest2[position-1][8].equals("false")){
+                        if(detailforest2.get(position-1)[8].equals("false")){
                             new Thread(new Runnable() {//加载纵向列表标题
                                 @Override
                                 public void run() {
-                                    Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/"+detailforest2[position-1][6]);//进行封装
+                                    Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/"+detailforest2.get(position-1)[6]);//进行封装
                                     Log.e(TAG, "token2：");
                                     call.enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                             is_follow.setImageResource(R.mipmap.active_3);
-                                            detailforest2[position-1][8]="true";
-                                            detailforest2[position-1][3]=(Integer.parseInt(detailforest2[position-1][3])+1)+"";
+                                           detailforest2.get(position-1)[8]="true";
+                                           detailforest2.get(position-1)[3]=(Integer.parseInt(detailforest2.get(position-1)[3])+1)+"";
 
-                                            follow_num.setText(detailforest2[position-1][3]);
+                                            follow_num.setText(detailforest2.get(position-1)[3]);
                                         }
 
                                         @Override
@@ -629,16 +678,16 @@ public class Page2Fragment extends Fragment {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/"+detailforest2[position-1][6]);//进行封装
+                                    Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/"+detailforest2.get(position-1)[6]);//进行封装
                                     Log.e(TAG, "token2：");
                                     call.enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                             is_follow.setImageResource(R.mipmap.inactive_3);
-                                            detailforest2[position-1][8]="false";
-                                            detailforest2[position-1][3]=(Integer.parseInt( detailforest2[position-1][3])-1)+"";
+                                           detailforest2.get(position-1)[8]="false";
+                                           detailforest2.get(position-1)[3]=(Integer.parseInt(detailforest2.get(position-1)[3])-1)+"";
 
-                                            follow_num.setText(detailforest2[position-1][3]);
+                                            follow_num.setText(detailforest2.get(position-1)[3]);
                                         }
 
                                         @Override
@@ -659,8 +708,8 @@ public class Page2Fragment extends Fragment {
                 view.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        Log.d("data[2]1",detailforest2[position-1][2]);
-                      Intent intent= CommentActivity.newIntent(getActivity(),detailforest2[position-1]);
+                        Log.d("data[2]1",detailforest2.get(position-1)[2]);
+                      Intent intent= CommentActivity.newIntent(getActivity(),detailforest2.get(position-1));
                         startActivity(intent);
                     }
                 });
@@ -668,7 +717,7 @@ public class Page2Fragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         for(int k=0;k<detailforest.length;k++){
-                            if(detailforest2[position-1][5].equals(detailforest[k][7])){
+                            if(detailforest2.get(position-1)[5].equals(detailforest[k][7])){
                                 Intent intent = Page2_DetailAllForestsActivity.newIntent(getContext(), detailforest[k]);
                                 startActivity(intent);
                             }
@@ -680,37 +729,37 @@ public class Page2Fragment extends Fragment {
 
             public void bind(int position){
                         this.position=position;
-                        content.setText(detailforest2[position-1][1]);
-                        created_timestamp.setText(detailforest2[position-1][2]);
-                        forest_name.setText(detailforest2[position-1][5]);
-                        follow_num.setText(detailforest2[position-1][3]);
-                        reply_num.setText(detailforest2[position-1][12]);
-                        thumbup_num.setText(detailforest2[position-1][13]);
-                        hole_id.setText("#" + detailforest2[position-1][6]);
-                        Log.d(TAG,detailforest2[position-1][8]);
-                        Log.d(TAG,detailforest2[position-1][10]);
-                        Log.d(TAG,detailforest2[position-1][11]);
+                        content.setText(detailforest2.get(position-1)[1]);
+                        created_timestamp.setText(detailforest2.get(position-1)[2]);
+                        forest_name.setText(detailforest2.get(position-1)[5]);
+                        follow_num.setText(detailforest2.get(position-1)[3]);
+                        reply_num.setText(detailforest2.get(position-1)[12]);
+                        thumbup_num.setText(detailforest2.get(position-1)[13]);
+                        hole_id.setText("#" +detailforest2.get(position-1)[6]);
+                       // Log.d(TAG,detailforest2.get(position-1)[8]);
+                       // Log.d(TAG,detailforest2.get(position-1)[10]);
+                       // Log.d(TAG,detailforest2.get(position-1)[11]);
 
-                        if (detailforest2[position-1][8].equals("true")) {
+                        if (detailforest2.get(position-1)[8].equals("true")) {
                             is_follow.setImageResource(R.mipmap.active_3);
                         }
-                        if(detailforest2[position-1][9].equals("true")){
+                        if(detailforest2.get(position-1)[9].equals("true")){
                             more_1.setImageResource(R.mipmap.vector6);
                             more_2.setText("删除");
                         }
-                        if (detailforest2[position-1][10].equals("true")) {
+                        if (detailforest2.get(position-1)[10].equals("true")) {
                             is_reply.setImageResource(R.mipmap.active_2);
                         }
-                        if (detailforest2[position-1][11].equals("true")) {
+                        if (detailforest2.get(position-1)[11].equals("true")) {
                             is_thumbup.setImageResource(R.mipmap.active);
                         }
-                        if(detailforest2[position-1][0].equals("")){
+                        if(detailforest2.get(position-1)[0].equals("")){
                         }else{
                             RoundedCorners roundedCorners = new RoundedCorners(16);
                             RequestOptions options1 = RequestOptions.bitmapTransform(roundedCorners);
 
                             Glide.with(getActivity())
-                                    .load(detailforest2[position-1][0])
+                                    .load(detailforest2.get(position-1)[0])
                                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                                     .apply(options1)
                                     .into(background_image_url);
@@ -747,7 +796,7 @@ public class Page2Fragment extends Fragment {
         }
         @Override
         public int getItemCount() {
-            return 10;
+            return listsize+1;
         }
     }
 }

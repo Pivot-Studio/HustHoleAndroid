@@ -143,6 +143,7 @@
             android:layout_marginTop="4dp"
             android:maxWidth="300dp"
             android:maxLines="5"
+            android:ellipsize="end"
             android:textColor="@color/GrayScale_20"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"

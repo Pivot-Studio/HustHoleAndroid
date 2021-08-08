@@ -33,13 +33,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
-
             <Button
                 android:id="@+id/button13"
                 android:layout_width="wrap_content"
                 android:layout_height="26dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/dp_14"
                 android:background="@drawable/tag_yellow"
                 android:drawableLeft="@mipmap/a218"
                 android:paddingLeft="6dp"
@@ -66,12 +65,11 @@
                 android:id="@+id/textView33"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
                 android:text="19:20  2020-09-16"
                 android:textColor="@color/GrayScale_80"
                 android:textSize="11sp"
                 app:layout_constraintStart_toStartOf="@+id/textView32"
-                app:layout_constraintTop_toBottomOf="@+id/textView32" />
+                app:layout_constraintTop_toBottomOf="@+id/button13" />
 
             <ImageView
                 android:id="@+id/imageView13"
@@ -142,11 +140,13 @@
 
             <TextView
                 android:id="@+id/textView37"
-                android:layout_width="@dimen/dp_320"
-                android:maxWidth="@dimen/dp_320"
+                android:layout_width="@dimen/dp_310"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
+                android:layout_marginTop="5dp"
+                android:maxWidth="@dimen/dp_310"
                 android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
+                android:maxLines="5"
+                android:ellipsize="end"
                 android:textColor="@color/GrayScale_20"
                 android:textSize="15sp"
                 app:layout_constraintStart_toStartOf="@+id/textView33"

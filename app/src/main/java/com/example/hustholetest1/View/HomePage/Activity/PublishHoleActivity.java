@@ -1,21 +1,28 @@
 package com.example.hustholetest1.View.HomePage.Activity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,9 +38,11 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.hustholetest1.Model.EditTextReaction;
 import com.example.hustholetest1.Model.Forest;
 import com.example.hustholetest1.Model.RequestInterface;
+import com.example.hustholetest1.Model.SoftKeyBoardListener;
 import com.example.hustholetest1.Model.TokenInterceptor;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.View.HomePage.fragment.Page2Fragment;
+import com.example.hustholetest1.View.RetrievePassword.Activity.VerificationCodeActivity;
 import com.githang.statusbar.StatusBarCompat;
 
 import org.json.JSONArray;
@@ -41,6 +50,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -67,10 +77,45 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
     private int number=0;
     private String what="0";
     private LinearLayout linearLayout;
+    private TextView length;
+
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.publishhole);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+         Button button8=(Button)findViewById(R.id.button8);
+
+
+        SoftKeyBoardListener.setListener(this,new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+            @Override
+            public void keyBoardShow(int height) {
+                //Toast.makeText(PublishHoleActivity.this, "键盘显示 高度" + height, Toast.LENGTH_SHORT).show();
+                int[] location=new int[2];
+                button8.getLocationOnScreen(location);
+                int[] location2=new int[2];
+                length.getLocationOnScreen(location2);
+                editText.setMaxHeight(location2[1]-location[1]-20);
+
+            }
+
+            @Override
+            public void keyBoardHide(int height) {
+               // Toast.makeText(PublishHoleActivity.this, "键盘隐藏 高度" + height, Toast.LENGTH_SHORT).show();
+                //textView.setText("高度："+String.valueOf(height));
+                int[] location=new int[2];
+                button8.getLocationOnScreen(location);
+                int[] location2=new int[2];
+                length.getLocationOnScreen(location2);
+                editText.setMaxHeight(location2[1]-location[1]-20);
+            }
+        });
+
+
+
+
         StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
         if (getSupportActionBar()!= null) {
             getSupportActionBar().hide();
@@ -85,6 +130,8 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         request = retrofit.create(RequestInterface.class);//创建接口实
+        length=(TextView)findViewById(R.id.textView74);
+
 
         back=(ImageView)findViewById(R.id.backView);
         back.setOnClickListener(new View.OnClickListener() {
@@ -128,11 +175,45 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
             }
         });
         text=(TextView)findViewById(R.id.textView73);
+        String forest=(String) getIntent()
+                .getStringExtra(key);
+        if(forest.equals("1")){
+
+        }else{
+            text.setText(forest);
+        }
+
+
+
         limit=(TextView)findViewById(R.id.textView77);
         editText=(EditText)findViewById(R.id.editText5);
         EditTextReaction.ButtonReaction(editText,button0);
         EditTextReaction.EditTextSize(editText,string1,14);
         linearLayout=(LinearLayout)findViewById(R.id.include);
+
+
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                length.setText(s.length()+"/1037");
+                if (s.length() >=1037) {
+                    //editText.setFocusable(false);
+                    Toast.makeText(PublishHoleActivity.this,"输入内容过长",Toast.LENGTH_SHORT).show();
+                    //textInputLayout.setErrorEnabled(true);
+                    //textInputLayout.setError("输入超长");
+                } else {
+                   // editText.setFocusable(true);
+                }
+            }
+        });
+
+
 
         text.setOnClickListener(new View.OnClickListener() {
 
@@ -370,6 +451,9 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         }
 
         public class HeadHolder extends RecyclerView.ViewHolder{
+
+
+
             private TextView textView;
             public HeadHolder(View view){
                 super(view);
@@ -405,6 +489,9 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                         } else if (position>1&&position<2+jsonArray.length()) {
                             text.setText(detailforest[position-2][7]);
                             what=detailforest[position-2][3];
+                        }else if(position==0){
+                            text.setText("未选择加入小树林");
+                            what="0";
                         }
 
                     }

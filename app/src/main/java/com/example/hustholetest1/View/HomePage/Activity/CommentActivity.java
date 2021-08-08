@@ -62,6 +62,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 
+
+
+
+
+
+
 public class CommentActivity extends AppCompatActivity {
     private static final String key="key_1";
     private TextView title;
@@ -76,6 +82,7 @@ public class CommentActivity extends AppCompatActivity {
     private String[] data;
     private String reply_to_who="-1";
     private RefreshLayout refreshlayout1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +102,7 @@ public class CommentActivity extends AppCompatActivity {
 //传入false表示刷新失败
             }
         });
+
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
@@ -109,6 +117,10 @@ public class CommentActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(CommentActivity.this);
         linearLayoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView2.setLayoutManager(linearLayoutManager2);
+
+
+
+
         editText = (EditText) findViewById(R.id.editText4);
 
         SpannableString ss = new SpannableString("评论洞主：");
@@ -176,7 +188,11 @@ public class CommentActivity extends AppCompatActivity {
 
 
         data = getIntent().getStringArrayExtra(key);
+        if(data.equals(null)){
 
+        }else{
+
+        }
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -253,6 +269,9 @@ public class CommentActivity extends AppCompatActivity {
         }
     }).start();
 }
+
+
+
     private class DownloadTask extends AsyncTask<Void, Void, Void> {//用于加载图片
 
             @Override
@@ -288,7 +307,7 @@ public class CommentActivity extends AppCompatActivity {
 
    
     public static Intent newIntent(Context packageContext, String[] data){
-        Log.d("data[2]2",data[2]);
+       // Log.d("data[2]2",data[2]);
         Intent intent = new Intent(packageContext, CommentActivity.class);
         intent.putExtra(key,data);
         return intent;
@@ -376,7 +395,6 @@ public class CommentActivity extends AppCompatActivity {
                     }
                 });
                 morewhat.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v){
                         morewhat.setVisibility(View.INVISIBLE);
@@ -885,7 +903,18 @@ public class CommentActivity extends AppCompatActivity {
                     is_thumbup.setImageResource(R.mipmap.active);
                 }
                 if(detailreply[position][8].equals("-1")){
-                    linearLayout.setVisibility(View.INVISIBLE);
+                    //linearLayout.setVisibility(View.INVISIBLE);
+                    ConstraintLayout.LayoutParams linearParams0 =(ConstraintLayout.LayoutParams) reply_tosomebody.getLayoutParams(); //取控件textView当前的布局参数 linearParams.height = 20;// 控件的高强制设成20
+                    linearParams0.height =0;
+                    linearParams0.width=0;
+                    linearParams0.topMargin=0;
+                    linearParams0.bottomMargin=0;// 控件的宽强制设成30
+                    reply_tosomebody.setLayoutParams(linearParams0);
+                   ConstraintLayout.LayoutParams linearParams =(ConstraintLayout.LayoutParams) linearLayout.getLayoutParams(); //取控件textView当前的布局参数 linearParams.height = 20;// 控件的高强制设成20
+                    linearParams.height =0;
+                    linearParams.width=0;
+                    linearLayout.setLayoutParams(linearParams);
+
                 }else {
                     Log.d("",detailreply[position][0]+detailreply[position][1]+detailreply[position][2]+detailreply[position][8]);
                     //linearLayout.setVisibility(View.VISIBLE);

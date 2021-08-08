@@ -34,6 +34,7 @@ import com.example.hustholetest1.R;
 import com.example.hustholetest1.View.HomePage.fragment.Page2Fragment;
 import com.example.hustholetest1.View.RegisterAndLogin.Activity.Login2Activity;
 import com.githang.statusbar.StatusBarCompat;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,6 +65,7 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
     private String data_2;
     private RequestInterface request;
     private RecyclerView recyclerView;
+    private FloatingActionButton addhole;
     private static final String key="key_1";
     private static final String key_2="key_2";
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +83,10 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
         button=(Button)findViewById(R.id.rectangle_3);
         head=(ImageView)findViewById(R.id.imageView19);
         head_2=(ImageView)findViewById(R.id.imageView22);
+
+
+
+
         //title = (TextView) findViewById(R.id.title);
         //title.setText("发现小树林");
         back.setOnClickListener(new View.OnClickListener() {
@@ -103,8 +109,22 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
         request = retrofit.create(RequestInterface.class);//创建接口实例
         Log.e(TAG, "token100：");
         data=getIntent().getStringArrayExtra(key);
+        addhole=(FloatingActionButton)findViewById(R.id.imageView0);
+        addhole.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                //关闭掉对话框,拿到对话框的对象
+                Intent intent=PublishHoleActivity.newIntent(Page2_DetailAllForestsActivity.this,data[7]);
+                startActivity(intent);
+            }
+        });
+
+
+
         if(data==null){
-          data_2=getIntent().getStringExtra(key_2);
+            addhole.setVisibility(View.INVISIBLE);
+            data_2=getIntent().getStringExtra(key_2);
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -129,6 +149,7 @@ public class Page2_DetailAllForestsActivity extends AppCompatActivity {
                                     data[6] = sonObject.getString("last_active_time");
                                     data[7] = sonObject.getString("name");
                                     update();
+                                    addhole.setVisibility(View.VISIBLE);
                                 } catch (IOException | JSONException e) {
                                     e.printStackTrace();
                                 }

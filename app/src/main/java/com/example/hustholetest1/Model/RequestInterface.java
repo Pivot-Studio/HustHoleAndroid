@@ -31,8 +31,8 @@ public interface RequestInterface {//接口
     Call<ResponseBody> delete(@Url String url);
     @GET("joined?list_size=30&start_id=0")
     Call<ResponseBody> joined();
-    @GET("holes?list_size=10&start_id=0&is_last_reply=true")
-    Call<ResponseBody> holes();
+    @GET
+    Call<ResponseBody> joined_holes(@Url String url);
     @GET
     Call<ResponseBody> detailholes(@Url String url);
 
@@ -66,6 +66,9 @@ public interface RequestInterface {//接口
     Call<ResponseBody> report(@Url String url);
     @POST
     Call<ResponseBody> report_2(@Url String url);
+
+
+
 
 
 }
