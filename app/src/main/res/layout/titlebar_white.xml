@@ -9,7 +9,7 @@
 
 
     <ImageView
-        android:id="@+id/backView"
+        android:id="@+id/iv_titlebarwhite_back"
         android:layout_width="@dimen/dp_52"
         android:layout_height="@dimen/dp_52"
         android:layout_centerInParent="true"

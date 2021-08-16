@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_about_2"
+    android:layout_width="200dp"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="32dp"
+    android:background="@color/white"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp">
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/logout_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:padding="30dp">
+        <TextView
+            android:id="@+id/logout_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="30dp"
+            android:layout_centerHorizontal="true"
+            android:text="确定要退出登录吗？"/>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/cancel"
+            android:layout_below="@+id/logout_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cornerRadius="10dp"
+            app:backgroundTint="@color/HH_BandColor_5"
+            android:textColor="@color/HH_Reminder_Warning"
+            app:strokeColor="@color/HH_Reminder_Warning"
+            android:textAlignment="center"
+            android:paddingVertical="10dp"
+            android:paddingHorizontal="20dp"
+            android:text="手滑了"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/cancel"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="确认退出"
+            android:textAlignment="center"
+            android:textColor="@color/HH_Reminder_Warning"
+            app:backgroundTint="@color/GrayScale_100"
+            app:strokeColor="@color/HH_Reminder_Warning"
+            app:strokeWidth="1dp" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
+
+

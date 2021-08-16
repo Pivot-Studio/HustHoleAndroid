@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <declare-styleable name="MaxHeightRecyclerView">
+        <attr name="maxHeight" format="dimension" />
+    </declare-styleable>
+
+
+
     <style name="Standard_Button">
         <item name="android:textSize">30sp</item>
     </style>
@@ -26,6 +32,10 @@
         <item name="android:windowEnterAnimation">@anim/popupwindow_enter</item>
         <item name="android:windowExitAnimation">@anim/popupwindow_exit</item>
     </style>
+    <style name="darkScreenAnim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/darkscreen_enter</item>
+        <item name="android:windowExitAnimation">@anim/darkscreen_exit</item>
+    </style>
     <style name="Page2Anim" parent="@android:style/Animation.Activity">
         <item name="android:windowEnterAnimation">@anim/context_menu_enter</item>
         <item name="android:windowExitAnimation">@anim/context_menu_exit</item>
@@ -41,5 +51,9 @@
     <style name="AlertDialogCustom" parent="android:style/Theme.Dialog">
         <item name="android:background">@drawable/homepage_notice</item>
     </style>
-
+    <style name="myBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/HH_BandColor_3</item>
+        <item name="colorPrimaryDark">@color/HH_BandColor_1</item>
+        <item name="colorAccent">@color/GrayScale_100</item>
+    </style>
 </resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="\nv 1.0"
+        android:textColor="@color/black"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2021-03-08"/>
+    <TextView
+        android:id="@+id/detail"
+        android:textSize="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="新增功能：\n- 关键词搜索;\n体验优化:\n- 点击树洞评论昵称时跳转的评论会闪动提醒\n"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:background="@color/GrayScale_50"
+        android:layout_height="1dp" />
+
+</LinearLayout>

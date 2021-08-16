@@ -26,4 +26,6 @@
     <color name="HH_BandColor_7">#FFB459</color>
     <color name="HH_Reminder_Warning">#FF6767</color>
     <color name="HH_Reminder_Link">#02A9F5</color>
+
+    <color name="darkscreen">#66000000</color>
 </resources>

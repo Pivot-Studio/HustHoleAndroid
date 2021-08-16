@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/GrayScale_100"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/GrayScale_100"
+        >
+
+        <TextView
+            android:id="@+id/tv_itemdetailforest_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="10dp"
+            android:text="#1037"
+            android:textColor="@color/GrayScale_0"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_itemdetailforest_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="19:20  2020-09-16"
+            android:textColor="@color/GrayScale_80"
+            android:textSize="11sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_itemdetailforest_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_itemdetailforest_title" />
+
+        <ImageView
+            android:id="@+id/iv_itemdetailforest_thumbup"
+            android:layout_width="16dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_itemdetailforest_content"
+            app:srcCompat="@mipmap/inactive" />
+
+        <TextView
+            android:id="@+id/tv_itemdetailforest_thumbupnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="4dp"
+            android:text="15"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_itemdetailforest_thumbup"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_thumbup"
+            app:layout_constraintTop_toTopOf="@+id/iv_itemdetailforest_thumbup" />
+
+        <ImageView
+            android:id="@+id/iv_itemdetailforest_reply"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="51dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_thumbup"
+            app:layout_constraintTop_toBottomOf="@+id/tv_itemdetailforest_content"
+            app:srcCompat="@mipmap/inactive_2" />
+
+        <TextView
+            android:id="@+id/tv_itemdetailforest_replynumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="15"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_itemdetailforest_reply"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_reply"
+            app:layout_constraintTop_toTopOf="@+id/iv_itemdetailforest_reply" />
+
+        <ImageView
+            android:id="@+id/iv_itemdetailforest_follow"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginStart="51dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_reply"
+            app:layout_constraintTop_toBottomOf="@+id/tv_itemdetailforest_content"
+            app:srcCompat="@mipmap/inactive_3" />
+
+        <TextView
+            android:id="@+id/tv_itemdetailforest_follownumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:text="15"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_itemdetailforest_follow"
+            app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_follow"
+            app:layout_constraintTop_toTopOf="@+id/iv_itemdetailforest_follow" />
+
+        <TextView
+            android:id="@+id/tv_itemdetailforest_content"
+            android:layout_width="@dimen/dp_310"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:maxWidth="@dimen/dp_310"
+            android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
+            android:maxLines="5"
+            android:ellipsize="end"
+            android:textColor="@color/GrayScale_20"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@+id/tv_itemdetailforest_time"
+            app:layout_constraintTop_toBottomOf="@+id/tv_itemdetailforest_time" />
+
+        <ImageView
+            android:id="@+id/iv_itemdetailforest_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@mipmap/threepoint" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_itemdetailforest_morelist"
+            android:layout_width="@dimen/dp_158"
+            android:layout_height="@dimen/dp_48"
+            android:elevation="20dp"
+            android:background="@drawable/more"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_itemdetailforest_moreicon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/vector4" />
+
+            <TextView
+                android:id="@+id/tv_itemdetailforest_moretext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="举报"
+                android:textColor="@color/GrayScale_20"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_moreicon"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="10dp"
+    android:background="@color/GrayScale_95"
+   />
+</LinearLayout>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/outer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/GrayScale_100"
+    android:orientation="vertical">
+    <!--app:layout_srlBackgroundColor="transparent"-->
+    <RelativeLayout
+        android:id="@+id/relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="10dp"
+        android:background="@color/GrayScale_100">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="22dp"
+            android:lineSpacingExtra="1sp"
+            android:text="Alice"
+            android:textColor="#343434"
+            android:textSize="13sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></TextView>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="7dp"
+            android:layout_toRightOf="@id/name"
+            android:lineSpacingExtra="1sp"
+            android:text="评论了你的树洞"
+            android:textColor="@color/GrayScale_50"
+            android:textSize="13sp"></TextView>
+
+        <TextView
+            android:id="@+id/hole_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="22dp"
+            android:lineSpacingExtra="1sp"
+            android:text="# 1037"
+            android:textColor="@color/GrayScale_20"
+            android:textSize="13sp"></TextView>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="5dp"
+        android:lineSpacingExtra="1sp"
+        android:text="19:20 2021 09-16"
+        android:textColor="@color/GrayScale_80"
+        android:textSize="11sp"></TextView>
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="331dp"
+        android:layout_height="21dp"
+        android:layout_marginLeft="22dp"
+        android:ellipsize="end"
+        android:lineSpacingExtra="1sp"
+        android:maxLines="1"
+        android:text="我好想买Airpods但是没有钱，梁老师可不可以资助呀呀呀"
+        android:textColor="@color/GrayScale_20"
+        android:textSize="14sp"></TextView>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_21"
+        android:layout_marginTop="15dp"
+        android:background="@color/GrayScale_95"></View>
+
+</LinearLayout>

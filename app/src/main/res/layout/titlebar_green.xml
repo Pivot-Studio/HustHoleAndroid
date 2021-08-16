@@ -8,18 +8,17 @@
 
 
     <ImageView
-        android:id="@+id/backView"
+        android:id="@+id/iv_titlebargreen_back"
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:layout_centerInParent="true"
         android:scaleType="center"
         android:background="@drawable/back_green"
         android:onClick="onClick"
-
-        app:srcCompat="@drawable/back_black" />
+        app:srcCompat="@mipmap/triangle_4" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/tv_titlebargreen_title"
         android:layout_width="wrap_content"
         android:layout_height="52dp"
         android:gravity="center"

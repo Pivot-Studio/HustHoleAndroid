@@ -1,15 +1,317 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <TextView
-        android:id="@+id/textView16"
-        android:layout_width="wrap_content"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="4444444"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:layout_marginBottom="200dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/img_my_background"
+                android:layout_width="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_height="207dp"
+                app:srcCompat="@mipmap/my_background" />
+
+            <!--        <View-->
+            <!--            android:id="@+id/my_view1"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="10dp"-->
+            <!--            android:background="#F3F3F3"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/my_background" />-->
+
+            <TextView
+                android:id="@+id/my_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/img_my_background"
+                android:layout_marginTop="10dp"
+                android:padding="12dp"
+                android:text="我来到树洞已经10天了。"
+                android:textAlignment="center" />
+
+            <!--        <View-->
+            <!--            android:id="@+id/my_view"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="1dp"-->
+            <!--            android:layout_marginTop="10dp"-->
+            <!--            android:background="#F3F3F3"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/date"-->
+            <!--            />-->
+
+            <RelativeLayout
+                android:id="@+id/my_hole_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/my_date">
+                <LinearLayout
+                    android:id="@+id/my_hole"
+                    android:clickable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/my_hole_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="4dp"
+                        android:layout_gravity="center"
+                        android:text="3"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="4dp"
+                        android:layout_gravity="center"
+                        android:text="我的树洞"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/my_star"
+                    android:clickable="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_toEndOf="@id/my_hole"
+                    android:layout_marginLeft="60dp">
+                    <TextView
+                        android:id="@+id/my_star_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="4dp"
+                        android:layout_gravity="center"
+                        android:text="1"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:padding="4dp"
+                        android:layout_gravity="center"
+                        android:text="我的关注"/>
+                </LinearLayout>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/settings"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/my_hole_star"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="个人设置"
+                    android:padding="12dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="12dp"
+                    app:srcCompat="@drawable/back_black"
+                    android:layout_alignParentEnd="true"
+                    android:rotation="180"
+                    android:layout_marginEnd="12dp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rules"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/settings"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="0dp"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="12dp"
+                    android:text="社区规范" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
+                    android:padding="12dp"
+                    android:rotation="180"
+                    app:srcCompat="@drawable/back_black" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/evaluate"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rules"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="评价"
+                    android:padding="12dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="12dp"
+                    app:srcCompat="@drawable/back_black"
+                    android:layout_alignParentEnd="true"
+                    android:rotation="180"
+                    android:layout_marginEnd="12dp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/advice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/evaluate"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="1dp"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="12dp"
+                    android:text="建议" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
+                    android:padding="12dp"
+                    android:rotation="180"
+                    app:srcCompat="@drawable/back_black" />
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/about"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/advice"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="1dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="关于1037树洞"
+                    android:padding="12dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="12dp"
+                    app:srcCompat="@drawable/back_black"
+                    android:layout_alignParentEnd="true"
+                    android:rotation="180"
+                    android:layout_marginEnd="12dp"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/update"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/about"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="1dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="更新日志"
+                    android:padding="12dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="12dp"
+                    app:srcCompat="@drawable/back_black"
+                    android:layout_alignParentEnd="true"
+                    android:rotation="180"
+                    android:layout_marginEnd="12dp"/>
+            </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/logout"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/update"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="退出登录"
+                    android:textColor="@color/HH_Reminder_Warning"
+                    android:padding="12dp"/>
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="12dp"
+                    app:srcCompat="@drawable/back_black"
+                    android:layout_alignParentEnd="true"
+                    android:rotation="180"
+                    android:layout_marginEnd="12dp"/>
+            </RelativeLayout>
+
+
+            <!--        <View-->
+            <!--            android:id="@+id/my_view2"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="1dp"-->
+            <!--            android:layout_marginTop="10dp"-->
+            <!--            android:background="#F3F3F3"-->
+
+            <!--            />-->
+
+            <!--        <androidx.recyclerview.widget.RecyclerView-->
+            <!--            android:id="@+id/my_recycleView1"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/my_view2"-->
+            <!--            />-->
+            <!--        <View-->
+            <!--            android:id="@+id/my_view3"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="10dp"-->
+            <!--            android:background="#F3F3F3"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/my_recycleView1"-->
+            <!--            />-->
+            <!--        <androidx.recyclerview.widget.RecyclerView-->
+            <!--            android:id="@+id/my_recycleView2"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/my_view3"-->
+            <!--            />-->
+            <!--        <View-->
+            <!--            android:id="@+id/my_view4"-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="1000dp"-->
+            <!--            android:background="#F3F3F3"-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/my_recycleView2"-->
+            <!--            />-->
+            <!--        &lt;!&ndash;        <androidx.recyclerview.widget.RecyclerView&ndash;&gt;-->
+            <!--        &lt;!&ndash;            android:id="@+id/my_recycleView3"&ndash;&gt;-->
+            <!--        &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+            <!--        &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
+            <!--        &lt;!&ndash;            app:layout_constraintTop_toBottomOf="@id/my_view4"&ndash;&gt;-->
+            <!--        &lt;!&ndash;            />&ndash;&gt;-->
+        </RelativeLayout>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
+
+
+
+
+
+
+
