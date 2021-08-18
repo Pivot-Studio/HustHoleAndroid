@@ -32,18 +32,19 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.Forest;
 import com.example.hustholetest1.model.GlideRoundTransform;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.StandardRefreshHeader;
+import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.network.TokenInterceptor;
 import com.example.hustholetest1.R;
-import com.example.hustholetest1.network.OkHttpUtil;
+import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.activity.HomeScreenActivity;
+import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity;
 import com.githang.statusbar.StatusBarCompat;
-import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 
 
@@ -61,7 +62,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
@@ -142,14 +142,9 @@ public class AllForestsActivity extends AppCompatActivity {
         TokenInterceptor.getContext(AllForestsActivity.this);
         //TokenInterceptor.getContext(RegisterActivity.this);
         System.out.println("提交了context");
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://hustholetest.pivotstudio.cn/api/forests/")
-                .client(OkHttpUtil.getOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        Log.e(TAG, "token99：");
+        retrofit= RetrofitManager.getRetrofit();
         request = retrofit.create(RequestInterface.class);//创建接口实例
-        Log.e(TAG, "token100：");
+
 
 
 
@@ -175,8 +170,7 @@ public class AllForestsActivity extends AppCompatActivity {
     new Thread(new Runnable() {//加载纵向列表标题
         @Override
         public void run() {
-            Call<ResponseBody> call = request.getCall();//进行封装
-            Log.e(TAG, "token2：");
+            Call<ResponseBody> call = request.getType(0,10);//进行封装
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -221,8 +215,8 @@ public class AllForestsActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String gg="type/"+title_list_2[cycle(true)]+"?start_id=0&list_size=10&is_last_active=false";
-                    Call<ResponseBody> call = request.testUrl(gg);//进行封装
+                    //String gg=title_list_2[cycle(true)]+"?start_id=0&list_size=10&is_last_active=false";
+                    Call<ResponseBody> call = request.getDetailTypeForest(title_list_2[cycle(true)],0,10,false);//进行封装
                     call.enqueue(new Callback<ResponseBody>() {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             String json = "null";
@@ -254,7 +248,7 @@ public class AllForestsActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                           t.printStackTrace();
                         }
                     });
                 }
@@ -270,7 +264,7 @@ public void Update2(){//加载热门小树林
     new Thread(new Runnable() {
         @Override
         public void run() {
-            Call<ResponseBody> call2 = request.getCall2();//进行封装
+            Call<ResponseBody> call2 = request.getHotForest(0,10);//进行封装
             call2.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -387,6 +381,7 @@ public void Update2(){//加载热门小树林
         @Override
         protected void onPostExecute(Void unused) {
             //recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number,false));
+
             recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number,true));
 
         }
@@ -482,24 +477,6 @@ public void Update2(){//加载热门小树林
                         MyTaskParams II=new MyTaskParams(position2, recyclerViewin);
                         new DownloadTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,II);
                         JSONArray jsonArray=Forest.getForest_list(position2);
-
-
-                     /*   bitmaps[position2]=new Bitmap[jsonArray.length()][];
-                        for(int f=0;f<jsonArray.length();f++) {
-                            int[] list1=new int[2];
-                            list1[0]=position2;
-                            list1[1]=f;
-                            MyTaskParams2 II2=new MyTaskParams2(list1, recyclerViewin);
-                            System.out.println(f+"424");
-                            new DownloadTask2().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,II2);
-
-                        }
-                    }else{
-                        recyclerViewin.setAdapter(new AllForestsDetailAdapter(position2,true));
-                    }*/
-
-
-
                     position=position2;
                     if(position2==0){
                         type.setText("热门小树林");
@@ -574,87 +551,91 @@ public void Update2(){//加载热门小树林
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            if(condition_if.equals("true")){
-                                View mView = View.inflate(getApplicationContext(), R.layout.dialog_forestquitnotice, null);
-                                // mView.setBackgroundResource(R.drawable.homepage_notice);
-                                //设置自定义的布局
-                                //mBuilder.setView(mView);
-                                Dialog dialog = new Dialog(AllForestsActivity.this);
-                                dialog.setContentView(mView);
-                                dialog.getWindow().setBackgroundDrawableResource(R.drawable.notice);
-                                TextView no = (TextView) mView.findViewById(R.id.tv_dialogforestquit_notquit);
-                                TextView yes = (TextView) mView.findViewById(R.id.tv_dialogforestquit_quit);
-                                no.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        dialog.dismiss();
-                                    }
-                                });
-                                yes.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
+                            if(CheckingToken.IfTokenExist()) {
+                                if (condition_if.equals("true")) {
+                                    View mView = View.inflate(getApplicationContext(), R.layout.dialog_forestquitnotice, null);
+                                    // mView.setBackgroundResource(R.drawable.homepage_notice);
+                                    //设置自定义的布局
+                                    //mBuilder.setView(mView);
+                                    Dialog dialog = new Dialog(AllForestsActivity.this);
+                                    dialog.setContentView(mView);
+                                    dialog.getWindow().setBackgroundDrawableResource(R.drawable.notice);
+                                    TextView no = (TextView) mView.findViewById(R.id.tv_dialogforestquit_notquit);
+                                    TextView yes = (TextView) mView.findViewById(R.id.tv_dialogforestquit_quit);
+                                    no.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            dialog.dismiss();
+                                        }
+                                    });
+                                    yes.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
 
-                                                Call<ResponseBody> call2 = request.delete( "http://hustholetest.pivotstudio.cn/api/forests/quit/"+forest_list_0[father_position][position][3]);//进行封装
-                                                call2.enqueue(new Callback<ResponseBody>() {
-                                                    @Override
-                                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                        Toast.makeText(AllForestsActivity.this, "退出成功", Toast.LENGTH_SHORT).show();
-                                                        condition_if="false";
-                                                        forest_list_0[father_position][position][5]="false";
-                                                        button.setPadding(30,5,6,6);
-                                                        button.setBackground(getDrawable(R.drawable.forest_button));
-                                                        button.setText("加入");
-                                                        button.setTextColor(getResources().getColor(R.color.GrayScale_100));
-                                                        Drawable homepressed=getResources().getDrawable(R.mipmap.group243,null);
-                                                        homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
-                                                        button.setCompoundDrawables(homepressed,null,null,null);
-                                                        dialog.dismiss();
-                                                    }
+                                                    Call<ResponseBody> call2 = request.delete("http://hustholetest.pivotstudio.cn/api/forests/quit/" + forest_list_0[father_position][position][3]);//进行封装
+                                                    call2.enqueue(new Callback<ResponseBody>() {
+                                                        @Override
+                                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                            Toast.makeText(AllForestsActivity.this, "退出成功", Toast.LENGTH_SHORT).show();
+                                                            condition_if = "false";
+                                                            forest_list_0[father_position][position][5] = "false";
+                                                            button.setPadding(30, 5, 6, 6);
+                                                            button.setBackground(getDrawable(R.drawable.forest_button));
+                                                            button.setText("加入");
+                                                            button.setTextColor(getResources().getColor(R.color.GrayScale_100));
+                                                            Drawable homepressed = getResources().getDrawable(R.mipmap.group243, null);
+                                                            homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
+                                                            button.setCompoundDrawables(homepressed, null, null, null);
+                                                            dialog.dismiss();
+                                                        }
 
-                                                    @Override
-                                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                        Toast.makeText(AllForestsActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                            }
-                                        }).start();
-                                    }
-                                });
-                                dialog.show();
+                                                        @Override
+                                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                            Toast.makeText(AllForestsActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+                                            }).start();
+                                        }
+                                    });
+                                    dialog.show();
+                                } else {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Call<ResponseBody> call23 = request.join("http://hustholetest.pivotstudio.cn/api/forests/join/" + forest_list_0[father_position][position][3]);//进行封装
+                                            call23.enqueue(new Callback<ResponseBody>() {
+
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    Toast.makeText(AllForestsActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
+                                                    forest_list_0[father_position][position][5] = "true";
+                                                    condition_if = "true";
+                                                    button.setPadding(0, 0, 0, 0);
+                                                    //button.setPadding(-30,-5,-6,-6);
+                                                    //button=(Button)view.findViewById(R.id.rectangle_4);
+                                                    button.setBackground(getDrawable(R.drawable.forest_button_white));
+                                                    button.setText("已加入");
+                                                    // button.setGravity(Gravity.CENTER_VERTICAL);
+                                                    button.setCompoundDrawables(null, null, null, null);
+                                                    button.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    Toast.makeText(AllForestsActivity.this, "加入失败", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
+                                    }).start();
+                                }
                             }else{
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                Call<ResponseBody> call23= request.join( "http://hustholetest.pivotstudio.cn/api/forests/join/"+forest_list_0[father_position][position][3]);//进行封装
-                                call23.enqueue(new Callback<ResponseBody>() {
-
-                                    @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        Toast.makeText(AllForestsActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
-                                        forest_list_0[father_position][position][5]="true";
-                                        condition_if="true";
-                                        button.setPadding(0,0,0,0);
-                                        //button.setPadding(-30,-5,-6,-6);
-                                        //button=(Button)view.findViewById(R.id.rectangle_4);
-                                        button.setBackground(getDrawable(R.drawable.forest_button_white));
-                                        button.setText("已加入");
-                                       // button.setGravity(Gravity.CENTER_VERTICAL);
-                                        button.setCompoundDrawables(null,null,null,null);
-                                        button.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
-                                    }
-
-                                    @Override
-                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        Toast.makeText(AllForestsActivity.this, "加入失败", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                                    }
-                                }).start();
+                                Intent intent=new Intent(AllForestsActivity.this, EmailVerifyActivity.class);
+                                startActivity(intent);
                             }
-
                         }
                     });
                     view.setOnClickListener(new View.OnClickListener() {

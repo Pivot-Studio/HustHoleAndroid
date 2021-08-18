@@ -62,7 +62,8 @@
         </activity>
         <activity android:name=".view.homescreen.forest.DetailForestActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/ImageTranslucentTheme">
         </activity>
         <activity android:name=".view.homescreen.forest.ApplyForestActivity"
         android:launchMode="singleTask"
@@ -118,6 +119,9 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity android:name=".view.homescreen.mine.VerifyOkActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.emailverify.EmailVerifyActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
     </application>

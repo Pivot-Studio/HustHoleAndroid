@@ -19,10 +19,10 @@
 
         <ImageView
             android:id="@+id/iv_ppwpublishhole_finish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="23dp"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="17dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/vector5" />
@@ -31,7 +31,7 @@
             android:id="@+id/tv_ppwpublishhole_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="17dp"
             android:text="@string/publishhole_popupwindow_1"
             android:textColor="@color/GrayScale_0"
             android:textSize="18sp"
@@ -44,6 +44,7 @@
         android:id="@+id/rv_ppwpublishhole"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout4" />

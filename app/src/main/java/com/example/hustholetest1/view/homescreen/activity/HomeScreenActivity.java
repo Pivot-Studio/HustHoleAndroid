@@ -23,8 +23,11 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.example.hustholetest1.model.BaseViewPager;
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.network.TokenInterceptor;
+import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
+import com.example.hustholetest1.view.homescreen.forest.DetailForestActivity;
 import com.example.hustholetest1.view.homescreen.publishhole.PublishHoleActivity;
 import com.example.hustholetest1.view.homescreen.fragment.HomePageFragment;
 import com.example.hustholetest1.view.homescreen.fragment.ForestFragment;
@@ -48,14 +51,19 @@ public class HomeScreenActivity extends AppCompatActivity {
     private ConstraintLayout constraint1,constraint2,constraint3,constraint4;
     private TextView textView0,textView1,textView2,textView3,textView4;
     private FloatingActionButton addhole;
+    private ImageView mOptionBoxIv;
+    private ConstraintLayout mTitleBarLl;
+    public static int gOptionBoxAndBarHeight;
+    public static int GetOBAndTBHeight(){
+        return gOptionBoxAndBarHeight;
+    }
 
+     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homescreen);
-
         StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-
         if(getSupportActionBar()!=null){//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
@@ -90,20 +98,43 @@ public class HomeScreenActivity extends AppCompatActivity {
         textView3=(TextView)findViewById(R.id.tv_homescreen_messagename);
         textView4=(TextView)findViewById(R.id.tv_homescreen_minename);
         addhole=(FloatingActionButton)findViewById(R.id.fab_homescreen_publishhole);
+        mOptionBoxIv=(ImageView)findViewById(R.id.iv_homescreen_optionbox);
+        mTitleBarLl=(ConstraintLayout)findViewById(R.id.ll_homescreen_titlebar);
+        int w = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        mOptionBoxIv.measure(w, h);
+        int height = mOptionBoxIv.getMeasuredHeight();
+        int w2 = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        int h2 = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        mTitleBarLl.measure(w2, h2);
+        int height2 = mTitleBarLl.getMeasuredHeight();
+        gOptionBoxAndBarHeight=height+height2;
+        Log.d("height+height2",height+"+"+height2);
+        //gOptionBoxTopLocation=mOptionBoxIv.getTop();
+
+
+
         addhole.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 //关闭掉对话框,拿到对话框的对象
-              Intent intent= PublishHoleActivity.newIntent(HomeScreenActivity.this,"1");
-              startActivity(intent);
+                if(CheckingToken.IfTokenExist()) {
+                    Intent intent = PublishHoleActivity.newIntent(HomeScreenActivity.this, "1");
+                    startActivity(intent);
+                }else{
+                    Intent intent=new Intent(HomeScreenActivity.this, EmailVerifyActivity.class);
+                    startActivity(intent);
+                }
             }
         });
+        CheckingToken.getContext(HomeScreenActivity.this);
         TokenInterceptor.getContext(HomeScreenActivity.this);
-        RetrofitManager.RetrofitBuilder("http://hustholetest.pivotstudio.cn/api/",HomeScreenActivity.this,true);
-        RetrofitManager.RetrofitBuilder("http://hustholetest.pivotstudio.cn/api/",HomeScreenActivity.this,false);
-
-
+        RetrofitManager.RetrofitBuilder("http://hustholetest.pivotstudio.cn/api/");
         a[0]=R.id.cl_homescreen_hompage;
         a[1]=R.id.cl_homescreen_hompage;
         /*Drawable drawableradiobutton1 = getResources().getDrawable(R.drawable.bottombar_button2);
@@ -258,7 +289,6 @@ public class HomeScreenActivity extends AppCompatActivity {
         mViewPager.removeOnPageChangeListener(mPageChangeListener);
     }
     public void onClick(View v) {
-        Intent intent;
         if(v.getId()!=R.id.fab_homescreen_publishhole){
         a[0]=a[1];
         a[1]=v.getId();
@@ -276,16 +306,34 @@ public class HomeScreenActivity extends AppCompatActivity {
                 mViewPager.setCurrentItem(1,false);
                 textView0.setText(R.string.homepage_4);
                 setBottombarPhoto(a);
+                if(CheckingToken.IfTokenExist()){
+
+                }else{
+                    Intent intent=new Intent(HomeScreenActivity.this, EmailVerifyActivity.class);
+                    startActivity(intent);
+                }
                 break;
             case R.id.cl_homescreen_message:
                 mViewPager.setCurrentItem(2,false);
                 textView0.setText(R.string.homepage_5);
                 setBottombarPhoto(a);
+                if(CheckingToken.IfTokenExist()){
+
+                }else{
+                    Intent intent=new Intent(HomeScreenActivity.this, EmailVerifyActivity.class);
+                    startActivity(intent);
+                }
                 break;
             case R.id.cl_homescreen_mine:
                 mViewPager.setCurrentItem(3,false);
                 textView0.setText(R.string.homepage_6);
                 setBottombarPhoto(a);
+                if(CheckingToken.IfTokenExist()){
+
+                }else{
+                    Intent intent=new Intent(HomeScreenActivity.this, EmailVerifyActivity.class);
+                    startActivity(intent);
+                }
                 break;
             default:
                 break;

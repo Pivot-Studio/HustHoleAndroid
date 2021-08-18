@@ -12,7 +12,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/standard_forest_centerphoto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -21,7 +21,7 @@
         android:id="@+id/tv_detailforesthead_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
+        android:layout_marginStart="15dp"
         android:text="测试测试测试测试"
         android:textColor="@color/GrayScale_100"
         android:textSize="18sp"
@@ -54,7 +54,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ll_detailforesthead"
         android:layout_width="match_parent"
-        android:layout_height="34dp"
+        android:layout_height="35dp"
         android:layout_marginTop="15dp"
         android:background="@color/GrayScale_100"
         app:layout_constraintTop_toBottomOf="@+id/tv_detailforesthead_content"
@@ -77,9 +77,19 @@
             android:id="@+id/btn_detailforesthead_greenline"
             android:layout_width="28dp"
             android:layout_height="2dp"
+            android:layout_marginBottom="2dp"
             android:background="@color/HH_BandColor_1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_detailforesthead_new" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:background="@color/GrayScale_80"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView

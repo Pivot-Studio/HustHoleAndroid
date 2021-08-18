@@ -3,7 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:id="@+id/cl_detailforest"
+    android:tileMode="disabled"
+    android:gravity="top"
+    >
 
 
     <ImageView
@@ -26,8 +31,8 @@
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/srl_detailforest_loadmore"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_720"
-        android:background="#00FFFFFF"
+        android:layout_height="wrap_content"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,14 +41,17 @@
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#00FFFFFF" />
+            />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.example.hustholetest1.model.MaxHeightRecyclerView
             android:id="@+id/rv_detailforest"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_720"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include2" />
+            android:layout_height="wrap_content"
+            />
+        <com.scwang.smart.refresh.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/GrayScale_80"/>
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 

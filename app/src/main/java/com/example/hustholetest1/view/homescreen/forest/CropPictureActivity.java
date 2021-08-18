@@ -241,8 +241,8 @@ public class CropPictureActivity extends AppCompatActivity {
             Glide.with(this)
                     .load(imageUri)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .placeholder(R.mipmap.logo)// 占位图设置：加载过程中显示的图片
-                    .error(R.mipmap.logo)// 异常占位图
+                    .placeholder(R.mipmap.ic_launcher)// 占位图设置：加载过程中显示的图片
+                    .error(R.mipmap.ic_launcher)// 异常占位图
                     .transform(new CenterCrop())
                     .into(photo);
         }catch (Exception e){

@@ -55,15 +55,16 @@
             android:layout_toStartOf="@id/view1"
             android:padding="12dp"
             android:text="未验证" />
+
         <ImageView
             android:id="@+id/view1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="12dp"
-            app:srcCompat="@drawable/back_black"
             android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:padding="12dp"
             android:rotation="180"
-            android:layout_marginEnd="12dp"/>
+            app:srcCompat="@drawable/back_black" />
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/security"

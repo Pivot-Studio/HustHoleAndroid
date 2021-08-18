@@ -14,6 +14,7 @@ import android.text.style.AbsoluteSizeSpan;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -28,15 +29,19 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.EditTextReaction;
 import com.example.hustholetest1.network.CommenRequestManager;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.model.TimeCount;
+import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.network.TokenInterceptor;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.network.OkHttpUtil;
+import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.forest.DetailForestActivity;
+import com.example.hustholetest1.view.registerandlogin.activity.LoginActivity;
 import com.githang.statusbar.StatusBarCompat;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -76,6 +81,8 @@ public class CommentListActivity extends AppCompatActivity {
     private String reply_to_who="-1";
     private RefreshLayout refreshlayout1;
 
+
+
     private Retrofit retrofit2;
     private RequestInterface request2;
     private String data_hole_id = null;
@@ -102,6 +109,12 @@ public class CommentListActivity extends AppCompatActivity {
                 mStartingLoadId=0;
                 mDetailReplyList=new ArrayList<>();
                 replyUpdate();
+               mCommentlistRv.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return true;
+                    }
+                });
 //传入false表示刷新失败
             }
         });
@@ -142,45 +155,49 @@ public class CommentListActivity extends AppCompatActivity {
         mPublishReplyBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(new Runnable() {//加载纵向列表标题
-                    @Override
-                    public void run() {
+                if(CheckingToken.IfTokenExist()){
+                    new Thread(new Runnable() {//加载纵向列表标题
+                        @Override
+                        public void run() {
 
-                        Call<ResponseBody> call = request.replies_add("http://hustholetest.pivotstudio.cn/api/replies?hole_id="+data[6]+"&content="+ mPublishReplyEt.getText().toString()+"&wanted_local_reply_id="+reply_to_who);//进行封装
-                       Log.d("", "http://hustholetest.pivotstudio.cn/api/replies?hole_id="+data[6]+"&content="+ mPublishReplyEt.getText().toString()+"&wanted_local_reply_id="+reply_to_who);
-                        call.enqueue(new Callback<ResponseBody>() {
-                            @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                String json = "null";
-                                try {
-                                    if (response.body() != null) {
-                                        json = response.body().string();
+                            Call<ResponseBody> call = request.replies_add("http://hustholetest.pivotstudio.cn/api/replies?hole_id=" + data[6] + "&content=" + mPublishReplyEt.getText().toString() + "&wanted_local_reply_id=" + reply_to_who);//进行封装
+                            Log.d("", "http://hustholetest.pivotstudio.cn/api/replies?hole_id=" + data[6] + "&content=" + mPublishReplyEt.getText().toString() + "&wanted_local_reply_id=" + reply_to_who);
+                            call.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    String json = "null";
+                                    try {
+                                        if (response.body() != null) {
+                                            json = response.body().string();
+                                        }
+                                        Log.e(TAG, json + "");
+                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        // 隐藏软键盘
+                                        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                                        mPublishReplyEt.setText("");
+                                        mPublishReplyEt.setHint("评价洞主：");
+                                        reply_to_who = "-1";
+                                        replyUpdate();
+
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
                                     }
-                                    Log.e(TAG, json + "");
-                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    // 隐藏软键盘
-                                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-                                    mPublishReplyEt.setText("");
-                                    mPublishReplyEt.setHint("评价洞主：");
-                                    reply_to_who="-1";
-                                    replyUpdate();
-
-                                } catch (IOException e) {
-                                    e.printStackTrace();
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable tr) {
 
-                            }
+                                }
 
 
-                        });
+                            });
 
-                    }
-                }).start();
-
+                        }
+                    }).start();
+                }else{
+                    Intent intent=new Intent(CommentListActivity.this, EmailVerifyActivity.class);
+                    startActivity(intent);
+            }
             }
         });
 
@@ -192,12 +209,7 @@ public class CommentListActivity extends AppCompatActivity {
         TokenInterceptor.getContext(CommentListActivity.this);
         //TokenInterceptor.getContext(RegisterActivity.this);
         System.out.println("提交了context");
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://hustholetest.pivotstudio.cn/")
-                .client(OkHttpUtil.getOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        Log.e(TAG, "token99：");
+        retrofit= RetrofitManager.getRetrofit();
         request = retrofit.create(RequestInterface.class);
 
         data = getIntent().getStringArrayExtra(key);
@@ -233,7 +245,7 @@ public class CommentListActivity extends AppCompatActivity {
             }
         });
 
-     mReplyAdapter=new ReplyAdapter();
+     //mReplyAdapter=new ReplyAdapter();
        //创建接口实例
        // replyUpdate(0);
     }
@@ -256,7 +268,7 @@ public class CommentListActivity extends AppCompatActivity {
         public void run() {
 
             SharedPreferences editor = getSharedPreferences("Depository2", Context.MODE_PRIVATE);//
-            String order = editor.getString("order", "false");
+            String order = editor.getString("order", "true");
             Call<ResponseBody> call = request.replies("http://hustholetest.pivotstudio.cn/api/replies?hole_id=" + data[6] + "&is_descend=" + order + "&start_id="+mStartingLoadId+"&list_size="+CONSTANT_STANDARD_LOAD_SIZE);//进行封装
 
 
@@ -270,23 +282,20 @@ public class CommentListActivity extends AppCompatActivity {
                         }
                         Log.e(TAG, json + "");
                         JSONObject jsonObject = new JSONObject(json);
-                        //读取
-                        //jsonArray = jsonObject.getJSONArray("msg");
-                        //Log.e(TAG, jsonArray.length() + "");
-
-                        if(json.equals("{\"msg\":[]}")){
+                        if(json.equals("{\"msg\":[]}")&&mLoadMoreCondotionRl!=null){
                             Toast.makeText(CommentListActivity.this,"加载到底辣",Toast.LENGTH_SHORT).show();
                             mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
-
-                            if(mLoadMoreCondotionRl!=null){
+                            //if(mLoadMoreCondotionRl!=null){
                                 mLoadMoreCondotionRl.finishLoadMore();
                                 mLoadMoreCondotionRl=null;
-                            }
+                           //}
                         }else{
+
                             jsonArray = jsonObject.getJSONArray("msg");
                             //jsonArray =response.body();
                             //mDetailforestHoleslist =new String[jsonArray2.length()][14];
                             new DownloadTask().execute();
+
                         }
 
                         //mDetailReplyList = new String[jsonArray.length()][12];
@@ -320,18 +329,26 @@ public class CommentListActivity extends AppCompatActivity {
                 if(mRefreshConditionRl !=null){
                     mRefreshConditionRl.finishRefresh();
                     mRefreshConditionRl =null;
-                   mReplyAdapter=new ReplyAdapter();
-                    mCommentlistRv.setAdapter(mReplyAdapter);
+
+                    mCommentlistRv.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            return false;
+                        }
+                    });
+
+                   mReplyAdapter.notifyDataSetChanged();
                 } else if(mLoadMoreCondotionRl!=null){
                     mLoadMoreCondotionRl.finishLoadMore();
                     mLoadMoreCondotionRl=null;
                     mReplyAdapter.notifyDataSetChanged();
                 }else{
+                    mReplyAdapter=new ReplyAdapter();
                    mCommentlistRv.setAdapter(mReplyAdapter);
                 }
 
 
-                mCommentlistRv.setAdapter(new ReplyAdapter());
+                //mCommentlistRv.setAdapter(new ReplyAdapter());
             }
 
             @Override
@@ -382,10 +399,8 @@ public class CommentListActivity extends AppCompatActivity {
         @Override
         public int getItemViewType(int position) {
             if (mHeaderCount != 0 && position < mHeaderCount) {
-//头部View
                 return ITEM_TYPE_HEADER;
-
-            }else if(position==1&&jsonArray.length()==0){
+            }else if(position==1&&mDetailReplyList.size()==0){
                 return ITEM_TYPE_NOMESSAGE;
             }else {
                 return ITEM_TYPE_CONTENT;
@@ -432,15 +447,19 @@ public class CommentListActivity extends AppCompatActivity {
                 morewhat.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v){
-                        morewhat.setVisibility(View.INVISIBLE);
-                        more_condition = false;
-                        if(data[9].equals("true")){
-                            CommenRequestManager.DeleteRequest(CommentListActivity.this,request,data[6]);
-                            finish();
-                        }else {
-                            CommenRequestManager.ReportRequest(CommentListActivity.this, request, data[6],"-1");
+                        if(CheckingToken.IfTokenExist()){
+                            morewhat.setVisibility(View.INVISIBLE);
+                            more_condition = false;
+                            if (data[9].equals("true")) {
+                                CommenRequestManager.DeleteRequest(CommentListActivity.this, request, data[6]);
+                                finish();
+                            } else {
+                                CommenRequestManager.ReportRequest(CommentListActivity.this, request, data[6], "-1");
+                            }
+                        }else{
+                            Intent intent=new Intent(CommentListActivity.this, EmailVerifyActivity.class);
+                            startActivity(intent);
                         }
-
                     }
                 });
 
@@ -456,11 +475,14 @@ public class CommentListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         SharedPreferences editor =getSharedPreferences("Depository2", Context.MODE_PRIVATE);//
-                        String  order = editor.getString("order", "false");
+                        String  order = editor.getString("order", "true");
                         order=order.equals("false")?"true":"false";
                         SharedPreferences.Editor editor2 = getSharedPreferences("Depository2", Context.MODE_PRIVATE).edit();//获取编辑器
                         editor2.putString("order",order);
                         editor2.commit();//提交
+
+                        mStartingLoadId=0;
+                        mDetailReplyList=new ArrayList<>();
                         replyUpdate();
 
 
@@ -487,108 +509,119 @@ public class CommentListActivity extends AppCompatActivity {
                 is_thumbup.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        if(data[11].equals("false")){
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/"+data[6]+"/-1");//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_thumbup.setImageResource(R.mipmap.active);
-                                           data[11]="true";
-                                           data[13]=(Integer.parseInt(data[13])+1)+"";
+                        if(CheckingToken.IfTokenExist()) {
+                            if (data[11].equals("false")) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + data[6] + "/-1");//进行封装
+                                        Log.e(TAG, "token2：");
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                is_thumbup.setImageResource(R.mipmap.active);
+                                                data[11] = "true";
+                                                data[13] = (Integer.parseInt(data[13]) + 1) + "";
 
-                                            thumbup_num.setText(data[13]);
-                                        }
+                                                thumbup_num.setText(data[13]);
+                                            }
 
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(CommentListActivity.this,"点赞失败",Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }).start();
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(CommentListActivity.this, "点赞失败", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            } else {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + data[6] + "/-1");//进行封装
+                                        Log.e(TAG, "token2：");
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                is_thumbup.setImageResource(R.mipmap.inactive);
+                                                data[11] = "false";
+                                                data[13] = (Integer.parseInt(data[13]) - 1) + "";
+
+                                                thumbup_num.setText(data[13]);
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(CommentListActivity.this, "取消点赞失败", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            }
                         }else{
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/"+data[6]+"/-1");//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_thumbup.setImageResource(R.mipmap.inactive);
-                                           data[11]="false";
-                                           data[13]=(Integer.parseInt(data[13])-1)+"";
-
-                                            thumbup_num.setText(data[13]);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(CommentListActivity.this,"取消点赞失败",Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }).start();
+                            Intent intent=new Intent(CommentListActivity.this, EmailVerifyActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });
                 is_follow.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        if(data[8].equals("false")){
-                            new Thread(new Runnable() {//加载纵向列表标题
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/follows/"+data[6]);//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_follow.setImageResource(R.mipmap.active_3);
-                                           data[8]="true";
-                                           data[3]=(Integer.parseInt(data[3])+1)+"";
 
-                                            follow_num.setText(data[3]);
-                                        }
+                        @Override
+                        public void onClick (View v){
+                            if(CheckingToken.IfTokenExist()){
+                                if (data[8].equals("false")) {
+                                    new Thread(new Runnable() {//加载纵向列表标题
+                                         @Override
+                                         public void run() {
+                                           Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/follows/" + data[6]);//进行封装Log.e(TAG, "token2：");
+                                             call.enqueue(new Callback<ResponseBody>() {
+                                             @Override
+                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                              is_follow.setImageResource(R.mipmap.active_3);
+                                              data[8] = "true";
+                                              data[3] = (Integer.parseInt(data[3]) + 1) + "";
 
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(CommentListActivity.this,"点赞失败",Toast.LENGTH_SHORT).show();
-                                            Log.d("","取消点赞失败");
-                                        }
-                                    });
-                                }
-                            }).start();
-                        }else{
+                                              follow_num.setText(data[3]);
+                                             }
+
+                                             @Override
+                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                 Toast.makeText(CommentListActivity.this, "点赞失败", Toast.LENGTH_SHORT).show();
+                                                 Log.d("", "取消点赞失败");
+                                             }
+                                           });
+                                         }
+                                   }).start();
+                               } else {
                             new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/follows/"+data[6]);//进行封装
+                                    Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/follows/" + data[6]);//进行封装
                                     Log.e(TAG, "token2：");
                                     call.enqueue(new Callback<ResponseBody>() {
                                         @Override
                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                             is_follow.setImageResource(R.mipmap.inactive_3);
-                                           data[8]="false";
-                                           data[3]=(Integer.parseInt(data[3])-1)+"";
+                                            data[8] = "false";
+                                            data[3] = (Integer.parseInt(data[3]) - 1) + "";
 
                                             follow_num.setText(data[3]);
                                         }
 
                                         @Override
                                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(CommentListActivity.this,"取消关注失败",Toast.LENGTH_SHORT).show();
-                                            Log.d("","取消关注失败");
+                                            Toast.makeText(CommentListActivity.this, "取消关注失败", Toast.LENGTH_SHORT).show();
+                                            Log.d("", "取消关注失败");
                                         }
                                     });
                                 }
                             }).start();
                         }
+                            }else{
+                                Intent intent=new Intent(CommentListActivity.this, EmailVerifyActivity.class);
+                                startActivity(intent);
                     }
+                    }
+
                 });
 
 
@@ -596,8 +629,8 @@ public class CommentListActivity extends AppCompatActivity {
             }
             public void bind(int position){
                 SharedPreferences editor =getSharedPreferences("Depository2", Context.MODE_PRIVATE);//
-                String  order = editor.getString("order", "false");
-                if(order.equals("false")){
+                String  order = editor.getString("order", "true");
+                if(order.equals("true")){
                     orders.setImageResource(R.mipmap.group111);
                 }else{
                     orders.setImageResource(R.mipmap.group112);
@@ -613,35 +646,53 @@ public class CommentListActivity extends AppCompatActivity {
               // Log.d("????????????",data[2].substring(0,4)+data[2].substring(5,7)+data[2].substring(8,10)+data[2].substring(11,13)+data[2].substring(14,16)+data[2].substring(14,16));
                 created_timestamp.setText(TimeCount.time(data[2]));
                 content.setText(data[1]);
-                Log.d("content",data[1]+"");
+               // Log.d("content",data[1]+"");
                 thumbup_num.setText(data[13]);
                 reply_num.setText(data[12]);
                 follow_num.setText(data[3]);
-                title.setText("#" + data[6]);
 
+                title.setText("#"+data[6]);
+                Log.d("title",data[6]+"");
                 if (data[8].equals("true")) {
                     is_follow.setImageResource(R.mipmap.active_3);
+                }else{
+                    is_follow.setImageResource(R.mipmap.inactive_3);
                 }
                 if(data[9].equals("true")){
                     more_1.setImageResource(R.mipmap.vector6);
                     more_2.setText("删除");
+                }else{
+                    more_1.setImageResource(R.mipmap.vector4);
+                    more_2.setText("");
                 }
                 if (data[10].equals("true")) {
                     is_reply.setImageResource(R.mipmap.active_2);
+                }else{
+                    is_reply.setImageResource(R.mipmap.inactive_2);
                 }
                 if (data[11].equals("true")) {
                     is_thumbup.setImageResource(R.mipmap.active);
+                }else{
+                    is_thumbup.setImageResource(R.mipmap.inactive);
                 }
             }
         }
         public class MessageHolder extends RecyclerView.ViewHolder{
             ImageView nomessage;
+            TextView nomessageTv;
             public MessageHolder(View view) {
                 super(view);
                 nomessage=(ImageView)view.findViewById(R.id.iv_nomessage);
+                nomessageTv=(TextView)view.findViewById(R.id.tv_nomessage);
             }
             public void bind(int position){
-               nomessage.setImageResource(R.mipmap.nomessage);
+
+                if(position==1&&mDetailReplyList.size()==0) {
+                    nomessage.setImageResource(R.mipmap.nomessage);
+                    nomessageTv.setText("还没有评论哦~");
+                }else{
+                    nomessageTv.setText("");
+                }
             }
         }
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -686,82 +737,86 @@ public class CommentListActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(View v){
-                        morewhat.setVisibility(View.INVISIBLE);
-                        more_condition = false;
-                        if(mDetailReplyList.get(position)[5].equals("true")){
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.delete_hole_2("http://hustholetest.pivotstudio.cn/api/replies/"+data[6]+"/" + mDetailReplyList.get(position)[7]);//进行封装
-                                    Log.e(TAG, "http://hustholetest.pivotstudio.cn/api/replies/"+data[6]+"/" + mDetailReplyList.get(position)[7]);
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            String json = "null";
+                        if(CheckingToken.IfTokenExist()){
+                            morewhat.setVisibility(View.INVISIBLE);
+                            more_condition = false;
+                            if (mDetailReplyList.get(position)[5].equals("true")) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.delete_hole_2("http://hustholetest.pivotstudio.cn/api/replies/" + data[6] + "/" + mDetailReplyList.get(position)[7]);//进行封装
+                                        Log.e(TAG, "http://hustholetest.pivotstudio.cn/api/replies/" + data[6] + "/" + mDetailReplyList.get(position)[7]);
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                String json = "null";
 
-                                            String returncondition=null;
-                                            if (response.body() != null) {
-                                                try {
-                                                    json = response.body().string();
-                                                    Log.d("json", response.body().string());
-                                                    JSONObject jsonObject = new JSONObject(json);
-                                                    returncondition = jsonObject.getString("msg");
-                                                    Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
-                                                    replyUpdate();
-                                                } catch (IOException | JSONException e) {
-                                                    e.printStackTrace();
+                                                String returncondition = null;
+                                                if (response.body() != null) {
+                                                    try {
+                                                        json = response.body().string();
+                                                        Log.d("json", response.body().string());
+                                                        JSONObject jsonObject = new JSONObject(json);
+                                                        returncondition = jsonObject.getString("msg");
+                                                        Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                        replyUpdate();
+                                                    } catch (IOException | JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                } else {
+                                                    Toast.makeText(CommentListActivity.this, "删除失败，超过可删除的时间范围", Toast.LENGTH_SHORT).show();
                                                 }
-                                            }else{
-                                                Toast.makeText(CommentListActivity.this, "删除失败，超过可删除的时间范围", Toast.LENGTH_SHORT).show();
+
+
                                             }
 
 
-                                        }
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(CommentListActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
 
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(CommentListActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
-
-                                        }
-                                    });
-                                }
-                            }).start();
-                        }else {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" + data[6] + "&reply_local_id="+ mDetailReplyList.get(position)[7]);//进行封装
-                                    Log.e(TAG, "http://hustholetest.pivotstudio.cn/api/replies/"+data[6]+"/" + mDetailReplyList.get(position)[7]);
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            String json = "null";
-                                            String returncondition = null;
-                                            if (response.body() != null) {
-                                                try {
-                                                    json = response.body().string();
-                                                    JSONObject jsonObject = new JSONObject(json);
-                                                    returncondition = jsonObject.getString("msg");
-                                                    Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
-                                                } catch (IOException | JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }else{
-                                                Toast.makeText(CommentListActivity.this, "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
                                             }
-                                        }
+                                        });
+                                    }
+                                }).start();
+                            } else {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" + data[6] + "&reply_local_id=" + mDetailReplyList.get(position)[7]);//进行封装
+                                        Log.e(TAG, "http://hustholetest.pivotstudio.cn/api/replies/" + data[6] + "/" + mDetailReplyList.get(position)[7]);
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                String json = "null";
+                                                String returncondition = null;
+                                                if (response.body() != null) {
+                                                    try {
+                                                        json = response.body().string();
+                                                        JSONObject jsonObject = new JSONObject(json);
+                                                        returncondition = jsonObject.getString("msg");
+                                                        Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                    } catch (IOException | JSONException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                } else {
+                                                    Toast.makeText(CommentListActivity.this, "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
 
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(CommentListActivity.this, "举报失败", Toast.LENGTH_SHORT).show();
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(CommentListActivity.this, "举报失败", Toast.LENGTH_SHORT).show();
 
-                                        }
-                                    });
-                                }
-                            }).start();
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            }
+                        }else{
+                            Intent intent=new Intent(CommentListActivity.this, EmailVerifyActivity.class);
+                            startActivity(intent);
                         }
-
                     }
                 });
 
@@ -789,52 +844,57 @@ public class CommentListActivity extends AppCompatActivity {
                 is_thumbup.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        if(mDetailReplyList.get(position)[6].equals("false")){
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/"+data[6]+"/"+ mDetailReplyList.get(position)[6]);//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_thumbup.setImageResource(R.mipmap.active);
-                                            mDetailReplyList.get(position)[6]="true";
-                                            mDetailReplyList.get(position)[11]=(Integer.parseInt(mDetailReplyList.get(position)[11])+1)+"";
+                        if(CheckingToken.IfTokenExist()) {
+                            if (mDetailReplyList.get(position)[6].equals("false")) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + data[6] + "/" + mDetailReplyList.get(position)[6]);//进行封装
+                                        Log.e(TAG, "token2：");
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                is_thumbup.setImageResource(R.mipmap.active);
+                                                mDetailReplyList.get(position)[6] = "true";
+                                                mDetailReplyList.get(position)[11] = (Integer.parseInt(mDetailReplyList.get(position)[11]) + 1) + "";
 
-                                            thumbup_num.setText(mDetailReplyList.get(position)[11]);
-                                        }
+                                                thumbup_num.setText(mDetailReplyList.get(position)[11]);
+                                            }
 
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(CommentListActivity.this,"点赞失败",Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }).start();
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(CommentListActivity.this, "点赞失败", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            } else {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + data[6] + "/" + mDetailReplyList.get(position)[6]);//进行封装
+                                        Log.e(TAG, "token2：");
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                is_thumbup.setImageResource(R.mipmap.inactive);
+                                                mDetailReplyList.get(position)[6] = "false";
+                                                mDetailReplyList.get(position)[11] = (Integer.parseInt(mDetailReplyList.get(position)[11]) - 1) + "";
+
+                                                thumbup_num.setText(mDetailReplyList.get(position)[11]);
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(CommentListActivity.this, "取消点赞失败", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            }
                         }else{
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/"+data[6]+"/"+ mDetailReplyList.get(position)[6]);//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_thumbup.setImageResource(R.mipmap.inactive);
-                                            mDetailReplyList.get(position)[6]="false";
-                                            mDetailReplyList.get(position)[11]=(Integer.parseInt(mDetailReplyList.get(position)[11])-1)+"";
-
-                                            thumbup_num.setText(mDetailReplyList.get(position)[11]);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(CommentListActivity.this,"取消点赞失败",Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }).start();
+                            Intent intent=new Intent(CommentListActivity.this, EmailVerifyActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });
@@ -851,6 +911,8 @@ public class CommentListActivity extends AppCompatActivity {
                  thumbup_num.setText(mDetailReplyList.get(position)[11]);
                 if (mDetailReplyList.get(position)[6].equals("true")) {
                     is_thumbup.setImageResource(R.mipmap.active);
+                }else{
+                    is_thumbup.setImageResource(R.mipmap.inactive);
                 }
                 if(mDetailReplyList.get(position)[8].equals("-1")){
                     //linearLayout.setVisibility(View.INVISIBLE);
@@ -881,26 +943,10 @@ public class CommentListActivity extends AppCompatActivity {
                     more_2.setText("删除");
                 }
                 line.setHeight(getViewHeight(content,true));
-                /*
-                detailreply[f][0] = sonObject.getString("alias");
-                detailreply[f][1] = sonObject.getString("content");
-                detailreply[f][2] = sonObject.getString("created_timestamp");
-                detailreply[f][3] = sonObject.getInt("hole_id")+"";
-                detailreply[f][4] = sonObject.getInt("id")+"";
-                detailreply[f][5] = sonObject.getBoolean("is_mine")+"";
-                detailreply[f][6] =sonObject.getBoolean("is_thumbup")+"";
-                detailreply[f][7] = sonObject.getInt("reply_local_id")+"";
-                detailreply[f][8] = sonObject.getInt("reply_to")+"";
-                detailreply[f][9] = sonObject.getString("reply_to_alias");
-                detailreply[f][10] = sonObject.getString("reply_to_content");
-                detailreply[f][11] = sonObject.getInt("thumbup_num")+"";
-*/
-
             }
         }
         public ReplyAdapter(){
-            Log.d(TAG,"数据传入了");
-            //this.events=events;
+
         }
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
