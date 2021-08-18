@@ -1,13 +1,16 @@
 package com.example.hustholetest1.view.homescreen.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,16 +25,21 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.MaxHeightRecyclerView;
+import com.example.hustholetest1.model.StandardRefreshFooter;
 import com.example.hustholetest1.network.CommenRequestManager;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
+import com.example.hustholetest1.view.homescreen.activity.HomeScreenActivity;
 import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity;
 import com.example.hustholetest1.view.homescreen.forest.AllForestsActivity;
 import com.example.hustholetest1.view.homescreen.forest.DetailForestActivity;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
@@ -67,6 +75,8 @@ public class ForestFragment extends Fragment {
     private int mStartingLoadId = 20;
     private RefreshLayout mRefreshConditionRl, mLoadMoreCondotionRl;
     private int CONSTANT_STANDARD_LOAD_SIZE = 20;
+    private Boolean mIfFirstLoad=true;
+    private SmartRefreshLayout mTitleBarSrl;
 
     public static ForestFragment newInstance() {
         ForestFragment fragment = new ForestFragment();
@@ -79,38 +89,70 @@ public class ForestFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_forest, container, false);
         RefreshLayout refreshLayout = (RefreshLayout) rootView.findViewById(R.id.refreshLayout);
         refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
-        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
-
-
-
-
-
+        //refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
+         //ClassicsFooter mClassicsFooter=new ClassicsFooter(getActivity());
+         //mClassicsFooter.setMinimumHeight(300);
+        // mClassicsFooter.setVerticalGravity(View.SCROLL_INDICATOR_TOP);
+        //refreshLayout.setRefreshFooter(mClassicsFooter);
+        refreshLayout.setRefreshFooter(new StandardRefreshFooter(getActivity()));
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
-                mRefreshConditionRl = refreshlayout;
-                mStartingLoadId = CONSTANT_STANDARD_LOAD_SIZE;
-                mJoinedHolesList = new ArrayList<String[]>();
-                update();
+                if(CheckingToken.IfTokenExist()) {
+                    mRefreshConditionRl = refreshlayout;
+                    mStartingLoadId = CONSTANT_STANDARD_LOAD_SIZE;
+                    mJoinedHolesList = new ArrayList<String[]>();
+                    update();
+
+                    mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            return true;
+                        }
+                    });
+                }else{
+                    refreshLayout.finishRefresh();
+                    Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
+                    startActivity(intent);
+                }
             }
         });
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
-                mLoadMoreCondotionRl = refreshlayout;
-                mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
-                update();
+                if(CheckingToken.IfTokenExist()) {
+                    mLoadMoreCondotionRl = refreshlayout;
+                    mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+                    update();
+                    //int titleBarBottomLocation=mTitleBarSrl.getBottom();
+                   // mJoinedHolesRv.setMaxHeight(HomeScreenActivity.GetOBTopLocation()-titleBarBottomLocation-2000);
+
+                }else {
+                    refreshLayout.finishLoadMore();
+                    Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
-        int heightPixels = outMetrics.heightPixels;
+
+
         mJoinedHolesRv = (MaxHeightRecyclerView) rootView.findViewById(R.id.rv_forest);
+        WindowManager wm = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
+       /* DisplayMetrics dm = new DisplayMetrics();
+        // 从默认显示器中获取显示参数保存到dm对象中
+        wm.getDefaultDisplay().getMetrics(dm);
+
+        mJoinedHolesRv.setMaxHeight(dm.heightPixels-HomeScreenActivity.GetOBAndTBHeight());
+
+        */
+
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(rootView.getContext());
         linearLayoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
         mJoinedHolesRv.setLayoutManager(linearLayoutManager2);
-        mJoinedHolesRv.setMaxHeight(heightPixels - 200);
+        mForestHoleAdapter = new ForestHoleAdapter();
+        mTitleBarSrl=(SmartRefreshLayout)rootView.findViewById(R.id.refreshLayout);
+
 
 
         //System.out.println("提交了context");
@@ -120,12 +162,20 @@ public class ForestFragment extends Fragment {
 
         mStartingLoadId = CONSTANT_STANDARD_LOAD_SIZE;
         mJoinedHolesList = new ArrayList<String[]>();
-        update();
-
+        if (CheckingToken.IfTokenExist()) {
+            update();
+        } else {
+            NoTokenUpdate();
+        }
         return rootView;
 
     }
 
+    public void NoTokenUpdate(){
+        mForestHoleAdapter = new ForestHoleAdapter();
+
+        mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+    }
 
     public int number() {
         mAdapterLoadCompleteNumber++;
@@ -147,6 +197,7 @@ public class ForestFragment extends Fragment {
                 if (mStartingLoadId == CONSTANT_STANDARD_LOAD_SIZE || mRefreshConditionRl != null) {
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
+
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             String json = "null";
                             try {
@@ -239,15 +290,31 @@ public class ForestFragment extends Fragment {
                 //将上拉刷新变量滞空同时结束掉上拉刷新
                 mLoadMoreCondotionRl.finishLoadMore();
                 mLoadMoreCondotionRl = null;
+                if (! mForestHoleAdapter.hasObservers()) {
+                    mForestHoleAdapter.setHasStableIds(true);
+                }
                 mForestHoleAdapter.notifyDataSetChanged();
             } else {
                 if (number() == 2) {//两个加载全部完毕后设置adpter
                     if (mRefreshConditionRl != null) {//判断是否由由下拉加载引起的
                         mRefreshConditionRl.finishRefresh();
                         mRefreshConditionRl = null;
+                        mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                return false;
+                            }
+                        });
+                        if(mIfFirstLoad){
+                            mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+                            mIfFirstLoad=false;
+                        }else{
+                        mForestHoleAdapter.notifyDataSetChanged();
                     }
-                    mForestHoleAdapter = new ForestHoleAdapter();
-                    mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+                    }else {
+
+                        mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+                    }
                     mAdapterLoadCompleteNumber = 0;
                 }
             }
@@ -304,18 +371,35 @@ public class ForestFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Void unused) {
-            if (number() == 2) {
-                if (mRefreshConditionRl != null) {
-                    mRefreshConditionRl.finishRefresh();
-                    mRefreshConditionRl = null;
+            if (mLoadMoreCondotionRl != null) {
+                //将上拉刷新变量滞空同时结束掉上拉刷新
+                mLoadMoreCondotionRl.finishLoadMore();
+                mLoadMoreCondotionRl = null;
+                mForestHoleAdapter.setHasStableIds(true);
+                mForestHoleAdapter.notifyDataSetChanged();
+            } else {
+                if (number() == 2) {//两个加载全部完毕后设置adpter
+                    if (mRefreshConditionRl != null) {//判断是否由由下拉加载引起的
+                        mRefreshConditionRl.finishRefresh();
+                        mRefreshConditionRl = null;
+                        mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                return false;
+                            }
+                        });
+                        if(mIfFirstLoad){
+                            mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+                        }else {
+                            mForestHoleAdapter.notifyDataSetChanged();
+                        }
+                    }else {
+                        mForestHoleAdapter = new ForestHoleAdapter();
+                        mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+                    }
+                    mAdapterLoadCompleteNumber = 0;
                 }
-                mJoinedHolesRv.setAdapter(new ForestHoleAdapter());
-                mAdapterLoadCompleteNumber = 0;
             }
-            // number1++;
-            // if(jsonArray.length()==number1){
-
-            //}
         }
 
         @Override
@@ -363,10 +447,15 @@ public class ForestFragment extends Fragment {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (position != mJoinedForestsJsonArray.length()) {
-                            Intent intent = DetailForestActivity.newIntent(getContext(), mJoinedForestsList[position]);
-                            startActivity(intent);
-                        } else {
+                        if(CheckingToken.IfTokenExist()){
+                            if (position != mJoinedForestsJsonArray.length()) {
+                                Intent intent = DetailForestActivity.newIntent(getContext(), mJoinedForestsList[position]);
+                                startActivity(intent);
+                            } else {
+                                Intent intent = new Intent(getContext(), AllForestsActivity.class);
+                                startActivity(intent);
+                            }
+                        }else{
                             Intent intent = new Intent(getContext(), AllForestsActivity.class);
                             startActivity(intent);
                         }
@@ -377,25 +466,30 @@ public class ForestFragment extends Fragment {
 
             public void bind(int position) {
                 this.position = position;
-                if (position != mJoinedForestsJsonArray.length()) {
-                    String name = mJoinedForestsList[position][7];
-                    if (name.length() > 6) {
-                        forestname.setText(name.substring(0, 5) + "...");
+                if(CheckingToken.IfTokenExist()) {
+                    if (position != mJoinedForestsJsonArray.length()) {
+                        String name = mJoinedForestsList[position][7];
+                        if (name.length() > 6) {
+                            forestname.setText(name.substring(0, 5) + "...");
+                        } else {
+                            forestname.setText(mJoinedForestsList[position][7]);
+                        }
+
+
+                        Glide.with(getActivity())
+                                .load(mJoinedForestsList[position][0])
+                                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                                .into(forestphoto);
+
+                        //forestphoto.setImageBitmap(bitmapss[position][1]);
                     } else {
-                        forestname.setText(mJoinedForestsList[position][7]);
+                        forestname.setText("加载更多");
+                        forestphoto.setImageResource(R.mipmap.more);
+
                     }
-
-
-                    Glide.with(getActivity())
-                            .load(mJoinedForestsList[position][0])
-                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .into(forestphoto);
-
-                    //forestphoto.setImageBitmap(bitmapss[position][1]);
-                } else {
+                }else{
                     forestname.setText("加载更多");
                     forestphoto.setImageResource(R.mipmap.more);
-
                 }
             }
 
@@ -424,7 +518,11 @@ public class ForestFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return mJoinedForestsJsonArray.length() + 1;
+            if(CheckingToken.IfTokenExist()){
+                return mJoinedForestsJsonArray.length() + 1;
+            }else{
+                return 1;
+            }
         }
     }
 
@@ -440,12 +538,9 @@ public class ForestFragment extends Fragment {
 
         @Override
         public int getItemViewType(int position) {
-            if (mHeaderCount != 0 && position < mHeaderCount) {
-//头部View
+            if (position==0) {
                 return ITEM_TYPE_HEADER;
-
             } else {
-//内容Vie
                 return ITEM_TYPE_CONTENT;
             }
         }
@@ -474,11 +569,11 @@ public class ForestFragment extends Fragment {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
+
             private TextView content, created_timestamp, forest_name, follow_num, reply_num, thumbup_num, hole_id, more_2;
             private ImageView background_image_url, is_follow, is_reply, is_thumbup, more, more_1;
             ConstraintLayout morewhat;
             private int position;
-
 
             public ViewHolder(View view) {
                 super(view);
@@ -662,38 +757,56 @@ public class ForestFragment extends Fragment {
 
 
             public void bind(int position) {
+                String[] item=mJoinedHolesList.get(position - 1);
                 this.position = position;
-                content.setText(mJoinedHolesList.get(position - 1)[1]);
-                created_timestamp.setText(mJoinedHolesList.get(position - 1)[2]);
-                forest_name.setText(mJoinedHolesList.get(position - 1)[5]);
-                follow_num.setText(mJoinedHolesList.get(position - 1)[3]);
-                reply_num.setText(mJoinedHolesList.get(position - 1)[12]);
-                thumbup_num.setText(mJoinedHolesList.get(position - 1)[13]);
-                hole_id.setText("#" + mJoinedHolesList.get(position - 1)[6]);
+                content.setText(item[1]);
+                created_timestamp.setText(item[2]);
+                forest_name.setText(item[5]);
+                follow_num.setText(item[3]);
+                reply_num.setText(item[12]);
+                thumbup_num.setText(item[13]);
+                hole_id.setText("#" + item[6]);
+                Log.d("thumbup_num"+"is_thumbup",item[13]+"+"+item[11]);
                 // Log.d(TAG,detailforest2.get(position-1)[8]);
                 // Log.d(TAG,detailforest2.get(position-1)[10]);
                 // Log.d(TAG,detailforest2.get(position-1)[11]);
 
-                if (mJoinedHolesList.get(position - 1)[8].equals("true")) {
+                if (item[8].equals("true")) {
                     is_follow.setImageResource(R.mipmap.active_3);
+                }else{
+                    is_follow.setImageResource(R.mipmap.inactive_3);
                 }
-                if (mJoinedHolesList.get(position - 1)[9].equals("true")) {
+                if (item[9].equals("true")) {
                     more_1.setImageResource(R.mipmap.vector6);
                     more_2.setText("删除");
+                }else{
+                    more_1.setImageResource(R.mipmap.vector4);
+                    more_2.setText("举报");
                 }
-                if (mJoinedHolesList.get(position - 1)[10].equals("true")) {
+                if (item[10].equals("true")) {
                     is_reply.setImageResource(R.mipmap.active_2);
+                }else{
+                    is_reply.setImageResource(R.mipmap.inactive_2);
                 }
-                if (mJoinedHolesList.get(position - 1)[11].equals("true")) {
+                if (item[11].equals("true")) {
                     is_thumbup.setImageResource(R.mipmap.active);
+                }else{
+                    is_thumbup.setImageResource(R.mipmap.inactive);
                 }
-                if (mJoinedHolesList.get(position - 1)[0].equals("")) {
-                } else {
+                if (item[0].equals("")) {
                     RoundedCorners roundedCorners = new RoundedCorners(16);
                     RequestOptions options1 = RequestOptions.bitmapTransform(roundedCorners);
-
                     Glide.with(getActivity())
-                            .load(mJoinedHolesList.get(position - 1)[0])
+                            .load(R.mipmap.vector3)
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .apply(options1)
+                            .into(background_image_url);
+                } else {
+
+                    RoundedCorners roundedCorners = new RoundedCorners(16);
+                    RequestOptions options1 = RequestOptions.bitmapTransform(roundedCorners);
+                    Glide.with(getActivity())
+                            .load(item[0])
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .apply(options1)
                             .into(background_image_url);
@@ -707,17 +820,22 @@ public class ForestFragment extends Fragment {
         }
 
         @Override
-        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public long getItemId(int position) {
 
+            return position;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
             if (viewType == ITEM_TYPE_HEADER) {
                 return new HeadHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_foresthead, parent, false));
-            } else if (viewType == ITEM_TYPE_CONTENT) {
+            } else{
                 return new ViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_forest, parent, false));
             }
-            return null;
+            //return null;
 
         }
 
@@ -725,16 +843,30 @@ public class ForestFragment extends Fragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             //Event event=events.get(position);
 
-            if (holder instanceof HeadHolder) {
+           /* if(position==0){
                 ((ForestHoleAdapter.HeadHolder) holder).bind(position);
-            } else if (holder instanceof ViewHolder) {
+            }else{
                 ((ForestHoleAdapter.ViewHolder) holder).bind(position);
             }
+
+
+            */
+          if (holder instanceof HeadHolder) {
+                ((ForestHoleAdapter.HeadHolder) holder).bind(position);
+            } else  {
+                ((ForestHoleAdapter.ViewHolder) holder).bind(position);
+            }
+
+
         }
 
         @Override
         public int getItemCount() {
-            return mJoinedHolesList.size() + 1;
+            if(CheckingToken.IfTokenExist()) {
+                return mJoinedHolesList.size() + 1;
+            }else{
+                return 1;
+            }
         }
     }
 }

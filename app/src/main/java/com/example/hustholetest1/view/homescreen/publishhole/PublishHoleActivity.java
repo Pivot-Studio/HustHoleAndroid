@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,9 +33,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.hustholetest1.model.EditTextReaction;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.SoftKeyBoardListener;
+import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.network.TokenInterceptor;
 import com.example.hustholetest1.R;
-import com.example.hustholetest1.network.OkHttpUtil;
 import com.example.hustholetest1.view.homescreen.forest.DetailForestActivity;
 import com.githang.statusbar.StatusBarCompat;
 
@@ -49,14 +50,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 
 public class PublishHoleActivity extends AppCompatActivity {//发树洞
     private static final String key="key_1";
-    private TextView text,limit;
+    private TextView text,limit,title;
     private ImageView back,X;
     private EditText editText;
     private Button button0;
@@ -68,7 +68,7 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
     private RecyclerView recyclerView;
     private int number=0;
     private String what="0";
-    private LinearLayout linearLayout;
+    private ConstraintLayout linearLayout;
     private TextView length;
 
 
@@ -79,6 +79,8 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         setContentView(R.layout.activity_publishhole);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
          Button button8=(Button)findViewById(R.id.btn_publishhole_line);
+         title=(TextView)findViewById(R.id.tv_titlebargreen_title);
+         title.setText(R.string.publishhole_1);
 
 
         SoftKeyBoardListener.setListener(this,new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
@@ -117,12 +119,8 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         SpannableString string1 = new SpannableString(this.getResources().getString(R.string.publishhole_4));
 
         TokenInterceptor.getContext(PublishHoleActivity.this);
-        retrofit = new Retrofit.Builder()
-                .baseUrl("http://hustholetest.pivotstudio.cn/api/forests/")
-                .client(OkHttpUtil.getOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        request = retrofit.create(RequestInterface.class);//创建接口实
+        retrofit = RetrofitManager.getRetrofit();
+        request = retrofit.create(RequestInterface.class);//创建接口实;//创建接口实
         length=(TextView)findViewById(R.id.tv_publishhole_textnumber);
 
 
@@ -130,6 +128,9 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                // 隐藏软键盘
+                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                 finish();
             }
         });
@@ -151,6 +152,9 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                     Toast.makeText(PublishHoleActivity.this,"发布成功",Toast.LENGTH_SHORT).show();
                                     finish();
+                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    // 隐藏软键盘
+                                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                                 }
 
                                 @Override
@@ -183,7 +187,7 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         editText=(EditText)findViewById(R.id.et_publishhole);
         EditTextReaction.ButtonReaction(editText,button0);
         EditTextReaction.EditTextSize(editText,string1,14);
-        linearLayout=(LinearLayout)findViewById(R.id.include);
+        linearLayout=(ConstraintLayout)findViewById(R.id.include);
 
 
         editText.addTextChangedListener(new TextWatcher() {
@@ -266,9 +270,6 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                                     //读取
                                     jsonArray = jsonObject.getJSONArray("forests");
                                     detailforest=new String[jsonArray.length()][8];
-
-                                    //bitmapss=new Bitmap[jsonArray.length()][2];
-                                    //for(int f=0;f<jsonArray.length();f++) {
                                     new DownloadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
                                     //}
 
@@ -286,7 +287,7 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
 
 
                         });
-                        Call<ResponseBody> call2 = request.getCall2();//进行封装
+                        Call<ResponseBody> call2 = request.getHotForest(0,10);//进行封装
                         call2.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -394,10 +395,6 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
             if(number==2) {
                 recyclerView.setAdapter(new ForestHoleAdapter());
             }
-            // number1++;
-            // if(jsonArray.length()==number1){
-
-            //}
         }
 
         @Override

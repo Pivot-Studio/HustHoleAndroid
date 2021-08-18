@@ -19,13 +19,20 @@ public interface RequestInterface {//接口
     Call<ResponseBody> mobileLogin(@Body HashMap map);
     @POST("register")
     Call<ResponseBody> register(@Body HashMap map);
-    @GET("types?list_size=10&start_id=0")
-    Call<ResponseBody> getCall();
+    @GET("forests/types?")
+    Call<ResponseBody> getType(@Query("start_id") int start_id,
+                               @Query("list_size") int list_size);
 
-    @GET("hot?list_size=10&start_id=0")
-    Call<ResponseBody> getCall2();
-    @GET
-    Call<ResponseBody> testUrl(@Url String url);
+    @GET("forests/hot?")
+    Call<ResponseBody> getHotForest(@Query("start_id") int start_id,
+                                    @Query("list_size") int list_size);
+
+
+    @HTTP(method = "GET", path = "forests/type/{forest_type}?", hasBody = false)
+    Call<ResponseBody> getDetailTypeForest(@Path("forest_type") String forest_type,
+                                           @Query("start_id") int start_id,
+                                           @Query("list_size") int list_size,
+                                           @Query("is_last_active") Boolean is_last_active);
 
     @POST
     Call<ResponseBody> join(@Url String url);
@@ -57,6 +64,8 @@ public interface RequestInterface {//接口
                                     @Query("list_size") int list_size,
                                     @Query("start_id") int start_id,
                                     @Query("is_last_active") Boolean is_last_active);
+
+
 
     @POST
     Call<ResponseBody> follow(@Url String url);

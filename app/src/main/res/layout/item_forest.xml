@@ -65,8 +65,8 @@
 
         <ImageView
             android:id="@+id/iv_itemforest_thumbup"
-            android:layout_width="20dp"
-            android:layout_height="25dp"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_20"
             android:layout_marginStart="14dp"
             android:layout_marginTop="7dp"
             android:layout_marginBottom="12dp"
@@ -89,8 +89,8 @@
 
         <ImageView
             android:id="@+id/iv_itemforest_reply"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
             android:layout_marginStart="51dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
@@ -113,8 +113,8 @@
 
         <ImageView
             android:id="@+id/iv_itemforest_follow"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_16"
             android:layout_marginStart="51dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="12dp"
@@ -163,8 +163,8 @@
 
         <ImageView
             android:id="@+id/iv_itemforest_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_25"
+            android:layout_height="@dimen/dp_25"
             android:layout_marginEnd="14dp"
             android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -181,8 +181,8 @@
 
             <ImageView
                 android:id="@+id/iv_itemforest_moreicon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
                 android:layout_marginStart="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

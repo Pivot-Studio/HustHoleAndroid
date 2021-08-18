@@ -1,31 +1,53 @@
 package com.example.hustholetest1.view.homescreen.forest;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
+
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.SimpleTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.example.hustholetest1.model.BlurTransformation;
+import com.example.hustholetest1.model.CheckingToken;
+import com.example.hustholetest1.model.JointBitmapView;
+import com.example.hustholetest1.model.MaxHeightRecyclerView;
+import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.model.TransparentRefreshHeader;
 import com.example.hustholetest1.network.CommenRequestManager;
 import com.example.hustholetest1.network.RequestInterface;
@@ -33,10 +55,12 @@ import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.network.TokenInterceptor;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.network.OkHttpUtil;
+import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity;
 import com.example.hustholetest1.view.homescreen.publishhole.PublishHoleActivity;
 import com.githang.statusbar.StatusBarCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.jaeger.library.StatusBarUtil;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
@@ -62,7 +86,7 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 public class DetailForestActivity extends AppCompatActivity {
     private Retrofit retrofit;
     private ImageView back,head,head_2,transformblock;
-
+    private TextView mTitlebarTextTv;
     private JSONArray jsonArray2;
     private ArrayList<String[]> mDetailforestHoleslist=new ArrayList<>();
    // private TextView title;
@@ -70,14 +94,18 @@ public class DetailForestActivity extends AppCompatActivity {
     private String data_2;
     private RequestInterface request;
     private ForestHoleAdapter mForestHoleAdapter;
-    private RecyclerView recyclerView;
+    private MaxHeightRecyclerView recyclerView;
     private FloatingActionButton addhole;
     private static final String key="key_1";
     private static final String key_2="key_2";
     private int mStartingLoadId = 0;
     private RefreshLayout mRefreshConditionRl, mLoadMoreCondotionRl;
     private int CONSTANT_STANDARD_LOAD_SIZE = 20;
-
+    private  ConstraintLayout titlebar,mDetailForestCl;
+    private Float mDistanceY = 0.0f;
+    private Window window;
+    private int headHeight=0;
+    private RecyclerView.OnScrollListener mOnscrollListener;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,14 +114,22 @@ public class DetailForestActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        //StatusBarUtil.setTranslucentForImageViewInFragment(DetailForestActivity.this, null);
+       // StatusBarUtil.setColor(this, getResources().getColor(R.color.Grayscale_200));
+        //StatusBarUtil.setTranslucentForImageViewInFragment(this, 0, null);
+        //StatusBarUtil.setLightMode(this);
+
+        mDetailForestCl=(ConstraintLayout)findViewById(R.id.cl_detailforest);
+
         back = (ImageView) findViewById(R.id.iv_titlebartransparent_back);
         head_2=(ImageView)findViewById(R.id.iv_detailforest_cover);
-
-
+        mTitlebarTextTv=(TextView)findViewById(R.id.tv_titlebartransparent_title);
 
         RefreshLayout refreshLayout = (RefreshLayout)findViewById(R.id.srl_detailforest_loadmore);
         refreshLayout.setRefreshHeader(new TransparentRefreshHeader(DetailForestActivity.this));
-        refreshLayout.setRefreshFooter(new ClassicsFooter(DetailForestActivity.this));
+        ClassicsFooter mclassicsfooter=new ClassicsFooter(DetailForestActivity.this);
+        mclassicsfooter.setBackgroundColor(getResources().getColor(R.color.GrayScale_95));
+        refreshLayout.setRefreshFooter(mclassicsfooter);
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -101,6 +137,15 @@ public class DetailForestActivity extends AppCompatActivity {
                 mStartingLoadId=0;
                 mDetailforestHoleslist=new ArrayList<>();
                 update();
+
+
+                recyclerView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return true;
+                    }
+                });
+
 //传入false表示刷新失败
             }
         });
@@ -112,14 +157,9 @@ public class DetailForestActivity extends AppCompatActivity {
                 update();
             }
         });
-
-        //title = (TextView) findViewById(R.id.title);
-        //title.setText("发现小树林");
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(Page2_DetailAllForestsActivity.this, HomePageActivity.class);
-                //startActivity(intent);
                 finish();
             }
         });
@@ -127,18 +167,21 @@ public class DetailForestActivity extends AppCompatActivity {
         //TokenInterceptor.getContext(RegisterActivity.this);
         System.out.println("提交了context");
         retrofit= RetrofitManager.getRetrofit();
-        Log.e(TAG, "token99：");
         request = retrofit.create(RequestInterface.class);//创建接口实例
-        Log.e(TAG, "token100：");
         data=getIntent().getStringArrayExtra(key);
         addhole=(FloatingActionButton)findViewById(R.id.fab_detailforest_publishhole);
         addhole.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                //关闭掉对话框,拿到对话框的对象
-                Intent intent= PublishHoleActivity.newIntent(DetailForestActivity.this,data[7]);
-                startActivity(intent);
+                if(CheckingToken.IfTokenExist()) {
+                    //关闭掉对话框,拿到对话框的对象
+                    Intent intent = PublishHoleActivity.newIntent(DetailForestActivity.this, data[7]);
+                    startActivity(intent);
+                }else{
+                    Intent intent=new Intent(DetailForestActivity.this, EmailVerifyActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -190,11 +233,56 @@ public class DetailForestActivity extends AppCompatActivity {
             update();
         }
 
-        recyclerView = (RecyclerView)findViewById(R.id.rv_detailforest);
+        recyclerView = (MaxHeightRecyclerView) findViewById(R.id.rv_detailforest);
+
+
+
+
+
+
+        WindowManager wm = (WindowManager)DetailForestActivity.this.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        // 从默认显示器中获取显示参数保存到dm对象中
+        wm.getDefaultDisplay().getMetrics(dm);
+        int[] location=new int[2];
+        back.getLocationOnScreen(location);
+         titlebar=(ConstraintLayout) findViewById(R.id.include2);
+        int w = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        int h = View.MeasureSpec.makeMeasureSpec(0,
+                View.MeasureSpec.UNSPECIFIED);
+        titlebar.measure(w, h);
+        int height = titlebar.getMeasuredHeight();
+
+        int bb=DetailForestActivity.this.getResources().getDisplayMetrics().densityDpi;
+        recyclerView.setMaxHeight(dm.heightPixels-height-20);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DetailForestActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
+
+
     }
+
+
+    public static void transparentStatusBar(Window window) {
+        /**
+         * 透明状态栏方法(SDK_INT >= 21)
+         * */
+        if (Build.VERSION.SDK_INT >= 21) {
+            View decorView = window.getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            window.setStatusBarColor(Color.TRANSPARENT);
+        }
+    }
+
+    public void close(View view) {
+        finish();
+    }
+
+
+
 
     private void update(){
         new Thread(new Runnable() {//加载纵向列表标题
@@ -249,13 +337,30 @@ public class DetailForestActivity extends AppCompatActivity {
             if(mRefreshConditionRl !=null){
                 mRefreshConditionRl.finishRefresh();
                 mRefreshConditionRl =null;
-                mForestHoleAdapter=new ForestHoleAdapter();
-                recyclerView.setAdapter(mForestHoleAdapter);
+
+
+
+                recyclerView.removeOnScrollListener(mOnscrollListener);
+                //recyclerView.addOnScrollListener(null);
+                mForestHoleAdapter.notifyDataSetChanged();
+
+
+
+
+                mDistanceY=0.0f;
+
+
+
+                recyclerView.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return false;
+                    }
+                });
             } else if(mLoadMoreCondotionRl!=null){
 
                 mLoadMoreCondotionRl.finishLoadMore();
                 mLoadMoreCondotionRl=null;
-
                 mForestHoleAdapter.notifyDataSetChanged();
 
 
@@ -322,7 +427,7 @@ public class DetailForestActivity extends AppCompatActivity {
 
         public class HeadHolder extends RecyclerView.ViewHolder{ ;
             private TextView title,hole_and_number,content;
-            private Button button;
+            private Button button,greenline;
             private ImageView head;
             public HeadHolder(View view){
                 super(view);
@@ -331,93 +436,171 @@ public class DetailForestActivity extends AppCompatActivity {
                 content=(TextView)view.findViewById(R.id.tv_detailforesthead_content);
                 button=(Button)view.findViewById(R.id.btn_detailforesthead_join);
                 head=(ImageView)view.findViewById(R.id.iv_detailforesthead_icon);
-
+                greenline=(Button)view.findViewById(R.id.btn_detailforesthead_greenline);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if(data[5].equals("true")){
-                            View mView = View.inflate(getApplicationContext(), R.layout.dialog_forestquitnotice, null);
-                            // mView.setBackgroundResource(R.drawable.homepage_notice);
-                            //设置自定义的布局
-                            //mBuilder.setView(mView);
-                            Dialog dialog = new Dialog(DetailForestActivity.this);
-                            dialog.setContentView(mView);
-                            TextView no = (TextView) mView.findViewById(R.id.tv_dialogforestquit_notquit);
-                            TextView yes = (TextView) mView.findViewById(R.id.tv_dialogforestquit_quit);
-                            dialog.getWindow().setBackgroundDrawableResource(R.drawable.notice);
-                            no.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    dialog.dismiss();
-                                }
-                            });
-                            yes.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
+                        if(CheckingToken.IfTokenExist()) {
+                            if (data[5].equals("true")) {
+                                View mView = View.inflate(getApplicationContext(), R.layout.dialog_forestquitnotice, null);
+                                // mView.setBackgroundResource(R.drawable.homepage_notice);
+                                //设置自定义的布局
+                                //mBuilder.setView(mView);
+                                Dialog dialog = new Dialog(DetailForestActivity.this);
+                                dialog.setContentView(mView);
+                                TextView no = (TextView) mView.findViewById(R.id.tv_dialogforestquit_notquit);
+                                TextView yes = (TextView) mView.findViewById(R.id.tv_dialogforestquit_quit);
+                                dialog.getWindow().setBackgroundDrawableResource(R.drawable.notice);
+                                no.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        dialog.dismiss();
+                                    }
+                                });
+                                yes.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        new Thread(new Runnable() {
+                                            @Override
+                                            public void run() {
 
-                                            Call<ResponseBody> call2 = request.delete( "http://hustholetest.pivotstudio.cn/api/forests/quit/"+data[3]);//进行封装
-                                            call2.enqueue(new Callback<ResponseBody>() {
-                                                @Override
-                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    Toast.makeText(DetailForestActivity.this, "退出成功", Toast.LENGTH_SHORT).show();
-                                                    data[5]="false";
-                                                    button.setPadding(30,5,6,6);
-                                                    button.setBackground(getDrawable(R.drawable.forest_button));
-                                                    button.setText("加入");
-                                                    button.setTextColor(getResources().getColor(R.color.GrayScale_100));
-                                                    Drawable homepressed=getResources().getDrawable(R.mipmap.group243,null);
-                                                    homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
-                                                    button.setCompoundDrawables(homepressed,null,null,null);
-                                                    dialog.dismiss();
-                                                }
+                                                Call<ResponseBody> call2 = request.delete("http://hustholetest.pivotstudio.cn/api/forests/quit/" + data[3]);//进行封装
+                                                call2.enqueue(new Callback<ResponseBody>() {
+                                                    @Override
+                                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                        Toast.makeText(DetailForestActivity.this, "退出成功", Toast.LENGTH_SHORT).show();
+                                                        data[5] = "false";
+                                                        button.setPadding(30, 5, 6, 6);
+                                                        button.setBackground(getDrawable(R.drawable.forest_button));
+                                                        button.setText("加入");
+                                                        button.setTextColor(getResources().getColor(R.color.GrayScale_100));
+                                                        Drawable homepressed = getResources().getDrawable(R.mipmap.group243, null);
+                                                        homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
+                                                        button.setCompoundDrawables(homepressed, null, null, null);
+                                                        dialog.dismiss();
+                                                    }
 
-                                                @Override
-                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                    Toast.makeText(DetailForestActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                        }
-                                    }).start();
-                                }
-                            });
-                            dialog.show();
+                                                    @Override
+                                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                        Toast.makeText(DetailForestActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        }).start();
+                                    }
+                                });
+                                dialog.show();
+                            } else {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call23 = request.join("http://hustholetest.pivotstudio.cn/api/forests/join/" + data[3]);//进行封装
+                                        call23.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                Toast.makeText(DetailForestActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
+
+                                                data[5] = "true";
+                                                button.setPadding(0, 0, 0, 0);
+                                                //button.setPadding(-30,-5,-6,-6);
+                                                //button=(Button)view.findViewById(R.id.rectangle_4);
+                                                button.setBackground(getDrawable(R.drawable.forest_button_white));
+                                                button.setText("已加入");
+                                                // button.setGravity(Gravity.CENTER_VERTICAL);
+                                                button.setCompoundDrawables(null, null, null, null);
+                                                button.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(DetailForestActivity.this, "加入失败", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            }
                         }else{
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call23= request.join( "http://hustholetest.pivotstudio.cn/api/forests/join/"+data[3]);//进行封装
-                                    call23.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            Toast.makeText(DetailForestActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
-
-                                            data[5]="true";
-                                            button.setPadding(0,0,0,0);
-                                            //button.setPadding(-30,-5,-6,-6);
-                                            //button=(Button)view.findViewById(R.id.rectangle_4);
-                                            button.setBackground(getDrawable(R.drawable.forest_button_white));
-                                            button.setText("已加入");
-                                            // button.setGravity(Gravity.CENTER_VERTICAL);
-                                            button.setCompoundDrawables(null,null,null,null);
-                                            button.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(DetailForestActivity.this, "加入失败", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }).start();
+                            Intent intent=new Intent(DetailForestActivity.this, EmailVerifyActivity.class);
+                            startActivity(intent);
                         }
 
                     }
                 });
             }
             public void bind(int position){
+
+
+
+
+                window = getWindow();
+                transparentStatusBar(window);
+//  RecyclerView设置滑动监听
+                mOnscrollListener=new RecyclerView.OnScrollListener() {
+                    //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
+                    @Override
+                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+
+
+                    }
+
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        //滑动的距离
+                        int bb=DetailForestActivity.this.getResources().getDisplayMetrics().densityDpi;
+                            mDistanceY += dy;
+                        Log.d("Y",dy+"");
+                            if((mDistanceY*160/bb) <0){
+                                mDistanceY =0.0f;
+                            }
+                        Log.d("mDis",mDistanceY+"");
+                        //toolbar的高度
+                        if(headHeight==0) {
+                            headHeight = greenline.getBottom()+30;
+                        }
+                        Log.d("headHeight",headHeight+"");
+                        //当滑动的距离 <= toolbar高度的时候，改变Toolbar背景色的透明度，达到渐变的效果
+                        if ((mDistanceY*160/bb) <= headHeight) {
+                            if (Build.VERSION.SDK_INT >= 21) {
+                                //设置状态栏透明
+                                window.setStatusBarColor(Color.TRANSPARENT);
+                            }
+
+                            float d = (mDistanceY*160/bb) / headHeight;
+                            //int i = Double.valueOf(d * 255).intValue();    //i 有可能小于0
+                            Log.d("d",d+"");
+
+                            window.setStatusBarColor(Color.parseColor("#"+intToHex((int)(d*255))+"4B9F79"));
+                            titlebar.setBackgroundColor(Color.parseColor("#"+intToHex((int)(d*255))+"4B9F79"));
+                           // titlebar.getBackground().mutate().setAlpha((int)(d*255));
+                            mTitlebarTextTv.setAlpha(d);
+                            mTitlebarTextTv.setText(data[7]);
+                            //back.setImageResource(R.mipmap.triangle_4);
+                            back.setAlpha(1f);
+
+
+                            ///titlebar.setAl// 0~255 透明度
+                            //titlebar.setBackgroundColor(getResources().getColor(R.color.HH_BandColor_1));
+                            //window.setAlpha(Math.max(i, 0));
+                            //textview.setAlpha((float) Math.max(d, 0));
+                            //imageview.setAlpha((float) Math.max(d, 0));
+                        } else {
+                            if (Build.VERSION.SDK_INT >= 21) {
+                                window.setStatusBarColor(getResources().getColor(R.color.HH_BandColor_1));
+                                titlebar.setAlpha(1f);
+                                titlebar.setBackgroundColor(getResources().getColor(R.color.HH_BandColor_1));
+                                mTitlebarTextTv.setAlpha(1f);
+                            }
+                        }
+                    }
+                };
+                recyclerView.addOnScrollListener(mOnscrollListener);
+
+
+
+
+
                 title.setText(data[7]);
                 hole_and_number.setText(data[4]);
                 content.setText(data[2]);
@@ -444,11 +627,67 @@ public class DetailForestActivity extends AppCompatActivity {
                         .apply(options1)
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         .into(head);
+
+
+
+
+
+
+
+
+                 //TODO  这样你就可以拿到这个bitmap了
+
+
+
+
+
                 Glide.with(DetailForestActivity.this)
+                        .asBitmap()
                         .load(data[1])
                         .transform(new BlurTransformation(DetailForestActivity.this,24))
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                        .into(head_2);
+                        .into(new SimpleTarget<Bitmap>() {
+                            @Override
+                            public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
+
+
+
+                                int width =resource.getWidth();
+                                int height = resource.getHeight()*2;
+                                //创建一个空的Bitmap(内存区域),宽度等于第一张图片的宽度，高度等于两张图片高度总和
+                                Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+                                //将bitmap放置到绘制区域,并将要拼接的图片绘制到指定内存区域
+
+                                ColorDrawable drawable = new ColorDrawable(Color.parseColor("#F3F3F3"));
+                                Bitmap bitmapblock = Bitmap.createBitmap(resource.getWidth(),resource.getHeight(),Bitmap.Config.ARGB_8888);
+                                Canvas canvas = new Canvas(bitmapblock);
+                                drawable.draw(canvas);
+
+
+                                Canvas canvas2 = new Canvas(bitmap);
+                                canvas2.drawBitmap(resource, 0, 0, null);
+                                canvas2.drawBitmap(bitmapblock, 0, resource.getHeight(), null);
+
+
+
+
+
+                                Drawable drawable2 = new BitmapDrawable(bitmap);
+                               // drawable.setBounds(0,0,0,dm.heightPixels/2);
+                                mDetailForestCl.setBackground(drawable2);
+
+                               // mDetailForestCl.setForegroundGravity(View.SCROLL_INDICATOR_TOP);
+                            }
+                        });
+
+                int result = 0;
+                //获取状态栏高度的资源id
+                int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+                if (resourceId > 0) {
+                    result = getResources().getDimensionPixelSize(resourceId);
+                }
+                head_2.setPadding(0, -result, 0, 0);
+                //fullScreen(DetailForestActivity.this);
             }
         }
 
@@ -495,13 +734,18 @@ public class DetailForestActivity extends AppCompatActivity {
 
                     @Override
                     public void onClick(View v){
-                        morewhat.setVisibility(View.INVISIBLE);
-                        more_condition = false;
-                        if(mDetailforestHoleslist.get(position-1)[9].equals("true")){
-                            CommenRequestManager.DeleteRequest(DetailForestActivity.this,request, mDetailforestHoleslist.get(position-1)[6]);
-                            finish();
-                        }else {
-                            CommenRequestManager.ReportRequest(DetailForestActivity.this, request, mDetailforestHoleslist.get(position-1)[6], "-1");
+                        if(CheckingToken.IfTokenExist()) {
+                            morewhat.setVisibility(View.INVISIBLE);
+                            more_condition = false;
+                            if (mDetailforestHoleslist.get(position - 1)[9].equals("true")) {
+                                CommenRequestManager.DeleteRequest(DetailForestActivity.this, request, mDetailforestHoleslist.get(position - 1)[6]);
+                                finish();
+                            } else {
+                                CommenRequestManager.ReportRequest(DetailForestActivity.this, request, mDetailforestHoleslist.get(position - 1)[6], "-1");
+                            }
+                        }else{
+                            Intent intent=new Intent(DetailForestActivity.this, EmailVerifyActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });
@@ -520,106 +764,116 @@ public class DetailForestActivity extends AppCompatActivity {
                 is_thumbup.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        if(mDetailforestHoleslist.get(position-1)[11].equals("false")){
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/"+ mDetailforestHoleslist.get(position-1)[6]+"/-1");//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_thumbup.setImageResource(R.mipmap.active);
-                                            mDetailforestHoleslist.get(position-1)[11]="true";
-                                            mDetailforestHoleslist.get(position-1)[13]=(Integer.parseInt( mDetailforestHoleslist.get(position-1)[13])+1)+"";
+                        if(CheckingToken.IfTokenExist()) {
+                            if (mDetailforestHoleslist.get(position - 1)[11].equals("false")) {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mDetailforestHoleslist.get(position - 1)[6] + "/-1");//进行封装
+                                        Log.e(TAG, "token2：");
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                is_thumbup.setImageResource(R.mipmap.active);
+                                                mDetailforestHoleslist.get(position - 1)[11] = "true";
+                                                mDetailforestHoleslist.get(position - 1)[13] = (Integer.parseInt(mDetailforestHoleslist.get(position - 1)[13]) + 1) + "";
 
-                                            thumbup_num.setText(mDetailforestHoleslist.get(position-1)[13]);
-                                        }
+                                                thumbup_num.setText(mDetailforestHoleslist.get(position - 1)[13]);
+                                            }
 
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(DetailForestActivity.this,"点赞失败,请检查网络状况",Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }).start();
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(DetailForestActivity.this, "点赞失败,请检查网络状况", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            } else {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mDetailforestHoleslist.get(position - 1)[6] + "/-1");//进行封装
+                                        Log.e(TAG, "token2：");
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                is_thumbup.setImageResource(R.mipmap.inactive);
+                                                mDetailforestHoleslist.get(position - 1)[11] = "false";
+                                                mDetailforestHoleslist.get(position - 1)[13] = (Integer.parseInt(mDetailforestHoleslist.get(position - 1)[13]) - 1) + "";
+
+                                                thumbup_num.setText(mDetailforestHoleslist.get(position - 1)[13]);
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(DetailForestActivity.this, "取消点赞失败,请检查网络状况", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            }
                         }else{
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/"+ mDetailforestHoleslist.get(position-1)[6]+"/-1");//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_thumbup.setImageResource(R.mipmap.inactive);
-                                            mDetailforestHoleslist.get(position-1)[11]="false";
-                                            mDetailforestHoleslist.get(position-1)[13]=(Integer.parseInt( mDetailforestHoleslist.get(position-1)[13])-1)+"";
-
-                                            thumbup_num.setText(mDetailforestHoleslist.get(position-1)[13]);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(DetailForestActivity.this,"取消点赞失败,请检查网络状况",Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }).start();
+                            Intent intent=new Intent(DetailForestActivity.this, EmailVerifyActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });
                 is_follow.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
-                        if(mDetailforestHoleslist.get(position-1)[8].equals("false")){
-                            new Thread(new Runnable() {//加载纵向列表标题
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/follows/"+ mDetailforestHoleslist.get(position-1)[6]);//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_follow.setImageResource(R.mipmap.active_3);
-                                            mDetailforestHoleslist.get(position-1)[8]="true";
-                                            mDetailforestHoleslist.get(position-1)[3]=(Integer.parseInt(mDetailforestHoleslist.get(position-1)[3])+1)+"";
+                        if(CheckingToken.IfTokenExist()) {
+                            if (mDetailforestHoleslist.get(position - 1)[8].equals("false")) {
+                                new Thread(new Runnable() {//加载纵向列表标题
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/follows/" + mDetailforestHoleslist.get(position - 1)[6]);//进行封装
+                                        Log.e(TAG, "token2：");
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                is_follow.setImageResource(R.mipmap.active_3);
+                                                mDetailforestHoleslist.get(position - 1)[8] = "true";
+                                                mDetailforestHoleslist.get(position - 1)[3] = (Integer.parseInt(mDetailforestHoleslist.get(position - 1)[3]) + 1) + "";
 
-                                            follow_num.setText(mDetailforestHoleslist.get(position-1)[3]);
-                                        }
+                                                follow_num.setText(mDetailforestHoleslist.get(position - 1)[3]);
+                                            }
 
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(DetailForestActivity.this,"关注失败,请检查网络状况",Toast.LENGTH_SHORT).show();
-                                            Log.d("","取消点赞失败");
-                                        }
-                                    });
-                                }
-                            }).start();
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(DetailForestActivity.this, "关注失败,请检查网络状况", Toast.LENGTH_SHORT).show();
+                                                Log.d("", "取消点赞失败");
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            } else {
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/follows/" + mDetailforestHoleslist.get(position - 1)[6]);//进行封装
+                                        Log.e(TAG, "token2：");
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                is_follow.setImageResource(R.mipmap.inactive_3);
+                                                mDetailforestHoleslist.get(position - 1)[8] = "false";
+                                                mDetailforestHoleslist.get(position - 1)[3] = (Integer.parseInt(mDetailforestHoleslist.get(position - 1)[3]) - 1) + "";
+
+                                                follow_num.setText(mDetailforestHoleslist.get(position - 1)[3]);
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(DetailForestActivity.this, "取消关注失败,请检查网络状况", Toast.LENGTH_SHORT).show();
+                                                Log.d("", "取消关注失败");
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            }
                         }else{
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/follows/"+ mDetailforestHoleslist.get(position-1)[6]);//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_follow.setImageResource(R.mipmap.inactive_3);
-                                            mDetailforestHoleslist.get(position-1)[8]="false";
-                                            mDetailforestHoleslist.get(position-1)[3]=(Integer.parseInt( mDetailforestHoleslist.get(position-1)[3])-1)+"";
-
-                                            follow_num.setText(mDetailforestHoleslist.get(position-1)[3]);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(DetailForestActivity.this,"取消关注失败,请检查网络状况",Toast.LENGTH_SHORT).show();
-                                            Log.d("","取消关注失败");
-                                        }
-                                    });
-                                }
-                            }).start();
+                            Intent intent=new Intent(DetailForestActivity.this, EmailVerifyActivity.class);
+                            startActivity(intent);
                         }
                     }
                 });
@@ -642,13 +896,25 @@ public class DetailForestActivity extends AppCompatActivity {
                 if (mDetailforestHoleslist.get(position-1)[8].equals("true")) {
                     is_follow.setImageResource(R.mipmap.active_3);
                     //is_follow.setImageDrawable(R.drawable.hole_active_1);
+                }else{
+                    is_follow.setImageResource(R.mipmap.inactive_3);
                 }
-
+                if (mDetailforestHoleslist.get(position-1)[9].equals("true")) {
+                    more_1.setImageResource(R.mipmap.vector6);
+                    more_2.setText("删除");
+                }else{
+                    more_1.setImageResource(R.mipmap.vector4);
+                    more_2.setText("举报");
+                }
                 if (mDetailforestHoleslist.get(position-1)[10].equals("true")) {
                     is_reply.setImageResource(R.mipmap.active_2);
+                }else{
+                    is_reply.setImageResource(R.mipmap.inactive_2);
                 }
                 if (mDetailforestHoleslist.get(position-1)[11].equals("true")) {
                     is_thumbup.setImageResource(R.mipmap.active);
+                }else{
+                    is_thumbup.setImageResource(R.mipmap.inactive);
                 }
 
             }
@@ -715,4 +981,44 @@ public class DetailForestActivity extends AppCompatActivity {
         intent.putExtra(key_2,data);
         return intent;
     }
+    private void fullScreen(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                //5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色
+                Window window = activity.getWindow();
+                View decorView = window.getDecorView();
+                //两个 flag 要结合使用，表示让应用的主体内容占用系统状态栏的空间
+                int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+                decorView.setSystemUiVisibility(option);
+                window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+                window.setStatusBarColor(Color.TRANSPARENT);
+                //导航栏颜色也可以正常设置
+//                window.setNavigationBarColor(Color.TRANSPARENT);
+            } else {
+                Window window = activity.getWindow();
+                WindowManager.LayoutParams attributes = window.getAttributes();
+                int flagTranslucentStatus = WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS;
+                int flagTranslucentNavigation = WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION;
+                attributes.flags |= flagTranslucentStatus;
+//                attributes.flags |= flagTranslucentNavigation;
+                window.setAttributes(attributes);
+            }
+        }
+    }
+    private static String intToHex(int n) {
+        if (n == 0) {
+            return "00";
+        }
+        StringBuilder sb = new StringBuilder(8);
+        String a;
+        char[] b = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        while (n != 0) {
+            sb = sb.append(b[n % 16]);
+            n = n / 16;
+        }
+        a = sb.reverse().toString();
+        return a.length() < 2 ? "0" + a : a;
+    }
+
 }

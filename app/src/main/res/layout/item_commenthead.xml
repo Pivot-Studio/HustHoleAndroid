@@ -110,8 +110,8 @@
 
     <ImageView
         android:id="@+id/iv_commenthead_more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_25"
+        android:layout_height="@dimen/dp_25"
         android:layout_marginEnd="22dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_commenthead_follownum"
         app:layout_constraintEnd_toEndOf="parent"
@@ -141,8 +141,8 @@
 
     <ImageView
         android:id="@+id/iv_commenthead_changesequence"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="@dimen/dp_20"
+        android:layout_height="@dimen/dp_20"
         android:layout_marginEnd="22dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_commenthead_frame"
         app:layout_constraintEnd_toEndOf="@+id/tv_commenthead_frame"
@@ -162,8 +162,8 @@
 
         <ImageView
             android:id="@+id/iv_commenthead_moreicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
             android:layout_marginStart="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

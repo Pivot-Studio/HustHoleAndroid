@@ -1,6 +1,8 @@
 package com.example.hustholetest1.view.homescreen.fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +18,13 @@ import androidx.fragment.app.Fragment;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.network.OkHttpUtil;
 import com.example.hustholetest1.network.RequestInterface;
+import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.mine.AboutActivity;
 import com.example.hustholetest1.view.homescreen.mine.MyHoleAndMyStarActivity;
 import com.example.hustholetest1.view.homescreen.mine.RulesActivity;
 import com.example.hustholetest1.view.homescreen.mine.SettingsActivity;
 import com.example.hustholetest1.view.homescreen.mine.UpdateActivity;
+import com.example.hustholetest1.view.registerandlogin.activity.WelcomeActivity;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -164,7 +168,13 @@ public class MineFragment extends Fragment {
                 btn_logout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         dialog.dismiss();
+                        SharedPreferences.Editor editor = getContext().getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
+                        editor.putString("token", "");
+                        editor.commit();
+                        Intent intent=new Intent(getContext(), WelcomeActivity.class);
+                        startActivity(intent);
                     }
                 });
                 dialog.show();

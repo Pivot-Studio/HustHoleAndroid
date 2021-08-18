@@ -34,11 +34,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ll_commentreply_replycontent"
         android:layout_width="@dimen/dp_340"
-        android:minWidth="@dimen/dp_340"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="6dp"
         android:background="@drawable/reply_gray"
+        android:minWidth="@dimen/dp_340"
         android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_commentreply_title">
@@ -47,11 +47,11 @@
         <TextView
             android:id="@+id/tv_commentreply_detailreplycontent"
             android:layout_width="@dimen/dp_320"
-            android:maxWidth="@dimen/dp_320"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
+            android:maxWidth="@dimen/dp_320"
 
             android:textSize="11sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -62,7 +62,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-<!--
+    <!--
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="@dimen/dp_340"
@@ -129,8 +129,8 @@
 
     <ImageView
         android:id="@+id/iv_commentreply_thumbup"
-        android:layout_width="20dp"
-        android:layout_height="25dp"
+        android:layout_width="@dimen/dp_20"
+        android:layout_height="@dimen/dp_24"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_commentreply_interval1"
@@ -139,8 +139,8 @@
 
     <ImageView
         android:id="@+id/iv_commentreply_more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_25"
+        android:layout_height="@dimen/dp_25"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
@@ -153,6 +153,7 @@
         android:id="@+id/tv_commentreply_thumbupnumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="30dp"
         android:text="15"
         android:textColor="@color/GrayScale_70"
@@ -183,8 +184,8 @@
 
         <ImageView
             android:id="@+id/iv_commentreply_moreicon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_24"
+            android:layout_height="@dimen/dp_24"
             android:layout_marginStart="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

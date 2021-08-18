@@ -109,55 +109,6 @@ public class LoginActivity extends AppCompatActivity {
                 String str2=editText2.getText().toString();
                 //Login.post(str1,str2);
                 if(Character.isUpperCase(str1.charAt(0))||Character.isLowerCase(str1.charAt(0))) {
-                   /* new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Response response;
-                                OkHttpClient client = new OkHttpClient();//
-
-                                FormBody body = new FormBody.Builder()
-                                        .add("email", str1)
-                                        .add("password", str2)
-                                        .build();
-                                Request request = new Request.Builder()
-                                        .url("http://hustholetest.pivotstudio.cn/api/auth/mobileLogin")
-                                        .post(body)
-                                        .build();
-
-                                response = client.newCall(request).execute();
-
-                                //Response response=client.newCall(request).execute();
-                                String json = response.body().string();
-                                System.out.println("总:" + json);
-                                JSONObject jsonObject = new JSONObject(json);
-                                //读取
-
-                                String condition = jsonObject.getString("msg");
-                                String token = jsonObject.getString("token");
-                                System.out.println("状态:" + condition);
-                                showResponse(condition);
-                                // Log.d("TAG", sssss);
-
-
-
-
-                                if (condition.equals("登录成功")) {//判断账号密码是否正确
-                                    //登录成功进入主界面
-                                    Intent intent = new Intent(RegisterActivity.this, HomePageActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                    startActivity(intent);
-                                } else {
-                                    //登录失败给与账户或密码错误提示
-                                }
-                            } catch (Exception E) {
-                                E.printStackTrace();
-                                Log.d("TAG", "jjjjjj4");
-                            }
-                        }
-                    }).start();*/
-
-
-
 
                     new Thread(new Runnable() {
                         @Override
@@ -169,7 +120,6 @@ public class LoginActivity extends AppCompatActivity {
                             // FormBody.Builder builder = new FormBody.Builder();
                             //builder.add("key","value");
                             Call<ResponseBody> call = request.mobileLogin(map);//进行封装
-                            Log.e(TAG, "token2：");
                             call.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -178,11 +128,9 @@ public class LoginActivity extends AppCompatActivity {
                                         if(response.body() != null){
                                         json = response.body().string();
                                         }
-                                        System.out.println("cccccc");
 
 
                                     } catch (IOException e) {
-                                        Log.e(TAG, "token2：9999999");
                                         e.printStackTrace();
 
                                     }
@@ -191,11 +139,11 @@ public class LoginActivity extends AppCompatActivity {
                                     try {
                                         JSONObject jsonObject = new JSONObject(json);
                                         //读取
-                                        System.out.println("ddddddd");
                                          condition = jsonObject.getString("msg");
                                         String token = jsonObject.getString("token");
-                                        Log.e(TAG, "conditon"+condition);
                                         System.out.println("token的具体值:" + token);
+
+
 
                                         SharedPreferences.Editor editor = getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
                                         editor.putString("token", token);
@@ -203,11 +151,6 @@ public class LoginActivity extends AppCompatActivity {
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }
-
-
-                                    //Toast.makeText(RegisterActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                    //finish();
-
                                     if (condition!=null&&condition.equals("登录成功")) {//判断账号密码是否正确
                                         //登录成功进入主界面
                                         showResponse("登录成功");
@@ -222,7 +165,6 @@ public class LoginActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                                    Log.e(TAG, "sw.toString()");
                                     if (tr == null) {
 
                                     }
@@ -248,8 +190,6 @@ public class LoginActivity extends AppCompatActivity {
                         }).start();
                 }else{
                     showResponse("学号格式错误，请重新输入");
-                    Log.d("TAG","jjjjjj3");
-                   // Toast.makeText(RegisterActivity.this, "学号格式错误，请重新输入", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
