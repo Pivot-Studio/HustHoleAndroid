@@ -129,4 +129,18 @@
     <string name="publishhole_popupwindow_3">选择</string>
     <string name="publishhole_popupwindow_4">加入的小树林</string>
     <string name="publishhole_popupwindow_5">热门小树林</string>
+
+
+    <string name="network_thumbupfailure_">点赞失败，请检查网络</string>
+    <string name="network_followfailure_">关注失败，请检查网络</string>
+    <string name="network_searchfailure_">搜索失败，请检查网络</string>
+    <string name="network_notthumbupfailure_">取消点赞失败，请检查网络</string>
+    <string name="network_notfollowfailure_">取消关注失败，请检查网络</string>
+    <string name="network_loadfailure">加载失败，请检查网络</string>
+    <string name="network_loadeverthing">已经到底辣</string>
+    <string name="network_joinfailture">加入失败，请检查网络</string>
+    <string name="network_quitfailture">退出失败，请检查网络</string>
+    <string name="network_sendfailture">发送失败，请检查网络</string>
+    <string name="network_deletefailture">删除失败，请检查网络</string>
+    <string name="network_reportfailture">举报失败，请检查网络</string>
 </resources>

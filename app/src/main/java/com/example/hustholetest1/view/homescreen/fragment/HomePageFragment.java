@@ -2,9 +2,6 @@ package com.example.hustholetest1.view.homescreen.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Canvas;
-import android.graphics.ColorFilter;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -36,17 +33,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.EditTextReaction;
 import com.example.hustholetest1.model.HomePageRefreshFooter;
-import com.example.hustholetest1.model.StandardRefreshFooter;
+import com.example.hustholetest1.model.MaxHeightRecyclerView;
 import com.example.hustholetest1.network.CommenRequestManager;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
-import com.example.hustholetest1.view.homescreen.activity.HomeScreenActivity;
 import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity;
 import com.example.hustholetest1.view.homescreen.forest.DetailForestActivity;
-import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
@@ -57,7 +52,6 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -76,7 +70,7 @@ public class HomePageFragment extends Fragment {
     private boolean flag=false;
     private PopupWindow mSlideBoxPpw, mDarkScreenPpw;
     private ConstraintLayout mWherePpwCl;
-    private RecyclerView mHomePageHolesRv;
+    private MaxHeightRecyclerView mHomePageHolesRv;
     private Retrofit retrofit;
     private RequestInterface request;
     private JSONArray jsonArray;
@@ -85,8 +79,15 @@ public class HomePageFragment extends Fragment {
     private Boolean mHolesSequenceCondition =false,mPpwExistenceCondition=false;
     private HoleAdapter mHomePageHolesAdpter;
     private RefreshLayout mRefreshConditionRl,mLoadMoreConditionRl;
-    private int CONSTANT_STANDARD_LOAD_SIZE = 20;
+    private RecyclerView.OnScrollListener mOnscrollListener;
 
+
+    private int CONSTANT_STANDARD_LOAD_SIZE = 20;
+    private Boolean mIfFirstLoad=true;
+    private Boolean mPrestrainCondition=false;
+
+    private Boolean more_condition=false;
+    private  ConstraintLayout mMoreWhatCl;
 
 
     public static HomePageFragment newInstance() {
@@ -108,6 +109,7 @@ public class HomePageFragment extends Fragment {
         mSearchEt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                RemoveOnScrollListener();
                 if(flag==true){
                   EndTriangleAnim();
                 }
@@ -121,7 +123,8 @@ public class HomePageFragment extends Fragment {
                 //当actionId == XX_SEND 或者 XX_DONE时都触发
                 //或者event.getKeyCode == ENTER 且 event.getAction == ACTION_DOWN时也触发
                 //注意，这是一定要判断event != null。因为在某些输入法上会返回null。
-                Log.d("输入","点击");
+                //Log.d("输入","点击");
+
                 if (actionId == EditorInfo.IME_ACTION_SEND
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
@@ -131,7 +134,7 @@ public class HomePageFragment extends Fragment {
                             InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
                             // 隐藏软键盘
                             imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
-                            Call<ResponseBody> call = request.search_hole(mSearchEt.getText().toString(),0,20);//进行封装
+                            Call<ResponseBody> call = request.search_hole(mSearchEt.getText().toString(),0,CONSTANT_STANDARD_LOAD_SIZE);//进行封装
                             call.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -141,6 +144,7 @@ public class HomePageFragment extends Fragment {
                                             json = response.body().string();
                                         }
                                         Log.d("",json);
+                                        mStartingLoadId=0;
                                         if(json.equals("null")) {
                                             Toast.makeText(getContext(),"无搜索结果",Toast.LENGTH_SHORT).show();
                                         }else{
@@ -162,7 +166,7 @@ public class HomePageFragment extends Fragment {
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                                   Toast.makeText(getContext(),"无搜索结果",Toast.LENGTH_SHORT).show();
+                                   Toast.makeText(getContext(),R.string.network_searchfailure_,Toast.LENGTH_SHORT).show();
                                 }
 
 
@@ -181,8 +185,10 @@ public class HomePageFragment extends Fragment {
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
+                RemoveOnScrollListener();
+
                mRefreshConditionRl =refreshlayout;
-                mHompageHolesList=new ArrayList<>();
+
                 mStartingLoadId=0;
                 update();
                 mHomePageHolesRv.setOnTouchListener(new View.OnTouchListener() {
@@ -198,19 +204,42 @@ public class HomePageFragment extends Fragment {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
+                RemoveOnScrollListener();
+
+
+                if(mIfFirstLoad){
+                    refreshlayout.finishLoadMore();
+                }else{
+                    if (mPrestrainCondition == false) {
+                        mLoadMoreConditionRl = refreshlayout;
+                        mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+                        update();
+                    } else {
+                        mLoadMoreConditionRl = refreshlayout;
+                    }
+                }
+
+                /*
+
                 if(mRefreshConditionRl!=null){
                     refreshlayout.finishLoadMore();
                 }else {
-                    mLoadMoreConditionRl = refreshlayout;
-                    mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
-                    update();
+                    if(mPrestrainCondition==false) {
+                        mLoadMoreConditionRl = refreshlayout;
+                        mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+                        update();
+                    }else{
+                        refreshlayout.finishLoadMore();
+                    }
                 }
+                */
+
             }
         });
 
 
-        //mHomePageHolesAdpter=new HoleAdapter();
-        mHomePageHolesRv =(RecyclerView)rootView.findViewById(R.id.recyclerView);
+        mHomePageHolesAdpter=new HoleAdapter();
+        mHomePageHolesRv =(MaxHeightRecyclerView)rootView.findViewById(R.id.recyclerView);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(rootView.getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mHomePageHolesRv.setLayoutManager(linearLayoutManager);
@@ -260,6 +289,7 @@ public class HomePageFragment extends Fragment {
         mForestSquareTv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                RemoveOnScrollListener();
                 if(flag==false){
                     BeginTriangleAnim();
                     InputMethodManager manager = ((InputMethodManager)getContext().getSystemService(Context.INPUT_METHOD_SERVICE));
@@ -376,8 +406,9 @@ public class HomePageFragment extends Fragment {
                             jsonArray=new JSONArray(json);
                             Log.d("json",json);
                             new DownloadTask().execute();
-
-
+                            if(mRefreshConditionRl!=null){
+                                mHompageHolesList=new ArrayList<>();
+                            }
                             if(mPpwExistenceCondition!=false){
                                 mSlideBoxPpw.dismiss();
                                 mDarkScreenPpw.dismiss();
@@ -395,7 +426,48 @@ public class HomePageFragment extends Fragment {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                        Toast.makeText(getContext(),R.string.network_loadfailure,Toast.LENGTH_SHORT).show();
+                        if(mLoadMoreConditionRl!=null){
+                            mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
+                            //Log.d("mStartingLoadId",mStartingLoadId+"");
+                            mLoadMoreConditionRl.finishLoadMore();
+                            mLoadMoreConditionRl=null;
+                           // mHomePageHolesAdpter.notifyDataSetChanged();
+                            if(mPrestrainCondition==true){
+                                mPrestrainCondition=false;
+                                // mHomePageHolesAdpter.notifyDataSetChanged();
+                            }
+                        }else if(mRefreshConditionRl!=null){
+                            mRefreshConditionRl.finishRefresh();
+                            mRefreshConditionRl=null;
+                            mHomePageHolesRv.setOnTouchListener(new View.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View v, MotionEvent event) {
+                                    return false;
+                                }
+                            });
 
+                            if(mIfFirstLoad){
+                               // mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
+                               // mIfFirstLoad=false;
+                            }else{
+                               // mHomePageHolesAdpter.notifyDataSetChanged();
+                            }
+
+                            //mHomePageHolesAdpter.notifyDataSetChanged();
+
+                            //mHomePageHolesAdpter=new HoleAdapter();
+                            //mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
+                        }else if(mPrestrainCondition==true){
+                            mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
+                            mPrestrainCondition=false;
+                           // mHomePageHolesAdpter.notifyDataSetChanged();
+
+                        }else{
+                           // mIfFirstLoad=false;
+                            //   mHomePageHolesAdpter=new HoleAdapter();
+                           // mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
+                        }
                     }
 
 
@@ -415,54 +487,68 @@ public class HomePageFragment extends Fragment {
         @Override
         protected void onPostExecute(Void unused) {
 
-                if(mLoadMoreConditionRl!=null){
-                    Log.d("mStartingLoadId",mStartingLoadId+"");
-                    mLoadMoreConditionRl.finishLoadMore();
-                    mLoadMoreConditionRl=null;
-                    mHomePageHolesAdpter.notifyDataSetChanged();
-                }else if(mRefreshConditionRl!=null){
-                    mRefreshConditionRl.finishRefresh();
-                    mRefreshConditionRl=null;
-
-                    mHomePageHolesRv.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            return false;
-                        }
-                    });
-
-                    mHomePageHolesAdpter.notifyDataSetChanged();
-                    //mHomePageHolesAdpter=new HoleAdapter();
-                    //mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
-                }else{
-
-                    mHomePageHolesAdpter=new HoleAdapter();
-                    mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
-
+            if (mLoadMoreConditionRl != null) {
+                Log.d("mStartingLoadId", mStartingLoadId + "");
+                mLoadMoreConditionRl.finishLoadMore();
+                mLoadMoreConditionRl = null;
+                mHomePageHolesAdpter.notifyDataSetChanged();
+                if (mPrestrainCondition == true) {
+                    mPrestrainCondition = false;
+                    // mHomePageHolesAdpter.notifyDataSetChanged();
                 }
+            } else if (mRefreshConditionRl != null) {
+                mRefreshConditionRl.finishRefresh();
+                mRefreshConditionRl = null;
+                mHomePageHolesRv.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return false;
+                    }
+                });
+
+                if (mIfFirstLoad) {
+                    mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
+                    mIfFirstLoad = false;
+                } else {
+                    mHomePageHolesAdpter.notifyDataSetChanged();
+                }
+
+                //mHomePageHolesAdpter.notifyDataSetChanged();
+
+                //mHomePageHolesAdpter=new HoleAdapter();
+                //mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
+            } else if (mPrestrainCondition == true) {
+                mPrestrainCondition = false;
+                mHomePageHolesAdpter.notifyDataSetChanged();
+
+            } else {
+                mIfFirstLoad = false;
+                //   mHomePageHolesAdpter=new HoleAdapter();
+                mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
+            }
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
 
             try {
-                for(int f=0;f<jsonArray.length();f++) {
+                for (int f = 0; f < jsonArray.length(); f++) {
                     JSONObject sonObject = jsonArray.getJSONObject(f);
-                    String[] SingleHole =new String[14];
+                    String[] SingleHole = new String[14];
                     //detailforest[f][0] = sonObject.getString("background_image_url");
                     SingleHole[1] = sonObject.getString("content");
                     SingleHole[2] = sonObject.getString("created_timestamp");
-                    SingleHole[3] = sonObject.getInt("follow_num")+"";
-                    SingleHole[4] = sonObject.getInt("forest_id")+"";
+                    SingleHole[3] = sonObject.getInt("follow_num") + "";
+                    SingleHole[4] = sonObject.getInt("forest_id") + "";
                     SingleHole[5] = sonObject.getString("forest_name");
-                    SingleHole[6] = sonObject.getInt("hole_id")+"";
+                    SingleHole[6] = sonObject.getInt("hole_id") + "";
                     //detailforest2[f][1] = sonObject.getString("image");
-                    SingleHole[8] = sonObject.getBoolean("is_follow")+"";
-                    SingleHole[9] = sonObject.getBoolean("is_mine")+"";
-                    SingleHole[10] = sonObject.getBoolean("is_reply")+"";
-                    SingleHole[11] = sonObject.getBoolean("is_thumbup")+"";
-                    SingleHole[12] = sonObject.getInt("reply_num")+"";
-                    SingleHole[13] = sonObject.getInt("thumbup_num")+"";
+                    SingleHole[8] = sonObject.getBoolean("is_follow") + "";
+                    SingleHole[9] = sonObject.getBoolean("is_mine") + "";
+                    SingleHole[10] = sonObject.getBoolean("is_reply") + "";
+                    SingleHole[11] = sonObject.getBoolean("is_thumbup") + "";
+                    SingleHole[12] = sonObject.getInt("reply_num") + "";
+                    SingleHole[13] = sonObject.getInt("thumbup_num") + "";
                     mHompageHolesList.add(SingleHole);
                 }
             } catch (JSONException e) {
@@ -471,276 +557,307 @@ public class HomePageFragment extends Fragment {
             return null;
         }
     }
-    public class HoleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-        //private static List<Event> events;
-        private Boolean more_condition=false;
-        private  ConstraintLayout morewhat0;
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            private TextView content,created_timestamp,follow_num,reply_num,thumbup_num,hole_id,more_2;
-            private ImageView background_image_url,is_follow,is_reply,is_thumbup,more,more_1;
-            private int position;
-            private Button forest_name;
-            private ConstraintLayout morewhat,constraintLayout3;
-            public ViewHolder(View view) {
-                super(view);
-                content=(TextView)view.findViewById(R.id.tv_itemhomepage_content);
-                created_timestamp=(TextView)view.findViewById(R.id.tv_itemhomepage_time);
-                forest_name=(Button)view.findViewById(R.id.btn_itemhompage_jumptodetailforest);
-                thumbup_num =(TextView)view.findViewById(R.id.tv_itemhomepage_thumbupnumber);
-                reply_num=(TextView)view.findViewById(R.id.tv_itemhomepage_replynumber);
-                follow_num =(TextView)view.findViewById(R.id.tv_itemhomepage_follownumber);
-                hole_id=(TextView)view.findViewById(R.id.tv_itemhomepage_title);
-                is_thumbup=(ImageView)view.findViewById(R.id.iv_itemhomepage_thumbup);
-                is_reply=(ImageView)view.findViewById(R.id.iv_itemhomepage_reply);
-                is_follow=(ImageView)view.findViewById(R.id.iv_itemhomepage_follow);
-                more=(ImageView)view.findViewById(R.id.iv_itemhomepage_more);
-                more_1=(ImageView)view.findViewById(R.id.iv_itemhomepage_moreicon);
-                more_2=(TextView)view.findViewById(R.id.tv_itemhomepage_moretext);
-                morewhat=(ConstraintLayout)view.findViewById(R.id.cl_itemhomepage_morelist);
-                constraintLayout3=(ConstraintLayout)view.findViewById(R.id.cl_itemhomepage_frame);
-                morewhat.setVisibility(View.INVISIBLE);
-                more.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                      if(more_condition==false){
-                          morewhat.setVisibility(View.VISIBLE);
-                          morewhat0=morewhat;
-                          more_condition=true;
-                      }else{
-                          morewhat0.setVisibility(View.INVISIBLE);
-                          morewhat.setVisibility(View.VISIBLE);
-                          morewhat0=morewhat;
-                      }
-                    }
-                });
-                morewhat.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View v){
-                        if(CheckingToken.IfTokenExist()) {
-                            morewhat.setVisibility(View.INVISIBLE);
-                            more_condition = false;
-                            if (mHompageHolesList.get(position)[9].equals("true")) {
-                                CommenRequestManager.DeleteRequest(getContext(), request, mHompageHolesList.get(position)[6]);
-                                //update();
-                            } else {
-                                CommenRequestManager.ReportRequest(getContext(), request, mHompageHolesList.get(position)[6], "-1");
-                            }
-                        }else{
-                                Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
-                                startActivity(intent);
-
-                        }
-
-
-
-                    }
-                });
-
-
-
-                is_thumbup.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        if(CheckingToken.IfTokenExist()) {
-                            if (mHompageHolesList.get(position)[11].equals("false")) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mHompageHolesList.get(position)[6] + "/-1");//进行封装
-                                        Log.e(TAG, "token2：");
-                                        call.enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                is_thumbup.setImageResource(R.mipmap.active);
-                                                mHompageHolesList.get(position)[11] = "true";
-                                                mHompageHolesList.get(position)[13] = (Integer.parseInt(mHompageHolesList.get(position)[13]) + 1) + "";
-
-                                                thumbup_num.setText(mHompageHolesList.get(position)[13]);
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(getContext(), "点赞失败", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                }).start();
-                            } else {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mHompageHolesList.get(position)[6] + "/-1");//进行封装
-                                        Log.e(TAG, "token2：");
-                                        call.enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                is_thumbup.setImageResource(R.mipmap.inactive);
-                                                mHompageHolesList.get(position)[11] = "false";
-                                                mHompageHolesList.get(position)[13] = (Integer.parseInt(mHompageHolesList.get(position)[13]) - 1) + "";
-
-                                                thumbup_num.setText(mHompageHolesList.get(position)[13]);
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(getContext(), "取消点赞失败", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                }).start();
-                            }
-                        }else{
-                            Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
-                is_follow.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        if(CheckingToken.IfTokenExist()) {
-                            if (mHompageHolesList.get(position)[8].equals("false")) {
-                                new Thread(new Runnable() {//加载纵向列表标题
-                                    @Override
-                                    public void run() {
-                                        Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/" + mHompageHolesList.get(position)[6]);//进行封装
-                                        Log.e(TAG, "token2：");
-                                        call.enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                is_follow.setImageResource(R.mipmap.active_3);
-                                                mHompageHolesList.get(position)[8] = "true";
-                                                mHompageHolesList.get(position)[3] = (Integer.parseInt(mHompageHolesList.get(position)[3]) + 1) + "";
-
-                                                follow_num.setText(mHompageHolesList.get(position)[3]);
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(getContext(), "点赞失败", Toast.LENGTH_SHORT).show();
-                                                Log.d("", "取消点赞失败");
-                                            }
-                                        });
-                                    }
-                                }).start();
-                            } else {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + mHompageHolesList.get(position)[6]);//进行封装
-                                        Log.e(TAG, "token2：");
-                                        call.enqueue(new Callback<ResponseBody>() {
-                                            @Override
-                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                is_follow.setImageResource(R.mipmap.inactive_3);
-                                                mHompageHolesList.get(position)[8] = "false";
-                                                mHompageHolesList.get(position)[3] = (Integer.parseInt(mHompageHolesList.get(position)[3]) - 1) + "";
-
-                                                follow_num.setText(mHompageHolesList.get(position)[3]);
-                                            }
-
-                                            @Override
-                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(getContext(), "取消关注失败", Toast.LENGTH_SHORT).show();
-                                                Log.d("", "取消关注失败");
-                                            }
-                                        });
-                                    }
-                                }).start();
-                            }
-                        }else{
-                            Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
-                            startActivity(intent);
-                        }
-                    }
-                });
-                constraintLayout3.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                        Log.d("data[2]1", mHompageHolesList.get(position)[2]);
-                        Intent intent= CommentListActivity.newIntent(getActivity(), mHompageHolesList.get(position));
-                        startActivity(intent);
-                    }
-                });
-                forest_name.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View v) {
-                                Intent intent = DetailForestActivity.newIntent(getContext(), mHompageHolesList.get(position)[4]);
-                                startActivity(intent);
-                    }
-                });
+        private void RemoveOnScrollListener() {
+            if (mOnscrollListener != null) {
+                mHomePageHolesRv.removeOnScrollListener(mOnscrollListener);
             }
-
-
-            public void bind(int position){
-                this.position=position;
-                content.setText(mHompageHolesList.get(position)[1]);
-
-                created_timestamp.setText(mHompageHolesList.get(position)[2]+(mHolesSequenceCondition==true?"更新":"发布"));
-                if(mHompageHolesList.get(position)[5].equals("")){
-                    forest_name.setVisibility(View.INVISIBLE);
-                }else {
-                    forest_name.setText("  "+ mHompageHolesList.get(position)[5]+"   ");
-                }
-                follow_num.setText(mHompageHolesList.get(position)[3]);
-                Log.d("holeidfollownumisfollow",mHompageHolesList.get(position)[6]+"+"+mHompageHolesList.get(position)[3]+"+"+mHompageHolesList.get(position)[8]);
-                reply_num.setText(mHompageHolesList.get(position)[12]);
-                thumbup_num.setText(mHompageHolesList.get(position)[13]);
-                hole_id.setText("#" + mHompageHolesList.get(position)[6]);
-                if (mHompageHolesList.get(position)[8].equals("true")) {
-                    is_follow.setImageResource(R.mipmap.active_3);
-                }else {
-                    is_follow.setImageResource(R.mipmap.inactive_3);
-                }
-                if(mHompageHolesList.get(position)[9].equals("true")){
-                    more_1.setImageResource(R.mipmap.vector6);
-                    more_2.setText("删除");
-                }else{
-                    more_1.setImageResource(R.mipmap.vector4);
-                    more_2.setText("举报");
-                }
-
-                if (mHompageHolesList.get(position)[10].equals("true")) {
-                    is_reply.setImageResource(R.mipmap.active_2);
-                }else{
-                    is_reply.setImageResource(R.mipmap.inactive_2);
-                }
-                if (mHompageHolesList.get(position)[11].equals("true")) {
-                    is_thumbup.setImageResource(R.mipmap.active);
-
-                    //is_thumbup.setImageDrawable(R.drawable.thumbup);
-                }else{
-                    is_thumbup.setImageResource(R.mipmap.inactive);
-                }
+            if(mMoreWhatCl!=null) {
+                mMoreWhatCl.setVisibility(View.INVISIBLE);
+                more_condition = false;
             }
-
-        }
-
-        public HoleAdapter(){
-
-            //this.events=events;
         }
 
 
+        public class HoleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+            //private static List<Event> events;
 
-        @Override
-        public RecyclerView.ViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
+            public class ViewHolder extends RecyclerView.ViewHolder {
+                private TextView content, created_timestamp, follow_num, reply_num, thumbup_num, hole_id, more_2;
+                private ImageView background_image_url, is_follow, is_reply, is_thumbup, more, more_1;
+                private int position;
+                private Button forest_name;
+                private ConstraintLayout morewhat, constraintLayout3;
+
+                public ViewHolder(View view) {
+                    super(view);
+                    content = (TextView) view.findViewById(R.id.tv_itemhomepage_content);
+                    created_timestamp = (TextView) view.findViewById(R.id.tv_itemhomepage_time);
+                    forest_name = (Button) view.findViewById(R.id.btn_itemhompage_jumptodetailforest);
+                    thumbup_num = (TextView) view.findViewById(R.id.tv_itemhomepage_thumbupnumber);
+                    reply_num = (TextView) view.findViewById(R.id.tv_itemhomepage_replynumber);
+                    follow_num = (TextView) view.findViewById(R.id.tv_itemhomepage_follownumber);
+                    hole_id = (TextView) view.findViewById(R.id.tv_itemhomepage_title);
+                    is_thumbup = (ImageView) view.findViewById(R.id.iv_itemhomepage_thumbup);
+                    is_reply = (ImageView) view.findViewById(R.id.iv_itemhomepage_reply);
+                    is_follow = (ImageView) view.findViewById(R.id.iv_itemhomepage_follow);
+                    more = (ImageView) view.findViewById(R.id.iv_itemhomepage_more);
+                    more_1 = (ImageView) view.findViewById(R.id.iv_itemhomepage_moreicon);
+                    more_2 = (TextView) view.findViewById(R.id.tv_itemhomepage_moretext);
+                    morewhat = (ConstraintLayout) view.findViewById(R.id.cl_itemhomepage_morelist);
+                    constraintLayout3 = (ConstraintLayout) view.findViewById(R.id.cl_itemhomepage_frame);
+                    morewhat.setVisibility(View.INVISIBLE);
+                    more.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (more_condition == false) {
+                                morewhat.setVisibility(View.VISIBLE);
+                                mMoreWhatCl = morewhat;
+                                more_condition = true;
+                            } else {
+                                mMoreWhatCl.setVisibility(View.INVISIBLE);
+                                morewhat.setVisibility(View.VISIBLE);
+                                mMoreWhatCl = morewhat;
+                            }
+                            if (mOnscrollListener != null) {
+                                mHomePageHolesRv.removeOnScrollListener(mOnscrollListener);
+                            }
+                            mOnscrollListener = new RecyclerView.OnScrollListener() {
+                                //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
+                                @Override
+                                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                    //super.onScrollStateChanged(recyclerView, newState);
+                                    mMoreWhatCl.setVisibility(View.INVISIBLE);
+                                    more_condition = false;
+                                    mHomePageHolesRv.removeOnScrollListener(mOnscrollListener);
+                                }
+                            };
+                            mHomePageHolesRv.addOnScrollListener(mOnscrollListener);
+                        }
+                    });
+                    morewhat.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            if (CheckingToken.IfTokenExist()) {
+                                RemoveOnScrollListener();
+                                if (mHompageHolesList.get(position)[9].equals("true")) {
+                                    CommenRequestManager.DeleteRequest(getContext(), request, mHompageHolesList.get(position)[6]);
+                                    //update();
+                                } else {
+                                    CommenRequestManager.ReportRequest(getContext(), request, mHompageHolesList.get(position)[6], "-1");
+                                }
+                            } else {
+                                Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
+                                startActivity(intent);
+
+                            }
+
+
+                        }
+                    });
+
+
+                    is_thumbup.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (CheckingToken.IfTokenExist()) {
+                                if (mHompageHolesList.get(position)[11].equals("false")) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mHompageHolesList.get(position)[6] + "/-1");//进行封装
+                                            Log.e(TAG, "token2：");
+                                            call.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    is_thumbup.setImageResource(R.mipmap.active);
+                                                    mHompageHolesList.get(position)[11] = "true";
+                                                    mHompageHolesList.get(position)[13] = (Integer.parseInt(mHompageHolesList.get(position)[13]) + 1) + "";
+
+                                                    thumbup_num.setText(mHompageHolesList.get(position)[13]);
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    Toast.makeText(getContext(), R.string.network_thumbupfailure_, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
+                                    }).start();
+                                } else {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mHompageHolesList.get(position)[6] + "/-1");//进行封装
+                                            Log.e(TAG, "token2：");
+                                            call.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    is_thumbup.setImageResource(R.mipmap.inactive);
+                                                    mHompageHolesList.get(position)[11] = "false";
+                                                    mHompageHolesList.get(position)[13] = (Integer.parseInt(mHompageHolesList.get(position)[13]) - 1) + "";
+
+                                                    thumbup_num.setText(mHompageHolesList.get(position)[13]);
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    Toast.makeText(getContext(), R.string.network_notthumbupfailure_, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
+                                    }).start();
+                                }
+                            } else {
+                                Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+                    });
+                    is_follow.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            if (CheckingToken.IfTokenExist()) {
+                                if (mHompageHolesList.get(position)[8].equals("false")) {
+                                    new Thread(new Runnable() {//加载纵向列表标题
+                                        @Override
+                                        public void run() {
+                                            Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/" + mHompageHolesList.get(position)[6]);//进行封装
+                                            Log.e(TAG, "token2：");
+                                            call.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    is_follow.setImageResource(R.mipmap.active_3);
+                                                    mHompageHolesList.get(position)[8] = "true";
+                                                    mHompageHolesList.get(position)[3] = (Integer.parseInt(mHompageHolesList.get(position)[3]) + 1) + "";
+
+                                                    follow_num.setText(mHompageHolesList.get(position)[3]);
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    Toast.makeText(getContext(), R.string.network_followfailure_, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+                                        }
+                                    }).start();
+                                } else {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + mHompageHolesList.get(position)[6]);//进行封装
+                                            Log.e(TAG, "token2：");
+                                            call.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    is_follow.setImageResource(R.mipmap.inactive_3);
+                                                    mHompageHolesList.get(position)[8] = "false";
+                                                    mHompageHolesList.get(position)[3] = (Integer.parseInt(mHompageHolesList.get(position)[3]) - 1) + "";
+
+                                                    follow_num.setText(mHompageHolesList.get(position)[3]);
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    Toast.makeText(getContext(), R.string.network_notfollowfailure_, Toast.LENGTH_SHORT).show();
+                                                    Log.d("", "取消关注失败");
+                                                }
+                                            });
+                                        }
+                                    }).start();
+                                }
+                            } else {
+                                Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
+                                startActivity(intent);
+                            }
+                        }
+                    });
+                    constraintLayout3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            RemoveOnScrollListener();
+                            Log.d("data[2]1", mHompageHolesList.get(position)[2]);
+                            Intent intent = CommentListActivity.newIntent(getActivity(), mHompageHolesList.get(position));
+                            startActivity(intent);
+                        }
+                    });
+                    forest_name.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = DetailForestActivity.newIntent(getContext(), mHompageHolesList.get(position)[4]);
+                            startActivity(intent);
+                        }
+                    });
+                }
+
+
+                public void bind(int position) {
+                    this.position = position;
+                    content.setText(mHompageHolesList.get(position)[1]);
+
+                    created_timestamp.setText(mHompageHolesList.get(position)[2] + (mHolesSequenceCondition == true ? "更新" : "发布"));
+                    if (mHompageHolesList.get(position)[5].equals("")) {
+                        forest_name.setVisibility(View.INVISIBLE);
+                    } else {
+                        forest_name.setText("  " + mHompageHolesList.get(position)[5] + "   ");
+                    }
+                    follow_num.setText(mHompageHolesList.get(position)[3]);
+                    Log.d("holeidfollownumisfollow", mHompageHolesList.get(position)[6] + "+" + mHompageHolesList.get(position)[3] + "+" + mHompageHolesList.get(position)[8]);
+                    reply_num.setText(mHompageHolesList.get(position)[12]);
+                    thumbup_num.setText(mHompageHolesList.get(position)[13]);
+                    hole_id.setText("#" + mHompageHolesList.get(position)[6]);
+                    if (mHompageHolesList.get(position)[8].equals("true")) {
+                        is_follow.setImageResource(R.mipmap.active_3);
+                    } else {
+                        is_follow.setImageResource(R.mipmap.inactive_3);
+                    }
+                    if (mHompageHolesList.get(position)[9].equals("true")) {
+                        more_1.setImageResource(R.mipmap.vector6);
+                        more_2.setText("删除");
+                    } else {
+                        more_1.setImageResource(R.mipmap.vector4);
+                        more_2.setText("举报");
+                    }
+
+                    if (mHompageHolesList.get(position)[10].equals("true")) {
+                        is_reply.setImageResource(R.mipmap.active_2);
+                    } else {
+                        is_reply.setImageResource(R.mipmap.inactive_2);
+                    }
+                    if (mHompageHolesList.get(position)[11].equals("true")) {
+                        is_thumbup.setImageResource(R.mipmap.active);
+
+                        //is_thumbup.setImageDrawable(R.drawable.thumbup);
+                    } else {
+                        is_thumbup.setImageResource(R.mipmap.inactive);
+                    }
+                }
+
+            }
+
+            public HoleAdapter() {
+
+                //this.events=events;
+            }
+
+
+            @Override
+            public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
 
                 return new HoleAdapter.ViewHolder(LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_homepage,parent,false ));
+                        .inflate(R.layout.item_homepage, parent, false));
 
-        }
-        @Override
-        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-            //Event event=events.get(position);
+            }
+
+            @Override
+            public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+                //Event event=events.get(position);
                 ((HoleAdapter.ViewHolder) holder).bind(position);
-        }
-        @Override
-        public int getItemCount() {
-            return mHompageHolesList.size();
+                if (position == mHompageHolesList.size() - 4 && (mHompageHolesList.size() % CONSTANT_STANDARD_LOAD_SIZE == 0)) {
+                    mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+                    mPrestrainCondition = true;
+                    update();
+                }
+            }
+
+            @Override
+            public int getItemCount() {
+                return mHompageHolesList.size();
+            }
         }
     }
 
-}
+
+

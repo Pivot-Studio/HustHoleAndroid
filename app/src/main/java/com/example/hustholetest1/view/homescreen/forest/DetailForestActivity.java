@@ -106,6 +106,12 @@ public class DetailForestActivity extends AppCompatActivity {
     private Window window;
     private int headHeight=0;
     private RecyclerView.OnScrollListener mOnscrollListener;
+    private Boolean mIfFirstLoad=true;
+    private Boolean mPrestrainCondition=false;
+
+    private Boolean more_condition=false;
+    private  ConstraintLayout mMoreWhatCl;
+    private RecyclerView.OnScrollListener mOnscrollListener2;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,11 +120,6 @@ public class DetailForestActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        //StatusBarUtil.setTranslucentForImageViewInFragment(DetailForestActivity.this, null);
-       // StatusBarUtil.setColor(this, getResources().getColor(R.color.Grayscale_200));
-        //StatusBarUtil.setTranslucentForImageViewInFragment(this, 0, null);
-        //StatusBarUtil.setLightMode(this);
-
         mDetailForestCl=(ConstraintLayout)findViewById(R.id.cl_detailforest);
 
         back = (ImageView) findViewById(R.id.iv_titlebartransparent_back);
@@ -133,12 +134,11 @@ public class DetailForestActivity extends AppCompatActivity {
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
+                RemoveOnScrollListener();
                 mRefreshConditionRl =refreshlayout;
                 mStartingLoadId=0;
-                mDetailforestHoleslist=new ArrayList<>();
+
                 update();
-
-
                 recyclerView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -152,9 +152,18 @@ public class DetailForestActivity extends AppCompatActivity {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
-                mLoadMoreCondotionRl = refreshlayout;
-                mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
-                update();
+                RemoveOnScrollListener();
+                if(mIfFirstLoad){
+                    refreshlayout.finishLoadMore();
+                }else {
+                    if (mPrestrainCondition == false) {
+                        mLoadMoreCondotionRl = refreshlayout;
+                        mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+                        update();
+                    } else {
+                        mLoadMoreCondotionRl = refreshlayout;
+                    }
+                }
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -164,8 +173,6 @@ public class DetailForestActivity extends AppCompatActivity {
             }
         });
         TokenInterceptor.getContext(DetailForestActivity.this);
-        //TokenInterceptor.getContext(RegisterActivity.this);
-        System.out.println("提交了context");
         retrofit= RetrofitManager.getRetrofit();
         request = retrofit.create(RequestInterface.class);//创建接口实例
         data=getIntent().getStringArrayExtra(key);
@@ -184,8 +191,6 @@ public class DetailForestActivity extends AppCompatActivity {
                 }
             }
         });
-
-
         mForestHoleAdapter=new ForestHoleAdapter();
         if(data==null){
             addhole.setVisibility(View.INVISIBLE);
@@ -219,12 +224,10 @@ public class DetailForestActivity extends AppCompatActivity {
                                     e.printStackTrace();
                                 }
                             }
-
                         }
-
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(DetailForestActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DetailForestActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -232,14 +235,7 @@ public class DetailForestActivity extends AppCompatActivity {
         }else{
             update();
         }
-
         recyclerView = (MaxHeightRecyclerView) findViewById(R.id.rv_detailforest);
-
-
-
-
-
-
         WindowManager wm = (WindowManager)DetailForestActivity.this.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics dm = new DisplayMetrics();
         // 从默认显示器中获取显示参数保存到dm对象中
@@ -253,14 +249,11 @@ public class DetailForestActivity extends AppCompatActivity {
                 View.MeasureSpec.UNSPECIFIED);
         titlebar.measure(w, h);
         int height = titlebar.getMeasuredHeight();
-
         int bb=DetailForestActivity.this.getResources().getDisplayMetrics().densityDpi;
         recyclerView.setMaxHeight(dm.heightPixels-height-20);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(DetailForestActivity.this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-
-
     }
 
 
@@ -299,18 +292,25 @@ public class DetailForestActivity extends AppCompatActivity {
                             if (response.body() != null) {
                                 json = response.body().string();
                             }
+
+
+                            if(mRefreshConditionRl!=null){
+                                mDetailforestHoleslist=new ArrayList<>();
+                            }
                             //Log.e(TAG, "token2："+json);
-                            if(json.equals("[]")){
+                            if(json.equals("[]")&&mLoadMoreCondotionRl!=null){
                                Toast.makeText(DetailForestActivity.this,"加载到底辣",Toast.LENGTH_SHORT).show();
-                               mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
-                                if(mLoadMoreCondotionRl!=null){
+                               // if(mStartingLoadId!=0) {
+                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                               // }
                                     mLoadMoreCondotionRl.finishLoadMore();
                                     mLoadMoreCondotionRl=null;
+                                /*if(mIfFirstLoad==true){
+                                    recyclerView.setAdapter(mForestHoleAdapter);
                                 }
+                                */
                             }else{
                             jsonArray2 = new JSONArray(json);
-                            //jsonArray =response.body();
-                            //mDetailforestHoleslist =new String[jsonArray2.length()][14];
                             new DownloadTask().execute();
                             }
                         } catch (IOException | JSONException e) {
@@ -321,7 +321,48 @@ public class DetailForestActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                        Toast.makeText(DetailForestActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
 
+                        if(mRefreshConditionRl !=null){
+                            mRefreshConditionRl.finishRefresh();
+                            mRefreshConditionRl =null;
+                            recyclerView.removeOnScrollListener(mOnscrollListener);
+                            //recyclerView.addOnScrollListener(null);
+
+
+                            if(mIfFirstLoad){
+                                //recyclerView.setAdapter(mForestHoleAdapter);
+                               // mIfFirstLoad=false;
+                            }else{
+                              //  mForestHoleAdapter.notifyDataSetChanged();
+                            }
+
+                           // mForestHoleAdapter.notifyDataSetChanged();
+                            mDistanceY=0.0f;
+                            recyclerView.setOnTouchListener(new View.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View v, MotionEvent event) {
+                                    return false;
+                                }
+                            });
+                        } else if(mLoadMoreCondotionRl!=null){
+                            mLoadMoreCondotionRl.finishLoadMore();
+                            mLoadMoreCondotionRl=null;
+                            mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
+                            if(mPrestrainCondition==true){
+                                mPrestrainCondition=false;
+                               // mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
+                                //  mForestHoleAdapter.notifyDataSetChanged();
+                            }
+                           // mForestHoleAdapter.notifyDataSetChanged();
+                        }else if(mPrestrainCondition==true){
+                            mPrestrainCondition=false;
+                            mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
+                          //  mForestHoleAdapter.notifyDataSetChanged();
+                        }else{
+                           // mIfFirstLoad=false;
+                          //  recyclerView.setAdapter(mForestHoleAdapter);
+                        }
                     }
 
 
@@ -337,20 +378,19 @@ public class DetailForestActivity extends AppCompatActivity {
             if(mRefreshConditionRl !=null){
                 mRefreshConditionRl.finishRefresh();
                 mRefreshConditionRl =null;
-
-
-
                 recyclerView.removeOnScrollListener(mOnscrollListener);
                 //recyclerView.addOnScrollListener(null);
+
+
+                if(mIfFirstLoad){
+                    recyclerView.setAdapter(mForestHoleAdapter);
+                    mIfFirstLoad=false;
+                }else{
+                    mForestHoleAdapter.notifyDataSetChanged();
+                }
+
                 mForestHoleAdapter.notifyDataSetChanged();
-
-
-
-
                 mDistanceY=0.0f;
-
-
-
                 recyclerView.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
@@ -358,14 +398,14 @@ public class DetailForestActivity extends AppCompatActivity {
                     }
                 });
             } else if(mLoadMoreCondotionRl!=null){
-
                 mLoadMoreCondotionRl.finishLoadMore();
                 mLoadMoreCondotionRl=null;
                 mForestHoleAdapter.notifyDataSetChanged();
-
-
+            }else if(mPrestrainCondition==true){
+                  mPrestrainCondition=false;
+                  mForestHoleAdapter.notifyDataSetChanged();
             }else{
-
+                mIfFirstLoad=false;
             recyclerView.setAdapter(mForestHoleAdapter);
             }
         }
@@ -402,8 +442,8 @@ public class DetailForestActivity extends AppCompatActivity {
 
     public class ForestHoleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         //private static List<Event> events;
-        private Boolean more_condition=false;
-        private  ConstraintLayout morewhat0;
+      //  private Boolean more_condition=false;
+       // private  ConstraintLayout morewhat0;
 
         public static final int ITEM_TYPE_HEADER = 0;
         public static final int ITEM_TYPE_CONTENT = 1;
@@ -482,7 +522,7 @@ public class DetailForestActivity extends AppCompatActivity {
 
                                                     @Override
                                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                        Toast.makeText(DetailForestActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(DetailForestActivity.this, R.string.network_quitfailture, Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                             }
@@ -499,7 +539,6 @@ public class DetailForestActivity extends AppCompatActivity {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                 Toast.makeText(DetailForestActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
-
                                                 data[5] = "true";
                                                 button.setPadding(0, 0, 0, 0);
                                                 //button.setPadding(-30,-5,-6,-6);
@@ -510,10 +549,9 @@ public class DetailForestActivity extends AppCompatActivity {
                                                 button.setCompoundDrawables(null, null, null, null);
                                                 button.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
                                             }
-
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(DetailForestActivity.this, "加入失败", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(DetailForestActivity.this, R.string.network_joinfailture, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -528,13 +566,9 @@ public class DetailForestActivity extends AppCompatActivity {
                 });
             }
             public void bind(int position){
-
-
-
-
                 window = getWindow();
                 transparentStatusBar(window);
-//  RecyclerView设置滑动监听
+                    //RecyclerView设置滑动监听
                 mOnscrollListener=new RecyclerView.OnScrollListener() {
                     //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 
@@ -566,25 +600,14 @@ public class DetailForestActivity extends AppCompatActivity {
                                 //设置状态栏透明
                                 window.setStatusBarColor(Color.TRANSPARENT);
                             }
-
                             float d = (mDistanceY*160/bb) / headHeight;
                             //int i = Double.valueOf(d * 255).intValue();    //i 有可能小于0
                             Log.d("d",d+"");
-
                             window.setStatusBarColor(Color.parseColor("#"+intToHex((int)(d*255))+"4B9F79"));
                             titlebar.setBackgroundColor(Color.parseColor("#"+intToHex((int)(d*255))+"4B9F79"));
-                           // titlebar.getBackground().mutate().setAlpha((int)(d*255));
                             mTitlebarTextTv.setAlpha(d);
                             mTitlebarTextTv.setText(data[7]);
-                            //back.setImageResource(R.mipmap.triangle_4);
                             back.setAlpha(1f);
-
-
-                            ///titlebar.setAl// 0~255 透明度
-                            //titlebar.setBackgroundColor(getResources().getColor(R.color.HH_BandColor_1));
-                            //window.setAlpha(Math.max(i, 0));
-                            //textview.setAlpha((float) Math.max(d, 0));
-                            //imageview.setAlpha((float) Math.max(d, 0));
                         } else {
                             if (Build.VERSION.SDK_INT >= 21) {
                                 window.setStatusBarColor(getResources().getColor(R.color.HH_BandColor_1));
@@ -627,20 +650,7 @@ public class DetailForestActivity extends AppCompatActivity {
                         .apply(options1)
                         .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                         .into(head);
-
-
-
-
-
-
-
-
                  //TODO  这样你就可以拿到这个bitmap了
-
-
-
-
-
                 Glide.with(DetailForestActivity.this)
                         .asBitmap()
                         .load(data[1])
@@ -667,9 +677,6 @@ public class DetailForestActivity extends AppCompatActivity {
                                 Canvas canvas2 = new Canvas(bitmap);
                                 canvas2.drawBitmap(resource, 0, 0, null);
                                 canvas2.drawBitmap(bitmapblock, 0, resource.getHeight(), null);
-
-
-
 
 
                                 Drawable drawable2 = new BitmapDrawable(bitmap);
@@ -721,13 +728,28 @@ public class DetailForestActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if(more_condition==false){
                             morewhat.setVisibility(View.VISIBLE);
-                            morewhat0=morewhat;
+                            mMoreWhatCl=morewhat;
                             more_condition=true;
                         }else{
-                            morewhat0.setVisibility(View.INVISIBLE);
+                            mMoreWhatCl.setVisibility(View.INVISIBLE);
                             morewhat.setVisibility(View.VISIBLE);
-                            morewhat0=morewhat;
+                            mMoreWhatCl=morewhat;
                         }
+                        if (mOnscrollListener2 != null) {
+                            recyclerView.removeOnScrollListener(mOnscrollListener2);
+                        }
+                        mOnscrollListener2 = new RecyclerView.OnScrollListener() {
+                            //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
+                            @Override
+                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                //super.onScrollStateChanged(recyclerView, newState);
+                                mMoreWhatCl.setVisibility(View.INVISIBLE);
+                                more_condition = false;
+                               recyclerView.removeOnScrollListener(mOnscrollListener2);
+                            }
+                        };
+                        recyclerView.addOnScrollListener(mOnscrollListener2);
                     }
                 });
                 morewhat.setOnClickListener(new View.OnClickListener() {
@@ -735,8 +757,9 @@ public class DetailForestActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v){
                         if(CheckingToken.IfTokenExist()) {
-                            morewhat.setVisibility(View.INVISIBLE);
-                            more_condition = false;
+                            RemoveOnScrollListener();
+                           // morewhat.setVisibility(View.INVISIBLE);
+                           // more_condition = false;
                             if (mDetailforestHoleslist.get(position - 1)[9].equals("true")) {
                                 CommenRequestManager.DeleteRequest(DetailForestActivity.this, request, mDetailforestHoleslist.get(position - 1)[6]);
                                 finish();
@@ -757,6 +780,7 @@ public class DetailForestActivity extends AppCompatActivity {
                 view.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
+                        RemoveOnScrollListener();
                         Intent intent= CommentListActivity.newIntent(DetailForestActivity.this, mDetailforestHoleslist.get(position-1));
                         startActivity(intent);
                     }
@@ -783,7 +807,7 @@ public class DetailForestActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(DetailForestActivity.this, "点赞失败,请检查网络状况", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(DetailForestActivity.this, R.string.network_thumbupfailure_, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -806,7 +830,7 @@ public class DetailForestActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(DetailForestActivity.this, "取消点赞失败,请检查网络状况", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(DetailForestActivity.this, R.string.network_notthumbupfailure_, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -840,8 +864,7 @@ public class DetailForestActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(DetailForestActivity.this, "关注失败,请检查网络状况", Toast.LENGTH_SHORT).show();
-                                                Log.d("", "取消点赞失败");
+                                                Toast.makeText(DetailForestActivity.this, R.string.network_followfailure_, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -864,8 +887,7 @@ public class DetailForestActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(DetailForestActivity.this, "取消关注失败,请检查网络状况", Toast.LENGTH_SHORT).show();
-                                                Log.d("", "取消关注失败");
+                                                Toast.makeText(DetailForestActivity.this, R.string.network_notfollowfailure_, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -959,6 +981,11 @@ public class DetailForestActivity extends AppCompatActivity {
                 ((DetailForestActivity.ForestHoleAdapter.ViewHolder) holder).bind(position);
 
             }
+            if(position==mDetailforestHoleslist.size()-4&&(mDetailforestHoleslist.size()%CONSTANT_STANDARD_LOAD_SIZE==0)){
+                mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+                mPrestrainCondition=true;
+                update();
+            }
            // Log.d(TAG,"已经设置单个信息了"+position);
             //holder.bind(position);
 
@@ -1020,5 +1047,13 @@ public class DetailForestActivity extends AppCompatActivity {
         a = sb.reverse().toString();
         return a.length() < 2 ? "0" + a : a;
     }
-
+    private void RemoveOnScrollListener() {
+        if (mOnscrollListener2 != null) {
+           recyclerView.removeOnScrollListener(mOnscrollListener2);
+        }
+        if(mMoreWhatCl!=null) {
+            mMoreWhatCl.setVisibility(View.INVISIBLE);
+            more_condition = false;
+        }
+    }
 }

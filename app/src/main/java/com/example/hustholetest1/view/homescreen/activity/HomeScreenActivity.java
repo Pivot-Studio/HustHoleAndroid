@@ -2,16 +2,21 @@ package com.example.hustholetest1.view.homescreen.activity;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -57,7 +62,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     public static int GetOBAndTBHeight(){
         return gOptionBoxAndBarHeight;
     }
-
+    private long exitTime = 0;
      
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +72,8 @@ public class HomeScreenActivity extends AppCompatActivity {
         if(getSupportActionBar()!=null){//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
-        mViewPager = (BaseViewPager) findViewById(R.id.vp_homescreen);
+
+
         int[] location=new int[2];
         //titleBar.getLocationOnScreen(location);
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -100,6 +106,7 @@ public class HomeScreenActivity extends AppCompatActivity {
         addhole=(FloatingActionButton)findViewById(R.id.fab_homescreen_publishhole);
         mOptionBoxIv=(ImageView)findViewById(R.id.iv_homescreen_optionbox);
         mTitleBarLl=(ConstraintLayout)findViewById(R.id.ll_homescreen_titlebar);
+        mViewPager = (BaseViewPager) findViewById(R.id.vp_homescreen);
         int w = View.MeasureSpec.makeMeasureSpec(0,
                 View.MeasureSpec.UNSPECIFIED);
         int h = View.MeasureSpec.makeMeasureSpec(0,
@@ -114,6 +121,10 @@ public class HomeScreenActivity extends AppCompatActivity {
         int height2 = mTitleBarLl.getMeasuredHeight();
         gOptionBoxAndBarHeight=height+height2;
         Log.d("height+height2",height+"+"+height2);
+        WindowManager wm = (WindowManager)HomeScreenActivity.this.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
+        // 从默认显示器中获取显示参数保存到dm对象中
+        wm.getDefaultDisplay().getMetrics(dm);
         //gOptionBoxTopLocation=mOptionBoxIv.getTop();
 
 
@@ -146,50 +157,68 @@ public class HomeScreenActivity extends AppCompatActivity {
 */
         //final AlertDialog.Builder  mBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
        // final AlertDialog.Builder  mBuilder = new AlertDialog.Builder(this);
-        View mView = View.inflate(getApplicationContext(), R.layout.dialog_homepage, null);
-       // mView.setBackgroundResource(R.drawable.homepage_notice);
-        //设置自定义的布局
-        //mBuilder.setView(mView);
-        Dialog dialog = new Dialog(this);
-        dialog.setContentView(mView);
-        TextView  mEt_first_password = (TextView) mView.findViewById(R.id.tv_dialoghomepage_title);
-        TextView mEt_second_password = (TextView) mView.findViewById(R.id.tv_dialoghomepage_content);
-       mEt_second_password.setMovementMethod(ScrollingMovementMethod.getInstance());
-        mEt_first_password.setText(R.string.homepage_2);
-        String aa=("<small><font color=\"#00000000\">你好，这里是1037树洞~</font></small><br>"+
-                " <small><font color=\"#666666\">请先别急着跳过噢，花三十秒听听树洞的悄悄话吧</font></small>"+"<font color=\"#666666\">(●'◡'●)</font><br><br>"+
-                "<strong><font color=\"#00000000\">1037树洞是什么</font></strong><br><br>"+
-                "<small><font color=\"#666666\">1037树洞是专属于HUSTer的</font></small><small><font color=\"#00000000\">匿名社区</font></small>，"+
-                "<small><font color=\"#666666\">通过学号绑定的校园邮箱来验证你的华科在校学生身份。你的学号邮箱仅会被用于验证，而不会在社区中被展示；通过后台加密算法，除了在严重违反社区规范的情况下且运营者认为有必要时，</font></small>"+
-                "<small><font color=\"#00000000\">任何人都无法获知你的发言身份</font></small><small><font color=\"#666666\">。在这里，你可以真正地畅所欲言。</font></small><br><br>"+
-                "<strong><font color=\"#00000000\">我们的初衷</font></strong><br><br>"+
-                " <small><font color=\"#666666\">敲下几行文字，1037树洞可以满足你任何的交流需求：</font></small><br><br>"+
-                " <small><font color=\"#00000000\">倾诉自己内心深处的伤感或喜悦，分享华科最新发生的大小趣事，寻找校内拥有小众爱好的朋友，寻求学长学姐们给自己的建议，交流对于热点社会问题的看法……</font></small><br><br>"+
-                " <small><font color=\"#666666\">树洞的本质是人和人之间的互相倾诉，只有人来人往，树洞才会好玩儿~在1037树洞，所有的声音都会被认真倾听，你的一切发言不用担心被熟人监视，而你的交流对象都是和你思维高度同频的HUSTer~</font></small><br><br>"+
-                "<strong><font color=\"#00000000\">我们的期望</font></strong><br><br>"+
-                " <small><font color=\"#666666\">为了让每一位洞友都能在1037树洞找到温暖，我们希望你：</font></small><br><br>"+
-                " <small><font color=\"#00000000\">&#160;&#160;●&#160;做一个友善的倾听者，尊重他人，即使TA与你观点相异；</font></small><br>"+
-                " <small><font color=\"#00000000\">&#160;&#160;●&#160;不要发布令人感到不适或者违反法律法规的内容，包括但不限于侮辱他人、侵犯隐私、发布暴力或色情内容等；</font></small><br>"+
-                " <small><font color=\"#00000000\">&#160;&#160;●&#160;在参与讨论时，请与我们一起维护社区的安全，对于社区内令人不适的内容主动制止。</font></small><br><br>"+
-                " <small><font color=\"#666666\">匿名社区的良好环境需要你我共同维护~感谢你的支持！</font></small><br><br>"+
-                "<small><font color=\"#00000000\">祝你在1037树洞玩得愉快。</font></small><br>");
-        mEt_second_password.setText(Html.fromHtml(aa));
 
-        //mEt_second_password.setMaxHeight(400);
-        Button mBtn_ok = (Button) mView.findViewById(R.id.btn_dialoghomepage_sure);
 
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-        //AlertDialog dialog=mBuilder.create();
-        dialog.setCanceledOnTouchOutside(false);
-        mBtn_ok.setOnClickListener(new View.OnClickListener() {
+        SharedPreferences editor = HomeScreenActivity.this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
+        Boolean condition = editor.getBoolean("iffirstlogin", true);
+        String token=editor.getString("token","");
+        if(condition) {
+            View mView = View.inflate(getApplicationContext(), R.layout.dialog_homepage, null);
+            // mView.setBackgroundResource(R.drawable.homepage_notice);
+            //设置自定义的布局
+            //mBuilder.setView(mView);
+            Dialog dialog = new Dialog(this);
+            dialog.setContentView(mView);
+            TextView mEt_first_password = (TextView) mView.findViewById(R.id.tv_dialoghomepage_title);
+            TextView mEt_second_password = (TextView) mView.findViewById(R.id.tv_dialoghomepage_content);
+            mEt_second_password.setMovementMethod(ScrollingMovementMethod.getInstance());
+            mEt_first_password.setText(R.string.homepage_2);
+            String aa = ("<small><font color=\"#00000000\">你好，这里是1037树洞~</font></small><br>" +
+                    " <small><font color=\"#666666\">请先别急着跳过噢，花三十秒听听树洞的悄悄话吧</font></small>" + "<font color=\"#666666\">(●'◡'●)</font><br><br>" +
+                    "<strong><font color=\"#00000000\">1037树洞是什么</font></strong><br><br>" +
+                    "<small><font color=\"#666666\">1037树洞是专属于HUSTer的</font></small><small><font color=\"#00000000\">匿名社区</font></small>，" +
+                    "<small><font color=\"#666666\">通过学号绑定的校园邮箱来验证你的华科在校学生身份。你的学号邮箱仅会被用于验证，而不会在社区中被展示；通过后台加密算法，除了在严重违反社区规范的情况下且运营者认为有必要时，</font></small>" +
+                    "<small><font color=\"#00000000\">任何人都无法获知你的发言身份</font></small><small><font color=\"#666666\">。在这里，你可以真正地畅所欲言。</font></small><br><br>" +
+                    "<strong><font color=\"#00000000\">我们的初衷</font></strong><br><br>" +
+                    " <small><font color=\"#666666\">敲下几行文字，1037树洞可以满足你任何的交流需求：</font></small><br><br>" +
+                    " <small><font color=\"#00000000\">倾诉自己内心深处的伤感或喜悦，分享华科最新发生的大小趣事，寻找校内拥有小众爱好的朋友，寻求学长学姐们给自己的建议，交流对于热点社会问题的看法……</font></small><br><br>" +
+                    " <small><font color=\"#666666\">树洞的本质是人和人之间的互相倾诉，只有人来人往，树洞才会好玩儿~在1037树洞，所有的声音都会被认真倾听，你的一切发言不用担心被熟人监视，而你的交流对象都是和你思维高度同频的HUSTer~</font></small><br><br>" +
+                    "<strong><font color=\"#00000000\">我们的期望</font></strong><br><br>" +
+                    " <small><font color=\"#666666\">为了让每一位洞友都能在1037树洞找到温暖，我们希望你：</font></small><br><br>" +
+                    " <small><font color=\"#00000000\">&#160;&#160;●&#160;做一个友善的倾听者，尊重他人，即使TA与你观点相异；</font></small><br>" +
+                    " <small><font color=\"#00000000\">&#160;&#160;●&#160;不要发布令人感到不适或者违反法律法规的内容，包括但不限于侮辱他人、侵犯隐私、发布暴力或色情内容等；</font></small><br>" +
+                    " <small><font color=\"#00000000\">&#160;&#160;●&#160;在参与讨论时，请与我们一起维护社区的安全，对于社区内令人不适的内容主动制止。</font></small><br><br>" +
+                    " <small><font color=\"#666666\">匿名社区的良好环境需要你我共同维护~感谢你的支持！</font></small><br><br>" +
+                    "<small><font color=\"#00000000\">祝你在1037树洞玩得愉快。</font></small><br>");
+            mEt_second_password.setText(Html.fromHtml(aa));
 
-            @Override
-            public void onClick(View v) {
-                //关闭掉对话框,拿到对话框的对象
-                dialog.dismiss();
+            //mEt_second_password.setMaxHeight(400);
+            Button mBtn_ok = (Button) mView.findViewById(R.id.btn_dialoghomepage_sure);
+
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            //AlertDialog dialog=mBuilder.create();
+            dialog.setCanceledOnTouchOutside(false);
+            mBtn_ok.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    //关闭掉对话框,拿到对话框的对象
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+            if(token.equals("")){
+
+            }else{
+                SharedPreferences.Editor editor2 = getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
+                //editor2.putString("token", token);
+                editor2.putBoolean("iffirstlogin",false);
+                editor2.commit();//提
             }
-        });
-        dialog.show();
+
+
+        }
 
 
 
@@ -379,6 +408,25 @@ public class HomeScreenActivity extends AppCompatActivity {
                 break;
             default:
                 break;
+        }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+    public void exit() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(getApplicationContext(), "再按一次退出程序",
+                    Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+            System.exit(0);
         }
     }
 }

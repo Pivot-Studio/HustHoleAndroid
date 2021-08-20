@@ -13,7 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@mipmap/nomessage" />
+        />
 
     <TextView
         android:id="@+id/tv_nomessage"
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="100dp"
-        android:text="还没有评论奥~"
+        android:text="                           "
         android:textColor="@color/GrayScale_70"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"

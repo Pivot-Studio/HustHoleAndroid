@@ -47,11 +47,12 @@
      android:background="@color/GrayScale_100"
      android:orientation="vertical"
      >
+
   <TextView
       android:layout_width="match_parent"
-      android:layout_height="2dp"
-      android:minHeight="2dp"
-      android:background="@color/GrayScale_80"/>
+      android:layout_height="@dimen/dp_1"
+      android:background="@color/GrayScale_80"
+      android:minHeight="2dp" />
   <TextView
       android:layout_width="match_parent"
       android:layout_height="10dp"

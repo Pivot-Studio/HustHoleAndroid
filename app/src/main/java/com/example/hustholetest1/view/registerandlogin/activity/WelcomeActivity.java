@@ -8,6 +8,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.view.homescreen.activity.HomeScreenActivity;
 import com.githang.statusbar.StatusBarCompat;
 
@@ -26,6 +27,14 @@ public class WelcomeActivity extends AppCompatActivity {
         if(getSupportActionBar()!=null){
             getSupportActionBar().hide();
         }
+        CheckingToken.getContext(WelcomeActivity.this);
+        if(CheckingToken.IfTokenExist()) {
+            Intent intent=new Intent(WelcomeActivity.this, HomeScreenActivity.class);
+            startActivity(intent);
+        }else{
+
+        }
+
         }
     public void onClick(View v){
         Intent intent;

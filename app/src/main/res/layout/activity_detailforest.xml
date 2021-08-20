@@ -32,7 +32,7 @@
         android:id="@+id/srl_detailforest_loadmore"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:minHeight="@dimen/dp_400"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,11 +47,12 @@
             android:id="@+id/rv_detailforest"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:minHeight="@dimen/dp_400"
             />
         <com.scwang.smart.refresh.footer.ClassicsFooter
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/GrayScale_80"/>
+            android:background="@color/GrayScale_95"/>
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 

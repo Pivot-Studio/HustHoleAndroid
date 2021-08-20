@@ -38,6 +38,7 @@ import com.example.hustholetest1.network.TokenInterceptor;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.view.homescreen.forest.DetailForestActivity;
 import com.githang.statusbar.StatusBarCompat;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,6 +71,7 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
     private String what="0";
     private ConstraintLayout linearLayout;
     private TextView length;
+    private AVLoadingIndicatorView mAVLoadingIndicatorView;
 
 
 
@@ -81,7 +83,9 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
          Button button8=(Button)findViewById(R.id.btn_publishhole_line);
          title=(TextView)findViewById(R.id.tv_titlebargreen_title);
          title.setText(R.string.publishhole_1);
-
+         mAVLoadingIndicatorView=(AVLoadingIndicatorView)findViewById(R.id.titlebargreen_AVLoadingIndicatorView);
+         mAVLoadingIndicatorView.hide();
+         mAVLoadingIndicatorView.setVisibility(View.GONE);
 
         SoftKeyBoardListener.setListener(this,new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
             @Override
@@ -217,6 +221,9 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
 
             @Override
             public void onClick(View v) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                // 隐藏软键盘
+                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                 View contentView = LayoutInflater.from(PublishHoleActivity.this).inflate(R.layout.ppw_publishhole, null);
                 View contentView2 = LayoutInflater.from(PublishHoleActivity.this).inflate(R.layout.ppw_homepagedarkscreen, null);
                 //关闭掉对话框,拿到对话框的对象
@@ -224,6 +231,7 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                 popWindow2.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
                 popWindow2.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
                 popWindow2.showAsDropDown(linearLayout);
+                popWindow2.setAnimationStyle(R.style.darkScreenAnim);
                 popWindow=new PopupWindow(contentView);
                 popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
                 popWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -481,6 +489,7 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                             text.setText(detailforest[position-2][7]);
                             what=detailforest[position-2][3];
                         }else if(position==0){
+
                             text.setText("未选择加入小树林");
                             what="0";
                         }
@@ -506,14 +515,20 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
             public void bind(int position){
                 Log.d("position",position+"");
                 this.position=position;
+                RoundedCorners roundedCorners = new RoundedCorners(16);
+                RequestOptions options1 = RequestOptions.bitmapTransform(roundedCorners);
                 if(position==0) {
+
+                    Glide.with(PublishHoleActivity.this)
+                            .load(R.mipmap.vector3)
+                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+                            .apply(options1)
+                            .into(background_image_url);
                         Log.d("position",position+"");
                     content.setText("未选择加入小树林");
 
                 }else if (position > 2 + jsonArray.length()) {
                     content.setText(detailforest2[position-3-jsonArray.length()][7]);
-                    RoundedCorners roundedCorners = new RoundedCorners(16);
-                    RequestOptions options1 = RequestOptions.bitmapTransform(roundedCorners);
                     Glide.with(PublishHoleActivity.this)
                             .load(detailforest2[position-3-jsonArray.length()][0])
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -521,8 +536,6 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                             .into(background_image_url);
                 } else if (position>1&&position<2+jsonArray.length()) {
                     content.setText(detailforest[position-2][7]);
-                    RoundedCorners roundedCorners = new RoundedCorners(16);
-                    RequestOptions options1 = RequestOptions.bitmapTransform(roundedCorners);
                     Glide.with(PublishHoleActivity.this)
                             .load(detailforest[position-2][0])
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
@@ -573,4 +586,12 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(popWindow!=null){
+        popWindow.dismiss();
+        popWindow2.dismiss();
+        }
+    }
 }

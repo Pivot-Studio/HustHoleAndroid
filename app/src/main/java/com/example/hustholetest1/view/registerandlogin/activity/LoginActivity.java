@@ -147,6 +147,7 @@ public class LoginActivity extends AppCompatActivity {
 
                                         SharedPreferences.Editor editor = getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
                                         editor.putString("token", token);
+                                        editor.putBoolean("iffirstlogin",true);
                                         editor.commit();//提交修改
                                     } catch (JSONException e) {
                                         e.printStackTrace();

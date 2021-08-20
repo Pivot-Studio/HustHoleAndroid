@@ -172,6 +172,7 @@ public class MineFragment extends Fragment {
                         dialog.dismiss();
                         SharedPreferences.Editor editor = getContext().getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
                         editor.putString("token", "");
+                        editor.putBoolean("iffirstlogin",true);
                         editor.commit();
                         Intent intent=new Intent(getContext(), WelcomeActivity.class);
                         startActivity(intent);

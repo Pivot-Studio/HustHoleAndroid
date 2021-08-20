@@ -7,7 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/GrayScale_95"
-    app:layout_constraintTop_toBottomOf="@+id/ll_register"
   >
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:layout_width="match_parent"
@@ -23,6 +22,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/GrayScale_95"/>
-
-
 </com.scwang.smart.refresh.layout.SmartRefreshLayout>

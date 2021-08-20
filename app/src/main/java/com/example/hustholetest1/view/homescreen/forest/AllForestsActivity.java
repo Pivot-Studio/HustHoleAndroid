@@ -35,6 +35,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.Forest;
 import com.example.hustholetest1.model.GlideRoundTransform;
+import com.example.hustholetest1.model.MaxHeightRecyclerView;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.network.RetrofitManager;
@@ -46,6 +47,7 @@ import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity
 import com.githang.statusbar.StatusBarCompat;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.wang.avi.AVLoadingIndicatorView;
 
 
 import org.json.JSONArray;
@@ -67,7 +69,7 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 
 public class AllForestsActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
+    private MaxHeightRecyclerView recyclerView;
     private Retrofit retrofit;
     private ImageView back;
     private TextView title;
@@ -82,6 +84,8 @@ public class AllForestsActivity extends AppCompatActivity {
     private boolean[] networkcondition;//记录是否加载过了，加载过了直接从forest_list_0和bitmaps中拿recyclerView翻阅达到一定长度再返回会重新加载
     private static final String key="key_1";
     private Boolean refreshcondition=false;
+    private AVLoadingIndicatorView mAVLoadingIndicatorView;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_allforest);
@@ -98,9 +102,15 @@ public class AllForestsActivity extends AppCompatActivity {
                 refreshlayout1=refreshlayout;
                 refreshcondition=true;
                 Update0();
+                mAVLoadingIndicatorView.setVisibility(View.VISIBLE);
+                mAVLoadingIndicatorView.show();
+                title.setText("加载中...");
 //传入false表示刷新失败
             }
         });
+        mAVLoadingIndicatorView=(AVLoadingIndicatorView)findViewById(R.id.titlebargreen_AVLoadingIndicatorView);
+
+
         /*refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
@@ -110,7 +120,7 @@ public class AllForestsActivity extends AppCompatActivity {
         });*/
         back= (ImageView) findViewById(R.id.iv_titlebargreen_back);
         title=(TextView)findViewById(R.id.tv_titlebargreen_title);
-        title.setText("发现小树林");
+
         back.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
@@ -163,6 +173,9 @@ public class AllForestsActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mAVLoadingIndicatorView.setVisibility(View.VISIBLE);
+        mAVLoadingIndicatorView.show();
+        title.setText("加载中...");
         Update0();
     }
 
@@ -194,6 +207,7 @@ public class AllForestsActivity extends AppCompatActivity {
                         }
                         number1=new int[title_list_2.length+1];
                         Update();
+
                         tab2=-1;
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -203,7 +217,14 @@ public class AllForestsActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
-
+                    if(refreshcondition==true){
+                        refreshlayout1.finishRefresh();
+                        refreshcondition=false;
+                    }
+                    title.setText("加载失败");
+                    mAVLoadingIndicatorView.hide();
+                    mAVLoadingIndicatorView.setVisibility(View.GONE);
+                    Toast.makeText(AllForestsActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -248,7 +269,14 @@ public class AllForestsActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                           t.printStackTrace();
+                            title.setText("加载失败");
+                            mAVLoadingIndicatorView.hide();
+                            mAVLoadingIndicatorView.setVisibility(View.GONE);
+                            if(refreshcondition==true){
+                                refreshlayout1.finishRefresh();
+                                refreshcondition=false;
+                            }
+                            Toast.makeText(AllForestsActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -279,7 +307,7 @@ public void Update2(){//加载热门小树林
 
                         Forest.setForest_list(0, jsonArray);
 
-                        recyclerView = (RecyclerView) findViewById(R.id.rv_allforest);
+                        recyclerView = (MaxHeightRecyclerView) findViewById(R.id.rv_allforest);
                         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AllForestsActivity.this);
                         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                         recyclerView.setLayoutManager(linearLayoutManager);
@@ -291,21 +319,31 @@ public void Update2(){//加载热门小树林
                         }
                         forest_list_0=new String[title_list_2.length+1][][];
                         bitmaps=new Bitmap[title_list_2.length+1][][];
-                        recyclerView.setAdapter(new AllForestsAdapter());
+                        title.setText("发现小树林");
+                        mAVLoadingIndicatorView.hide();
+                        mAVLoadingIndicatorView.setVisibility(View.GONE);
+
+
+                            recyclerView.setAdapter(new AllForestsAdapter());
                         if(refreshcondition==true){
                             refreshlayout1.finishRefresh();
                             refreshcondition=false;
                         }
-
                     } catch (JSONException | IOException e) {
                         e.printStackTrace();
                     }
-                    // Log.e(TAG, "URLSASFSDGS"+background_image_url_list[0]);
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
-
+                    title.setText("加载失败");
+                    mAVLoadingIndicatorView.hide();
+                    mAVLoadingIndicatorView.setVisibility(View.GONE);
+                    if(refreshcondition==true){
+                        refreshlayout1.finishRefresh();
+                        refreshcondition=false;
+                    }
+                    Toast.makeText(AllForestsActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -315,7 +353,6 @@ public void Update2(){//加载热门小树林
     public  class MyTaskParams2 {//加载图片所用
         int[] list1=new int[2];
         RecyclerView recyclerView;
-
         MyTaskParams2(int[] list1,RecyclerView recyclerView) {
             this.list1=list1;
             this.recyclerView=recyclerView;
@@ -329,9 +366,11 @@ public void Update2(){//加载热门小树林
         protected void onPostExecute(Void unused) {
             //Downloadanswer(DT2number);
             number1[DT2number]++;
-            System.out.println(DT2number+"468");
+           // System.out.println(DT2number+"468");
             if(jsonArray.length()==number1[DT2number]){
-            recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number,true));
+                mAVLoadingIndicatorView.hide();
+                mAVLoadingIndicatorView.setVisibility(View.GONE);
+                recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number,true));
                 networkcondition[DT2number]=true;
             }
         }
@@ -382,7 +421,8 @@ public void Update2(){//加载热门小树林
         protected void onPostExecute(Void unused) {
             //recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number,false));
 
-            recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number,true));
+                //mAllForestsDetailAdapter=new AllForestsDetailAdapter(DT2number, true);
+                recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number, true));
 
         }
         @Override
@@ -423,11 +463,9 @@ public void Update2(){//加载热门小树林
             @Override
             public int getItemViewType(int position) {
                 if (mHeaderCount != 0 && position < mHeaderCount) {
-//头部View
                     return ITEM_TYPE_HEADER;
 
                 } else {
-//内容Vie
                     return ITEM_TYPE_CONTENT;
                 }
             }
@@ -594,7 +632,7 @@ public void Update2(){//加载热门小树林
 
                                                         @Override
                                                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                            Toast.makeText(AllForestsActivity.this, "退出失败", Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(AllForestsActivity.this, R.string.network_quitfailture, Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
                                                 }
@@ -626,7 +664,7 @@ public void Update2(){//加载热门小树林
 
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                    Toast.makeText(AllForestsActivity.this, "加入失败", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(AllForestsActivity.this, R.string.network_joinfailture, Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                         }

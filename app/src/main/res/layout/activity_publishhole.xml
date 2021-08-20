@@ -21,7 +21,7 @@
         <Button
             android:id="@+id/btn_publishhole_line"
             android:layout_width="match_parent"
-            android:layout_height="2dp"
+            android:layout_height="1dp"
 
             android:background="@color/GrayScale_80"
             app:layout_constraintBottom_toBottomOf="parent"

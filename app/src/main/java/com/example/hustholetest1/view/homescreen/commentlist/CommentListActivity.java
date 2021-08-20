@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -41,12 +42,14 @@ import com.example.hustholetest1.R;
 import com.example.hustholetest1.network.OkHttpUtil;
 import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.forest.DetailForestActivity;
+import com.example.hustholetest1.view.homescreen.mypage.Update;
 import com.example.hustholetest1.view.registerandlogin.activity.LoginActivity;
 import com.githang.statusbar.StatusBarCompat;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -90,7 +93,13 @@ public class CommentListActivity extends AppCompatActivity {
     private int mStartingLoadId = 0;
     private RefreshLayout mRefreshConditionRl, mLoadMoreCondotionRl;
     private int CONSTANT_STANDARD_LOAD_SIZE = 20;
+    private Boolean mPrestrainCondition=false;
+    private Boolean mIfFirstLoad=true;
+    private AVLoadingIndicatorView mAVLoadingIndicatorView;
 
+    private Boolean more_condition=false;
+    private  ConstraintLayout mMoreWhatCl;
+    private RecyclerView.OnScrollListener mOnscrollListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,9 +114,9 @@ public class CommentListActivity extends AppCompatActivity {
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
+                RemoveOnScrollListener();
                 mRefreshConditionRl =refreshlayout;
                 mStartingLoadId=0;
-                mDetailReplyList=new ArrayList<>();
                 replyUpdate();
                mCommentlistRv.setOnTouchListener(new View.OnTouchListener() {
                     @Override
@@ -121,13 +130,23 @@ public class CommentListActivity extends AppCompatActivity {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
-                mLoadMoreCondotionRl = refreshlayout;
-                mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
-               replyUpdate();
+                RemoveOnScrollListener();
+                if(mIfFirstLoad){
+                    refreshlayout.finishLoadMore();
+                }else{
+                     if(mPrestrainCondition == false) {
+                        mLoadMoreCondotionRl = refreshlayout;
+                        mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+                         replyUpdate();
+                     } else {
+                         mLoadMoreCondotionRl = refreshlayout;
+                     }
+                }
             }
         });
 
-
+        mAVLoadingIndicatorView=(AVLoadingIndicatorView)findViewById(R.id.titlebargreen_AVLoadingIndicatorView);
+        mAVLoadingIndicatorView.show();
         mCommentlistRv = (RecyclerView) findViewById(R.id.rv_commentlist);
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(CommentListActivity.this);
         linearLayoutManager2.setOrientation(LinearLayoutManager.VERTICAL);
@@ -156,6 +175,7 @@ public class CommentListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(CheckingToken.IfTokenExist()){
+                    RemoveOnScrollListener();
                     new Thread(new Runnable() {//加载纵向列表标题
                         @Override
                         public void run() {
@@ -177,6 +197,8 @@ public class CommentListActivity extends AppCompatActivity {
                                         mPublishReplyEt.setText("");
                                         mPublishReplyEt.setHint("评价洞主：");
                                         reply_to_who = "-1";
+                                        mStartingLoadId=0;
+                                        mDetailReplyList=new ArrayList<>();
                                         replyUpdate();
 
                                     } catch (IOException e) {
@@ -186,6 +208,7 @@ public class CommentListActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                                    Toast.makeText(CommentListActivity.this,R.string.network_sendfailture,Toast.LENGTH_SHORT).show();
 
                                 }
 
@@ -208,7 +231,7 @@ public class CommentListActivity extends AppCompatActivity {
 
         TokenInterceptor.getContext(CommentListActivity.this);
         //TokenInterceptor.getContext(RegisterActivity.this);
-        System.out.println("提交了context");
+        //System.out.println("提交了context");
         retrofit= RetrofitManager.getRetrofit();
         request = retrofit.create(RequestInterface.class);
 
@@ -221,7 +244,7 @@ public class CommentListActivity extends AppCompatActivity {
                         .client(OkHttpUtil.getOkHttpClient())
                         .addConverterFactory(GsonConverterFactory.create())
                         .build();
-                Log.e(TAG, "token99：retrofit2");
+               // Log.e(TAG, "token99：retrofit2");
                 request2 = retrofit2.create(RequestInterface.class);
                 data = new String[14];
                 getData();
@@ -241,11 +264,15 @@ public class CommentListActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                // 隐藏软键盘
+                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                 finish();
             }
         });
 
-     //mReplyAdapter=new ReplyAdapter();
+     mReplyAdapter=new ReplyAdapter();
        //创建接口实例
        // replyUpdate(0);
     }
@@ -281,6 +308,9 @@ public class CommentListActivity extends AppCompatActivity {
                             json = response.body().string();
                         }
                         Log.e(TAG, json + "");
+                        if(mRefreshConditionRl!=null){
+                            mDetailReplyList=new ArrayList<>();
+                        }
                         JSONObject jsonObject = new JSONObject(json);
                         if(json.equals("{\"msg\":[]}")&&mLoadMoreCondotionRl!=null){
                             Toast.makeText(CommentListActivity.this,"加载到底辣",Toast.LENGTH_SHORT).show();
@@ -290,14 +320,12 @@ public class CommentListActivity extends AppCompatActivity {
                                 mLoadMoreCondotionRl=null;
                            //}
                         }else{
-
                             jsonArray = jsonObject.getJSONArray("msg");
-                            //jsonArray =response.body();
-                            //mDetailforestHoleslist =new String[jsonArray2.length()][14];
                             new DownloadTask().execute();
 
                         }
-
+                        mAVLoadingIndicatorView.hide();
+                        mAVLoadingIndicatorView.setVisibility(View.GONE);
                         //mDetailReplyList = new String[jsonArray.length()][12];
                        // if(a==1){
                         //    refreshlayout1.finishRefresh();
@@ -310,6 +338,45 @@ public class CommentListActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                    Toast.makeText(CommentListActivity.this,"请检查网络",Toast.LENGTH_SHORT).show();
+                    mAVLoadingIndicatorView.hide();
+                    mAVLoadingIndicatorView.setVisibility(View.GONE);
+                    title.setText("加载失败");
+                    if(mRefreshConditionRl !=null){
+                        mRefreshConditionRl.finishRefresh();
+                        mRefreshConditionRl =null;
+                        mCommentlistRv.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                return false;
+                            }
+                        });
+                        if(mIfFirstLoad) {
+                            //mCommentlistRv.setAdapter(mReplyAdapter);
+                           // mIfFirstLoad=false;
+                        }else{
+                           // mReplyAdapter.notifyDataSetChanged();
+                        }
+                    } else if(mLoadMoreCondotionRl!=null){
+                        mLoadMoreCondotionRl.finishLoadMore();
+                        mLoadMoreCondotionRl=null;
+                        mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
+                        //mReplyAdapter.notifyDataSetChanged();
+                        if(mPrestrainCondition==true){
+                            mPrestrainCondition=false;
+                        }
+                    }else if(mPrestrainCondition==true){
+                        mPrestrainCondition=false;
+                        mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
+                        //mReplyAdapter.notifyDataSetChanged();
+                    }else{
+                       // mIfFirstLoad=false;
+                        //mReplyAdapter=new ReplyAdapter();
+                        //mCommentlistRv.setAdapter(mReplyAdapter);
+                    }
+
+
+
 
                 }
 
@@ -326,6 +393,7 @@ public class CommentListActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Void unused) {
+
                 if(mRefreshConditionRl !=null){
                     mRefreshConditionRl.finishRefresh();
                     mRefreshConditionRl =null;
@@ -336,14 +404,25 @@ public class CommentListActivity extends AppCompatActivity {
                             return false;
                         }
                     });
-
-                   mReplyAdapter.notifyDataSetChanged();
+                   if(mIfFirstLoad) {
+                       mCommentlistRv.setAdapter(mReplyAdapter);
+                       mIfFirstLoad=false;
+                   }else{
+                       mReplyAdapter.notifyDataSetChanged();
+                   }
                 } else if(mLoadMoreCondotionRl!=null){
                     mLoadMoreCondotionRl.finishLoadMore();
                     mLoadMoreCondotionRl=null;
                     mReplyAdapter.notifyDataSetChanged();
+                    if(mPrestrainCondition==true){
+                        mPrestrainCondition=false;
+                    }
+                }else if(mPrestrainCondition==true){
+                    mPrestrainCondition=false;
+                    mReplyAdapter.notifyDataSetChanged();
                 }else{
-                    mReplyAdapter=new ReplyAdapter();
+                    mIfFirstLoad=false;
+                    //mReplyAdapter=new ReplyAdapter();
                    mCommentlistRv.setAdapter(mReplyAdapter);
                 }
 
@@ -394,16 +473,16 @@ public class CommentListActivity extends AppCompatActivity {
         public static final int ITEM_TYPE_CONTENT = 1;
         public static final int ITEM_TYPE_NOMESSAGE = 2;
         private int mHeaderCount=1;//头部View个数
-        private Boolean more_condition=false;
-        private  ConstraintLayout morewhat0;
+        //private Boolean more_condition=false;
+       // private  ConstraintLayout morewhat0;
         @Override
         public int getItemViewType(int position) {
             if (mHeaderCount != 0 && position < mHeaderCount) {
                 return ITEM_TYPE_HEADER;
-            }else if(position==1&&mDetailReplyList.size()==0){
-                return ITEM_TYPE_NOMESSAGE;
-            }else {
+            }else if(position!=0&&mDetailReplyList.size()!=0){
                 return ITEM_TYPE_CONTENT;
+            }else{
+                return ITEM_TYPE_NOMESSAGE;
             }
         }
 
@@ -412,6 +491,7 @@ public class CommentListActivity extends AppCompatActivity {
             private TextView created_timestamp,content,thumbup_num,reply_num,follow_num,more_2;
             private ImageView is_thumbup,is_reply,is_follow,orders,more,more_1;
             private ConstraintLayout morewhat;
+
             public HeadHolder(View view){
                 super(view);
                 forest_name = (Button) view.findViewById(R.id.btn_commenthead_jumptodetailforest);
@@ -434,13 +514,30 @@ public class CommentListActivity extends AppCompatActivity {
                     public void onClick(View v) {
                       if(more_condition==false){
                           morewhat.setVisibility(View.VISIBLE);
-                          morewhat0=morewhat;
+                           mMoreWhatCl=morewhat;
                           more_condition=true;
                       }else{
-                          morewhat0.setVisibility(View.INVISIBLE);
+                           mMoreWhatCl.setVisibility(View.INVISIBLE);
                           morewhat.setVisibility(View.VISIBLE);
-                          morewhat0=morewhat;
+                           mMoreWhatCl=morewhat;
                       }
+
+                        if (mOnscrollListener != null) {
+                            mCommentlistRv.removeOnScrollListener(mOnscrollListener);
+                        }
+                        mOnscrollListener = new RecyclerView.OnScrollListener() {
+                            //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
+                            @Override
+                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                //super.onScrollStateChanged(recyclerView, newState);
+                                mMoreWhatCl.setVisibility(View.INVISIBLE);
+                                more_condition = false;
+                                mCommentlistRv.removeOnScrollListener(mOnscrollListener);
+                            }
+                        };
+                        mCommentlistRv.addOnScrollListener(mOnscrollListener);
+
 
                     }
                 });
@@ -448,8 +545,9 @@ public class CommentListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v){
                         if(CheckingToken.IfTokenExist()){
-                            morewhat.setVisibility(View.INVISIBLE);
-                            more_condition = false;
+                            RemoveOnScrollListener();
+                            //morewhat.setVisibility(View.INVISIBLE);
+                           // more_condition = false;
                             if (data[9].equals("true")) {
                                 CommenRequestManager.DeleteRequest(CommentListActivity.this, request, data[6]);
                                 finish();
@@ -493,6 +591,7 @@ public class CommentListActivity extends AppCompatActivity {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        RemoveOnScrollListener();
                         SpannableString ss = new SpannableString("评论洞主：");
                         // 新建一个属性对象,设置文字的大小
                         AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14,true);
@@ -528,7 +627,7 @@ public class CommentListActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(CommentListActivity.this, "点赞失败", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(CommentListActivity.this, R.string.network_thumbupfailure_, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -551,7 +650,7 @@ public class CommentListActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(CommentListActivity.this, "取消点赞失败", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(CommentListActivity.this, R.string.network_notthumbupfailure_, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -585,8 +684,8 @@ public class CommentListActivity extends AppCompatActivity {
 
                                              @Override
                                              public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                 Toast.makeText(CommentListActivity.this, "点赞失败", Toast.LENGTH_SHORT).show();
-                                                 Log.d("", "取消点赞失败");
+                                                 Toast.makeText(CommentListActivity.this, R.string.network_followfailure_, Toast.LENGTH_SHORT).show();
+
                                              }
                                            });
                                          }
@@ -609,8 +708,7 @@ public class CommentListActivity extends AppCompatActivity {
 
                                         @Override
                                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(CommentListActivity.this, "取消关注失败", Toast.LENGTH_SHORT).show();
-                                            Log.d("", "取消关注失败");
+                                            Toast.makeText(CommentListActivity.this, R.string.network_notfollowfailure_, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -641,7 +739,7 @@ public class CommentListActivity extends AppCompatActivity {
                 if (data[5].equals("")) {
                     forest_name.setVisibility(View.INVISIBLE);
                 } else {
-                    forest_name.setText("  " + data[5] + "  ");
+                    forest_name.setText("  " + data[5] + "   ");
                 }
               // Log.d("????????????",data[2].substring(0,4)+data[2].substring(5,7)+data[2].substring(8,10)+data[2].substring(11,13)+data[2].substring(14,16)+data[2].substring(14,16));
                 created_timestamp.setText(TimeCount.time(data[2]));
@@ -663,7 +761,7 @@ public class CommentListActivity extends AppCompatActivity {
                     more_2.setText("删除");
                 }else{
                     more_1.setImageResource(R.mipmap.vector4);
-                    more_2.setText("");
+                    more_2.setText("举报");
                 }
                 if (data[10].equals("true")) {
                     is_reply.setImageResource(R.mipmap.active_2);
@@ -686,7 +784,7 @@ public class CommentListActivity extends AppCompatActivity {
                 nomessageTv=(TextView)view.findViewById(R.id.tv_nomessage);
             }
             public void bind(int position){
-
+               // Toast.makeText(CommentListActivity.this,""+mDetailReplyList.size(),Toast.LENGTH_SHORT).show();
                 if(position==1&&mDetailReplyList.size()==0) {
                     nomessage.setImageResource(R.mipmap.nomessage);
                     nomessageTv.setText("还没有评论哦~");
@@ -723,14 +821,28 @@ public class CommentListActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if(more_condition==false){
                             morewhat.setVisibility(View.VISIBLE);
-                            morewhat0=morewhat;
+                             mMoreWhatCl=morewhat;
                             more_condition=true;
                         }else{
-                            morewhat0.setVisibility(View.INVISIBLE);
+                             mMoreWhatCl.setVisibility(View.INVISIBLE);
                             morewhat.setVisibility(View.VISIBLE);
-                            morewhat0=morewhat;
+                             mMoreWhatCl=morewhat;
                         }
+                        if (mOnscrollListener != null) {
+                            mCommentlistRv.removeOnScrollListener(mOnscrollListener);
+                        }
+                        mOnscrollListener = new RecyclerView.OnScrollListener() {
+                            //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 
+                            @Override
+                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                //super.onScrollStateChanged(recyclerView, newState);
+                                mMoreWhatCl.setVisibility(View.INVISIBLE);
+                                more_condition = false;
+                                mCommentlistRv.removeOnScrollListener(mOnscrollListener);
+                            }
+                        };
+                        mCommentlistRv.addOnScrollListener(mOnscrollListener);
                     }
                 });
                 morewhat.setOnClickListener(new View.OnClickListener() {
@@ -738,8 +850,9 @@ public class CommentListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v){
                         if(CheckingToken.IfTokenExist()){
-                            morewhat.setVisibility(View.INVISIBLE);
-                            more_condition = false;
+                            RemoveOnScrollListener();
+                           // morewhat.setVisibility(View.INVISIBLE);
+                           // more_condition = false;
                             if (mDetailReplyList.get(position)[5].equals("true")) {
                                 new Thread(new Runnable() {
                                     @Override
@@ -773,7 +886,7 @@ public class CommentListActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(CommentListActivity.this, "删除失败", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(CommentListActivity.this, R.string.network_deletefailture, Toast.LENGTH_SHORT).show();
 
                                             }
                                         });
@@ -806,7 +919,7 @@ public class CommentListActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(CommentListActivity.this, "举报失败", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(CommentListActivity.this, R.string.network_reportfailture, Toast.LENGTH_SHORT).show();
 
                                             }
                                         });
@@ -827,6 +940,7 @@ public class CommentListActivity extends AppCompatActivity {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        RemoveOnScrollListener();
                         SpannableString ss = new SpannableString("回复@"+ mDetailReplyList.get(position)[0]+(mDetailReplyList.get(position)[5].equals("true")?"(我)":"")+"：");
                         AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14,true);
                         ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -863,7 +977,7 @@ public class CommentListActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(CommentListActivity.this, "点赞失败", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(CommentListActivity.this, R.string.network_thumbupfailure_, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -886,7 +1000,7 @@ public class CommentListActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                Toast.makeText(CommentListActivity.this, "取消点赞失败", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(CommentListActivity.this, R.string.network_notthumbupfailure_, Toast.LENGTH_SHORT).show();
                                             }
                                         });
                                     }
@@ -941,6 +1055,9 @@ public class CommentListActivity extends AppCompatActivity {
                 if(mDetailReplyList.get(position)[5].equals("true")){
                     more_1.setImageResource(R.mipmap.vector6);
                     more_2.setText("删除");
+                }else{
+                    more_1.setImageResource(R.mipmap.vector4);
+                    more_2.setText("举报");
                 }
                 line.setHeight(getViewHeight(content,true));
             }
@@ -955,7 +1072,7 @@ public class CommentListActivity extends AppCompatActivity {
             if (viewType ==ITEM_TYPE_HEADER) {
                 return new ReplyAdapter.HeadHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_commenthead,parent,false));
-            } else if (viewType == ITEM_TYPE_CONTENT) {
+            } else if (viewType==ITEM_TYPE_CONTENT) {
                 return new ReplyAdapter.ViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_commentreply,parent,false));
             }else if(viewType==ITEM_TYPE_NOMESSAGE){
@@ -974,8 +1091,15 @@ public class CommentListActivity extends AppCompatActivity {
             } else if (holder instanceof ReplyAdapter.ViewHolder) {
                 ((ReplyAdapter.ViewHolder) holder).bind(position-1);
             }else if (holder instanceof ReplyAdapter.MessageHolder) {
-                ((ReplyAdapter.MessageHolder) holder).bind(position - 1);
+                ((ReplyAdapter.MessageHolder) holder).bind(position);
             }
+
+            if(position== mDetailReplyList.size()-3&&(mDetailReplyList.size()%20==0)){
+                mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+                mPrestrainCondition=true;
+                replyUpdate();
+            }
+
 
             }
         @Override
@@ -1041,11 +1165,19 @@ public class CommentListActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                        Log.d(TAG, "onFailure: i am failed in getData");
+                        Toast.makeText(CommentListActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }).start();
     }
-    
+    private void RemoveOnScrollListener() {
+        if (mOnscrollListener != null) {
+            mCommentlistRv.removeOnScrollListener(mOnscrollListener);
+        }
+        if(mMoreWhatCl!=null) {
+            mMoreWhatCl.setVisibility(View.INVISIBLE);
+            more_condition = false;
+        }
+    }
 }

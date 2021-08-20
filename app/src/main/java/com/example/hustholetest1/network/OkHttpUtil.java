@@ -11,9 +11,9 @@ public class OkHttpUtil {
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient
                 .Builder();
         //设置超时时间
-        httpClientBuilder.connectTimeout(1000, TimeUnit.SECONDS);
-        httpClientBuilder.writeTimeout(1000, TimeUnit.SECONDS);
-        httpClientBuilder.readTimeout(1000, TimeUnit.SECONDS);
+        httpClientBuilder.connectTimeout(20, TimeUnit.SECONDS);
+        httpClientBuilder.writeTimeout(20, TimeUnit.SECONDS);
+        httpClientBuilder.readTimeout(20, TimeUnit.SECONDS);
         //使用拦截器
         httpClientBuilder.addInterceptor(new TokenInterceptor());
         return httpClientBuilder.build();
@@ -23,9 +23,9 @@ public class OkHttpUtil {
         OkHttpClient.Builder httpClientBuilder = new OkHttpClient
                 .Builder();
         //设置超时时间
-        httpClientBuilder.connectTimeout(1000, TimeUnit.SECONDS);
-        httpClientBuilder.writeTimeout(1000, TimeUnit.SECONDS);
-        httpClientBuilder.readTimeout(1000, TimeUnit.SECONDS);
+        httpClientBuilder.connectTimeout(20, TimeUnit.SECONDS);
+        httpClientBuilder.writeTimeout(20, TimeUnit.SECONDS);
+        httpClientBuilder.readTimeout(20, TimeUnit.SECONDS);
         //使用拦截器
         httpClientBuilder.addInterceptor(new TemporaryTokenInterceptor());
         return httpClientBuilder.build();

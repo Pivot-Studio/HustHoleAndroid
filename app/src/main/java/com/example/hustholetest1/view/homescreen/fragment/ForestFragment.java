@@ -77,7 +77,12 @@ public class ForestFragment extends Fragment {
     private int CONSTANT_STANDARD_LOAD_SIZE = 20;
     private Boolean mIfFirstLoad=true;
     private SmartRefreshLayout mTitleBarSrl;
+    private Boolean mPrestrainCondition=false;
 
+
+    private Boolean more_condition=false;
+    private  ConstraintLayout mMoreWhatCl;
+    private RecyclerView.OnScrollListener mOnscrollListener;
     public static ForestFragment newInstance() {
         ForestFragment fragment = new ForestFragment();
         return fragment;
@@ -89,27 +94,23 @@ public class ForestFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_forest, container, false);
         RefreshLayout refreshLayout = (RefreshLayout) rootView.findViewById(R.id.refreshLayout);
         refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
-        //refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
-         //ClassicsFooter mClassicsFooter=new ClassicsFooter(getActivity());
-         //mClassicsFooter.setMinimumHeight(300);
-        // mClassicsFooter.setVerticalGravity(View.SCROLL_INDICATOR_TOP);
-        //refreshLayout.setRefreshFooter(mClassicsFooter);
         refreshLayout.setRefreshFooter(new StandardRefreshFooter(getActivity()));
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
+                RemoveOnScrollListener();
                 if(CheckingToken.IfTokenExist()) {
                     mRefreshConditionRl = refreshlayout;
                     mStartingLoadId = CONSTANT_STANDARD_LOAD_SIZE;
-                    mJoinedHolesList = new ArrayList<String[]>();
-                    update();
 
+                    update();
                     mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
                             return true;
                         }
                     });
+
                 }else{
                     refreshLayout.finishRefresh();
                     Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
@@ -120,17 +121,25 @@ public class ForestFragment extends Fragment {
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
+                RemoveOnScrollListener();
                 if(CheckingToken.IfTokenExist()) {
-                    mLoadMoreCondotionRl = refreshlayout;
-                    mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
-                    update();
-                    //int titleBarBottomLocation=mTitleBarSrl.getBottom();
-                   // mJoinedHolesRv.setMaxHeight(HomeScreenActivity.GetOBTopLocation()-titleBarBottomLocation-2000);
-
-                }else {
-                    refreshLayout.finishLoadMore();
-                    Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
-                    startActivity(intent);
+                    if(mIfFirstLoad){
+                        refreshlayout.finishLoadMore();
+                    }else {
+                        if (mPrestrainCondition == false) {
+                            mLoadMoreCondotionRl = refreshlayout;
+                            mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+                            update();
+                        } else {
+                            mLoadMoreCondotionRl = refreshlayout;
+                        }
+                        //int titleBarBottomLocation=mTitleBarSrl.getBottom();
+                        // mJoinedHolesRv.setMaxHeight(HomeScreenActivity.GetOBTopLocation()-titleBarBottomLocation-2000);
+                    }
+                }else{
+                        refreshLayout.finishLoadMore();
+                        Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
+                        startActivity(intent);
                 }
             }
         });
@@ -138,8 +147,8 @@ public class ForestFragment extends Fragment {
 
 
         mJoinedHolesRv = (MaxHeightRecyclerView) rootView.findViewById(R.id.rv_forest);
-        WindowManager wm = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
-       /* DisplayMetrics dm = new DisplayMetrics();
+        /*WindowManager wm = (WindowManager)getContext().getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics dm = new DisplayMetrics();
         // 从默认显示器中获取显示参数保存到dm对象中
         wm.getDefaultDisplay().getMetrics(dm);
 
@@ -205,6 +214,9 @@ public class ForestFragment extends Fragment {
                                     json = response.body().string();
                                 }
                                 JSONObject jsonObject = new JSONObject(json);
+                                if(mRefreshConditionRl!=null){
+                                    mJoinedHolesList = new ArrayList<String[]>();
+                                }
                                 mJoinedForestsJsonArray = jsonObject.getJSONArray("forests");
                                 mJoinedForestsList = new String[mJoinedForestsJsonArray.length()][8];
                                 new JoinedForestsDownloadTask().execute();
@@ -217,18 +229,53 @@ public class ForestFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                            Toast.makeText(getContext(), "网络请求失败", Toast.LENGTH_SHORT).show();
-                            if (mStartingLoadId != CONSTANT_STANDARD_LOAD_SIZE) {
-                                mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
-                            }
-                            if (mLoadMoreCondotionRl != null) {
-                                mLoadMoreCondotionRl.finishLoadMore();
-                                mLoadMoreCondotionRl = null;
-                            } else if (mRefreshConditionRl != null) {
-                                mRefreshConditionRl.finishRefresh();
-                                mRefreshConditionRl = null;
-                            }
+                            Toast.makeText(getContext(), R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
 
+                                if (mLoadMoreCondotionRl != null) {
+                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                    //将上拉刷新变量滞空同时结束掉上拉刷新
+                                    mLoadMoreCondotionRl.finishLoadMore();
+                                    mLoadMoreCondotionRl = null;
+                                    // if (! mForestHoleAdapter.hasObservers()) {
+                                    //     mForestHoleAdapter.setHasStableIds(true);
+                                    // }
+                                    // mForestHoleAdapter.notifyDataSetChanged();
+                                    if (mPrestrainCondition == true) {
+                                        mPrestrainCondition = false;
+                                    }
+                                } else if (mPrestrainCondition == true) {
+                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                    mPrestrainCondition = false;
+                                    //  mForestHoleAdapter.notifyDataSetChanged();
+                                    if (mLoadMoreCondotionRl != null) {
+                                        //将上拉刷新变量滞空同时结束掉上拉刷新
+                                        mLoadMoreCondotionRl.finishLoadMore();
+                                        mLoadMoreCondotionRl = null;
+                                    }
+                                } else {
+                                    //if (number() == 2) {//两个加载全部完毕后设置adpter
+                                    if (mRefreshConditionRl != null) {//判断是否由由下拉加载引起的
+                                        mRefreshConditionRl.finishRefresh();
+                                        mRefreshConditionRl = null;
+                                        mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
+                                            @Override
+                                            public boolean onTouch(View v, MotionEvent event) {
+                                                return false;
+                                            }
+                                        });
+                                        if (mIfFirstLoad) {
+                                            // mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+                                            //  mIfFirstLoad=false;
+                                        } else {
+                                            //  mForestHoleAdapter.notifyDataSetChanged();
+                                        }
+                                    } else {
+
+                                        //mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+                                    }
+                                    //mAdapterLoadCompleteNumber = 0;
+                                    //}
+                                }
                         }
 
 
@@ -253,17 +300,55 @@ public class ForestFragment extends Fragment {
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Toast.makeText(getContext(), "网络请求失败", Toast.LENGTH_SHORT).show();
-                            if (mStartingLoadId != CONSTANT_STANDARD_LOAD_SIZE) {
-                                mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
-                            }
-                            if (mLoadMoreCondotionRl != null) {
-                                mLoadMoreCondotionRl.finishLoadMore();
-                                mLoadMoreCondotionRl = null;
-                            } else if (mRefreshConditionRl != null) {
-                                mRefreshConditionRl.finishRefresh();
-                                mRefreshConditionRl = null;
-                            }
+                            Toast.makeText(getContext(), R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
+
+                                if (mLoadMoreCondotionRl != null) {
+                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                    //将上拉刷新变量滞空同时结束掉上拉刷新
+                                    mLoadMoreCondotionRl.finishLoadMore();
+                                    mLoadMoreCondotionRl = null;
+                                    // if (! mForestHoleAdapter.hasObservers()) {
+                                    //     mForestHoleAdapter.setHasStableIds(true);
+                                    // }
+                                    // mForestHoleAdapter.notifyDataSetChanged();
+                                    if (mPrestrainCondition == true) {
+                                        mPrestrainCondition = false;
+                                    }
+                                } else if (mPrestrainCondition == true) {
+                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                    mPrestrainCondition = false;
+                                    //  mForestHoleAdapter.notifyDataSetChanged();
+                                    if (mLoadMoreCondotionRl != null) {
+                                        //将上拉刷新变量滞空同时结束掉上拉刷新
+                                        mLoadMoreCondotionRl.finishLoadMore();
+                                        mLoadMoreCondotionRl = null;
+                                    }
+                                } else {
+                                    //if (number() == 2) {//两个加载全部完毕后设置adpter
+                                    if (mRefreshConditionRl != null) {//判断是否由由下拉加载引起的
+                                        mRefreshConditionRl.finishRefresh();
+                                        mRefreshConditionRl = null;
+                                        mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
+                                            @Override
+                                            public boolean onTouch(View v, MotionEvent event) {
+                                                return false;
+                                            }
+                                        });
+                                        if (mIfFirstLoad) {
+                                            // mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+                                            //  mIfFirstLoad=false;
+                                        } else {
+                                            //  mForestHoleAdapter.notifyDataSetChanged();
+                                        }
+                                    } else {
+
+                                        //mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+                                    }
+                                    //}
+                                }
+
+
+
 
                         }
                     });
@@ -287,6 +372,7 @@ public class ForestFragment extends Fragment {
         @Override
         protected void onPostExecute(Void unused) {
             if (mLoadMoreCondotionRl != null) {
+
                 //将上拉刷新变量滞空同时结束掉上拉刷新
                 mLoadMoreCondotionRl.finishLoadMore();
                 mLoadMoreCondotionRl = null;
@@ -294,6 +380,18 @@ public class ForestFragment extends Fragment {
                     mForestHoleAdapter.setHasStableIds(true);
                 }
                 mForestHoleAdapter.notifyDataSetChanged();
+                if(mPrestrainCondition==true){
+
+                    mPrestrainCondition=false;
+                }
+            }else if(mPrestrainCondition==true){
+                mPrestrainCondition=false;
+                mForestHoleAdapter.notifyDataSetChanged();
+                if (mLoadMoreCondotionRl != null) {
+                    //将上拉刷新变量滞空同时结束掉上拉刷新
+                    mLoadMoreCondotionRl.finishLoadMore();
+                    mLoadMoreCondotionRl = null;
+                }
             } else {
                 if (number() == 2) {//两个加载全部完毕后设置adpter
                     if (mRefreshConditionRl != null) {//判断是否由由下拉加载引起的
@@ -310,9 +408,9 @@ public class ForestFragment extends Fragment {
                             mIfFirstLoad=false;
                         }else{
                         mForestHoleAdapter.notifyDataSetChanged();
-                    }
+                        }
                     }else {
-
+                        mIfFirstLoad=false;
                         mJoinedHolesRv.setAdapter(mForestHoleAdapter);
                     }
                     mAdapterLoadCompleteNumber = 0;
@@ -322,7 +420,6 @@ public class ForestFragment extends Fragment {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Log.d("状态2", "sss");
             try {
                 for (int f = 0; f < mJoinedHolesJsonArray.length(); f++) {
                     JSONObject sonObject = mJoinedHolesJsonArray.getJSONObject(f);
@@ -377,7 +474,14 @@ public class ForestFragment extends Fragment {
                 mLoadMoreCondotionRl = null;
                 mForestHoleAdapter.setHasStableIds(true);
                 mForestHoleAdapter.notifyDataSetChanged();
-            } else {
+                if(mPrestrainCondition==true){
+                    mPrestrainCondition=false;
+                }
+            } else if(mPrestrainCondition==true){
+                mPrestrainCondition=false;
+                mForestHoleAdapter.notifyDataSetChanged();
+
+            }else {
                 if (number() == 2) {//两个加载全部完毕后设置adpter
                     if (mRefreshConditionRl != null) {//判断是否由由下拉加载引起的
                         mRefreshConditionRl.finishRefresh();
@@ -390,11 +494,13 @@ public class ForestFragment extends Fragment {
                         });
                         if(mIfFirstLoad){
                             mJoinedHolesRv.setAdapter(mForestHoleAdapter);
+                            mIfFirstLoad=false;
                         }else {
                             mForestHoleAdapter.notifyDataSetChanged();
                         }
                     }else {
-                        mForestHoleAdapter = new ForestHoleAdapter();
+                        mIfFirstLoad=false;
+                      //  mForestHoleAdapter = new ForestHoleAdapter();
                         mJoinedHolesRv.setAdapter(mForestHoleAdapter);
                     }
                     mAdapterLoadCompleteNumber = 0;
@@ -533,8 +639,8 @@ public class ForestFragment extends Fragment {
         public static final int ITEM_TYPE_CONTENT = 1;
         public static final int ITEM_TYPE_BOTTOM = 2;
         private int mHeaderCount = 1;//头部View个数
-        private Boolean more_condition = false;
-        private ConstraintLayout morewhat0;
+        //private Boolean more_condition = false;
+       // private ConstraintLayout  mMoreWhatCl;
 
         @Override
         public int getItemViewType(int position) {
@@ -600,20 +706,40 @@ public class ForestFragment extends Fragment {
                     public void onClick(View v) {
                         if (more_condition == false) {
                             morewhat.setVisibility(View.VISIBLE);
-                            morewhat0 = morewhat;
+                             mMoreWhatCl = morewhat;
                             more_condition = true;
                         } else {
-                            morewhat0.setVisibility(View.INVISIBLE);
+                             mMoreWhatCl.setVisibility(View.INVISIBLE);
                             morewhat.setVisibility(View.VISIBLE);
-                            morewhat0 = morewhat;
+                             mMoreWhatCl = morewhat;
                         }
+
+
+                        if (mOnscrollListener != null) {
+                           mJoinedHolesRv.removeOnScrollListener(mOnscrollListener);
+                        }
+                        mOnscrollListener = new RecyclerView.OnScrollListener() {
+                            //@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+
+                            @Override
+                            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                //super.onScrollStateChanged(recyclerView, newState);
+                                mMoreWhatCl.setVisibility(View.INVISIBLE);
+                                more_condition = false;
+                                mJoinedHolesRv.removeOnScrollListener(mOnscrollListener);
+                            }
+                        };
+                        mJoinedHolesRv.addOnScrollListener(mOnscrollListener);
+
+
                     }
                 });
                 morewhat.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        morewhat.setVisibility(View.INVISIBLE);
-                        more_condition = false;
+                        RemoveOnScrollListener();
+                        //morewhat.setVisibility(View.INVISIBLE);
+                     //   more_condition = false;
                         if (mJoinedHolesList.get(position - 1)[9].equals("true")) {
                             //if(detailforest2[position-1][9].equals("true")){
                             CommenRequestManager.DeleteRequest(getContext(), request, mJoinedHolesList.get(position - 1)[6]);
@@ -645,7 +771,7 @@ public class ForestFragment extends Fragment {
 
                                         @Override
                                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(getContext(), "点赞失败", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), R.string.network_thumbupfailure_, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -668,7 +794,7 @@ public class ForestFragment extends Fragment {
 
                                         @Override
                                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(getContext(), "取消点赞失败", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getContext(), R.string.network_notthumbupfailure_, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -697,8 +823,8 @@ public class ForestFragment extends Fragment {
 
                                         @Override
                                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(getContext(), "点赞失败", Toast.LENGTH_SHORT).show();
-                                            Log.d("", "取消点赞失败");
+                                            Toast.makeText(getContext(), R.string.network_followfailure_, Toast.LENGTH_SHORT).show();
+
                                         }
                                     });
                                 }
@@ -721,8 +847,7 @@ public class ForestFragment extends Fragment {
 
                                         @Override
                                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(getContext(), "取消关注失败", Toast.LENGTH_SHORT).show();
-                                            Log.d("", "取消关注失败");
+                                            Toast.makeText(getContext(), R.string.network_notfollowfailure_, Toast.LENGTH_SHORT).show();
                                         }
                                     });
                                 }
@@ -737,6 +862,7 @@ public class ForestFragment extends Fragment {
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        RemoveOnScrollListener();
                         Log.d("data[2]1", mJoinedHolesList.get(position - 1)[2]);
                         Intent intent = CommentListActivity.newIntent(getActivity(), mJoinedHolesList.get(position - 1));
                         startActivity(intent);
@@ -767,10 +893,6 @@ public class ForestFragment extends Fragment {
                 thumbup_num.setText(item[13]);
                 hole_id.setText("#" + item[6]);
                 Log.d("thumbup_num"+"is_thumbup",item[13]+"+"+item[11]);
-                // Log.d(TAG,detailforest2.get(position-1)[8]);
-                // Log.d(TAG,detailforest2.get(position-1)[10]);
-                // Log.d(TAG,detailforest2.get(position-1)[11]);
-
                 if (item[8].equals("true")) {
                     is_follow.setImageResource(R.mipmap.active_3);
                 }else{
@@ -856,7 +978,11 @@ public class ForestFragment extends Fragment {
             } else  {
                 ((ForestHoleAdapter.ViewHolder) holder).bind(position);
             }
-
+        if(position== mJoinedHolesList.size()-3&&(mJoinedHolesList.size()%20==0)&&mRefreshConditionRl==null){
+            mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+            mPrestrainCondition=true;
+            update();
+        }
 
         }
 
@@ -867,6 +993,15 @@ public class ForestFragment extends Fragment {
             }else{
                 return 1;
             }
+        }
+    }
+    private void RemoveOnScrollListener() {
+        if (mOnscrollListener != null) {
+            mJoinedHolesRv.removeOnScrollListener(mOnscrollListener);
+        }
+        if(mMoreWhatCl!=null) {
+            mMoreWhatCl.setVisibility(View.INVISIBLE);
+            more_condition = false;
         }
     }
 }
