@@ -701,11 +701,15 @@ public class DetailForestActivity extends AppCompatActivity {
        public class ViewHolder extends RecyclerView.ViewHolder {
             private TextView content,created_timestamp,follow_num,reply_num,thumbup_num,hole_id,more_2;
             private ImageView is_follow,is_reply,is_thumbup,more,more_1;
-            ConstraintLayout morewhat;
+            private ConstraintLayout morewhat,thumbup,follow;
             private int position;
 
             public ViewHolder(View view) {
                 super(view);
+                thumbup=(ConstraintLayout)view.findViewById(R.id.cl_detailforest_thumbup);
+                follow=(ConstraintLayout)view.findViewById(R.id.cl_detailforest_follow);
+
+
                 content=(TextView)view.findViewById(R.id.tv_itemdetailforest_content);
                 created_timestamp=(TextView)view.findViewById(R.id.tv_itemdetailforest_time);
                // forest_name=(TextView)view.findViewById(R.id.textView32);
@@ -785,7 +789,7 @@ public class DetailForestActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
-                is_thumbup.setOnClickListener(new View.OnClickListener(){
+                thumbup.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
                         if(CheckingToken.IfTokenExist()) {
@@ -842,7 +846,7 @@ public class DetailForestActivity extends AppCompatActivity {
                         }
                     }
                 });
-                is_follow.setOnClickListener(new View.OnClickListener(){
+                follow.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
                         if(CheckingToken.IfTokenExist()) {

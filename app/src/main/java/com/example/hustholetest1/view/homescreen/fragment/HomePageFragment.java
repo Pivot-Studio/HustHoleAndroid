@@ -576,10 +576,12 @@ public class HomePageFragment extends Fragment {
                 private ImageView background_image_url, is_follow, is_reply, is_thumbup, more, more_1;
                 private int position;
                 private Button forest_name;
-                private ConstraintLayout morewhat, constraintLayout3;
+                private ConstraintLayout morewhat, constraintLayout3,thumbup,follow;
 
                 public ViewHolder(View view) {
                     super(view);
+                    thumbup=(ConstraintLayout)view.findViewById(R.id.cl_itemhomepage_thumbup);
+                    follow=(ConstraintLayout)view.findViewById(R.id.cl_itemhomepage_follow);
                     content = (TextView) view.findViewById(R.id.tv_itemhomepage_content);
                     created_timestamp = (TextView) view.findViewById(R.id.tv_itemhomepage_time);
                     forest_name = (Button) view.findViewById(R.id.btn_itemhompage_jumptodetailforest);
@@ -648,7 +650,7 @@ public class HomePageFragment extends Fragment {
                     });
 
 
-                    is_thumbup.setOnClickListener(new View.OnClickListener() {
+                    thumbup.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (CheckingToken.IfTokenExist()) {
@@ -705,7 +707,7 @@ public class HomePageFragment extends Fragment {
                             }
                         }
                     });
-                    is_follow.setOnClickListener(new View.OnClickListener() {
+                    follow.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             if (CheckingToken.IfTokenExist()) {

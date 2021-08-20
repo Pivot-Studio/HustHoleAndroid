@@ -489,11 +489,17 @@ public class CommentListActivity extends AppCompatActivity {
         public class HeadHolder extends RecyclerView.ViewHolder{
             private Button forest_name;
             private TextView created_timestamp,content,thumbup_num,reply_num,follow_num,more_2;
-            private ImageView is_thumbup,is_reply,is_follow,orders,more,more_1;
+            private ConstraintLayout thumbup,reply,follow;
+            private ImageView is_thumbup,is_reply,is_follow;
+            private ImageView orders,more,more_1;
             private ConstraintLayout morewhat;
 
             public HeadHolder(View view){
                 super(view);
+                thumbup=(ConstraintLayout)view.findViewById(R.id.cl_commenthead_thumbup);
+                reply=(ConstraintLayout)view.findViewById(R.id.cl_commenthead_reply);
+                follow=(ConstraintLayout)view.findViewById(R.id.cl_commenthead_follow);
+
                 forest_name = (Button) view.findViewById(R.id.btn_commenthead_jumptodetailforest);
                 created_timestamp = (TextView) view.findViewById(R.id.tv_commenthead_time);
                 content = (TextView) view.findViewById(R.id.tv_commenthead_content);
@@ -605,7 +611,7 @@ public class CommentListActivity extends AppCompatActivity {
 
 
 
-                is_thumbup.setOnClickListener(new View.OnClickListener(){
+                thumbup.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
                         if(CheckingToken.IfTokenExist()) {
@@ -662,7 +668,7 @@ public class CommentListActivity extends AppCompatActivity {
                         }
                     }
                 });
-                is_follow.setOnClickListener(new View.OnClickListener(){
+                follow.setOnClickListener(new View.OnClickListener(){
 
                         @Override
                         public void onClick (View v){
@@ -796,12 +802,15 @@ public class CommentListActivity extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             private TextView alias_me,content, created_timestamp,thumbup_num,reply_tosomebody,more_2;
             private ImageView  is_thumbup,more,more_1;
-            private ConstraintLayout linearLayout,morewhat;
+            private ConstraintLayout linearLayout,morewhat,thumbup;
             private Button line;
             private int position;
 
             public ViewHolder(View view) {
                 super(view);
+
+                thumbup=(ConstraintLayout)view.findViewById(R.id.cl_commentreply_thumbup);
+
                 alias_me=(TextView)view.findViewById(R.id.tv_commentreply_title);
                 content=(TextView)view.findViewById(R.id.tv_commentreply_content);
                 created_timestamp=(TextView)view.findViewById(R.id.tv_commentreply_time);
@@ -955,7 +964,7 @@ public class CommentListActivity extends AppCompatActivity {
 
 
 
-                is_thumbup.setOnClickListener(new View.OnClickListener(){
+                thumbup.setOnClickListener(new View.OnClickListener(){
                     @Override
                     public void onClick(View v) {
                         if(CheckingToken.IfTokenExist()) {
