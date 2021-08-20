@@ -60,17 +60,16 @@
         android:id="@+id/cl_commenthead_thumbup"
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_40"
-        android:layout_marginStart="22dp"
         android:layout_marginTop="5dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_commenthead_content"
         app:layout_constraintTop_toBottomOf="@+id/tv_commenthead_content">
 
         <ImageView
             android:id="@+id/iv_commenthead_thumbup"
-            android:layout_width="@dimen/dp_20"
-            android:layout_height="@dimen/dp_25"
+            android:layout_width="@dimen/dp_17"
+            android:layout_height="@dimen/dp_24"
 
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@mipmap/inactive" />
@@ -79,9 +78,9 @@
             android:id="@+id/tv_commenthead_thumbupnum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
+            android:layout_marginBottom="11dp"
             android:text="15"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_commenthead_thumbup"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_commenthead_thumbup" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -90,7 +89,7 @@
         android:id="@+id/cl_commenthead_reply"
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_40"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="@dimen/dp_32"
         app:layout_constraintBottom_toBottomOf="@+id/cl_commenthead_thumbup"
         app:layout_constraintStart_toEndOf="@+id/cl_commenthead_thumbup"
         app:layout_constraintTop_toTopOf="@+id/cl_commenthead_thumbup">
@@ -99,9 +98,9 @@
             android:id="@+id/iv_commenthead_reply"
             android:layout_width="@dimen/dp_16"
             android:layout_height="@dimen/dp_16"
+            android:layout_marginBottom="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@mipmap/inactive_2" />
 
         <TextView
@@ -111,17 +110,16 @@
             android:text="15"
             app:layout_constraintBottom_toBottomOf="@+id/iv_commenthead_reply"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.7"
             app:layout_constraintStart_toEndOf="@+id/iv_commenthead_reply"
             app:layout_constraintTop_toTopOf="@+id/iv_commenthead_reply"
-            app:layout_constraintVertical_bias="0.0" />
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_commenthead_follow"
         android:layout_width="@dimen/dp_40"
         android:layout_height="@dimen/dp_40"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="@dimen/dp_32"
         app:layout_constraintBottom_toBottomOf="@+id/cl_commenthead_reply"
         app:layout_constraintStart_toEndOf="@+id/cl_commenthead_reply"
         app:layout_constraintTop_toTopOf="@+id/cl_commenthead_reply">
@@ -130,31 +128,30 @@
             android:id="@+id/iv_commenthead_follow"
             android:layout_width="@dimen/dp_16"
             android:layout_height="@dimen/dp_16"
-            android:layout_marginStart="32dp"
+            android:layout_marginBottom="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_commenthead_replynum"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@mipmap/inactive_3" />
 
         <TextView
             android:id="@+id/tv_commenthead_follownum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="6dp"
             android:text="15"
             app:layout_constraintBottom_toBottomOf="@+id/iv_commenthead_follow"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_commenthead_follow"
-            app:layout_constraintTop_toTopOf="@+id/iv_commenthead_follow" />
+            app:layout_constraintTop_toTopOf="@+id/iv_commenthead_follow"
+         />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <ImageView
         android:id="@+id/iv_commenthead_more"
         android:layout_width="@dimen/dp_25"
         android:layout_height="@dimen/dp_25"
         android:layout_marginEnd="22dp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_commenthead_follownum"
+        app:layout_constraintBottom_toTopOf="@+id/tv_commenthead_frame"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_commenthead_follownum"
         app:srcCompat="@mipmap/threepoint" />
 
     <TextView

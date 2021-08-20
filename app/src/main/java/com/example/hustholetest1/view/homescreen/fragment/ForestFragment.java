@@ -64,7 +64,8 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 public class ForestFragment extends Fragment {
     private RecyclerView mCircleForestsRv;
     private MaxHeightRecyclerView mJoinedHolesRv;
-    private TextView mJumpToAllforestTv;
+    //private TextView mJumpToAllforestTv;
+    private ConstraintLayout mJumpToAllforestTv;
     private Retrofit retrofit;
     private RequestInterface request;
     private JSONArray mJoinedForestsJsonArray, mJoinedHolesJsonArray;
@@ -655,7 +656,7 @@ public class ForestFragment extends Fragment {
             public HeadHolder(View view) {
                 super(view);
 
-                mJumpToAllforestTv = (TextView) view.findViewById(R.id.tv_foresthead_jumptoallforest);
+                mJumpToAllforestTv = (ConstraintLayout) view.findViewById(R.id.cl_foresthead);
                 mJumpToAllforestTv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -678,11 +679,15 @@ public class ForestFragment extends Fragment {
 
             private TextView content, created_timestamp, forest_name, follow_num, reply_num, thumbup_num, hole_id, more_2;
             private ImageView background_image_url, is_follow, is_reply, is_thumbup, more, more_1;
-            ConstraintLayout morewhat;
+            private ConstraintLayout morewhat,thumbup,follow;
             private int position;
 
             public ViewHolder(View view) {
                 super(view);
+
+                thumbup=(ConstraintLayout)view.findViewById(R.id.cl_itemforest_thumbup);
+                follow=(ConstraintLayout)view.findViewById(R.id.cl_itemforest_follow);
+
                 content = (TextView) view.findViewById(R.id.tv_itemforest_content);
                 created_timestamp = (TextView) view.findViewById(R.id.tv_itemforest_time);
                 forest_name = (TextView) view.findViewById(R.id.tv_itemforest_title);
@@ -750,7 +755,7 @@ public class ForestFragment extends Fragment {
                 });
 
 
-                is_thumbup.setOnClickListener(new View.OnClickListener() {
+                thumbup.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (mJoinedHolesList.get(position - 1)[11].equals("false")) {
@@ -802,7 +807,7 @@ public class ForestFragment extends Fragment {
                         }
                     }
                 });
-                is_follow.setOnClickListener(new View.OnClickListener() {
+                follow.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (mJoinedHolesList.get(position - 1)[8].equals("false")) {

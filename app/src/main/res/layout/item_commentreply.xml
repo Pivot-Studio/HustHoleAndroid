@@ -126,16 +126,36 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    <ImageView
-        android:id="@+id/iv_commentreply_thumbup"
-        android:layout_width="@dimen/dp_20"
-        android:layout_height="@dimen/dp_24"
-        android:layout_marginEnd="8dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_commentreply_thumbup"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginEnd="30dp"
         android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_commentreply_interval1"
-        app:layout_constraintEnd_toStartOf="@+id/tv_commentreply_thumbupnumber"
-        app:srcCompat="@mipmap/inactive" />
+        app:layout_constraintEnd_toStartOf="@+id/iv_commentreply_more">
+
+        <ImageView
+            android:id="@+id/iv_commentreply_thumbup"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_24"
+            android:layout_marginBottom="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@mipmap/inactive" />
+
+        <TextView
+            android:id="@+id/tv_commentreply_thumbupnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15"
+            android:textColor="@color/GrayScale_70"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_commentreply_thumbup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_commentreply_thumbup" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
         android:id="@+id/iv_commentreply_more"
@@ -148,20 +168,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout5"
         app:srcCompat="@mipmap/threepoint" />
-
-    <TextView
-        android:id="@+id/tv_commentreply_thumbupnumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="30dp"
-        android:text="15"
-        android:textColor="@color/GrayScale_70"
-        android:textSize="11sp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_commentreply_more"
-        app:layout_constraintEnd_toStartOf="@+id/iv_commentreply_more"
-        app:layout_constraintTop_toTopOf="@+id/iv_commentreply_more" />
-
     <TextView
         android:id="@+id/tv_commentreply_interval1"
         android:layout_width="match_parent"

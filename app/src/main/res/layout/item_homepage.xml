@@ -72,72 +72,95 @@
                 app:layout_constraintStart_toStartOf="@+id/tv_itemhomepage_title"
                 app:layout_constraintTop_toBottomOf="@+id/btn_itemhompage_jumptodetailforest" />
 
-            <ImageView
-                android:id="@+id/iv_itemhomepage_thumbup"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="12dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_itemhomepage_thumbup"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_itemhomepage_content"
-                app:srcCompat="@mipmap/inactive" />
+                app:layout_constraintStart_toStartOf="@+id/tv_itemhomepage_content"
+                app:layout_constraintTop_toBottomOf="@+id/tv_itemhomepage_content">
 
-            <TextView
-                android:id="@+id/tv_itemhomepage_thumbupnumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="4dp"
-                android:text="15"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_itemhomepage_thumbup"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_thumbup"
-                app:layout_constraintTop_toTopOf="@+id/iv_itemhomepage_thumbup" />
+                <ImageView
+                    android:id="@+id/iv_itemhomepage_thumbup"
+                    android:layout_width="@dimen/dp_16"
+                    android:layout_height="wrap_content"
 
-            <ImageView
-                android:id="@+id/iv_itemhomepage_reply"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
-                android:layout_marginStart="51dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@mipmap/inactive" />
+
+                <TextView
+                    android:id="@+id/tv_itemhomepage_thumbupnumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="11dp"
+                    android:text="15"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_thumbup" />
+            </androidx.constraintlayout.widget.ConstraintLayout>>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_itemhomepage_reply"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="26dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_thumbup"
-                app:layout_constraintTop_toBottomOf="@+id/tv_itemhomepage_content"
-                app:srcCompat="@mipmap/inactive_2" />
+                app:layout_constraintStart_toEndOf="@+id/cl_itemhomepage_thumbup"
+                app:layout_constraintTop_toBottomOf="@+id/tv_itemhomepage_content">
 
-            <TextView
-                android:id="@+id/tv_itemhomepage_replynumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:text="15"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_itemhomepage_reply"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_reply"
-                app:layout_constraintTop_toTopOf="@+id/iv_itemhomepage_reply" />
+                <ImageView
+                    android:id="@+id/iv_itemhomepage_reply"
+                    android:layout_width="@dimen/dp_16"
+                    android:layout_height="@dimen/dp_16"
+                    android:layout_marginBottom="12dp"
 
-            <ImageView
-                android:id="@+id/iv_itemhomepage_follow"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_16"
-                android:layout_marginStart="51dp"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="12dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@mipmap/inactive_2" />
+
+                <TextView
+                    android:id="@+id/tv_itemhomepage_replynumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:text="15"
+                    app:layout_constraintBottom_toBottomOf="@+id/iv_itemhomepage_reply"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_reply"
+                    app:layout_constraintTop_toTopOf="@+id/iv_itemhomepage_reply" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+           <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_itemhomepage_follow"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_40"
+                android:layout_marginStart="26dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_reply"
-                app:layout_constraintTop_toBottomOf="@+id/tv_itemhomepage_content"
-                app:srcCompat="@mipmap/inactive_3" />
+                app:layout_constraintStart_toEndOf="@+id/cl_itemhomepage_reply"
+                app:layout_constraintTop_toBottomOf="@+id/tv_itemhomepage_content">
 
-            <TextView
-                android:id="@+id/tv_itemhomepage_follownumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="6dp"
-                android:text="15"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_itemhomepage_follow"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_follow"
-                app:layout_constraintTop_toTopOf="@+id/iv_itemhomepage_follow" />
+               <ImageView
+                   android:id="@+id/iv_itemhomepage_follow"
+                   android:layout_width="@dimen/dp_16"
+                   android:layout_height="@dimen/dp_16"
+                   android:layout_marginBottom="12dp"
+
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:srcCompat="@mipmap/inactive_3" />
+
+               <TextView
+                   android:id="@+id/tv_itemhomepage_follownumber"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="15"
+                   app:layout_constraintBottom_toBottomOf="@+id/iv_itemhomepage_follow"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_follow"
+                   app:layout_constraintTop_toTopOf="@+id/iv_itemhomepage_follow" />
+           </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
                 android:id="@+id/tv_itemhomepage_content"
