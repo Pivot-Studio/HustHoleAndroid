@@ -1,5 +1,6 @@
 package com.example.hustholetest1.view.homescreen.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
 
@@ -24,6 +25,7 @@ public class MyHoleAndMyStarActivity extends AppCompatActivity{
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
 
+    Intent intent;
     List<Fragment> fragments = new ArrayList<>();
     List<String> titles = new ArrayList<>();
 
@@ -72,6 +74,9 @@ public class MyHoleAndMyStarActivity extends AppCompatActivity{
         });
 
         mTabLayout.setupWithViewPager(mViewPager);
+
+        intent = getIntent();
+        mViewPager.setCurrentItem(intent.getIntExtra("initFragmentID", 0) == 0 ? 0 : 1);
     }
 
     private void initViewPager() {
@@ -79,9 +84,6 @@ public class MyHoleAndMyStarActivity extends AppCompatActivity{
 
 //        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(0)));
 //        mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
-
-
-
 
         mViewPager.setOffscreenPageLimit(2);
 

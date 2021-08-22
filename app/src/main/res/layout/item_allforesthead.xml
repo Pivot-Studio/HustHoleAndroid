@@ -12,11 +12,11 @@
         android:layout_width="@dimen/dp_76"
         android:layout_height="@dimen/dp_32"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="10dp"
         android:background="@drawable/forest_button_white"
         android:text="申请新建"
         android:textColor="@color/HH_BandColor_3"
         android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_allforesthead_content" />
 
@@ -33,17 +33,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tv_allforesthead_content"
-            android:layout_width="245dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="1dp"
-            android:text="@string/page2_allforests_3"
-            android:textColor="@color/GrayScale_50"
-            android:textSize="11sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_allforesthead_title" />
+    <TextView
+        android:id="@+id/tv_allforesthead_content"
+        android:layout_width="@dimen/dp_245"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="1dp"
+        android:text="@string/page2_allforests_3"
+        android:textColor="@color/GrayScale_50"
+        android:textSize="11sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_allforesthead_title" />
 
     <ImageView
         android:id="@+id/iv_allforesthead_icon1"

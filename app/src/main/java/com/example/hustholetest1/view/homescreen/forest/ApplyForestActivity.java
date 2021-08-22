@@ -1,16 +1,22 @@
 package com.example.hustholetest1.view.homescreen.forest;
 
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
@@ -31,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -40,12 +47,41 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.model.EditTextReaction;
 import com.example.hustholetest1.model.GlideRoundTransform;
+import com.example.hustholetest1.network.RequestInterface;
+import com.example.hustholetest1.network.RetrofitManager;
 import com.githang.statusbar.StatusBarCompat;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Observable;
+
+import okhttp3.FormBody;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.http.Url;
 
 
 public class ApplyForestActivity extends AppCompatActivity {
+    private RequestInterface request;
+    private Retrofit retrofit;
     private TextView textView,text,warnName,warnIntroduce,titleBar;
-    private Button ppwButton,addCover;
+    private Button ppwButton,addCover,send;
     private ImageButton addIcon;
     private EditText forestName,forestIntroduce;
     private ImageView back,mCoverIv;
@@ -53,6 +89,15 @@ public class ApplyForestActivity extends AppCompatActivity {
     private ConstraintLayout constraintLayout;
     private ScrollView scrollView;
     private Boolean popWindowCondtion=false;
+    private static Bitmap bitmap1,bitmap2;
+    private Boolean mForestNameCondition=false,mForestIntroduceCondition=false;
+    public static void setIcon(Bitmap bitmap){
+        bitmap1=bitmap;
+    }
+    public static void setCover(Bitmap bitmap){
+        bitmap2=bitmap;
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_applyforest);
@@ -73,6 +118,71 @@ public class ApplyForestActivity extends AppCompatActivity {
         warnIntroduce.setVisibility(View.INVISIBLE);
         forestName=(EditText)findViewById(R.id.et_applyforest_name);
         forestIntroduce=(EditText)findViewById(R.id.et_applyforest_introduce);
+        send=(Button)findViewById(R.id.btn_applyforest_send);
+        send.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new Thread(new Runnable() {//加载纵向列表标题
+                    File file;
+                    File file2;
+                    @Override
+                    public void run() {
+                        try {
+                             file=saveFile(bitmap1,"icon");
+                             file2=saveFile(bitmap2,"cover");
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+
+                            RequestBody fileRQ = RequestBody.create(MediaType.parse("image/png"), file);
+                            MultipartBody.Part part = MultipartBody.Part.createFormData("image_url", file.getName(), fileRQ);
+
+
+                            RequestBody fileRQ2 = RequestBody.create(MediaType.parse("image/png"), file2);
+                            MultipartBody.Part part2 = MultipartBody.Part.createFormData("background_image_url", file2.getName(), fileRQ2);
+
+                            RequestBody body=new MultipartBody.Builder()
+                                    .addFormDataPart("forest_name", forestName.getText().toString())
+                                    .addFormDataPart("description", forestIntroduce.getText().toString())
+                                    .addFormDataPart("image_url",file.getName(),fileRQ)
+                                    .addFormDataPart("background_image_url",file2.getName(),fileRQ2)
+                                    .build();
+/*
+
+ */
+                  Call<ResponseBody> call = request.applyForest(body);//进行封装
+                        //call.
+                  call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    String json = "null";
+                    try {
+                        if (response.body() != null) {
+                            json = response.body().string();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                   Toast.makeText(ApplyForestActivity.this,"申请成功",Toast.LENGTH_SHORT).show();
+                   finish();
+                }
+
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                    Toast.makeText(ApplyForestActivity.this,"申请失败，请检查网络",Toast.LENGTH_SHORT).show();
+                }
+
+
+            });
+        }
+    }).start();
+
+
+
+
+            }
+        });
         addIcon=(ImageButton)findViewById(R.id.btn_applyforest_addicon);
         addIcon.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,21 +191,34 @@ public class ApplyForestActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
+        addCover=(Button)findViewById(R.id.btn_applyforest_addcover);
+        addCover.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ApplyForestActivity.this, CropOblongPictureActivity.class);
+                startActivity(intent);
+            }
+        });
         SpannableString string1 = new SpannableString(this.getResources().getString(R.string.page2_applyforest_4));
         SpannableString string2 = new SpannableString(this.getResources().getString(R.string.page2_applyforest_7));
         EditTextReaction.EditTextSize(forestName,string1,18);
         EditTextReaction.EditTextSize(forestIntroduce,string2,15);
         forestName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             @Override
             public void afterTextChanged(Editable s) {
                 if (forestName.getText().toString().trim().length() > 10) {
                     warnName.setVisibility(View.VISIBLE);
-                } else { warnName.setVisibility(View.INVISIBLE); }
+                    mForestNameCondition=false;
+                } else {
+                    warnName.setVisibility(View.INVISIBLE);
+                    mForestNameCondition=true;
+                }
+               ButtonCondition();
             }
         });
         forestIntroduce.addTextChangedListener(new TextWatcher() {
@@ -107,7 +230,11 @@ public class ApplyForestActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s) {
                 if (forestIntroduce.getText().toString().trim().length() > 40) {
                     warnIntroduce.setVisibility(View.VISIBLE);
-                } else { warnIntroduce.setVisibility(View.INVISIBLE); }
+                    mForestIntroduceCondition=false;
+                } else { warnIntroduce.setVisibility(View.INVISIBLE);
+                mForestIntroduceCondition=true;
+                }
+            ButtonCondition();
             }
         });
         back.setOnClickListener(new View.OnClickListener() {
@@ -127,7 +254,99 @@ public class ApplyForestActivity extends AppCompatActivity {
         textView.setText(spannable);
         constraintLayout=(ConstraintLayout) findViewById(R.id.include);
         scrollView=(ScrollView) findViewById(R.id.scrollView2);
+
+        retrofit= RetrofitManager.getRetrofit();
+        request = retrofit.create(RequestInterface.class);
+
+
+
     }
+private void ButtonCondition(){
+    if(mForestIntroduceCondition&&mForestNameCondition&&bitmap1!=null&&bitmap2!=null){
+        send.setBackgroundResource(R.drawable.button);
+        send.setEnabled(true);
+    }else{
+        send.setBackgroundResource(R.drawable.standard_button_gray);
+        send.setEnabled(false);
+    }
+}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(bitmap1!=null){
+            Drawable drawable = new BitmapDrawable(bitmap1);
+            addIcon.setBackground(drawable);
+            ButtonCondition();
+        }
+        if(bitmap2!=null){
+            Drawable drawable = new BitmapDrawable(bitmap2);
+            addCover.setBackground(drawable);
+            ButtonCondition();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(bitmap1!=null){
+            bitmap1=null;
+        }
+        if(bitmap2!=null){
+            bitmap2=null;
+        }
+    }
+
+    public File saveFile(Bitmap bm, String fileName) throws IOException {//将Bitmap类型的图片转化成file类型，便于上传到服务器
+        //String path=Environment.getExternalStorageDirectory() + ;
+     //   File extDir = Environment.getExternalStorageDirectory();
+
+        //String filename = "downloadedMusic.mp3";
+
+        //File dirFile = new File(path);
+       // File file = new File(extDir,fileName);
+
+
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File file = new File(directory, fileName);
+
+
+
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            if (bm.compress(Bitmap.CompressFormat.PNG, 100, out)) {
+                out.flush();
+                out.close();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        /*
+        ContextWrapper cw = new ContextWrapper(getApplicationContext());
+        File directory = cw.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File  dirFile = new File(directory, "/Ask");
+
+
+
+        if(!dirFile.exists()){
+            dirFile.mkdir();
+        }
+
+        File myCaptureFile = new File(dirFile.getName() + fileName);
+        BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(myCaptureFile));
+        bm.compress(Bitmap.CompressFormat.PNG, 80, bos);
+        bos.flush();
+        bos.close();
+
+
+        return myCaptureFile;
+
+         */
+return file;
+    }
+
     public class TextClick extends ClickableSpan {
         @Override
         public void onClick(View view) {

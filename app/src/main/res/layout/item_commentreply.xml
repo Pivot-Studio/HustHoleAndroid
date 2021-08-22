@@ -210,4 +210,18 @@
             app:layout_constraintStart_toEndOf="@+id/iv_commentreply_moreicon"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/tv_commentreply_ifhot"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_18"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="22dp"
+        android:text="    热评    "
+        android:gravity="center"
+        android:textColor="@color/HH_BandColor_7"
+        android:textSize="9sp"
+        android:background="@drawable/tag_yellow"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

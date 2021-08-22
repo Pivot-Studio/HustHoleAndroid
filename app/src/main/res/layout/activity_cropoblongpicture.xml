@@ -6,13 +6,13 @@
     android:layout_height="match_parent"
     android:background="@color/GrayScale_0">
     <include
-        android:id="@+id/include_croppicture"
+        android:id="@+id/include_cropoblongpicture"
         layout="@layout/titlebar_green"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="68dp" />
 
     <ImageView
-        android:id="@+id/iv_croppicture_revolve"
+        android:id="@+id/iv_cropoblongpicture_revolve"
         android:layout_width="@dimen/dp_24"
         android:layout_height="@dimen/dp_24"
         android:layout_marginBottom="40dp"
@@ -22,7 +22,7 @@
         app:srcCompat="@mipmap/vector7" />
 
     <Button
-        android:id="@+id/btn_croppicture_yes"
+        android:id="@+id/btn_cropoblongpicture_yes"
         android:layout_width="@dimen/dp_68"
         android:layout_height="@dimen/dp_32"
         android:layout_marginEnd="15dp"
@@ -35,7 +35,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
-        android:id="@+id/btn_croppicture_no"
+        android:id="@+id/btn_cropoblongpicture_no"
         android:layout_width="@dimen/dp_68"
         android:layout_height="@dimen/dp_32"
 
@@ -49,58 +49,56 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/iv_croppicture_photo2"
+        android:id="@+id/iv_cropoblongpicture_photo2"
         android:layout_width="@dimen/dp_275"
-        android:layout_height="@dimen/dp_275"
-        android:scaleType="matrix"
+        android:layout_height="@dimen/dp_107"
         android:background="#343434"
-        app:layout_constraintBottom_toTopOf="@+id/iv_croppicture_revolve"
+        android:scaleType="matrix"
+        app:layout_constraintBottom_toTopOf="@+id/iv_cropoblongpicture_revolve"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include_croppicture"
-        />
-
+        app:layout_constraintTop_toBottomOf="@+id/include_cropoblongpicture" />
 
 
     <com.example.hustholetest1.model.MyImageView
-        android:id="@+id/iv_croppicture_photo"
+        android:id="@+id/iv_cropoblongpicture_photo"
         android:layout_width="@dimen/dp_275"
-        android:layout_height="@dimen/dp_275"
+        android:layout_height="@dimen/dp_107"
         android:scaleType="matrix"
-        app:layout_constraintBottom_toTopOf="@+id/iv_croppicture_revolve"
+        app:layout_constraintBottom_toTopOf="@+id/iv_cropoblongpicture_revolve"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include_croppicture"
+        app:layout_constraintTop_toBottomOf="@+id/include_cropoblongpicture"
         tools:srcCompat="@tools:sample/avatars" />
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@+id/iv_croppicture_photo"
-        app:layout_constraintTop_toTopOf="@+id/iv_croppicture_photo"
+        app:layout_constraintStart_toStartOf="@+id/iv_cropoblongpicture_photo"
+        app:layout_constraintTop_toTopOf="@+id/iv_cropoblongpicture_photo"
         app:srcCompat="@mipmap/vector94" />
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@+id/iv_croppicture_photo"
-        app:layout_constraintTop_toTopOf="@+id/iv_croppicture_photo"
+        app:layout_constraintEnd_toEndOf="@+id/iv_cropoblongpicture_photo"
+        app:layout_constraintTop_toTopOf="@+id/iv_cropoblongpicture_photo"
         app:srcCompat="@mipmap/vector95" />
 
     <ImageView
         android:id="@+id/imageView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_croppicture_photo"
-        app:layout_constraintEnd_toEndOf="@+id/iv_croppicture_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_cropoblongpicture_photo"
+        app:layout_constraintEnd_toEndOf="@+id/iv_cropoblongpicture_photo"
         app:srcCompat="@mipmap/vector96" />
 
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_croppicture_photo"
-        app:layout_constraintStart_toStartOf="@+id/iv_croppicture_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_cropoblongpicture_photo"
+        app:layout_constraintStart_toStartOf="@+id/iv_cropoblongpicture_photo"
         app:srcCompat="@mipmap/vector97" />
 </androidx.constraintlayout.widget.ConstraintLayout>

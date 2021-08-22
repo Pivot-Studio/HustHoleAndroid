@@ -12,6 +12,7 @@
 
         android:networkSecurityConfig="@xml/network_security"
         android:allowBackup="true"
+        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -122,6 +123,9 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity android:name=".view.emailverify.EmailVerifyActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.homescreen.forest.CropOblongPictureActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
     </application>

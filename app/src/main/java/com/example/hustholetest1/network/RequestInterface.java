@@ -1,13 +1,20 @@
 package com.example.hustholetest1.network;
-import java.util.HashMap;
+import android.database.Observable;
 
+import java.util.HashMap;
+import java.util.List;
+
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
@@ -121,11 +128,56 @@ public interface RequestInterface {//接口
     @POST("auth/verifyCodeMatch?email=U202011988.edu.cn&verify_code=1234")
     Call<ResponseBody> verifyCodeMatch();
 
-    @GET("myself/myfollow?start_id=0&list_size=10")
-    Call<ResponseBody> myFollow();
-    @GET("myself/myholes?start_id=0&list_size=10")
-    Call<ResponseBody> myHoles();
 
+    @GET("myself/myfollow?")
+    Call<ResponseBody> myFollow(@Query("start_id") int start_id,
+                                @Query("list_size") int list_size);
 
+    @GET("myself/myholes?")
+    Call<ResponseBody> myHoles(@Query("start_id") int start_id,
+                               @Query("list_size") int list_size);
+
+    @GET("myself/mydata")
+    Call<ResponseBody> myData();
+
+    @GET("auth")
+    Call<ResponseBody> isUnderSecurity();
+
+    @POST("auth/update")
+    Call<ResponseBody> changeSecurityMode(@Body HashMap map);
+/*
+    @Multipart
+    @POST("forests/apply")
+    Call<ResponseBody> applyForest(@Body HashMap map
+                                   @Part);
+
+ */
+@POST("forests/apply")
+Call<ResponseBody> applyForest(@Body RequestBody body);
+
+@GET("replies/hot?")
+Call<ResponseBody> hotReply(@Query("hole_id") String hole_id,
+                            @Query("start_id") int start_id,
+                            @Query("list_size") int list_size);
+
+@GET("replies/owner?")
+Call<ResponseBody> owner(@Query("hole_id") String hole_id,
+                         @Query("start_id") int start_id,
+                         @Query("list_size") int list_size,
+                         @Query("is_descend") String is_descend);
+   // @GET("safety")
+   // Call<ResponseBody> isUnderSecurity();
+
+   // @POST("safety")
+   // Call<ResponseBody> changeSecurityMode(@Body Boolean turnOn);
+
+   /* @Multipart
+    @POST()
+
+    Call<ResponseBody> applyForest(@Part("body") RequestBody body, @Part MultipartBody.Part file);
+    //Observable<ResponseBody> applyForest(
+            //@Part() List<MultipartBody.Part > files );
+
+    */
 }
 

@@ -3,6 +3,7 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -35,6 +36,19 @@
       android:layout_width="match_parent"
       android:layout_height="wrap_content" />
  </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+ <Button
+     android:id="@+id/btn_commentlist_master"
+     android:layout_width="@dimen/dp_64"
+     android:layout_height="@dimen/dp_28"
+     android:layout_marginEnd="@dimen/dp_22"
+     android:layout_marginBottom="@dimen/dp_20"
+     android:background="@drawable/ic_onlylookmaster"
+     android:text="只看洞主"
+     android:textColor="@color/GrayScale_50"
+     android:textSize="10sp"
+     app:layout_constraintBottom_toBottomOf="parent"
+     app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

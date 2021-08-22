@@ -79,7 +79,7 @@ public class ForestFragment extends Fragment {
     private Boolean mIfFirstLoad=true;
     private SmartRefreshLayout mTitleBarSrl;
     private Boolean mPrestrainCondition=false;
-
+    private Boolean mDeleteCondition=false;
 
     private Boolean more_condition=false;
     private  ConstraintLayout mMoreWhatCl;
@@ -96,6 +96,7 @@ public class ForestFragment extends Fragment {
         RefreshLayout refreshLayout = (RefreshLayout) rootView.findViewById(R.id.refreshLayout);
         refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
         refreshLayout.setRefreshFooter(new StandardRefreshFooter(getActivity()));
+
         refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -103,7 +104,6 @@ public class ForestFragment extends Fragment {
                 if(CheckingToken.IfTokenExist()) {
                     mRefreshConditionRl = refreshlayout;
                     mStartingLoadId = CONSTANT_STANDARD_LOAD_SIZE;
-
                     update();
                     mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
                         @Override
@@ -215,9 +215,7 @@ public class ForestFragment extends Fragment {
                                     json = response.body().string();
                                 }
                                 JSONObject jsonObject = new JSONObject(json);
-                                if(mRefreshConditionRl!=null){
-                                    mJoinedHolesList = new ArrayList<String[]>();
-                                }
+
                                 mJoinedForestsJsonArray = jsonObject.getJSONArray("forests");
                                 mJoinedForestsList = new String[mJoinedForestsJsonArray.length()][8];
                                 new JoinedForestsDownloadTask().execute();
@@ -291,6 +289,13 @@ public class ForestFragment extends Fragment {
                             try {
                                 if (response.body() != null) {
                                     json = response.body().string();
+                                }
+                                if(mRefreshConditionRl!=null){
+                                    mJoinedHolesList = new ArrayList<String[]>();
+                                }
+                                if(mDeleteCondition){
+                                    mDeleteCondition=false;
+                                    mJoinedHolesList = new ArrayList<String[]>();
                                 }
                                 mJoinedHolesJsonArray = new JSONArray(json);
                                 new JoinedHolesDownloadTask().execute();
@@ -535,6 +540,9 @@ public class ForestFragment extends Fragment {
             }
             return null;
         }
+        public void OptionBoxRefresh(){
+
+        }
     }
 
 
@@ -681,6 +689,7 @@ public class ForestFragment extends Fragment {
             private ImageView background_image_url, is_follow, is_reply, is_thumbup, more, more_1;
             private ConstraintLayout morewhat,thumbup,follow;
             private int position;
+            private Boolean thumbupCondition=false,followCondition=false;
 
             public ViewHolder(View view) {
                 super(view);
@@ -743,122 +752,193 @@ public class ForestFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         RemoveOnScrollListener();
-                        //morewhat.setVisibility(View.INVISIBLE);
-                     //   more_condition = false;
-                        if (mJoinedHolesList.get(position - 1)[9].equals("true")) {
-                            //if(detailforest2[position-1][9].equals("true")){
-                            CommenRequestManager.DeleteRequest(getContext(), request, mJoinedHolesList.get(position - 1)[6]);
-                        } else {
-                            CommenRequestManager.ReportRequest(getContext(), request, mJoinedHolesList.get(position - 1)[6],"-1");
+                        if(CheckingToken.IfTokenExist()) {
+                            if (mJoinedHolesList.get(position - 1)[9].equals("true")) {
+                                new Thread(new Runnable() {//加载纵向列表标题
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.delete_hole(mJoinedHolesList.get(position - 1)[6]);//进行封装
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                                                mStartingLoadId = 20;
+                                                mDeleteCondition = true;
+                                                update();
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                                                mDeleteCondition = false;
+                                            }
+                                        });
+                                    }
+                                }).start();
+                            } else {
+                                CommenRequestManager.ReportRequest(getContext(), request, mJoinedHolesList.get(position - 1)[6], "-1");
+                            }
                         }
-                    }
+                        }
                 });
 
 
                 thumbup.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (mJoinedHolesList.get(position - 1)[11].equals("false")) {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mJoinedHolesList.get(position - 1)[6] + "/-1");//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
+                        if(CheckingToken.IfTokenExist()) {
+                            if (thumbupCondition==false) {
+                                thumbupCondition = true;
+                                if (mJoinedHolesList.get(position - 1)[11].equals("false")) {
+                                    new Thread(new Runnable() {
                                         @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_thumbup.setImageResource(R.mipmap.active);
-                                            mJoinedHolesList.get(position - 1)[11] = "true";
-                                            mJoinedHolesList.get(position - 1)[13] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[13]) + 1) + "";
+                                        public void run() {
+                                            Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mJoinedHolesList.get(position - 1)[6] + "/-1");//进行封装
+                                            Log.e(TAG, "token2：");
+                                            call.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    is_thumbup.setImageResource(R.mipmap.active);
+                                                    mJoinedHolesList.get(position - 1)[11] = "true";
+                                                    mJoinedHolesList.get(position - 1)[13] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[13]) + 1) + "";
+                                                    thumbupCondition = false;
+                                                    thumbup_num.setText(mJoinedHolesList.get(position - 1)[13]);
+                                                }
 
-                                            thumbup_num.setText(mJoinedHolesList.get(position - 1)[13]);
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    thumbupCondition = false;
+                                                    Toast.makeText(getContext(), R.string.network_thumbupfailure_, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
                                         }
-
+                                    }).start();
+                                } else {
+                                    new Thread(new Runnable() {
                                         @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(getContext(), R.string.network_thumbupfailure_, Toast.LENGTH_SHORT).show();
+                                        public void run() {
+                                            Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mJoinedHolesList.get(position - 1)[6] + "/-1");//进行封装
+                                            Log.e(TAG, "token2：");
+                                            call.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    is_thumbup.setImageResource(R.mipmap.inactive);
+                                                    mJoinedHolesList.get(position - 1)[11] = "false";
+                                                    mJoinedHolesList.get(position - 1)[13] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[13]) - 1) + "";
+                                                    thumbupCondition = false;
+                                                    thumbup_num.setText(mJoinedHolesList.get(position - 1)[13]);
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    thumbupCondition = false;
+                                                    Toast.makeText(getContext(), R.string.network_notthumbupfailure_, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
                                         }
-                                    });
+                                    }).start();
                                 }
-                            }).start();
-                        } else {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mJoinedHolesList.get(position - 1)[6] + "/-1");//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_thumbup.setImageResource(R.mipmap.inactive);
-                                            mJoinedHolesList.get(position - 1)[11] = "false";
-                                            mJoinedHolesList.get(position - 1)[13] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[13]) - 1) + "";
-
-                                            thumbup_num.setText(mJoinedHolesList.get(position - 1)[13]);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(getContext(), R.string.network_notthumbupfailure_, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }).start();
+                            }
                         }
-                    }
+                        }
                 });
                 follow.setOnClickListener(new View.OnClickListener() {
+
                     @Override
                     public void onClick(View v) {
-                        if (mJoinedHolesList.get(position - 1)[8].equals("false")) {
-                            new Thread(new Runnable() {//加载纵向列表标题
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/" + mJoinedHolesList.get(position - 1)[6]);//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
+                        if(CheckingToken.IfTokenExist()) {
+
+                            if (followCondition==false) {
+                                followCondition = true;
+                                if (mJoinedHolesList.get(position - 1)[8].equals("false")) {
+                                    new Thread(new Runnable() {//加载纵向列表标题
                                         @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_follow.setImageResource(R.mipmap.active_3);
-                                            mJoinedHolesList.get(position - 1)[8] = "true";
-                                            mJoinedHolesList.get(position - 1)[3] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[3]) + 1) + "";
+                                        public void run() {
+                                            Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/" + mJoinedHolesList.get(position - 1)[6]);//进行封装
+                                            Log.e(TAG, "token2：");
+                                            call.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    if(response.code()==200) {
+                                                        is_follow.setImageResource(R.mipmap.active_3);
+                                                        mJoinedHolesList.get(position - 1)[8] = "true";
+                                                        mJoinedHolesList.get(position - 1)[3] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[3]) + 1) + "";
+                                                        followCondition = false;
+                                                        follow_num.setText(mJoinedHolesList.get(position - 1)[3]);
+                                                    }else{
+                                                        followCondition = false;
+                                                        String json = "null";
+                                                        String returncondition = null;
+                                                        if (response.body() != null) {
+                                                            try {
+                                                                json = response.body().string();
+                                                                JSONObject jsonObject = new JSONObject(json);
+                                                                returncondition = jsonObject.getString("msg");
+                                                                Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                            } catch (IOException | JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }else{
+                                                            Toast.makeText(getContext(),"过于频繁请求！",Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                }
 
-                                            follow_num.setText(mJoinedHolesList.get(position - 1)[3]);
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    Toast.makeText(getContext(), R.string.network_followfailure_, Toast.LENGTH_SHORT).show();
+                                                    followCondition = false;
+                                                }
+                                            });
                                         }
-
+                                    }).start();
+                                } else {
+                                    new Thread(new Runnable() {
                                         @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(getContext(), R.string.network_followfailure_, Toast.LENGTH_SHORT).show();
+                                        public void run() {
+                                            Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + mJoinedHolesList.get(position - 1)[6]);//进行封装
+                                            Log.e(TAG, "token2：");
+                                            call.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    if(response.code()==200) {
+                                                        is_follow.setImageResource(R.mipmap.inactive_3);
+                                                        mJoinedHolesList.get(position - 1)[8] = "false";
+                                                        mJoinedHolesList.get(position - 1)[3] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[3]) - 1) + "";
+                                                        followCondition = false;
+                                                        follow_num.setText(mJoinedHolesList.get(position - 1)[3]);
+                                                    }else{
+                                                        followCondition = false;
+                                                        String json = "null";
+                                                        String returncondition = null;
+                                                        if (response.body() != null) {
+                                                            try {
+                                                                json = response.body().string();
+                                                                JSONObject jsonObject = new JSONObject(json);
+                                                                returncondition = jsonObject.getString("msg");
+                                                                Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                            } catch (IOException | JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        }else{
+                                                            Toast.makeText(getContext(),"过于频繁请求！",Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                }
 
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    followCondition = false;
+                                                    Toast.makeText(getContext(), R.string.network_notfollowfailure_, Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
                                         }
-                                    });
+                                    }).start();
                                 }
-                            }).start();
-                        } else {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + mJoinedHolesList.get(position - 1)[6]);//进行封装
-                                    Log.e(TAG, "token2：");
-                                    call.enqueue(new Callback<ResponseBody>() {
-                                        @Override
-                                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                            is_follow.setImageResource(R.mipmap.inactive_3);
-                                            mJoinedHolesList.get(position - 1)[8] = "false";
-                                            mJoinedHolesList.get(position - 1)[3] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[3]) - 1) + "";
-
-                                            follow_num.setText(mJoinedHolesList.get(position - 1)[3]);
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                            Toast.makeText(getContext(), R.string.network_notfollowfailure_, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                }
-                            }).start();
+                            }
                         }
-                    }
+                        }
+
                 });
 
 

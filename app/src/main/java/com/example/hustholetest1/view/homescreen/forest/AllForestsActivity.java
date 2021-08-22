@@ -70,11 +70,12 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 public class AllForestsActivity extends AppCompatActivity {
     private MaxHeightRecyclerView recyclerView;
-    private Retrofit retrofit;
+
     private ImageView back;
     private TextView title;
     private Button build;
     private RequestInterface request;
+    private Retrofit retrofit;
     private String[] title_list_2;//暂时储存所有纵向列表标题
     private String[][][] forest_list_0;//暂时储存所有文字
     private Bitmap[][][] bitmaps;//暂时储存所有图片
@@ -168,15 +169,24 @@ public class AllForestsActivity extends AppCompatActivity {
                 Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) { //表示未授权时
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         mAVLoadingIndicatorView.setVisibility(View.VISIBLE);
         mAVLoadingIndicatorView.show();
         title.setText("加载中...");
         Update0();
+    }
+    public void BackUpdate(){
+        mAVLoadingIndicatorView.setVisibility(View.VISIBLE);
+        mAVLoadingIndicatorView.show();
+        title.setText("加载中...");
+        Update0();
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
     }
 
     public void Update0(){

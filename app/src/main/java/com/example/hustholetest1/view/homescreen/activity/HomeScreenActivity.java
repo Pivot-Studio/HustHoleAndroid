@@ -83,11 +83,7 @@ public class HomeScreenActivity extends AppCompatActivity {
 
         //int bb=getActivity().getResources().getDisplayMetrics().densityDpi;
         //mTabRadioGroup = findViewById(R.id.linearLayout3);
-        mFragments = new ArrayList<>(4);
-        mFragments.add(HomePageFragment.newInstance());
-        mFragments.add(ForestFragment.newInstance());
-        mFragments.add(MessageFragment.newInstance());
-        mFragments.add(MineFragment.newInstance());
+
 
         imageView1=(ImageView)findViewById(R.id.iv_homescreen_hompageicon);
         imageView2=(ImageView)findViewById(R.id.iv_homescreen_foresticon);
@@ -158,7 +154,11 @@ public class HomeScreenActivity extends AppCompatActivity {
         //final AlertDialog.Builder  mBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
        // final AlertDialog.Builder  mBuilder = new AlertDialog.Builder(this);
 
-
+        mFragments = new ArrayList<>(4);
+        mFragments.add(HomePageFragment.newInstance());
+        mFragments.add(ForestFragment.newInstance());
+        mFragments.add(MessageFragment.newInstance());
+        mFragments.add(MineFragment.newInstance());
         SharedPreferences editor = HomeScreenActivity.this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
         Boolean condition = editor.getBoolean("iffirstlogin", true);
         String token=editor.getString("token","");
@@ -222,42 +222,6 @@ public class HomeScreenActivity extends AppCompatActivity {
 
 
 
-
-       /* AlertDialog.Builder builder=new AlertDialog.Builder(this);
-        //builder.setIcon(android.R.drawable.ic_dialog_info);//提示图标
-        builder.setTitle(R.string.homepage_2);
-        String aa=("<small><font color=\"#00000000\">你好，这里是1037树洞~</font></small><br>"+
-                " <small><font color=\"#666666\">请先别急着跳过噢，花三十秒听听树洞的悄悄话吧(●'◡'●)</font></small><br><br>"+
-                "<strong><small><font color=\"#00000000\">1037树洞是什么？</font></small></strong><br><br>"+
-                "<small><font color=\"#666666\">1037树洞是专属于HUSTer的</font></small><small><font color=\"#00000000\">匿名社区</font></small>，"+
-                "<small><font color=\"#666666\">通过学号绑定的校园邮箱来验证你的华科在校学生身份。你的学号邮箱仅会被用于验证，而不会在社区中被展示；通过后台加密算法，除了在严重违反社区规范的情况下且运营者认为有必要时，</font></small>"+
-                "<small><font color=\"#00000000\">任何人都无法获知你的发言身份</font></small><small><font color=\"#666666\">。在这里，你可以真正地畅所欲言。</font></small><br><br>"+
-                "<strong><small><font color=\"#00000000\">我们的初衷</font></small></strong><br><br>"+
-                " <small><font color=\"#666666\">敲下几行文字，1037树洞可以满足你任何的交流需求：</font></small><br><br>"+
-                " <small><font color=\"#00000000\">倾诉自己内心深处的伤感或喜悦，分享华科最新发生的大小趣事，寻找校内拥有小众爱好的朋友，寻求学长学姐们给自己的建议，交流对于热点社会问题的看法……</font></small><br><br>"+
-                " <small><font color=\"#666666\">树洞的本质是人和人之间的互相倾诉，只有人来人往，树洞才会好玩儿~在1037树洞，所有的声音都会被认真倾听，你的一切发言不用担心被熟人监视，而你的交流对象都是和你思维高度同频的HUSTer~</font></small><br><br>"+
-                "<strong><small><font color=\"#00000000\">我们的期望</font></small></strong><br><br>"+
-                " <small><font color=\"#666666\">为了让每一位洞友都能在1037树洞找到温暖，我们希望你：</font></small><br><br>"+
-                " <small><font color=\"#00000000\">&#160;&#160;1.做一个友善的倾听者，尊重他人，即使TA与你观点相异；</font></small><br><br>"+
-                " <small><font color=\"#00000000\">&#160;&#160;2.不要发布令人感到不适或者违反法律法规的内容，包括但不限于侮辱他人、侵犯隐私、发布暴力或色情内容等；</font></small><br><br>"+
-                " <small><font color=\"#00000000\">&#160;&#160;3.在参与讨论时，请与我们一起维护社区的安全，对于社区内令人不适的内容主动制止。</font></small><br><br>"+
-                " <small><font color=\"#666666\">匿名社区的良好环境需要你我共同维护~感谢你的支持！</font></small><br><br>"+
-                "<small><font color=\"#00000000\">祝你在1037树洞玩得愉快。</font></small><br>");
-
-        builder.setMessage(Html.fromHtml(aa));
-        builder.setPositiveButton("我知道了",
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //点击“知道了”的后续业务逻辑
-                    }
-                });
-        AlertDialog dialog=builder.create();
-
-//设置窗口的大小
-
-*/
-
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragments);
         mViewPager.setAdapter(mAdapter);
         // register listener
@@ -267,6 +231,9 @@ public class HomeScreenActivity extends AppCompatActivity {
         radioButton.setChecked(true);*/
         ImageView imageView0=(ImageView)findViewById(R.id.fab_homescreen_publishhole);
         imageView0.bringToFront();
+
+
+
        /* WindowManager mWm = (WindowManager) this.getApplicationContext().getSystemService(
                 Context.WINDOW_SERVICE);//用于设置悬浮框来达到最上层按钮，因为需要权限申请，太麻烦，已经舍弃
         WindowManager.LayoutParams mWmParams = new WindowManager.LayoutParams();

@@ -3,14 +3,24 @@ package com.example.hustholetest1.view.homescreen.forest;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.PointF;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.FloatMath;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,23 +34,80 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.model.MyImageView;
+import com.example.hustholetest1.model.ZoomImageView;
 import com.githang.statusbar.StatusBarCompat;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.File;
 
-public class CropPictureActivity extends AppCompatActivity {
+public class CropPictureActivity extends AppCompatActivity implements View.OnTouchListener{
     private static final int REQUEST_CODE_GALLERY = 0x10;// 图库选取图片标识请求码
     private static final int CROP_PHOTO = 0x12;// 裁剪图片标识请求码
     private static final int STORAGE_PERMISSION = 0x20;// 动态申请存储权限标识
 
-    //@BindView(R.id.iv_pic)ImageView iv_pic;// imageView控件
+
+
+    /**
+     * 控件宽度
+     */
+    private int mWidth;
+    /**
+     * 控件高度
+     */
+    private int mHeight;
+    /**
+     * 拿到src的图片
+     */
+    private Drawable mDrawable;
+    /**
+     * 图片宽度（使用前判断mDrawable是否null）
+     */
+    private int mDrawableWidth;
+    /**
+     * 图片高度（使用前判断mDrawable是否null）
+     */
+    private int mDrawableHeight;
+
+    /**
+     * 初始化缩放值
+     */
+    private float mScale;
+
+    /**
+     * 双击图片的缩放值
+     */
+
+
+
+
 
     private File imageFile = null;// 声明File对象
     private Uri imageUri = null;// 裁剪后的图片uri
     private String path = "";
     private Button yes,no;
     private TextView titleBarTitle;
-    private ImageView photo,titleBarBack;
+    private MyImageView photo;
+    private ImageView  titleBarBack,mRevolve,mCropPicture;
+    private AVLoadingIndicatorView mAVLoadingIndicatorView;
+
+
+
+    private Matrix matrix = new Matrix();
+    private Matrix savedMatrix = new Matrix();
+
+    // 不同状态的表示：
+    private static final int NONE = 0;
+    private static final int DRAG = 1;
+    private static final int ZOOM = 2;
+    private int mode = NONE;
+
+    // 定义第一个按下的点，两只接触点的重点，以及出事的两指按下的距离：
+    private PointF startPoint = new PointF();
+    private PointF midPoint = new PointF();
+    private float oriDis = 1f;
+    private int number;
+    private Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +119,9 @@ public class CropPictureActivity extends AppCompatActivity {
         if(getSupportActionBar()!=null){
             getSupportActionBar().hide();
         }
+        mAVLoadingIndicatorView=(AVLoadingIndicatorView)findViewById(R.id.titlebargreen_AVLoadingIndicatorView);
+        mAVLoadingIndicatorView.hide();
+        mAVLoadingIndicatorView.setVisibility(View.GONE);
         titleBarTitle=(TextView)findViewById(R.id.tv_titlebargreen_title);
         titleBarTitle.setText("裁剪图片");
         titleBarBack=(ImageView) findViewById(R.id.iv_titlebargreen_back);
@@ -65,7 +135,23 @@ public class CropPictureActivity extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gallery();
+
+                mAVLoadingIndicatorView.setVisibility(View.VISIBLE);
+                mAVLoadingIndicatorView.show();
+                titleBarTitle.setText("裁剪中...");
+                try {
+                    Bitmap bitmap1=captureView(photo);
+                    photo.init(CropPictureActivity.this);
+                    photo.setImageBitmap(bitmap1);
+                    ApplyForestActivity.setIcon(bitmap1);
+                    titleBarTitle.setText("裁剪成功");
+                    finish();
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                    mAVLoadingIndicatorView.hide();
+                    mAVLoadingIndicatorView.setVisibility(View.GONE);
+                    titleBarTitle.setText("裁剪失败");
+                }
             }
         });
      no=(Button)findViewById(R.id.btn_croppicture_no);
@@ -75,31 +161,66 @@ public class CropPictureActivity extends AppCompatActivity {
           finish();
         }
     });
-     photo=(ImageView) findViewById(R.id.iv_croppicture_photo);
+     mCropPicture=(ImageView)findViewById(R.id.iv_croppicture_photo2);
+     mRevolve=(ImageView)findViewById(R.id.iv_croppicture_revolve);
+     mRevolve.setOnClickListener(new View.OnClickListener() {
+         @Override
+         public void onClick(View view) {
+
+             if(bitmap!=null) {
+                 bitmap = rotateBmp(bitmap, 90);
+                 photo=null;
+                 photo=(MyImageView) findViewById(R.id.iv_croppicture_photo);
+                 photo.init(CropPictureActivity.this);
+                 photo.setImageBitmap(bitmap);
+             }
+           /*
+             RotateAnimation rotate;
+
+             rotate =new RotateAnimation(number*90f,number*90f+90f, Animation.RELATIVE_TO_SELF,
+                     0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+             rotate.setDuration(200);
+             rotate.setFillAfter(true);
+             number++;
+             photo.startAnimation(rotate);
+
+
+            */
+
+         }
+     });
+     photo=(MyImageView) findViewById(R.id.iv_croppicture_photo);
+        //photo.setOnTouchListener(this);
+        gallery();
 }
-    /**
-     * 单击事件绑定
-     */
-    /*@OnClick({R.id.btn_gallery})
-    public void doClick(View view){
 
-        switch (view.getId()){
-
-            case R.id.btn_gallery:// 图库选择
+    public static Bitmap captureView(View view) throws Throwable {
+        Bitmap bm = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        view.draw(new Canvas(bm));
+        return bm;
+    }
 
 
-                break;
+    public static Bitmap rotateBmp(Bitmap b, int degrees) {
+        if (degrees != 0 && b != null) {
+            Matrix m = new Matrix();
+            m.setRotate(degrees, (float) b.getWidth() / 2,
+                    (float) b.getHeight() / 2);
+            try {
+                Bitmap b2 = Bitmap.createBitmap(b, 0, 0, b.getWidth(),
+                        b.getHeight(), m, true);
+                if (b != b2) {
+                    b.recycle();
+                    b = b2;
+                }
+            } catch (OutOfMemoryError ex) {
 
+
+            }
         }
-
-    }*/
-
-
-    /**
-     * 图库选择图片
-     */
+        return b;
+    }
     private void gallery() {
-
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // 以startActivityForResult的方式启动一个activity用来获取返回的结果
         startActivityForResult(intent, REQUEST_CODE_GALLERY);
@@ -123,35 +244,37 @@ public class CropPictureActivity extends AppCompatActivity {
 
                     Uri uri = data.getData();// 获取图片的uri
 
-                    Intent intent_gallery_crop = new Intent("com.android.camera.action.CROP");
-                    intent_gallery_crop.setDataAndType(uri, "image/*");
+                    String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                    Cursor cursor = getContentResolver().query(uri,
+                            filePathColumn, null, null, null);// 从系统表中查询指定Uri对应的照片
+                    cursor.moveToFirst();
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    String picturePath = cursor.getString(columnIndex); // 获取照片路径
+                    cursor.close();
+                    bitmap = BitmapFactory.decodeFile(picturePath);
+                    photo.setImageBitmap(bitmap);
 
-                    // 设置裁剪
-                    intent_gallery_crop.putExtra("crop", "true");
-                    intent_gallery_crop.putExtra("scale", true);
-                    // aspectX aspectY 是宽高的比例
-                    intent_gallery_crop.putExtra("aspectX", 1);
-                    intent_gallery_crop.putExtra("aspectY", 1);
-                    // outputX outputY 是裁剪图片宽高
-                    intent_gallery_crop.putExtra("outputX", 400);
-                    intent_gallery_crop.putExtra("outputY", 400);
+/*
+                    mWidth = photo.getWidth();
+                     mHeight = photo.getHeight();
 
-                    intent_gallery_crop.putExtra("return-data", false);
+                    //通过getDrawable获得Src的图片
+                     mDrawable = photo.getDrawable();
+                    if (mDrawable == null)
+                        return;
+                     mDrawableWidth = mDrawable.getIntrinsicWidth();
+                     mDrawableHeight = mDrawable.getIntrinsicHeight();
 
-                    // 创建文件保存裁剪的图片
-                    createImageFile();
-                    imageUri = Uri.fromFile(imageFile);
+                    initImageViewSize();
+                    moveToCenter();
 
-                    if (imageUri != null){
-                        intent_gallery_crop.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                        intent_gallery_crop.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
-                    }
 
-                    startActivityForResult(intent_gallery_crop, CROP_PHOTO);
+ */
+
 
                     break;
 
-                case CROP_PHOTO:// 裁剪图片
+               /* case CROP_PHOTO:// 裁剪图片
 
                     try{
 
@@ -165,10 +288,123 @@ public class CropPictureActivity extends AppCompatActivity {
 
                     break;
 
+
+                */
             }
 
         }
     }
+
+
+
+    private void initImageViewSize() {
+        if (mDrawable == null)
+            return;
+
+        // 缩放值
+        float scale = 1.0f;
+        // 图片宽度大于控件宽度，图片高度小于控件高度
+        if (mDrawableWidth > mWidth && mDrawableHeight < mHeight)
+            //scale = mWidth * 1.0f / mDrawableWidth;
+            scale=mHeight*1.0f/mDrawableHeight;
+            // 图片高度度大于控件宽高，图片宽度小于控件宽度
+        else if (mDrawableHeight > mHeight && mDrawableWidth < mWidth)
+            //scale = mHeight * 1.0f / mDrawableHeight;
+            scale=mWidth*1.0f/mDrawableWidth;
+            // 图片宽度大于控件宽度，图片高度大于控件高度
+        else if (mDrawableHeight > mHeight && mDrawableWidth > mWidth)
+            scale = Math.max(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
+            // 图片宽度小于控件宽度，图片高度小于控件高度
+        else if (mDrawableHeight < mHeight && mDrawableWidth < mWidth)
+            scale = Math.max(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
+        mScale = scale;
+        //mMaxScale = mScale * 8.0f;
+       // mMinScale = mScale * 0.5f;
+    }
+
+    /**
+     * 移动控件中间位置
+     */
+    private void moveToCenter() {
+        final float dx = mWidth / 2 - mDrawableWidth / 2;
+        final float dy = mHeight / 2 - mDrawableHeight / 2;
+        matrix = new Matrix();
+        // 平移至中心
+        matrix.postTranslate(dx, dy);
+        // 以控件中心作为缩放
+        matrix.postScale(mScale, mScale, mWidth / 2, mHeight / 2);
+        photo.setImageMatrix(matrix);
+    }
+
+
+
+
+
+
+
+    // 计算两个触摸点之间的距离
+    private float distance(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        return Float.valueOf(String.valueOf(Math.sqrt(x * x + y * y))) ;
+    }
+
+    // 计算两个触摸点的中点
+    private PointF middle(MotionEvent event) {
+        float x = event.getX(0) + event.getX(1);
+        float y = event.getY(0) + event.getY(1);
+        return new PointF(x / 2, y / 2);
+    }
+
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        ImageView view = (ImageView) v;
+        switch (event.getAction() & MotionEvent.ACTION_MASK) {
+            // 单指
+            case MotionEvent.ACTION_DOWN:
+                matrix.set(view.getImageMatrix());
+                savedMatrix.set(matrix);
+                startPoint.set(event.getX(), event.getY());
+                mode = DRAG;
+                break;
+            // 双指
+            case MotionEvent.ACTION_POINTER_DOWN:
+                oriDis = distance(event);
+                if (oriDis > 10f) {
+                    savedMatrix.set(matrix);
+                    midPoint = middle(event);
+                    mode = ZOOM;
+                }
+                break;
+            // 手指放开
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                mode = NONE;
+                break;
+            // 单指滑动事件
+            case MotionEvent.ACTION_MOVE:
+                if (mode == DRAG) {
+                    // 是一个手指拖动
+                    matrix.set(savedMatrix);
+                    matrix.postTranslate(event.getX() - startPoint.x, event.getY() - startPoint.y);
+                } else if (mode == ZOOM) {
+                    // 两个手指滑动
+                    float newDist = distance(event);
+                    if (newDist > 10f) {
+                        matrix.set(savedMatrix);
+                        float scale = newDist / oriDis;
+                        matrix.postScale(scale, scale, midPoint.x, midPoint.y);
+                    }
+                }
+                break;
+        }
+        // 设置ImageView的Matrix
+        view.setImageMatrix(matrix);
+        return true;
+    }
+
+
 
     /**
      * Android6.0后需要动态申请危险权限

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="20dp"
+    app:cardCornerRadius="10dp">
+    <RelativeLayout
+        android:id="@+id/rv_follow"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="10dp">
+
+        <TextView
+            android:id="@+id/hole_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/GrayScale_0" />
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/hole_id"
+            android:text="2021-08-05"/>
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/date"
+            android:ellipsize="end"
+            android:lineSpacingExtra="4dp"
+            android:maxLines="5"
+            android:textColor="@color/GrayScale_0"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/inform"
+            android:layout_width="@dimen/dp_158"
+            android:layout_height="@dimen/dp_48"
+            android:clickable="true"
+            android:layout_alignEnd="@id/content"
+            android:layout_alignBottom="@id/content"
+            android:background="@drawable/more"
+            android:elevation="20dp">
+
+            <ImageView
+                android:id="@+id/iv_itemhomepage_moreicon"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/vector4" />
+
+            <TextView
+                android:id="@+id/tv_itemhomepage_moretext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="举报"
+                android:textColor="@color/GrayScale_20"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_moreicon"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <RelativeLayout
+            android:layout_below="@id/content"
+            android:layout_margin="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="20dp">
+            <ImageView
+                android:id="@+id/img_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/inactive"/>
+            <TextView
+                android:id="@+id/text_up"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:text="10"
+                android:layout_toEndOf="@id/img_up"/>
+            <ImageView
+                android:id="@+id/img_talk"
+                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/text_up"
+                app:srcCompat="@mipmap/inactive_2"/>
+            <TextView
+                android:id="@+id/text_talk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="12"
+                android:layout_toEndOf="@id/img_talk"/>
+            <ImageView
+                android:id="@+id/img_star"
+                android:layout_marginLeft="20dp"
+                android:layout_toEndOf="@id/text_talk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/inactive_3"/>
+            <TextView
+                android:id="@+id/text_star"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3"
+                android:layout_toEndOf="@id/img_star"/>
+            <ImageView
+                android:id="@+id/threePoint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                app:srcCompat="@mipmap/threepoint"/>
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

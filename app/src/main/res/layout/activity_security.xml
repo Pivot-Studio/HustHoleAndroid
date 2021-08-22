@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="10dp">
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="@color/HH_BandColor_3"
+        android:text="安全"/>
+    <TextView
+        android:id="@+id/tv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/GrayScale_0"
+        app:layout_constraintTop_toBottomOf="@id/tv1"
+       app:layout_constraintStart_toStartOf="parent"
+        android:text="记录自己的树洞"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tv2"
+        app:layout_constraintEnd_toStartOf="parent"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="324dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="在此选项关闭期间，新发布的树洞不会显示在“我的树洞”中，并且不会随着再次开启而出现，该树洞被评论时也不会收到通知。" />
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/st_security"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:buttonTint="@color/HH_BandColor_3"
+            android:enabled="true" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">-->
+    <!--    <PreferenceCategory android:title="安全">-->
+    <!--        <SwitchPreference-->
+    <!--            android:defaultValue="true"-->
+    <!--            android:key="example_switch"-->
+    <!--            android:summary="在此选项关闭期间，新发布的树洞不会显示在“我的树洞”中，并且不会随着再次开启而出现，该树洞被评论时也不会收到通知。"-->
+    <!--            android:title="记录自己的树洞" />-->
+    <!--    </PreferenceCategory>-->
+    <!--</PreferenceScreen>-->

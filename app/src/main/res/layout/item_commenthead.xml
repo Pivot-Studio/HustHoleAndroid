@@ -150,6 +150,7 @@
         android:layout_width="@dimen/dp_25"
         android:layout_height="@dimen/dp_25"
         android:layout_marginEnd="22dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/tv_commenthead_frame"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@mipmap/threepoint" />
@@ -157,7 +158,7 @@
     <TextView
         android:id="@+id/tv_commenthead_frame"
         android:layout_width="match_parent"
-        android:layout_height="34dp"
+        android:layout_height="@dimen/dp_34"
         android:background="@color/GrayScale_95"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cl_commenthead_thumbup" />
@@ -174,16 +175,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_commenthead_frame" />
 
-    <ImageView
-        android:id="@+id/iv_commenthead_changesequence"
-        android:layout_width="@dimen/dp_20"
-        android:layout_height="@dimen/dp_20"
-        android:layout_marginEnd="22dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_commenthead_changesequence"
+        android:layout_width="@dimen/dp_50"
+        android:layout_height="@dimen/dp_34"
         app:layout_constraintBottom_toBottomOf="@+id/tv_commenthead_frame"
         app:layout_constraintEnd_toEndOf="@+id/tv_commenthead_frame"
-        app:layout_constraintTop_toTopOf="@+id/tv_commenthead_frame"
-        app:srcCompat="@mipmap/group111" />
+        app:layout_constraintTop_toTopOf="@+id/tv_commenthead_frame">
 
+        <ImageView
+            android:id="@+id/iv_commenthead_changesequence"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/group111" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_commenthead_morelist"
         android:layout_width="@dimen/dp_158"
