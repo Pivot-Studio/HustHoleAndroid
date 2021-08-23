@@ -84,6 +84,14 @@ public class HomeScreenActivity extends AppCompatActivity {
         //int bb=getActivity().getResources().getDisplayMetrics().densityDpi;
         //mTabRadioGroup = findViewById(R.id.linearLayout3);
 
+        mFragments = new ArrayList<>(4);
+        mFragments.add(HomePageFragment.newInstance());
+        mFragments.add(ForestFragment.newInstance());
+        mFragments.add(MessageFragment.newInstance());
+        mFragments.add(MineFragment.newInstance());
+
+
+
 
         imageView1=(ImageView)findViewById(R.id.iv_homescreen_hompageicon);
         imageView2=(ImageView)findViewById(R.id.iv_homescreen_foresticon);
@@ -154,15 +162,11 @@ public class HomeScreenActivity extends AppCompatActivity {
         //final AlertDialog.Builder  mBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
        // final AlertDialog.Builder  mBuilder = new AlertDialog.Builder(this);
 
-        mFragments = new ArrayList<>(4);
-        mFragments.add(HomePageFragment.newInstance());
-        mFragments.add(ForestFragment.newInstance());
-        mFragments.add(MessageFragment.newInstance());
-        mFragments.add(MineFragment.newInstance());
+
         SharedPreferences editor = HomeScreenActivity.this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
         Boolean condition = editor.getBoolean("iffirstlogin", true);
         String token=editor.getString("token","");
-        if(condition) {
+        //if(condition) {
             View mView = View.inflate(getApplicationContext(), R.layout.dialog_homepage, null);
             // mView.setBackgroundResource(R.drawable.homepage_notice);
             //设置自定义的布局
@@ -218,7 +222,7 @@ public class HomeScreenActivity extends AppCompatActivity {
             }
 
 
-        }
+        //}
 
 
 

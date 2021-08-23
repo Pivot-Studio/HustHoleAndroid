@@ -15,7 +15,7 @@
     android:visibility="visible">
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/system_notification_image"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="20dp"
@@ -28,10 +28,10 @@
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:orientation="vertical"
-            android:layout_toRightOf="@id/imageView9"
-            android:layout_alignBottom="@id/imageView9">
+            android:layout_toRightOf="@id/system_notification_image"
+            android:layout_alignBottom="@id/system_notification_image">
             <TextView
-                android:id="@+id/textView19"
+                android:id="@+id/system_notification_tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -39,19 +39,22 @@
                 android:text="@string/page3fragment_1"
                 android:textColor="@color/GrayScale_20"
                 android:textSize="15sp"
-                app:layout_constraintStart_toEndOf="@+id/imageView9" />
+                app:layout_constraintStart_toEndOf="@+id/system_notification_image" />
 
             <TextView
-                android:id="@+id/textView20"
-                android:layout_width="wrap_content"
+                android:id="@+id/latest_system_notification"
+                android:layout_width="@dimen/dp_264"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="11dp"
                 android:layout_gravity="bottom"
-                android:text="TextView"
+                android:text=""
                 android:textColor="@color/GrayScale_50"
                 android:textSize="10sp"
-                app:layout_constraintBottom_toBottomOf="@+id/imageView9" />
+                android:ellipsize="end"
+                android:lineSpacingExtra="1sp"
+                android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="@+id/system_notification_image" />
         </LinearLayout>
 </RelativeLayout>
     <View

@@ -58,7 +58,9 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import kotlin.Result;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -169,6 +171,7 @@ public class CommentListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(mOnlyRefreshCondition==false) {
+                    title.setText("加载中...");
                     mAVLoadingIndicatorView.setVisibility(View.VISIBLE);
                     mAVLoadingIndicatorView.show();
                     mOnlyRefreshCondition=true;
@@ -181,7 +184,6 @@ public class CommentListActivity extends AppCompatActivity {
                         Drawable homepressed = getResources().getDrawable(R.mipmap.vector8, null);
                         homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
                         mOnlyMaster.setCompoundDrawables(homepressed, null, null, null);
-
                         replyUpdate();
                     } else {
                         //mOnlyMaster.setWidth(64);
@@ -229,36 +231,54 @@ public class CommentListActivity extends AppCompatActivity {
                     new Thread(new Runnable() {//加载纵向列表标题
                         @Override
                         public void run() {
-
                             Call<ResponseBody> call = request.replies_add("http://hustholetest.pivotstudio.cn/api/replies?hole_id=" + data[6] + "&content=" + mPublishReplyEt.getText().toString() + "&wanted_local_reply_id=" + reply_to_who);//进行封装
                             Log.d("", "http://hustholetest.pivotstudio.cn/api/replies?hole_id=" + data[6] + "&content=" + mPublishReplyEt.getText().toString() + "&wanted_local_reply_id=" + reply_to_who);
                             call.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    String json = "null";
-                                    try {
-                                        if (response.body() != null) {
-                                            json = response.body().string();
-                                        }
-                                        Log.e(TAG, json + "");
-                                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                        // 隐藏软键盘
-                                        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-                                        mPublishReplyEt.setText("");
-                                        mPublishReplyEt.setHint("评价洞主：");
-                                        reply_to_who = "-1";
-                                        mStartingLoadId=0;
-                                        mDetailReplyList=new ArrayList<>();
-                                         if(mIfOnlyCondition) {
-                                                 replyUpdate();
 
-                                         }else{
-                                          hotReplyUpdate();
-                                         }
+                                   if(response.code()==200) {
+                                       String json = "null";
+                                       try {
+                                           if (response.body() != null) {
+                                               json = response.body().string();
+                                           }
+                                           Log.e(TAG, json + "");
+                                           InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                           // 隐藏软键盘
+                                           imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                                           mPublishReplyEt.setText("");
+                                           mPublishReplyEt.setHint("评价洞主：");
+                                           reply_to_who = "-1";
+                                           mStartingLoadId = 0;
+                                           mDetailReplyList = new ArrayList<>();
+                                           if (mIfOnlyCondition) {
+                                               replyUpdate();
+                                           } else {
+                                               hotReplyUpdate();
+                                           }
 
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
+                                       } catch (IOException e) {
+                                           e.printStackTrace();
+                                       }
+                                   }else{
+                                       String json = "null";
+                                       String returncondition = null;
+                                       if (response.errorBody() != null) {
+                                           try {
+                                               json = response.errorBody().string();
+                                               JSONObject jsonObject = new JSONObject(json);
+                                               returncondition = jsonObject.getString("msg");
+                                               Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                           } catch (IOException | JSONException e) {
+                                               e.printStackTrace();
+                                           }
+                                       }else{
+                                           Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                       }
+
+
+                                   }
                                 }
 
                                 @Override
@@ -282,6 +302,7 @@ public class CommentListActivity extends AppCompatActivity {
 
         back = (ImageView) findViewById(R.id.iv_titlebargreen_back);
         title = (TextView) findViewById(R.id.tv_titlebargreen_title);
+
 
 
         TokenInterceptor.getContext(CommentListActivity.this);
@@ -345,32 +366,44 @@ public class CommentListActivity extends AppCompatActivity {
                call.enqueue(new Callback<ResponseBody>() {
                    @Override
                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                       String json = "null";
-                       try {
-                           if (response.body() != null) {
-                               json = response.body().string();
+                       if(response.code()==200) {
+                           String json = "null";
+                           try {
+                               if (response.body() != null) {
+                                   json = response.body().string();
+                               }
+                               JSONObject jsonObject = new JSONObject(json);
+                               jsonArray2 = jsonObject.getJSONArray("msg");
+                               replyUpdate();
+                           } catch (IOException | JSONException e) {
+                               e.printStackTrace();
                            }
-                           Log.e(TAG, json + "");
+                       }else{
+                           FailureAction();
+                           String json = "null";
+                           String returncondition = null;
+                           if (response.errorBody() != null) {
+                               try {
+                                   json = response.errorBody().string();
+                                   JSONObject jsonObject = new JSONObject(json);
+                                   returncondition = jsonObject.getString("msg");
+                                   Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                               } catch (IOException | JSONException e) {
+                                   e.printStackTrace();
+                               }
 
-                           JSONObject jsonObject = new JSONObject(json);
-                           jsonArray2 = jsonObject.getJSONArray("msg");
-                           //mHotReplyNumber=jsonArray2.length();
-                           replyUpdate();
-                              // new DownloadTask().execute();
-
-                           //mDetailReplyList = new String[jsonArray.length()][12];
-                           // if(a==1){
-                           //    refreshlayout1.finishRefresh();
-                           //}
-                           //new DownloadTask().execute();
-                       } catch (IOException | JSONException e) {
-                           e.printStackTrace();
+                           }else{
+                               Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                           }
                        }
                    }
 
                    @Override
                    public void onFailure(Call<ResponseBody> call, Throwable tr) {
                        Toast.makeText(CommentListActivity.this,"请检查网络",Toast.LENGTH_SHORT).show();
+                       FailureAction();
+                   }
+                   private void FailureAction(){
                        mAVLoadingIndicatorView.hide();
                        mAVLoadingIndicatorView.setVisibility(View.GONE);
                        title.setText("加载失败");
@@ -390,13 +423,8 @@ public class CommentListActivity extends AppCompatActivity {
                                    return false;
                                }
                            });
-                           if(mIfFirstLoad) {
-                               //mCommentlistRv.setAdapter(mReplyAdapter);
-                               // mIfFirstLoad=false;
-                           }else{
-                               // mReplyAdapter.notifyDataSetChanged();
-                           }
-                       } else if(mLoadMoreCondotionRl!=null){
+                           if(mIfFirstLoad) {}else{}
+                       }else if(mLoadMoreCondotionRl!=null){
                            mLoadMoreCondotionRl.finishLoadMore();
                            mLoadMoreCondotionRl=null;
                            mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
@@ -407,18 +435,10 @@ public class CommentListActivity extends AppCompatActivity {
                        }else if(mPrestrainCondition==true){
                            mPrestrainCondition=false;
                            mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
-                           //mReplyAdapter.notifyDataSetChanged();
                        }else{
-                           // mIfFirstLoad=false;
-                           //mReplyAdapter=new ReplyAdapter();
-                           //mCommentlistRv.setAdapter(mReplyAdapter);
                        }
 
-
-
-
                    }
-
 
                });
 
@@ -454,143 +474,132 @@ public class CommentListActivity extends AppCompatActivity {
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    String json = "null";
-                    try {
-                        if (response.body() != null) {
-                            json = response.body().string();
-                        }
-                        Log.e(TAG, json + "");
-                        if(mRefreshConditionRl!=null){
-                            mDetailReplyList=new ArrayList<>();
-                        }
-                        if(order_condition){
-                            order_condition=false;
-                            mAVLoadingIndicatorView.setVisibility(View.GONE);
-                            mAVLoadingIndicatorView.hide();
-                            //title.setText("#"+data[6]);
-                            mDetailReplyList=new ArrayList<>();
-                        }
-                        if(mOnlyRefreshCondition){
-                            mOnlyRefreshCondition=false;
-                            mAVLoadingIndicatorView.setVisibility(View.GONE);
-                            mAVLoadingIndicatorView.hide();
-                            //title.setText("#"+data[6]);
-                            //order_condition=false;
-                            mDetailReplyList=new ArrayList<>();
-                        }
-                        if(mDeleteCondition){
-                            mDeleteCondition=false;
-                            mAVLoadingIndicatorView.setVisibility(View.GONE);
-                            mAVLoadingIndicatorView.hide();
-                            mDetailReplyList=new ArrayList<>();
-                        }
-                        JSONObject jsonObject = new JSONObject(json);
+                    if(response.code()==200) {
+                        String json = "null";
+                        try {
+                            if (response.body() != null) {
+                                json = response.body().string();
+                            }
+                            Log.e(TAG, json + "");
+                            if (mRefreshConditionRl != null) {
+                                mDetailReplyList = new ArrayList<>();
+                            }
+                            if (order_condition) {
+                                order_condition = false;
+                                mAVLoadingIndicatorView.setVisibility(View.GONE);
+                                mAVLoadingIndicatorView.hide();
+                                //title.setText("#"+data[6]);
+                                mDetailReplyList = new ArrayList<>();
+                            }
+                            if (mOnlyRefreshCondition) {
+                                mOnlyRefreshCondition = false;
+                                mAVLoadingIndicatorView.setVisibility(View.GONE);
+                                mAVLoadingIndicatorView.hide();
+                                mDetailReplyList = new ArrayList<>();
+                            }
+                            if (mDeleteCondition) {
+                                mDeleteCondition = false;
+                                mAVLoadingIndicatorView.setVisibility(View.GONE);
+                                mAVLoadingIndicatorView.hide();
+                                mDetailReplyList = new ArrayList<>();
+                            }
+                            JSONObject jsonObject = new JSONObject(json);
 
-                        if(json.equals("{\"msg\":[]}")&&mLoadMoreCondotionRl!=null){
-                            Toast.makeText(CommentListActivity.this,"加载到底辣",Toast.LENGTH_SHORT).show();
-                            mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
-                            //if(mLoadMoreCondotionRl!=null){
+                            if (json.equals("{\"msg\":[]}") && mLoadMoreCondotionRl != null) {
+                                Toast.makeText(CommentListActivity.this, "加载到底辣", Toast.LENGTH_SHORT).show();
+                                mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                //if(mLoadMoreCondotionRl!=null){
                                 mLoadMoreCondotionRl.finishLoadMore();
-                                mLoadMoreCondotionRl=null;
-                           //}
-                        }else{
-                            jsonArray = jsonObject.getJSONArray("msg");
-                            new DownloadTask().execute();
+                                mLoadMoreCondotionRl = null;
+                                //}
+                            } else {
+                                jsonArray = jsonObject.getJSONArray("msg");
+                                new DownloadTask().execute();
 
+                            }
+                            mAVLoadingIndicatorView.hide();
+                            mAVLoadingIndicatorView.setVisibility(View.GONE);
+                            //mDetailReplyList = new String[jsonArray.length()][12];
+                            // if(a==1){
+                            //    refreshlayout1.finishRefresh();
+                            //}
+                            //new DownloadTask().execute();
+                        } catch (IOException | JSONException e) {
+                            e.printStackTrace();
                         }
-                        mAVLoadingIndicatorView.hide();
-                        mAVLoadingIndicatorView.setVisibility(View.GONE);
-                        //mDetailReplyList = new String[jsonArray.length()][12];
-                       // if(a==1){
-                        //    refreshlayout1.finishRefresh();
-                        //}
-                        //new DownloadTask().execute();
-                    } catch (IOException | JSONException e) {
-                        e.printStackTrace();
+                    }else{
+                        String json = "null";
+                        String returncondition = null;
+                        if (response.errorBody() != null) {
+                            try {
+                                json = response.errorBody().string();
+                                JSONObject jsonObject = new JSONObject(json);
+                                returncondition = jsonObject.getString("msg");
+                                Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                            } catch (IOException | JSONException e) {
+                                e.printStackTrace();
+                            }
+                            FailureAction();
+                        }else{
+                            Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
-
-                    if(mIfOnlyCondition&&mOnlyRefreshCondition) {
-                        mOnlyRefreshCondition=false;
-                        mIfOnlyCondition=false;
-                        mIfOnlyCondition = false;
-                        mOnlyMaster.setPadding(0, 0, 0, 0);
-                        //button.setPadding(-30,-5,-6,-6);
-                        //button=(Button)view.findViewById(R.id.rectangle_4);
-                        // mOnlyMaster.setBackground(getDrawable(R.drawable.forest_button_white));
-                        // mOnlyMaster.setText("已加入");
-                        // mOnlyMaster.setGravity(Gravity.CENTER_VERTICAL);
-                        mOnlyMaster.setCompoundDrawables(null, null, null, null);
-                        mOnlyMaster.setTextColor(getResources().getColor(R.color.GrayScale_50));
-                    }else if(mIfOnlyCondition==false&&mOnlyRefreshCondition){
-                        mOnlyRefreshCondition=false;
-                        mIfOnlyCondition = true;
-                        mOnlyMaster.setPadding(30, 5, 6, 6);
-                        //mOnlyMaster.setBackground(getDrawable(R.drawable.forest_button));
-                        //mOnlyMaster.setText("加入");
-                        mOnlyMaster.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
-                        Drawable homepressed = getResources().getDrawable(R.mipmap.vector8, null);
-                        homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
-                        mOnlyMaster.setCompoundDrawables(homepressed, null, null, null);
-                    }
-
-
-
-
-
                     Toast.makeText(CommentListActivity.this,R.string.network_loadfailure,Toast.LENGTH_SHORT).show();
-                    mAVLoadingIndicatorView.hide();
-                    mAVLoadingIndicatorView.setVisibility(View.GONE);
-                    title.setText("加载失败");
-
-                    if(order_condition){
-                        order_condition=false;
-
-                    }
-                    if(mDeleteCondition){
-                        mDeleteCondition=false;
-                    }
-                    if(mRefreshConditionRl !=null){
-                        mRefreshConditionRl.finishRefresh();
-                        mRefreshConditionRl =null;
-                        mCommentlistRv.setOnTouchListener(new View.OnTouchListener() {
-                            @Override
-                            public boolean onTouch(View v, MotionEvent event) {
-                                return false;
-                            }
-                        });
-                        if(mIfFirstLoad) {
-                            //mCommentlistRv.setAdapter(mReplyAdapter);
-                           // mIfFirstLoad=false;
-                        }else{
-                           // mReplyAdapter.notifyDataSetChanged();
-                        }
-                    } else if(mLoadMoreCondotionRl!=null){
-                        mLoadMoreCondotionRl.finishLoadMore();
-                        mLoadMoreCondotionRl=null;
-                        mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
-                        //mReplyAdapter.notifyDataSetChanged();
-                        if(mPrestrainCondition==true){
-                            mPrestrainCondition=false;
-                        }
-                    }else if(mPrestrainCondition==true){
-                        mPrestrainCondition=false;
-                        mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
-                        //mReplyAdapter.notifyDataSetChanged();
-                    }else{
-                       // mIfFirstLoad=false;
-                        //mReplyAdapter=new ReplyAdapter();
-                        //mCommentlistRv.setAdapter(mReplyAdapter);
-                    }
-
-
-
-
+                    FailureAction();
                 }
+              private void FailureAction(){
+                  mAVLoadingIndicatorView.hide();
+                  mAVLoadingIndicatorView.setVisibility(View.GONE);
+                  title.setText("加载失败");
+                  if(mIfOnlyCondition&&mOnlyRefreshCondition) {
+                      mOnlyRefreshCondition=false;
+                      mIfOnlyCondition=false;
+                      mIfOnlyCondition = false;
+                      mOnlyMaster.setPadding(0, 0, 0, 0);
+                      mOnlyMaster.setCompoundDrawables(null, null, null, null);
+                      mOnlyMaster.setTextColor(getResources().getColor(R.color.GrayScale_50));
+                  }else if(mIfOnlyCondition==false&&mOnlyRefreshCondition){
+                      mOnlyRefreshCondition=false;
+                      mIfOnlyCondition = true;
+                      mOnlyMaster.setPadding(30, 5, 6, 6);
+                      mOnlyMaster.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
+                      Drawable homepressed = getResources().getDrawable(R.mipmap.vector8, null);
+                      homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
+                      mOnlyMaster.setCompoundDrawables(homepressed, null, null, null);
+                  }
+                  if(order_condition){
+                      order_condition=false;
 
+                  }
+                  if(mDeleteCondition){
+                      mDeleteCondition=false;
+                  }
+                  if(mRefreshConditionRl !=null){
+                      mRefreshConditionRl.finishRefresh();
+                      mRefreshConditionRl =null;
+                      mCommentlistRv.setOnTouchListener(new View.OnTouchListener() {
+                          @Override
+                          public boolean onTouch(View v, MotionEvent event) {
+                              return false;
+                          }
+                      });
+                  } else if(mLoadMoreCondotionRl!=null){
+                      mLoadMoreCondotionRl.finishLoadMore();
+                      mLoadMoreCondotionRl=null;
+                      mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
+                      if(mPrestrainCondition==true){
+                          mPrestrainCondition=false;
+                      }
+                  }else if(mPrestrainCondition==true){
+                      mPrestrainCondition=false;
+                      mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
+                  }else{
+                  }
+              }
 
             });
 
@@ -790,13 +799,113 @@ public class CommentListActivity extends AppCompatActivity {
                     public void onClick(View v){
                         if(CheckingToken.IfTokenExist()){
                             RemoveOnScrollListener();
-                            //morewhat.setVisibility(View.INVISIBLE);
-                           // more_condition = false;
                             if (data[9].equals("true")) {
-                                CommenRequestManager.DeleteRequest(CommentListActivity.this, request, data[6]);
-                                finish();
+                                new Thread(new Runnable() {//加载纵向列表标题
+                                    @Override
+                                    public void run() {
+                                        //Call<ResponseBody> call = request.delete_hole("http://hustholetest.pivotstudio.cn/api/holes/" + holenumber);//进行封装
+                                        Call<ResponseBody> call = request.delete_hole(data[6]);//进行封装
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                if (response.code() == 200) {
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    finish();
+                                                    if (response.body() != null) {
+                                                        try {
+                                                            json = response.body().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(CommentListActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }else{
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.errorBody() != null) {
+                                                        try {
+                                                            json = response.errorBody().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        //FailureAction();
+                                                    } else {
+                                                        Toast.makeText(CommentListActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(CommentListActivity.this, R.string.network_deletefailture, Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
+                                    }
+                                }).start();
                             } else {
-                                CommenRequestManager.ReportRequest(CommentListActivity.this, request, data[6], "-1");
+                                new Thread(new Runnable() {//加载纵向列表标题
+                                    @Override
+                                    public void run() {
+                                        //HashMap map = new HashMap();
+                                        //map.put("hole_id", data[6]);
+                                       // map.put("reply_local_id", -1);
+                                        Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" + data[6] + "&reply_local_id= -1");
+                                        //Call<ResponseBody> call = request.report(map);//进行封装
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                if(response.code()==200) {
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.body() != null) {
+                                                        try {
+                                                            json = response.body().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(CommentListActivity.this, "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }else{
+                                                    //followCondition = false;
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.errorBody() != null) {
+                                                        try {
+                                                            json = response.errorBody().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        //FailureAction();
+                                                    }else{
+                                                        Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(CommentListActivity.this, R.string.network_reportfailture, Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
+                                    }
+                                }).start();
                             }
                         }else{
                             Intent intent=new Intent(CommentListActivity.this, EmailVerifyActivity.class);
@@ -874,18 +983,38 @@ public class CommentListActivity extends AppCompatActivity {
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
-                                                    is_thumbup.setImageResource(R.mipmap.active);
-                                                    data[11] = "true";
-                                                    data[13] = (Integer.parseInt(data[13]) + 1) + "";
-                                                    thumbupCondition=false;
-                                                    thumbup_num.setText(data[13]);
+                                                    if(response.code()==200) {
+                                                        is_thumbup.setImageResource(R.mipmap.active);
+                                                        data[11] = "true";
+                                                        data[13] = (Integer.parseInt(data[13]) + 1) + "";
+                                                        thumbupCondition = false;
+                                                        thumbup_num.setText(data[13]);
+                                                    }else{
+                                                        FailureAction();
+                                                        String json = "null";
+                                                        String returncondition = null;
+                                                         if (response.errorBody() != null) {
+                                                             try {
+                                                                 json = response.errorBody().string();
+                                                                 JSONObject jsonObject = new JSONObject(json);
+                                                                 returncondition = jsonObject.getString("msg");
+                                                                 Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                             } catch (IOException | JSONException e) {
+                                                                 e.printStackTrace();
+                                                             }
+                                                        }else{
+                                                                Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
                                                 }
 
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                    thumbupCondition=false;
                                                     Toast.makeText(CommentListActivity.this, R.string.network_thumbupfailure_, Toast.LENGTH_SHORT).show();
+                                                    FailureAction();
+                                                }
+                                                private void FailureAction(){
+                                                    thumbupCondition=false;
                                                 }
                                             });
                                         }
@@ -899,17 +1028,39 @@ public class CommentListActivity extends AppCompatActivity {
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    is_thumbup.setImageResource(R.mipmap.inactive);
-                                                    data[11] = "false";
-                                                    data[13] = (Integer.parseInt(data[13]) - 1) + "";
-                                                    thumbupCondition=false;
-                                                    thumbup_num.setText(data[13]);
+                                                    if(response.code()==200) {
+                                                        is_thumbup.setImageResource(R.mipmap.inactive);
+                                                        data[11] = "false";
+                                                        data[13] = (Integer.parseInt(data[13]) - 1) + "";
+                                                        thumbupCondition = false;
+                                                        thumbup_num.setText(data[13]);
+                                                    }else{
+                                                        FailureAction();
+                                                        String json = "null";
+                                                        String returncondition = null;
+                                                        if (response.errorBody() != null) {
+                                                            try {
+                                                                json = response.errorBody().string();
+                                                                JSONObject jsonObject = new JSONObject(json);
+                                                                returncondition = jsonObject.getString("msg");
+                                                                Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                            } catch (IOException | JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+
+                                                        }else{
+                                                            Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
                                                 }
 
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                    thumbupCondition=false;
+                                                    FailureAction();
                                                     Toast.makeText(CommentListActivity.this, R.string.network_notthumbupfailure_, Toast.LENGTH_SHORT).show();
+                                                }
+                                                private void FailureAction(){
+                                                    thumbupCondition=false;
                                                 }
                                             });
                                         }
@@ -944,29 +1095,34 @@ public class CommentListActivity extends AppCompatActivity {
                                                             followCondition = false;
                                                             follow_num.setText(data[3]);
                                                         }else{
-                                                            followCondition = false;
+                                                            FailureAction();
+                                                            //followCondition = false;
                                                             String json = "null";
                                                             String returncondition = null;
-                                                            if (response.body() != null) {
+                                                            if (response.errorBody() != null) {
                                                                 try {
-                                                                    json = response.body().string();
+                                                                    json = response.errorBody().string();
                                                                     JSONObject jsonObject = new JSONObject(json);
                                                                     returncondition = jsonObject.getString("msg");
                                                                     Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
                                                                 } catch (IOException | JSONException e) {
                                                                     e.printStackTrace();
                                                                 }
+
                                                             }else{
-                                                                Toast.makeText(CommentListActivity.this,"过于频繁请求！",Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
                                                             }
                                                         }
                                                     }
 
                                                     @Override
                                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                        followCondition=false;
+                                                        FailureAction();
                                                         Toast.makeText(CommentListActivity.this, R.string.network_followfailure_, Toast.LENGTH_SHORT).show();
 
+                                                    }
+                                                    private void FailureAction(){
+                                                        followCondition=false;
                                                     }
                                                 });
                                             }
@@ -976,7 +1132,6 @@ public class CommentListActivity extends AppCompatActivity {
                                             @Override
                                             public void run() {
                                                 Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + data[6]);//进行封装
-                                                Log.e(TAG, "token2：");
                                                 call.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -987,29 +1142,35 @@ public class CommentListActivity extends AppCompatActivity {
                                                             followCondition = false;
                                                             follow_num.setText(data[3]);
                                                         }else{
-                                                            followCondition = false;
+                                                            FailureAction();
+                                                            //followCondition = false;
                                                             String json = "null";
                                                             String returncondition = null;
-                                                            if (response.body() != null) {
+                                                            if (response.errorBody() != null) {
                                                                 try {
-                                                                    json = response.body().string();
+                                                                    json = response.errorBody().string();
                                                                     JSONObject jsonObject = new JSONObject(json);
                                                                     returncondition = jsonObject.getString("msg");
                                                                     Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
                                                                 } catch (IOException | JSONException e) {
                                                                     e.printStackTrace();
                                                                 }
+
                                                             }else{
-                                                                Toast.makeText(CommentListActivity.this,"过于频繁请求！",Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
                                                             }
                                                         }
                                                     }
 
                                                     @Override
                                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                        followCondition=false;
+                                                       FailureAction();
                                                         Toast.makeText(CommentListActivity.this, R.string.network_notfollowfailure_, Toast.LENGTH_SHORT).show();
                                                     }
+                                                    private void FailureAction(){
+                                                        followCondition=false;
+                                                    }
+
                                                 });
                                             }
                                         }).start();
@@ -1168,34 +1329,47 @@ public class CommentListActivity extends AppCompatActivity {
                                         call.enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                String json = "null";
-
-                                                String returncondition = null;
-                                                if (response.body() != null) {
-                                                    try {
-                                                        json = response.body().string();
-                                                        Log.d("json", response.body().string());
-                                                        JSONObject jsonObject = new JSONObject(json);
-                                                        returncondition = jsonObject.getString("msg");
-                                                        Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
-                                                        mDeleteCondition=true;
-                                                        mStartingLoadId=0;
-                                                        if(mIfOnlyCondition) {
-                                                            replyUpdate();
-                                                         }else{
-                                                            hotReplyUpdate();
-                                                         }
-                                                    } catch (IOException | JSONException e) {
-                                                        e.printStackTrace();
+                                                if(response.code()==200) {
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.body() != null) {
+                                                        try {
+                                                            json = response.body().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                            mDeleteCondition = true;
+                                                            mStartingLoadId = 0;
+                                                            if (mIfOnlyCondition) {
+                                                                replyUpdate();
+                                                            } else {
+                                                                hotReplyUpdate();
+                                                            }
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(CommentListActivity.this, "删除失败，超过可删除的时间范围", Toast.LENGTH_SHORT).show();
                                                     }
-                                                } else {
-                                                    Toast.makeText(CommentListActivity.this, "删除失败，超过可删除的时间范围", Toast.LENGTH_SHORT).show();
+                                                }else{
+                                                    //followCondition = false;
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.errorBody() != null) {
+                                                        try {
+                                                            json = response.errorBody().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                                    e.printStackTrace();
+                                                        }
+                                                                //FailureAction();
+                                                    }else{
+                                                        Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
-
-
                                             }
-
-
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                 Toast.makeText(CommentListActivity.this, R.string.network_deletefailture, Toast.LENGTH_SHORT).show();
@@ -1213,19 +1387,38 @@ public class CommentListActivity extends AppCompatActivity {
                                         call.enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                String json = "null";
-                                                String returncondition = null;
-                                                if (response.body() != null) {
-                                                    try {
-                                                        json = response.body().string();
-                                                        JSONObject jsonObject = new JSONObject(json);
-                                                        returncondition = jsonObject.getString("msg");
-                                                        Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
-                                                    } catch (IOException | JSONException e) {
-                                                        e.printStackTrace();
+                                                if(response.code()==200) {
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.body() != null) {
+                                                        try {
+                                                            json = response.body().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(CommentListActivity.this, "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
                                                     }
-                                                } else {
-                                                    Toast.makeText(CommentListActivity.this, "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
+                                                }else{
+                                                    //followCondition = false;
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.errorBody() != null) {
+                                                        try {
+                                                            json = response.errorBody().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                                //FailureAction();
+                                                    }else{
+                                                        Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                                    }
                                                 }
                                             }
 
@@ -1288,20 +1481,38 @@ public class CommentListActivity extends AppCompatActivity {
                                                         thumbupCondition = false;
                                                         thumbup_num.setText(mDetailReplyList.get(position)[11]);
                                                     }else{
-                                                        thumbupCondition = false;
-                                                        Toast.makeText(CommentListActivity.this,"过于频繁请求！",Toast.LENGTH_SHORT).show();
+                                                        FailureAction();
+                                                       // followCondition = false;
+                                                        String json = "null";
+                                                        String returncondition = null;
+                                                        if (response.errorBody() != null) {
+                                                            try {
+                                                                json = response.errorBody().string();
+                                                                JSONObject jsonObject = new JSONObject(json);
+                                                                returncondition = jsonObject.getString("msg");
+                                                                Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                            } catch (IOException | JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+
+                                                        }else{
+                                                            Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                                        }
                                                     }
                                                 }
 
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                    thumbupCondition=false;
+                                                    FailureAction();
                                                     Toast.makeText(CommentListActivity.this, R.string.network_thumbupfailure_, Toast.LENGTH_SHORT).show();
+                                                }
+                                                private void FailureAction(){
+                                                    thumbupCondition=false;
                                                 }
                                             });
                                         }
                                     }).start();
-                                } else {
+                                }else{
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
@@ -1317,15 +1528,33 @@ public class CommentListActivity extends AppCompatActivity {
                                                         thumbupCondition = false;
                                                         thumbup_num.setText(mDetailReplyList.get(position)[11]);
                                                     }else{
-                                                        thumbupCondition = false;
-                                                        Toast.makeText(CommentListActivity.this,"过于频繁请求！",Toast.LENGTH_SHORT).show();
+                                                       // followCondition = false;
+                                                        String json = "null";
+                                                        String returncondition = null;
+                                                        if (response.errorBody() != null) {
+                                                            try {
+                                                                json = response.errorBody().string();
+                                                                JSONObject jsonObject = new JSONObject(json);
+                                                                returncondition = jsonObject.getString("msg");
+                                                                Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                            } catch (IOException | JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                            FailureAction();
+                                                        }else{
+                                                            Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                                        }
                                                     }
+
                                                 }
 
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                                    thumbupCondition=false;
+                                                    FailureAction();
                                                     Toast.makeText(CommentListActivity.this, R.string.network_notthumbupfailure_, Toast.LENGTH_SHORT).show();
+                                                }
+                                                private void FailureAction(){
+                                                    thumbupCondition=false;
                                                 }
                                             });
                                         }
@@ -1474,28 +1703,46 @@ public class CommentListActivity extends AppCompatActivity {
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        String json = "null";
-                        try {
-                            if (response.body() != null) {
-                                json = response.body().string();
+                        if(response.code()==200) {
+                            String json = "null";
+                            try {
+                                if (response.body() != null) {
+                                    json = response.body().string();
+                                }
+                                JSONObject jsonObject = new JSONObject(json);
+                                //data[0]=jsonObject.getString("background_image_url");
+                                data[1] = jsonObject.getString("content");
+                                data[2] = jsonObject.getString("created_timestamp");
+                                data[3] = jsonObject.getInt("follow_num") + "";
+                                data[4] = jsonObject.getInt("forest_id") + "";
+                                data[5] = jsonObject.getString("forest_name");
+                                data[6] = jsonObject.getInt("hole_id") + "";
+                                data[8] = jsonObject.getBoolean("is_follow") + "";
+                                data[9] = jsonObject.getBoolean("is_mine") + "";
+                                data[10] = jsonObject.getBoolean("is_reply") + "";
+                                data[11] = jsonObject.getBoolean("is_thumbup") + "";
+                                data[12] = jsonObject.getInt("reply_num") + "";
+                                data[13] = jsonObject.getInt("thumbup_num") + "";
+                                hotReplyUpdate();
+                            } catch (IOException | JSONException e) {
+                                e.printStackTrace();
                             }
-                            JSONObject jsonObject = new JSONObject(json);
-                            //data[0]=jsonObject.getString("background_image_url");
-                            data[1] = jsonObject.getString("content");
-                            data[2] = jsonObject.getString("created_timestamp");
-                            data[3] = jsonObject.getInt("follow_num")+"";
-                            data[4] = jsonObject.getInt("forest_id")+"";
-                            data[5] = jsonObject.getString("forest_name");
-                            data[6] = jsonObject.getInt("hole_id")+"";
-                            data[8] = jsonObject.getBoolean("is_follow")+"";
-                            data[9] = jsonObject.getBoolean("is_mine")+"";
-                            data[10] = jsonObject.getBoolean("is_reply")+"";
-                            data[11] = jsonObject.getBoolean("is_thumbup")+"";
-                            data[12] = jsonObject.getInt("reply_num")+"";
-                            data[13] = jsonObject.getInt("thumbup_num")+"";
-                             hotReplyUpdate();
-                        } catch (IOException | JSONException e) {
-                            e.printStackTrace();
+                        }else {
+                            //followCondition = false;
+                            String json = "null";
+                            String returncondition = null;
+                            if (response.errorBody() != null) {
+                                try {
+                                    json = response.errorBody().string();
+                                    JSONObject jsonObject = new JSONObject(json);
+                                    returncondition = jsonObject.getString("msg");
+                                    Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                } catch (IOException | JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Toast.makeText(CommentListActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
 

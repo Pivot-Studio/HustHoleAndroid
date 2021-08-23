@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hustholetest1.R;
@@ -27,7 +26,7 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
     private int mHeaderCount=1;//头部View个数
     private int mBottomCount=1;//底部View个数
 
-
+    public String mContent = null;
     public interface OnItemClickListener {
         void onClick(int position);
     }
@@ -56,6 +55,9 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
         return mBottomCount != 0 && position >= (mHeaderCount + getContentItemCount());
     }
 
+    public void getSystemNotification(String content){
+        this.mContent=content;
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -95,10 +97,12 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
     }
     //头部 ViewHolder
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
-
+        TextView latestSystemNotification;
         public HeaderViewHolder(View itemView) {
             super(itemView);
+            latestSystemNotification = itemView.findViewById(R.id.latest_system_notification);
         }
+
     }
     //底部 ViewHolder
     public static class BottomViewHolder extends RecyclerView.ViewHolder {
@@ -152,6 +156,7 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
 
 
         if (holder instanceof HeaderViewHolder) {
+            ((HeaderViewHolder)holder).latestSystemNotification.setText(mContent);
         } else if (holder instanceof ContentViewHolder) {
 
             NotificationBean notification = mNotificationList.get(position-mHeaderCount);

@@ -629,13 +629,16 @@ public class HomePageFragment extends Fragment {
                                         @Override
                                         public void run() {
                                             Call<ResponseBody> call = request.delete_hole( mHompageHolesList.get(position)[6]);//进行封装
-                                            call.enqueue(new Callback<ResponseBody>() {
+                                            call.enqueue(new Callback<ResponseBody>(){
+
+
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                     Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
                                                    // mStartingLoadId = 20;
                                                    // mDeleteCondition = true;
                                                    // update();
+
                                                     mStartingLoadId=0;
                                                     mDeleteCondition=true;
                                                     update();
@@ -652,7 +655,60 @@ public class HomePageFragment extends Fragment {
 
 
                                 } else {
-                                    CommenRequestManager.ReportRequest(getContext(), request, mHompageHolesList.get(position)[6], "-1");
+                                    new Thread(new Runnable() {//加载纵向列表标题
+                                        @Override
+                                        public void run() {
+                                            Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" +mHompageHolesList.get(position)[6] + "&reply_local_id= -1");
+                                            call.enqueue(new Callback<ResponseBody>() {
+                                                @Override
+                                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                    if(response.code()==200) {
+                                                        String json = "null";
+                                                        String returncondition = null;
+                                                        if (response.body() != null) {
+                                                            try {
+                                                                json = response.body().string();
+                                                                JSONObject jsonObject = new JSONObject(json);
+                                                                returncondition = jsonObject.getString("msg");
+                                                                Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                            } catch (IOException | JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                        } else {
+                                                            Toast.makeText(getContext(), "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }else{
+                                                        //followCondition = false;
+                                                        String json = "null";
+                                                        String returncondition = null;
+                                                        if (response.errorBody() != null) {
+                                                            try {
+                                                                json = response.errorBody().string();
+                                                                JSONObject jsonObject = new JSONObject(json);
+                                                                returncondition = jsonObject.getString("msg");
+                                                                Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                            } catch (IOException | JSONException e) {
+                                                                e.printStackTrace();
+                                                            }
+                                                            //FailureAction();
+                                                        }else{
+                                                            Toast.makeText(getContext(),R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    }
+                                                }
+
+                                                @Override
+                                                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                    Toast.makeText(getContext(), R.string.network_reportfailture, Toast.LENGTH_SHORT).show();
+
+                                                }
+                                            });
+                                        }
+                                    }).start();
+
+
+
+                                    //CommenRequestManager.ReportRequest(getContext(), request, , "-1");
                                 }
                             } else {
                                 Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
@@ -782,9 +838,10 @@ public class HomePageFragment extends Fragment {
                                                 Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + mHompageHolesList.get(position)[6]);//进行封装
                                                 Log.e(TAG, "token2：");
                                                 call.enqueue(new Callback<ResponseBody>() {
+
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+                                                         //response.errorBody()
 
 
                                                         if(response.code()==200) {
@@ -797,9 +854,9 @@ public class HomePageFragment extends Fragment {
                                                             followCondition = false;
                                                             String json = "null";
                                                             String returncondition = null;
-                                                            if (response.body() != null) {
+                                                            if (response.errorBody() != null) {
                                                                 try {
-                                                                    json = response.body().string();
+                                                                    json = response.errorBody().string();
                                                                     JSONObject jsonObject = new JSONObject(json);
                                                                     returncondition = jsonObject.getString("msg");
                                                                     Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
@@ -807,10 +864,11 @@ public class HomePageFragment extends Fragment {
                                                                     e.printStackTrace();
                                                                 }
                                                             }else{
-                                                                Toast.makeText(getContext(),"过于频繁请求！",Toast.LENGTH_SHORT).show();
+                                                                Toast.makeText(getContext(),R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
                                                             }
                                                         }
                                                     }
+
 
                                                     @Override
                                                     public void onFailure(Call<ResponseBody> call, Throwable t) {

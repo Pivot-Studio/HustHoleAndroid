@@ -65,7 +65,7 @@
 
     <TextView
         android:id="@+id/content"
-        android:layout_width="331dp"
+        android:layout_width="@dimen/dp_331"
         android:layout_height="21dp"
         android:layout_marginLeft="22dp"
         android:ellipsize="end"

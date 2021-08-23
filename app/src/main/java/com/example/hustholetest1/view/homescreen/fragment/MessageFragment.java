@@ -1,6 +1,7 @@
 package com.example.hustholetest1.view.homescreen.fragment;
 
 import static com.example.hustholetest1.view.homescreen.message.ParseNotificationData.parseJson;
+import static com.example.hustholetest1.view.homescreen.message.ParseNotificationData.parseSysJson;
 
 import android.content.Context;
 import android.content.Intent;
@@ -22,12 +23,15 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity;
 import com.example.hustholetest1.view.homescreen.message.NotificationAdapter;
 import com.example.hustholetest1.view.homescreen.message.NotificationBean;
 import com.example.hustholetest1.view.homescreen.message.SystemNotification;
+import com.example.hustholetest1.view.homescreen.message.SystemNotificationBean;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
@@ -48,8 +52,8 @@ public class MessageFragment extends Fragment {
     private NotificationAdapter adapter;
     private RecyclerView notificationRecyclerView;
     private final static String TAG = "tag";
-    private ImageView imageView3;
-    private TextView textView16;
+    private ImageView noNotificationImage;
+    private TextView thereIsNoNotification;
     private int page = 1;
     private final static int list_size = 15;
     private int start_id = 0;
@@ -60,6 +64,11 @@ public class MessageFragment extends Fragment {
 
     public String url = "http://hustholetest.pivotstudio.cn/api/notices/";
     private String token;
+
+
+    private List<SystemNotificationBean> mSystemNotificationList = new ArrayList<>();
+    private TextView latestSystemNotification;
+
     public static MessageFragment newInstance() {
         MessageFragment fragment = new MessageFragment();
         return fragment;
@@ -77,7 +86,27 @@ public class MessageFragment extends Fragment {
         //refreshLayout.setEnableAutoLoadMore(false);//是否启用列表惯性滑动到底部时自动加载更多
 
         refreshLayout.setOnRefreshListener(refreshlayout -> {
-            refreshlayout.finishRefresh(4000/*,false*/);//传入false表示刷新失败
+            if(CheckingToken.IfTokenExist()){
+                Log.d(TAG, "onCreateView: here are refresh");
+                if(page > 1){
+                    myNotificationList.clear();
+                    mSystemNotificationList.clear();
+                    adapter.getSystemNotification(null);
+                    page = 1;
+                }
+                isAll = false;
+                hasInit = false;
+                start_id = 0;
+                getLatestSystemNotification();
+                getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +
+                        "list_size=" + list_size);
+                refreshlayout.finishRefresh(4000/*,false*/);//传入false表示刷新失败
+            }
+            else{
+                refreshLayout.finishRefresh();
+                Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
+                startActivity(intent);
+            }
 
         });
         refreshLayout.setOnLoadMoreListener(refreshlayout -> {
@@ -105,14 +134,15 @@ public class MessageFragment extends Fragment {
             refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
         });
 
+
         constraintLayout = rootView.findViewById(R.id.constraintLayout);
         constraintLayout.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), SystemNotification.class);
             startActivity(intent);
         });
 
-        imageView3 =  rootView.findViewById(R.id.imageView3);
-        textView16 =  rootView.findViewById(R.id.textView16);
+        noNotificationImage = rootView.findViewById(R.id.no_notification_image);
+        thereIsNoNotification = rootView.findViewById(R.id.there_is_no_notification);
         constraintLayout = rootView.findViewById(R.id.constraintLayout);
         notificationRecyclerView = rootView.findViewById(R.id.notification);
         if(!hasInit){
@@ -120,13 +150,14 @@ public class MessageFragment extends Fragment {
                     "list_size="+list_size);
         }
         else if(myNotificationList!= null && hasInit){ //已经初始化直接显示,每次回到这个页面时直接显示
-            imageView3.setVisibility(View.GONE);
-            textView16.setVisibility(View.GONE);
+            noNotificationImage.setVisibility(View.GONE);
+            thereIsNoNotification.setVisibility(View.GONE);
             constraintLayout.setVisibility(View.GONE);
             adapter = new NotificationAdapter(getActivity(), myNotificationList);
             notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity() , LinearLayoutManager.VERTICAL,false));
             notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
             notificationRecyclerView.setAdapter(adapter);
+            adapter.getSystemNotification(mSystemNotificationList.get(0).getSystemContent());
             adapter.setOnItemClickListener(new NotificationAdapter.OnItemClickListener() {
                 @Override
                 public void onClick(int position) {
@@ -143,8 +174,8 @@ public class MessageFragment extends Fragment {
             });
         }
         else{ //数据为null
-            imageView3.setVisibility(View.VISIBLE);
-            textView16.setVisibility(View.VISIBLE);
+            noNotificationImage.setVisibility(View.VISIBLE);
+            thereIsNoNotification.setVisibility(View.VISIBLE);
             constraintLayout.setVisibility(View.VISIBLE);
         }
 
@@ -152,9 +183,83 @@ public class MessageFragment extends Fragment {
         //notificationRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
         //Log.d(TAG, "onCreateView: 6");
 
+        latestSystemNotification = rootView.findViewById(R.id.latest_system_notification);
+        getLatestSystemNotification();
 
         return rootView;
     }
+
+
+    public void getLatestSystemNotification(){
+        String mPath= "http://hustholetest.pivotstudio.cn/api/system_notices?start_id=0&list_size=1";
+        OkHttpClient client = new OkHttpClient();
+        Message message = Message.obtain();
+
+        SharedPreferences editor = getContext().getSharedPreferences("Depository", Context.MODE_PRIVATE);//
+        token = editor.getString("token", "");
+        Log.d(TAG, "getStringByOkhttp: token "+token);
+        Request request = new Request.Builder().get().addHeader("Authorization", "Bearer "+token).url(mPath).build();
+
+        Log.d(TAG, "getStringByOkhttp: request");
+        try {
+            Call call = client.newCall(request);
+            Log.d(TAG, "getStringByOkhttp: call");
+            call.enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    message.what = 1;
+                    message.obj = e.getMessage();
+                    Log.d(TAG, "onFailure: e.toString " + e.toString());
+                    Log.d(TAG, "e.getLocalizedMessage" + e.getLocalizedMessage());
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {//回调的方法执行在子线程。
+                        Log.d(TAG, "获取数据成功了");
+                        Log.d(TAG, "response.code()==" + response.code());
+                        final String responseData = response.body().string();
+                        Log.d(TAG, "response.body().string()== " + responseData);
+                        Log.d(TAG, "obtain message");
+                        String temp = responseData.replace("{\"system_notices\":", "");
+                        temp = removeCharAt(temp, temp.length()-1);
+                        message.what = 0;
+                        message.obj = temp;
+                        systemNotificationHandler.sendMessage(message);
+                        Log.d(TAG, "onResponse: handler message");
+                    } else {
+                        message.what = 1;
+                        Log.d(TAG, "onResponse: response " + response.networkResponse());
+                    }
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.d(TAG, "getStringByOkhttp:i am exception, e.toString() " + e.toString());
+        }
+    }
+
+    private Handler systemNotificationHandler = new Handler(){
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+            super.handleMessage(msg);
+            Log.d(TAG, "handleMessage: msr.what " +msg.what);
+            switch (msg.what){
+                case 0://请求网络成功
+                    String Data = (String)msg.obj;
+                    Log.d(TAG, "SystemNotificationhandleMessage: get Data "+ Data);
+                    mSystemNotificationList = parseSysJson(Data);
+                    latestSystemNotification.setText(mSystemNotificationList.get(0).getSystemContent());
+                    Log.d(TAG, "handleMessage: adapter.content"+mSystemNotificationList.get(0).getSystemContent());
+                    break;
+                case 1://失败
+                    break;
+            }
+        }
+    };
+
+
+
 
     public void startHoleActivity(int mPosition){
         String data_hole_id = myNotificationList.get(mPosition-1).getHole_id();//position-1是因为SystemNotification为第一个item
@@ -218,14 +323,15 @@ public class MessageFragment extends Fragment {
                     myNotificationList = parseJson(Data);
                     isNotification = true;
                     if(isNotification){ //有通知就不显示
-                        imageView3.setVisibility(View.GONE);
-                        textView16.setVisibility(View.GONE);
+                        noNotificationImage.setVisibility(View.GONE);
+                        thereIsNoNotification.setVisibility(View.GONE);
                         constraintLayout.setVisibility(View.GONE);
                         Log.d(TAG, "handleMessage: size  " + myNotificationList.size());
                         adapter = new NotificationAdapter(getActivity(), myNotificationList);
                         notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity() , LinearLayoutManager.VERTICAL,false));
                         notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
                         notificationRecyclerView.setAdapter(adapter);
+                        adapter.getSystemNotification(mSystemNotificationList.get(0).getSystemContent());
                         adapter.setOnItemClickListener(new NotificationAdapter.OnItemClickListener() {
                             @Override
                             public void onClick(int position) {
@@ -245,15 +351,15 @@ public class MessageFragment extends Fragment {
                         Log.d(TAG, "handleMessage: start_id :"+start_id);
                     }
                     else {
-                        imageView3.setVisibility(View.VISIBLE);
-                        textView16.setVisibility(View.VISIBLE);
+                        noNotificationImage.setVisibility(View.VISIBLE);
+                        thereIsNoNotification.setVisibility(View.VISIBLE);
                         constraintLayout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onCreateView: visible");
                     }
                     break;
                 case 1://失败
                     constraintLayout.setVisibility(View.VISIBLE);
-                    textView16.setText("网络连接失败");
+                    thereIsNoNotification.setText("");
                     break;
                 case 2://不是首次请求网络
                     String Data2 = (String)msg.obj;
@@ -261,6 +367,7 @@ public class MessageFragment extends Fragment {
                     Data2 = removeCharAt(Data2, Data2.length()-1);
                     Log.d(TAG, "handleMessage: get Data2 "+ Data2);
                     myNotificationList.addAll(parseJson(Data2));
+                    adapter.getSystemNotification(mSystemNotificationList.get(0).getSystemContent());
                     Log.d(TAG, "handleMessage: size  " + myNotificationList.size());
                     /*adapter = new NotificationAdapter( getActivity(), myNotificationList);
                     notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity() , LinearLayoutManager.VERTICAL,false));
@@ -297,7 +404,7 @@ public class MessageFragment extends Fragment {
                     Log.d(TAG, "handleMessage: start_id :"+start_id);
                     break;
                 case 3:
-                    if(myNotificationList != null){
+                    if(myNotificationList != null && page!=1 ){
                         /*adapter = new NotificationAdapter( getActivity(), myNotificationList);
                         notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity() , LinearLayoutManager.VERTICAL,false));
                         notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -306,8 +413,8 @@ public class MessageFragment extends Fragment {
                         Log.d(TAG, "handleMessage: case3");
                     }
                     else {
-                        imageView3.setVisibility(View.VISIBLE);
-                        textView16.setVisibility(View.VISIBLE);
+                        noNotificationImage.setVisibility(View.VISIBLE);
+                        thereIsNoNotification.setVisibility(View.VISIBLE);
                         constraintLayout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onCreateView: visible");
                     }

@@ -776,7 +776,57 @@ public class ForestFragment extends Fragment {
                                     }
                                 }).start();
                             } else {
-                                CommenRequestManager.ReportRequest(getContext(), request, mJoinedHolesList.get(position - 1)[6], "-1");
+                                new Thread(new Runnable() {//加载纵向列表标题
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" +mJoinedHolesList.get(position - 1)[6] + "&reply_local_id= -1");
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                if(response.code()==200) {
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.body() != null) {
+                                                        try {
+                                                            json = response.body().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(getContext(), "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }else{
+                                                    //followCondition = false;
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.errorBody() != null) {
+                                                        try {
+                                                            json = response.errorBody().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        //FailureAction();
+                                                    }else{
+                                                        Toast.makeText(getContext(),R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(getContext(), R.string.network_reportfailture, Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
+                                    }
+                                }).start();
+                                //CommenRequestManager.ReportRequest(getContext(), request, mJoinedHolesList.get(position - 1)[6], "-1");
                             }
                         }
                         }
@@ -843,19 +893,16 @@ public class ForestFragment extends Fragment {
                         }
                 });
                 follow.setOnClickListener(new View.OnClickListener() {
-
                     @Override
                     public void onClick(View v) {
                         if(CheckingToken.IfTokenExist()) {
-
                             if (followCondition==false) {
                                 followCondition = true;
                                 if (mJoinedHolesList.get(position - 1)[8].equals("false")) {
-                                    new Thread(new Runnable() {//加载纵向列表标题
+                                    new Thread(new Runnable(){
                                         @Override
                                         public void run() {
                                             Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/" + mJoinedHolesList.get(position - 1)[6]);//进行封装
-                                            Log.e(TAG, "token2：");
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -883,7 +930,6 @@ public class ForestFragment extends Fragment {
                                                         }
                                                     }
                                                 }
-
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                     Toast.makeText(getContext(), R.string.network_followfailure_, Toast.LENGTH_SHORT).show();
@@ -925,7 +971,6 @@ public class ForestFragment extends Fragment {
                                                         }
                                                     }
                                                 }
-
                                                 @Override
                                                 public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                     followCondition = false;

@@ -797,7 +797,57 @@ public class DetailForestActivity extends AppCompatActivity {
 
                                 //finish();
                             } else {
-                                CommenRequestManager.ReportRequest(DetailForestActivity.this, request, mDetailforestHoleslist.get(position - 1)[6], "-1");
+                                new Thread(new Runnable() {//加载纵向列表标题
+                                    @Override
+                                    public void run() {
+                                        Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" +mDetailforestHoleslist.get(position - 1)[6]+ "&reply_local_id= -1");
+                                        call.enqueue(new Callback<ResponseBody>() {
+                                            @Override
+                                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                                if(response.code()==200) {
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.body() != null) {
+                                                        try {
+                                                            json = response.body().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(DetailForestActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                    } else {
+                                                        Toast.makeText(DetailForestActivity.this, "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }else{
+                                                    //followCondition = false;
+                                                    String json = "null";
+                                                    String returncondition = null;
+                                                    if (response.errorBody() != null) {
+                                                        try {
+                                                            json = response.errorBody().string();
+                                                            JSONObject jsonObject = new JSONObject(json);
+                                                            returncondition = jsonObject.getString("msg");
+                                                            Toast.makeText(DetailForestActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                                        } catch (IOException | JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
+                                                        //FailureAction();
+                                                    }else{
+                                                        Toast.makeText(DetailForestActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            }
+
+                                            @Override
+                                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                                Toast.makeText(DetailForestActivity.this, R.string.network_reportfailture, Toast.LENGTH_SHORT).show();
+
+                                            }
+                                        });
+                                    }
+                                }).start();
+                                //CommenRequestManager.ReportRequest(DetailForestActivity.this, request, mDetailforestHoleslist.get(position - 1)[6], "-1");
                             }
                         }else{
                             Intent intent=new Intent(DetailForestActivity.this, EmailVerifyActivity.class);

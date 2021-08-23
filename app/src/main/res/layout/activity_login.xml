@@ -85,7 +85,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginTop="@dimen/dp_20"
         android:background="@drawable/standard_corner"
-        android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
         android:hint="@string/register_4"
         android:importantForAutofill="no"
         android:inputType="none"

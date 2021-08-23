@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hustholetest1.R;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import static com.example.hustholetest1.view.homescreen.fragment.MessageFragment
 import static com.example.hustholetest1.view.homescreen.message.ParseNotificationData.parseSysJson;
 
 public class SystemNotification extends AppCompatActivity {
-    private TextView textView;
+    private TextView mTitle;
     private List<SystemNotificationBean> mSystemNotificationList = new ArrayList<>();
     private SystemNotificationAdapter adapter;
     private RecyclerView sysNotificationRecyclerView;
@@ -46,6 +47,7 @@ public class SystemNotification extends AppCompatActivity {
     //private MyItemDecoration myItemDecoration = new MyItemDecoration();
 
     private String token;
+    private AVLoadingIndicatorView mAVLoadingIndicatorView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +55,14 @@ public class SystemNotification extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        textView = findViewById(R.id.tv_titlebargreen_title);
-        textView.setText("系统通知");
+        mTitle = findViewById(R.id.tv_titlebargreen_title);
+        /*mTitle.setText("系统通知");*/
         sysNotificationRecyclerView = this.findViewById(R.id.system_notification);
         backView = findViewById(R.id.iv_titlebargreen_back);
         backView.setOnClickListener(new onClickBack(this));
+        mAVLoadingIndicatorView = findViewById(R.id.titlebargreen_AVLoadingIndicatorView);
+        mAVLoadingIndicatorView.show();
+        mAVLoadingIndicatorView.setVisibility(View.VISIBLE);
 
         //initData();
         //myItemDecoration.setColor(Color.parseColor("#F3F3F3"));
@@ -128,8 +133,14 @@ public class SystemNotification extends AppCompatActivity {
                             Toast.makeText(SystemNotification.this, "click " + position, Toast.LENGTH_SHORT)/*.show()*/;
                         }
                     });
+                    mAVLoadingIndicatorView.hide();
+                    mAVLoadingIndicatorView.setVisibility(View.GONE);
+                    mTitle.setText("系统通知");
                     break;
                 case 1://失败
+                    mAVLoadingIndicatorView.hide();
+                    mAVLoadingIndicatorView.setVisibility(View.GONE);
+                    mTitle.setText("加载失败");
                     break;
             }
         }

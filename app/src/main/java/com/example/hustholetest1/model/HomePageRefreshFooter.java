@@ -75,31 +75,12 @@ public class HomePageRefreshFooter extends LinearLayout implements RefreshFooter
     public void onStateChanged(RefreshLayout refreshLayout, RefreshState oldState, RefreshState newState) {
         switch (newState) {
             case PullDownToRefresh:
-                //下拉刷新开始。正在下拉还没松手时调用
-                //每次重新下拉时，将图片资源重置为小人的大脑袋
-                // mImage.setImageResource(R.drawable.refresh_point);
-                //mImage2.setImageResource(R.drawable.refresh_point);
-                // mImage3.setImageResource(R.drawable.refresh_point);
-                //Log.e("刷新：","PullDownToRefresh");
                 break;
-            case Refreshing: //正在刷新。只调用一次
-                //状态切换为正在刷新状态时，设置图片资源为小人卖萌的动画并开始执行
+            case Refreshing:
                 mLoadmore.show();
                 //text.setText("jiazaizhong");
                 refreshCondition=true;
-                    /*
-                    mImage.setImageResource(R.drawable.refresh_2);
-                    mImage2.setImageResource(R.drawable.refresh_3);
-                    mImage3.setImageResource(R.drawable.refresh_1);
-                    refreshingAnim = (AnimationDrawable) mImage.getDrawable();
-                    refreshingAnim.start();
-                    refreshingAnim2 = (AnimationDrawable) mImage2.getDrawable();
-                    refreshingAnim2.start();
-                    refreshingAnim3 = (AnimationDrawable) mImage3.getDrawable();
-                    refreshingAnim3.start();
-                    Log.e("刷新：","Refreshing");
 
-                     */
                 break;
             case ReleaseToRefresh:
 

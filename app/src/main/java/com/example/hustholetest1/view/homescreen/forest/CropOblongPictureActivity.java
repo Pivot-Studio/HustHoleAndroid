@@ -163,18 +163,17 @@ public class CropOblongPictureActivity extends AppCompatActivity implements View
             mRevolve.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
                     if(bitmap!=null) {
                         bitmap = rotateBmp(bitmap, 90);
                         photo=null;
-                        photo=(MyImageView) findViewById(R.id.iv_croppicture_photo);
+                        photo=(MyImageView) findViewById(R.id.iv_cropoblongpicture_photo);
                         photo.init(CropOblongPictureActivity.this);
                         photo.setImageBitmap(bitmap);
                     }
-                   // photo.animate().rotation(90);
                 }
             });
             photo=(MyImageView) findViewById(R.id.iv_cropoblongpicture_photo);
-            //photo.setOnTouchListener(this);
             gallery();
         }
     public static Bitmap rotateBmp(Bitmap b, int degrees) {

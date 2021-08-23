@@ -143,4 +143,5 @@
     <string name="network_sendfailture">发送失败，请检查网络</string>
     <string name="network_deletefailture">删除失败，请检查网络</string>
     <string name="network_reportfailture">举报失败，请检查网络</string>
+    <string name="network_unknownfailture">未知错误</string>
 </resources>

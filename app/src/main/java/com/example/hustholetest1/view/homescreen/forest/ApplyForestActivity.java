@@ -123,8 +123,8 @@ public class ApplyForestActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new Thread(new Runnable() {//加载纵向列表标题
-                    File file;
-                    File file2;
+
+                    File file,file2;
                     @Override
                     public void run() {
                         try {
@@ -142,12 +142,15 @@ public class ApplyForestActivity extends AppCompatActivity {
                             RequestBody fileRQ2 = RequestBody.create(MediaType.parse("image/png"), file2);
                             MultipartBody.Part part2 = MultipartBody.Part.createFormData("background_image_url", file2.getName(), fileRQ2);
 
+
+
                             RequestBody body=new MultipartBody.Builder()
                                     .addFormDataPart("forest_name", forestName.getText().toString())
                                     .addFormDataPart("description", forestIntroduce.getText().toString())
                                     .addFormDataPart("image_url",file.getName(),fileRQ)
                                     .addFormDataPart("background_image_url",file2.getName(),fileRQ2)
                                     .build();
+
 /*
 
  */

@@ -47,6 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="58dp"
         android:elevation="@dimen/dp_30"
+        android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

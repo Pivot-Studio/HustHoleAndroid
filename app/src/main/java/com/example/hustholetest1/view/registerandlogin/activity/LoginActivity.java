@@ -109,16 +109,12 @@ public class LoginActivity extends AppCompatActivity {
                 String str2=editText2.getText().toString();
                 //Login.post(str1,str2);
                 if(Character.isUpperCase(str1.charAt(0))||Character.isLowerCase(str1.charAt(0))) {
-
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
                             HashMap map = new HashMap();
                             map.put("email", str1);
                             map.put("password", str2);
-                            // map.put("something", someobject);
-                            // FormBody.Builder builder = new FormBody.Builder();
-                            //builder.add("key","value");
                             Call<ResponseBody> call = request.mobileLogin(map);//进行封装
                             call.enqueue(new Callback<ResponseBody>() {
                                 @Override

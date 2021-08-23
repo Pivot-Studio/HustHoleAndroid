@@ -8,7 +8,10 @@
     android:layout_height="210dp"
     android:background="@color/GrayScale_95"
     android:orientation="horizontal">
-
+<TextView
+    android:layout_width="8dp"
+    android:layout_height="210dp"
+    android:background="@color/GrayScale_95"/>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="154dp"
         android:layout_height="210dp"
@@ -99,4 +102,8 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="8dp"
+        android:layout_height="210dp"
+        android:background="@color/GrayScale_95"/>
 </LinearLayout>

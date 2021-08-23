@@ -124,13 +124,13 @@
 
         <TextView
             android:id="@+id/tv_itemdetailforest_content"
-            android:layout_width="@dimen/dp_310"
+            android:layout_width="@dimen/dp_330"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:maxWidth="@dimen/dp_310"
-            android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
-            android:maxLines="5"
             android:ellipsize="end"
+            android:maxWidth="@dimen/dp_310"
+            android:maxLines="5"
+            android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
             android:textColor="@color/GrayScale_20"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="@+id/tv_itemdetailforest_time"
