@@ -85,7 +85,8 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 public class DetailForestActivity extends AppCompatActivity {
     private Retrofit retrofit;
-    private ImageView back,head,head_2,transformblock;
+    private ConstraintLayout back;
+    private ImageView head,head_2,transformblock;
     private TextView mTitlebarTextTv;
     private JSONArray jsonArray2;
     private ArrayList<String[]> mDetailforestHoleslist=new ArrayList<>();
@@ -113,6 +114,61 @@ public class DetailForestActivity extends AppCompatActivity {
     private  ConstraintLayout mMoreWhatCl;
     private RecyclerView.OnScrollListener mOnscrollListener2;
 
+
+    private ImageView mReturnIsThumbup,mReturnIsReply,mReturnIsFollow;
+    private TextView mReturnThumbupNUmber,mReturnReplyNumber,mReturnFollowNumber;
+    private int mReturnPosition;
+    private int RESULTCODE_COMMENT=1,REQUESTCODE_COMMENT=4;
+
+    private String mSendBackDateJoinCondtion;
+    private int RESULTCODE_COMMENT_2=2;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode!=RESULTCODE_COMMENT){
+            return;
+        }
+        if(requestCode==REQUESTCODE_COMMENT){
+            String thumbupCondition=data.getStringExtra("ThumbupCondition");
+            String followCondition=data.getStringExtra("FollowCondition");
+            if(thumbupCondition!=null){
+                if(thumbupCondition.equals("true")&& mDetailforestHoleslist.get(mReturnPosition - 1)[11].equals("false")){
+                    mReturnIsThumbup.setImageResource(R.mipmap.active);
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[11] = "true";
+
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[13] = (Integer.parseInt(mDetailforestHoleslist.get(mReturnPosition - 1)[13]) + 1) + "";
+                    //thumbupCondition = false;
+                    mReturnThumbupNUmber.setText(mDetailforestHoleslist.get(mReturnPosition - 1)[13]);
+                }else if(thumbupCondition.equals("false")&& mDetailforestHoleslist.get(mReturnPosition - 1)[11].equals("true")){
+                    mReturnIsThumbup.setImageResource(R.mipmap.inactive);
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[11] = "false";
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[13] = (Integer.parseInt(mDetailforestHoleslist.get(mReturnPosition - 1)[13]) - 1) + "";
+                    //thumbupCondition = false;
+                    mReturnThumbupNUmber.setText(mDetailforestHoleslist.get(mReturnPosition - 1)[13]);
+                }
+            }
+            if(followCondition!=null){
+                if(followCondition.equals("true")&& mDetailforestHoleslist.get(mReturnPosition - 1)[8].equals("false")){
+                    mReturnIsFollow.setImageResource(R.mipmap.active_3);
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[8] = "true";
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[3] = (Integer.parseInt(mDetailforestHoleslist.get(mReturnPosition - 1)[3]) + 1) + "";
+                    //followCondition = false;
+                    mReturnFollowNumber.setText(mDetailforestHoleslist.get(mReturnPosition - 1)[3]);
+                }else if(followCondition.equals("false")&& mDetailforestHoleslist.get(mReturnPosition - 1)[8].equals("true")){
+                    mReturnIsFollow.setImageResource(R.mipmap.inactive);
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[8] = "false";
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[3] = (Integer.parseInt(mDetailforestHoleslist.get(mReturnPosition - 1)[3]) - 1) + "";
+                    //thumbupCondition = false;
+                    mReturnFollowNumber.setText(mDetailforestHoleslist.get(mReturnPosition - 1)[3]);
+                }
+
+            }
+
+        }
+    }
+
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailforest);
@@ -122,7 +178,7 @@ public class DetailForestActivity extends AppCompatActivity {
         }
         mDetailForestCl=(ConstraintLayout)findViewById(R.id.cl_detailforest);
 
-        back = (ImageView) findViewById(R.id.iv_titlebartransparent_back);
+        back = (ConstraintLayout) findViewById(R.id.cl_titlebartransparent_back);
         head_2=(ImageView)findViewById(R.id.iv_detailforest_cover);
         mTitlebarTextTv=(TextView)findViewById(R.id.tv_titlebartransparent_title);
 
@@ -168,6 +224,7 @@ public class DetailForestActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getBack();
                 finish();
             }
         });
@@ -254,6 +311,24 @@ public class DetailForestActivity extends AppCompatActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
     }
+
+
+
+    @Override
+    public void onBackPressed() {
+        getBack();
+        super.onBackPressed();
+
+        //System.out.println("按下了back键   onBackPressed()");
+    }
+
+    private void getBack(){
+        Intent data=new Intent();
+        data.putExtra("JoinCondition",mSendBackDateJoinCondtion);
+        //data.putExtra("FollowCondition",mSendBackDateFollowCondtion);
+        setResult(RESULTCODE_COMMENT_2,data);
+    }
+
 
 
     public static void transparentStatusBar(Window window) {
@@ -513,6 +588,7 @@ public class DetailForestActivity extends AppCompatActivity {
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                         Toast.makeText(DetailForestActivity.this, "退出成功", Toast.LENGTH_SHORT).show();
                                                         data[5] = "false";
+                                                        mSendBackDateJoinCondtion=data[5];
                                                         button.setPadding(30, 5, 6, 6);
                                                         button.setBackground(getDrawable(R.drawable.forest_button));
                                                         button.setText("加入");
@@ -543,7 +619,7 @@ public class DetailForestActivity extends AppCompatActivity {
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                                 Toast.makeText(DetailForestActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
                                                 data[5] = "true";
-
+                                                mSendBackDateJoinCondtion=data[5];
                                                 button.setPadding(0, 0, 0, 0);
                                                 //button.setPadding(-30,-5,-6,-6);
                                                 //button=(Button)view.findViewById(R.id.rectangle_4);
@@ -611,7 +687,7 @@ public class DetailForestActivity extends AppCompatActivity {
                             titlebar.setBackgroundColor(Color.parseColor("#"+intToHex((int)(d*255))+"4B9F79"));
                             mTitlebarTextTv.setAlpha(d);
                             mTitlebarTextTv.setText(data[7]);
-                            back.setAlpha(1f);
+                           // back.setAlpha(1f);
                         } else {
                             if (Build.VERSION.SDK_INT >= 21) {
                                 window.setStatusBarColor(getResources().getColor(R.color.HH_BandColor_1));
@@ -632,6 +708,7 @@ public class DetailForestActivity extends AppCompatActivity {
                 hole_and_number.setText(data[4]);
                 content.setText(data[2]);
                 if(data[5].equals("false")){
+
                     button.setPadding(30,5,6,6);
                     button.setBackground(getDrawable(R.drawable.forest_button));
                     button.setText("加入");
@@ -663,8 +740,6 @@ public class DetailForestActivity extends AppCompatActivity {
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-
-
 
                                 int width =resource.getWidth();
                                 int height = resource.getHeight()*2;
@@ -864,8 +939,16 @@ public class DetailForestActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         RemoveOnScrollListener();
-                        Intent intent= CommentListActivity.newIntent(DetailForestActivity.this, mDetailforestHoleslist.get(position-1));
-                        startActivity(intent);
+
+                        mReturnIsThumbup=is_thumbup;
+                        mReturnIsReply=is_reply;
+                        mReturnIsFollow=is_follow;
+                        mReturnThumbupNUmber=thumbup_num;
+                        mReturnReplyNumber=reply_num;
+                        mReturnFollowNumber=follow_num;
+                        mReturnPosition=position;
+                        Intent intent = CommentListActivity.newIntent(DetailForestActivity.this, mDetailforestHoleslist.get(position-1));
+                        startActivityForResult(intent,REQUESTCODE_COMMENT);
                     }
                 });
                 thumbup.setOnClickListener(new View.OnClickListener(){

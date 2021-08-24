@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -76,6 +77,7 @@ public class ForestFragment extends Fragment {
     private int mStartingLoadId = 20;
     private RefreshLayout mRefreshConditionRl, mLoadMoreCondotionRl;
     private int CONSTANT_STANDARD_LOAD_SIZE = 20;
+
     private Boolean mIfFirstLoad=true;
     private SmartRefreshLayout mTitleBarSrl;
     private Boolean mPrestrainCondition=false;
@@ -84,10 +86,62 @@ public class ForestFragment extends Fragment {
     private Boolean more_condition=false;
     private  ConstraintLayout mMoreWhatCl;
     private RecyclerView.OnScrollListener mOnscrollListener;
+
+
+    private ImageView mReturnIsThumbup,mReturnIsReply,mReturnIsFollow;
+    private TextView mReturnThumbupNUmber,mReturnReplyNumber,mReturnFollowNumber;
+    private int mReturnPosition;
+    private int RESULTCODE_COMMENT=1,REQUESTCODE_COMMENT=2;
+
     public static ForestFragment newInstance() {
         ForestFragment fragment = new ForestFragment();
         return fragment;
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode!=RESULTCODE_COMMENT){
+            return;
+        }
+        if(requestCode==REQUESTCODE_COMMENT){
+            String thumbupCondition=data.getStringExtra("ThumbupCondition");
+            String followCondition=data.getStringExtra("FollowCondition");
+            if(thumbupCondition!=null){
+                if(thumbupCondition.equals("true")&& mJoinedHolesList.get(mReturnPosition - 1)[11].equals("false")){
+                    mReturnIsThumbup.setImageResource(R.mipmap.active);
+                    mJoinedHolesList.get(mReturnPosition - 1)[11] = "true";
+
+                    mJoinedHolesList.get(mReturnPosition - 1)[13] = (Integer.parseInt(mJoinedHolesList.get(mReturnPosition - 1)[13]) + 1) + "";
+                    //thumbupCondition = false;
+                    mReturnThumbupNUmber.setText(mJoinedHolesList.get(mReturnPosition - 1)[13]);
+                }else if(thumbupCondition.equals("false")&& mJoinedHolesList.get(mReturnPosition - 1)[11].equals("true")){
+                    mReturnIsThumbup.setImageResource(R.mipmap.inactive);
+                    mJoinedHolesList.get(mReturnPosition - 1)[11] = "false";
+                    mJoinedHolesList.get(mReturnPosition - 1)[13] = (Integer.parseInt(mJoinedHolesList.get(mReturnPosition - 1)[13]) - 1) + "";
+                    //thumbupCondition = false;
+                    mReturnThumbupNUmber.setText(mJoinedHolesList.get(mReturnPosition - 1)[13]);
+                }
+            }
+            if(followCondition!=null){
+                if(followCondition.equals("true")&& mJoinedHolesList.get(mReturnPosition - 1)[8].equals("false")){
+                    mReturnIsFollow.setImageResource(R.mipmap.active_3);
+                    mJoinedHolesList.get(mReturnPosition - 1)[8] = "true";
+                    mJoinedHolesList.get(mReturnPosition - 1)[3] = (Integer.parseInt(mJoinedHolesList.get(mReturnPosition - 1)[3]) + 1) + "";
+                    //followCondition = false;
+                    mReturnFollowNumber.setText(mJoinedHolesList.get(mReturnPosition - 1)[3]);
+                }else if(followCondition.equals("false")&& mJoinedHolesList.get(mReturnPosition - 1)[8].equals("true")){
+                    mReturnIsFollow.setImageResource(R.mipmap.inactive);
+                    mJoinedHolesList.get(mReturnPosition - 1)[8] = "false";
+                    mJoinedHolesList.get(mReturnPosition - 1)[3] = (Integer.parseInt(mJoinedHolesList.get(mReturnPosition - 1)[3]) - 1) + "";
+                    //thumbupCondition = false;
+                    mReturnFollowNumber.setText(mJoinedHolesList.get(mReturnPosition - 1)[3]);
+                }
+
+            }
+
+        }
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -445,23 +499,6 @@ public class ForestFragment extends Fragment {
                     list[12] = sonObject.getInt("reply_num") + "";
                     list[13] = sonObject.getInt("thumbup_num") + "";
                     mJoinedHolesList.add(list);
-                    /*
-                    detailforest2[f][0] = sonObject.getString("background_image_url");
-                    detailforest2[f][1] = sonObject.getString("content");
-                    detailforest2[f][2] = sonObject.getString("created_timestamp");
-                    detailforest2[f][3] = sonObject.getInt("follow_num")+"";
-                    detailforest2[f][4] = sonObject.getInt("forest_id")+"";
-                    detailforest2[f][5] = sonObject.getString("forest_name");
-                    detailforest2[f][6] = sonObject.getInt("hole_id")+"";
-                    //detailforest2[f][1] = sonObject.getString("image");
-                    detailforest2[f][8] = sonObject.getBoolean("is_follow")+"";
-                    detailforest2[f][9] = sonObject.getBoolean("is_mine")+"";
-                    detailforest2[f][10] = sonObject.getBoolean("is_reply")+"";
-                    detailforest2[f][11] = sonObject.getBoolean("is_thumbup")+"";
-                    detailforest2[f][12] = sonObject.getInt("reply_num")+"";
-                    detailforest2[f][13] = sonObject.getInt("thumbup_num")+"";
-
-                     */
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -912,6 +949,7 @@ public class ForestFragment extends Fragment {
                                                         mJoinedHolesList.get(position - 1)[3] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[3]) + 1) + "";
                                                         followCondition = false;
                                                         follow_num.setText(mJoinedHolesList.get(position - 1)[3]);
+                                                        //mReturnIsFollow="true";
                                                     }else{
                                                         followCondition = false;
                                                         String json = "null";
@@ -993,9 +1031,18 @@ public class ForestFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         RemoveOnScrollListener();
-                        Log.d("data[2]1", mJoinedHolesList.get(position - 1)[2]);
+                        mReturnIsThumbup=is_thumbup;
+                        mReturnIsReply=is_reply;
+                        mReturnIsFollow=is_follow;
+                        mReturnThumbupNUmber=thumbup_num;
+                        mReturnReplyNumber=reply_num;
+                        mReturnFollowNumber=follow_num;
+                        mReturnPosition=position;
+                        //is_follow
+                       // Log.d("data[2]1", mJoinedHolesList.get(position - 1)[2]);
                         Intent intent = CommentListActivity.newIntent(getActivity(), mJoinedHolesList.get(position - 1));
-                        startActivity(intent);
+                        startActivityForResult(intent,REQUESTCODE_COMMENT);
+                        //startActivity(intent);
                     }
                 });
                 background_image_url.setOnClickListener(new View.OnClickListener() {
@@ -1134,5 +1181,6 @@ public class ForestFragment extends Fragment {
             more_condition = false;
         }
     }
+
 }
 

@@ -75,7 +75,7 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 public class CommentListActivity extends AppCompatActivity {
     private static final String key="key_1";
     private TextView title;
-    private ImageView back;
+    private ConstraintLayout back;
     private EditText mPublishReplyEt;
     private Button mPublishReplyBtn;
     private RecyclerView mCommentlistRv;
@@ -105,11 +105,16 @@ public class CommentListActivity extends AppCompatActivity {
     private RecyclerView.OnScrollListener mOnscrollListener;
 
     private Button mOnlyMaster;
+
+
+    private String mSendBackDateThumbupCondtion,mSendBackDateFollowCondtion;
+    private int RESULTCODE_COMMENT=1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.GrayScale_100), true);
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -300,7 +305,7 @@ public class CommentListActivity extends AppCompatActivity {
         });
 
 
-        back = (ImageView) findViewById(R.id.iv_titlebargreen_back);
+        back = (ConstraintLayout) findViewById(R.id.cl_titlebargreen_back);
         title = (TextView) findViewById(R.id.tv_titlebargreen_title);
 
 
@@ -348,6 +353,7 @@ public class CommentListActivity extends AppCompatActivity {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 // 隐藏软键盘
                 imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                getBack();
                 finish();
             }
         });
@@ -356,6 +362,24 @@ public class CommentListActivity extends AppCompatActivity {
        //创建接口实例
        // replyUpdate(0);
     }
+
+
+    @Override
+    public void onBackPressed() {
+        getBack();
+        super.onBackPressed();
+
+        //System.out.println("按下了back键   onBackPressed()");
+    }
+    private void getBack(){
+        Intent data=new Intent();
+        data.putExtra("ThumbupCondition",mSendBackDateThumbupCondtion);
+        data.putExtra("FollowCondition",mSendBackDateFollowCondtion);
+        setResult(RESULTCODE_COMMENT,data);
+    }
+
+
+
    private void hotReplyUpdate(){
        new Thread(new Runnable() {//加载纵向列表标题
            @Override
@@ -653,8 +677,6 @@ public class CommentListActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-
-
                     for(int f=0;f<jsonArray2.length();f++) {
                         JSONObject sonObject2 = jsonArray2.getJSONObject(f);
                         String[] singleReply2=new String[12];
@@ -672,9 +694,6 @@ public class CommentListActivity extends AppCompatActivity {
                         singleReply2[11] = sonObject2.getInt("thumbup_num")+"";
                         mDetailReplyList.add(singleReply2);
                     }
-
-
-
 
                     for(int f=0;f<jsonArray.length();f++) {
                         JSONObject sonObject = jsonArray.getJSONObject(f);
@@ -811,6 +830,7 @@ public class CommentListActivity extends AppCompatActivity {
                                                 if (response.code() == 200) {
                                                     String json = "null";
                                                     String returncondition = null;
+                                                    getBack();
                                                     finish();
                                                     if (response.body() != null) {
                                                         try {
@@ -989,6 +1009,7 @@ public class CommentListActivity extends AppCompatActivity {
                                                         data[13] = (Integer.parseInt(data[13]) + 1) + "";
                                                         thumbupCondition = false;
                                                         thumbup_num.setText(data[13]);
+                                                        mSendBackDateThumbupCondtion=data[11];
                                                     }else{
                                                         FailureAction();
                                                         String json = "null";
@@ -1034,6 +1055,7 @@ public class CommentListActivity extends AppCompatActivity {
                                                         data[13] = (Integer.parseInt(data[13]) - 1) + "";
                                                         thumbupCondition = false;
                                                         thumbup_num.setText(data[13]);
+                                                        mSendBackDateThumbupCondtion=data[11];
                                                     }else{
                                                         FailureAction();
                                                         String json = "null";
@@ -1094,6 +1116,7 @@ public class CommentListActivity extends AppCompatActivity {
                                                             data[3] = (Integer.parseInt(data[3]) + 1) + "";
                                                             followCondition = false;
                                                             follow_num.setText(data[3]);
+                                                            mSendBackDateFollowCondtion=data[8];
                                                         }else{
                                                             FailureAction();
                                                             //followCondition = false;
@@ -1141,6 +1164,7 @@ public class CommentListActivity extends AppCompatActivity {
                                                             data[3] = (Integer.parseInt(data[3]) - 1) + "";
                                                             followCondition = false;
                                                             follow_num.setText(data[3]);
+                                                            mSendBackDateFollowCondtion=data[8];
                                                         }else{
                                                             FailureAction();
                                                             //followCondition = false;
@@ -1196,18 +1220,14 @@ public class CommentListActivity extends AppCompatActivity {
                     orders.setImageResource(R.mipmap.group112);
                 }
 
-
-                Log.d("data[2]3", data[2]);
                 if (data[5].equals("")) {
                     forest_name.setVisibility(View.INVISIBLE);
                 } else {
                     forest_name.setVisibility(View.VISIBLE);
                     forest_name.setText("  " + data[5] + "   ");
                 }
-              // Log.d("????????????",data[2].substring(0,4)+data[2].substring(5,7)+data[2].substring(8,10)+data[2].substring(11,13)+data[2].substring(14,16)+data[2].substring(14,16));
                 created_timestamp.setText(TimeCount.time(data[2]));
                 content.setText(data[1]);
-               // Log.d("content",data[1]+"");
                 thumbup_num.setText(data[13]);
                 reply_num.setText(data[12]);
                 follow_num.setText(data[3]);
@@ -1480,6 +1500,23 @@ public class CommentListActivity extends AppCompatActivity {
                                                         mDetailReplyList.get(position)[11] = (Integer.parseInt(mDetailReplyList.get(position)[11]) + 1) + "";
                                                         thumbupCondition = false;
                                                         thumbup_num.setText(mDetailReplyList.get(position)[11]);
+                                                        if(position<(jsonArray2.length())){
+                                                            for(int a=position+1;a<mDetailReplyList.size();a++){
+                                                               if( mDetailReplyList.get(a)[7].equals(mDetailReplyList.get(position)[7])){
+                                                                   mDetailReplyList.get(a)[6] = "true";
+                                                                   mDetailReplyList.get(a)[11] = (Integer.parseInt(mDetailReplyList.get(a)[11]) + 1) + "";
+                                                                   mReplyAdapter.notifyItemChanged(a+1,mDetailReplyList.size()+1);
+                                                               }
+                                                            }
+                                                        }else{
+                                                            for(int a=0;a<jsonArray2.length();a++){
+                                                                if( mDetailReplyList.get(a)[7].equals(mDetailReplyList.get(position)[7])){
+                                                                    mDetailReplyList.get(a)[6] = "true";
+                                                                    mDetailReplyList.get(a)[11] = (Integer.parseInt(mDetailReplyList.get(a)[11]) + 1) + "";
+                                                                    mReplyAdapter.notifyItemChanged(a+1,mDetailReplyList.size()+1);
+                                                                }
+                                                            }
+                                                        }
                                                     }else{
                                                         FailureAction();
                                                        // followCondition = false;
@@ -1527,6 +1564,23 @@ public class CommentListActivity extends AppCompatActivity {
                                                         mDetailReplyList.get(position)[11] = (Integer.parseInt(mDetailReplyList.get(position)[11]) - 1) + "";
                                                         thumbupCondition = false;
                                                         thumbup_num.setText(mDetailReplyList.get(position)[11]);
+                                                        if(position<(jsonArray2.length())){
+                                                            for(int a=position+1;a<mDetailReplyList.size();a++){
+                                                                if( mDetailReplyList.get(a)[7].equals(mDetailReplyList.get(position)[7])){
+                                                                    mDetailReplyList.get(a)[6] = "false";
+                                                                    mDetailReplyList.get(a)[11] = (Integer.parseInt(mDetailReplyList.get(a)[11]) - 1) + "";
+                                                                    mReplyAdapter.notifyItemChanged(a+1,mDetailReplyList.size()+1);
+                                                                }
+                                                            }
+                                                        }else{
+                                                            for(int a=0;a<jsonArray2.length();a++){
+                                                                if( mDetailReplyList.get(a)[7].equals(mDetailReplyList.get(position)[7])){
+                                                                    mDetailReplyList.get(a)[6] = "true";
+                                                                    mDetailReplyList.get(a)[11] = (Integer.parseInt(mDetailReplyList.get(a)[11]) + 1) + "";
+                                                                    mReplyAdapter.notifyItemChanged(a+1,mDetailReplyList.size()+1);
+                                                                }
+                                                            }
+                                                        }
                                                     }else{
                                                        // followCondition = false;
                                                         String json = "null";

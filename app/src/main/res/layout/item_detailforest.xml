@@ -21,6 +21,7 @@
             android:layout_marginStart="22dp"
             android:layout_marginTop="10dp"
             android:text="#1037"
+            android:textStyle="bold"
             android:textColor="@color/GrayScale_0"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -124,15 +125,16 @@
 
         <TextView
             android:id="@+id/tv_itemdetailforest_content"
-            android:layout_width="@dimen/dp_330"
+            android:layout_width="@dimen/dp_340"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:ellipsize="end"
+            android:lineHeight="21sp"
             android:maxWidth="@dimen/dp_310"
             android:maxLines="5"
             android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
             android:textColor="@color/GrayScale_20"
-            android:textSize="15sp"
+            android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@+id/tv_itemdetailforest_time"
             app:layout_constraintTop_toBottomOf="@+id/tv_itemdetailforest_time" />
 

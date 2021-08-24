@@ -23,6 +23,7 @@
         android:importantForAutofill="no"
         android:maxLength="10"
         android:inputType="none"
+        android:maxLines="1"
         android:textCursorDrawable="@drawable/standard_cursor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -85,7 +86,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginTop="@dimen/dp_20"
         android:background="@drawable/standard_corner"
-
+        android:maxLines="1"
         android:hint="@string/register_4"
         android:importantForAutofill="no"
         android:inputType="none"

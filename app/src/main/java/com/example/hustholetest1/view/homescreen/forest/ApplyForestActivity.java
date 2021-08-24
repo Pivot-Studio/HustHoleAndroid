@@ -84,7 +84,8 @@ public class ApplyForestActivity extends AppCompatActivity {
     private Button ppwButton,addCover,send;
     private ImageButton addIcon;
     private EditText forestName,forestIntroduce;
-    private ImageView back,mCoverIv;
+    private ConstraintLayout back;
+    private ImageView mCoverIv;
     private PopupWindow popWindow;
     private ConstraintLayout constraintLayout;
     private ScrollView scrollView;
@@ -111,7 +112,7 @@ public class ApplyForestActivity extends AppCompatActivity {
         titleBar=(TextView)findViewById(R.id.tv_titlebarcentergreen_title);
         titleBar.setText("申请小树林");
         textView=(TextView)findViewById(R.id.tv_applyforest_content);
-        back=(ImageView)findViewById(R.id.iv_titlebarcentergreen_back);
+        back=(ConstraintLayout) findViewById(R.id.cl_titlebarcentergreen_back);
         warnName=(TextView)findViewById(R.id.tv_applyforest_warnname);
         warnIntroduce=(TextView)findViewById(R.id.tv_applyforest_warnintroduce);
         warnName.setVisibility(View.INVISIBLE);

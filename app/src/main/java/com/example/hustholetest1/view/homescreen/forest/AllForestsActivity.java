@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -71,7 +72,7 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 public class AllForestsActivity extends AppCompatActivity {
     private MaxHeightRecyclerView recyclerView;
 
-    private ImageView back;
+    private ConstraintLayout back;
     private TextView title;
     private Button build;
     private RequestInterface request;
@@ -86,6 +87,46 @@ public class AllForestsActivity extends AppCompatActivity {
     private static final String key="key_1";
     private Boolean refreshcondition=false;
     private AVLoadingIndicatorView mAVLoadingIndicatorView;
+
+    private int RESULTCODE_COMMENT_2=2,REQUESTCODE_COMMENT=1;
+    private Button mReturnJoinButton;
+    private String mConditionIfJoined;
+    private int mFatherClPosition,mClPosition;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+         if(resultCode!=RESULTCODE_COMMENT_2){
+            return;
+        }
+        if(requestCode==REQUESTCODE_COMMENT) {
+            String joinedCondition = data.getStringExtra("JoinCondition");
+            if (joinedCondition!= null) {
+                if(forest_list_0[mFatherClPosition][mClPosition][5].equals("true")&&joinedCondition.equals("false")){
+                    //mConditionIfJoined="false";
+                    forest_list_0[mFatherClPosition][mClPosition][5] = "false";
+                    mReturnJoinButton.setPadding(30, 5, 6, 6);
+                    mReturnJoinButton.setBackground(getDrawable(R.drawable.forest_button));
+                    mReturnJoinButton.setText("加入");
+                    mReturnJoinButton.setTextColor(getResources().getColor(R.color.GrayScale_100));
+                    Drawable homepressed = getResources().getDrawable(R.mipmap.group243, null);
+                    homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
+                    mReturnJoinButton.setCompoundDrawables(homepressed, null, null, null);
+                }else if (forest_list_0[mFatherClPosition][mClPosition][5].equals("false")&&joinedCondition.equals("true")){
+                   // mConditionIfJoined="true";
+                    forest_list_0[mFatherClPosition][mClPosition][5] = "true";
+                    mReturnJoinButton.setPadding(0, 0, 0, 0);
+                    mReturnJoinButton.setBackground(getDrawable(R.drawable.forest_button_white));
+                    mReturnJoinButton.setText("已加入");
+                    // button.setGravity(Gravity.CENTER_VERTICAL);
+                    mReturnJoinButton.setCompoundDrawables(null, null, null, null);
+                    mReturnJoinButton.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
+                }
+            }
+        }
+
+
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +160,7 @@ public class AllForestsActivity extends AppCompatActivity {
                 //传入false表示加载失败
             }
         });*/
-        back= (ImageView) findViewById(R.id.iv_titlebargreen_back);
+        back= (ConstraintLayout) findViewById(R.id.cl_titlebargreen_back);
         title=(TextView)findViewById(R.id.tv_titlebargreen_title);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -429,11 +470,7 @@ public void Update2(){//加载热门小树林
 
         @Override
         protected void onPostExecute(Void unused) {
-            //recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number,false));
-
-                //mAllForestsDetailAdapter=new AllForestsDetailAdapter(DT2number, true);
-                recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number, true));
-
+            recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number, true));
         }
         @Override
         protected Void doInBackground(MyTaskParams...voids) {
@@ -689,8 +726,13 @@ public void Update2(){//加载热门小树林
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            mFatherClPosition=father_position;
+                            mClPosition=position;
+                            mConditionIfJoined=forest_list_0[mFatherClPosition][mClPosition][5];
+                            mReturnJoinButton=button;
                             Intent intent = DetailForestActivity.newIntent(AllForestsActivity.this,forest_list_0[father_position][position]);
-                            startActivity(intent);
+                            startActivityForResult(intent,REQUESTCODE_COMMENT);
+                            //startActivity(intent);
                         }
                     });
                 }

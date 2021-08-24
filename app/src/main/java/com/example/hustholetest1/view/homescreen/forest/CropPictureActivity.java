@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
@@ -88,7 +89,8 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
     private Button yes,no;
     private TextView titleBarTitle;
     private MyImageView photo;
-    private ImageView  titleBarBack,mRevolve,mCropPicture;
+    private ConstraintLayout titleBarBack;
+    private ImageView mRevolve,mCropPicture;
     private AVLoadingIndicatorView mAVLoadingIndicatorView;
 
 
@@ -124,7 +126,7 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
         mAVLoadingIndicatorView.setVisibility(View.GONE);
         titleBarTitle=(TextView)findViewById(R.id.tv_titlebargreen_title);
         titleBarTitle.setText("裁剪图片");
-        titleBarBack=(ImageView) findViewById(R.id.iv_titlebargreen_back);
+        titleBarBack=(ConstraintLayout) findViewById(R.id.cl_titlebargreen_back);
         titleBarBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,8 +1,11 @@
 package com.example.hustholetest1.view.homescreen.publishhole;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -10,6 +13,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -45,6 +49,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -192,7 +197,7 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         EditTextReaction.ButtonReaction(editText,button0);
         EditTextReaction.EditTextSize(editText,string1,14);
         linearLayout=(ConstraintLayout)findViewById(R.id.include);
-
+        TextView limit2=(TextView) findViewById(R.id.limit2);
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -227,15 +232,24 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                 View contentView = LayoutInflater.from(PublishHoleActivity.this).inflate(R.layout.ppw_publishhole, null);
                 View contentView2 = LayoutInflater.from(PublishHoleActivity.this).inflate(R.layout.ppw_homepagedarkscreen, null);
                 //关闭掉对话框,拿到对话框的对象
+
+                int[] location=new int[2];
+                limit.getLocationOnScreen(location);
+                int[] location2=new int[2];
+                limit2.getLocationOnScreen(location2);
+
                 popWindow2=new PopupWindow(contentView2);
                 popWindow2.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
                 popWindow2.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-                popWindow2.showAsDropDown(linearLayout);
                 popWindow2.setAnimationStyle(R.style.darkScreenAnim);
+                popWindow2.showAsDropDown(linearLayout);
+
                 popWindow=new PopupWindow(contentView);
                 popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-                popWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+                popWindow.setHeight(location2[1]-location[1]);
+                Toast.makeText(PublishHoleActivity.this,location2[1]-location[1]+"",Toast.LENGTH_SHORT).show();
                 popWindow.setAnimationStyle(R.style.Page2Anim);
+                //popWindow.setClippingEnabled(false);
                 popWindow.showAsDropDown(limit);
 
 
@@ -276,7 +290,7 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                                     }
                                     JSONObject jsonObject = new JSONObject(json);
                                     //读取
-                                    jsonArray = jsonObject.getJSONArray("forests");
+                                    jsonArray=jsonObject.getJSONArray("forests");
                                     detailforest=new String[jsonArray.length()][8];
                                     new DownloadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
                                     //}
@@ -305,8 +319,8 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                                         json = response.body().string();
                                     }
 
-                                    JSONObject jsonObject = new JSONObject(json);
-                                    jsonArray2 = jsonObject.getJSONArray("forests");
+                                    JSONObject jsonObject=new JSONObject(json);
+                                    jsonArray2=jsonObject.getJSONArray("forests");
                                     detailforest2=new String[jsonArray2.length()][8];
                                     new DownloadTask2().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
 
@@ -440,11 +454,8 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         @Override
         public int getItemViewType(int position) {
             if (position ==1||position==2+jsonArray.length()) {
-//头部View
                 return ITEM_TYPE_HEADER;
-
             } else {
-//内容Vie
                 return ITEM_TYPE_CONTENT;
             }
         }
@@ -489,11 +500,9 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                             text.setText(detailforest[position-2][7]);
                             what=detailforest[position-2][3];
                         }else if(position==0){
-
                             text.setText("未选择加入小树林");
                             what="0";
                         }
-
                     }
                 });
                 view.setOnClickListener(new View.OnClickListener(){
@@ -518,15 +527,12 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                 RoundedCorners roundedCorners = new RoundedCorners(16);
                 RequestOptions options1 = RequestOptions.bitmapTransform(roundedCorners);
                 if(position==0) {
-
                     Glide.with(PublishHoleActivity.this)
                             .load(R.mipmap.vector3)
                             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
                             .apply(options1)
                             .into(background_image_url);
-                        Log.d("position",position+"");
                     content.setText("未选择加入小树林");
-
                 }else if (position > 2 + jsonArray.length()) {
                     content.setText(detailforest2[position-3-jsonArray.length()][7]);
                     Glide.with(PublishHoleActivity.this)
@@ -593,5 +599,59 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         popWindow.dismiss();
         popWindow2.dismiss();
         }
+    }
+    //获取虚拟按键的高度
+    public static int getNavigationBarHeight(Context context) {
+        int result = 0;
+        if (hasNavBar(context)) {
+            Resources res = context.getResources();
+            int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                result = res.getDimensionPixelSize(resourceId);
+            }
+        }
+        return result;
+    }
+    /**
+     * 检查是否存在虚拟按键栏
+     *
+     * @param context
+     * @return
+     */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    public static boolean hasNavBar(Context context) {
+        Resources res = context.getResources();
+        int resourceId = res.getIdentifier("config_showNavigationBar", "bool", "android");
+        if (resourceId != 0) {
+            boolean hasNav = res.getBoolean(resourceId);
+            // check override flag
+            String sNavBarOverride = getNavBarOverride();
+            if ("1".equals(sNavBarOverride)) {
+                hasNav = false;
+            } else if ("0".equals(sNavBarOverride)) {
+                hasNav = true;
+            }
+            return hasNav;
+        } else { // fallback
+            return !ViewConfiguration.get(context).hasPermanentMenuKey();
+        }
+    }
+    /**
+     * 判断虚拟按键栏是否重写
+     *
+     * @return
+     */
+    private static String getNavBarOverride() {
+        String sNavBarOverride = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                Class c = Class.forName("android.os.SystemProperties");
+                Method m = c.getDeclaredMethod("get", String.class);
+                m.setAccessible(true);
+                sNavBarOverride = (String) m.invoke(null, "qemu.hw.mainkeys");
+            } catch (Throwable e) {
+            }
+        }
+        return sNavBarOverride;
     }
 }

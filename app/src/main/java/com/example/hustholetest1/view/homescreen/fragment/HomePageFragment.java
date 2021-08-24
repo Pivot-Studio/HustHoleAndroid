@@ -90,6 +90,55 @@ public class HomePageFragment extends Fragment {
     private  ConstraintLayout mMoreWhatCl;
 
 
+    private ImageView mReturnIsThumbup,mReturnIsReply,mReturnIsFollow;
+    private TextView mReturnThumbupNUmber,mReturnReplyNumber,mReturnFollowNumber;
+    private int mReturnPosition;
+    private int RESULTCODE_COMMENT=1,REQUESTCODE_COMMENT=3;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode!=RESULTCODE_COMMENT){
+            return;
+        }
+        if(requestCode==REQUESTCODE_COMMENT){
+            String thumbupCondition=data.getStringExtra("ThumbupCondition");
+            String followCondition=data.getStringExtra("FollowCondition");
+            if(thumbupCondition!=null){
+                if(thumbupCondition.equals("true")&&  mHompageHolesList.get(mReturnPosition)[11].equals("false")){
+                    mReturnIsThumbup.setImageResource(R.mipmap.active);
+                    mHompageHolesList.get(mReturnPosition)[11] = "true";
+                    mHompageHolesList.get(mReturnPosition)[13] = (Integer.parseInt(mHompageHolesList.get(mReturnPosition)[13]) + 1) + "";
+                    //thumbupCondition = false;
+                    mReturnThumbupNUmber.setText(mHompageHolesList.get(mReturnPosition)[13]);
+                }else if(thumbupCondition.equals("false")&&  mHompageHolesList.get(mReturnPosition)[11].equals("true")){
+                    mReturnIsThumbup.setImageResource(R.mipmap.inactive);
+                    mHompageHolesList.get(mReturnPosition)[11] = "false";
+                    mHompageHolesList.get(mReturnPosition)[13] = (Integer.parseInt(mHompageHolesList.get(mReturnPosition)[13]) - 1) + "";
+                    //thumbupCondition = false;
+                    mReturnThumbupNUmber.setText(mHompageHolesList.get(mReturnPosition)[13]);
+                }
+            }
+            if(followCondition!=null){
+                if(followCondition.equals("true")&&  mHompageHolesList.get(mReturnPosition)[8].equals("false")){
+                    mReturnIsFollow.setImageResource(R.mipmap.active_3);
+                    mHompageHolesList.get(mReturnPosition )[8] = "true";
+                    mHompageHolesList.get(mReturnPosition )[3] = (Integer.parseInt(mHompageHolesList.get(mReturnPosition)[3]) + 1) + "";
+                    //followCondition = false;
+                    mReturnFollowNumber.setText(mHompageHolesList.get(mReturnPosition)[3]);
+                }else if(followCondition.equals("false")&& mHompageHolesList.get(mReturnPosition)[8].equals("true")){
+                    mReturnIsFollow.setImageResource(R.mipmap.inactive);
+                    mHompageHolesList.get(mReturnPosition )[8] = "false";
+                    mHompageHolesList.get(mReturnPosition )[3] = (Integer.parseInt(mHompageHolesList.get(mReturnPosition )[3]) - 1) + "";
+                    //thumbupCondition = false;
+                    mReturnFollowNumber.setText(mHompageHolesList.get(mReturnPosition)[3]);
+                }
+
+            }
+
+        }
+    }
+
     public static HomePageFragment newInstance() {
         HomePageFragment fragment = new HomePageFragment();
         return fragment;
@@ -890,9 +939,27 @@ public class HomePageFragment extends Fragment {
                         @Override
                         public void onClick(View v) {
                             RemoveOnScrollListener();
-                            Log.d("data[2]1", mHompageHolesList.get(position)[2]);
+
+
+                            mReturnIsThumbup=is_thumbup;
+                            mReturnIsReply=is_reply;
+                            mReturnIsFollow=is_follow;
+                            mReturnThumbupNUmber=thumbup_num;
+                            mReturnReplyNumber=reply_num;
+                            mReturnFollowNumber=follow_num;
+                            mReturnPosition=position;
+                            //is_follow
+                            // Log.d("data[2]1", mJoinedHolesList.get(position - 1)[2]);
                             Intent intent = CommentListActivity.newIntent(getActivity(), mHompageHolesList.get(position));
-                            startActivity(intent);
+                            startActivityForResult(intent,REQUESTCODE_COMMENT);
+
+
+
+
+
+
+                            //Intent intent = CommentListActivity.newIntent(getActivity(), );
+                           // startActivity(intent);
                         }
                     });
                     forest_name.setOnClickListener(new View.OnClickListener() {
