@@ -67,7 +67,7 @@
 
 
 
-    <string name="page1fragment_1">搜索树洞</string>
+    <string name="page1fragment_1">搜搜你想倾听的</string>
     <string name="page1fragment_2">树洞广场</string>
     <string name="page1fragment_3">关注</string>
     <string name="page1fragment_4">推荐</string>
@@ -144,4 +144,6 @@
     <string name="network_deletefailture">删除失败，请检查网络</string>
     <string name="network_reportfailture">举报失败，请检查网络</string>
     <string name="network_unknownfailture">未知错误</string>
+    <string name="network_loginfailure">登录失败，请检查网络</string>
+    <string name="network_failure">请检查网络</string>
 </resources>

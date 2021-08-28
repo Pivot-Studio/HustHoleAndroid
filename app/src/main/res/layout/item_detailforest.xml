@@ -18,7 +18,7 @@
             android:id="@+id/tv_itemdetailforest_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
+            android:layout_marginStart="@dimen/dp_22"
             android:layout_marginTop="10dp"
             android:text="#1037"
             android:textStyle="bold"
@@ -40,7 +40,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_detailforest_thumbup"
-            android:layout_width="@dimen/dp_40"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
             app:layout_constraintStart_toStartOf="@+id/tv_itemdetailforest_content"
             app:layout_constraintTop_toBottomOf="@+id/tv_itemdetailforest_content">
@@ -50,7 +50,7 @@
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_20"
 
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="11dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@mipmap/inactive" />
@@ -59,27 +59,25 @@
                 android:id="@+id/tv_itemdetailforest_thumbupnumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="11dp"
+                android:layout_marginStart="@dimen/dp_6"
                 android:text="15"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_itemdetailforest_thumbup"
                 app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_thumbup" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_detailforest_reply"
-            android:layout_width="@dimen/dp_40"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:layout_marginStart="@dimen/dp_26"
+            android:layout_marginStart="@dimen/dp_67"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cl_detailforest_thumbup">
+            app:layout_constraintStart_toStartOf="@+id/cl_detailforest_thumbup">
 
             <ImageView
                 android:id="@+id/iv_itemdetailforest_reply"
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_16"
                 android:layout_marginBottom="12dp"
-
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@mipmap/inactive_2" />
@@ -88,20 +86,19 @@
                 android:id="@+id/tv_itemdetailforest_replynumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_6"
                 android:text="15"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_itemdetailforest_reply"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_reply"
-                app:layout_constraintTop_toTopOf="@+id/iv_itemdetailforest_reply" />
+                app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_reply" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_detailforest_follow"
-            android:layout_width="@dimen/dp_40"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:layout_marginStart="@dimen/dp_26"
+            android:layout_marginStart="@dimen/dp_67"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cl_detailforest_reply">
+            app:layout_constraintStart_toStartOf="@+id/cl_detailforest_reply">
 
             <ImageView
                 android:id="@+id/iv_itemdetailforest_follow"
@@ -116,25 +113,25 @@
                 android:id="@+id/tv_itemdetailforest_follownumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_6"
                 android:text="15"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_itemdetailforest_follow"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_follow"
-                app:layout_constraintTop_toTopOf="@+id/iv_itemdetailforest_follow" />
+                app:layout_constraintStart_toEndOf="@+id/iv_itemdetailforest_follow" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/tv_itemdetailforest_content"
-            android:layout_width="@dimen/dp_340"
+            android:layout_width="@dimen/dp_335"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:ellipsize="end"
-            android:lineHeight="21sp"
+            android:lineHeight="@dimen/sp_21"
             android:maxWidth="@dimen/dp_310"
             android:maxLines="5"
             android:text="哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈"
             android:textColor="@color/GrayScale_20"
             android:textSize="13sp"
+
             app:layout_constraintStart_toStartOf="@+id/tv_itemdetailforest_time"
             app:layout_constraintTop_toBottomOf="@+id/tv_itemdetailforest_time" />
 

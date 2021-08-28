@@ -12,6 +12,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -49,7 +51,8 @@ import java.util.List;
 public class HomeScreenActivity extends AppCompatActivity {
     private BaseViewPager mViewPager;
     private List<Fragment> mFragments;
-    private FragmentPagerAdapter mAdapter;
+    private MyFragmentPagerAdapter mAdapter;
+    private FragmentManager mFragmentManager;
     private int[] a=new int[2];
 
    // private RadioGroup mTabRadioGroup;
@@ -59,6 +62,7 @@ public class HomeScreenActivity extends AppCompatActivity {
     private FloatingActionButton addhole;
     private ImageView mOptionBoxIv;
     private ConstraintLayout mTitleBarLl;
+    private String mTags;
     public static int gOptionBoxAndBarHeight;
     public static int GetOBAndTBHeight(){
         return gOptionBoxAndBarHeight;
@@ -87,9 +91,6 @@ public class HomeScreenActivity extends AppCompatActivity {
         HomeScreenActivity.this.getWindowManager().getDefaultDisplay().getMetrics(outMetrics);
         int widthPixels = outMetrics.widthPixels;
         int heightPixels = outMetrics.heightPixels;
-
-        //int bb=getActivity().getResources().getDisplayMetrics().densityDpi;
-        //mTabRadioGroup = findViewById(R.id.linearLayout3);
 
         mFragments = new ArrayList<>(4);
         mFragments.add(HomePageFragment.newInstance());
@@ -156,24 +157,13 @@ public class HomeScreenActivity extends AppCompatActivity {
         });
         CheckingToken.getContext(HomeScreenActivity.this);
         TokenInterceptor.getContext(HomeScreenActivity.this);
-        RetrofitManager.RetrofitBuilder("http://hustholetest.pivotstudio.cn/api/");
+        RetrofitManager.RetrofitBuilder(RetrofitManager.API);
         a[0]=R.id.cl_homescreen_hompage;
         a[1]=R.id.cl_homescreen_hompage;
-        /*Drawable drawableradiobutton1 = getResources().getDrawable(R.drawable.bottombar_button2);
-        drawableradiobutton1.setBounds(-30, 0, 60, 100);//第一0是距左右边距离，第二0是距上下边距离，第三69长度,第四宽度
-        radioButton1.setCompoundDrawables(null, drawableradiobutton1, null, null);//只放上面
-        Drawable drawableradiobutton2= getResources().getDrawable(R.drawable.bottombar_button3);
-        drawableradiobutton2.setBounds(30, 0, 120, 100);//第一0是距左右边距离，第二0是距上下边距离，第三69长度,第四宽度
-        radioButton2.setCompoundDrawables(null, drawableradiobutton2, null, null);//只放上面
-*/
-        //final AlertDialog.Builder  mBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.AlertDialogCustom));
-       // final AlertDialog.Builder  mBuilder = new AlertDialog.Builder(this);
-
-
         SharedPreferences editor = HomeScreenActivity.this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
         Boolean condition = editor.getBoolean("iffirstlogin", true);
         String token=editor.getString("token","");
-        //if(condition) {
+        if(condition) {
             View mView = View.inflate(getApplicationContext(), R.layout.dialog_homepage, null);
             // mView.setBackgroundResource(R.drawable.homepage_notice);
             //设置自定义的布局
@@ -219,19 +209,20 @@ public class HomeScreenActivity extends AppCompatActivity {
             });
 
             dialog.show();
+            SharedPreferences.Editor editor2 = getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
             if(token.equals("")){
-
+                editor2.putBoolean("iffirstlogin",true);
             }else{
-                SharedPreferences.Editor editor2 = getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
-                //editor2.putString("token", token);
                 editor2.putBoolean("iffirstlogin",false);
-                editor2.commit();//提
             }
+            editor2.commit();//提
+        }
+        /*if(token.equals("")){
 
+        }else{
 
-        //}
-
-
+        }
+*/
 
         mAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), mFragments);
         mViewPager.setAdapter(mAdapter);
@@ -242,13 +233,6 @@ public class HomeScreenActivity extends AppCompatActivity {
         radioButton.setChecked(true);*/
         ImageView imageView0=(ImageView)findViewById(R.id.fab_homescreen_publishhole);
         imageView0.bringToFront();
-
-
-
-       /* WindowManager mWm = (WindowManager) this.getApplicationContext().getSystemService(
-                Context.WINDOW_SERVICE);//用于设置悬浮框来达到最上层按钮，因为需要权限申请，太麻烦，已经舍弃
-        WindowManager.LayoutParams mWmParams = new WindowManager.LayoutParams();
-        mWm.addView(imageView0, mWmParams);*/
     }
   /*  private RadioGroup.OnCheckedChangeListener mOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener() {
         @Override//用于将滑动界面与按钮同步，因为不要求滑动所以这个暂时没用了
@@ -277,14 +261,35 @@ public class HomeScreenActivity extends AppCompatActivity {
     };
     private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         private List<Fragment> mList;
+        private FragmentManager mFragmentManager1;
         public MyFragmentPagerAdapter(FragmentManager fm, List<Fragment> list) {
             super(fm);
             this.mList = list;
+            mFragmentManager=fm;
         }
+
+
+
+        @Override
+        public Object instantiateItem( ViewGroup container, int position) {
+            //return super.instantiateItem(container, position);
+            Fragment fragment = (Fragment) super.instantiateItem(container, position);
+            if(fragment instanceof HomePageFragment){
+                 mTags = fragment.getTag();
+                Log.e("instantiateItem", mTags);
+            }
+            return fragment;
+
+        }
+
         @Override
         public Fragment getItem(int position) {
-            return this.mList == null ? null : this.mList.get(position);
+             Log.d("position",position+"");
+
+
+                 return this.mList == null ? null : this.mList.get(position);
         }
+
         @Override
         public int getCount() {
             return this.mList == null ? 0 : this.mList.size();
@@ -295,16 +300,24 @@ public class HomeScreenActivity extends AppCompatActivity {
         super.onDestroy();
         mViewPager.removeOnPageChangeListener(mPageChangeListener);
     }
+
     public void onClick(View v) {
+        if(a[1]==R.id.cl_homescreen_hompage&&v.getId()==R.id.cl_homescreen_hompage){
+            HomePageFragment fragment = (HomePageFragment)mFragmentManager.findFragmentByTag(mTags);
+            fragment.homeScreenUpdate();
+           // Toast.makeText(HomeScreenActivity.this,"点击了两次",Toast.LENGTH_SHORT).show();
+            // Log.d("点击了两次","点击了两次");
+        }
         if(v.getId()!=R.id.fab_homescreen_publishhole){
-        a[0]=a[1];
-        a[1]=v.getId();
+            a[0]=a[1];
+            a[1]=v.getId();
         }
         switch (v.getId()) {
             case R.id.fab_homescreen_publishhole://下一步设置密码
-                Log.d("中间按钮","点到了");
+
                 break;
             case R.id.cl_homescreen_hompage:
+
                 mViewPager.setCurrentItem(0,false);
                 textView0.setText(R.string.homepage_1);
                 setBottombarPhoto(a);

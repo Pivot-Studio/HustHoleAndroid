@@ -2,6 +2,8 @@ package com.example.hustholetest1.view.homescreen.message;
 
 import android.util.Log;
 
+import com.example.hustholetest1.model.TimeCount;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -23,7 +25,7 @@ public class ParseNotificationData {
                 String reply_local_id = jsonObject.getString("reply_local_id");
                 String alias = jsonObject.getString("alias");
                 String created_timestamp = jsonObject.getString("created_timestamp");
-                created_timestamp = parseTime(created_timestamp);
+                created_timestamp = TimeCount.time(created_timestamp);
                 String is_read = jsonObject.getString("is_read");
                 String type = jsonObject.getString("type");
                 String content = jsonObject.getString("content");
@@ -53,6 +55,7 @@ public class ParseNotificationData {
         }
         return null;
     }
+    //弃
     public static String parseTime(String created_timestamp){
         StringBuilder sb = new StringBuilder(created_timestamp);
         sb.replace(4,5," ");
@@ -80,7 +83,7 @@ public class ParseNotificationData {
             for (int i = 0; i<jsonArray.length(); i++){
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String timestamp = jsonObject.getString("timestamp");
-                //timestamp = parseTime(timestamp); 这个time的格式我有点迷
+                //timestamp = TimeCount.time(timestamp); 这个time的格式我有点迷
                 String have_read = jsonObject.getString("have_read");
                 String title = jsonObject.getString("title");
                 String id = jsonObject.getString("id");

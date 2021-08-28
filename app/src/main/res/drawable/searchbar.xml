@@ -5,7 +5,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 内部颜色 -->
     <solid
-        android:color="@color/GrayScale_95" android:state_pressed="false" />
+        android:color="@color/GrayScale_95" android:state_pressed="false"/>
+
 
     <!-- 边缘线条颜色 -->
     <stroke

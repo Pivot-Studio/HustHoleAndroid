@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
@@ -33,7 +34,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.EditTextReaction;
-import com.example.hustholetest1.network.CommenRequestManager;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.model.TimeCount;
@@ -43,14 +43,15 @@ import com.example.hustholetest1.R;
 import com.example.hustholetest1.network.OkHttpUtil;
 import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.forest.DetailForestActivity;
-import com.example.hustholetest1.view.homescreen.mypage.Update;
-import com.example.hustholetest1.view.registerandlogin.activity.LoginActivity;
 import com.githang.statusbar.StatusBarCompat;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.wang.avi.AVLoadingIndicatorView;
+import com.zzhoujay.richtext.RichText;
+import com.zzhoujay.richtext.RichType;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -60,7 +61,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kotlin.Result;
+
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -93,7 +94,7 @@ public class CommentListActivity extends AppCompatActivity {
     private RequestInterface request2;
     private String data_hole_id = null;
     private ReplyAdapter mReplyAdapter;
-    private int mStartingLoadId = 0;
+    private int mStartingLoadId = 0,mLastLoadId;
     private RefreshLayout mRefreshConditionRl, mLoadMoreCondotionRl;
     private int CONSTANT_STANDARD_LOAD_SIZE = 20;
     private Boolean mPrestrainCondition=false;
@@ -106,7 +107,7 @@ public class CommentListActivity extends AppCompatActivity {
 
     private Button mOnlyMaster;
 
-
+    private Boolean mSendCondition=false;
     private String mSendBackDateThumbupCondtion,mSendBackDateFollowCondtion;
     private int RESULTCODE_COMMENT=1;
 
@@ -114,6 +115,8 @@ public class CommentListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
+
+        RichText.initCacheDir(this);
         StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -154,7 +157,6 @@ public class CommentListActivity extends AppCompatActivity {
                         mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
                         if(mIfOnlyCondition) {
                             replyUpdate();
-
                         }else{
                             hotReplyUpdate();
                         }
@@ -181,6 +183,8 @@ public class CommentListActivity extends AppCompatActivity {
                     mAVLoadingIndicatorView.show();
                     mOnlyRefreshCondition=true;
                     if (mIfOnlyCondition==false) {
+                        mLastLoadId=mStartingLoadId;
+                        mStartingLoadId=0;
                         mIfOnlyCondition = true;
                         mOnlyMaster.setPadding(30, 5, 6, 6);
                         //mOnlyMaster.setBackground(getDrawable(R.drawable.forest_button));
@@ -191,6 +195,8 @@ public class CommentListActivity extends AppCompatActivity {
                         mOnlyMaster.setCompoundDrawables(homepressed, null, null, null);
                         replyUpdate();
                     } else {
+                        mLastLoadId=mStartingLoadId;
+                        mStartingLoadId=0;
                         //mOnlyMaster.setWidth(64);
                         mIfOnlyCondition = false;
                         mOnlyMaster.setPadding(0, 0, 0, 0);
@@ -232,71 +238,82 @@ public class CommentListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(CheckingToken.IfTokenExist()){
-                    RemoveOnScrollListener();
-                    new Thread(new Runnable() {//加载纵向列表标题
-                        @Override
-                        public void run() {
-                            Call<ResponseBody> call = request.replies_add("http://hustholetest.pivotstudio.cn/api/replies?hole_id=" + data[6] + "&content=" + mPublishReplyEt.getText().toString() + "&wanted_local_reply_id=" + reply_to_who);//进行封装
-                            Log.d("", "http://hustholetest.pivotstudio.cn/api/replies?hole_id=" + data[6] + "&content=" + mPublishReplyEt.getText().toString() + "&wanted_local_reply_id=" + reply_to_who);
-                            call.enqueue(new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    if(mSendCondition==false){
+                        mSendCondition=true;
+                        RemoveOnScrollListener();
+                        new Thread(new Runnable() {//加载纵向列表标题
+                            @Override
+                            public void run() {
+                                //Toast.makeText(CommentListActivity.this,mPublishReplyEt.getText().toString().contains("\n")+"",Toast.LENGTH_SHORT).show();
+                                //Log.d("content-1", mPublishReplyEt.getText().toString());
+                                HashMap map=new HashMap();
+                                map.put("hole_id",(data[6]));
+                                map.put("content",mPublishReplyEt.getText().toString());
+                                map.put("wanted_local_reply_id",(reply_to_who));
+                                //Call<ResponseBody> call = request.replies_add(map);
+                                Call<ResponseBody> call = request.replies_add(RetrofitManager.API+"replies?hole_id=" + data[6] + "&content=" + mPublishReplyEt.getText().toString().replace("\n","%0a") + "&wanted_local_reply_id=" + reply_to_who);//进行封装
+                                call.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        mSendCondition =false;
+                                        if (response.code() == 200) {
+                                            String json = "null";
+                                            try {
+                                                if (response.body() != null) {
+                                                    json = response.body().string();
+                                                }
+                                                Log.e(TAG, json + "");
+                                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                                // 隐藏软键盘
+                                                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                                                mPublishReplyEt.setText("");
+                                                mPublishReplyEt.setHint("评价洞主：");
+                                                reply_to_who = "-1";
+                                                mStartingLoadId = 0;
+                                                mDetailReplyList = new ArrayList<>();
+                                                if (mIfOnlyCondition) {
+                                                    replyUpdate();
+                                                } else {
+                                                    hotReplyUpdate();
+                                                }
 
-                                   if(response.code()==200) {
-                                       String json = "null";
-                                       try {
-                                           if (response.body() != null) {
-                                               json = response.body().string();
-                                           }
-                                           Log.e(TAG, json + "");
-                                           InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                           // 隐藏软键盘
-                                           imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-                                           mPublishReplyEt.setText("");
-                                           mPublishReplyEt.setHint("评价洞主：");
-                                           reply_to_who = "-1";
-                                           mStartingLoadId = 0;
-                                           mDetailReplyList = new ArrayList<>();
-                                           if (mIfOnlyCondition) {
-                                               replyUpdate();
-                                           } else {
-                                               hotReplyUpdate();
-                                           }
-
-                                       } catch (IOException e) {
-                                           e.printStackTrace();
-                                       }
-                                   }else{
-                                       String json = "null";
-                                       String returncondition = null;
-                                       if (response.errorBody() != null) {
-                                           try {
-                                               json = response.errorBody().string();
-                                               JSONObject jsonObject = new JSONObject(json);
-                                               returncondition = jsonObject.getString("msg");
-                                               Toast.makeText(CommentListActivity.this, returncondition, Toast.LENGTH_SHORT).show();
-                                           } catch (IOException | JSONException e) {
-                                               e.printStackTrace();
-                                           }
-                                       }else{
-                                           Toast.makeText(CommentListActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
-                                       }
-
-
-                                   }
-                                }
-
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                                    Toast.makeText(CommentListActivity.this,R.string.network_sendfailture,Toast.LENGTH_SHORT).show();
-
-                                }
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            String json = "null";
+                                            String returncondition = null;
+                                            if (response.errorBody() != null) {
+                                                try {
+                                                    json = response.errorBody().string();
+                                                    JSONObject jsonObject = new JSONObject(json);
+                                                    //returncondition = jsonObject.getString("msg");
+                                                    Toast.makeText(CommentListActivity.this, response.code()+"", Toast.LENGTH_SHORT).show();
+                                                } catch (IOException | JSONException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            } else {
+                                                Toast.makeText(CommentListActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                            }
 
 
-                            });
+                                        }
 
-                        }
-                    }).start();
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                                        mSendCondition =false;
+                                        Toast.makeText(CommentListActivity.this, R.string.network_sendfailture, Toast.LENGTH_SHORT).show();
+
+                                    }
+
+
+                                });
+
+                            }
+                        }).start();
+                    }
                 }else{
                     Intent intent=new Intent(CommentListActivity.this, EmailVerifyActivity.class);
                     startActivity(intent);
@@ -314,19 +331,13 @@ public class CommentListActivity extends AppCompatActivity {
         //TokenInterceptor.getContext(RegisterActivity.this);
         //System.out.println("提交了context");
         retrofit= RetrofitManager.getRetrofit();
-        request = retrofit.create(RequestInterface.class);
+        request=RetrofitManager.getRequest();
+       // request = retrofit.create(RequestInterface.class);
 
         data = getIntent().getStringArrayExtra(key);
         if(data == null){
             data_hole_id = getIntent().getStringExtra("data_hole_id");
             if(data_hole_id != null){
-                retrofit2 = new Retrofit.Builder()
-                        .baseUrl("http://hustholetest.pivotstudio.cn/api/forests/")
-                        .client(OkHttpUtil.getOkHttpClient())
-                        .addConverterFactory(GsonConverterFactory.create())
-                        .build();
-               // Log.e(TAG, "token99：retrofit2");
-                request2 = retrofit2.create(RequestInterface.class);
                 data = new String[14];
                 getData();
             }
@@ -340,10 +351,14 @@ public class CommentListActivity extends AppCompatActivity {
              }
         }
 
-
-
-
-
+        String openKeyBoard=getIntent().getStringExtra("reply");
+        if(openKeyBoard!=null) {
+            if (openKeyBoard.equals("key_board")) {
+                mPublishReplyEt.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.showSoftInput(mPublishReplyEt, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -493,7 +508,7 @@ public class CommentListActivity extends AppCompatActivity {
                  call = request.owner(data[6] ,mStartingLoadId,CONSTANT_STANDARD_LOAD_SIZE, order);
                  jsonArray2=new JSONArray();
             }else{
-                 call = request.replies("http://hustholetest.pivotstudio.cn/api/replies?hole_id=" + data[6] + "&is_descend=" + order + "&start_id=" + mStartingLoadId + "&list_size=" + CONSTANT_STANDARD_LOAD_SIZE);
+                 call = request.replies(RetrofitManager.API+"replies?hole_id=" + data[6] + "&is_descend=" + order + "&start_id=" + mStartingLoadId + "&list_size=" + CONSTANT_STANDARD_LOAD_SIZE);
             }//进行封装
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
@@ -582,7 +597,6 @@ public class CommentListActivity extends AppCompatActivity {
                   if(mIfOnlyCondition&&mOnlyRefreshCondition) {
                       mOnlyRefreshCondition=false;
                       mIfOnlyCondition=false;
-                      mIfOnlyCondition = false;
                       mOnlyMaster.setPadding(0, 0, 0, 0);
                       mOnlyMaster.setCompoundDrawables(null, null, null, null);
                       mOnlyMaster.setTextColor(getResources().getColor(R.color.GrayScale_50));
@@ -682,6 +696,7 @@ public class CommentListActivity extends AppCompatActivity {
                         String[] singleReply2=new String[12];
                         singleReply2[0] = sonObject2.getString("alias");
                         singleReply2[1] = sonObject2.getString("content");
+
                         singleReply2[2] = sonObject2.getString("created_timestamp");
                         singleReply2[3] = sonObject2.getInt("hole_id")+"";
                         singleReply2[4] = sonObject2.getInt("id")+"";
@@ -700,6 +715,7 @@ public class CommentListActivity extends AppCompatActivity {
                         String[] singleReply=new String[12];
                        singleReply[0] = sonObject.getString("alias");
                        singleReply[1] = sonObject.getString("content");//
+                        Log.d("content0", singleReply[1]);
                        singleReply[2] = sonObject.getString("created_timestamp");//
                        singleReply[3] = sonObject.getInt("hole_id")+"";
                        singleReply[4] = sonObject.getInt("id")+"";
@@ -732,6 +748,12 @@ public class CommentListActivity extends AppCompatActivity {
         return intent;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RichText.recycle();
+
+    }
 
     public class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         //private static List<Event> events;
@@ -822,7 +844,6 @@ public class CommentListActivity extends AppCompatActivity {
                                 new Thread(new Runnable() {//加载纵向列表标题
                                     @Override
                                     public void run() {
-                                        //Call<ResponseBody> call = request.delete_hole("http://hustholetest.pivotstudio.cn/api/holes/" + holenumber);//进行封装
                                         Call<ResponseBody> call = request.delete_hole(data[6]);//进行封装
                                         call.enqueue(new Callback<ResponseBody>() {
                                             @Override
@@ -878,7 +899,7 @@ public class CommentListActivity extends AppCompatActivity {
                                         //HashMap map = new HashMap();
                                         //map.put("hole_id", data[6]);
                                        // map.put("reply_local_id", -1);
-                                        Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" + data[6] + "&reply_local_id= -1");
+                                        Call<ResponseBody> call = request.report_2(RetrofitManager.API+"reports?hole_id=" + data[6] + "&reply_local_id= -1");
                                         //Call<ResponseBody> call = request.report(map);//进行封装
                                         call.enqueue(new Callback<ResponseBody>() {
                                             @Override
@@ -961,10 +982,9 @@ public class CommentListActivity extends AppCompatActivity {
                             mStartingLoadId = 0;
                              if(mIfOnlyCondition) {
                             replyUpdate();
-
-                        }else{
-                            hotReplyUpdate();
-                        }
+                               }else{
+                               hotReplyUpdate();
+                             }
                         }
 
                     }
@@ -999,7 +1019,7 @@ public class CommentListActivity extends AppCompatActivity {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + data[6] + "/-1");//进行封装
+                                            Call<ResponseBody> call = request.thumbups(RetrofitManager.API+"thumbups/" + data[6] + "/-1");//进行封装
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1044,7 +1064,7 @@ public class CommentListActivity extends AppCompatActivity {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + data[6] + "/-1");//进行封装
+                                            Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API+"thumbups/" + data[6] + "/-1");//进行封装
                                             Log.e(TAG, "token2：");
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
@@ -1106,7 +1126,7 @@ public class CommentListActivity extends AppCompatActivity {
                                         new Thread(new Runnable() {//加载纵向列表标题
                                             @Override
                                             public void run() {
-                                                Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/" + data[6]);//进行封装Log.e(TAG, "token2：");
+                                                Call<ResponseBody> call = request.follow(RetrofitManager.API+"follows/" + data[6]);//进行封装Log.e(TAG, "token2：");
                                                 call.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1154,7 +1174,7 @@ public class CommentListActivity extends AppCompatActivity {
                                         new Thread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + data[6]);//进行封装
+                                                Call<ResponseBody> call = request.deletefollow(RetrofitManager.API+"follows/" + data[6]);//进行封装
                                                 call.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1227,7 +1247,13 @@ public class CommentListActivity extends AppCompatActivity {
                     forest_name.setText("  " + data[5] + "   ");
                 }
                 created_timestamp.setText(TimeCount.time(data[2]));
-                content.setText(data[1]);
+               //content.setText(data[1]);
+                String a=data[1].replace("\n","  \n");
+                RichText.from(a)
+                        .type(RichType.markdown)
+                        .into(content);
+
+
                 thumbup_num.setText(data[13]);
                 reply_num.setText(data[12]);
                 follow_num.setText(data[3]);
@@ -1344,8 +1370,7 @@ public class CommentListActivity extends AppCompatActivity {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Call<ResponseBody> call = request.delete_hole_2("http://hustholetest.pivotstudio.cn/api/replies/" + data[6] + "/" + mDetailReplyList.get(position)[7]);//进行封装
-                                        Log.e(TAG, "http://hustholetest.pivotstudio.cn/api/replies/" + data[6] + "/" + mDetailReplyList.get(position)[7]);
+                                        Call<ResponseBody> call = request.delete_hole_2(RetrofitManager.API+"replies/" + data[6] + "/" + mDetailReplyList.get(position)[7]);//进行封装
                                         call.enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1402,8 +1427,7 @@ public class CommentListActivity extends AppCompatActivity {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" + data[6] + "&reply_local_id=" + mDetailReplyList.get(position)[7]);//进行封装
-                                        Log.e(TAG, "http://hustholetest.pivotstudio.cn/api/replies/" + data[6] + "/" + mDetailReplyList.get(position)[7]);
+                                        Call<ResponseBody> call = request.report_2(RetrofitManager.API+"reports?hole_id=" + data[6] + "&reply_local_id=" + mDetailReplyList.get(position)[7]);//进行封装
                                         call.enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1466,7 +1490,7 @@ public class CommentListActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         RemoveOnScrollListener();
-                        SpannableString ss = new SpannableString("回复@"+ mDetailReplyList.get(position)[0]+(mDetailReplyList.get(position)[5].equals("true")?"(我)":"")+"：");
+                        SpannableString ss = new SpannableString("回复@"+ mDetailReplyList.get(position)[0]+(mDetailReplyList.get(position)[5].equals("true")?"(我)":"")+":");
                         AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14,true);
                         ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
@@ -1490,7 +1514,7 @@ public class CommentListActivity extends AppCompatActivity {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + data[6] + "/" + mDetailReplyList.get(position)[7]);//进行封装
+                                            Call<ResponseBody> call = request.thumbups(RetrofitManager.API+"thumbups/" + data[6] + "/" + mDetailReplyList.get(position)[7]);//进行封装
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -1553,7 +1577,7 @@ public class CommentListActivity extends AppCompatActivity {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + data[6] + "/" + mDetailReplyList.get(position)[6]);//进行封装
+                                            Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API+"thumbups/" + data[6] + "/" + mDetailReplyList.get(position)[7]);//进行封装
                                             Log.e(TAG, "token2：");
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
@@ -1575,8 +1599,8 @@ public class CommentListActivity extends AppCompatActivity {
                                                         }else{
                                                             for(int a=0;a<jsonArray2.length();a++){
                                                                 if( mDetailReplyList.get(a)[7].equals(mDetailReplyList.get(position)[7])){
-                                                                    mDetailReplyList.get(a)[6] = "true";
-                                                                    mDetailReplyList.get(a)[11] = (Integer.parseInt(mDetailReplyList.get(a)[11]) + 1) + "";
+                                                                    mDetailReplyList.get(a)[6] = "false";
+                                                                    mDetailReplyList.get(a)[11] = (Integer.parseInt(mDetailReplyList.get(a)[11]) - 1) + "";
                                                                     mReplyAdapter.notifyItemChanged(a+1,mDetailReplyList.size()+1);
                                                                 }
                                                             }
@@ -1634,6 +1658,7 @@ public class CommentListActivity extends AppCompatActivity {
                 }
                 this.position=position;
                  alias_me.setText(mDetailReplyList.get(position)[0]+(mDetailReplyList.get(position)[5].equals("true")?"(我)":""));
+                 Log.d("content",mDetailReplyList.get(position)[1]);
                  content.setText(mDetailReplyList.get(position)[1]);
                  created_timestamp.setText(TimeCount.time( mDetailReplyList.get(position)[2]));
                  thumbup_num.setText(mDetailReplyList.get(position)[11]);
@@ -1658,7 +1683,7 @@ public class CommentListActivity extends AppCompatActivity {
                 }else {
                     Log.d("", mDetailReplyList.get(position)[0]+ mDetailReplyList.get(position)[1]+ mDetailReplyList.get(position)[2]+ mDetailReplyList.get(position)[8]);
                     //linearLayout.setVisibility(View.VISIBLE);
-                    SpannableStringBuilder builder = new SpannableStringBuilder(""+ mDetailReplyList.get(position)[9]+":"+ mDetailReplyList.get(position)[10]);
+                    SpannableStringBuilder builder = new SpannableStringBuilder(""+ mDetailReplyList.get(position)[9]+" : "+ mDetailReplyList.get(position)[10]);
 //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
                     ForegroundColorSpan redSpan = new ForegroundColorSpan(getResources().getColor(R.color.GrayScale_0));
                     //ForegroundColorSpan whiteSpan = new ForegroundColorSpan(getResources().getColor(R.color.GrayScale_80));
@@ -1751,9 +1776,7 @@ public class CommentListActivity extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Call<ResponseBody> call = request2.holes2("http://hustholetest.pivotstudio.cn/api/holes/"+data_hole_id);
-                Log.e("tag", "token2：");
-                Log.d("tag", "run: request2");
+                Call<ResponseBody> call = request.holes2(RetrofitManager.API+"holes/"+data_hole_id);
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

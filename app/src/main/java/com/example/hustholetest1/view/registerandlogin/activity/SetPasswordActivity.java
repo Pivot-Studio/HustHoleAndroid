@@ -18,7 +18,9 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hustholetest1.model.EditTextReaction;
+import com.example.hustholetest1.network.ErrorMsg;
 import com.example.hustholetest1.network.RequestInterface;
+import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.network.TokenInterceptor;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.network.OkHttpUtil;
@@ -81,7 +83,7 @@ public class SetPasswordActivity extends AppCompatActivity {
         TokenInterceptor.getContext(SetPasswordActivity.this);
         System.out.println("提交了context");
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://hustholetest.pivotstudio.cn/api/auth/")
+                .baseUrl(RetrofitManager.API+"auth/")
                 .client(OkHttpUtil.getOkHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -107,7 +109,6 @@ public class SetPasswordActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.btn_setpassword_jumptohomescreen://加入
-
                 if(true) {//判断密码是否错误，还未添加
                     new Thread(new Runnable() {
                         @Override
@@ -115,87 +116,39 @@ public class SetPasswordActivity extends AppCompatActivity {
                             HashMap map = new HashMap();
                             map.put("email", email);
                             map.put("password", password);
-                            // map.put("something", someobject);
-                            // FormBody.Builder builder = new FormBody.Builder();
-                            //builder.add("key","value");
-
                             Call<ResponseBody> call = request.register(map);//进行封装
-
-                            Log.e(TAG, "token2：");
-
-
                             call.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    String json = "null";
-                                    try {
-                                        if(response.body() != null){
-                                            json = response.body().string();
+                                    if(response.code()==200) {
+                                        String json = "null";
+                                        try {
+                                            if (response.body() != null) {
+                                                json = response.body().string();
+                                            }
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
                                         }
-                                        System.out.println("cccccc");
+                                        String condition = null;
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(json);
+                                            condition = jsonObject.getString("msg");
 
-
-                                    } catch (IOException e) {
-                                        Log.e(TAG, "token2：9999999");
-                                        e.printStackTrace();
-
-                                    }
-                                    System.out.println("总:" + json);
-                                    String condition=null;
-                                    try {
-
-                                        JSONObject jsonObject = new JSONObject(json);
-                                        //读取
-                                        System.out.println("ddddddd");
-                                        condition = jsonObject.getString("msg");
-                                        String token = jsonObject.getString("token");
-                                        Log.e(TAG, "conditon"+condition);
-                                        System.out.println("token的具体值:" + token);
-
-                                        SharedPreferences.Editor editor = getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
-                                        editor.putString("token", token);
-                                        editor.commit();//提交修改
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-                                    //Toast.makeText(RegisterActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                                    //finish();
-
-                                    if (condition!=null&&condition.equals("注册成功")) {//判断账号密码是否正确
-                                        //登录成功进入主界面
-                                        showResponse("注册成功");
-                                        Intent intent = new Intent(SetPasswordActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent);
-                                    } else {
-                                        showResponse("密码格式错误");
-                                        //登录失败给与账户或密码错误提示
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                            showResponse(condition);
+                                            Intent intent = new Intent(SetPasswordActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                    }else{
+                                        ErrorMsg.getErrorMsg(response,SetPasswordActivity.this);
                                     }
 
                                 }
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                                    Log.e(TAG, "sw.toString()");
-                                    if (tr == null) {
-
-                                    }
-                                    // This is to reduce the amount of log spew that apps do in the non-error
-                                    // condition of the network being unavailable.
-                                    Throwable t = tr;
-                                    while (t != null) {
-                                        if (t instanceof UnknownHostException) {
-
-                                        }
-                                        t = t.getCause();
-                                    }
-                                    StringWriter sw = new StringWriter();
-                                    PrintWriter pw = new PrintWriter(sw);
-                                    tr.printStackTrace(pw);
-                                    pw.flush();
-
-                                    Log.e(TAG, sw.toString());
+                                    Toast.makeText(SetPasswordActivity.this, R.string.network_failure, Toast.LENGTH_SHORT).show();
                                 }
 
                             });

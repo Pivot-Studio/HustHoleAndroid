@@ -34,7 +34,8 @@ import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.EditTextReaction;
 import com.example.hustholetest1.model.HomePageRefreshFooter;
 import com.example.hustholetest1.model.MaxHeightRecyclerView;
-import com.example.hustholetest1.network.CommenRequestManager;
+import com.example.hustholetest1.model.TimeCount;
+import com.example.hustholetest1.network.ErrorMsg;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.network.RetrofitManager;
@@ -75,8 +76,8 @@ public class HomePageFragment extends Fragment {
     private RequestInterface request;
     private JSONArray jsonArray;
     private ArrayList<String[]> mHompageHolesList=new ArrayList<>();
-    private int mStartingLoadId = 0;
-    private Boolean mHolesSequenceCondition =false,mPpwExistenceCondition=false;
+    private int mStartingLoadId = 0,mLastLoadId;
+    private Boolean mHolesSequenceCondition =true,mPpwExistenceCondition=false;
     private HoleAdapter mHomePageHolesAdpter;
     private RefreshLayout mRefreshConditionRl,mLoadMoreConditionRl;
     private RecyclerView.OnScrollListener mOnscrollListener;
@@ -87,6 +88,8 @@ public class HomePageFragment extends Fragment {
     private Boolean mPrestrainCondition=false;
     private Boolean mDeleteCondition=false;
     private Boolean more_condition=false;
+    private Boolean mHomeScreenUpdate=false;
+    private Boolean mSearchCondition=false,mIfSearch=false;
     private  ConstraintLayout mMoreWhatCl;
 
 
@@ -109,13 +112,11 @@ public class HomePageFragment extends Fragment {
                     mReturnIsThumbup.setImageResource(R.mipmap.active);
                     mHompageHolesList.get(mReturnPosition)[11] = "true";
                     mHompageHolesList.get(mReturnPosition)[13] = (Integer.parseInt(mHompageHolesList.get(mReturnPosition)[13]) + 1) + "";
-                    //thumbupCondition = false;
                     mReturnThumbupNUmber.setText(mHompageHolesList.get(mReturnPosition)[13]);
                 }else if(thumbupCondition.equals("false")&&  mHompageHolesList.get(mReturnPosition)[11].equals("true")){
                     mReturnIsThumbup.setImageResource(R.mipmap.inactive);
                     mHompageHolesList.get(mReturnPosition)[11] = "false";
                     mHompageHolesList.get(mReturnPosition)[13] = (Integer.parseInt(mHompageHolesList.get(mReturnPosition)[13]) - 1) + "";
-                    //thumbupCondition = false;
                     mReturnThumbupNUmber.setText(mHompageHolesList.get(mReturnPosition)[13]);
                 }
             }
@@ -124,24 +125,123 @@ public class HomePageFragment extends Fragment {
                     mReturnIsFollow.setImageResource(R.mipmap.active_3);
                     mHompageHolesList.get(mReturnPosition )[8] = "true";
                     mHompageHolesList.get(mReturnPosition )[3] = (Integer.parseInt(mHompageHolesList.get(mReturnPosition)[3]) + 1) + "";
-                    //followCondition = false;
                     mReturnFollowNumber.setText(mHompageHolesList.get(mReturnPosition)[3]);
                 }else if(followCondition.equals("false")&& mHompageHolesList.get(mReturnPosition)[8].equals("true")){
                     mReturnIsFollow.setImageResource(R.mipmap.inactive);
                     mHompageHolesList.get(mReturnPosition )[8] = "false";
                     mHompageHolesList.get(mReturnPosition )[3] = (Integer.parseInt(mHompageHolesList.get(mReturnPosition )[3]) - 1) + "";
-                    //thumbupCondition = false;
                     mReturnFollowNumber.setText(mHompageHolesList.get(mReturnPosition)[3]);
                 }
-
             }
-
         }
     }
 
     public static HomePageFragment newInstance() {
         HomePageFragment fragment = new HomePageFragment();
         return fragment;
+    }
+    private void noSearch(){
+        mIfSearch=false;
+        if(mSearchEt.getText()!=null){
+            mSearchEt.setText("");
+        }
+    }
+    private void searchUpdate(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+                if(mIfSearch==false){
+                    mLastLoadId=mStartingLoadId;
+                    mStartingLoadId=0;
+                }
+                Log.d("1111","1111");
+                //if(mHompageHolesList.size()%20==0) {
+                    Call<ResponseBody> call = request.search_hole(mSearchEt.getText().toString(), mStartingLoadId, CONSTANT_STANDARD_LOAD_SIZE);//进行封装
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            mSearchCondition = false;
+                            Log.d("2222", "1111");
+                            if (response.code() == 200) {
+                                mIfSearch = true;
+                                String json = "null";
+                                try {
+                                    if (response.body() != null) {
+                                        json = response.body().string();
+                                    }
+                                    //Log.d("3333", json);
+                                    if (mStartingLoadId!= 0&&json.equals("[]")){
+                                        if(mLoadMoreConditionRl != null){
+                                            //Log.d("mStartingLoadId", mStartingLoadId + "");
+                                            mLoadMoreConditionRl.finishLoadMore();
+                                            mLoadMoreConditionRl = null;
+                                            //mHomePageHolesAdpter.notifyDataSetChanged();
+                                            if (mPrestrainCondition) {
+                                                mPrestrainCondition = false;
+                                                // mHomePageHolesAdpter.notifyDataSetChanged();
+                                            }else if(mPrestrainCondition){
+                                                mPrestrainCondition = false;
+                                            }
+                                        }
+                                        Toast.makeText(getContext(), "加载到底辣", Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        if (json.equals("[]") || json.equals("null")) {
+                                            Toast.makeText(getContext(), "无搜索结果", Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            if (mStartingLoadId == 0) {
+                                                mHompageHolesList = new ArrayList<>();
+                                            }
+                                            jsonArray = new JSONArray(json);
+                                            new DownloadTask().execute();
+
+
+                                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+                                        }
+                                    }
+                                } catch (IOException | JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            } else {
+                                Log.d("4444", "1111");
+                                failureAction();
+                                ErrorMsg.getErrorMsg(response, getContext());
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                            failureAction();
+                            Toast.makeText(getContext(), R.string.network_searchfailure_, Toast.LENGTH_SHORT).show();
+                        }
+
+                        private void failureAction() {
+                            mStartingLoadId = mLastLoadId;
+                            mSearchCondition = false;
+                            if (mLoadMoreConditionRl != null) {
+                                mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                mLoadMoreConditionRl.finishLoadMore();
+                                mLoadMoreConditionRl = null;
+                                if (mPrestrainCondition == true) {
+                                    mPrestrainCondition = false;
+                                } else if (mPrestrainCondition == true) {
+                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                    mPrestrainCondition = false;
+                                } else {
+
+                                }
+                            }
+
+                        }
+                    });
+
+            }
+        }).start();
+    }
+    private void showResponse(){
+        Toast.makeText(getContext(), "加载到底了", Toast.LENGTH_SHORT).show();
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -151,8 +251,6 @@ public class HomePageFragment extends Fragment {
         mTriangleIv.setImageResource(R.mipmap.triangle);
         mForestSquareTv =(TextView)rootView.findViewById(R.id.tv_homepage_forestsquare);
         mWherePpwCl =(ConstraintLayout) rootView.findViewById(R.id.ll_register);
-
-        //recyclerView=(RecyclerView)rootView.findViewById(R.id.recyclerView);
         SpannableString string1 = new SpannableString(this.getResources().getString(R.string.page1fragment_1));
         EditTextReaction.EditTextSize(mSearchEt,string1,12);
         mSearchEt.setOnClickListener(new View.OnClickListener() {
@@ -166,64 +264,17 @@ public class HomePageFragment extends Fragment {
         });
         mSearchEt.setImeOptions(EditorInfo.IME_ACTION_SEND);
         mSearchEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                //当actionId == XX_SEND 或者 XX_DONE时都触发
-                //或者event.getKeyCode == ENTER 且 event.getAction == ACTION_DOWN时也触发
-                //注意，这是一定要判断event != null。因为在某些输入法上会返回null。
-                //Log.d("输入","点击");
-
                 if (actionId == EditorInfo.IME_ACTION_SEND
                         || actionId == EditorInfo.IME_ACTION_DONE
                         || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                            // 隐藏软键盘
-                            imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
-                            Call<ResponseBody> call = request.search_hole(mSearchEt.getText().toString(),0,CONSTANT_STANDARD_LOAD_SIZE);//进行封装
-                            call.enqueue(new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    String json = "null";
-                                    try {
-                                        if (response.body() != null) {
-                                            json = response.body().string();
-                                        }
-                                        Log.d("",json);
-                                        mStartingLoadId=0;
-                                        if(json.equals("null")) {
-                                            Toast.makeText(getContext(),"无搜索结果",Toast.LENGTH_SHORT).show();
-                                        }else{
-                                            jsonArray = new JSONArray(json);
-                                            new DownloadTask().execute();
-                                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                            // 隐藏软键盘
-                                            imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
-                                        }
+                    if(mSearchCondition==false) {
+                        mSearchCondition = true;
+                        searchUpdate();
 
-                                        //}
+                    }
 
-                                    } catch (IOException | JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-                                }
-
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                                   Toast.makeText(getContext(),R.string.network_searchfailure_,Toast.LENGTH_SHORT).show();
-                                }
-
-
-                            });
-                        }
-                    }).start();
-
-                    //处理事件
                 }
                 return false;
             }
@@ -235,54 +286,38 @@ public class HomePageFragment extends Fragment {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 RemoveOnScrollListener();
-
-               mRefreshConditionRl =refreshlayout;
-
+                mRefreshConditionRl =refreshlayout;
+                mLastLoadId=mStartingLoadId;
                 mStartingLoadId=0;
+
                 update();
                 mHomePageHolesRv.setOnTouchListener(new View.OnTouchListener() {
-
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
                         return true;
                     }
                 });
-
             }
         });
         refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
                 RemoveOnScrollListener();
-
-
                 if(mIfFirstLoad){
                     refreshlayout.finishLoadMore();
                 }else{
                     if (mPrestrainCondition == false) {
                         mLoadMoreConditionRl = refreshlayout;
                         mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
-                        update();
+                        if(mIfSearch) {
+                            searchUpdate();
+                        }else {
+                            update();
+                        }
                     } else {
                         mLoadMoreConditionRl = refreshlayout;
                     }
                 }
-
-                /*
-
-                if(mRefreshConditionRl!=null){
-                    refreshlayout.finishLoadMore();
-                }else {
-                    if(mPrestrainCondition==false) {
-                        mLoadMoreConditionRl = refreshlayout;
-                        mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
-                        update();
-                    }else{
-                        refreshlayout.finishLoadMore();
-                    }
-                }
-                */
-
             }
         });
 
@@ -313,9 +348,10 @@ public class HomePageFragment extends Fragment {
                 mNewPublishBtn.setTextAppearance(getActivity(),R.style.popupwindow_button_click);
                 mNewCommentBtn.setBackgroundResource(R.drawable.standard_button_gray);
                 mNewCommentBtn.setTextAppearance(getActivity(),R.style.popupwindow_button);
-                mHolesSequenceCondition =false;
+                mHolesSequenceCondition =true;
                 mPpwExistenceCondition=true;
-                mHompageHolesList=new ArrayList<>();
+
+                mLastLoadId=mStartingLoadId;
                 mStartingLoadId=0;
                 update();
             }
@@ -327,9 +363,10 @@ public class HomePageFragment extends Fragment {
                 mNewCommentBtn.setTextAppearance(getActivity(),R.style.popupwindow_button_click);
                 mNewPublishBtn.setBackgroundResource(R.drawable.standard_button_gray);
                 mNewPublishBtn.setTextAppearance(getActivity(),R.style.popupwindow_button);
-                mHolesSequenceCondition =true;
+                mHolesSequenceCondition =false;
                 mPpwExistenceCondition=true;
-                mHompageHolesList=new ArrayList<>();
+
+                mLastLoadId=mStartingLoadId;
                 mStartingLoadId=0;
                 update();
 
@@ -426,72 +463,91 @@ public class HomePageFragment extends Fragment {
         mSlideBoxPpw.dismiss();
         mDarkScreenPpw.dismiss();
     }
+    public  void homeScreenUpdate(){
+        mHomeScreenUpdate=true;
+        mLastLoadId=mStartingLoadId;
+        mStartingLoadId=0;
+        update();
 
+    }
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //TokenInterceptor.getContext(getActivity());
         //TokenInterceptor.getContext(RegisterActivity.this);");
         retrofit= RetrofitManager.getRetrofit();
-        request = retrofit.create(RequestInterface.class);//创建接口实例
-         //update();
-
+        request=RetrofitManager.getRequest();
     }
-    public void update( ){
+    public  void update( ){
         new Thread(new Runnable() {//加载纵向列表标题
             @Override
             public void run() {
                 Call<ResponseBody> call = request.homepageholes(true, mHolesSequenceCondition,mStartingLoadId,CONSTANT_STANDARD_LOAD_SIZE);
-
-                //Call<ResponseBody> call = request.holes2("http://hustholetest.pivotstudio.cn/api/holes?is_descend=true&is_last_reply="+condition+"&start_id=0&list_size=10");//进行封装
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        String json = "null";
-                        try {
-                            if (response.body() != null) {
-                                json = response.body().string();
-                            }
-                            jsonArray=new JSONArray(json);
-                            Log.d("json",json);
-                            if(mRefreshConditionRl!=null){
-                                mHompageHolesList=new ArrayList<>();
-                            }
-                            if(mDeleteCondition){
-                                mDeleteCondition=false;
-                                mHompageHolesList=new ArrayList<>();
-                            }
-                            if(mPpwExistenceCondition!=false){
-                                mSlideBoxPpw.dismiss();
-                                mDarkScreenPpw.dismiss();
-                                EndTriangleAnim();
-                                mPpwExistenceCondition=false;
-                            }
-                            new DownloadTask().execute();
+                        if(response.code()==200) {
+                            String json = "null";
+                            try {
+                                if (response.body() != null) {
+                                    json = response.body().string();
+                                }
+                                jsonArray = new JSONArray(json);
+                                noSearch();
+                                if (mHomeScreenUpdate) {
+                                    mHomeScreenUpdate = false;
+                                    mHompageHolesList = new ArrayList<>();
+                                }
+                                if (mRefreshConditionRl != null) {
+                                    mHompageHolesList = new ArrayList<>();
+                                }
+                                if (mDeleteCondition) {
+                                    mDeleteCondition = false;
+                                    mHompageHolesList = new ArrayList<>();
+                                }
+                                if (mPpwExistenceCondition != false) {
+                                    mHompageHolesList = new ArrayList<>();
+                                    mSlideBoxPpw.dismiss();
+                                    mDarkScreenPpw.dismiss();
+                                    EndTriangleAnim();
+                                    mPpwExistenceCondition = false;
+                                }
+                                new DownloadTask().execute();
 
-                            //}
+                                //}
 
-                        } catch (IOException | JSONException e) {
-                            e.printStackTrace();
+                            } catch (IOException | JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            failureAction();
+                            ErrorMsg.getErrorMsg(response,getContext());
                         }
-
 
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
                         Toast.makeText(getContext(),R.string.network_loadfailure,Toast.LENGTH_SHORT).show();
+                        failureAction();
+                    }
+                    private void failureAction(){
+                        if(mPpwExistenceCondition!=false){
+                            mStartingLoadId=mLastLoadId;
+                            mPpwExistenceCondition=false;
+                        }
+                        if(mHomeScreenUpdate){
+                            mHomeScreenUpdate=false;
+                        }
                         if(mLoadMoreConditionRl!=null){
                             mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
-                            //Log.d("mStartingLoadId",mStartingLoadId+"");
                             mLoadMoreConditionRl.finishLoadMore();
                             mLoadMoreConditionRl=null;
-                           // mHomePageHolesAdpter.notifyDataSetChanged();
                             if(mPrestrainCondition==true){
                                 mPrestrainCondition=false;
-                                // mHomePageHolesAdpter.notifyDataSetChanged();
                             }
                         }else if(mRefreshConditionRl!=null){
+                            mStartingLoadId=mLastLoadId;
                             mRefreshConditionRl.finishRefresh();
                             mRefreshConditionRl=null;
                             mHomePageHolesRv.setOnTouchListener(new View.OnTouchListener() {
@@ -502,21 +558,18 @@ public class HomePageFragment extends Fragment {
                             });
 
                             if(mIfFirstLoad){
-                               // mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
-                               // mIfFirstLoad=false;
+                                // mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
+                                // mIfFirstLoad=false;
                             }else{
-                               // mHomePageHolesAdpter.notifyDataSetChanged();
+                                // mHomePageHolesAdpter.notifyDataSetChanged();
                             }
                         }else if(mPrestrainCondition==true){
                             mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
                             mPrestrainCondition=false;
-                           // mHomePageHolesAdpter.notifyDataSetChanged();
-
                         }else{
 
                         }
                     }
-
 
                 });
             }
@@ -562,7 +615,11 @@ public class HomePageFragment extends Fragment {
                 mPrestrainCondition = false;
                 mHomePageHolesAdpter.notifyDataSetChanged();
 
-            }else{
+            }else if(mIfSearch){
+
+                mHomePageHolesAdpter.notifyDataSetChanged();
+            }
+            else{
                 mIfFirstLoad = false;
                 mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
             }
@@ -616,12 +673,13 @@ public class HomePageFragment extends Fragment {
                 private ImageView background_image_url, is_follow, is_reply, is_thumbup, more, more_1;
                 private int position;
                 private Button forest_name;
-                private ConstraintLayout morewhat, constraintLayout3,thumbup,follow;
+                private ConstraintLayout morewhat, constraintLayout3,thumbup,follow,reply;
                 private Boolean thumbupCondition=false,followCondition=false;
                 public ViewHolder(View view) {
                     super(view);
                     thumbup=(ConstraintLayout)view.findViewById(R.id.cl_itemhomepage_thumbup);
                     follow=(ConstraintLayout)view.findViewById(R.id.cl_itemhomepage_follow);
+                    reply=(ConstraintLayout)view.findViewById(R.id.cl_itemhomepage_reply);
                     content = (TextView) view.findViewById(R.id.tv_itemhomepage_content);
                     created_timestamp = (TextView) view.findViewById(R.id.tv_itemhomepage_time);
                     forest_name = (Button) view.findViewById(R.id.btn_itemhompage_jumptodetailforest);
@@ -683,14 +741,16 @@ public class HomePageFragment extends Fragment {
 
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
-                                                   // mStartingLoadId = 20;
-                                                   // mDeleteCondition = true;
-                                                   // update();
-
-                                                    mStartingLoadId=0;
-                                                    mDeleteCondition=true;
-                                                    update();
+                                                    if(response.code()==200) {
+                                                        Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                                                        mLastLoadId = mStartingLoadId;
+                                                        mStartingLoadId = 0;
+                                                        mDeleteCondition = true;
+                                                        update();
+                                                    }else{
+                                                        mDeleteCondition = false;
+                                                        ErrorMsg.getErrorMsg(response,getContext());
+                                                    }
                                                 }
 
                                                 @Override
@@ -707,7 +767,7 @@ public class HomePageFragment extends Fragment {
                                     new Thread(new Runnable() {//加载纵向列表标题
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" +mHompageHolesList.get(position)[6] + "&reply_local_id= -1");
+                                            Call<ResponseBody> call = request.report_2(RetrofitManager.API+"reports?hole_id=" +mHompageHolesList.get(position)[6] + "&reply_local_id= -1");
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -727,22 +787,7 @@ public class HomePageFragment extends Fragment {
                                                             Toast.makeText(getContext(), "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
                                                         }
                                                     }else{
-                                                        //followCondition = false;
-                                                        String json = "null";
-                                                        String returncondition = null;
-                                                        if (response.errorBody() != null) {
-                                                            try {
-                                                                json = response.errorBody().string();
-                                                                JSONObject jsonObject = new JSONObject(json);
-                                                                returncondition = jsonObject.getString("msg");
-                                                                Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
-                                                            } catch (IOException | JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                            //FailureAction();
-                                                        }else{
-                                                            Toast.makeText(getContext(),R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
-                                                        }
+                                                        ErrorMsg.getErrorMsg(response,getContext());
                                                     }
                                                 }
 
@@ -780,16 +825,20 @@ public class HomePageFragment extends Fragment {
                                         new Thread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mHompageHolesList.get(position)[6] + "/-1");//进行封装
-                                                Log.e(TAG, "token2：");
+                                                Call<ResponseBody> call = request.thumbups(RetrofitManager.API+"thumbups/" + mHompageHolesList.get(position)[6] + "/-1");//进行封装
                                                 call.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                        is_thumbup.setImageResource(R.mipmap.active);
-                                                        mHompageHolesList.get(position)[11] = "true";
-                                                        mHompageHolesList.get(position)[13] = (Integer.parseInt(mHompageHolesList.get(position)[13]) + 1) + "";
-                                                        thumbupCondition=false;
-                                                        thumbup_num.setText(mHompageHolesList.get(position)[13]);
+                                                        if(response.code()==200) {
+                                                            is_thumbup.setImageResource(R.mipmap.active);
+                                                            mHompageHolesList.get(position)[11] = "true";
+                                                            mHompageHolesList.get(position)[13] = (Integer.parseInt(mHompageHolesList.get(position)[13]) + 1) + "";
+                                                            thumbupCondition = false;
+                                                            thumbup_num.setText(mHompageHolesList.get(position)[13]);
+                                                        }else{
+                                                            thumbupCondition=false;
+                                                            ErrorMsg.getErrorMsg(response,getContext());
+                                                        }
                                                     }
 
                                                     @Override
@@ -804,16 +853,21 @@ public class HomePageFragment extends Fragment {
                                         new Thread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mHompageHolesList.get(position)[6] + "/-1");//进行封装
+                                                Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API+"thumbups/" + mHompageHolesList.get(position)[6] + "/-1");//进行封装
                                                 Log.e(TAG, "token2：");
                                                 call.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                        is_thumbup.setImageResource(R.mipmap.inactive);
-                                                        mHompageHolesList.get(position)[11] = "false";
-                                                        mHompageHolesList.get(position)[13] = (Integer.parseInt(mHompageHolesList.get(position)[13]) - 1) + "";
-                                                        thumbupCondition=false;
-                                                        thumbup_num.setText(mHompageHolesList.get(position)[13]);
+                                                        if(response.code()==200) {
+                                                            is_thumbup.setImageResource(R.mipmap.inactive);
+                                                            mHompageHolesList.get(position)[11] = "false";
+                                                            mHompageHolesList.get(position)[13] = (Integer.parseInt(mHompageHolesList.get(position)[13]) - 1) + "";
+                                                            thumbupCondition = false;
+                                                            thumbup_num.setText(mHompageHolesList.get(position)[13]);
+                                                        }else{
+                                                            thumbupCondition=false;
+                                                            ErrorMsg.getErrorMsg(response,getContext());
+                                                        }
                                                     }
 
                                                     @Override
@@ -842,7 +896,7 @@ public class HomePageFragment extends Fragment {
                                         new Thread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/" + mHompageHolesList.get(position)[6]);//进行封装
+                                                Call<ResponseBody> call = request.follow(RetrofitManager.API+"follows/" + mHompageHolesList.get(position)[6]);//进行封装
                                                 Log.e(TAG, "token2：");
                                                 call.enqueue(new Callback<ResponseBody>() {
                                                     @Override
@@ -854,21 +908,8 @@ public class HomePageFragment extends Fragment {
                                                             followCondition = false;
                                                             follow_num.setText(mHompageHolesList.get(position)[3]);
                                                         }else{
-                                                            followCondition = false;
-                                                            String json = "null";
-                                                            String returncondition = null;
-                                                            if (response.body() != null) {
-                                                                try {
-                                                                    json = response.body().string();
-                                                                    JSONObject jsonObject = new JSONObject(json);
-                                                                    returncondition = jsonObject.getString("msg");
-                                                                    Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
-                                                                } catch (IOException | JSONException e) {
-                                                                    e.printStackTrace();
-                                                                }
-                                                            }else{
-                                                                Toast.makeText(getContext(),"过于频繁请求！",Toast.LENGTH_SHORT).show();
-                                                            }
+                                                            followCondition=false;
+                                                            ErrorMsg.getErrorMsg(response,getContext());
                                                         }
                                                     }
 
@@ -884,7 +925,7 @@ public class HomePageFragment extends Fragment {
                                         new Thread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + mHompageHolesList.get(position)[6]);//进行封装
+                                                Call<ResponseBody> call = request.deletefollow(RetrofitManager.API+"follows/" + mHompageHolesList.get(position)[6]);//进行封装
                                                 Log.e(TAG, "token2：");
                                                 call.enqueue(new Callback<ResponseBody>() {
 
@@ -900,25 +941,10 @@ public class HomePageFragment extends Fragment {
                                                             followCondition = false;
                                                             follow_num.setText(mHompageHolesList.get(position)[3]);
                                                         }else{
-                                                            followCondition = false;
-                                                            String json = "null";
-                                                            String returncondition = null;
-                                                            if (response.errorBody() != null) {
-                                                                try {
-                                                                    json = response.errorBody().string();
-                                                                    JSONObject jsonObject = new JSONObject(json);
-                                                                    returncondition = jsonObject.getString("msg");
-                                                                    Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
-                                                                } catch (IOException | JSONException e) {
-                                                                    e.printStackTrace();
-                                                                }
-                                                            }else{
-                                                                Toast.makeText(getContext(),R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
-                                                            }
+                                                            followCondition=false;
+                                                            ErrorMsg.getErrorMsg(response,getContext());
                                                         }
                                                     }
-
-
                                                     @Override
                                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                                         followCondition=false;
@@ -935,12 +961,10 @@ public class HomePageFragment extends Fragment {
                             }
                         }
                     });
-                    constraintLayout3.setOnClickListener(new View.OnClickListener() {
+                    reply.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View view) {
                             RemoveOnScrollListener();
-
-
                             mReturnIsThumbup=is_thumbup;
                             mReturnIsReply=is_reply;
                             mReturnIsFollow=is_follow;
@@ -948,18 +972,24 @@ public class HomePageFragment extends Fragment {
                             mReturnReplyNumber=reply_num;
                             mReturnFollowNumber=follow_num;
                             mReturnPosition=position;
-                            //is_follow
-                            // Log.d("data[2]1", mJoinedHolesList.get(position - 1)[2]);
+                            Intent intent = CommentListActivity.newIntent(getActivity(), mHompageHolesList.get(position));
+                            intent.putExtra("reply","key_board");
+                            startActivityForResult(intent,REQUESTCODE_COMMENT);
+                        }
+                    });
+                    constraintLayout3.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            RemoveOnScrollListener();
+                            mReturnIsThumbup=is_thumbup;
+                            mReturnIsReply=is_reply;
+                            mReturnIsFollow=is_follow;
+                            mReturnThumbupNUmber=thumbup_num;
+                            mReturnReplyNumber=reply_num;
+                            mReturnFollowNumber=follow_num;
+                            mReturnPosition=position;
                             Intent intent = CommentListActivity.newIntent(getActivity(), mHompageHolesList.get(position));
                             startActivityForResult(intent,REQUESTCODE_COMMENT);
-
-
-
-
-
-
-                            //Intent intent = CommentListActivity.newIntent(getActivity(), );
-                           // startActivity(intent);
                         }
                     });
                     forest_name.setOnClickListener(new View.OnClickListener() {
@@ -975,9 +1005,11 @@ public class HomePageFragment extends Fragment {
                 public void bind(int position) {
                     this.position = position;
                     content.setText(mHompageHolesList.get(position)[1]);
-
-                    created_timestamp.setText(mHompageHolesList.get(position)[2] + (mHolesSequenceCondition == true ? "更新" : "发布"));
-
+                    if(mIfSearch){
+                        created_timestamp.setText(TimeCount.time(mHompageHolesList.get(position)[2]));
+                    }else{
+                        created_timestamp.setText(TimeCount.time(mHompageHolesList.get(position)[2]) + (mHolesSequenceCondition == true ? "更新" : "发布"));
+                    }
                     if (mHompageHolesList.get(position)[5].equals("")) {
                         forest_name.setVisibility(View.INVISIBLE);
                     } else {
@@ -1009,8 +1041,6 @@ public class HomePageFragment extends Fragment {
                     }
                     if (mHompageHolesList.get(position)[11].equals("true")) {
                         is_thumbup.setImageResource(R.mipmap.active);
-
-                        //is_thumbup.setImageDrawable(R.drawable.thumbup);
                     } else {
                         is_thumbup.setImageResource(R.mipmap.inactive);
                     }
@@ -1026,11 +1056,8 @@ public class HomePageFragment extends Fragment {
 
             @Override
             public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-
                 return new HoleAdapter.ViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_homepage, parent, false));
-
             }
 
             @Override
@@ -1040,7 +1067,11 @@ public class HomePageFragment extends Fragment {
                 if (position == mHompageHolesList.size() - 4 && (mHompageHolesList.size() % CONSTANT_STANDARD_LOAD_SIZE == 0)) {
                     mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
                     mPrestrainCondition = true;
-                    update();
+                    if(mIfSearch) {
+                        searchUpdate();
+                    }else{
+                        update();
+                    }
                 }
             }
 
@@ -1050,6 +1081,7 @@ public class HomePageFragment extends Fragment {
             }
         }
     }
+
 
 
 

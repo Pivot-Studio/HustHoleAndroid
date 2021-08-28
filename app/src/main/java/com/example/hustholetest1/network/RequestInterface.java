@@ -24,7 +24,17 @@ public interface RequestInterface {//接口
 
     @POST("mobileLogin")
     Call<ResponseBody> mobileLogin(@Body HashMap map);
-    @POST("register")
+    @POST("sendVerifyCode")
+    Call<ResponseBody> sendVerifyCode(@Body HashMap map);
+
+    @POST
+    Call<ResponseBody> resetPassword(@Url String url);
+
+
+    @POST
+    Call<ResponseBody> verifyCodeMatch(@Url String url);
+
+    @POST("mobileRegister")
     Call<ResponseBody> register(@Body HashMap map);
     @GET("forests/types?")
     Call<ResponseBody> getType(@Query("start_id") int start_id,
@@ -45,6 +55,7 @@ public interface RequestInterface {//接口
     Call<ResponseBody> join(@Url String url);
     @DELETE
     Call<ResponseBody> delete(@Url String url);
+
 
 
 
@@ -76,17 +87,25 @@ public interface RequestInterface {//接口
 
     @POST
     Call<ResponseBody> follow(@Url String url);
+
     @DELETE
     Call<ResponseBody>deletefollow(@Url String url);
 
     @POST
     Call<ResponseBody> thumbups(@Url String url);
+
     @DELETE
     Call<ResponseBody> deletethumbups(@Url String url);
     @GET
     Call<ResponseBody> replies(@Url String url);
-    @POST
+
+   @POST
     Call<ResponseBody> replies_add(@Url String url);
+
+
+
+   // @POST("replies")
+   // Call<ResponseBody> replies_add(@Body HashMap map);
 
     @POST
     Call<ResponseBody> holes(@Url String url);
@@ -115,11 +134,12 @@ public interface RequestInterface {//接口
 
 
 
-     @POST("reports")
-     Call<ResponseBody> report(@Body HashMap map);
+    // @POST("reports")
+    // Call<ResponseBody> report(@Body HashMap map);
     //Call<ResponseBody> report(@Path("hole_id") String hole_id);
-
-
+    @POST("reports")
+    Call<ResponseBody> report(@Body HashMap map);
+//
     @POST
     Call<ResponseBody> report_2(@Url String url);
 
@@ -165,19 +185,6 @@ Call<ResponseBody> owner(@Query("hole_id") String hole_id,
                          @Query("start_id") int start_id,
                          @Query("list_size") int list_size,
                          @Query("is_descend") String is_descend);
-   // @GET("safety")
-   // Call<ResponseBody> isUnderSecurity();
 
-   // @POST("safety")
-   // Call<ResponseBody> changeSecurityMode(@Body Boolean turnOn);
-
-   /* @Multipart
-    @POST()
-
-    Call<ResponseBody> applyForest(@Part("body") RequestBody body, @Part MultipartBody.Part file);
-    //Observable<ResponseBody> applyForest(
-            //@Part() List<MultipartBody.Part > files );
-
-    */
 }
 

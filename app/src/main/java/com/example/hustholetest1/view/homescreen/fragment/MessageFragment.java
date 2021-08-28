@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity;
 import com.example.hustholetest1.view.homescreen.message.NotificationAdapter;
@@ -58,11 +59,13 @@ public class MessageFragment extends Fragment {
     private final static int list_size = 15;
     private int start_id = 0;
     private ConstraintLayout constraintLayout;
+    private boolean finishRefresh = false;
+    private boolean isRefreshing = false;
 
     private Boolean isAll = false;
     private Boolean hasInit = false;
 
-    public String url = "http://hustholetest.pivotstudio.cn/api/notices/";
+    public String url = RetrofitManager.API+"notices/";
     private String token;
 
 
@@ -97,9 +100,35 @@ public class MessageFragment extends Fragment {
                 isAll = false;
                 hasInit = false;
                 start_id = 0;
+                isRefreshing = true;
                 getLatestSystemNotification();
                 getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +
                         "list_size=" + list_size);
+                /*while (!finishRefresh){
+                    if(finishRefresh){
+                        refreshLayout.finishRefresh();
+                        finishRefresh = false;
+                    }
+                    isRefreshing = false;
+                }*/
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        /**
+                         *要执行的操作
+                         */
+                        if(finishRefresh){
+                            refreshlayout.finishRefresh();
+                            isRefreshing = false;
+                            finishRefresh = false;
+                        }
+                        else {
+                            refreshlayout.autoRefresh();
+                        }
+                    }
+                }, 500);//0.5秒后执行Runnable中的run方法
                 refreshlayout.finishRefresh(4000/*,false*/);//传入false表示刷新失败
             }
             else{
@@ -117,20 +146,6 @@ public class MessageFragment extends Fragment {
             else{
                 refreshlayout.finishLoadMoreWithNoMoreData();
             }
-            /*new Thread(){
-                @Override
-                public void run() {
-                    super.run();
-                    try {
-                        Thread.sleep(5000);
-                        Log.d("T", "run: sleep");
-                        refreshlayout.finishLoadMore(4000*//*,false*//*);//传入false表示加载失败
-                        Log.d("T", "onLoadMore: i am finishloadmore");
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }.start();*/
             refreshlayout.finishLoadMore(2000/*,false*/);//传入false表示加载失败
         });
 
@@ -149,7 +164,7 @@ public class MessageFragment extends Fragment {
             getStringByOkhttp(url+"?"+"start_id="+start_id+"&"+
                     "list_size="+list_size);
         }
-        else if(myNotificationList!= null && hasInit){ //已经初始化直接显示,每次回到这个页面时直接显示
+        else if(myNotificationList!= null && hasInit && page >1){ //已经初始化直接显示,每次回到这个页面时直接显示
             noNotificationImage.setVisibility(View.GONE);
             thereIsNoNotification.setVisibility(View.GONE);
             constraintLayout.setVisibility(View.GONE);
@@ -158,18 +173,14 @@ public class MessageFragment extends Fragment {
             notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
             notificationRecyclerView.setAdapter(adapter);
             adapter.getSystemNotification(mSystemNotificationList.get(0).getSystemContent());
-            adapter.setOnItemClickListener(new NotificationAdapter.OnItemClickListener() {
-                @Override
-                public void onClick(int position) {
-                    if(position>0){
-                        startHoleActivity(position);
-                        //Toast.makeText(getActivity(), "click " + position, Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Intent intent = new Intent(getActivity(),SystemNotification.class);
-                        startActivity(intent);
-                    }
-
+            adapter.setOnItemClickListener(position -> {
+                if(position>0){
+                    startHoleActivity(position);
+                    //Toast.makeText(getActivity(), "click " + position, Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Intent intent = new Intent(getActivity(),SystemNotification.class);
+                    startActivity(intent);
                 }
             });
         }
@@ -179,9 +190,6 @@ public class MessageFragment extends Fragment {
             constraintLayout.setVisibility(View.VISIBLE);
         }
 
-        //加上底部的分割线
-        //notificationRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
-        //Log.d(TAG, "onCreateView: 6");
 
         latestSystemNotification = rootView.findViewById(R.id.latest_system_notification);
         getLatestSystemNotification();
@@ -191,7 +199,7 @@ public class MessageFragment extends Fragment {
 
 
     public void getLatestSystemNotification(){
-        String mPath= "http://hustholetest.pivotstudio.cn/api/system_notices?start_id=0&list_size=1";
+        String mPath= RetrofitManager.API+"system_notices?start_id=0&list_size=1";
         OkHttpClient client = new OkHttpClient();
         Message message = Message.obtain();
 
@@ -356,10 +364,16 @@ public class MessageFragment extends Fragment {
                         constraintLayout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onCreateView: visible");
                     }
+                    if(isRefreshing){
+                        finishRefresh = true;
+                    }
                     break;
                 case 1://失败
                     constraintLayout.setVisibility(View.VISIBLE);
                     thereIsNoNotification.setText("");
+                    if(isRefreshing){
+                        finishRefresh = true;
+                    }
                     break;
                 case 2://不是首次请求网络
                     String Data2 = (String)msg.obj;
@@ -382,7 +396,7 @@ public class MessageFragment extends Fragment {
                              */
                             adapter.notifyDataSetChanged();
                         }
-                    }, 800);//3秒后执行Runnable中的run方法
+                    }, 400);//0.4秒后执行Runnable中的run方法
 
                     Log.d(TAG, "handleMessage: case2");
                     adapter.setOnItemClickListener(new NotificationAdapter.OnItemClickListener() {
@@ -402,7 +416,11 @@ public class MessageFragment extends Fragment {
                     page ++;
                     start_id+=list_size;
                     Log.d(TAG, "handleMessage: start_id :"+start_id);
+                    if(isRefreshing){
+                        finishRefresh = true;
+                    }
                     break;
+                
                 case 3:
                     if(myNotificationList != null && page!=1 ){
                         /*adapter = new NotificationAdapter( getActivity(), myNotificationList);
@@ -418,8 +436,10 @@ public class MessageFragment extends Fragment {
                         constraintLayout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onCreateView: visible");
                     }
+                    if(isRefreshing){
+                        finishRefresh = true;
+                    }
                     break;
-
             }
         }
     };
@@ -468,7 +488,7 @@ public class MessageFragment extends Fragment {
                             isAll = true;
                             hasInit = true;
                         }
-                        else if(page ==1){
+                        else if(page == 1){
                             message.what = 0;
                             hasInit = true;
                         }

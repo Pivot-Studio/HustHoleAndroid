@@ -67,7 +67,6 @@
             android:theme="@style/ImageTranslucentTheme">
         </activity>
         <activity android:name=".view.homescreen.forest.ApplyForestActivity"
-        android:launchMode="singleTask"
         android:screenOrientation="portrait">
 
     </activity>

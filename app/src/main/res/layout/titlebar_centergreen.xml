@@ -21,7 +21,6 @@
             android:id="@+id/iv_titlebarcentergreen_back"
             android:layout_width="10dp"
             android:layout_height="18dp"
-            android:onClick="onClick"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

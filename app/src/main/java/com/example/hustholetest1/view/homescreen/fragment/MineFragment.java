@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.example.hustholetest1.R;
-import com.example.hustholetest1.network.OkHttpUtil;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.network.RetrofitManager;
-import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.mine.AboutActivity;
 import com.example.hustholetest1.view.homescreen.mine.MyHoleAndMyStarActivity;
 import com.example.hustholetest1.view.homescreen.mine.RulesActivity;
@@ -31,18 +25,11 @@ import com.example.hustholetest1.view.homescreen.mine.SettingsActivity;
 import com.example.hustholetest1.view.homescreen.mine.UpdateActivity;
 import com.example.hustholetest1.view.registerandlogin.activity.WelcomeActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.io.IOException;
-import java.time.LocalDate;
-
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class MineFragment extends Fragment {
@@ -107,8 +94,9 @@ public class MineFragment extends Fragment {
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        try {
+                        /*try {
                             if (response.body() != null) {
+
                                 String jsonStr = response.body().string();
                                 JSONObject data = JSON.parseObject(jsonStr);
                                 int joinDays = data.getInteger("join_days");
@@ -118,12 +106,16 @@ public class MineFragment extends Fragment {
                                 tv_joinDays.setText("我来到树洞已经" + joinDays +"天啦。");
                                 tv_myHoleNum.setText( String.valueOf(myHoleNum));
                                 tv_myStarNum.setText( String.valueOf(myStarNum));
+
+
                             }else{
                                 Log.d(TAG,"is null");
                             }
                         }catch (IOException e) {
                             e.printStackTrace();
                         }
+
+                         */
                     }
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) { }
@@ -236,10 +228,10 @@ public class MineFragment extends Fragment {
                 btn_logout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         dialog.dismiss();
                         SharedPreferences.Editor editor = getContext().getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
                         editor.putString("token", "");
+                        editor.putBoolean("iffirstlogin",false);
                         editor.commit();
                         Intent intent=new Intent(getContext(), WelcomeActivity.class);
                         startActivity(intent);

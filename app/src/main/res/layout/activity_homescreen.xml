@@ -255,7 +255,7 @@
         android:id="@+id/fab_homescreen_publishhole"
         android:layout_width="@dimen/dp_49"
         android:layout_height="@dimen/dp_49"
-        android:layout_marginBottom="31dp"
+        android:layout_marginBottom="27dp"
         android:backgroundTint="@color/HH_BandColor_1"
         android:onClick="onClick"
         app:borderWidth="0.0dip"

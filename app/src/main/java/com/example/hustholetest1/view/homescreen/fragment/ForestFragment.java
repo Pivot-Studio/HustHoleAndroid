@@ -1,16 +1,13 @@
 package com.example.hustholetest1.view.homescreen.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,17 +26,16 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.MaxHeightRecyclerView;
 import com.example.hustholetest1.model.StandardRefreshFooter;
-import com.example.hustholetest1.network.CommenRequestManager;
+import com.example.hustholetest1.model.TimeCount;
+import com.example.hustholetest1.network.ErrorMsg;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
-import com.example.hustholetest1.view.homescreen.activity.HomeScreenActivity;
 import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity;
 import com.example.hustholetest1.view.homescreen.forest.AllForestsActivity;
 import com.example.hustholetest1.view.homescreen.forest.DetailForestActivity;
-import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.SmartRefreshLayout;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
@@ -74,7 +70,7 @@ public class ForestFragment extends Fragment {
     private ForestHoleAdapter mForestHoleAdapter;
     private List<String[]> mJoinedHolesList = new ArrayList<String[]>();
     private int mAdapterLoadCompleteNumber = 0;
-    private int mStartingLoadId = 20;
+    private int mStartingLoadId = 20,mLastLoadId;
     private RefreshLayout mRefreshConditionRl, mLoadMoreCondotionRl;
     private int CONSTANT_STANDARD_LOAD_SIZE = 20;
 
@@ -221,7 +217,7 @@ public class ForestFragment extends Fragment {
 
         //System.out.println("提交了context");
         retrofit = RetrofitManager.getRetrofit();
-        request = retrofit.create(RequestInterface.class);//创建接口实例
+        request=RetrofitManager.getRequest();
 
 
         mStartingLoadId = CONSTANT_STANDARD_LOAD_SIZE;
@@ -263,75 +259,66 @@ public class ForestFragment extends Fragment {
                         @Override
 
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            String json = "null";
-                            try {
-                                if (response.body() != null) {
-                                    json = response.body().string();
+                            if(response.code()==200) {
+                                String json = "null";
+                                try {
+                                    if (response.body() != null) {
+                                        json = response.body().string();
+                                    }
+                                    JSONObject jsonObject = new JSONObject(json);
+
+                                    mJoinedForestsJsonArray = jsonObject.getJSONArray("forests");
+                                    mJoinedForestsList = new String[mJoinedForestsJsonArray.length()][8];
+                                    new JoinedForestsDownloadTask().execute();
+                                } catch (IOException | JSONException e) {
+                                    e.printStackTrace();
                                 }
-                                JSONObject jsonObject = new JSONObject(json);
-
-                                mJoinedForestsJsonArray = jsonObject.getJSONArray("forests");
-                                mJoinedForestsList = new String[mJoinedForestsJsonArray.length()][8];
-                                new JoinedForestsDownloadTask().execute();
-                            } catch (IOException | JSONException e) {
-                                e.printStackTrace();
+                            }else{
+                                failureAction();
+                                ErrorMsg.getErrorMsg(response,getContext());
                             }
-
 
                         }
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable tr) {
                             Toast.makeText(getContext(), R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
+                             failureAction();
 
+                                    //mAdapterLoadCompleteNumber = 0;
+                                    //}
+
+                        }
+                        private void failureAction() {
+                            if (mLoadMoreCondotionRl != null) {
+                                mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                //将上拉刷新变量滞空同时结束掉上拉刷新
+                                mLoadMoreCondotionRl.finishLoadMore();
+                                mLoadMoreCondotionRl = null;
+                                if (mPrestrainCondition == true) {
+                                    mPrestrainCondition = false;
+                                }
+                            } else if (mPrestrainCondition == true) {
+                                mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                mPrestrainCondition = false;
                                 if (mLoadMoreCondotionRl != null) {
-                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
                                     //将上拉刷新变量滞空同时结束掉上拉刷新
                                     mLoadMoreCondotionRl.finishLoadMore();
                                     mLoadMoreCondotionRl = null;
-                                    // if (! mForestHoleAdapter.hasObservers()) {
-                                    //     mForestHoleAdapter.setHasStableIds(true);
-                                    // }
-                                    // mForestHoleAdapter.notifyDataSetChanged();
-                                    if (mPrestrainCondition == true) {
-                                        mPrestrainCondition = false;
-                                    }
-                                } else if (mPrestrainCondition == true) {
-                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
-                                    mPrestrainCondition = false;
-                                    //  mForestHoleAdapter.notifyDataSetChanged();
-                                    if (mLoadMoreCondotionRl != null) {
-                                        //将上拉刷新变量滞空同时结束掉上拉刷新
-                                        mLoadMoreCondotionRl.finishLoadMore();
-                                        mLoadMoreCondotionRl = null;
-                                    }
-                                } else {
-                                    //if (number() == 2) {//两个加载全部完毕后设置adpter
-                                    if (mRefreshConditionRl != null) {//判断是否由由下拉加载引起的
-                                        mRefreshConditionRl.finishRefresh();
-                                        mRefreshConditionRl = null;
-                                        mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
-                                            @Override
-                                            public boolean onTouch(View v, MotionEvent event) {
-                                                return false;
-                                            }
-                                        });
-                                        if (mIfFirstLoad) {
-                                            // mJoinedHolesRv.setAdapter(mForestHoleAdapter);
-                                            //  mIfFirstLoad=false;
-                                        } else {
-                                            //  mForestHoleAdapter.notifyDataSetChanged();
-                                        }
-                                    } else {
-
-                                        //mJoinedHolesRv.setAdapter(mForestHoleAdapter);
-                                    }
-                                    //mAdapterLoadCompleteNumber = 0;
-                                    //}
                                 }
+                            } else {
+                                if (mRefreshConditionRl != null) {//判断是否由由下拉加载引起的
+                                    mRefreshConditionRl.finishRefresh();
+                                    mRefreshConditionRl = null;
+                                    mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
+                                        @Override
+                                        public boolean onTouch(View v, MotionEvent event) {
+                                            return false;
+                                        }
+                                    });
+                                }
+                            }
                         }
-
-
                     });
                 }
 
@@ -339,77 +326,67 @@ public class ForestFragment extends Fragment {
                     call2.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            String json = "null";
-                            try {
-                                if (response.body() != null) {
-                                    json = response.body().string();
+                            if(response.code()==200) {
+                                String json = "null";
+                                try {
+                                    if (response.body() != null) {
+                                        json = response.body().string();
+                                    }
+                                    if (mRefreshConditionRl != null) {
+                                        mJoinedHolesList = new ArrayList<String[]>();
+                                    }
+                                    if (mDeleteCondition) {
+                                        mDeleteCondition = false;
+                                        mJoinedHolesList = new ArrayList<String[]>();
+                                    }
+                                    mJoinedHolesJsonArray = new JSONArray(json);
+                                    new JoinedHolesDownloadTask().execute();
+                                } catch (JSONException | IOException e) {
+                                    e.printStackTrace();
                                 }
-                                if(mRefreshConditionRl!=null){
-                                    mJoinedHolesList = new ArrayList<String[]>();
-                                }
-                                if(mDeleteCondition){
-                                    mDeleteCondition=false;
-                                    mJoinedHolesList = new ArrayList<String[]>();
-                                }
-                                mJoinedHolesJsonArray = new JSONArray(json);
-                                new JoinedHolesDownloadTask().execute();
-                            } catch (JSONException | IOException e) {
-                                e.printStackTrace();
+                            }else{
+                                failureAction();
+                                ErrorMsg.getErrorMsg(response,getContext());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             Toast.makeText(getContext(), R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
+                             failureAction();
 
+                        }
+                        private void failureAction(){
+                            if (mLoadMoreCondotionRl != null) {
+                                mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                //将上拉刷新变量滞空同时结束掉上拉刷新
+                                mLoadMoreCondotionRl.finishLoadMore();
+                                mLoadMoreCondotionRl = null;
+                                if (mPrestrainCondition == true) {
+                                    mPrestrainCondition = false;
+                                }
+                            } else if (mPrestrainCondition == true) {
+                                mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                mPrestrainCondition = false;
                                 if (mLoadMoreCondotionRl != null) {
-                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
                                     //将上拉刷新变量滞空同时结束掉上拉刷新
                                     mLoadMoreCondotionRl.finishLoadMore();
                                     mLoadMoreCondotionRl = null;
-                                    // if (! mForestHoleAdapter.hasObservers()) {
-                                    //     mForestHoleAdapter.setHasStableIds(true);
-                                    // }
-                                    // mForestHoleAdapter.notifyDataSetChanged();
-                                    if (mPrestrainCondition == true) {
-                                        mPrestrainCondition = false;
-                                    }
-                                } else if (mPrestrainCondition == true) {
-                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
-                                    mPrestrainCondition = false;
-                                    //  mForestHoleAdapter.notifyDataSetChanged();
-                                    if (mLoadMoreCondotionRl != null) {
-                                        //将上拉刷新变量滞空同时结束掉上拉刷新
-                                        mLoadMoreCondotionRl.finishLoadMore();
-                                        mLoadMoreCondotionRl = null;
-                                    }
-                                } else {
-                                    //if (number() == 2) {//两个加载全部完毕后设置adpter
-                                    if (mRefreshConditionRl != null) {//判断是否由由下拉加载引起的
-                                        mRefreshConditionRl.finishRefresh();
-                                        mRefreshConditionRl = null;
-                                        mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
-                                            @Override
-                                            public boolean onTouch(View v, MotionEvent event) {
-                                                return false;
-                                            }
-                                        });
-                                        if (mIfFirstLoad) {
-                                            // mJoinedHolesRv.setAdapter(mForestHoleAdapter);
-                                            //  mIfFirstLoad=false;
-                                        } else {
-                                            //  mForestHoleAdapter.notifyDataSetChanged();
+                                }
+                            } else {
+                                if (mRefreshConditionRl != null) {//判断是否由由下拉加载引起的
+                                    mRefreshConditionRl.finishRefresh();
+                                    mRefreshConditionRl = null;
+                                    mJoinedHolesRv.setOnTouchListener(new View.OnTouchListener() {
+                                        @Override
+                                        public boolean onTouch(View v, MotionEvent event) {
+                                            return false;
                                         }
-                                    } else {
-
-                                        //mJoinedHolesRv.setAdapter(mForestHoleAdapter);
-                                    }
-                                    //}
+                                    });
+                                } else {
                                 }
 
-
-
-
+                            }
                         }
                     });
 
@@ -724,7 +701,7 @@ public class ForestFragment extends Fragment {
 
             private TextView content, created_timestamp, forest_name, follow_num, reply_num, thumbup_num, hole_id, more_2;
             private ImageView background_image_url, is_follow, is_reply, is_thumbup, more, more_1;
-            private ConstraintLayout morewhat,thumbup,follow;
+            private ConstraintLayout morewhat,thumbup,follow,reply;
             private int position;
             private Boolean thumbupCondition=false,followCondition=false;
 
@@ -733,7 +710,7 @@ public class ForestFragment extends Fragment {
 
                 thumbup=(ConstraintLayout)view.findViewById(R.id.cl_itemforest_thumbup);
                 follow=(ConstraintLayout)view.findViewById(R.id.cl_itemforest_follow);
-
+                reply=(ConstraintLayout)view.findViewById(R.id.cl_itemforest_reply);
                 content = (TextView) view.findViewById(R.id.tv_itemforest_content);
                 created_timestamp = (TextView) view.findViewById(R.id.tv_itemforest_time);
                 forest_name = (TextView) view.findViewById(R.id.tv_itemforest_title);
@@ -798,10 +775,15 @@ public class ForestFragment extends Fragment {
                                         call.enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
-                                                mStartingLoadId = 20;
-                                                mDeleteCondition = true;
-                                                update();
+                                                if(response.code()==200) {
+                                                    Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
+                                                    mStartingLoadId = 20;
+                                                    mDeleteCondition = true;
+                                                    update();
+                                                }else{
+                                                    mDeleteCondition = false;
+                                                    ErrorMsg.getErrorMsg(response,getContext());
+                                                }
                                             }
 
                                             @Override
@@ -816,7 +798,7 @@ public class ForestFragment extends Fragment {
                                 new Thread(new Runnable() {//加载纵向列表标题
                                     @Override
                                     public void run() {
-                                        Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" +mJoinedHolesList.get(position - 1)[6] + "&reply_local_id= -1");
+                                        Call<ResponseBody> call = request.report_2(RetrofitManager.API+"reports?hole_id=" +mJoinedHolesList.get(position - 1)[6] + "&reply_local_id= -1");
                                         call.enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -836,22 +818,7 @@ public class ForestFragment extends Fragment {
                                                         Toast.makeText(getContext(), "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
                                                     }
                                                 }else{
-                                                    //followCondition = false;
-                                                    String json = "null";
-                                                    String returncondition = null;
-                                                    if (response.errorBody() != null) {
-                                                        try {
-                                                            json = response.errorBody().string();
-                                                            JSONObject jsonObject = new JSONObject(json);
-                                                            returncondition = jsonObject.getString("msg");
-                                                            Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
-                                                        } catch (IOException | JSONException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                        //FailureAction();
-                                                    }else{
-                                                        Toast.makeText(getContext(),R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
-                                                    }
+                                                    ErrorMsg.getErrorMsg(response,getContext());
                                                 }
                                             }
 
@@ -880,16 +847,21 @@ public class ForestFragment extends Fragment {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mJoinedHolesList.get(position - 1)[6] + "/-1");//进行封装
+                                            Call<ResponseBody> call = request.thumbups(RetrofitManager.API+"thumbups/" + mJoinedHolesList.get(position - 1)[6] + "/-1");//进行封装
                                             Log.e(TAG, "token2：");
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    is_thumbup.setImageResource(R.mipmap.active);
-                                                    mJoinedHolesList.get(position - 1)[11] = "true";
-                                                    mJoinedHolesList.get(position - 1)[13] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[13]) + 1) + "";
-                                                    thumbupCondition = false;
-                                                    thumbup_num.setText(mJoinedHolesList.get(position - 1)[13]);
+                                                    if(response.code()==200) {
+                                                        is_thumbup.setImageResource(R.mipmap.active);
+                                                        mJoinedHolesList.get(position - 1)[11] = "true";
+                                                        mJoinedHolesList.get(position - 1)[13] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[13]) + 1) + "";
+                                                        thumbupCondition = false;
+                                                        thumbup_num.setText(mJoinedHolesList.get(position - 1)[13]);
+                                                    }else{
+                                                        thumbupCondition = false;
+                                                        ErrorMsg.getErrorMsg(response,getContext());
+                                                    }
                                                 }
 
                                                 @Override
@@ -904,16 +876,21 @@ public class ForestFragment extends Fragment {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mJoinedHolesList.get(position - 1)[6] + "/-1");//进行封装
+                                            Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API+"thumbups/" + mJoinedHolesList.get(position - 1)[6] + "/-1");//进行封装
                                             Log.e(TAG, "token2：");
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    is_thumbup.setImageResource(R.mipmap.inactive);
-                                                    mJoinedHolesList.get(position - 1)[11] = "false";
-                                                    mJoinedHolesList.get(position - 1)[13] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[13]) - 1) + "";
-                                                    thumbupCondition = false;
-                                                    thumbup_num.setText(mJoinedHolesList.get(position - 1)[13]);
+                                                    if(response.code()==200) {
+                                                        is_thumbup.setImageResource(R.mipmap.inactive);
+                                                        mJoinedHolesList.get(position - 1)[11] = "false";
+                                                        mJoinedHolesList.get(position - 1)[13] = (Integer.parseInt(mJoinedHolesList.get(position - 1)[13]) - 1) + "";
+                                                        thumbupCondition = false;
+                                                        thumbup_num.setText(mJoinedHolesList.get(position - 1)[13]);
+                                                    }else{
+                                                        thumbupCondition = false;
+                                                        ErrorMsg.getErrorMsg(response,getContext());
+                                                    }
                                                 }
 
                                                 @Override
@@ -939,7 +916,7 @@ public class ForestFragment extends Fragment {
                                     new Thread(new Runnable(){
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/" + mJoinedHolesList.get(position - 1)[6]);//进行封装
+                                            Call<ResponseBody> call = request.follow(RetrofitManager.API+"follows/" + mJoinedHolesList.get(position - 1)[6]);//进行封装
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -952,20 +929,7 @@ public class ForestFragment extends Fragment {
                                                         //mReturnIsFollow="true";
                                                     }else{
                                                         followCondition = false;
-                                                        String json = "null";
-                                                        String returncondition = null;
-                                                        if (response.body() != null) {
-                                                            try {
-                                                                json = response.body().string();
-                                                                JSONObject jsonObject = new JSONObject(json);
-                                                                returncondition = jsonObject.getString("msg");
-                                                                Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
-                                                            } catch (IOException | JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }else{
-                                                            Toast.makeText(getContext(),"过于频繁请求！",Toast.LENGTH_SHORT).show();
-                                                        }
+                                                        ErrorMsg.getErrorMsg(response,getContext());
                                                     }
                                                 }
                                                 @Override
@@ -980,7 +944,7 @@ public class ForestFragment extends Fragment {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + mJoinedHolesList.get(position - 1)[6]);//进行封装
+                                            Call<ResponseBody> call = request.deletefollow(RetrofitManager.API+"follows/" + mJoinedHolesList.get(position - 1)[6]);//进行封装
                                             Log.e(TAG, "token2：");
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
@@ -993,20 +957,7 @@ public class ForestFragment extends Fragment {
                                                         follow_num.setText(mJoinedHolesList.get(position - 1)[3]);
                                                     }else{
                                                         followCondition = false;
-                                                        String json = "null";
-                                                        String returncondition = null;
-                                                        if (response.body() != null) {
-                                                            try {
-                                                                json = response.body().string();
-                                                                JSONObject jsonObject = new JSONObject(json);
-                                                                returncondition = jsonObject.getString("msg");
-                                                                Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
-                                                            } catch (IOException | JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }else{
-                                                            Toast.makeText(getContext(),"过于频繁请求！",Toast.LENGTH_SHORT).show();
-                                                        }
+                                                        ErrorMsg.getErrorMsg(response,getContext());
                                                     }
                                                 }
                                                 @Override
@@ -1025,8 +976,24 @@ public class ForestFragment extends Fragment {
                 });
 
 
-                //forestname = (TextView) view.findViewById(R.id.textView28);
-                //forestphoto=(ImageView)view.findViewById(R.id.circleImageView);
+               reply.setOnClickListener(new View.OnClickListener() {
+                   @Override
+                   public void onClick(View view) {
+                       RemoveOnScrollListener();
+                       mReturnIsThumbup=is_thumbup;
+                       mReturnIsReply=is_reply;
+                       mReturnIsFollow=is_follow;
+                       mReturnThumbupNUmber=thumbup_num;
+                       mReturnReplyNumber=reply_num;
+                       mReturnFollowNumber=follow_num;
+                       mReturnPosition=position;
+                       //is_follow
+                       // Log.d("data[2]1", mJoinedHolesList.get(position - 1)[2]);
+                       Intent intent = CommentListActivity.newIntent(getActivity(), mJoinedHolesList.get(position - 1));
+                       intent.putExtra("reply","key_board");
+                       startActivityForResult(intent,REQUESTCODE_COMMENT);
+                   }
+               });
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -1062,8 +1029,8 @@ public class ForestFragment extends Fragment {
             public void bind(int position) {
                 String[] item=mJoinedHolesList.get(position - 1);
                 this.position = position;
-                content.setText(item[1]);
-                created_timestamp.setText(item[2]);
+                content.setText(item[1].replace("\\n", "\n"));
+                created_timestamp.setText(TimeCount.time(item[2]));
                 forest_name.setText(item[5]);
                 follow_num.setText(item[3]);
                 reply_num.setText(item[12]);

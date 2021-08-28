@@ -3,14 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="52dp"
+    android:layout_height="@dimen/dp_52"
     android:background="@color/HH_BandColor_1"
     android:orientation="horizontal">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_titlebargreen_back"
-        android:layout_width="40dp"
-        android:layout_height="52dp"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_52"
         android:layout_centerInParent="true"
         android:background="@drawable/back_green"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -32,8 +32,8 @@
 
     <com.wang.avi.AVLoadingIndicatorView
         android:id="@+id/titlebargreen_AVLoadingIndicatorView"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
         app:indicatorName="BallClipRotateIndicator"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cl_titlebargreen_back"
@@ -42,7 +42,7 @@
     <TextView
         android:id="@+id/tv_titlebargreen_title"
         android:layout_width="wrap_content"
-        android:layout_height="52dp"
+        android:layout_height="@dimen/dp_52"
         android:gravity="center"
         android:text="加载中..."
         android:textColor="@color/GrayScale_100"

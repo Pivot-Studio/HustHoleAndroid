@@ -5,9 +5,7 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.Editable;
@@ -16,15 +14,12 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
 import android.text.TextPaint;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -33,7 +28,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -43,29 +37,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.model.EditTextReaction;
 import com.example.hustholetest1.model.GlideRoundTransform;
+import com.example.hustholetest1.network.ErrorMsg;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.network.RetrofitManager;
 import com.githang.statusbar.StatusBarCompat;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Observable;
 
-import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -74,7 +58,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.http.Url;
 
 
 public class ApplyForestActivity extends AppCompatActivity {
@@ -160,16 +143,20 @@ public class ApplyForestActivity extends AppCompatActivity {
                   call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    String json = "null";
-                    try {
-                        if (response.body() != null) {
-                            json = response.body().string();
+                    if(response.code()==200) {
+                        String json = "null";
+                        try {
+                            if (response.body() != null) {
+                                json = response.body().string();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                        Toast.makeText(ApplyForestActivity.this, "申请成功", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }else{
+                        ErrorMsg.getErrorMsg(response,ApplyForestActivity.this);
                     }
-                   Toast.makeText(ApplyForestActivity.this,"申请成功",Toast.LENGTH_SHORT).show();
-                   finish();
                 }
 
                 @Override
@@ -244,8 +231,11 @@ public class ApplyForestActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ApplyForestActivity.this, AllForestsActivity.class);
-                startActivity(intent);
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                // 隐藏软键盘
+                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                finish();
             }
         });
 
@@ -260,10 +250,10 @@ public class ApplyForestActivity extends AppCompatActivity {
         scrollView=(ScrollView) findViewById(R.id.scrollView2);
 
         retrofit= RetrofitManager.getRetrofit();
-        request = retrofit.create(RequestInterface.class);
-
-
-
+        request=RetrofitManager.getRequest();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        // 隐藏软键盘
+        imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
     }
 private void ButtonCondition(){
     if(mForestIntroduceCondition&&mForestNameCondition&&bitmap1!=null&&bitmap2!=null){

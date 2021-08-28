@@ -30,14 +30,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/searchbar"
-                android:textColor="@color/GrayScale_80"
+                android:textColor="@color/GrayScale_0"
                 android:layout_gravity="center_vertical"
-                android:importantForAutofill="no"
-                android:inputType="none"
+
                 android:textSize="12sp"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
-                android:textCursorDrawable="@drawable/standard_cursor"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
