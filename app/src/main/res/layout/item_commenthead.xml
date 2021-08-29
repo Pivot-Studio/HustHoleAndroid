@@ -60,9 +60,8 @@
         android:id="@+id/cl_commenthead_thumbup"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_40"
-        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="@+id/tv_commenthead_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_commenthead_content">
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <ImageView
             android:id="@+id/iv_commenthead_thumbup"
@@ -222,4 +221,12 @@
             app:layout_constraintStart_toEndOf="@+id/iv_commenthead_moreicon"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_commenthead_content"
+        app:layout_constraintStart_toEndOf="@+id/tv_commenthead_content" />
 </androidx.constraintlayout.widget.ConstraintLayout>

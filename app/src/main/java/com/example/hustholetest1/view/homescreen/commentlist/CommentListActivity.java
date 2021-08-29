@@ -32,6 +32,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.EditTextReaction;
 import com.example.hustholetest1.network.RequestInterface;
@@ -49,8 +50,7 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener;
 import com.wang.avi.AVLoadingIndicatorView;
-import com.zzhoujay.richtext.RichText;
-import com.zzhoujay.richtext.RichType;
+
 
 
 import org.json.JSONArray;
@@ -68,6 +68,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import ru.noties.markwon.Markwon;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
@@ -116,7 +117,6 @@ public class CommentListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
 
-        RichText.initCacheDir(this);
         StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -374,6 +374,7 @@ public class CommentListActivity extends AppCompatActivity {
         });
 
      mReplyAdapter=new ReplyAdapter();
+
        //创建接口实例
        // replyUpdate(0);
     }
@@ -751,7 +752,7 @@ public class CommentListActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        RichText.recycle();
+
 
     }
 
@@ -1248,10 +1249,9 @@ public class CommentListActivity extends AppCompatActivity {
                 }
                 created_timestamp.setText(TimeCount.time(data[2]));
                //content.setText(data[1]);
-                String a=data[1].replace("\n","  \n");
-                RichText.from(a)
-                        .type(RichType.markdown)
-                        .into(content);
+                String a=data[1];
+                Markwon.setMarkdown(content, a.replace("\n","\n\n"));
+
 
 
                 thumbup_num.setText(data[13]);
@@ -1645,10 +1645,6 @@ public class CommentListActivity extends AppCompatActivity {
                         }
                     }
                 });
-
-
-
-
             }
             public void bind(int position){
                 if(position<(jsonArray2.length())){
@@ -1660,6 +1656,8 @@ public class CommentListActivity extends AppCompatActivity {
                  alias_me.setText(mDetailReplyList.get(position)[0]+(mDetailReplyList.get(position)[5].equals("true")?"(我)":""));
                  Log.d("content",mDetailReplyList.get(position)[1]);
                  content.setText(mDetailReplyList.get(position)[1]);
+
+
                  created_timestamp.setText(TimeCount.time( mDetailReplyList.get(position)[2]));
                  thumbup_num.setText(mDetailReplyList.get(position)[11]);
                 if (mDetailReplyList.get(position)[6].equals("true")) {
@@ -1830,6 +1828,9 @@ public class CommentListActivity extends AppCompatActivity {
                 });
             }
         }).start();
+    }
+    private void seKeLeTon(View view){
+
     }
     private void RemoveOnScrollListener() {
         if (mOnscrollListener != null) {

@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.SpannableString;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -52,7 +51,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -91,7 +93,7 @@ public class HomePageFragment extends Fragment {
     private Boolean mHomeScreenUpdate=false;
     private Boolean mSearchCondition=false,mIfSearch=false;
     private  ConstraintLayout mMoreWhatCl;
-
+    private Boolean mSingleHoleCondition=false;
 
     private ImageView mReturnIsThumbup,mReturnIsReply,mReturnIsFollow;
     private TextView mReturnThumbupNUmber,mReturnReplyNumber,mReturnFollowNumber;
@@ -146,47 +148,124 @@ public class HomePageFragment extends Fragment {
             mSearchEt.setText("");
         }
     }
+    private static Pattern NUMBER_PATTERN = Pattern.compile("-?[0-9]+(\\.[0-9]+)?");
+    public static boolean checkStrIsNum02(String str) {
+        String bigStr;
+        try {
+            /** 先将str转成BigDecimal，然后在转成String */
+            bigStr = new BigDecimal(str).toString();
+        } catch (Exception e) {
+            /** 如果转换数字失败，说明该str并非全部为数字 */
+            return false;
+        }
+        Matcher isNum = NUMBER_PATTERN.matcher(str);
+        if (!isNum.matches()) {
+            return false;
+        }
+        return true;
+    }
     private void searchUpdate(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
-                if(mIfSearch==false){
-                    mLastLoadId=mStartingLoadId;
-                    mStartingLoadId=0;
+        if(checkStrIsNum02(mSearchEt.getText().toString())){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    Call<ResponseBody> call = request.holes2(RetrofitManager.API+"holes/"+mSearchEt.getText().toString());
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            mSearchCondition=false;
+                            if(response.code()==200) {
+                                String json = "null";
+                                try {
+                                    if (response.body() != null) {
+                                        json = response.body().string();
+                                    }
+                                    mStartingLoadId=0;
+                                    mSingleHoleCondition=true;
+                                    mHompageHolesList=new ArrayList<>();
+                                    JSONObject sonObject = new JSONObject(json);
+                                    String[] SingleHole = new String[14];
+                                    //detailforest[f][0] = sonObject.getString("background_image_url");
+                                    SingleHole[1] = sonObject.getString("content");
+                                    SingleHole[2] = sonObject.getString("created_timestamp");
+                                    SingleHole[3] = sonObject.getInt("follow_num") + "";
+                                    SingleHole[4] = sonObject.getInt("forest_id") + "";
+                                    SingleHole[5] = sonObject.getString("forest_name");
+                                    SingleHole[6] = sonObject.getInt("hole_id") + "";
+                                    //detailforest2[f][1] = sonObject.getString("image");
+                                    SingleHole[8] = sonObject.getBoolean("is_follow") + "";
+                                    SingleHole[9] = sonObject.getBoolean("is_mine") + "";
+                                    SingleHole[10] = sonObject.getBoolean("is_reply") + "";
+                                    SingleHole[11] = sonObject.getBoolean("is_thumbup") + "";
+                                    SingleHole[12] = sonObject.getInt("reply_num") + "";
+                                    SingleHole[13] = sonObject.getInt("thumbup_num") + "";
+                                    mHompageHolesList.add(SingleHole);
+                                    mHomePageHolesRv.setAdapter(mHomePageHolesAdpter);
+                                } catch (IOException | JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }else {
+                                //followCondition = false;
+                                String json = "null";
+                                if (response.errorBody() != null) {
+                                    try {
+                                        json = response.errorBody().string();
+                                        Toast.makeText(getContext(), json, Toast.LENGTH_SHORT).show();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                } else {
+                                    Toast.makeText(getContext(), R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                            mSearchCondition = false;
+                            Toast.makeText(getContext(), R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
-                Log.d("1111","1111");
-                //if(mHompageHolesList.size()%20==0) {
+            }).start();
+
+
+        }else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+
                     Call<ResponseBody> call = request.search_hole(mSearchEt.getText().toString(), mStartingLoadId, CONSTANT_STANDARD_LOAD_SIZE);//进行封装
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
                             mSearchCondition = false;
-                            Log.d("2222", "1111");
                             if (response.code() == 200) {
+                                mSingleHoleCondition=false;
                                 mIfSearch = true;
                                 String json = "null";
                                 try {
                                     if (response.body() != null) {
                                         json = response.body().string();
                                     }
-                                    //Log.d("3333", json);
-                                    if (mStartingLoadId!= 0&&json.equals("[]")){
-                                        if(mLoadMoreConditionRl != null){
-                                            //Log.d("mStartingLoadId", mStartingLoadId + "");
+                                    if (mStartingLoadId != 0 && json.equals("[]")) {
+                                        if (mLoadMoreConditionRl != null) {
                                             mLoadMoreConditionRl.finishLoadMore();
                                             mLoadMoreConditionRl = null;
                                             //mHomePageHolesAdpter.notifyDataSetChanged();
                                             if (mPrestrainCondition) {
                                                 mPrestrainCondition = false;
                                                 // mHomePageHolesAdpter.notifyDataSetChanged();
-                                            }else if(mPrestrainCondition){
+                                            } else if (mPrestrainCondition) {
                                                 mPrestrainCondition = false;
                                             }
                                         }
+
                                         Toast.makeText(getContext(), "加载到底辣", Toast.LENGTH_SHORT).show();
-                                    }else {
+                                    } else {
                                         if (json.equals("[]") || json.equals("null")) {
                                             Toast.makeText(getContext(), "无搜索结果", Toast.LENGTH_SHORT).show();
                                         } else {
@@ -205,7 +284,6 @@ public class HomePageFragment extends Fragment {
                                     e.printStackTrace();
                                 }
                             } else {
-                                Log.d("4444", "1111");
                                 failureAction();
                                 ErrorMsg.getErrorMsg(response, getContext());
                             }
@@ -237,8 +315,9 @@ public class HomePageFragment extends Fragment {
                         }
                     });
 
-            }
-        }).start();
+                }
+            }).start();
+        }
     }
     private void showResponse(){
         Toast.makeText(getContext(), "加载到底了", Toast.LENGTH_SHORT).show();
@@ -271,6 +350,9 @@ public class HomePageFragment extends Fragment {
                         || (event != null && KeyEvent.KEYCODE_ENTER == event.getKeyCode() && KeyEvent.ACTION_DOWN == event.getAction())) {
                     if(mSearchCondition==false) {
                         mSearchCondition = true;
+                        //if (mIfSearch == false) {
+                            mLastLoadId = mStartingLoadId;
+                            mStartingLoadId = 0;
                         searchUpdate();
 
                     }
@@ -303,7 +385,7 @@ public class HomePageFragment extends Fragment {
             @Override
             public void onLoadMore(RefreshLayout refreshlayout) {
                 RemoveOnScrollListener();
-                if(mIfFirstLoad){
+                if(mIfFirstLoad||mSingleHoleCondition){
                     refreshlayout.finishLoadMore();
                 }else{
                     if (mPrestrainCondition == false) {
@@ -465,6 +547,7 @@ public class HomePageFragment extends Fragment {
     }
     public  void homeScreenUpdate(){
         mHomeScreenUpdate=true;
+        mSingleHoleCondition=false;
         mLastLoadId=mStartingLoadId;
         mStartingLoadId=0;
         update();
@@ -487,6 +570,7 @@ public class HomePageFragment extends Fragment {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if(response.code()==200) {
+                            mSingleHoleCondition=false;
                             String json = "null";
                             try {
                                 if (response.body() != null) {
@@ -588,13 +672,11 @@ public class HomePageFragment extends Fragment {
         protected void onPostExecute(Void unused) {
 
             if(mLoadMoreConditionRl != null){
-                Log.d("mStartingLoadId", mStartingLoadId + "");
                 mLoadMoreConditionRl.finishLoadMore();
                 mLoadMoreConditionRl = null;
                 mHomePageHolesAdpter.notifyDataSetChanged();
                 if (mPrestrainCondition == true) {
                     mPrestrainCondition = false;
-                    // mHomePageHolesAdpter.notifyDataSetChanged();
                 }
             }else if(mRefreshConditionRl != null) {
                 mRefreshConditionRl.finishRefresh();
@@ -616,7 +698,9 @@ public class HomePageFragment extends Fragment {
                 mHomePageHolesAdpter.notifyDataSetChanged();
 
             }else if(mIfSearch){
-
+                if (mIfFirstLoad) {
+                    mIfFirstLoad = false;
+                }
                 mHomePageHolesAdpter.notifyDataSetChanged();
             }
             else{
@@ -854,7 +938,6 @@ public class HomePageFragment extends Fragment {
                                             @Override
                                             public void run() {
                                                 Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API+"thumbups/" + mHompageHolesList.get(position)[6] + "/-1");//进行封装
-                                                Log.e(TAG, "token2：");
                                                 call.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -897,7 +980,6 @@ public class HomePageFragment extends Fragment {
                                             @Override
                                             public void run() {
                                                 Call<ResponseBody> call = request.follow(RetrofitManager.API+"follows/" + mHompageHolesList.get(position)[6]);//进行封装
-                                                Log.e(TAG, "token2：");
                                                 call.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -926,7 +1008,6 @@ public class HomePageFragment extends Fragment {
                                             @Override
                                             public void run() {
                                                 Call<ResponseBody> call = request.deletefollow(RetrofitManager.API+"follows/" + mHompageHolesList.get(position)[6]);//进行封装
-                                                Log.e(TAG, "token2：");
                                                 call.enqueue(new Callback<ResponseBody>() {
 
                                                     @Override
@@ -1017,7 +1098,6 @@ public class HomePageFragment extends Fragment {
                         forest_name.setText("  " + mHompageHolesList.get(position)[5] + "   ");
                     }
                     follow_num.setText(mHompageHolesList.get(position)[3]);
-                    Log.d("holeidfollownumisfollow", mHompageHolesList.get(position)[6] + "+" + mHompageHolesList.get(position)[3] + "+" + mHompageHolesList.get(position)[8]);
                     reply_num.setText(mHompageHolesList.get(position)[12]);
                     thumbup_num.setText(mHompageHolesList.get(position)[13]);
                     hole_id.setText("#" + mHompageHolesList.get(position)[6]);

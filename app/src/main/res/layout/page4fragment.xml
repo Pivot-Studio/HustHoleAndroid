@@ -21,14 +21,14 @@
                 android:layout_width="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_height="207dp"
-                app:srcCompat="@mipmap/my_background" />
+                app:srcCompat="@mipmap/mybackground" />
 
             <!--        <View-->
             <!--            android:id="@+id/my_view1"-->
             <!--            android:layout_width="match_parent"-->
             <!--            android:layout_height="10dp"-->
             <!--            android:background="#F3F3F3"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/my_background" />-->
+            <!--            app:layout_constraintTop_toBottomOf="@id/mybackground.png" />-->
 
             <TextView
                 android:id="@+id/my_date"

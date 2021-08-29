@@ -17,7 +17,10 @@ android {
 
     buildTypes {
         release {
+           // minifyEnabled true//最小化资源包
+            //shrinkResources true
             minifyEnabled false
+           // proguardFiles getDefaultProguardFile('proguard-android.txt'),'proguard-rules.pro'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
       // repositories { maven { url "https://maven.google.com" } }
@@ -33,12 +36,19 @@ android {
 
 dependencies {
 
+    implementation 'com.ethanhua:skeleton:1.1.2'
+    //主要是动画的实现
+    implementation 'io.supercharge:shimmerlayout:2.1.0'
+
+
+    implementation 'ru.noties:markwon:1.0.1'//markdown
+    implementation 'ru.noties:markwon-image-loader:1.0.1' // optional
+    implementation 'ru.noties:markwon-view:1.0.1' // optional
 
     implementation 'com.wang.avi:library:2.1.3'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
 
-    implementation 'com.zzhoujay.richtext:richtext:3.0.8'
-    implementation 'com.zzhoujay:html:1.0.1'
+
 
     implementation 'com.squareup.retrofit2:retrofit:2.1.0'
 //解析器
