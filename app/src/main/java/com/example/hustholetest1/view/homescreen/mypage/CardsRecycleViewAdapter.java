@@ -49,7 +49,7 @@ public class CardsRecycleViewAdapter extends RecyclerView.Adapter<CardsRecycleVi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_hole,parent,false);
+                .inflate(R.layout.card_myhole,parent,false);
         ViewHolder holder = new ViewHolder(view);
         holder.img_up.setOnClickListener(new View.OnClickListener() {
             Boolean isUp = false;

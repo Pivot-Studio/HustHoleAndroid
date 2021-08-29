@@ -3,45 +3,54 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="20dp"
-    app:cardCornerRadius="10dp">
+    android:layout_marginTop="@dimen/dp_10"
+    android:layout_marginHorizontal="@dimen/dp_12"
+    app:cardCornerRadius="@dimen/dp_20">
     <RelativeLayout
-        android:id="@+id/rv_follow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="10dp">
-
+        android:layout_marginHorizontal="@dimen/dp_12"
+        android:layout_marginVertical="@dimen/dp_10">
         <TextView
             android:id="@+id/hole_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="# 12345"
             android:textColor="@color/GrayScale_0" />
+
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/hole_id"
-            android:text="2021-08-05"/>
+            android:layout_marginTop="@dimen/dp_3"
+            android:text="2021-08-05"
+            android:textColor="@color/GrayScale_80" />
 
         <TextView
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/date"
+            android:layout_marginTop="@dimen/dp_5"
             android:ellipsize="end"
             android:lineSpacingExtra="4dp"
             android:maxLines="5"
-            android:textColor="@color/GrayScale_0"/>
+            android:text="一天晚上，我玩了几个小时的电脑，时针指向“九”了，还意犹未音传到了我的耳边：“九点了，赶快上床睡觉……”一天晚上，我玩了几个小时的电脑，时针指向“九”了，还意犹未尽。这时，令我讨厌的声音传到了我的耳边：“九点了，赶快上床睡觉……”听到这里，我不厌其烦地应了一声：“哦。”虽然嘴上是这么说的，但心里却舍不得离开，听到这里，我不厌其烦地应了一声：“哦。”虽然嘴上是这么说的，但心里却舍不得离开，"
+            android:textColor="@color/GrayScale_20"
+            android:textSize="@dimen/sp_14" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/inform"
-            android:layout_width="@dimen/dp_158"
-            android:layout_height="@dimen/dp_48"
-            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignEnd="@id/content"
             android:layout_alignBottom="@id/content"
+            android:layout_marginStart="@dimen/dp_12"
             android:background="@drawable/more"
-            android:elevation="20dp">
+            android:clickable="true"
+            android:paddingVertical="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_80">
 
             <ImageView
                 android:id="@+id/iv_itemhomepage_moreicon"
@@ -57,7 +66,7 @@
                 android:id="@+id/tv_itemhomepage_moretext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="@dimen/dp_12"
                 android:text="举报"
                 android:textColor="@color/GrayScale_20"
                 android:textSize="14sp"
@@ -67,57 +76,199 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
-            android:layout_below="@id/content"
-            android:layout_margin="5dp"
             android:layout_width="match_parent"
-            android:layout_height="20dp">
+            android:layout_height="@dimen/dp_25"
+            android:layout_below="@id/content"
+            android:layout_marginTop="5dp">
+
             <ImageView
                 android:id="@+id/img_up"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/inactive"/>
+                android:layout_width="@dimen/dp_20"
+                android:layout_height="@dimen/dp_25"
+                app:srcCompat="@mipmap/inactive" />
+
             <TextView
                 android:id="@+id/text_up"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/dp_4"
+                android:layout_toEndOf="@id/img_up"
                 android:text="10"
-                android:layout_toEndOf="@id/img_up"/>
+                android:textColor="@color/GrayScale_70"
+                android:textSize="@dimen/sp_11" />
+
             <ImageView
                 android:id="@+id/img_talk"
-                android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/dp_30"
                 android:layout_toEndOf="@id/text_up"
-                app:srcCompat="@mipmap/inactive_2"/>
+                app:srcCompat="@mipmap/inactive_2" />
+
             <TextView
                 android:id="@+id/text_talk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/dp_4"
+                android:layout_toEndOf="@id/img_talk"
                 android:text="12"
-                android:layout_toEndOf="@id/img_talk"/>
+                android:textColor="@color/GrayScale_70"
+                android:textSize="@dimen/sp_11" />
+
             <ImageView
                 android:id="@+id/img_star"
-                android:layout_marginLeft="20dp"
-                android:layout_toEndOf="@id/text_talk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:srcCompat="@mipmap/inactive_3"/>
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/dp_30"
+                android:layout_toEndOf="@id/text_talk"
+                app:srcCompat="@mipmap/inactive_3" />
+
             <TextView
                 android:id="@+id/text_star"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/dp_4"
+                android:layout_toEndOf="@id/img_star"
                 android:text="3"
-                android:layout_toEndOf="@id/img_star"/>
+                android:textColor="@color/GrayScale_70"
+                android:textSize="@dimen/sp_11" />
+
             <ImageView
                 android:id="@+id/threePoint"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                app:srcCompat="@mipmap/threepoint"/>
+                app:srcCompat="@mipmap/threepoint" />
         </RelativeLayout>
     </RelativeLayout>
 
 
 </androidx.cardview.widget.CardView>
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="wrap_content"-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto"-->
+<!--    android:layout_margin="20dp"-->
+<!--    app:cardCornerRadius="10dp">-->
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/rv_follow"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_margin="10dp">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/hole_id"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textColor="@color/GrayScale_0" />-->
+<!--        <TextView-->
+<!--            android:id="@+id/date"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/hole_id"-->
+<!--            android:text="2021-08-05"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/content"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/date"-->
+<!--            android:ellipsize="end"-->
+<!--            android:lineSpacingExtra="4dp"-->
+<!--            android:maxLines="5"-->
+<!--            android:textColor="@color/GrayScale_0"/>-->
+
+<!--        <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--            android:id="@+id/inform"-->
+<!--            android:layout_width="@dimen/dp_158"-->
+<!--            android:layout_height="@dimen/dp_48"-->
+<!--            android:clickable="true"-->
+<!--            android:layout_alignEnd="@id/content"-->
+<!--            android:layout_alignBottom="@id/content"-->
+<!--            android:background="@drawable/more"-->
+<!--            android:elevation="20dp">-->
+
+<!--            <ImageView-->
+<!--                android:id="@+id/iv_itemhomepage_moreicon"-->
+<!--                android:layout_width="@dimen/dp_24"-->
+<!--                android:layout_height="@dimen/dp_24"-->
+<!--                android:layout_marginStart="12dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:srcCompat="@mipmap/vector4" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/tv_itemhomepage_moretext"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="15dp"-->
+<!--                android:text="举报"-->
+<!--                android:textColor="@color/GrayScale_20"-->
+<!--                android:textSize="14sp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_moreicon"-->
+<!--                app:layout_constraintTop_toTopOf="parent" />-->
+<!--        </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+<!--        <RelativeLayout-->
+<!--            android:layout_below="@id/content"-->
+<!--            android:layout_margin="5dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="20dp">-->
+<!--            <ImageView-->
+<!--                android:id="@+id/img_up"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:srcCompat="@mipmap/inactive"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/text_up"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:text="10"-->
+<!--                android:layout_toEndOf="@id/img_up"/>-->
+<!--            <ImageView-->
+<!--                android:id="@+id/img_talk"-->
+<!--                android:layout_marginLeft="20dp"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_toEndOf="@id/text_up"-->
+<!--                app:srcCompat="@mipmap/inactive_2"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/text_talk"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerVertical="true"-->
+<!--                android:text="12"-->
+<!--                android:layout_toEndOf="@id/img_talk"/>-->
+<!--            <ImageView-->
+<!--                android:id="@+id/img_star"-->
+<!--                android:layout_marginLeft="20dp"-->
+<!--                android:layout_toEndOf="@id/text_talk"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                app:srcCompat="@mipmap/inactive_3"/>-->
+<!--            <TextView-->
+<!--                android:id="@+id/text_star"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="3"-->
+<!--                android:layout_toEndOf="@id/img_star"/>-->
+<!--            <ImageView-->
+<!--                android:id="@+id/threePoint"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                app:srcCompat="@mipmap/threepoint"/>-->
+<!--        </RelativeLayout>-->
+<!--    </RelativeLayout>-->
+
+
+<!--</androidx.cardview.widget.CardView>-->

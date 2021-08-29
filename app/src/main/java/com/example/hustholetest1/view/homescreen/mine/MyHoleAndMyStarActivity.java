@@ -2,7 +2,12 @@ package com.example.hustholetest1.view.homescreen.mine;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,31 +21,37 @@ import com.example.hustholetest1.view.homescreen.mypage.FragmentAdapter;
 import com.example.hustholetest1.view.homescreen.mine.fragment.MyHoleFragment;
 import com.example.hustholetest1.view.homescreen.mine.fragment.MyStarFragment;
 
+import com.githang.statusbar.StatusBarCompat;
 import com.google.android.material.tabs.TabLayout;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MyHoleAndMyStarActivity extends AppCompatActivity{
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
+    private ImageView imgMy;
 
     Intent intent;
     List<Fragment> fragments = new ArrayList<>();
     List<String> titles = new ArrayList<>();
 
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hole_star);
 
-//        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-//        if(getSupportActionBar()!=null){//隐藏上方ActionBar
-//            getSupportActionBar().hide();
-//        }
+        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
+        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+            getSupportActionBar().hide();
+        }
 
         mTabLayout = findViewById(R.id.tl_hole_star);
-        mViewPager = findViewById(R.id.vp_hole_star);
 
+        mViewPager = findViewById(R.id.vp_hole_star);
+        imgMy = findViewById(R.id.my_img);
+        imgMy.setOnClickListener(v -> finish());
         fragments.add(MyHoleFragment.newInstance());
         fragments.add(MyStarFragment.newInstance());
 
@@ -77,6 +88,7 @@ public class MyHoleAndMyStarActivity extends AppCompatActivity{
 
         intent = getIntent();
         mViewPager.setCurrentItem(intent.getIntExtra("initFragmentID", 0) == 0 ? 0 : 1);
+        changeTabIndicatorWidth(mTabLayout,10);
     }
 
     private void initViewPager() {
@@ -111,4 +123,45 @@ public class MyHoleAndMyStarActivity extends AppCompatActivity{
 
         }
     };
+    public void changeTabIndicatorWidth(final TabLayout tabLayout, final int margin) {
+        Log.d("inin","in this");
+        tabLayout.post(() -> {
+            try {
+                Field mTabStripField = tabLayout.getClass().getDeclaredField("mTabStrip");
+                mTabStripField.setAccessible(true);
+
+                LinearLayout mTabStrip = (LinearLayout) mTabStripField.get(tabLayout);
+
+                int dp10 = margin == 0 ? 50 : margin;
+
+                for (int i = 0; i < mTabStrip.getChildCount(); i++) {
+                    View tabView = mTabStrip.getChildAt(i);
+
+                    Field mTextViewField = tabView.getClass().getDeclaredField("mTextView");
+                    mTextViewField.setAccessible(true);
+
+                    TextView mTextView = (TextView) mTextViewField.get(tabView);
+
+                    tabView.setPadding(0, 0, 0, 0);
+
+                    int width = 0;
+                    width = mTextView.getWidth();
+                    if (width == 0) {
+                        mTextView.measure(0, 0);
+                        width = mTextView.getMeasuredWidth();
+                    }
+
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
+                    params.width = width;
+                    params.leftMargin = dp10;
+                    params.rightMargin = dp10;
+                    tabView.setLayoutParams(params);
+                    tabView.invalidate();
+                }
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
 }

@@ -314,6 +314,7 @@ public class CommentListActivity extends AppCompatActivity {
         data = getIntent().getStringArrayExtra(key);
         if(data == null){
             data_hole_id = getIntent().getStringExtra("data_hole_id");
+            Log.d("CommentListActivity","data_hole_id: " + data_hole_id);
             if(data_hole_id != null){
                 retrofit2 = new Retrofit.Builder()
                         .baseUrl("http://hustholetest.pivotstudio.cn/api/forests/")
@@ -327,19 +328,13 @@ public class CommentListActivity extends AppCompatActivity {
             }
         }
         else {
-
+            Log.d("CommentListActivity","data is not null");
              if(mIfOnlyCondition) {
                  replyUpdate();
              }else{
                  hotReplyUpdate();
              }
         }
-
-
-
-
-
-
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1698,7 +1693,7 @@ public class CommentListActivity extends AppCompatActivity {
             @Override
             public void run() {
                 Call<ResponseBody> call = request2.holes2("http://hustholetest.pivotstudio.cn/api/holes/"+data_hole_id);
-                Log.e("tag", "token2：");
+                Log.d("tag", "token2：");
                 Log.d("tag", "run: request2");
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
