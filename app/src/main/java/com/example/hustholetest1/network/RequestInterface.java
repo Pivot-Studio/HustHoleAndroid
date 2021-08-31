@@ -30,12 +30,12 @@ public interface RequestInterface {//接口
     @POST
     Call<ResponseBody> resetPassword(@Url String url);
 
-
     @POST
     Call<ResponseBody> verifyCodeMatch(@Url String url);
 
     @POST("mobileRegister")
     Call<ResponseBody> register(@Body HashMap map);
+
     @GET("forests/types?")
     Call<ResponseBody> getType(@Query("start_id") int start_id,
                                @Query("list_size") int list_size);
@@ -105,7 +105,7 @@ public interface RequestInterface {//接口
 
 
    // @POST("replies")
-   // Call<ResponseBody> replies_add(@Body HashMap map);
+    //Call<ResponseBody> replies_add(@Body HashMap map);
 
     @POST
     Call<ResponseBody> holes(@Url String url);

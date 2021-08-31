@@ -250,7 +250,8 @@ public class CommentListActivity extends AppCompatActivity {
                                 map.put("hole_id",(data[6]));
                                 map.put("content",mPublishReplyEt.getText().toString());
                                 map.put("wanted_local_reply_id",(reply_to_who));
-                                //Call<ResponseBody> call = request.replies_add(map);
+                               // Call<ResponseBody> call = request.replies_add(map);
+
                                 Call<ResponseBody> call = request.replies_add(RetrofitManager.API+"replies?hole_id=" + data[6] + "&content=" + mPublishReplyEt.getText().toString().replace("\n","%0a") + "&wanted_local_reply_id=" + reply_to_who);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
@@ -288,7 +289,7 @@ public class CommentListActivity extends AppCompatActivity {
                                                     json = response.errorBody().string();
                                                     JSONObject jsonObject = new JSONObject(json);
                                                     //returncondition = jsonObject.getString("msg");
-                                                    Toast.makeText(CommentListActivity.this, response.code()+"", Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(CommentListActivity.this, response.code()+""+json, Toast.LENGTH_SHORT).show();
                                                 } catch (IOException | JSONException e) {
                                                     e.printStackTrace();
                                                 }
@@ -303,6 +304,7 @@ public class CommentListActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                                        tr.printStackTrace();
                                         mSendCondition =false;
                                         Toast.makeText(CommentListActivity.this, R.string.network_sendfailture, Toast.LENGTH_SHORT).show();
 
@@ -374,7 +376,7 @@ public class CommentListActivity extends AppCompatActivity {
         });
 
      mReplyAdapter=new ReplyAdapter();
-
+     mCommentlistRv.setAdapter(mReplyAdapter);
        //创建接口实例
        // replyUpdate(0);
     }
@@ -664,8 +666,9 @@ public class CommentListActivity extends AppCompatActivity {
                         }
                     });
                    if(mIfFirstLoad) {
-                       mCommentlistRv.setAdapter(mReplyAdapter);
                        mIfFirstLoad=false;
+                       mCommentlistRv.setAdapter(mReplyAdapter);
+
                    }else{
                        mReplyAdapter.notifyDataSetChanged();
                    }
@@ -761,17 +764,27 @@ public class CommentListActivity extends AppCompatActivity {
         public static final int ITEM_TYPE_HEADER = 0;
         public static final int ITEM_TYPE_CONTENT = 1;
         public static final int ITEM_TYPE_NOMESSAGE = 2;
+        public static final int ITEM_TYPE_LOADINGHEADER=3;
+        public static final int ITEM_TYPE_LOADINGCONTENT=4;
         private int mHeaderCount=1;//头部View个数
         //private Boolean more_condition=false;
        // private  ConstraintLayout morewhat0;
         @Override
         public int getItemViewType(int position) {
-            if (mHeaderCount != 0 && position < mHeaderCount) {
-                return ITEM_TYPE_HEADER;
-            }else if(position!=0&&mDetailReplyList.size()!=0){
-                return ITEM_TYPE_CONTENT;
-            }else{
-                return ITEM_TYPE_NOMESSAGE;
+            if(mIfFirstLoad){
+                if(position==0){
+                    return ITEM_TYPE_LOADINGHEADER;
+                }else{
+                    return ITEM_TYPE_LOADINGCONTENT;
+                }
+            }else {
+                if (mHeaderCount != 0 && position < mHeaderCount) {
+                    return ITEM_TYPE_HEADER;
+                } else if (position != 0 && mDetailReplyList.size() != 0) {
+                    return ITEM_TYPE_CONTENT;
+                } else {
+                    return ITEM_TYPE_NOMESSAGE;
+                }
             }
         }
 
@@ -1699,6 +1712,29 @@ public class CommentListActivity extends AppCompatActivity {
                 line.setHeight(getViewHeight(content,true));
             }
         }
+
+
+        public class LoadingHeaderHolder extends RecyclerView.ViewHolder{
+            public LoadingHeaderHolder(View view) {
+                super(view);
+            }
+            public void bind(int position){
+
+            }
+        }
+
+
+
+        public class LoadingReplyHolder extends RecyclerView.ViewHolder{
+
+            public LoadingReplyHolder(View view) {
+                super(view);
+            }
+            public void bind(int position){
+            }
+        }
+
+
         public ReplyAdapter(){
 
         }
@@ -1715,6 +1751,12 @@ public class CommentListActivity extends AppCompatActivity {
             }else if(viewType==ITEM_TYPE_NOMESSAGE){
                 return new ReplyAdapter.MessageHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_commentnomessage,parent,false));
+            }else if(viewType==ITEM_TYPE_LOADINGHEADER){
+                return new ReplyAdapter.LoadingHeaderHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_commentheadloading,parent,false));
+            }else if(viewType==ITEM_TYPE_LOADINGCONTENT){
+                return new ReplyAdapter.LoadingReplyHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_commentreplyloading,parent,false));
             }
             return null;
 
@@ -1730,27 +1772,29 @@ public class CommentListActivity extends AppCompatActivity {
             }else if (holder instanceof ReplyAdapter.MessageHolder) {
                 ((ReplyAdapter.MessageHolder) holder).bind(position);
             }
+            if(mIfFirstLoad){}else {
+                if (position == mDetailReplyList.size() - 3 && (mDetailReplyList.size() % 20 == 0)) {
+                    mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
+                    mPrestrainCondition = true;
+                    if (mIfOnlyCondition) {
+                        replyUpdate();
 
-            if(position== mDetailReplyList.size()-3&&(mDetailReplyList.size()%20==0)){
-                mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
-                mPrestrainCondition=true;
-                 if(mIfOnlyCondition) {
-                            replyUpdate();
-
-                        }else{
-                            hotReplyUpdate();
-                        }
+                    } else {
+                        hotReplyUpdate();
+                    }
+                }
             }
-
-
             }
         @Override
         public int getItemCount() {
-            if(mDetailReplyList.size()==0){
-                return 2;
+            if(mIfFirstLoad){
+               return 4;
+            }else {
+                if (mDetailReplyList.size() == 0) {
+                    return 2;
+                }
+                return mDetailReplyList.size() + 1;
             }
-            return mDetailReplyList.size()+1;
-
         }
     }
 
