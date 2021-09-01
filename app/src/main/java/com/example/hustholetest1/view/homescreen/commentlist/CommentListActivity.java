@@ -1,5 +1,6 @@
 package com.example.hustholetest1.view.homescreen.commentlist;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -155,11 +156,11 @@ public class CommentListActivity extends AppCompatActivity {
                      if(mPrestrainCondition == false) {
                         mLoadMoreCondotionRl = refreshlayout;
                         mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
-                        if(mIfOnlyCondition) {
+                        //if(mIfOnlyCondition) {
                             replyUpdate();
-                        }else{
-                            hotReplyUpdate();
-                        }
+                       // }else{
+                       //     hotReplyUpdate();
+                        //}
                      } else {
                          mLoadMoreCondotionRl = refreshlayout;
                      }
@@ -244,15 +245,11 @@ public class CommentListActivity extends AppCompatActivity {
                         new Thread(new Runnable() {//加载纵向列表标题
                             @Override
                             public void run() {
-                                //Toast.makeText(CommentListActivity.this,mPublishReplyEt.getText().toString().contains("\n")+"",Toast.LENGTH_SHORT).show();
-                                //Log.d("content-1", mPublishReplyEt.getText().toString());
                                 HashMap map=new HashMap();
                                 map.put("hole_id",(data[6]));
                                 map.put("content",mPublishReplyEt.getText().toString());
                                 map.put("wanted_local_reply_id",(reply_to_who));
-                               // Call<ResponseBody> call = request.replies_add(map);
-
-                                Call<ResponseBody> call = request.replies_add(RetrofitManager.API+"replies?hole_id=" + data[6] + "&content=" + mPublishReplyEt.getText().toString().replace("\n","%0a") + "&wanted_local_reply_id=" + reply_to_who);//进行封装
+                                Call<ResponseBody> call = request.replies_add(RetrofitManager.API+"replies?hole_id=" + data[6] + "&content=" + mPublishReplyEt.getText().toString().replace("\n","%0A") + "&wanted_local_reply_id=" + reply_to_who);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -330,12 +327,8 @@ public class CommentListActivity extends AppCompatActivity {
 
 
         TokenInterceptor.getContext(CommentListActivity.this);
-        //TokenInterceptor.getContext(RegisterActivity.this);
-        //System.out.println("提交了context");
         retrofit= RetrofitManager.getRetrofit();
         request=RetrofitManager.getRequest();
-       // request = retrofit.create(RequestInterface.class);
-
         data = getIntent().getStringArrayExtra(key);
         if(data == null){
             data_hole_id = getIntent().getStringExtra("data_hole_id");
@@ -817,6 +810,8 @@ public class CommentListActivity extends AppCompatActivity {
                 more_2=(TextView)view.findViewById(R.id.tv_commenthead_moretext);
                 morewhat=(ConstraintLayout)view.findViewById(R.id.cl_commenthead_morelist);
                 morewhat.setVisibility(View.INVISIBLE);
+
+
                 more.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -995,7 +990,7 @@ public class CommentListActivity extends AppCompatActivity {
 
                             mStartingLoadId = 0;
                              if(mIfOnlyCondition) {
-                            replyUpdate();
+                               replyUpdate();
                                }else{
                                hotReplyUpdate();
                              }
@@ -1003,8 +998,21 @@ public class CommentListActivity extends AppCompatActivity {
 
                     }
                 });
-
-
+                //content.setOnClickListener(new shortL);
+                content.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RemoveOnScrollListener();
+                        SpannableString ss = new SpannableString("评论洞主：");
+                        // 新建一个属性对象,设置文字的大小
+                        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14,true);
+                        // 附加属性到文本
+                        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        // 设置hint
+                        mPublishReplyEt.setHint(new SpannedString(ss));
+                        reply_to_who="-1";
+                    }
+                });
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -1016,6 +1024,10 @@ public class CommentListActivity extends AppCompatActivity {
                         ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         // 设置hint
                         mPublishReplyEt.setHint(new SpannedString(ss));
+
+
+
+
                         reply_to_who="-1";
                     }
                 });
@@ -1253,7 +1265,6 @@ public class CommentListActivity extends AppCompatActivity {
                 }else{
                     orders.setImageResource(R.mipmap.group112);
                 }
-
                 if (data[5].equals("")) {
                     forest_name.setVisibility(View.INVISIBLE);
                 } else {
@@ -1264,8 +1275,6 @@ public class CommentListActivity extends AppCompatActivity {
                //content.setText(data[1]);
                 String a=data[1];
                 Markwon.setMarkdown(content, a.replace("\n","\n\n"));
-
-
 
                 thumbup_num.setText(data[13]);
                 reply_num.setText(data[12]);
@@ -1319,7 +1328,7 @@ public class CommentListActivity extends AppCompatActivity {
             private TextView alias_me,content, created_timestamp,thumbup_num,reply_tosomebody,more_2,Hot;
             private ImageView  is_thumbup,more,more_1;
             private ConstraintLayout linearLayout,morewhat,thumbup;
-            private Button line;
+            private TextView line;
             private int position;
             private Boolean thumbupCondition=false,followCondition=false;
 
@@ -1335,7 +1344,7 @@ public class CommentListActivity extends AppCompatActivity {
                 is_thumbup=(ImageView)view.findViewById(R.id.iv_commentreply_thumbup);
                 reply_tosomebody=(TextView)view.findViewById(R.id.tv_commentreply_detailreplycontent);
                 linearLayout=(ConstraintLayout) view.findViewById(R.id.ll_commentreply_replycontent);
-                line=(Button)view.findViewById(R.id.textView72);
+                line=(TextView)view.findViewById(R.id.textView72);
                 Hot=(TextView)view.findViewById(R.id.tv_commentreply_ifhot);
                 more=(ImageView)view.findViewById(R.id.iv_commentreply_more);
                 more_1=(ImageView)view.findViewById(R.id.iv_commentreply_moreicon);
@@ -1498,7 +1507,22 @@ public class CommentListActivity extends AppCompatActivity {
 
 
 
+                content.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RemoveOnScrollListener();
+                        SpannableString ss = new SpannableString("回复@"+ mDetailReplyList.get(position)[0]+(mDetailReplyList.get(position)[5].equals("true")?"(我)":"")+":");
+                        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14,true);
+                        ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
+                        mPublishReplyEt.setHint(new SpannedString(ss));
+                        mPublishReplyEt.requestFocus();
+                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(mPublishReplyEt, InputMethodManager.SHOW_IMPLICIT);
+
+                        reply_to_who= mDetailReplyList.get(position)[7];
+                    }
+                });
                 view.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -1509,8 +1533,9 @@ public class CommentListActivity extends AppCompatActivity {
 
                         mPublishReplyEt.setHint(new SpannedString(ss));
                         mPublishReplyEt.requestFocus();
-                        InputMethodManager imm = (InputMethodManager) mPublishReplyEt.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        imm.showSoftInput(mPublishReplyEt, InputMethodManager.SHOW_IMPLICIT);
+
                         reply_to_who= mDetailReplyList.get(position)[7];
                     }
                 });
@@ -1667,7 +1692,8 @@ public class CommentListActivity extends AppCompatActivity {
                 }
                 this.position=position;
                  alias_me.setText(mDetailReplyList.get(position)[0]+(mDetailReplyList.get(position)[5].equals("true")?"(我)":""));
-                 Log.d("content",mDetailReplyList.get(position)[1]);
+
+
                  content.setText(mDetailReplyList.get(position)[1]);
 
 
@@ -1679,7 +1705,9 @@ public class CommentListActivity extends AppCompatActivity {
                     is_thumbup.setImageResource(R.mipmap.inactive);
                 }
                 if(mDetailReplyList.get(position)[8].equals("-1")){
+                    linearLayout.setVisibility(View.GONE);
                     //linearLayout.setVisibility(View.INVISIBLE);
+                    /*
                     ConstraintLayout.LayoutParams linearParams0 =(ConstraintLayout.LayoutParams) reply_tosomebody.getLayoutParams(); //取控件textView当前的布局参数 linearParams.height = 20;// 控件的高强制设成20
                     linearParams0.height =0;
                     linearParams0.width=0;
@@ -1691,7 +1719,10 @@ public class CommentListActivity extends AppCompatActivity {
                     linearParams.width=0;
                     linearLayout.setLayoutParams(linearParams);
 
+                     */
+
                 }else {
+                    linearLayout.setVisibility(View.VISIBLE);
                     Log.d("", mDetailReplyList.get(position)[0]+ mDetailReplyList.get(position)[1]+ mDetailReplyList.get(position)[2]+ mDetailReplyList.get(position)[8]);
                     //linearLayout.setVisibility(View.VISIBLE);
                     SpannableStringBuilder builder = new SpannableStringBuilder(""+ mDetailReplyList.get(position)[9]+" : "+ mDetailReplyList.get(position)[10]);
@@ -1709,6 +1740,7 @@ public class CommentListActivity extends AppCompatActivity {
                     more_1.setImageResource(R.mipmap.vector4);
                     more_2.setText("举报");
                 }
+                line.setWidth(1);
                 line.setHeight(getViewHeight(content,true));
             }
         }
@@ -1772,16 +1804,17 @@ public class CommentListActivity extends AppCompatActivity {
             }else if (holder instanceof ReplyAdapter.MessageHolder) {
                 ((ReplyAdapter.MessageHolder) holder).bind(position);
             }
-            if(mIfFirstLoad){}else {
-                if (position == mDetailReplyList.size() - 3 && (mDetailReplyList.size() % 20 == 0)) {
+            if(mIfFirstLoad){
+
+            }else {
+                if (position == mDetailReplyList.size() - 3 && (mDetailReplyList.size()-3 % 20 == 0)) {
                     mStartingLoadId = mStartingLoadId + CONSTANT_STANDARD_LOAD_SIZE;
                     mPrestrainCondition = true;
-                    if (mIfOnlyCondition) {
+                   // if (mIfOnlyCondition) {
                         replyUpdate();
-
-                    } else {
-                        hotReplyUpdate();
-                    }
+                    //} else {
+                    //    hotReplyUpdate();
+                    //}
                 }
             }
             }

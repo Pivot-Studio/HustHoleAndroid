@@ -174,7 +174,10 @@ public class HomePageFragment extends Fragment {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             mSearchCondition=false;
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
                             if(response.code()==200) {
+
                                 String json = "null";
                                 try {
                                     if (response.body() != null) {
@@ -234,16 +237,17 @@ public class HomePageFragment extends Fragment {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+
 
                     Call<ResponseBody> call = request.search_hole(mSearchEt.getText().toString(), mStartingLoadId, CONSTANT_STANDARD_LOAD_SIZE);//进行封装
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-
+                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
                             mSearchCondition = false;
                             if (response.code() == 200) {
+
                                 mSingleHoleCondition=false;
                                 mIfSearch = true;
                                 String json = "null";
@@ -276,8 +280,8 @@ public class HomePageFragment extends Fragment {
                                             new DownloadTask().execute();
 
 
-                                            InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                            imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+                                            InputMethodManager immm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                            immm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
                                         }
                                     }
                                 } catch (IOException | JSONException e) {

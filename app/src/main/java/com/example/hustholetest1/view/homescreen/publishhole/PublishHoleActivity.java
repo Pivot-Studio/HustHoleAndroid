@@ -165,7 +165,7 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         button0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content=editText.getText().toString();
+                String content=editText.getText().toString().replace("\n","%0A");
                 //Toast.makeText(PublishHoleActivity.this, ""+content, Toast.LENGTH_SHORT).show();
                 if(content.length()>15) {
                     if(mSendCondition==false) {

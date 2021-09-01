@@ -10,7 +10,7 @@
         android:id="@+id/tv_commentreply_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
+        android:layout_marginStart="@dimen/dp_20"
         android:layout_marginTop="12dp"
         android:text="TextView"
         android:textColor="@color/GrayScale_20"
@@ -115,12 +115,13 @@
             app:layout_constraintStart_toEndOf="@+id/textView72"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
+        <TextView
             android:id="@+id/textView72"
-            android:layout_width="@dimen/dp_0_1"
+            android:layout_width="@dimen/dp_1_5"
             android:layout_height="wrap_content"
             android:layout_marginStart="22dp"
             android:background="@color/GrayScale_80"
+
             android:minHeight="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
