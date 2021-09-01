@@ -3,12 +3,12 @@ package com.example.hustholetest1.view.homescreen.mine.fragment;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,10 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.model.CheckingToken;
+import com.example.hustholetest1.model.StandardRefreshFooter;
+import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +51,13 @@ public class MyHoleFragment extends Fragment {
     private JSONArray jsonArray;
     private RecyclerView myRecycleView;
 
+    private int start_id = 0;
+    private int list_size = 20;
+    private boolean isRefresh = false;
+    private boolean finishRefresh = false;
+    private boolean isOnLoadMore = false;
+    private boolean finishOnLoadMore = false;
+
     String TAG = "myHole";
 
     public static MyHoleFragment newInstance() {
@@ -58,7 +68,58 @@ public class MyHoleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View myHoleView = inflater.inflate(R.layout.fragment_myhole, container, false);
-        Log.d(TAG + "111", "this is my hole fragment");
+
+        RefreshLayout refreshLayout = myHoleView.findViewById(R.id.refreshLayout);
+        refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
+        refreshLayout.setRefreshFooter(new StandardRefreshFooter(getActivity()));
+
+        refreshLayout.setEnableLoadMore(true);
+        refreshLayout.setEnableRefresh(true);
+
+        refreshLayout.setOnRefreshListener(mRefreshLayout -> {
+            myHolesList.clear();
+            start_id = 0;
+            isRefresh = true;
+            update();
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                /**
+                 *要执行的操作
+                 */
+                if(finishRefresh){
+                    refreshLayout.finishRefresh();
+                    isRefresh = false;
+                    finishRefresh = false;
+                }
+                else {
+                    refreshLayout.autoRefresh();
+                }
+            }, 500);
+            refreshLayout.finishRefresh(5000);
+        });
+        refreshLayout.setOnLoadMoreListener(mRefreshLayout -> {
+            isOnLoadMore = true;
+            start_id = myHolesList.size()-1;
+            Log.d(TAG, "onCreateView: start_id = "+start_id);
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                /**
+                 *要执行的操作
+                 */
+                if(finishOnLoadMore){
+                    refreshLayout.finishLoadMore();
+                    isOnLoadMore = false;
+                    finishOnLoadMore = false;
+                }
+                else {
+                    refreshLayout.autoLoadMore();
+                }
+            }, 500);
+            update();
+            refreshLayout.finishLoadMore(5000);
+        });
+
+
         myRecycleView = myHoleView.findViewById(R.id.myHoleRecyclerView);
         myRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         update();
@@ -115,7 +176,14 @@ public class MyHoleFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        myRecycleView.setAdapter(new CardsRecycleViewAdapter());
+                        if(isRefresh) finishRefresh = true;
+
+                        if(isOnLoadMore){
+                            myRecycleView.getAdapter().notifyDataSetChanged();
+                            finishOnLoadMore = true;
+                        } else {
+                            myRecycleView.setAdapter(new CardsRecycleViewAdapter());
+                        }
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
@@ -144,7 +212,7 @@ public class MyHoleFragment extends Fragment {
                 super(view);
 
                 ID = (TextView) view.findViewById(R.id.hole_id);
-                date = (TextView) view.findViewById(R.id.date);
+                date = (TextView) view.findViewById(R.id.created_timestamp);
                 content = (TextView) view.findViewById(R.id.content);
 
                 text_up = (TextView) view.findViewById(R.id.text_up);
@@ -191,37 +259,8 @@ public class MyHoleFragment extends Fragment {
                         dialog.dismiss();
                     });
                     dialog.show();
-
-
-//                    @Override
-//                    public void onClick(View v) {
-//                        TextView title = new TextView(getContext());
-//                        title.setGravity(Gravity.CENTER);
-//                        title.setTextColor(Color.BLACK);
-//                        title.setText("删除");
-//                        new AlertDialog.Builder(getContext())
-//                                .setCustomTitle(title)
-//                                .setMessage("你确认要删除该内容吗？")
-//                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        myHolesList.remove(position);
-//                                        notifyDataSetChanged();
-//                                        myDelete.setVisibility(View.GONE);
-//                                        more_condition = false;
-//                                    }
-//                                })
-//                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        myDelete.setVisibility(View.GONE);
-//                                        more_condition = false;
-//                                    }
-//                                })
-//                                .show();
-//                    }
-//                });
                 });
+
                 img_up.setOnClickListener(v -> {
                     if (CheckingToken.IfTokenExist()) {
                         if (myHolesList.get(position)[6].equals("false")) {

@@ -14,7 +14,7 @@
         android:textColor="@color/GrayScale_20"
         android:textStyle="bold"/>
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/created_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_3"

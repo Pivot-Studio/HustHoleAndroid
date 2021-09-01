@@ -107,7 +107,7 @@
         <activity android:name=".view.homescreen.mine.UpdateActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.MyHoleAndMyStarActivity"
+        <activity android:name=".view.homescreen.mine.HoleStarReplyActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity android:name=".view.homescreen.mine.EmailActivity"
@@ -128,6 +128,8 @@
         <activity android:name=".view.homescreen.forest.CropOblongPictureActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
+        <activity android:name=".view.homescreen.mine.ShareCardActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
     </application>
-
 </manifest>

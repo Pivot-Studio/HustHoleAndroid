@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.view.homescreen.mine.fragment.MyReplyFragment;
 import com.example.hustholetest1.view.homescreen.mypage.FragmentAdapter;
 import com.example.hustholetest1.view.homescreen.mine.fragment.MyHoleFragment;
 import com.example.hustholetest1.view.homescreen.mine.fragment.MyStarFragment;
@@ -28,7 +29,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyHoleAndMyStarActivity extends AppCompatActivity{
+public class HoleStarReplyActivity extends AppCompatActivity{
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private ImageView imgMy;
@@ -52,13 +53,16 @@ public class MyHoleAndMyStarActivity extends AppCompatActivity{
         mViewPager = findViewById(R.id.vp_hole_star);
         imgMy = findViewById(R.id.my_img);
         imgMy.setOnClickListener(v -> finish());
+
         fragments.add(MyHoleFragment.newInstance());
         fragments.add(MyStarFragment.newInstance());
+        fragments.add(MyReplyFragment.newInstance());
 
 
 //      注意这里TabLayout的写法。
         titles.add("我的树洞");
         titles.add("我的关注");
+        titles.add("我的评论");
 //        initViewPager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @NonNull
@@ -87,7 +91,7 @@ public class MyHoleAndMyStarActivity extends AppCompatActivity{
         mTabLayout.setupWithViewPager(mViewPager);
 
         intent = getIntent();
-        mViewPager.setCurrentItem(intent.getIntExtra("initFragmentID", 0) == 0 ? 0 : 1);
+        mViewPager.setCurrentItem(intent.getIntExtra("initFragmentID", 0));
         changeTabIndicatorWidth(mTabLayout,10);
     }
 

@@ -27,7 +27,7 @@ public class CardsRecycleViewAdapter extends RecyclerView.Adapter<CardsRecycleVi
             totalView = view;
 
             ID = (TextView) view.findViewById(R.id.hole_id);
-            date = (TextView) view.findViewById(R.id.date);
+            date = (TextView) view.findViewById(R.id.created_timestamp);
             content = (TextView) view.findViewById(R.id.content);
 
             text_up = (TextView) view.findViewById(R.id.text_up);

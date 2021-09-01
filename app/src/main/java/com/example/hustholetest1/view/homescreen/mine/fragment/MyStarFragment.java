@@ -3,12 +3,12 @@ package com.example.hustholetest1.view.homescreen.mine.fragment;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,10 +21,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.model.CheckingToken;
+import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity;
+import com.scwang.smart.refresh.footer.ClassicsFooter;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +51,14 @@ public class MyStarFragment extends Fragment {
     private JSONArray jsonArray;
     private RecyclerView myRecycleView;
 
+    private int start_id = 0;
+    private int list_size = 20;
+    private boolean isRefresh = false;
+    private boolean finishRefresh = false;
+    private boolean isOnLoadMore = false;
+    private boolean finishOnLoadMore = false;
+
+
 
     String TAG = "myStar";
 
@@ -58,18 +69,71 @@ public class MyStarFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View myHoleView = inflater.inflate(R.layout.fragment_mystar, container, false);
+        View myStarView = inflater.inflate(R.layout.fragment_mystar, container, false);
 
-        myRecycleView = myHoleView.findViewById(R.id.my_starRecyclerView);
+        myRecycleView = myStarView.findViewById(R.id.myStarRecyclerView);
         Log.d(TAG,"this is my star fragment");
+
+        RefreshLayout refreshLayout = myStarView.findViewById(R.id.refreshLayout);
+        refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
+        refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
+
+        refreshLayout.setEnableLoadMore(true);
+        refreshLayout.setEnableRefresh(true);
+
+        refreshLayout.setOnRefreshListener(mRefreshLayout -> {
+            myStarsList.clear();
+            start_id = 0;
+            isRefresh = true;
+            update();
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                /**
+                 *要执行的操作
+                 */
+                if(finishRefresh){
+                    refreshLayout.finishRefresh();
+                    isRefresh = false;
+                    finishRefresh = false;
+                }
+                else {
+                    refreshLayout.autoRefresh();
+                }
+            }, 500);
+            refreshLayout.finishRefresh(5000);
+        });
+        refreshLayout.setOnLoadMoreListener(mRefreshLayout -> {
+            isOnLoadMore = true;
+            start_id = myStarsList.size()-1;
+            Log.d(TAG, "onCreateView: start_id = "+start_id);
+            Handler handler = new Handler();
+            handler.postDelayed(() -> {
+                /**
+                 *要执行的操作
+                 */
+                if(finishOnLoadMore){
+                    refreshLayout.finishLoadMore();
+                    isOnLoadMore = false;
+                    finishOnLoadMore = false;
+                }
+                else {
+                    refreshLayout.autoLoadMore();
+                }
+            }, 500);
+            update();
+            refreshLayout.finishLoadMore(5000);
+        });
+
         myRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         update();
 
-        return myHoleView;
+        return myStarView;
     }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+
+
+
         super.onCreate(savedInstanceState);
         RetrofitManager.RetrofitBuilder(BASE_URL);
         retrofit = RetrofitManager.getRetrofit();
@@ -117,7 +181,17 @@ public class MyStarFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        myRecycleView.setAdapter(new CardsRecycleViewAdapter());
+                        if(isRefresh){
+                            finishRefresh = true;
+                        }
+
+                        if(isOnLoadMore){
+                            myRecycleView.getAdapter().notifyDataSetChanged();
+                            finishOnLoadMore = true;
+                        }
+                        else {
+                            myRecycleView.setAdapter(new CardsRecycleViewAdapter());
+                        }
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
@@ -144,7 +218,7 @@ public class MyStarFragment extends Fragment {
 
                 //                rv = (RelativeLayout) view.findViewById(R.id.myhole_rv);
                 ID = (TextView) view.findViewById(R.id.hole_id);
-                date = (TextView) view.findViewById(R.id.date);
+                date = (TextView) view.findViewById(R.id.created_timestamp);
                 content = (TextView) view.findViewById(R.id.content);
 
                 text_up = (TextView) view.findViewById(R.id.text_up);
