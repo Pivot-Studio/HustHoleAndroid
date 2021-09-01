@@ -147,7 +147,7 @@ public class HomeScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //关闭掉对话框,拿到对话框的对象
                 if(CheckingToken.IfTokenExist()) {
-                    Intent intent = PublishHoleActivity.newIntent(HomeScreenActivity.this, "1");
+                    Intent intent = PublishHoleActivity.newIntent(HomeScreenActivity.this, "1","无");
                     startActivity(intent);
                 }else{
                     Intent intent=new Intent(HomeScreenActivity.this, EmailVerifyActivity.class);

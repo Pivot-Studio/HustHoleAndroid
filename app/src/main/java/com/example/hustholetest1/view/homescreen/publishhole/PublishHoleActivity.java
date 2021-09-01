@@ -62,7 +62,7 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 
 public class PublishHoleActivity extends AppCompatActivity {//发树洞
-    private static final String key="key_1";
+    private static final String key="key_1",key2="key_2";
     private TextView text,limit,title,limit2,mstrike;
     private ImageView back,X;
     private EditText editText;
@@ -209,11 +209,13 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         text=(TextView)findViewById(R.id.tv_publishhole_forestname);
         String forest=(String) getIntent()
                 .getStringExtra(key);
+        String forestid=(String) getIntent()
+                .getStringExtra(key2);
         if(forest.equals("1")){
 
         }else{
             text.setText(forest);
-            what=forest;
+            what=forestid;
         }
 
 
@@ -395,9 +397,10 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
 
 
 
-    public static Intent newIntent(Context packageContext, String data){
+    public static Intent newIntent(Context packageContext, String data,String forestid){
         Intent intent = new Intent(packageContext, PublishHoleActivity.class);
         intent.putExtra(key,data);
+        intent.putExtra(key2,forestid);
         return intent;
     }
 

@@ -233,7 +233,7 @@ public class DetailForestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(CheckingToken.IfTokenExist()) {
                     //关闭掉对话框,拿到对话框的对象
-                    Intent intent = PublishHoleActivity.newIntent(DetailForestActivity.this, data[7]);
+                    Intent intent = PublishHoleActivity.newIntent(DetailForestActivity.this, data[7],data[3]);
                     startActivity(intent);
                 }else{
                     Intent intent=new Intent(DetailForestActivity.this, EmailVerifyActivity.class);
@@ -355,7 +355,7 @@ public class DetailForestActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //Call<ResponseBody> call = request.detailholes(data[3],mStartingLoadId,CONSTANT_STANDARD_LOAD_SIZE,false);//进行封装
-                Call<ResponseBody> call = request.detailholes2(RetrofitManager.API+"forests/"+data[3]+"/holes?start_id="+mStartingLoadId+"&list_size="+CONSTANT_STANDARD_LOAD_SIZE+"&is_last_active=false");//进行封装
+                Call<ResponseBody> call = request.detailholes2(RetrofitManager.API+"forests/"+data[3]+"/holes?start_id="+mStartingLoadId+"&list_size="+CONSTANT_STANDARD_LOAD_SIZE+"&is_descend=true");//进行封装
 
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override

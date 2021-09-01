@@ -73,6 +73,7 @@ public interface RequestInterface {//接口
 
     @GET
     Call<ResponseBody> detailholes2(@Url String url);
+
    @HTTP(method = "GET", path = "forests/detail/{hole_id}", hasBody = false)
     Call<ResponseBody> detailforest(@Path("hole_id") String hole_id);
 

@@ -100,7 +100,7 @@ public class CommentListActivity extends AppCompatActivity {
     private RefreshLayout mRefreshConditionRl, mLoadMoreCondotionRl;
     private int CONSTANT_STANDARD_LOAD_SIZE = 20;
     private Boolean mPrestrainCondition=false;
-    private Boolean mIfFirstLoad=true;
+    private Boolean mIfFirstLoad=true,mHotLoadCondition=false;
     private AVLoadingIndicatorView mAVLoadingIndicatorView;
 
     private Boolean more_condition=false,order_condition=false,mOnlyRefreshCondition=false,mIfOnlyCondition=false,mDeleteCondition=false;
@@ -688,23 +688,27 @@ public class CommentListActivity extends AppCompatActivity {
             @Override
             protected Void doInBackground(Void... voids) {
                 try {
-                    for(int f=0;f<jsonArray2.length();f++) {
-                        JSONObject sonObject2 = jsonArray2.getJSONObject(f);
-                        String[] singleReply2=new String[12];
-                        singleReply2[0] = sonObject2.getString("alias");
-                        singleReply2[1] = sonObject2.getString("content");
+                    if(mHotLoadCondition) {
 
-                        singleReply2[2] = sonObject2.getString("created_timestamp");
-                        singleReply2[3] = sonObject2.getInt("hole_id")+"";
-                        singleReply2[4] = sonObject2.getInt("id")+"";
-                        singleReply2[5] = sonObject2.getBoolean("is_mine")+"";
-                        singleReply2[6] =sonObject2.getBoolean("is_thumbup")+"";
-                        singleReply2[7] = sonObject2.getInt("reply_local_id")+"";
-                        singleReply2[8] = sonObject2.getInt("reply_to")+"";
-                        singleReply2[9] = sonObject2.getString("reply_to_alias");
-                        singleReply2[10] = sonObject2.getString("reply_to_content");
-                        singleReply2[11] = sonObject2.getInt("thumbup_num")+"";
-                        mDetailReplyList.add(singleReply2);
+                    }else {
+                        mHotLoadCondition=true;
+                        for (int f = 0; f < jsonArray2.length(); f++) {
+                            JSONObject sonObject2 = jsonArray2.getJSONObject(f);
+                            String[] singleReply2 = new String[12];
+                            singleReply2[0] = sonObject2.getString("alias");
+                            singleReply2[1] = sonObject2.getString("content");
+                            singleReply2[2] = sonObject2.getString("created_timestamp");
+                            singleReply2[3] = sonObject2.getInt("hole_id") + "";
+                            singleReply2[4] = sonObject2.getInt("id") + "";
+                            singleReply2[5] = sonObject2.getBoolean("is_mine") + "";
+                            singleReply2[6] = sonObject2.getBoolean("is_thumbup") + "";
+                            singleReply2[7] = sonObject2.getInt("reply_local_id") + "";
+                            singleReply2[8] = sonObject2.getInt("reply_to") + "";
+                            singleReply2[9] = sonObject2.getString("reply_to_alias");
+                            singleReply2[10] = sonObject2.getString("reply_to_content");
+                            singleReply2[11] = sonObject2.getInt("thumbup_num") + "";
+                            mDetailReplyList.add(singleReply2);
+                        }
                     }
 
                     for(int f=0;f<jsonArray.length();f++) {
