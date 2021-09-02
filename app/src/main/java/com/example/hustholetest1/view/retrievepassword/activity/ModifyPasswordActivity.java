@@ -105,7 +105,7 @@ public class ModifyPasswordActivity extends AppCompatActivity {
                             map.put("email", id);
                             map.put("verify_code",vertify);
                             map.put("new_password",password);
-                            Call<ResponseBody> call = request.resetPassword(RetrofitManager.API+"auth/changePassword?email="+id+"&verify_code="+vertify+"&new_password="+password);//进行封装
+                            Call<ResponseBody> call = request.resetPassword(RetrofitManager.API+"auth/mobileChangePassword?email="+id+"&verify_code="+vertify+"&new_password="+password);//进行封装
                             call.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

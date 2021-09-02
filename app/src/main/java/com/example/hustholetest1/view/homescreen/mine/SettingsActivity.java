@@ -1,10 +1,7 @@
 package com.example.hustholetest1.view.homescreen.mine;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.text.Layout;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -13,15 +10,14 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.model.CheckingToken;
+import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.githang.statusbar.StatusBarCompat;
 
-import org.w3c.dom.Text;
-
 public class SettingsActivity extends AppCompatActivity {
-    private RelativeLayout email,security;
     ImageView img;
-    TextView tv;
-    Boolean isVerified;
+    TextView isVerified;
+//    Boolean isVerified;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -34,17 +30,10 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setting);
 
 
-        email = findViewById(R.id.email);
-        security = findViewById(R.id.security);
+        RelativeLayout email = findViewById(R.id.email);
+        RelativeLayout security = findViewById(R.id.security);
         img = findViewById(R.id.settings_img);
-        tv = findViewById(R.id.tv);
-
-//        SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
-//        editor.putBoolean("isVerified",false);
-
-        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
-        isVerified = pref.getBoolean("isVerified",false);
-        tv.setText(isVerified? "已验证":"未验证");
+        isVerified = findViewById(R.id.tv);
 
         email.setOnClickListener(this::onClick);
         security.setOnClickListener(this::onClick);
@@ -53,20 +42,15 @@ public class SettingsActivity extends AppCompatActivity {
         initView();
     }
     public void initView() {
-        RelativeLayout email,security;
-        email = findViewById(R.id.email);
-        security = findViewById(R.id.security);
+        isVerified.setText(CheckingToken.IfTokenExist() ? "已验证" : "未验证");
     }
 
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
             case R.id.email:
-                if(isVerified){
-                    intent = new Intent(this, VerifyOkActivity.class);
-                }else {
-                    intent = new Intent(this, EmailActivity.class);
-                }
+                intent = CheckingToken.IfTokenExist() ? new Intent(this, VerifyOkActivity.class)
+                                                : new Intent(this, EmailVerifyActivity.class);
                 startActivity(intent);
                 break;
             case R.id.security:

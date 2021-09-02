@@ -1,34 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    >
-    <LinearLayout
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/total"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="200dp">
+        android:layout_height="wrap_content">
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            >
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center_horizontal">
             <ImageView
                 android:id="@+id/img_my_background"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_height="207dp"
-                app:srcCompat="@mipmap/mybackground" />
+                android:scaleType="fitXY"
+                app:srcCompat="@mipmap/my_background" />
 
-            <!--        <View-->
-            <!--            android:id="@+id/my_view1"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="10dp"-->
-            <!--            android:background="#F3F3F3"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/mybackground.png" />-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/GrayScale_95"
+                android:layout_below="@id/img_my_background" />
 
             <TextView
                 android:id="@+id/my_date"
@@ -37,8 +34,8 @@
                 android:layout_below="@id/img_my_background"
                 android:layout_marginTop="10dp"
                 android:padding="12dp"
-                android:text="我来到树洞已经10天了。"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textColor="@color/GrayScale_20" />
 
             <!--        <View-->
             <!--            android:id="@+id/my_view"-->
@@ -48,94 +45,154 @@
             <!--            android:background="#F3F3F3"-->
             <!--            app:layout_constraintTop_toBottomOf="@id/date"-->
             <!--            />-->
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/GrayScale_95"
+                android:layout_below="@id/my_date" />
             <RelativeLayout
                 android:id="@+id/my_hole_star"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_60"
                 android:layout_marginTop="1dp"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/my_date">
+
                 <LinearLayout
                     android:id="@+id/my_hole"
-                    android:clickable="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/dp_60"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/my_hole_num"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:padding="4dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="3"/>
+                        android:padding="4dp"
+                        android:textColor="@color/GrayScale_20" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:padding="4dp"
                         android:layout_gravity="center"
-                        android:text="我的树洞"/>
+                        android:padding="4dp"
+                        android:text="@string/tv_myHoles"
+                        android:textColor="@color/GrayScale_50" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/my_star"
-                    android:clickable="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:layout_height="@dimen/dp_60"
+                    android:layout_marginStart="@dimen/dp_40"
                     android:layout_toEndOf="@id/my_hole"
-                    android:layout_marginLeft="60dp">
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical">
+
                     <TextView
                         android:id="@+id/my_star_num"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:padding="4dp"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="1"/>
+                        android:padding="4dp"
+                        android:textColor="@color/GrayScale_20" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:padding="4dp"
                         android:layout_gravity="center"
-                        android:text="我的关注"/>
+                        android:padding="4dp"
+                        android:text="@string/tv_myFollows"
+                        android:textColor="@color/GrayScale_50" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/my_reply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_60"
+                    android:layout_marginStart="@dimen/dp_40"
+                    android:layout_toEndOf="@id/my_star"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/my_reply_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
+                        android:textColor="@color/GrayScale_20" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/tv_myReply"
+                        android:textColor="@color/GrayScale_50" />
                 </LinearLayout>
             </RelativeLayout>
+
+            <View
+                android:id="@+id/my_view2"
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:layout_below="@id/my_hole_star"
+                android:background="@color/GrayScale_95" />
+
             <RelativeLayout
                 android:id="@+id/settings"
-                android:clickable="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_44"
                 android:layout_below="@id/my_hole_star"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:clickable="true"
+                android:focusable="true">
+
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="个人设置"
-                    android:padding="12dp"/>
+                    android:layout_height="@dimen/dp_44"
+                    android:paddingVertical="@dimen/dp_14"
+                    android:paddingStart="@dimen/dp_20"
+                    android:text="@string/个人设置"
+                    android:textColor="@color/GrayScale_20" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:padding="12dp"
-                    app:srcCompat="@drawable/back_black"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
+                    android:padding="12dp"
                     android:rotation="180"
-                    android:layout_marginEnd="12dp"/>
+                    app:srcCompat="@drawable/back_black" />
             </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:layout_alignBottom="@id/settings"
+                android:background="@color/GrayScale_95"/>
 
             <RelativeLayout
                 android:id="@+id/rules"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_44"
                 android:layout_below="@id/settings"
-                android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="0dp"
-                android:clickable="true">
+                android:clickable="true"
+                android:focusable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:padding="12dp"
-                    android:text="社区规范" />
+                    android:paddingVertical="@dimen/dp_14"
+                    android:paddingStart="@dimen/dp_20"
+                    android:text="社区规范"
+                    android:textColor="@color/GrayScale_20" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -146,44 +203,120 @@
                     android:rotation="180"
                     app:srcCompat="@drawable/back_black" />
             </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/GrayScale_95"
+                android:layout_below="@id/rules" />
 
             <RelativeLayout
-                android:id="@+id/evaluate"
-                android:clickable="true"
+                android:id="@+id/share"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_44"
                 android:layout_below="@id/rules"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="0dp"
+                android:clickable="true"
+                android:focusable="true">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="评价"
-                    android:padding="12dp"/>
+                    android:paddingVertical="@dimen/dp_14"
+                    android:paddingStart="@dimen/dp_20"
+                    android:text="把树洞分享给同学"
+                    android:textColor="@color/GrayScale_20" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:padding="12dp"
-                    app:srcCompat="@drawable/back_black"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
+                    android:padding="12dp"
                     android:rotation="180"
-                    android:layout_marginEnd="12dp"/>
+                    app:srcCompat="@drawable/back_black" />
             </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/GrayScale_95"
+                android:layout_below="@id/share" />
+
+            <RelativeLayout
+                android:id="@+id/evaluate"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44"
+                android:layout_below="@id/share"
+                android:layout_marginTop="10dp"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:paddingVertical="@dimen/dp_14"
+                    android:paddingStart="@dimen/dp_20"
+                    android:text="评价"
+                    android:textColor="@color/GrayScale_20" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
+                    android:padding="12dp"
+                    android:rotation="180"
+                    app:srcCompat="@drawable/back_black" />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/GrayScale_95"
+                android:layout_below="@id/evaluate" />
 
             <RelativeLayout
                 android:id="@+id/advice"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_44"
                 android:layout_below="@id/evaluate"
-                android:layout_marginHorizontal="10dp"
                 android:layout_marginTop="1dp"
                 android:clickable="true">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:paddingVertical="@dimen/dp_14"
+                    android:paddingStart="@dimen/dp_20"
+                    android:text="建议"
+                    android:textColor="@color/GrayScale_20" />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
                     android:padding="12dp"
-                    android:text="建议" />
+                    android:rotation="180"
+                    app:srcCompat="@drawable/back_black" />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/GrayScale_95"
+                android:layout_below="@id/advice" />
+
+            <RelativeLayout
+                android:id="@+id/about"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/advice"
+                android:layout_marginTop="1dp"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_44"
+                    android:paddingVertical="@dimen/dp_14"
+                    android:paddingStart="@dimen/dp_20"
+                    android:text="关于1037树洞"
+                    android:textColor="@color/GrayScale_20" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -194,119 +327,81 @@
                     android:rotation="180"
                     app:srcCompat="@drawable/back_black" />
             </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/about"
-                android:clickable="true"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/advice"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="1dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="关于1037树洞"
-                    android:padding="12dp"/>
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:padding="12dp"
-                    app:srcCompat="@drawable/back_black"
-                    android:layout_alignParentEnd="true"
-                    android:rotation="180"
-                    android:layout_marginEnd="12dp"/>
-            </RelativeLayout>
+                android:layout_height="1dp"
+                android:background="@color/GrayScale_95"
+                android:layout_below="@id/about" />
+
             <RelativeLayout
                 android:id="@+id/update"
-                android:clickable="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_44"
                 android:layout_below="@id/about"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="1dp">
+                android:layout_marginTop="1dp"
+                android:clickable="true">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:paddingVertical="@dimen/dp_14"
+                    android:paddingStart="@dimen/dp_20"
                     android:text="更新日志"
-                    android:padding="12dp"/>
+                    android:textColor="@color/GrayScale_20" />
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:padding="12dp"
-                    app:srcCompat="@drawable/back_black"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
+                    android:padding="12dp"
                     android:rotation="180"
-                    android:layout_marginEnd="12dp"/>
+                    app:srcCompat="@drawable/back_black" />
             </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="@color/GrayScale_95"
+                android:layout_below="@id/update" />
+
             <RelativeLayout
                 android:id="@+id/logout"
-                android:clickable="true"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/dp_44"
                 android:layout_below="@id/update"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginTop="10dp">
+                android:layout_marginTop="10dp"
+                android:clickable="true">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:paddingVertical="@dimen/dp_14"
+                    android:paddingStart="@dimen/dp_20"
                     android:text="退出登录"
-                    android:textColor="@color/HH_Reminder_Warning"
-                    android:padding="12dp"/>
+                    android:textColor="@color/HH_Reminder_Warning" />
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:padding="12dp"
-                    app:srcCompat="@drawable/back_black"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
+                    android:padding="12dp"
                     android:rotation="180"
-                    android:layout_marginEnd="12dp"/>
+                    app:srcCompat="@drawable/back_black" />
             </RelativeLayout>
-
-
-            <!--        <View-->
-            <!--            android:id="@+id/my_view2"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="1dp"-->
-            <!--            android:layout_marginTop="10dp"-->
-            <!--            android:background="#F3F3F3"-->
-
-            <!--            />-->
-
-            <!--        <androidx.recyclerview.widget.RecyclerView-->
-            <!--            android:id="@+id/my_recycleView1"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/my_view2"-->
-            <!--            />-->
-            <!--        <View-->
-            <!--            android:id="@+id/my_view3"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="10dp"-->
-            <!--            android:background="#F3F3F3"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/my_recycleView1"-->
-            <!--            />-->
-            <!--        <androidx.recyclerview.widget.RecyclerView-->
-            <!--            android:id="@+id/my_recycleView2"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/my_view3"-->
-            <!--            />-->
-            <!--        <View-->
-            <!--            android:id="@+id/my_view4"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="1000dp"-->
-            <!--            android:background="#F3F3F3"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/my_recycleView2"-->
-            <!--            />-->
-            <!--        &lt;!&ndash;        <androidx.recyclerview.widget.RecyclerView&ndash;&gt;-->
-            <!--        &lt;!&ndash;            android:id="@+id/my_recycleView3"&ndash;&gt;-->
-            <!--        &lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
-            <!--        &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-            <!--        &lt;!&ndash;            app:layout_constraintTop_toBottomOf="@id/my_view4"&ndash;&gt;-->
-            <!--        &lt;!&ndash;            />&ndash;&gt;-->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@id/logout"
+                android:background="@color/GrayScale_95" />
         </RelativeLayout>
-    </LinearLayout>
-
+        <TextView
+            android:id="@+id/ppw_share_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/dp_200"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
 
 

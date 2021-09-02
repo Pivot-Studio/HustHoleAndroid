@@ -25,7 +25,7 @@ public class UpdateRecycleViewAdapter extends RecyclerView.Adapter<UpdateRecycle
             super(view);
             updateView = view;
             version = (TextView) view.findViewById(R.id.version);
-            date = (TextView) view.findViewById(R.id.date);
+            date = (TextView) view.findViewById(R.id.created_timestamp);
             detail = (TextView)view.findViewById(R.id.detail);
         }
     }

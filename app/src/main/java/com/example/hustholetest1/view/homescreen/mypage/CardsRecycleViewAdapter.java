@@ -27,7 +27,7 @@ public class CardsRecycleViewAdapter extends RecyclerView.Adapter<CardsRecycleVi
             totalView = view;
 
             ID = (TextView) view.findViewById(R.id.hole_id);
-            date = (TextView) view.findViewById(R.id.date);
+            date = (TextView) view.findViewById(R.id.created_timestamp);
             content = (TextView) view.findViewById(R.id.content);
 
             text_up = (TextView) view.findViewById(R.id.text_up);
@@ -49,7 +49,7 @@ public class CardsRecycleViewAdapter extends RecyclerView.Adapter<CardsRecycleVi
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_hole,parent,false);
+                .inflate(R.layout.card_myhole,parent,false);
         ViewHolder holder = new ViewHolder(view);
         holder.img_up.setOnClickListener(new View.OnClickListener() {
             Boolean isUp = false;

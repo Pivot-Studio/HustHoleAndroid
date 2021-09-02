@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--分支-->
+<!--正常白色绿框按钮-->
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 内部颜色 -->
+    <solid
+        android:color="@color/GrayScale_100" android:state_pressed="false"/>
+    <!-- 边缘线条颜色 -->
+    <stroke
+        android:width="1dp"
+        android:color="@color/HH_Reminder_Warning" />
+    <!-- 圆角的幅度 -->
+    <corners
+        android:topLeftRadius="13dip"
+        android:topRightRadius="13dip"
+        android:bottomLeftRadius="13dip"
+        android:bottomRightRadius="13dip"/>
+</shape>
+

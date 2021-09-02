@@ -13,6 +13,7 @@
         android:layout_marginStart="22dp"
         android:layout_marginTop="15dp"
         android:text="@string/commment_1"
+        android:textStyle="bold"
         android:textColor="@color/GrayScale_20"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"

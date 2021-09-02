@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginTop="10dp"
         android:background="@color/GrayScale_100">
 
         <TextView
@@ -21,10 +21,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/dp_22"
+            android:layout_marginLeft="22dp"
             android:lineSpacingExtra="1sp"
             android:text="Alice"
-            android:textColor="@color/GrayScale_20"
+            android:textColor="#343434"
             android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></TextView>
@@ -33,7 +33,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_7"
+            android:layout_marginLeft="7dp"
             android:layout_toRightOf="@id/name"
             android:lineSpacingExtra="1sp"
             android:text="评论了你的树洞"
@@ -45,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dp_19"
+            android:layout_marginRight="22dp"
             android:lineSpacingExtra="1sp"
             android:text="# 1037"
             android:textColor="@color/GrayScale_20"
@@ -56,8 +56,8 @@
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="17dp"
-        android:layout_marginStart="@dimen/dp_22"
-        android:layout_marginTop="@dimen/dp_5"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="5dp"
         android:lineSpacingExtra="1sp"
         android:text="19:20 2021 09-16"
         android:textColor="@color/GrayScale_80"
@@ -66,9 +66,8 @@
     <TextView
         android:id="@+id/content"
         android:layout_width="@dimen/dp_331"
-        android:layout_height="@dimen/dp_22"
-        android:layout_marginLeft="@dimen/dp_22"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_height="21dp"
+        android:layout_marginLeft="22dp"
         android:ellipsize="end"
         android:lineSpacingExtra="1sp"
         android:maxLines="1"
@@ -78,8 +77,8 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_height="@dimen/dp_10"
+        android:layout_marginTop="15dp"
         android:background="@color/GrayScale_95"></View>
 
 </LinearLayout>

@@ -269,6 +269,7 @@ public class CommentListActivity extends AppCompatActivity {
                                                 reply_to_who = "-1";
                                                 mStartingLoadId = 0;
                                                 mDetailReplyList = new ArrayList<>();
+                                                mHotLoadCondition=false;
                                                 if (mIfOnlyCondition) {
                                                     replyUpdate();
                                                 } else {
@@ -330,14 +331,13 @@ public class CommentListActivity extends AppCompatActivity {
         retrofit= RetrofitManager.getRetrofit();
         request=RetrofitManager.getRequest();
         data = getIntent().getStringArrayExtra(key);
-        if(data == null){
+        if(data==null){
             data_hole_id = getIntent().getStringExtra("data_hole_id");
-            if(data_hole_id != null){
+            if(data_hole_id!= null){
                 data = new String[14];
                 getData();
             }
-        }
-        else {
+        }else {
 
              if(mIfOnlyCondition) {
                  replyUpdate();
@@ -518,6 +518,7 @@ public class CommentListActivity extends AppCompatActivity {
                             Log.e(TAG, json + "");
                             if (mRefreshConditionRl != null) {
                                 mDetailReplyList = new ArrayList<>();
+                                mHotLoadCondition=false;
                             }
                             if (order_condition) {
                                 order_condition = false;
@@ -525,18 +526,21 @@ public class CommentListActivity extends AppCompatActivity {
                                 mAVLoadingIndicatorView.hide();
                                 //title.setText("#"+data[6]);
                                 mDetailReplyList = new ArrayList<>();
+                                mHotLoadCondition=false;
                             }
                             if (mOnlyRefreshCondition) {
                                 mOnlyRefreshCondition = false;
                                 mAVLoadingIndicatorView.setVisibility(View.GONE);
                                 mAVLoadingIndicatorView.hide();
                                 mDetailReplyList = new ArrayList<>();
+                                mHotLoadCondition=false;
                             }
                             if (mDeleteCondition) {
                                 mDeleteCondition = false;
                                 mAVLoadingIndicatorView.setVisibility(View.GONE);
                                 mAVLoadingIndicatorView.hide();
                                 mDetailReplyList = new ArrayList<>();
+                                mHotLoadCondition=false;
                             }
                             JSONObject jsonObject = new JSONObject(json);
 
@@ -1348,6 +1352,7 @@ public class CommentListActivity extends AppCompatActivity {
                 is_thumbup=(ImageView)view.findViewById(R.id.iv_commentreply_thumbup);
                 reply_tosomebody=(TextView)view.findViewById(R.id.tv_commentreply_detailreplycontent);
                 linearLayout=(ConstraintLayout) view.findViewById(R.id.ll_commentreply_replycontent);
+                linearLayout.setVisibility(View.GONE);
                 line=(TextView)view.findViewById(R.id.textView72);
                 Hot=(TextView)view.findViewById(R.id.tv_commentreply_ifhot);
                 more=(ImageView)view.findViewById(R.id.iv_commentreply_more);
@@ -1710,21 +1715,6 @@ public class CommentListActivity extends AppCompatActivity {
                 }
                 if(mDetailReplyList.get(position)[8].equals("-1")){
                     linearLayout.setVisibility(View.GONE);
-                    //linearLayout.setVisibility(View.INVISIBLE);
-                    /*
-                    ConstraintLayout.LayoutParams linearParams0 =(ConstraintLayout.LayoutParams) reply_tosomebody.getLayoutParams(); //取控件textView当前的布局参数 linearParams.height = 20;// 控件的高强制设成20
-                    linearParams0.height =0;
-                    linearParams0.width=0;
-                    linearParams0.topMargin=0;
-                    linearParams0.bottomMargin=0;// 控件的宽强制设成30
-                    reply_tosomebody.setLayoutParams(linearParams0);
-                   ConstraintLayout.LayoutParams linearParams =(ConstraintLayout.LayoutParams) linearLayout.getLayoutParams(); //取控件textView当前的布局参数 linearParams.height = 20;// 控件的高强制设成20
-                    linearParams.height =0;
-                    linearParams.width=0;
-                    linearLayout.setLayoutParams(linearParams);
-
-                     */
-
                 }else {
                     linearLayout.setVisibility(View.VISIBLE);
                     Log.d("", mDetailReplyList.get(position)[0]+ mDetailReplyList.get(position)[1]+ mDetailReplyList.get(position)[2]+ mDetailReplyList.get(position)[8]);

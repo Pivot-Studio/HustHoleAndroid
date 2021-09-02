@@ -149,43 +149,50 @@ public interface RequestInterface {//接口
     @POST("auth/verifyCodeMatch?email=U202011988.edu.cn&verify_code=1234")
     Call<ResponseBody> verifyCodeMatch();
 
-
-    @GET("myself/myfollow?")
-    Call<ResponseBody> myFollow(@Query("start_id") int start_id,
-                                @Query("list_size") int list_size);
+    @GET("myself/mydata")
+    Call<ResponseBody> myData();
 
     @GET("myself/myholes?")
     Call<ResponseBody> myHoles(@Query("start_id") int start_id,
                                @Query("list_size") int list_size);
 
-    @GET("myself/mydata")
-    Call<ResponseBody> myData();
+    @GET("myself/myfollow?")
+    Call<ResponseBody> myFollow(@Query("start_id") int start_id,
+                                @Query("list_size") int list_size);
+
+
+    @GET("myself/myreplies?")
+    Call<ResponseBody> myReplies(@Query("start_id") int start_id,
+                                 @Query("list_size") int list_size);
+
+    @GET("myself/latestShareImage")
+    Call<ResponseBody> getShareImage();
 
     @GET("auth")
     Call<ResponseBody> isUnderSecurity();
 
     @POST("auth/update")
     Call<ResponseBody> changeSecurityMode(@Body HashMap map);
-/*
-    @Multipart
+    /*
+        @Multipart
+        @POST("forests/apply")
+        Call<ResponseBody> applyForest(@Body HashMap map
+                                       @Part);
+
+     */
     @POST("forests/apply")
-    Call<ResponseBody> applyForest(@Body HashMap map
-                                   @Part);
+    Call<ResponseBody> applyForest(@Body RequestBody body);
 
- */
-@POST("forests/apply")
-Call<ResponseBody> applyForest(@Body RequestBody body);
+    @GET("replies/hot?")
+    Call<ResponseBody> hotReply(@Query("hole_id") String hole_id,
+                                @Query("start_id") int start_id,
+                                @Query("list_size") int list_size);
 
-@GET("replies/hot?")
-Call<ResponseBody> hotReply(@Query("hole_id") String hole_id,
-                            @Query("start_id") int start_id,
-                            @Query("list_size") int list_size);
-
-@GET("replies/owner?")
-Call<ResponseBody> owner(@Query("hole_id") String hole_id,
-                         @Query("start_id") int start_id,
-                         @Query("list_size") int list_size,
-                         @Query("is_descend") String is_descend);
+    @GET("replies/owner?")
+    Call<ResponseBody> owner(@Query("hole_id") String hole_id,
+                             @Query("start_id") int start_id,
+                             @Query("list_size") int list_size,
+                             @Query("is_descend") String is_descend);
 
 }
 
