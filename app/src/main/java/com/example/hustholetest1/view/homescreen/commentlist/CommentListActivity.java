@@ -1707,6 +1707,7 @@ public class CommentListActivity extends AppCompatActivity {
 
 
                  created_timestamp.setText(TimeCount.time( mDetailReplyList.get(position)[2]));
+                 Log.d("replytime", mDetailReplyList.get(position)[2]);
                  thumbup_num.setText(mDetailReplyList.get(position)[11]);
                 if (mDetailReplyList.get(position)[6].equals("true")) {
                     is_thumbup.setImageResource(R.mipmap.active);

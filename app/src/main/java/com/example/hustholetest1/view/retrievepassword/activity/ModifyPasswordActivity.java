@@ -128,10 +128,10 @@ public class ModifyPasswordActivity extends AppCompatActivity {
                                         if (response.errorBody() != null) {
                                             try {
                                                 json = response.errorBody().string();
-                                                JSONObject jsonObject = new JSONObject(json);
-                                                returncondition = jsonObject.getString("msg");
-                                                Toast.makeText(ModifyPasswordActivity.this, returncondition, Toast.LENGTH_SHORT).show();
-                                            } catch (IOException | JSONException e) {
+                                               // JSONObject jsonObject = new JSONObject(json);
+                                               // returncondition = jsonObject.getString("msg");
+                                                Toast.makeText(ModifyPasswordActivity.this, json, Toast.LENGTH_SHORT).show();
+                                            } catch (IOException  e) {
                                                 e.printStackTrace();
                                             }
                                         }else{

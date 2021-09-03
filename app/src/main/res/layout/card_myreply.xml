@@ -33,12 +33,13 @@
 
         <ImageView
             android:id="@+id/my_reply_moreWhat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@mipmap/threepoint"
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:layout_marginEnd="3dp"
+            android:layout_marginBottom="15dp"
             app:layout_constraintBottom_toTopOf="@id/my_reply_content"
-            android:layout_marginBottom="@dimen/dp_10" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@mipmap/threepoint" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/my_reply_delete"
