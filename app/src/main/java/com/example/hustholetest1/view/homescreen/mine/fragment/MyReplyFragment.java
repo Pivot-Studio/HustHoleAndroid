@@ -249,7 +249,7 @@ public class MyReplyFragment extends Fragment {
                 myReplyTotal.setOnClickListener(v -> {
                     Log.d(TAG, "现在跳转到评论界面。");
                     Intent intent = CommentListActivity.newIntent(getActivity(), null);
-                    intent.putExtra("data_hole_id", (myList.get(position)).hole_id);
+                    intent.putExtra("data_hole_id", (myList.get(position)).hole_id+"");
                     startActivity(intent);
                 });
             }

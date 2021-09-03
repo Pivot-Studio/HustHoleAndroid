@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -36,10 +37,10 @@ import com.example.hustholetest1.model.CheckingToken;
 import com.example.hustholetest1.model.Forest;
 import com.example.hustholetest1.model.GlideRoundTransform;
 import com.example.hustholetest1.model.MaxHeightRecyclerView;
+import com.example.hustholetest1.network.ErrorMsg;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.StandardRefreshHeader;
 import com.example.hustholetest1.network.RetrofitManager;
-import com.example.hustholetest1.network.TokenInterceptor;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.activity.HomeScreenActivity;
@@ -71,7 +72,7 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 public class AllForestsActivity extends AppCompatActivity {
     private MaxHeightRecyclerView recyclerView;
 
-    private ImageView back;
+    private ConstraintLayout back;
     private TextView title;
     private Button build;
     private RequestInterface request;
@@ -86,6 +87,46 @@ public class AllForestsActivity extends AppCompatActivity {
     private static final String key="key_1";
     private Boolean refreshcondition=false;
     private AVLoadingIndicatorView mAVLoadingIndicatorView;
+
+    private int RESULTCODE_COMMENT_2=2,REQUESTCODE_COMMENT=1;
+    private Button mReturnJoinButton;
+    private String mConditionIfJoined;
+    private int mFatherClPosition,mClPosition;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+         if(resultCode!=RESULTCODE_COMMENT_2){
+            return;
+        }
+        if(requestCode==REQUESTCODE_COMMENT) {
+            String joinedCondition = data.getStringExtra("JoinCondition");
+            if (joinedCondition!= null) {
+                if(forest_list_0[mFatherClPosition][mClPosition][5].equals("true")&&joinedCondition.equals("false")){
+                    //mConditionIfJoined="false";
+                    forest_list_0[mFatherClPosition][mClPosition][5] = "false";
+                    mReturnJoinButton.setPadding(30, 5, 6, 6);
+                    mReturnJoinButton.setBackground(getDrawable(R.drawable.forest_button));
+                    mReturnJoinButton.setText("加入");
+                    mReturnJoinButton.setTextColor(getResources().getColor(R.color.GrayScale_100));
+                    Drawable homepressed = getResources().getDrawable(R.mipmap.group243, null);
+                    homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
+                    mReturnJoinButton.setCompoundDrawables(homepressed, null, null, null);
+                }else if (forest_list_0[mFatherClPosition][mClPosition][5].equals("false")&&joinedCondition.equals("true")){
+                   // mConditionIfJoined="true";
+                    forest_list_0[mFatherClPosition][mClPosition][5] = "true";
+                    mReturnJoinButton.setPadding(0, 0, 0, 0);
+                    mReturnJoinButton.setBackground(getDrawable(R.drawable.forest_button_white));
+                    mReturnJoinButton.setText("已加入");
+                    // button.setGravity(Gravity.CENTER_VERTICAL);
+                    mReturnJoinButton.setCompoundDrawables(null, null, null, null);
+                    mReturnJoinButton.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
+                }
+            }
+        }
+
+
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,16 +151,7 @@ public class AllForestsActivity extends AppCompatActivity {
             }
         });
         mAVLoadingIndicatorView=(AVLoadingIndicatorView)findViewById(R.id.titlebargreen_AVLoadingIndicatorView);
-
-
-        /*refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadMore(2000);//false
-                //传入false表示加载失败
-            }
-        });*/
-        back= (ImageView) findViewById(R.id.iv_titlebargreen_back);
+        back= (ConstraintLayout) findViewById(R.id.cl_titlebargreen_back);
         title=(TextView)findViewById(R.id.tv_titlebargreen_title);
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -129,49 +161,15 @@ public class AllForestsActivity extends AppCompatActivity {
                                         startActivity(intent);
                                     }
                                 });
-
-       /* RefreshLayout refreshLayout = (RefreshLayout) findViewById(R.id.refreshLayout);
-        refreshLayout.setRefreshHeader(new StandardRefreshHeader(Page2_AllForestsActivity.this));
-        // refreshLayout.setRefreshFooter(new ClassicsFooter(getActivity()));
-
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                refreshlayout.finishRefresh(4000/*,false*//*);
-//传入false表示刷新失败
-            }
-        });
-        refreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshlayout) {
-                refreshlayout.finishLoadMore(4000);
-                //传入false表示加载失败
-            }
-        });*/
-
-
-        TokenInterceptor.getContext(AllForestsActivity.this);
-        //TokenInterceptor.getContext(RegisterActivity.this);
-        System.out.println("提交了context");
-        retrofit= RetrofitManager.getRetrofit();
-        request = retrofit.create(RequestInterface.class);//创建接口实例
-
-
-
-
-
-
-
-
-
-
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) { //表示未授权时
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, 1);
         }
         mAVLoadingIndicatorView.setVisibility(View.VISIBLE);
         mAVLoadingIndicatorView.show();
-        title.setText("加载中...");
+        retrofit= RetrofitManager.getRetrofit();
+        request=RetrofitManager.getRequest();
+       // request = retrofit.create(RequestInterface.class);
         Update0();
     }
     public void BackUpdate(){
@@ -182,13 +180,6 @@ public class AllForestsActivity extends AppCompatActivity {
     }
 
 
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-    }
-
     public void Update0(){
     new Thread(new Runnable() {//加载纵向列表标题
         @Override
@@ -197,47 +188,52 @@ public class AllForestsActivity extends AppCompatActivity {
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    String json = "null";
-                    try {
-                        if (response.body() != null) {
-                            json = response.body().string();
+                    if(response.code()==200) {
+                        String json = "null";
+                        try {
+                            if (response.body() != null) {
+                                json = response.body().string();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    String titlelist = null;
-                    try {
+                        String titlelist = null;
+                        try {
 
-                        JSONObject jsonObject = new JSONObject(json);
-                        JSONArray jsonArray =jsonObject.getJSONArray("types");
-                        title_list_2=new String[jsonArray.length()];
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            title_list_2[i] = jsonArray.getString(i);
-                            System.out.println(""+ title_list_2[i]);
+                            JSONObject jsonObject = new JSONObject(json);
+                            JSONArray jsonArray = jsonObject.getJSONArray("types");
+                            title_list_2 = new String[jsonArray.length()];
+                            for (int i = 0; i < jsonArray.length(); i++) {
+                                title_list_2[i] = jsonArray.getString(i);
+                                System.out.println("" + title_list_2[i]);
+                            }
+                            number1 = new int[title_list_2.length + 1];
+                            Update();
+
+                            tab2 = -1;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        number1=new int[title_list_2.length+1];
-                        Update();
-
-                        tab2=-1;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                    }else{
+                        ErrorMsg.getErrorMsg(response,AllForestsActivity.this);
+                        failureAction();
                     }
-
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                    if(refreshcondition==true){
-                        refreshlayout1.finishRefresh();
-                        refreshcondition=false;
-                    }
-                    title.setText("加载失败");
-                    mAVLoadingIndicatorView.hide();
-                    mAVLoadingIndicatorView.setVisibility(View.GONE);
+                    failureAction();
                     Toast.makeText(AllForestsActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
                 }
-
-
+               private void failureAction(){
+                   if(refreshcondition==true){
+                       refreshlayout1.finishRefresh();
+                       refreshcondition=false;
+                   }
+                   title.setText("加载失败");
+                   mAVLoadingIndicatorView.hide();
+                   mAVLoadingIndicatorView.setVisibility(View.GONE);
+               }
             });
         }
     }).start();
@@ -250,35 +246,44 @@ public class AllForestsActivity extends AppCompatActivity {
                     Call<ResponseBody> call = request.getDetailTypeForest(title_list_2[cycle(true)],0,10,false);//进行封装
                     call.enqueue(new Callback<ResponseBody>() {
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            String json = "null";
-                            try {
-                                if (response.body() != null) {
-                                    json = response.body().string();
+                            if(response.code()==200) {
+                                String json = "null";
+                                try {
+                                    if (response.body() != null) {
+                                        json = response.body().string();
+                                    }
+
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+
                                 }
+                                System.out.println("总:" + json);
 
-                            } catch (IOException e) {
-                                e.printStackTrace();
-
-                            }
-                            System.out.println("总:" + json);
-
-                            try {
-                                JSONObject jsonObject = new JSONObject(json);
-                                //读取
-                                JSONArray jsonArray = jsonObject.getJSONArray("forests");
-                                Forest.setForest_list(cycle(false)+1, jsonArray);
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                            if(cycle(false)!= title_list_2.length-1){
-                               Update();
+                                try {
+                                    JSONObject jsonObject = new JSONObject(json);
+                                    //读取
+                                    JSONArray jsonArray = jsonObject.getJSONArray("forests");
+                                    Forest.setForest_list(cycle(false) + 1, jsonArray);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                if (cycle(false) != title_list_2.length - 1) {
+                                    Update();
+                                } else {
+                                    Update2();
+                                }
                             }else{
-                                Update2();
+                                failureAction();
+                                ErrorMsg.getErrorMsg(response,AllForestsActivity.this);
                             }
                         }
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            failureAction();
+                            Toast.makeText(AllForestsActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
+                        }
+                        private void failureAction(){
                             title.setText("加载失败");
                             mAVLoadingIndicatorView.hide();
                             mAVLoadingIndicatorView.setVisibility(View.GONE);
@@ -286,7 +291,6 @@ public class AllForestsActivity extends AppCompatActivity {
                                 refreshlayout1.finishRefresh();
                                 refreshcondition=false;
                             }
-                            Toast.makeText(AllForestsActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
                         }
                     });
                 }
@@ -306,46 +310,55 @@ public void Update2(){//加载热门小树林
             call2.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                    String json = "null";
-                    try {
-                        if (response.body() != null) {
-                            json = response.body().string();
-                        }
-                         String titlelist = null;
-                        JSONObject jsonObject = new JSONObject(json);
-                        JSONArray jsonArray = jsonObject.getJSONArray("forests");
+                    if(response.code()==200) {
+                        String json = "null";
+                        try {
+                            if (response.body() != null) {
+                                json = response.body().string();
+                            }
+                            String titlelist = null;
+                            JSONObject jsonObject = new JSONObject(json);
+                            JSONArray jsonArray = jsonObject.getJSONArray("forests");
 
-                        Forest.setForest_list(0, jsonArray);
+                            Forest.setForest_list(0, jsonArray);
 
-                        recyclerView = (MaxHeightRecyclerView) findViewById(R.id.rv_allforest);
-                        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AllForestsActivity.this);
-                        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-                        recyclerView.setLayoutManager(linearLayoutManager);
+                            recyclerView = (MaxHeightRecyclerView) findViewById(R.id.rv_allforest);
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AllForestsActivity.this);
+                            linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                            recyclerView.setLayoutManager(linearLayoutManager);
 
 
-                        networkcondition=new boolean[title_list_2.length+1];
-                        for(int a=0;a<title_list_2.length;a++){
-                              networkcondition[a]=false;
-                        }
-                        forest_list_0=new String[title_list_2.length+1][][];
-                        bitmaps=new Bitmap[title_list_2.length+1][][];
-                        title.setText("发现小树林");
-                        mAVLoadingIndicatorView.hide();
-                        mAVLoadingIndicatorView.setVisibility(View.GONE);
+                            networkcondition = new boolean[title_list_2.length + 1];
+                            for (int a = 0; a < title_list_2.length; a++) {
+                                networkcondition[a] = false;
+                            }
+                            forest_list_0 = new String[title_list_2.length + 1][][];
+                            bitmaps = new Bitmap[title_list_2.length + 1][][];
+                            title.setText("发现小树林");
+                            mAVLoadingIndicatorView.hide();
+                            mAVLoadingIndicatorView.setVisibility(View.GONE);
 
 
                             recyclerView.setAdapter(new AllForestsAdapter());
-                        if(refreshcondition==true){
-                            refreshlayout1.finishRefresh();
-                            refreshcondition=false;
+                            if (refreshcondition == true) {
+                                refreshlayout1.finishRefresh();
+                                refreshcondition = false;
+                            }
+                        } catch (JSONException | IOException e) {
+                            e.printStackTrace();
                         }
-                    } catch (JSONException | IOException e) {
-                        e.printStackTrace();
+                    }else{
+                        failureAction();
+                        ErrorMsg.getErrorMsg(response,AllForestsActivity.this);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                    failureAction();
+                    Toast.makeText(AllForestsActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
+                }
+                private void failureAction(){
                     title.setText("加载失败");
                     mAVLoadingIndicatorView.hide();
                     mAVLoadingIndicatorView.setVisibility(View.GONE);
@@ -353,7 +366,6 @@ public void Update2(){//加载热门小树林
                         refreshlayout1.finishRefresh();
                         refreshcondition=false;
                     }
-                    Toast.makeText(AllForestsActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -429,11 +441,7 @@ public void Update2(){//加载热门小树林
 
         @Override
         protected void onPostExecute(Void unused) {
-            //recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number,false));
-
-                //mAllForestsDetailAdapter=new AllForestsDetailAdapter(DT2number, true);
-                recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number, true));
-
+            recyclerViewin.setAdapter(new AllForestsDetailAdapter(DT2number, true));
         }
         @Override
         protected Void doInBackground(MyTaskParams...voids) {
@@ -583,13 +591,11 @@ public void Update2(){//加载热门小树林
                 private TextView name;
                 private TextView joined_and_hole;
                 private TextView description;
-                private String condition_if;
+                //private String condition_if;
                 ConstraintLayout next;
-
                 private int position;
                 public ViewHolder(View view)  {
                     super(view);
-
                     background_image_url=(ImageView)view.findViewById(R.id.iv_allforesticon_icon);
                     cover_url=(ImageView)view.findViewById(R.id.iv_allforesticon_cover);
                     name=(TextView)view.findViewById(R.id.tv_allforesticon_title);
@@ -600,11 +606,8 @@ public void Update2(){//加载热门小树林
                         @Override
                         public void onClick(View v) {
                             if(CheckingToken.IfTokenExist()) {
-                                if (condition_if.equals("true")) {
+                                if (forest_list_0[father_position][position][5].equals("true")) {
                                     View mView = View.inflate(getApplicationContext(), R.layout.dialog_forestquitnotice, null);
-                                    // mView.setBackgroundResource(R.drawable.homepage_notice);
-                                    //设置自定义的布局
-                                    //mBuilder.setView(mView);
                                     Dialog dialog = new Dialog(AllForestsActivity.this);
                                     dialog.setContentView(mView);
                                     dialog.getWindow().setBackgroundDrawableResource(R.drawable.notice);
@@ -623,21 +626,25 @@ public void Update2(){//加载热门小树林
                                                 @Override
                                                 public void run() {
 
-                                                    Call<ResponseBody> call2 = request.delete("http://hustholetest.pivotstudio.cn/api/forests/quit/" + forest_list_0[father_position][position][3]);//进行封装
+                                                    Call<ResponseBody> call2 = request.delete(RetrofitManager.API+"forests/quit/" + forest_list_0[father_position][position][3]);//进行封装
                                                     call2.enqueue(new Callback<ResponseBody>() {
                                                         @Override
                                                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                            Toast.makeText(AllForestsActivity.this, "退出成功", Toast.LENGTH_SHORT).show();
-                                                            condition_if = "false";
-                                                            forest_list_0[father_position][position][5] = "false";
-                                                            button.setPadding(30, 5, 6, 6);
-                                                            button.setBackground(getDrawable(R.drawable.forest_button));
-                                                            button.setText("加入");
-                                                            button.setTextColor(getResources().getColor(R.color.GrayScale_100));
-                                                            Drawable homepressed = getResources().getDrawable(R.mipmap.group243, null);
-                                                            homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
-                                                            button.setCompoundDrawables(homepressed, null, null, null);
-                                                            dialog.dismiss();
+                                                            if(response.code()==200) {
+                                                                Toast.makeText(AllForestsActivity.this, "退出成功", Toast.LENGTH_SHORT).show();
+                                                                forest_list_0[father_position][position][5]= "false";
+                                                                forest_list_0[father_position][position][5] = "false";
+                                                                button.setPadding(30, 5, 6, 6);
+                                                                button.setBackground(getDrawable(R.drawable.forest_button));
+                                                                button.setText("加入");
+                                                                button.setTextColor(getResources().getColor(R.color.GrayScale_100));
+                                                                Drawable homepressed = getResources().getDrawable(R.mipmap.group243, null);
+                                                                homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
+                                                                button.setCompoundDrawables(homepressed, null, null, null);
+                                                                dialog.dismiss();
+                                                            }else{
+                                                                ErrorMsg.getErrorMsg(response,AllForestsActivity.this);
+                                                            }
                                                         }
 
                                                         @Override
@@ -654,22 +661,26 @@ public void Update2(){//加载热门小树林
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call23 = request.join("http://hustholetest.pivotstudio.cn/api/forests/join/" + forest_list_0[father_position][position][3]);//进行封装
+                                            Call<ResponseBody> call23 = request.join(RetrofitManager.API+"forests/join/" + forest_list_0[father_position][position][3]);//进行封装
                                             call23.enqueue(new Callback<ResponseBody>() {
 
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    Toast.makeText(AllForestsActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
-                                                    forest_list_0[father_position][position][5] = "true";
-                                                    condition_if = "true";
-                                                    button.setPadding(0, 0, 0, 0);
-                                                    //button.setPadding(-30,-5,-6,-6);
-                                                    //button=(Button)view.findViewById(R.id.rectangle_4);
-                                                    button.setBackground(getDrawable(R.drawable.forest_button_white));
-                                                    button.setText("已加入");
-                                                    // button.setGravity(Gravity.CENTER_VERTICAL);
-                                                    button.setCompoundDrawables(null, null, null, null);
-                                                    button.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
+                                                    if(response.code()==200) {
+                                                        Toast.makeText(AllForestsActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
+                                                        forest_list_0[father_position][position][5] = "true";
+                                                        forest_list_0[father_position][position][5]= "true";
+                                                        button.setPadding(0, 0, 0, 0);
+                                                        //button.setPadding(-30,-5,-6,-6);
+                                                        //button=(Button)view.findViewById(R.id.rectangle_4);
+                                                        button.setBackground(getDrawable(R.drawable.forest_button_white));
+                                                        button.setText("已加入");
+                                                        // button.setGravity(Gravity.CENTER_VERTICAL);
+                                                        button.setCompoundDrawables(null, null, null, null);
+                                                        button.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
+                                                    }else{
+                                                        ErrorMsg.getErrorMsg(response,AllForestsActivity.this);
+                                                    }
                                                 }
 
                                                 @Override
@@ -689,19 +700,24 @@ public void Update2(){//加载热门小树林
                     view.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            mFatherClPosition=father_position;
+                            mClPosition=position;
+                            mConditionIfJoined=forest_list_0[mFatherClPosition][mClPosition][5];
+                            mReturnJoinButton=button;
                             Intent intent = DetailForestActivity.newIntent(AllForestsActivity.this,forest_list_0[father_position][position]);
-                            startActivity(intent);
+                            startActivityForResult(intent,REQUESTCODE_COMMENT);
+                            //startActivity(intent);
                         }
                     });
                 }
                 public void bind(int position)  {
                     this.position=position;
-                    condition_if=forest_list_0[father_position][position][5];
+                    //condition_if=forest_list_0[father_position][position][5];
                     if(tab) {
                         name.setText(forest_list_0[father_position][position][7]);
                         joined_and_hole.setText(forest_list_0[father_position][position][4]);
                         description.setText(forest_list_0[father_position][position][2]);
-                        if(condition_if.equals("false")){
+                        if(forest_list_0[father_position][position][5].equals("false")){
                             button.setPadding(30,5,6,6);
                             button.setBackground(getDrawable(R.drawable.forest_button));
                             button.setText("加入");

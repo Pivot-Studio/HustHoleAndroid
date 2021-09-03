@@ -24,8 +24,18 @@ public interface RequestInterface {//接口
 
     @POST("mobileLogin")
     Call<ResponseBody> mobileLogin(@Body HashMap map);
-    @POST("register")
+    @POST("sendVerifyCode")
+    Call<ResponseBody> sendVerifyCode(@Body HashMap map);
+
+    @POST
+    Call<ResponseBody> resetPassword(@Url String url);
+
+    @POST
+    Call<ResponseBody> verifyCodeMatch(@Url String url);
+
+    @POST("mobileRegister")
     Call<ResponseBody> register(@Body HashMap map);
+
     @GET("forests/types?")
     Call<ResponseBody> getType(@Query("start_id") int start_id,
                                @Query("list_size") int list_size);
@@ -49,6 +59,7 @@ public interface RequestInterface {//接口
 
 
 
+
     @GET("forests/joined?")
     Call<ResponseBody> joined(@Query("list_size") int list_size,
                               @Query("start_id") int start_id);
@@ -62,6 +73,7 @@ public interface RequestInterface {//接口
 
     @GET
     Call<ResponseBody> detailholes2(@Url String url);
+
    @HTTP(method = "GET", path = "forests/detail/{hole_id}", hasBody = false)
     Call<ResponseBody> detailforest(@Path("hole_id") String hole_id);
 
@@ -76,17 +88,25 @@ public interface RequestInterface {//接口
 
     @POST
     Call<ResponseBody> follow(@Url String url);
+
     @DELETE
     Call<ResponseBody>deletefollow(@Url String url);
 
     @POST
     Call<ResponseBody> thumbups(@Url String url);
+
     @DELETE
     Call<ResponseBody> deletethumbups(@Url String url);
     @GET
     Call<ResponseBody> replies(@Url String url);
-    @POST
+
+   @POST
     Call<ResponseBody> replies_add(@Url String url);
+
+
+
+   // @POST("replies")
+    //Call<ResponseBody> replies_add(@Body HashMap map);
 
     @POST
     Call<ResponseBody> holes(@Url String url);
@@ -115,11 +135,12 @@ public interface RequestInterface {//接口
 
 
 
-     @POST("reports")
-     Call<ResponseBody> report(@Body HashMap map);
+    // @POST("reports")
+    // Call<ResponseBody> report(@Body HashMap map);
     //Call<ResponseBody> report(@Path("hole_id") String hole_id);
-
-
+    @POST("reports")
+    Call<ResponseBody> report(@Body HashMap map);
+//
     @POST
     Call<ResponseBody> report_2(@Url String url);
 
@@ -140,9 +161,11 @@ public interface RequestInterface {//接口
                                 @Query("list_size") int list_size);
 
 
+
     @GET("myself/myreplies?")
     Call<ResponseBody> myReplies(@Query("start_id") int start_id,
-                               @Query("list_size") int list_size);
+                                 @Query("list_size") int list_size);
+
 
     @GET("myself/latestShareImage")
     Call<ResponseBody> getShareImage();
@@ -152,16 +175,13 @@ public interface RequestInterface {//接口
 
     @POST("auth/update")
     Call<ResponseBody> changeSecurityMode(@Body HashMap map);
-/*
-    @Multipart
-    @POST("forests/apply")
-    Call<ResponseBody> applyForest(@Body HashMap map
-                                   @Part);
+    /*
+        @Multipart
+        @POST("forests/apply")
+        Call<ResponseBody> applyForest(@Body HashMap map
+                                       @Part);
 
- */
-@POST("forests/apply")
-Call<ResponseBody> applyForest(@Body RequestBody body);
-
+<<<<<<< HEAD
 @GET("replies/hot?")
 Call<ResponseBody> hotReply(@Query("hole_id") String hole_id,
                             @Query("start_id") int start_id,
@@ -179,14 +199,21 @@ Call<ResponseBody> owner(@Query("hole_id") String hole_id,
 
    // @POST("safety")
    // Call<ResponseBody> changeSecurityMode(@Body Boolean turnOn);
+=======
+     */
+    @POST("forests/apply")
+    Call<ResponseBody> applyForest(@Body RequestBody body);
 
-   /* @Multipart
-    @POST()
+    @GET("replies/hot?")
+    Call<ResponseBody> hotReply(@Query("hole_id") String hole_id,
+                                @Query("start_id") int start_id,
+                                @Query("list_size") int list_size);
 
-    Call<ResponseBody> applyForest(@Part("body") RequestBody body, @Part MultipartBody.Part file);
-    //Observable<ResponseBody> applyForest(
-            //@Part() List<MultipartBody.Part > files );
+    @GET("replies/owner?")
+    Call<ResponseBody> owner(@Query("hole_id") String hole_id,
+                             @Query("start_id") int start_id,
+                             @Query("list_size") int list_size,
+                             @Query("is_descend") String is_descend);
 
-    */
 }
 

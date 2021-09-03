@@ -28,11 +28,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.OrientationHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -40,27 +38,23 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 
-import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.hustholetest1.model.BlurTransformation;
 import com.example.hustholetest1.model.CheckingToken;
-import com.example.hustholetest1.model.JointBitmapView;
 import com.example.hustholetest1.model.MaxHeightRecyclerView;
-import com.example.hustholetest1.model.StandardRefreshHeader;
+import com.example.hustholetest1.model.TimeCount;
 import com.example.hustholetest1.model.TransparentRefreshHeader;
-import com.example.hustholetest1.network.CommenRequestManager;
+import com.example.hustholetest1.network.ErrorMsg;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.network.TokenInterceptor;
 import com.example.hustholetest1.R;
-import com.example.hustholetest1.network.OkHttpUtil;
 import com.example.hustholetest1.view.emailverify.EmailVerifyActivity;
 import com.example.hustholetest1.view.homescreen.commentlist.CommentListActivity;
 import com.example.hustholetest1.view.homescreen.publishhole.PublishHoleActivity;
 import com.githang.statusbar.StatusBarCompat;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.jaeger.library.StatusBarUtil;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener;
@@ -78,14 +72,14 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 
 public class DetailForestActivity extends AppCompatActivity {
     private Retrofit retrofit;
-    private ImageView back,head,head_2,transformblock;
+    private ConstraintLayout back;
+    private ImageView head,head_2,transformblock;
     private TextView mTitlebarTextTv;
     private JSONArray jsonArray2;
     private ArrayList<String[]> mDetailforestHoleslist=new ArrayList<>();
@@ -98,7 +92,7 @@ public class DetailForestActivity extends AppCompatActivity {
     private FloatingActionButton addhole;
     private static final String key="key_1";
     private static final String key_2="key_2";
-    private int mStartingLoadId = 0;
+    private int mStartingLoadId = 0,mLastLoadId;
     private RefreshLayout mRefreshConditionRl, mLoadMoreCondotionRl;
     private int CONSTANT_STANDARD_LOAD_SIZE = 20;
     private  ConstraintLayout titlebar,mDetailForestCl;
@@ -113,6 +107,61 @@ public class DetailForestActivity extends AppCompatActivity {
     private  ConstraintLayout mMoreWhatCl;
     private RecyclerView.OnScrollListener mOnscrollListener2;
 
+
+    private ImageView mReturnIsThumbup,mReturnIsReply,mReturnIsFollow;
+    private TextView mReturnThumbupNUmber,mReturnReplyNumber,mReturnFollowNumber;
+    private int mReturnPosition;
+    private int RESULTCODE_COMMENT=1,REQUESTCODE_COMMENT=4;
+
+    private String mSendBackDateJoinCondtion;
+    private int RESULTCODE_COMMENT_2=2;
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode!=RESULTCODE_COMMENT){
+            return;
+        }
+        if(requestCode==REQUESTCODE_COMMENT){
+            String thumbupCondition=data.getStringExtra("ThumbupCondition");
+            String followCondition=data.getStringExtra("FollowCondition");
+            if(thumbupCondition!=null){
+                if(thumbupCondition.equals("true")&& mDetailforestHoleslist.get(mReturnPosition - 1)[11].equals("false")){
+                    mReturnIsThumbup.setImageResource(R.mipmap.active);
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[11] = "true";
+
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[13] = (Integer.parseInt(mDetailforestHoleslist.get(mReturnPosition - 1)[13]) + 1) + "";
+                    //thumbupCondition = false;
+                    mReturnThumbupNUmber.setText(mDetailforestHoleslist.get(mReturnPosition - 1)[13]);
+                }else if(thumbupCondition.equals("false")&& mDetailforestHoleslist.get(mReturnPosition - 1)[11].equals("true")){
+                    mReturnIsThumbup.setImageResource(R.mipmap.inactive);
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[11] = "false";
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[13] = (Integer.parseInt(mDetailforestHoleslist.get(mReturnPosition - 1)[13]) - 1) + "";
+                    //thumbupCondition = false;
+                    mReturnThumbupNUmber.setText(mDetailforestHoleslist.get(mReturnPosition - 1)[13]);
+                }
+            }
+            if(followCondition!=null){
+                if(followCondition.equals("true")&& mDetailforestHoleslist.get(mReturnPosition - 1)[8].equals("false")){
+                    mReturnIsFollow.setImageResource(R.mipmap.active_3);
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[8] = "true";
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[3] = (Integer.parseInt(mDetailforestHoleslist.get(mReturnPosition - 1)[3]) + 1) + "";
+                    //followCondition = false;
+                    mReturnFollowNumber.setText(mDetailforestHoleslist.get(mReturnPosition - 1)[3]);
+                }else if(followCondition.equals("false")&& mDetailforestHoleslist.get(mReturnPosition - 1)[8].equals("true")){
+                    mReturnIsFollow.setImageResource(R.mipmap.inactive);
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[8] = "false";
+                    mDetailforestHoleslist.get(mReturnPosition - 1)[3] = (Integer.parseInt(mDetailforestHoleslist.get(mReturnPosition - 1)[3]) - 1) + "";
+                    //thumbupCondition = false;
+                    mReturnFollowNumber.setText(mDetailforestHoleslist.get(mReturnPosition - 1)[3]);
+                }
+
+            }
+
+        }
+    }
+
+
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailforest);
@@ -122,7 +171,7 @@ public class DetailForestActivity extends AppCompatActivity {
         }
         mDetailForestCl=(ConstraintLayout)findViewById(R.id.cl_detailforest);
 
-        back = (ImageView) findViewById(R.id.iv_titlebartransparent_back);
+        back = (ConstraintLayout) findViewById(R.id.cl_titlebartransparent_back);
         head_2=(ImageView)findViewById(R.id.iv_detailforest_cover);
         mTitlebarTextTv=(TextView)findViewById(R.id.tv_titlebartransparent_title);
 
@@ -168,12 +217,14 @@ public class DetailForestActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getBack();
                 finish();
             }
         });
         TokenInterceptor.getContext(DetailForestActivity.this);
         retrofit= RetrofitManager.getRetrofit();
-        request = retrofit.create(RequestInterface.class);//创建接口实例
+        request=RetrofitManager.getRequest();
+        //request = retrofit.create(RequestInterface.class);//创建接口实例
         data=getIntent().getStringArrayExtra(key);
         addhole=(FloatingActionButton)findViewById(R.id.fab_detailforest_publishhole);
         addhole.setOnClickListener(new View.OnClickListener() {
@@ -182,7 +233,7 @@ public class DetailForestActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(CheckingToken.IfTokenExist()) {
                     //关闭掉对话框,拿到对话框的对象
-                    Intent intent = PublishHoleActivity.newIntent(DetailForestActivity.this, data[7]);
+                    Intent intent = PublishHoleActivity.newIntent(DetailForestActivity.this, data[7],data[3]);
                     startActivity(intent);
                 }else{
                     Intent intent=new Intent(DetailForestActivity.this, EmailVerifyActivity.class);
@@ -201,29 +252,34 @@ public class DetailForestActivity extends AppCompatActivity {
                     call2.enqueue(new Callback<ResponseBody>() {
                         @Override
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            String json = "null";
-                            if (response.body() != null) {
-                                try {
-                                    data=new String[8];
-                                    json = response.body().string();
-                                    JSONObject jsonObject = new JSONObject(json);
-                                    JSONArray jsonArray0 = jsonObject.getJSONArray("forests");
-                                    JSONObject sonObject = jsonArray0.getJSONObject(0);
-                                    data[0] = sonObject.getString("background_image_url");
-                                    data[1] = sonObject.getString("cover_url");
-                                    data[2] = sonObject.getString("description");
-                                    data[3] = sonObject.getInt("forest_id") + "";
-                                    data[4] = sonObject.getInt("hole_number") + "Huster . " + sonObject.getInt("joined_number") + "树洞";
-                                    data[5] = sonObject.getBoolean("joined")+"";
-                                    data[6] = sonObject.getString("last_active_time");
-                                    data[7] = sonObject.getString("name");
-                                    update();
-                                    addhole.setVisibility(View.VISIBLE);
-                                } catch (IOException | JSONException e) {
-                                    e.printStackTrace();
+                            if(response.code()==200) {
+                                String json = "null";
+                                if (response.body() != null) {
+                                    try {
+                                        data = new String[8];
+                                        json = response.body().string();
+                                        JSONObject jsonObject = new JSONObject(json);
+                                        JSONArray jsonArray0 = jsonObject.getJSONArray("forests");
+                                        JSONObject sonObject = jsonArray0.getJSONObject(0);
+                                        data[0] = sonObject.getString("background_image_url");
+                                        data[1] = sonObject.getString("cover_url");
+                                        data[2] = sonObject.getString("description");
+                                        data[3] = sonObject.getInt("forest_id") + "";
+                                        data[4] = sonObject.getInt("hole_number") + "Huster . " + sonObject.getInt("joined_number") + "树洞";
+                                        data[5] = sonObject.getBoolean("joined") + "";
+                                        data[6] = sonObject.getString("last_active_time");
+                                        data[7] = sonObject.getString("name");
+                                        update();
+                                        addhole.setVisibility(View.VISIBLE);
+                                    } catch (IOException | JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
+                            }else{
+                                ErrorMsg.getErrorMsg(response,DetailForestActivity.this);
                             }
                         }
+
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
                             Toast.makeText(DetailForestActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
@@ -256,6 +312,24 @@ public class DetailForestActivity extends AppCompatActivity {
     }
 
 
+
+    @Override
+    public void onBackPressed() {
+        getBack();
+        super.onBackPressed();
+
+        //System.out.println("按下了back键   onBackPressed()");
+    }
+
+    private void getBack(){
+        Intent data=new Intent();
+        data.putExtra("JoinCondition",mSendBackDateJoinCondtion);
+        //data.putExtra("FollowCondition",mSendBackDateFollowCondtion);
+        setResult(RESULTCODE_COMMENT_2,data);
+    }
+
+
+
     public static void transparentStatusBar(Window window) {
         /**
          * 透明状态栏方法(SDK_INT >= 21)
@@ -281,50 +355,50 @@ public class DetailForestActivity extends AppCompatActivity {
             @Override
             public void run() {
                 //Call<ResponseBody> call = request.detailholes(data[3],mStartingLoadId,CONSTANT_STANDARD_LOAD_SIZE,false);//进行封装
-                Call<ResponseBody> call = request.detailholes2("http://hustholetest.pivotstudio.cn/api/forests/"+data[3]+"/holes?start_id="+mStartingLoadId+"&list_size="+CONSTANT_STANDARD_LOAD_SIZE+"&is_last_active=true");//进行封装
+                Call<ResponseBody> call = request.detailholes2(RetrofitManager.API+"forests/"+data[3]+"/holes?start_id="+mStartingLoadId+"&list_size="+CONSTANT_STANDARD_LOAD_SIZE+"&is_descend=true");//进行封装
 
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        String json = "null";
-                        try {
-                            if (response.body() != null) {
-                                json = response.body().string();
-                            }
-
-
-                            if(mRefreshConditionRl!=null){
-                                mDetailforestHoleslist=new ArrayList<>();
-                            }
-                            if(mDeleteCondition){
-                              mDeleteCondition=false;
-                                mDetailforestHoleslist=new ArrayList<>();
-                            }
-                            //Log.e(TAG, "token2："+json);
-                            if(json.equals("[]")&&mLoadMoreCondotionRl!=null){
-                               Toast.makeText(DetailForestActivity.this,"加载到底辣",Toast.LENGTH_SHORT).show();
-                               // if(mStartingLoadId!=0) {
-                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
-                               // }
-                                    mLoadMoreCondotionRl.finishLoadMore();
-                                    mLoadMoreCondotionRl=null;
-                                /*if(mIfFirstLoad==true){
-                                    recyclerView.setAdapter(mForestHoleAdapter);
+                        if(response.code()==200) {
+                            String json = "null";
+                            try {
+                                if (response.body() != null) {
+                                    json = response.body().string();
                                 }
-                                */
-                            }else{
-                            jsonArray2 = new JSONArray(json);
-                            new DownloadTask().execute();
-                            }
-                        } catch (IOException | JSONException e) {
-                            e.printStackTrace();
-                        }
 
+
+                                if (mRefreshConditionRl != null) {
+                                    mDetailforestHoleslist = new ArrayList<>();
+                                }
+                                if (mDeleteCondition) {
+                                    mDeleteCondition = false;
+                                    mDetailforestHoleslist = new ArrayList<>();
+                                }
+                                if (json.equals("[]") && mLoadMoreCondotionRl != null) {
+                                    Toast.makeText(DetailForestActivity.this, "加载到底辣", Toast.LENGTH_SHORT).show();
+                                    mStartingLoadId = mStartingLoadId - CONSTANT_STANDARD_LOAD_SIZE;
+                                    mLoadMoreCondotionRl.finishLoadMore();
+                                    mLoadMoreCondotionRl = null;
+                                } else {
+                                    jsonArray2 = new JSONArray(json);
+                                    new DownloadTask().execute();
+                                }
+                            } catch (IOException | JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            failureAction();
+                            ErrorMsg.getErrorMsg(response,DetailForestActivity.this);
+                        }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
                         Toast.makeText(DetailForestActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
+                         failureAction();
+                    }
+                    private void failureAction(){
 
                         if(mRefreshConditionRl !=null){
                             mRefreshConditionRl.finishRefresh();
@@ -335,12 +409,12 @@ public class DetailForestActivity extends AppCompatActivity {
 
                             if(mIfFirstLoad){
                                 //recyclerView.setAdapter(mForestHoleAdapter);
-                               // mIfFirstLoad=false;
+                                // mIfFirstLoad=false;
                             }else{
-                              //  mForestHoleAdapter.notifyDataSetChanged();
+                                //  mForestHoleAdapter.notifyDataSetChanged();
                             }
 
-                           // mForestHoleAdapter.notifyDataSetChanged();
+                            // mForestHoleAdapter.notifyDataSetChanged();
                             mDistanceY=0.0f;
                             recyclerView.setOnTouchListener(new View.OnTouchListener() {
                                 @Override
@@ -354,20 +428,19 @@ public class DetailForestActivity extends AppCompatActivity {
                             mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
                             if(mPrestrainCondition==true){
                                 mPrestrainCondition=false;
-                               // mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
+                                // mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
                                 //  mForestHoleAdapter.notifyDataSetChanged();
                             }
-                           // mForestHoleAdapter.notifyDataSetChanged();
+                            // mForestHoleAdapter.notifyDataSetChanged();
                         }else if(mPrestrainCondition==true){
                             mPrestrainCondition=false;
                             mStartingLoadId=mStartingLoadId-CONSTANT_STANDARD_LOAD_SIZE;
-                          //  mForestHoleAdapter.notifyDataSetChanged();
+                            //  mForestHoleAdapter.notifyDataSetChanged();
                         }else{
-                           // mIfFirstLoad=false;
-                          //  recyclerView.setAdapter(mForestHoleAdapter);
+                            // mIfFirstLoad=false;
+                            //  recyclerView.setAdapter(mForestHoleAdapter);
                         }
                     }
-
 
                 });
             }
@@ -507,20 +580,25 @@ public class DetailForestActivity extends AppCompatActivity {
                                             @Override
                                             public void run() {
 
-                                                Call<ResponseBody> call2 = request.delete("http://hustholetest.pivotstudio.cn/api/forests/quit/" + data[3]);//进行封装
+                                                Call<ResponseBody> call2 = request.delete(RetrofitManager.API+"forests/quit/" + data[3]);//进行封装
                                                 call2.enqueue(new Callback<ResponseBody>() {
                                                     @Override
                                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                        Toast.makeText(DetailForestActivity.this, "退出成功", Toast.LENGTH_SHORT).show();
-                                                        data[5] = "false";
-                                                        button.setPadding(30, 5, 6, 6);
-                                                        button.setBackground(getDrawable(R.drawable.forest_button));
-                                                        button.setText("加入");
-                                                        button.setTextColor(getResources().getColor(R.color.GrayScale_100));
-                                                        Drawable homepressed = getResources().getDrawable(R.mipmap.group243, null);
-                                                        homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
-                                                        button.setCompoundDrawables(homepressed, null, null, null);
-                                                        dialog.dismiss();
+                                                        if(response.code()==200) {
+                                                            Toast.makeText(DetailForestActivity.this, "退出成功", Toast.LENGTH_SHORT).show();
+                                                            data[5] = "false";
+                                                            mSendBackDateJoinCondtion = data[5];
+                                                            button.setPadding(30, 5, 6, 6);
+                                                            button.setBackground(getDrawable(R.drawable.forest_button));
+                                                            button.setText("加入");
+                                                            button.setTextColor(getResources().getColor(R.color.GrayScale_100));
+                                                            Drawable homepressed = getResources().getDrawable(R.mipmap.group243, null);
+                                                            homepressed.setBounds(0, 0, homepressed.getMinimumWidth(), homepressed.getMinimumHeight());
+                                                            button.setCompoundDrawables(homepressed, null, null, null);
+                                                            dialog.dismiss();
+                                                        }else{
+                                                            ErrorMsg.getErrorMsg(response,DetailForestActivity.this);
+                                                        }
                                                     }
 
                                                     @Override
@@ -537,21 +615,25 @@ public class DetailForestActivity extends AppCompatActivity {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        Call<ResponseBody> call23 = request.join("http://hustholetest.pivotstudio.cn/api/forests/join/" + data[3]);//进行封装
+                                        Call<ResponseBody> call23 = request.join(RetrofitManager.API+"forests/join/" + data[3]);//进行封装
                                         call23.enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                Toast.makeText(DetailForestActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
-                                                data[5] = "true";
-
-                                                button.setPadding(0, 0, 0, 0);
-                                                //button.setPadding(-30,-5,-6,-6);
-                                                //button=(Button)view.findViewById(R.id.rectangle_4);
-                                                button.setBackground(getDrawable(R.drawable.forest_button_white));
-                                                button.setText("已加入");
-                                                // button.setGravity(Gravity.CENTER_VERTICAL);
-                                                button.setCompoundDrawables(null, null, null, null);
-                                                button.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
+                                                if(response.code()==200) {
+                                                    Toast.makeText(DetailForestActivity.this, "加入成功", Toast.LENGTH_SHORT).show();
+                                                    data[5] = "true";
+                                                    mSendBackDateJoinCondtion = data[5];
+                                                    button.setPadding(0, 0, 0, 0);
+                                                    //button.setPadding(-30,-5,-6,-6);
+                                                    //button=(Button)view.findViewById(R.id.rectangle_4);
+                                                    button.setBackground(getDrawable(R.drawable.forest_button_white));
+                                                    button.setText("已加入");
+                                                    // button.setGravity(Gravity.CENTER_VERTICAL);
+                                                    button.setCompoundDrawables(null, null, null, null);
+                                                    button.setTextColor(getResources().getColor(R.color.HH_BandColor_3));
+                                                }else{
+                                                    ErrorMsg.getErrorMsg(response,DetailForestActivity.this);
+                                                }
                                             }
                                             @Override
                                             public void onFailure(Call<ResponseBody> call, Throwable t) {
@@ -611,7 +693,7 @@ public class DetailForestActivity extends AppCompatActivity {
                             titlebar.setBackgroundColor(Color.parseColor("#"+intToHex((int)(d*255))+"4B9F79"));
                             mTitlebarTextTv.setAlpha(d);
                             mTitlebarTextTv.setText(data[7]);
-                            back.setAlpha(1f);
+                           // back.setAlpha(1f);
                         } else {
                             if (Build.VERSION.SDK_INT >= 21) {
                                 window.setStatusBarColor(getResources().getColor(R.color.HH_BandColor_1));
@@ -632,6 +714,7 @@ public class DetailForestActivity extends AppCompatActivity {
                 hole_and_number.setText(data[4]);
                 content.setText(data[2]);
                 if(data[5].equals("false")){
+
                     button.setPadding(30,5,6,6);
                     button.setBackground(getDrawable(R.drawable.forest_button));
                     button.setText("加入");
@@ -663,8 +746,6 @@ public class DetailForestActivity extends AppCompatActivity {
                         .into(new SimpleTarget<Bitmap>() {
                             @Override
                             public void onResourceReady(Bitmap resource, Transition<? super Bitmap> transition) {
-
-
 
                                 int width =resource.getWidth();
                                 int height = resource.getHeight()*2;
@@ -705,7 +786,7 @@ public class DetailForestActivity extends AppCompatActivity {
        public class ViewHolder extends RecyclerView.ViewHolder {
             private TextView content,created_timestamp,follow_num,reply_num,thumbup_num,hole_id,more_2;
             private ImageView is_follow,is_reply,is_thumbup,more,more_1;
-            private ConstraintLayout morewhat,thumbup,follow;
+            private ConstraintLayout morewhat,thumbup,follow,reply;
             private int position;
             private Boolean thumbupCondition=false,followCondition=false;
 
@@ -713,7 +794,7 @@ public class DetailForestActivity extends AppCompatActivity {
                 super(view);
                 thumbup=(ConstraintLayout)view.findViewById(R.id.cl_detailforest_thumbup);
                 follow=(ConstraintLayout)view.findViewById(R.id.cl_detailforest_follow);
-
+                reply=(ConstraintLayout)view.findViewById(R.id.cl_detailforest_reply);
 
                 content=(TextView)view.findViewById(R.id.tv_itemdetailforest_content);
                 created_timestamp=(TextView)view.findViewById(R.id.tv_itemdetailforest_time);
@@ -777,10 +858,15 @@ public class DetailForestActivity extends AppCompatActivity {
                                         call.enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                Toast.makeText(DetailForestActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
-                                                mStartingLoadId=0;
-                                                mDeleteCondition=true;
-                                                update();
+                                                if(response.code()==200) {
+                                                    Toast.makeText(DetailForestActivity.this, "删除成功", Toast.LENGTH_SHORT).show();
+                                                    mStartingLoadId = 0;
+                                                    mDeleteCondition = true;
+                                                    update();
+                                                }else{
+                                                    mDeleteCondition = false;
+                                                    ErrorMsg.getErrorMsg(response,DetailForestActivity.this);
+                                                }
                                             }
 
                                             @Override
@@ -800,7 +886,7 @@ public class DetailForestActivity extends AppCompatActivity {
                                 new Thread(new Runnable() {//加载纵向列表标题
                                     @Override
                                     public void run() {
-                                        Call<ResponseBody> call = request.report_2("http://hustholetest.pivotstudio.cn/api/reports?hole_id=" +mDetailforestHoleslist.get(position - 1)[6]+ "&reply_local_id= -1");
+                                        Call<ResponseBody> call = request.report_2(RetrofitManager.API+"reports?hole_id=" +mDetailforestHoleslist.get(position - 1)[6]+ "&reply_local_id= -1");
                                         call.enqueue(new Callback<ResponseBody>() {
                                             @Override
                                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -820,22 +906,7 @@ public class DetailForestActivity extends AppCompatActivity {
                                                         Toast.makeText(DetailForestActivity.this, "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
                                                     }
                                                 }else{
-                                                    //followCondition = false;
-                                                    String json = "null";
-                                                    String returncondition = null;
-                                                    if (response.errorBody() != null) {
-                                                        try {
-                                                            json = response.errorBody().string();
-                                                            JSONObject jsonObject = new JSONObject(json);
-                                                            returncondition = jsonObject.getString("msg");
-                                                            Toast.makeText(DetailForestActivity.this, returncondition, Toast.LENGTH_SHORT).show();
-                                                        } catch (IOException | JSONException e) {
-                                                            e.printStackTrace();
-                                                        }
-                                                        //FailureAction();
-                                                    }else{
-                                                        Toast.makeText(DetailForestActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
-                                                    }
+                                                    ErrorMsg.getErrorMsg(response,DetailForestActivity.this);
                                                 }
                                             }
 
@@ -855,7 +926,23 @@ public class DetailForestActivity extends AppCompatActivity {
                         }
                     }
                 });
+                reply.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RemoveOnScrollListener();
 
+                        mReturnIsThumbup=is_thumbup;
+                        mReturnIsReply=is_reply;
+                        mReturnIsFollow=is_follow;
+                        mReturnThumbupNUmber=thumbup_num;
+                        mReturnReplyNumber=reply_num;
+                        mReturnFollowNumber=follow_num;
+                        mReturnPosition=position;
+                        Intent intent = CommentListActivity.newIntent(DetailForestActivity.this, mDetailforestHoleslist.get(position-1));
+                        intent.putExtra("reply","key_board");
+                        startActivityForResult(intent,REQUESTCODE_COMMENT);
+                    }
+                });
 
 
                 //forestname = (TextView) view.findViewById(R.id.textView28);
@@ -864,8 +951,16 @@ public class DetailForestActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         RemoveOnScrollListener();
-                        Intent intent= CommentListActivity.newIntent(DetailForestActivity.this, mDetailforestHoleslist.get(position-1));
-                        startActivity(intent);
+
+                        mReturnIsThumbup=is_thumbup;
+                        mReturnIsReply=is_reply;
+                        mReturnIsFollow=is_follow;
+                        mReturnThumbupNUmber=thumbup_num;
+                        mReturnReplyNumber=reply_num;
+                        mReturnFollowNumber=follow_num;
+                        mReturnPosition=position;
+                        Intent intent = CommentListActivity.newIntent(DetailForestActivity.this, mDetailforestHoleslist.get(position-1));
+                        startActivityForResult(intent,REQUESTCODE_COMMENT);
                     }
                 });
                 thumbup.setOnClickListener(new View.OnClickListener(){
@@ -878,15 +973,20 @@ public class DetailForestActivity extends AppCompatActivity {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mDetailforestHoleslist.get(position - 1)[6] + "/-1");//进行封装
+                                            Call<ResponseBody> call = request.thumbups(RetrofitManager.API+"thumbups/" + mDetailforestHoleslist.get(position - 1)[6] + "/-1");//进行封装
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    is_thumbup.setImageResource(R.mipmap.active);
-                                                    mDetailforestHoleslist.get(position - 1)[11] = "true";
-                                                    mDetailforestHoleslist.get(position - 1)[13] = (Integer.parseInt(mDetailforestHoleslist.get(position - 1)[13]) + 1) + "";
-                                                    thumbupCondition=false;
-                                                    thumbup_num.setText(mDetailforestHoleslist.get(position - 1)[13]);
+                                                    if(response.code()==200) {
+                                                        is_thumbup.setImageResource(R.mipmap.active);
+                                                        mDetailforestHoleslist.get(position - 1)[11] = "true";
+                                                        mDetailforestHoleslist.get(position - 1)[13] = (Integer.parseInt(mDetailforestHoleslist.get(position - 1)[13]) + 1) + "";
+                                                        thumbupCondition = false;
+                                                        thumbup_num.setText(mDetailforestHoleslist.get(position - 1)[13]);
+                                                    }else{
+                                                        thumbupCondition=false;
+                                                        ErrorMsg.getErrorMsg(response,DetailForestActivity.this);
+                                                    }
                                                 }
 
                                                 @Override
@@ -901,16 +1001,21 @@ public class DetailForestActivity extends AppCompatActivity {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + mDetailforestHoleslist.get(position - 1)[6] + "/-1");//进行封装
+                                            Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API+"thumbups/" + mDetailforestHoleslist.get(position - 1)[6] + "/-1");//进行封装
                                             Log.e(TAG, "token2：");
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                                    is_thumbup.setImageResource(R.mipmap.inactive);
-                                                    mDetailforestHoleslist.get(position - 1)[11] = "false";
-                                                    mDetailforestHoleslist.get(position - 1)[13] = (Integer.parseInt(mDetailforestHoleslist.get(position - 1)[13]) - 1) + "";
-                                                    thumbupCondition=false;
-                                                    thumbup_num.setText(mDetailforestHoleslist.get(position - 1)[13]);
+                                                    if(response.code()==200) {
+                                                        is_thumbup.setImageResource(R.mipmap.inactive);
+                                                        mDetailforestHoleslist.get(position - 1)[11] = "false";
+                                                        mDetailforestHoleslist.get(position - 1)[13] = (Integer.parseInt(mDetailforestHoleslist.get(position - 1)[13]) - 1) + "";
+                                                        thumbupCondition = false;
+                                                        thumbup_num.setText(mDetailforestHoleslist.get(position - 1)[13]);
+                                                    }else{
+                                                        thumbupCondition=false;
+                                                        ErrorMsg.getErrorMsg(response,DetailForestActivity.this);
+                                                    }
                                                 }
 
                                                 @Override
@@ -939,7 +1044,7 @@ public class DetailForestActivity extends AppCompatActivity {
                                     new Thread(new Runnable() {//加载纵向列表标题
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/" + mDetailforestHoleslist.get(position - 1)[6]);//进行封装
+                                            Call<ResponseBody> call = request.follow(RetrofitManager.API+"follows/" + mDetailforestHoleslist.get(position - 1)[6]);//进行封装
                                             Log.e(TAG, "token2：");
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
@@ -952,20 +1057,7 @@ public class DetailForestActivity extends AppCompatActivity {
                                                         follow_num.setText(mDetailforestHoleslist.get(position - 1)[3]);
                                                     }else{
                                                         followCondition = false;
-                                                        String json = "null";
-                                                        String returncondition = null;
-                                                        if (response.body() != null) {
-                                                            try {
-                                                                json = response.body().string();
-                                                                JSONObject jsonObject = new JSONObject(json);
-                                                                returncondition = jsonObject.getString("msg");
-                                                                Toast.makeText(DetailForestActivity.this, returncondition, Toast.LENGTH_SHORT).show();
-                                                            } catch (IOException | JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }else{
-                                                            Toast.makeText(DetailForestActivity.this,"过于频繁请求！",Toast.LENGTH_SHORT).show();
-                                                        }
+                                                        ErrorMsg.getErrorMsg(response,DetailForestActivity.this);
                                                     }
                                                 }
 
@@ -981,8 +1073,8 @@ public class DetailForestActivity extends AppCompatActivity {
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {
-                                            Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + mDetailforestHoleslist.get(position - 1)[6]);//进行封装
-                                            Log.e(TAG, "token2：");
+                                            Call<ResponseBody> call = request.deletefollow(RetrofitManager.API+"follows/" + mDetailforestHoleslist.get(position - 1)[6]);//进行封装
+
                                             call.enqueue(new Callback<ResponseBody>() {
                                                 @Override
                                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -994,20 +1086,7 @@ public class DetailForestActivity extends AppCompatActivity {
                                                         follow_num.setText(mDetailforestHoleslist.get(position - 1)[3]);
                                                     }else{
                                                         followCondition = false;
-                                                        String json = "null";
-                                                        String returncondition = null;
-                                                        if (response.body() != null) {
-                                                            try {
-                                                                json = response.body().string();
-                                                                JSONObject jsonObject = new JSONObject(json);
-                                                                returncondition = jsonObject.getString("msg");
-                                                                Toast.makeText(DetailForestActivity.this, returncondition, Toast.LENGTH_SHORT).show();
-                                                            } catch (IOException | JSONException e) {
-                                                                e.printStackTrace();
-                                                            }
-                                                        }else{
-                                                            Toast.makeText(DetailForestActivity.this,"过于频繁请求！",Toast.LENGTH_SHORT).show();
-                                                        }
+                                                        ErrorMsg.getErrorMsg(response,DetailForestActivity.this);
                                                     }
                                                 }
 
@@ -1034,8 +1113,8 @@ public class DetailForestActivity extends AppCompatActivity {
 
             public void bind(int position){
                 this.position=position;
-                content.setText(mDetailforestHoleslist.get(position-1)[1]);
-                created_timestamp.setText(mDetailforestHoleslist.get(position-1)[2]);
+                content.setText(mDetailforestHoleslist.get(position-1)[1].replace("\\n", "\n"));
+                created_timestamp.setText(TimeCount.time(mDetailforestHoleslist.get(position-1)[2]));
                 follow_num.setText(mDetailforestHoleslist.get(position-1)[3]);
                 reply_num.setText(mDetailforestHoleslist.get(position-1)[12]);
                 thumbup_num.setText(mDetailforestHoleslist.get(position-1)[13]);

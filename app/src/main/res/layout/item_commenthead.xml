@@ -13,6 +13,7 @@
         android:layout_marginStart="22dp"
         android:layout_marginTop="15dp"
         android:text="@string/commment_1"
+        android:textStyle="bold"
         android:textColor="@color/GrayScale_20"
         android:textSize="13sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +23,7 @@
         android:id="@+id/btn_commenthead_jumptodetailforest"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="wrap_content"
-        android:layout_height="26dp"
+        android:layout_height="24dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="14dp"
         android:background="@drawable/tag_yellow"
@@ -30,7 +31,7 @@
         android:paddingLeft="6dp"
         android:text="  小树林标签   "
         android:textColor="@color/HH_BandColor_7"
-        android:textSize="12sp"
+        android:textSize="11sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
@@ -49,27 +50,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:maxWidth="@dimen/dp_320"
+        android:maxWidth="@dimen/dp_335"
         android:text="TextView"
         android:textColor="@color/GrayScale_20"
-        android:textSize="14sp"
+        android:textSize="13sp"
         app:layout_constraintStart_toStartOf="@+id/tv_commenthead_time"
         app:layout_constraintTop_toBottomOf="@+id/tv_commenthead_time" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_commenthead_thumbup"
-        android:layout_width="@dimen/dp_40"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_40"
-        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="@+id/tv_commenthead_content"
-        app:layout_constraintTop_toBottomOf="@+id/tv_commenthead_content">
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <ImageView
             android:id="@+id/iv_commenthead_thumbup"
-            android:layout_width="@dimen/dp_17"
-            android:layout_height="@dimen/dp_24"
+            android:layout_width="@dimen/dp_16"
+            android:layout_height="@dimen/dp_20"
 
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@mipmap/inactive" />
@@ -78,20 +78,19 @@
             android:id="@+id/tv_commenthead_thumbupnum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="11dp"
+            android:layout_marginStart="@dimen/dp_6"
             android:text="15"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_commenthead_thumbup"
             app:layout_constraintStart_toEndOf="@+id/iv_commenthead_thumbup" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_commenthead_reply"
-        android:layout_width="@dimen/dp_40"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_40"
-        android:layout_marginStart="@dimen/dp_32"
+        android:layout_marginStart="@dimen/dp_67"
         app:layout_constraintBottom_toBottomOf="@+id/cl_commenthead_thumbup"
-        app:layout_constraintStart_toEndOf="@+id/cl_commenthead_thumbup"
+        app:layout_constraintStart_toStartOf="@+id/cl_commenthead_thumbup"
         app:layout_constraintTop_toTopOf="@+id/cl_commenthead_thumbup">
 
         <ImageView
@@ -107,21 +106,20 @@
             android:id="@+id/tv_commenthead_replynum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_6"
             android:text="15"
             app:layout_constraintBottom_toBottomOf="@+id/iv_commenthead_reply"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_commenthead_reply"
-            app:layout_constraintTop_toTopOf="@+id/iv_commenthead_reply"
-            />
+            app:layout_constraintTop_toTopOf="@+id/iv_commenthead_reply" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_commenthead_follow"
-        android:layout_width="@dimen/dp_40"
+        android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_40"
-        android:layout_marginStart="@dimen/dp_32"
+        android:layout_marginStart="@dimen/dp_67"
         app:layout_constraintBottom_toBottomOf="@+id/cl_commenthead_reply"
-        app:layout_constraintStart_toEndOf="@+id/cl_commenthead_reply"
+        app:layout_constraintStart_toStartOf="@+id/cl_commenthead_reply"
         app:layout_constraintTop_toTopOf="@+id/cl_commenthead_reply">
 
         <ImageView
@@ -137,12 +135,10 @@
             android:id="@+id/tv_commenthead_follownum"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_6"
             android:text="15"
             app:layout_constraintBottom_toBottomOf="@+id/iv_commenthead_follow"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_commenthead_follow"
-            app:layout_constraintTop_toTopOf="@+id/iv_commenthead_follow"
-         />
+            app:layout_constraintStart_toEndOf="@+id/iv_commenthead_follow" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
@@ -226,4 +222,12 @@
             app:layout_constraintStart_toEndOf="@+id/iv_commenthead_moreicon"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_commenthead_content"
+        app:layout_constraintStart_toEndOf="@+id/tv_commenthead_content" />
 </androidx.constraintlayout.widget.ConstraintLayout>

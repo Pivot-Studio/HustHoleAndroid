@@ -9,18 +9,29 @@ android:orientation="horizontal"
     android:background="@color/Grayscale_200"
     android:id="@+id/cl_titbartransparent"
 >
-
-
-    <ImageView
-        android:id="@+id/iv_titlebartransparent_back"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_titlebartransparent_back"
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:layout_centerInParent="true"
-        android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/triangle_4" />
+        app:layout_constraintVertical_bias="1.0"
+        android:layout_centerInParent="true"
+        >
+
+        <ImageView
+            android:id="@+id/iv_titlebartransparent_back"
+            android:layout_width="10dp"
+            android:layout_height="18dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/triangle_4" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <TextView
         android:id="@+id/tv_titlebartransparent_title"
@@ -31,6 +42,6 @@ android:orientation="horizontal"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/iv_titlebartransparent_back"
+        app:layout_constraintStart_toStartOf="@+id/cl_titlebartransparent_back"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -30,22 +30,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/searchbar"
-                android:textColor="@color/GrayScale_80"
+                android:textColor="@color/GrayScale_0"
                 android:layout_gravity="center_vertical"
-                android:importantForAutofill="no"
-                android:inputType="none"
+
                 android:textSize="12sp"
                 android:imeOptions="actionSearch"
                 android:singleLine="true"
-                android:textCursorDrawable="@drawable/standard_cursor"
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
             <ImageView
                 android:id="@+id/iv_homepage_searchicon"
-                android:layout_width="@dimen/dp_12"
-                android:layout_height="@dimen/dp_12"
+                android:layout_width="@dimen/dp_9"
+                android:layout_height="@dimen/dp_9"
                 android:layout_marginStart="10dp"
                 app:layout_constraintBottom_toBottomOf="@+id/et_homepage"
                 app:layout_constraintStart_toStartOf="@+id/et_homepage"

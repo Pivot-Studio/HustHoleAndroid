@@ -66,7 +66,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_itemforest_thumbup"
-            android:layout_width="@dimen/dp_40"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_itemforest_content"
@@ -76,7 +76,7 @@
                 android:id="@+id/iv_itemforest_thumbup"
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_20"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="11dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@mipmap/inactive" />
@@ -85,20 +85,19 @@
                 android:id="@+id/tv_itemforest_thumbupnumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="11dp"
+                android:layout_marginStart="@dimen/dp_6"
                 android:text="15"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@+id/iv_itemforest_thumbup"
                 app:layout_constraintStart_toEndOf="@+id/iv_itemforest_thumbup" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_itemforest_reply"
-            android:layout_width="@dimen/dp_40"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:layout_marginStart="26dp"
+            android:layout_marginStart="@dimen/dp_67"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cl_itemforest_thumbup">
+            app:layout_constraintStart_toStartOf="@+id/cl_itemforest_thumbup">
 
             <ImageView
                 android:id="@+id/iv_itemforest_reply"
@@ -113,20 +112,19 @@
                 android:id="@+id/tv_itemforest_replynumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_6"
                 android:text="15"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_itemforest_reply"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemforest_reply"
-                app:layout_constraintTop_toTopOf="@+id/iv_itemforest_reply" />
+                app:layout_constraintStart_toEndOf="@+id/iv_itemforest_reply" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_itemforest_follow"
-            android:layout_width="@dimen/dp_40"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:layout_marginStart="26dp"
+            android:layout_marginStart="@dimen/dp_67"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cl_itemforest_reply">
+            app:layout_constraintStart_toStartOf="@+id/cl_itemforest_reply">
 
             <ImageView
                 android:id="@+id/iv_itemforest_follow"
@@ -142,23 +140,24 @@
                 android:id="@+id/tv_itemforest_follownumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_6"
                 android:text="15"
                 app:layout_constraintBottom_toBottomOf="@+id/iv_itemforest_follow"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemforest_follow"
-                app:layout_constraintTop_toTopOf="@+id/iv_itemforest_follow" />
+                app:layout_constraintStart_toEndOf="@+id/iv_itemforest_follow" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
         <TextView
             android:id="@+id/tv_itemforest_content"
-            android:layout_width="@dimen/dp_310"
+            android:layout_width="@dimen/dp_335"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:lineHeight="@dimen/sp_21"
             android:maxWidth="@dimen/dp_310"
             android:maxLines="5"
-            android:ellipsize="end"
             android:textColor="@color/GrayScale_20"
-            android:textSize="15sp"
+            android:textSize="13sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/iv_itemforest_icon" />
 
@@ -170,7 +169,9 @@
             android:layout_marginEnd="12dp"
             android:text="#1037"
             android:textColor="@color/GrayScale_0"
+            android:textStyle="bold"
             android:textSize="13sp"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -1,8 +1,11 @@
 package com.example.hustholetest1.view.homescreen.publishhole;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.SpannableString;
@@ -10,13 +13,13 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +34,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.hustholetest1.model.EditTextReaction;
+import com.example.hustholetest1.model.MaxHeightRecyclerView;
+import com.example.hustholetest1.network.ErrorMsg;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.model.SoftKeyBoardListener;
 import com.example.hustholetest1.network.RetrofitManager;
@@ -45,6 +50,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -56,8 +62,8 @@ import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
 
 
 public class PublishHoleActivity extends AppCompatActivity {//发树洞
-    private static final String key="key_1";
-    private TextView text,limit,title;
+    private static final String key="key_1",key2="key_2";
+    private TextView text,limit,title,limit2,mstrike;
     private ImageView back,X;
     private EditText editText;
     private Button button0;
@@ -66,15 +72,19 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
     private RequestInterface request;
     private JSONArray jsonArray,jsonArray2;
     private String[][] detailforest,detailforest2;
-    private RecyclerView recyclerView;
+    private MaxHeightRecyclerView recyclerView;
     private int number=0;
     private String what="0";
-    private ConstraintLayout linearLayout;
+    private ConstraintLayout linearLayout,mScreenCl;
     private TextView length;
     private AVLoadingIndicatorView mAVLoadingIndicatorView;
+    private int[] location,location2;
+    private Boolean mSendCondition=false;
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-
-
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +96,7 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
          mAVLoadingIndicatorView=(AVLoadingIndicatorView)findViewById(R.id.titlebargreen_AVLoadingIndicatorView);
          mAVLoadingIndicatorView.hide();
          mAVLoadingIndicatorView.setVisibility(View.GONE);
+       //  test=(TextView)findViewById(R.id.textView3);
 
         SoftKeyBoardListener.setListener(this,new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
             @Override
@@ -126,16 +137,26 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         retrofit = RetrofitManager.getRetrofit();
         request = retrofit.create(RequestInterface.class);//创建接口实;//创建接口实
         length=(TextView)findViewById(R.id.tv_publishhole_textnumber);
+        mstrike=(TextView)findViewById(R.id.tv_publishhole_strike);
+        mstrike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                editText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 
-
+            }
+        });
         back=(ImageView)findViewById(R.id.iv_titlebargreen_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 // 隐藏软键盘
                 imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                 finish();
+
             }
         });
         button0=(Button)findViewById(R.id.btn_publishhole_send);
@@ -144,32 +165,42 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         button0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String content=editText.getText().toString();
+                String content=editText.getText().toString().replace("\n","%0A");
+                //Toast.makeText(PublishHoleActivity.this, ""+content, Toast.LENGTH_SHORT).show();
                 if(content.length()>15) {
-                    new Thread(new Runnable() {//加载纵向列表标题
-                        @Override
-                        public void run() {
-                            Call<ResponseBody> call = request.holes("http://hustholetest.pivotstudio.cn/api/holes?content="+content+"&forest_id="+what);//进行封装
-                            Log.e(TAG, "token2：");
-                            call.enqueue(new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    Toast.makeText(PublishHoleActivity.this,"发布成功",Toast.LENGTH_SHORT).show();
-                                    finish();
-                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    // 隐藏软键盘
-                                    imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
-                                }
+                    if(mSendCondition==false) {
+                        mSendCondition=true;
+                        new Thread(new Runnable() {//加载纵向列表标题
+                            @Override
+                            public void run() {
+                                Call<ResponseBody> call = request.holes(RetrofitManager.API+"holes?content=" + content + "&forest_id=" + what);//进行封装
+                                call.enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if(response.code()==200) {
+                                            mSendCondition = false;
+                                            Toast.makeText(PublishHoleActivity.this, "发布成功", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                            // 隐藏软键盘
+                                            imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+                                        }else{
+                                            mSendCondition=false;
+                                            ErrorMsg.getErrorMsg(response,PublishHoleActivity.this);
+                                        }
+                                    }
 
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                                    Toast.makeText(PublishHoleActivity.this,"发布失败，请检查网络",Toast.LENGTH_SHORT).show();
-                                }
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                                        mSendCondition=false;
+                                        Toast.makeText(PublishHoleActivity.this, "发布失败，请检查网络", Toast.LENGTH_SHORT).show();
+                                    }
 
 
-                            });
-                        }
-                    }).start();
+                                });
+                            }
+                        }).start();
+                    }
                 }else{
                     Toast.makeText(PublishHoleActivity.this,"输入内容至少需要15字",Toast.LENGTH_SHORT).show();
                 }
@@ -178,11 +209,13 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         text=(TextView)findViewById(R.id.tv_publishhole_forestname);
         String forest=(String) getIntent()
                 .getStringExtra(key);
+        String forestid=(String) getIntent()
+                .getStringExtra(key2);
         if(forest.equals("1")){
 
         }else{
             text.setText(forest);
-            what=forest;
+            what=forestid;
         }
 
 
@@ -192,8 +225,27 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         EditTextReaction.ButtonReaction(editText,button0);
         EditTextReaction.EditTextSize(editText,string1,14);
         linearLayout=(ConstraintLayout)findViewById(R.id.include);
+        limit2=(TextView) findViewById(R.id.limit2);
+        limit.post(new Runnable() {
+            @Override
+            public void run() {
+                location = new int[2];
+                limit.getLocationOnScreen(location);
+            }
+        });
+        limit2.post(new Runnable() {
+            @Override
+            public void run() {
+                location2 = new int[2];
+                limit2.getLocationOnScreen(location2);
+            }
+        });
+        editText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-
+            }
+        });
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -205,15 +257,15 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
             public void afterTextChanged(Editable s) {
                 length.setText(s.length()+"/1037");
                 if (s.length() >=1037) {
-                    //editText.setFocusable(false);
                     Toast.makeText(PublishHoleActivity.this,"输入内容过长",Toast.LENGTH_SHORT).show();
-                    //textInputLayout.setErrorEnabled(true);
-                    //textInputLayout.setError("输入超长");
                 } else {
-                   // editText.setFocusable(true);
                 }
             }
         });
+
+
+        //关闭掉对话框,拿到对话框的对象
+
 
 
 
@@ -226,19 +278,23 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                 imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
                 View contentView = LayoutInflater.from(PublishHoleActivity.this).inflate(R.layout.ppw_publishhole, null);
                 View contentView2 = LayoutInflater.from(PublishHoleActivity.this).inflate(R.layout.ppw_homepagedarkscreen, null);
-                //关闭掉对话框,拿到对话框的对象
+                if(location==null) {
+                    location = new int[2];
+                    limit.getLocationOnScreen(location);
+                    location2 = new int[2];
+                    limit2.getLocationOnScreen(location2);
+                }
                 popWindow2=new PopupWindow(contentView2);
                 popWindow2.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
                 popWindow2.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-                popWindow2.showAsDropDown(linearLayout);
                 popWindow2.setAnimationStyle(R.style.darkScreenAnim);
+                popWindow2.showAsDropDown(linearLayout);
+
                 popWindow=new PopupWindow(contentView);
                 popWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-                popWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+                popWindow.setHeight(location2[1]-location[1]);
                 popWindow.setAnimationStyle(R.style.Page2Anim);
                 popWindow.showAsDropDown(limit);
-
-
                 contentView2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -254,43 +310,42 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                         popWindow.dismiss();
                     }
                 });
-                recyclerView = (RecyclerView)contentView.findViewById(R.id.rv_ppwpublishhole);
+                recyclerView = (MaxHeightRecyclerView) contentView.findViewById(R.id.rv_ppwpublishhole);
+                recyclerView.setMaxHeight(location2[1]-location[1]-200);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(PublishHoleActivity.this);
                 linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                 recyclerView.setLayoutManager(linearLayoutManager);
-
-
-                new Thread(new Runnable() {//加载纵向列表标题
+                new Thread(new Runnable() {
                     @Override
                     public void run() {
                         number=0;
                         Call<ResponseBody> call = request.joined(30,0);//进行封装
-                        Log.e(TAG, "token2：");
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                String json = "null";
-                                try {
-                                    if (response.body() != null) {
-                                        json = response.body().string();
+                                if(response.code()==200) {
+                                    String json = "null";
+                                    try {
+                                        if (response.body() != null) {
+                                            json = response.body().string();
+                                        }
+                                        JSONObject jsonObject = new JSONObject(json);
+                                        //读取
+                                        jsonArray = jsonObject.getJSONArray("forests");
+                                        detailforest = new String[jsonArray.length()][8];
+                                        new DownloadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+                                    } catch (IOException | JSONException e) {
+                                        e.printStackTrace();
                                     }
-                                    JSONObject jsonObject = new JSONObject(json);
-                                    //读取
-                                    jsonArray = jsonObject.getJSONArray("forests");
-                                    detailforest=new String[jsonArray.length()][8];
-                                    new DownloadTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-                                    //}
-
-                                } catch (IOException | JSONException e) {
-                                    e.printStackTrace();
+                                }else{
+                                    ErrorMsg.getErrorMsg(response,PublishHoleActivity.this);
                                 }
-
 
                             }
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable tr) {
-
+                                Toast.makeText(PublishHoleActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
                             }
 
 
@@ -299,27 +354,30 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                         call2.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                String json = "null";
-                                try {
-                                    if (response.body() != null) {
-                                        json = response.body().string();
+                                if(response.code()==200) {
+                                    String json = "null";
+                                    try {
+                                        if (response.body() != null) {
+                                            json = response.body().string();
+                                        }
+
+                                        JSONObject jsonObject = new JSONObject(json);
+                                        jsonArray2 = jsonObject.getJSONArray("forests");
+                                        detailforest2 = new String[jsonArray2.length()][8];
+                                        new DownloadTask2().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
+
+
+                                    } catch (JSONException | IOException e) {
+                                        e.printStackTrace();
                                     }
-
-                                    JSONObject jsonObject = new JSONObject(json);
-                                    jsonArray2 = jsonObject.getJSONArray("forests");
-                                    detailforest2=new String[jsonArray2.length()][8];
-                                    new DownloadTask2().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR);
-
-
-                                } catch (JSONException | IOException e) {
-                                    e.printStackTrace();
+                                }else{
+                                    ErrorMsg.getErrorMsg(response,PublishHoleActivity.this);
                                 }
-                                // Log.e(TAG, "URLSASFSDGS"+background_image_url_list[0]);
                             }
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable tr) {
-
+                                Toast.makeText(PublishHoleActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -327,13 +385,6 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
 
                     }
                 }).start();
-
-
-
-
-                //popupWindow2=new PopupWindow(contentView2);
-                //button=(Button)contentView.findViewById(R.id.button);
-                //text=(TextView)contentView.findViewById(R.id.textView60);
             }
         });
 
@@ -346,9 +397,10 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
 
 
 
-    public static Intent newIntent(Context packageContext, String data){
+    public static Intent newIntent(Context packageContext, String data,String forestid){
         Intent intent = new Intent(packageContext, PublishHoleActivity.class);
         intent.putExtra(key,data);
+        intent.putExtra(key2,forestid);
         return intent;
     }
 
@@ -363,15 +415,11 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
             if(number==2) {
                 recyclerView.setAdapter(new ForestHoleAdapter());
             }
-            // number1++;
-            // if(jsonArray.length()==number1){
 
-            //}
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            //int allnumber=voids[0];
             try {
                 for(int f=0;f<jsonArray.length();f++) {
                     JSONObject sonObject = jsonArray.getJSONObject(f);
@@ -440,11 +488,8 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         @Override
         public int getItemViewType(int position) {
             if (position ==1||position==2+jsonArray.length()) {
-//头部View
                 return ITEM_TYPE_HEADER;
-
             } else {
-//内容Vie
                 return ITEM_TYPE_CONTENT;
             }
         }
@@ -493,7 +538,6 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                             text.setText("未选择加入小树林");
                             what="0";
                         }
-
                     }
                 });
                 view.setOnClickListener(new View.OnClickListener(){
@@ -513,20 +557,12 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
 
 
             public void bind(int position){
-                Log.d("position",position+"");
                 this.position=position;
                 RoundedCorners roundedCorners = new RoundedCorners(16);
                 RequestOptions options1 = RequestOptions.bitmapTransform(roundedCorners);
                 if(position==0) {
-
-                    Glide.with(PublishHoleActivity.this)
-                            .load(R.mipmap.vector3)
-                            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                            .apply(options1)
-                            .into(background_image_url);
-                        Log.d("position",position+"");
+                    background_image_url.setImageResource(R.mipmap.vector3);
                     content.setText("未选择加入小树林");
-
                 }else if (position > 2 + jsonArray.length()) {
                     content.setText(detailforest2[position-3-jsonArray.length()][7]);
                     Glide.with(PublishHoleActivity.this)
@@ -593,5 +629,59 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
         popWindow.dismiss();
         popWindow2.dismiss();
         }
+    }
+    //获取虚拟按键的高度
+    public static int getNavigationBarHeight(Context context) {
+        int result = 0;
+        if (hasNavBar(context)) {
+            Resources res = context.getResources();
+            int resourceId = res.getIdentifier("navigation_bar_height", "dimen", "android");
+            if (resourceId > 0) {
+                result = res.getDimensionPixelSize(resourceId);
+            }
+        }
+        return result;
+    }
+    /**
+     * 检查是否存在虚拟按键栏
+     *
+     * @param context
+     * @return
+     */
+    @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
+    public static boolean hasNavBar(Context context) {
+        Resources res = context.getResources();
+        int resourceId = res.getIdentifier("config_showNavigationBar", "bool", "android");
+        if (resourceId != 0) {
+            boolean hasNav = res.getBoolean(resourceId);
+            // check override flag
+            String sNavBarOverride = getNavBarOverride();
+            if ("1".equals(sNavBarOverride)) {
+                hasNav = false;
+            } else if ("0".equals(sNavBarOverride)) {
+                hasNav = true;
+            }
+            return hasNav;
+        } else { // fallback
+            return !ViewConfiguration.get(context).hasPermanentMenuKey();
+        }
+    }
+    /**
+     * 判断虚拟按键栏是否重写
+     *
+     * @return
+     */
+    private static String getNavBarOverride() {
+        String sNavBarOverride = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                Class c = Class.forName("android.os.SystemProperties");
+                Method m = c.getDeclaredMethod("get", String.class);
+                m.setAccessible(true);
+                sNavBarOverride = (String) m.invoke(null, "qemu.hw.mainkeys");
+            } catch (Throwable e) {
+            }
+        }
+        return sNavBarOverride;
     }
 }

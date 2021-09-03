@@ -16,11 +16,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hustholetest1.model.EditTextReaction;
 //import com.example.hustholetest1.Model.Login;
+import com.example.hustholetest1.network.ErrorMsg;
 import com.example.hustholetest1.network.RequestInterface;
+import com.example.hustholetest1.network.RetrofitManager;
 import com.example.hustholetest1.network.TokenInterceptor;
 import com.example.hustholetest1.R;
 import com.example.hustholetest1.network.OkHttpUtil;
 import com.example.hustholetest1.view.homescreen.activity.HomeScreenActivity;
+import com.example.hustholetest1.view.homescreen.publishhole.PublishHoleActivity;
 import com.example.hustholetest1.view.retrievepassword.activity.ForgetPasswordActivity;
 import com.githang.statusbar.StatusBarCompat;
 
@@ -82,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
         TokenInterceptor.getContext(LoginActivity.this);
         System.out.println("提交了context");
         retrofit = new Retrofit.Builder()
-                .baseUrl("http://hustholetest.pivotstudio.cn/api/auth/")
+                .baseUrl(RetrofitManager.API+"auth/")
                 .client(OkHttpUtil.getOkHttpClient())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
@@ -108,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                 String str1=editText1.getText().toString();
                 String str2=editText2.getText().toString();
                 //Login.post(str1,str2);
-                if(Character.isUpperCase(str1.charAt(0))||Character.isLowerCase(str1.charAt(0))) {
+                //if(Character.isUpperCase(str1.charAt(0))||Character.isLowerCase(str1.charAt(0))) {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -119,75 +122,58 @@ public class LoginActivity extends AppCompatActivity {
                             call.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                    String json = "null";
-                                    try {
-                                        if(response.body() != null){
-                                        json = response.body().string();
+                                    if(response.code()==200) {
+                                        String json = "null";
+                                        try {
+                                            if (response.body() != null) {
+                                                json = response.body().string();
+                                            }
+
+
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+
                                         }
+                                        System.out.println("总:" + json);
+                                        String condition = null;
+                                        try {
+                                            JSONObject jsonObject = new JSONObject(json);
+                                            //读取
+                                            condition = jsonObject.getString("msg");
+                                            String token = jsonObject.getString("token");
+                                            System.out.println("token的具体值:" + token);
 
 
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-
+                                            SharedPreferences.Editor editor = getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
+                                            editor.putString("token", token);
+                                            editor.putBoolean("iffirstlogin", true);
+                                            editor.commit();//提交修改
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+                                        if (condition != null && condition.equals("登录成功")) {//判断账号密码是否正确
+                                            //登录成功进入主界面
+                                            showResponse("登录成功");
+                                            Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                        } else {
+                                            showResponse("邮箱或密码错误");
+                                            //登录失败给与账户或密码错误提示
+                                        }
+                                    }else{
+                                        ErrorMsg.getErrorMsg(response,LoginActivity.this);
                                     }
-                                    System.out.println("总:" + json);
-                                    String condition=null;
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(json);
-                                        //读取
-                                         condition = jsonObject.getString("msg");
-                                        String token = jsonObject.getString("token");
-                                        System.out.println("token的具体值:" + token);
-
-
-
-                                        SharedPreferences.Editor editor = getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
-                                        editor.putString("token", token);
-                                        editor.putBoolean("iffirstlogin",true);
-                                        editor.commit();//提交修改
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                    if (condition!=null&&condition.equals("登录成功")) {//判断账号密码是否正确
-                                        //登录成功进入主界面
-                                        showResponse("登录成功");
-                                        Intent intent = new Intent(LoginActivity.this, HomeScreenActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                        startActivity(intent);
-                                    } else {
-                                        showResponse("邮箱或密码错误");
-                                        //登录失败给与账户或密码错误提示
-                                    }
-
                                 }
 
                                 @Override
                                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                                    if (tr == null) {
-
-                                    }
-                                    // This is to reduce the amount of log spew that apps do in the non-error
-                                    // condition of the network being unavailable.
-                                    Throwable t = tr;
-                                    while (t != null) {
-                                        if (t instanceof UnknownHostException) {
-
-                                        }
-                                        t = t.getCause();
-                                    }
-                                    StringWriter sw = new StringWriter();
-                                    PrintWriter pw = new PrintWriter(sw);
-                                    tr.printStackTrace(pw);
-                                    pw.flush();
-
-                                    Log.e(TAG, sw.toString());
+                                    Toast.makeText(LoginActivity.this, R.string.network_loginfailure, Toast.LENGTH_SHORT).show();
                                 }
 
                             });
                         }
                         }).start();
-                }else{
-                    showResponse("学号格式错误，请重新输入");
-                }
+
 
                 break;
             default:

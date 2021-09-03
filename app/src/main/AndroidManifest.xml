@@ -67,7 +67,6 @@
             android:theme="@style/ImageTranslucentTheme">
         </activity>
         <activity android:name=".view.homescreen.forest.ApplyForestActivity"
-        android:launchMode="singleTask"
         android:screenOrientation="portrait">
 
     </activity>
@@ -108,6 +107,12 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity android:name=".view.homescreen.mine.HoleStarReplyActivity"
+<<<<<<< HEAD
+=======
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.homescreen.mine.MyHoleAndMyStarActivity"
+>>>>>>> 48926acac6ef48e05f6101a1a7c345ed127d1bfe
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
         <activity android:name=".view.homescreen.mine.EmailActivity"

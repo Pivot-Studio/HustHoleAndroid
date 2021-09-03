@@ -15,8 +15,8 @@
         android:text="@string/register_welcome_2"
         android:textColor="@color/GrayScale_50"
         android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@+id/tv_welcome_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_welcome_title" />
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
     <Button
         android:id="@+id/btn_welcome_jumptologin"
@@ -49,29 +49,42 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_welcome_jumptologin" />
 
-    <TextView
-        android:id="@+id/btn_welcome_greenline"
-        android:layout_width="@dimen/dp_130"
-        android:layout_height="@dimen/dp_10"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/block_line"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_welcome_title"
-        app:layout_constraintEnd_toEndOf="@+id/tv_welcome_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_welcome_title" />
 
-    <TextView
-        android:id="@+id/tv_welcome_title"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_45"
-        android:text="1037树洞"
-        android:textColor="@color/GrayScale_20"
-        android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.207"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.225" />
+        app:layout_constraintVertical_bias="0.225">
+
+        <TextView
+            android:id="@+id/btn_welcome_greenline"
+            android:layout_width="@dimen/dp_120"
+            android:layout_height="@dimen/dp_10"
+            android:layout_marginBottom="9dp"
+            android:background="@drawable/block_line"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_welcome_title"
+            app:layout_constraintEnd_toEndOf="@+id/tv_welcome_title"
+            app:layout_constraintStart_toStartOf="@+id/tv_welcome_title" />
+
+        <TextView
+            android:id="@+id/tv_welcome_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_45"
+            android:text="1037树洞"
+            android:textColor="@color/GrayScale_20"
+            android:textSize="30sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
         android:id="@+id/tv_welcome_title3"
@@ -80,6 +93,6 @@
         android:text="欢迎你"
         android:textColor="@color/GrayScale_20"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_welcome_title"
-        app:layout_constraintStart_toEndOf="@+id/tv_welcome_title" />
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

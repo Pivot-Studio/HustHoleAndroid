@@ -39,11 +39,10 @@
             android:layout_width="@dimen/dp_256"
             android:layout_height="@dimen/dp_50"
             android:layout_below="@+id/cancel"
-            android:background="@drawable/button_white_red"
             android:layout_marginTop="@dimen/dp_15"
+            android:background="@drawable/button_white_red"
             android:text="确认退出"
             android:textColor="@color/HH_Reminder_Warning"
-
             app:strokeColor="@color/HH_Reminder_Warning"
             app:strokeWidth="1dp" />
 

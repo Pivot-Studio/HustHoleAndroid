@@ -11,14 +11,32 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.hustholetest1.model.EditTextReaction;
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.network.ErrorMsg;
+import com.example.hustholetest1.network.OkHttpUtil;
+import com.example.hustholetest1.network.RequestInterface;
+import com.example.hustholetest1.network.RetrofitManager;
 import com.githang.statusbar.StatusBarCompat;
 
 import static androidx.constraintlayout.motion.utils.Oscillator.TAG;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.HashMap;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class VerificationCodeActivity extends AppCompatActivity {
@@ -27,6 +45,9 @@ public class VerificationCodeActivity extends AppCompatActivity {
     private TextView time1,hint1,textView2,textView3;
     private ImageView back;
     private static final String ACTIVITY_IDENTIFY="identify";
+    private String id;
+    private RequestInterface request;
+    private Retrofit retrofit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +67,7 @@ public class VerificationCodeActivity extends AppCompatActivity {
         button1.setEnabled(false);
         //hint1.setVisibility(View.INVISIBLE);
         editText1=(EditText)findViewById(R.id.et_vcode_email);
-        String id=(String) getIntent()
+         id=(String) getIntent()
                 .getStringExtra(ACTIVITY_IDENTIFY);
         hint1.setText("验证邮箱已发送至"+id+"@hust.edu.cn");
 
@@ -64,17 +85,70 @@ public class VerificationCodeActivity extends AppCompatActivity {
             }
         };
         timer.start();
+        retrofit = new Retrofit.Builder()
+                .baseUrl(RetrofitManager.API+"auth/")
+                .client(OkHttpUtil.getOkHttpClient())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        request = retrofit.create(RequestInterface.class);//创建接口实例
     }
     public void onClick(View v){
         Intent intent;
         switch (v.getId()) {
             case R.id.btn_vcode_jumptologin://验证成功后进入重新设置密码界面
-                if(true){//判断验证码是否正确
-                intent=new Intent(VerificationCodeActivity.this, ModifyPasswordActivity.class);
-                startActivity(intent);
-                }else{
-                  //验证码错误提示
-                }
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            HashMap map = new HashMap();
+                            String vertify=editText1.getText().toString();
+                            map.put("email", id);
+                            map.put("verify_code",vertify);
+
+                            Call<ResponseBody> call = request.verifyCodeMatch(RetrofitManager.API+"auth/verifyCodeMatch?email="+id+"&verify_code="+vertify);//进行封装
+                            call.enqueue(new Callback<ResponseBody>() {
+                                @Override
+                                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    if(response.code()==200) {
+                                        String json = "null";
+                                        try {
+                                            if (response.body() != null) {
+                                                json = response.body().string();
+                                            }
+                                        } catch (IOException e) {
+                                            e.printStackTrace();
+                                        }
+                                        Intent intent=ModifyPasswordActivity.newIntent(VerificationCodeActivity.this,id,vertify);
+                                        startActivity(intent);
+                                    }else{
+                                        String json = "null";
+                                        String returncondition = null;
+                                        if (response.errorBody() != null) {
+                                            try {
+                                                json = response.errorBody().string();
+                                                JSONObject jsonObject = new JSONObject(json);
+                                                returncondition = jsonObject.getString("is_match");
+                                                Toast.makeText(VerificationCodeActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                            } catch (IOException | JSONException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }else{
+                                            Toast.makeText(VerificationCodeActivity.this, R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                        }
+                                        //ErrorMsg.getErrorMsg(response,VerificationCodeActivity.this);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                                    Toast.makeText(VerificationCodeActivity.this, R.string.network_loginfailure, Toast.LENGTH_SHORT).show();
+                                }
+
+                            });
+                        }
+                    }).start();
+
                 break;
             case R.id.iv_titlebarwhite_back://退回键
                 finish();
@@ -85,7 +159,6 @@ public class VerificationCodeActivity extends AppCompatActivity {
     }
     public static Intent newIntent(Context context, String id1){
         Intent intent1=new Intent(context,VerificationCodeActivity.class);
-        Log.d(TAG,"????"+id1);
         intent1.putExtra(ACTIVITY_IDENTIFY,id1);
         return intent1;
     }

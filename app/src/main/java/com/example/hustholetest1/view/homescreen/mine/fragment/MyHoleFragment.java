@@ -266,7 +266,8 @@ public class MyHoleFragment extends Fragment {
                         if (myHolesList.get(position)[6].equals("false")) {
                             new Thread(() -> {
                                 request = retrofit.create(RequestInterface.class);
-                                Call<ResponseBody> call = request.thumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + myHolesList.get(position)[4] + "/-1");//进行封装
+
+                                Call<ResponseBody> call = request.thumbups(RetrofitManager.API+"thumbups/" + myHolesList.get(position)[4] + "/-1");//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -284,7 +285,7 @@ public class MyHoleFragment extends Fragment {
                             }).start();
                         } else {
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.deletethumbups("http://hustholetest.pivotstudio.cn/api/thumbups/" + myHolesList.get(position)[4] + "/-1");//进行封装
+                                Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API+"thumbups/" + myHolesList.get(position)[4] + "/-1");//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -312,7 +313,7 @@ public class MyHoleFragment extends Fragment {
                         if (myHolesList.get(position)[5].equals("false")) {
                             //加载纵向列表标题
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.follow("http://hustholetest.pivotstudio.cn/api/follows/" + myHolesList.get(position)[4]);//进行封装
+                                Call<ResponseBody> call = request.follow(RetrofitManager.API+"follows/" + myHolesList.get(position)[4]);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -331,7 +332,7 @@ public class MyHoleFragment extends Fragment {
                             }).start();
                         } else {
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.deletefollow("http://hustholetest.pivotstudio.cn/api/follows/" + myHolesList.get(position)[4]);//进行封装
+                                Call<ResponseBody> call = request.deletefollow(RetrofitManager.API+"follows/" + myHolesList.get(position)[4]);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

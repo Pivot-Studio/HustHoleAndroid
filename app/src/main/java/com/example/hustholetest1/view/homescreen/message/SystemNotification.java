@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.model.CheckingToken;
+import com.example.hustholetest1.network.RetrofitManager;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.io.IOException;
@@ -40,7 +42,7 @@ public class SystemNotification extends AppCompatActivity {
     private SystemNotificationAdapter adapter;
     private RecyclerView sysNotificationRecyclerView;
     private String TAG = "tag";
-    public String url = "http://hustholetest.pivotstudio.cn/api/system_notices";
+    public String url = RetrofitManager.API+"system_notices";
     private final static int list_size = 10;
     private int start_id = 0;
     private ImageView backView;
@@ -77,7 +79,14 @@ public class SystemNotification extends AppCompatActivity {
                 Toast.makeText(SystemNotification.this, "click " + position, Toast.LENGTH_SHORT).show();
             }
         });*/
-        getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +"list_size=" + list_size);
+        if(CheckingToken.IfTokenExist()){
+            getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +"list_size=" + list_size);
+        }
+        else{
+            mAVLoadingIndicatorView.hide();
+            mAVLoadingIndicatorView.setVisibility(View.GONE);
+            mTitle.setText("系统通知");
+        }
 
     }
 
@@ -194,18 +203,6 @@ public class SystemNotification extends AppCompatActivity {
         }
     }
 
-    /*public class MyItemDecoration extends RecyclerView.ItemDecoration{
-        private Paint mPaint;
-        public MyItemDecoration() {
-            mPaint = new Paint();
-            *//*mPaint.setAntiAlias(true);          抗锯齿*//*
-            mPaint.setColor(Color.GRAY);        //默认颜色
-        }
-        public MyItemDecoration setColor(int color) {
-            mPaint.setColor(color);
-            return this;
-        }
-    }*/
 
 
 }

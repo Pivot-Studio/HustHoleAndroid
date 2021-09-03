@@ -22,8 +22,9 @@
         android:hint="@string/register_2"
         android:importantForAutofill="no"
         android:maxLength="10"
+        android:textSize="@dimen/sp_14"
         android:inputType="none"
-        android:textCursorDrawable="@drawable/standard_cursor"
+        android:maxLines="1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,15 +34,16 @@
         android:id="@+id/tv_login_suffix"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_20"
+        android:layout_marginEnd="20dp"
         android:text="@string/register_3"
         android:textColor="@color/GrayScale_20"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/et_login_email"
         app:layout_constraintEnd_toEndOf="@+id/et_login_email"
-        app:layout_constraintHorizontal_bias="0.94"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/et_login_email"
         app:layout_constraintTop_toTopOf="@+id/et_login_email"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.512" />
 
     <TextView
         android:id="@+id/tv_login_jumptoforgetpassword"
@@ -85,11 +87,11 @@
         android:layout_gravity="center_vertical"
         android:layout_marginTop="@dimen/dp_20"
         android:background="@drawable/standard_corner"
-
+        android:maxLines="1"
         android:hint="@string/register_4"
+        android:textSize="@dimen/sp_14"
         android:importantForAutofill="no"
         android:inputType="none"
-        android:textCursorDrawable="@drawable/standard_cursor"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/et_login_email" />
