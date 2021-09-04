@@ -171,17 +171,47 @@
                     android:rotation="180"
                     app:srcCompat="@drawable/back_black" />
             </RelativeLayout>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_1"
                 android:layout_alignBottom="@id/settings"
-                android:background="@color/GrayScale_95"/>
+                android:background="@color/GrayScale_95" />
+            <RelativeLayout
+                android:id="@+id/shield"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44"
+                android:layout_below="@id/settings"
+                android:clickable="true"
+                android:focusable="true">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_44"
+                    android:paddingVertical="@dimen/dp_14"
+                    android:paddingStart="@dimen/dp_20"
+                    android:text="屏蔽设置"
+                    android:textColor="@color/GrayScale_20" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="12dp"
+                    android:padding="12dp"
+                    android:rotation="180"
+                    app:srcCompat="@drawable/back_black" />
+            </RelativeLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:layout_alignBottom="@id/shield"
+                android:background="@color/GrayScale_95"/>
             <RelativeLayout
                 android:id="@+id/rules"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_44"
-                android:layout_below="@id/settings"
+                android:layout_below="@id/shield"
                 android:layout_marginTop="0dp"
                 android:clickable="true"
                 android:focusable="true">

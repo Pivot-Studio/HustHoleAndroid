@@ -196,5 +196,16 @@ public interface RequestInterface {//接口
     @GET("auth/checkActivation")
     Call<ResponseBody> checkActivation();
 
+
+    @GET
+    Call<ResponseBody>blockwords(@Url String url);
+
+    @POST
+    Call<ResponseBody>addblockword(@Url String url);
+
+    @DELETE
+    Call<ResponseBody>deleteblockword(@Url String url);
+
+
 }
 

@@ -133,6 +133,12 @@
         <activity android:name=".view.homescreen.mine.ShareCardActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
+        <activity android:name=".view.homescreen.mine.SetScreenKeyWordActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".view.homescreen.mine.ScreenActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

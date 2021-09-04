@@ -7,7 +7,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitManager {
-    public static String API="http://husthole.pivotstudio.cn/api/";
+    public static String API="http://hustholetest.pivotstudio.cn/api/";
     private static Retrofit retrofit;
     private static RequestInterface request;
     public static Retrofit getRetrofit(){

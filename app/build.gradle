@@ -35,6 +35,9 @@ android {
 }
 
 dependencies {
+
+    implementation 'com.github.donkingliang:LabelsView:1.6.5'
+
     implementation 'ru.noties:markwon:1.0.1'//markdown
     implementation 'ru.noties:markwon-image-loader:1.0.1' // optional
     implementation 'ru.noties:markwon-view:1.0.1' // optional

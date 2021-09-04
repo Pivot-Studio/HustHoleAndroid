@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import cn.pivotstudio.husthole.R;
 import cn.pivotstudio.husthole.model.CheckingToken;
 import cn.pivotstudio.husthole.network.ErrorMsg;
+import cn.pivotstudio.husthole.network.OkHttpUtil;
 import cn.pivotstudio.husthole.network.RequestInterface;
 import cn.pivotstudio.husthole.network.RetrofitManager;
 import cn.pivotstudio.husthole.view.emailverify.EmailVerifyActivity;
@@ -28,6 +29,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 import com.githang.statusbar.StatusBarCompat;
 
@@ -135,13 +137,20 @@ public class SettingsActivity extends AppCompatActivity {
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
+                            Retrofit retrofit2 = new Retrofit.Builder()
+                                    .baseUrl(RetrofitManager.API+"auth/")
+                                    .client(OkHttpUtil.getOkHttpClient())
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+
+                            RequestInterface request2 = retrofit2.create(RequestInterface.class);
                             HashMap map = new HashMap();
                             SharedPreferences editor = SettingsActivity.this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
                                 String condition = editor.getString("email", "");
                                 Log.d("email2",condition);
                             map.put("email", condition);
                             map.put("isResetPassword", "false");
-                            Call<ResponseBody> call = request.sendVerifyCode(map);//进行封装
+                            Call<ResponseBody> call = request2.sendVerifyCode(map);//进行封装
                             call.enqueue(new Callback<ResponseBody>() {
                                 @Override
                                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -164,8 +173,6 @@ public class SettingsActivity extends AppCompatActivity {
                                         if (response.errorBody() != null) {
                                             try {
                                                 json = response.errorBody().string();
-                                                //JSONObject jsonObject = new JSONObject(json);
-                                                //returncondition = jsonObject.getString("msg");
                                                 Toast.makeText(SettingsActivity.this, json, Toast.LENGTH_SHORT).show();
                                             } catch (IOException  e) {
                                                 e.printStackTrace();

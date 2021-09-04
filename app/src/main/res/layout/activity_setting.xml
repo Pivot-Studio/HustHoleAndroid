@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/GrayScale_95"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
@@ -39,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/settings_bar"
-        android:layout_marginHorizontal="10dp"
+        android:background="@color/GrayScale_100"
         android:clickable="true">
         <!--        android:layout_below="@id/toolbar_setting">-->
         <TextView
@@ -70,18 +71,17 @@
     <TextView
         android:id="@+id/line"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_2"
-        android:background="@color/GrayScale_95"
+        android:layout_height="@dimen/dp_1"
         android:layout_below="@id/email"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="1dp"
-       />
+        android:background="@color/GrayScale_95" />
     <RelativeLayout
         android:id="@+id/security"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/line"
-        android:layout_marginHorizontal="10dp"
+        android:background="@color/GrayScale_100"
         android:layout_marginTop="1dp"
         android:clickable="true">
 

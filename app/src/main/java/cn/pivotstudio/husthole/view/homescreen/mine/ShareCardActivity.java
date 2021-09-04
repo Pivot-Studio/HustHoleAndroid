@@ -46,7 +46,7 @@ public class ShareCardActivity extends AppCompatActivity {
     PopupWindow ppwShareTo;
 
     protected void onCreate(Bundle savedInstanceState) {
-        String BASE_URL = "http://hustholetest.pivotstudio.cn/api/";
+        String BASE_URL = RetrofitManager.API;
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_card);

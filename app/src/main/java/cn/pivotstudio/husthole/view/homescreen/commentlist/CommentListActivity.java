@@ -36,6 +36,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import cn.pivotstudio.husthole.model.CheckingToken;
 import cn.pivotstudio.husthole.model.EditTextReaction;
+import cn.pivotstudio.husthole.network.ErrorMsg;
 import cn.pivotstudio.husthole.network.RequestInterface;
 import cn.pivotstudio.husthole.model.StandardRefreshHeader;
 import cn.pivotstudio.husthole.model.TimeCount;
@@ -63,6 +64,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
+import cn.pivotstudio.husthole.view.homescreen.mine.EmailActivity;
+import cn.pivotstudio.husthole.view.homescreen.publishhole.PublishHoleActivity;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -259,21 +262,11 @@ public class CommentListActivity extends AppCompatActivity {
                                                 e.printStackTrace();
                                             }
                                         } else {
-                                            String json = "null";
-                                            String returncondition = null;
-                                            if (response.errorBody() != null) {
-                                                try {
-                                                    json = response.errorBody().string();
-                                                    JSONObject jsonObject = new JSONObject(json);
-                                                    //returncondition = jsonObject.getString("msg");
-                                                    Toast.makeText(CommentListActivity.this, response.code()+""+json, Toast.LENGTH_SHORT).show();
-                                                } catch (IOException | JSONException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            } else {
-                                                Toast.makeText(CommentListActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                            ErrorMsg.getErrorMsg(response, CommentListActivity.this);
+                                            if(response.code()==401){
+                                               Intent intent=new Intent(CommentListActivity.this, EmailActivity.class);
+                                               startActivity(intent);
                                             }
-
 
                                         }
 
@@ -634,7 +627,6 @@ public class CommentListActivity extends AppCompatActivity {
                 if(mRefreshConditionRl !=null){
                     mRefreshConditionRl.finishRefresh();
                     mRefreshConditionRl =null;
-
                     mCommentlistRv.setOnTouchListener(new View.OnTouchListener() {
                         @Override
                         public boolean onTouch(View v, MotionEvent event) {
@@ -663,9 +655,6 @@ public class CommentListActivity extends AppCompatActivity {
                     //mReplyAdapter=new ReplyAdapter();
                    mCommentlistRv.setAdapter(mReplyAdapter);
                 }
-
-
-                //mCommentlistRv.setAdapter(new ReplyAdapter());
             }
 
             @Override

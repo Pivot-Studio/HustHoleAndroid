@@ -104,7 +104,7 @@ public class VerifyActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         String vertify=et.getText().toString();
-                        Call<ResponseBody> call = request.verifyCodeMatch(RetrofitManager.API+"auth/verifyCodeMatch?email="+(String) getIntent()
+                        Call<ResponseBody> call = request.verifyCodeMatch(RetrofitManager.API+"auth/activation?email="+(String) getIntent()
                                 .getStringExtra(ACTIVITY_IDENTIFY)+"&verify_code="+vertify);//进行封装
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
@@ -128,7 +128,7 @@ public class VerifyActivity extends AppCompatActivity {
                                         try {
                                             json = response.errorBody().string();
                                             JSONObject jsonObject = new JSONObject(json);
-                                            returncondition = jsonObject.getString("is_match");
+                                            returncondition = jsonObject.getString("msg");
                                             Toast.makeText(VerifyActivity.this, returncondition, Toast.LENGTH_SHORT).show();
                                         } catch (IOException | JSONException e) {
                                             e.printStackTrace();
@@ -162,16 +162,23 @@ public class VerifyActivity extends AppCompatActivity {
                 }*/
                 break;
             case R.id.tv_again:
-                Toast.makeText(getApplicationContext(), "已重新发送。", Toast.LENGTH_SHORT).show();
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        Retrofit retrofit2 = new Retrofit.Builder()
+                                .baseUrl(RetrofitManager.API+"auth/")
+                                .client(OkHttpUtil.getOkHttpClient())
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
+
+                        RequestInterface request2 = retrofit2.create(RequestInterface.class);
                         HashMap map = new HashMap();
                         SharedPreferences editor = VerifyActivity.this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
                         String condition = editor.getString("email", "");
                         map.put("email", condition);
                         map.put("isResetPassword", "false");
-                        Call<ResponseBody> call = request.sendVerifyCode(map);//进行封装
+                        Call<ResponseBody> call = request2.sendVerifyCode(map);//进行封装
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -205,7 +212,6 @@ public class VerifyActivity extends AppCompatActivity {
                                     }
 
                                 }else{
-                                    Toast.makeText(VerifyActivity.this,"邮箱不存在",Toast.LENGTH_SHORT).show();
                                     String json = "null";
                                     String returncondition = null;
                                     if (response.errorBody() != null) {

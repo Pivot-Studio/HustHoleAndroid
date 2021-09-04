@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/GrayScale_95"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/screen_bar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/HH_BandColor_1"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/screen_img"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/back_green"
+
+            android:scaleType="center"
+            app:srcCompat="@drawable/back_black" />
+
+        <TextView
+            android:id="@+id/screen_title"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="屏蔽设置"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+    <!--    <androidx.appcompat.widget.Toolbar-->
+    <!--        android:id="@+id/toolbar_setting"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"/>-->
+    <RelativeLayout
+        android:id="@+id/screen_keyword"
+        android:background="@color/GrayScale_100"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/screen_bar"
+        >
+        <!--        android:layout_below="@id/toolbar_setting">-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="关键词屏蔽"
+            android:textColor="@color/GrayScale_20" />
+
+
+        <ImageView
+            android:id="@+id/view1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:padding="12dp"
+            android:rotation="180"
+            app:srcCompat="@drawable/back_black" />
+    </RelativeLayout>
+
+</RelativeLayout>

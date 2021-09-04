@@ -48,10 +48,10 @@
             android:id="@+id/tv_verify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
             android:text="您还没有通过校园邮箱验证。1037树洞使用您注册时使用的学号对应的华科校园邮箱验证您的在校学生身份，并已给您的邮箱发送验证邮件。"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/et_verify"

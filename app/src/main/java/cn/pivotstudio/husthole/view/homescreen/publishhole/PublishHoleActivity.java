@@ -41,6 +41,7 @@ import cn.pivotstudio.husthole.model.SoftKeyBoardListener;
 import cn.pivotstudio.husthole.network.RetrofitManager;
 import cn.pivotstudio.husthole.network.TokenInterceptor;
 import cn.pivotstudio.husthole.R;
+import cn.pivotstudio.husthole.view.homescreen.commentlist.CommentListActivity;
 import cn.pivotstudio.husthole.view.homescreen.forest.DetailForestActivity;
 import com.githang.statusbar.StatusBarCompat;
 import com.wang.avi.AVLoadingIndicatorView;
@@ -52,6 +53,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import cn.pivotstudio.husthole.view.homescreen.mine.EmailActivity;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -187,6 +189,10 @@ public class PublishHoleActivity extends AppCompatActivity {//发树洞
                                         }else{
                                             mSendCondition=false;
                                             ErrorMsg.getErrorMsg(response,PublishHoleActivity.this);
+                                            if(response.code()==401){
+                                                Intent intent=new Intent(PublishHoleActivity.this, EmailActivity.class);
+                                                startActivity(intent);
+                                            }
                                         }
                                     }
 

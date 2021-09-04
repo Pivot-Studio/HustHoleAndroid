@@ -25,6 +25,7 @@ import cn.pivotstudio.husthole.network.RetrofitManager;
 import cn.pivotstudio.husthole.view.homescreen.mine.AboutActivity;
 import cn.pivotstudio.husthole.view.homescreen.mine.HoleStarReplyActivity;
 import cn.pivotstudio.husthole.view.homescreen.mine.RulesActivity;
+import cn.pivotstudio.husthole.view.homescreen.mine.ScreenActivity;
 import cn.pivotstudio.husthole.view.homescreen.mine.SettingsActivity;
 import cn.pivotstudio.husthole.view.homescreen.mine.ShareCardActivity;
 import cn.pivotstudio.husthole.view.homescreen.mine.UpdateActivity;
@@ -46,7 +47,7 @@ import retrofit2.Retrofit;
 public class MineFragment extends Fragment {
 
     private View rootView,shareCardView,backgroundView;
-    private RelativeLayout settings, rules, share, evaluate, advice, about, update, logout;
+    private RelativeLayout settings,shield, rules, share, evaluate, advice, about, update, logout;
     private LinearLayout myHole, myStar, myReply, shareCard;
     private TextView tv_joinDays,tv_myStarNum,tv_myHoleNum,tv_myReplyNum,cancel,location;
     private static String BASE_URL = "http://husthole.pivotstudio.cn/api/";
@@ -68,6 +69,7 @@ public class MineFragment extends Fragment {
         super.onCreate(savedInstanceState);
         rootView = inflater.inflate(R.layout.page4fragment, container, false);
         settings = rootView.findViewById(R.id.settings);
+        shield=rootView.findViewById(R.id.shield);
         rules = rootView.findViewById(R.id.rules);
         share = rootView.findViewById(R.id.share);
         evaluate = rootView.findViewById(R.id.evaluate);
@@ -108,6 +110,7 @@ public class MineFragment extends Fragment {
         getMyData();
 
         settings.setOnClickListener(this::onClick);
+        shield.setOnClickListener(this::onClick);
         rules.setOnClickListener(this::onClick);
         share.setOnClickListener(this::onClick);
         evaluate.setOnClickListener(this::onClick);
@@ -220,6 +223,10 @@ public class MineFragment extends Fragment {
                 break;
             case R.id.settings:
                 intent = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.shield:
+                intent = new Intent(getActivity().getApplicationContext(), ScreenActivity.class);
                 startActivity(intent);
                 break;
             case R.id.rules:
