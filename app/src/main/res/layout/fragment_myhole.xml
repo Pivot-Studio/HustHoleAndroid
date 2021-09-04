@@ -4,15 +4,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/refreshLayout"
+    android:background="@color/GrayScale_95"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <com.scwang.smart.refresh.header.ClassicsHeader
         android:id="@+id/refresh_header"
+        android:background="@color/GrayScale_95"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/GrayScale_95">
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/myHoleRecyclerView"
             android:layout_width="match_parent"

@@ -29,7 +29,7 @@ import retrofit2.Retrofit;
 public class SecurityActivity extends AppCompatActivity {
     SwitchMaterial isUnderSecurity;
     ImageView back;
-    private static final String BASE_URL = "http://husthole.pivotstudio.cn/api/";
+    private static final String BASE_URL = RetrofitManager.API;
     private final String TAG = "insecurity";
     Retrofit retrofit;
     RequestInterface request;

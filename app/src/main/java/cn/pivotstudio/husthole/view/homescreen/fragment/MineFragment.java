@@ -50,7 +50,7 @@ public class MineFragment extends Fragment {
     private RelativeLayout settings,shield, rules, share, evaluate, advice, about, update, logout;
     private LinearLayout myHole, myStar, myReply, shareCard;
     private TextView tv_joinDays,tv_myStarNum,tv_myHoleNum,tv_myReplyNum,cancel,location;
-    private static String BASE_URL = "http://husthole.pivotstudio.cn/api/";
+    private static String BASE_URL = RetrofitManager.API;
     private org.json.JSONArray jsonArray;
     private PopupWindow ppwBackground, ppwShare;
     

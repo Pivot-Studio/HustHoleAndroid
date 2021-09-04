@@ -69,6 +69,7 @@
             android:layout_marginBottom="15dp"
             android:background="@android:color/transparent"
             android:focusable="true"
+            android:textColorHint="#CBCBCB"
             android:focusableInTouchMode="true"
             android:maxLength="7"
             app:layout_constraintBottom_toBottomOf="parent"

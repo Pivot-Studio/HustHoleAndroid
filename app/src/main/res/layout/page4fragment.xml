@@ -156,11 +156,13 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp_44"
+                    android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="@string/个人设置"
-                    android:textColor="@color/GrayScale_20" />
+                    android:textColor="@color/GrayScale_20"
+                    android:textSize="@dimen/sp_15"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -187,10 +189,12 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp_44"
+                    android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="屏蔽设置"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_15"
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -218,10 +222,12 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="社区规范"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_15"
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -250,10 +256,12 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="把树洞分享给同学"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_15"
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -281,7 +289,7 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="评价"
@@ -312,10 +320,12 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="建议"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_15"
                     android:textColor="@color/GrayScale_20" />
                 <ImageView
                     android:layout_width="wrap_content"
@@ -342,10 +352,12 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp_44"
+                    android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="关于1037树洞"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_15"
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -373,10 +385,12 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="更新日志"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_15"
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -404,10 +418,12 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="退出登录"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/sp_15"
                     android:textColor="@color/HH_Reminder_Warning" />
                 <ImageView
                     android:layout_width="wrap_content"

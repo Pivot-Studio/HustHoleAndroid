@@ -43,7 +43,7 @@ import retrofit2.Retrofit;
 
 public class MyReplyFragment extends Fragment {
 
-    private static final String BASE_URL = "http://husthole.pivotstudio.cn/api/";
+    private static final String BASE_URL = RetrofitManager.API;
 //    private final ArrayList<String[]> myList = new ArrayList<>();
     private final ArrayList<MyReplyItem> myList = new ArrayList<>();
     private Retrofit retrofit;

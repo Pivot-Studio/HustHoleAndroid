@@ -44,7 +44,7 @@ import retrofit2.Retrofit;
 
 public class MyHoleFragment extends Fragment {
 
-    private static final String BASE_URL = "http://husthole.pivotstudio.cn/api/";
+    private static final String BASE_URL = RetrofitManager.API;
     private final ArrayList<String[]> myHolesList = new ArrayList<>();
     private Retrofit retrofit;
     private RequestInterface request;

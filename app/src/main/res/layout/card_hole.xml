@@ -11,6 +11,9 @@
         android:layout_margin="10dp">
         <TextView
             android:id="@+id/hole_id"
+            android:textStyle="bold"
+            android:textSize="@dimen/sp_13"
+            android:textColor="@color/GrayScale_0"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="# 12345"/>
@@ -19,6 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/hole_id"
+            android:textColor="@color/GrayScale_80"
+            android:textSize="@dimen/sp_11"
             android:text="2021-08-05"/>
         <TextView
             android:id="@+id/content"
@@ -73,12 +78,13 @@
                 android:layout_height="wrap_content"
                 android:text="3"
                 android:layout_toEndOf="@id/img_star"/>
+
             <ImageView
                 android:id="@+id/threePoint"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/dp_25"
+                android:layout_height="@dimen/dp_25"
                 android:layout_alignParentEnd="true"
-                app:srcCompat="@mipmap/threepoint"/>
+                app:srcCompat="@mipmap/threepoint" />
         </RelativeLayout>
     </RelativeLayout>
 
