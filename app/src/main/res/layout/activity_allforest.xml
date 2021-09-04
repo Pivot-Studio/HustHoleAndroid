@@ -30,7 +30,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.example.hustholetest1.model.MaxHeightRecyclerView
+    <cn.pivotstudio.husthole.model.MaxHeightRecyclerView
         android:id="@+id/rv_allforest"
         android:layout_weight="100"
         android:layout_width="match_parent"

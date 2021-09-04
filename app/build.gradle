@@ -7,7 +7,7 @@ android {
     compileSdkVersion "android-R"
     buildToolsVersion "30.0.2"
     defaultConfig {
-        applicationId "com.example.hustholetest1"
+        applicationId "cn.pivotstudio.husthole"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -35,9 +35,6 @@ android {
 }
 
 dependencies {
-
-
-
     implementation 'ru.noties:markwon:1.0.1'//markdown
     implementation 'ru.noties:markwon-image-loader:1.0.1' // optional
     implementation 'ru.noties:markwon-view:1.0.1' // optional
