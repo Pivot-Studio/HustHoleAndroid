@@ -148,7 +148,7 @@
             <RelativeLayout
                 android:id="@+id/settings"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/my_hole_star"
                 android:layout_marginTop="10dp"
                 android:clickable="true"
@@ -161,8 +161,8 @@
                     android:paddingStart="@dimen/dp_20"
                     android:text="@string/个人设置"
                     android:textColor="@color/GrayScale_20"
-                    android:textSize="@dimen/sp_15"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp_14"
+                     />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -182,7 +182,7 @@
             <RelativeLayout
                 android:id="@+id/shield"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/settings"
                 android:clickable="true"
                 android:focusable="true">
@@ -193,8 +193,8 @@
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="屏蔽设置"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/sp_15"
+
+                    android:textSize="@dimen/sp_14"
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -214,7 +214,7 @@
             <RelativeLayout
                 android:id="@+id/rules"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/shield"
                 android:layout_marginTop="0dp"
                 android:clickable="true"
@@ -226,8 +226,8 @@
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="社区规范"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/sp_15"
+
+                    android:textSize="@dimen/sp_14"
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -248,7 +248,7 @@
             <RelativeLayout
                 android:id="@+id/share"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/rules"
                 android:layout_marginTop="0dp"
                 android:clickable="true"
@@ -260,8 +260,8 @@
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="把树洞分享给同学"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/sp_15"
+
+                    android:textSize="@dimen/sp_14"
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -282,7 +282,7 @@
             <RelativeLayout
                 android:id="@+id/evaluate"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/share"
                 android:layout_marginTop="10dp"
                 android:clickable="true">
@@ -293,6 +293,8 @@
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="评价"
+                    android:textSize="@dimen/sp_14"
+
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -313,7 +315,7 @@
             <RelativeLayout
                 android:id="@+id/advice"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/evaluate"
                 android:layout_marginTop="1dp"
                 android:clickable="true">
@@ -324,8 +326,8 @@
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="建议"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/sp_15"
+
+                    android:textSize="@dimen/sp_14"
                     android:textColor="@color/GrayScale_20" />
                 <ImageView
                     android:layout_width="wrap_content"
@@ -356,8 +358,8 @@
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="关于1037树洞"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/sp_15"
+
+                    android:textSize="@dimen/sp_14"
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -378,7 +380,7 @@
             <RelativeLayout
                 android:id="@+id/update"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/about"
                 android:layout_marginTop="1dp"
                 android:clickable="true">
@@ -389,8 +391,8 @@
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="更新日志"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/sp_15"
+
+                    android:textSize="@dimen/sp_14"
                     android:textColor="@color/GrayScale_20" />
 
                 <ImageView
@@ -411,7 +413,7 @@
             <RelativeLayout
                 android:id="@+id/logout"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/update"
                 android:layout_marginTop="10dp"
                 android:clickable="true">
@@ -422,8 +424,8 @@
                     android:paddingVertical="@dimen/dp_14"
                     android:paddingStart="@dimen/dp_20"
                     android:text="退出登录"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/sp_15"
+
+                    android:textSize="@dimen/sp_14"
                     android:textColor="@color/HH_Reminder_Warning" />
                 <ImageView
                     android:layout_width="wrap_content"
