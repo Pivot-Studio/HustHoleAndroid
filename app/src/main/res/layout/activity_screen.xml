@@ -39,11 +39,10 @@
     <!--        android:layout_height="wrap_content"/>-->
     <RelativeLayout
         android:id="@+id/screen_keyword"
-        android:background="@color/GrayScale_100"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_44"
         android:layout_below="@id/screen_bar"
-        >
+        android:background="@color/GrayScale_100">
         <!--        android:layout_below="@id/toolbar_setting">-->
         <TextView
             android:layout_width="wrap_content"

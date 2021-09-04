@@ -2,6 +2,7 @@ package cn.pivotstudio.husthole.network;
 
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -27,4 +28,13 @@ public class RetrofitManager {
             request = retrofit.create(RequestInterface.class);
         //return retrofit1;
     }
+    public static boolean isApkInDebug(Context context) {
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 }

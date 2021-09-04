@@ -69,6 +69,15 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
         constraintLayout2_label =  findViewById(R.id.constraintLayout2_label);
         constraintLayout2_label.setVisibility(View.INVISIBLE);
         labelsView =  findViewById(R.id.labels);
+
+        //mOnlyMaster.setBackground(getDrawable(R.drawable.forest_button));
+        //mOnlyMaster.setText("加入");
+        ///labelsView .setTextColor(getResources().getColor(R.color.HH_BandColor_3));
+
+
+
+
+
         screen_keyword_img=findViewById(R.id.screen_keyword_img);
         screen_keyword_img.setOnClickListener(new View.OnClickListener() {
             @Override
