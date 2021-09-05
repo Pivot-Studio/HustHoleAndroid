@@ -113,7 +113,7 @@
             android:layout_height="wrap_content"
             android:background="@color/GrayScale_95" />
 
-        <com.example.hustholetest1.model.MaxHeightRecyclerView
+        <cn.pivotstudio.husthole.model.MaxHeightRecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -62,7 +62,7 @@
 
 
 
-    <com.example.hustholetest1.model.MyImageView
+    <cn.pivotstudio.husthole.model.MyImageView
         android:id="@+id/iv_croppicture_photo"
         android:layout_width="@dimen/dp_275"
         android:layout_height="@dimen/dp_275"

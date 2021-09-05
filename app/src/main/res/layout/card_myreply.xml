@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -33,12 +34,12 @@
 
         <ImageView
             android:id="@+id/my_reply_moreWhat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_25"
+            android:layout_height="@dimen/dp_25"
+            android:layout_marginEnd="3dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@mipmap/threepoint"
-            app:layout_constraintBottom_toTopOf="@id/my_reply_content"
-            android:layout_marginBottom="@dimen/dp_10" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/threepoint" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/my_reply_delete"

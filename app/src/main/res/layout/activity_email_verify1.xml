@@ -10,7 +10,7 @@
         android:id="@+id/email_verify1_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_52"
-        android:background="@color/HH_BandColor_1"
+        android:background="@color/GrayScale_100"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +21,7 @@
             android:layout_width="52dp"
             android:layout_height="52dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/back_green"
+            android:background="@color/GrayScale_100"
             android:clickable="true"
             android:scaleType="center"
             app:srcCompat="@drawable/back_black" />
@@ -53,6 +53,7 @@
             android:text="验证邮箱后才可以发言..."
             android:textColor="@color/GrayScale_0"
             android:textSize="20dp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,27 +62,26 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="100dp"
-            android:background="@color/HH_BandColor_5"
+            android:background="@drawable/button"
             android:clickable="true"
             android:text="验证校园邮箱"
             android:textColor="@color/GrayScale_100"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_1" />
 
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/btn_2"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="10dp"
-            android:background="@color/GrayScale_100"
+            android:background="@drawable/standard_button_white"
             android:clickable="true"
             android:gravity="center"
             android:text="我再逛逛"
             android:textColor="@color/HH_BandColor_5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/btn_1"
-            app:strokeColor="@color/HH_BandColor_5"
-            app:strokeWidth="1dp" />
+             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

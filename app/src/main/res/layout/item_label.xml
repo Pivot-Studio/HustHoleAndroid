@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/GrayScale_95">
+
+    <include
+        android:id="@+id/include4"
+        layout="@layout/activity_setscreenkeyword"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout1_label"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:layout_gravity="center"
+        android:layout_weight="30.0"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include4">
+
+        <TextView
+            android:id="@+id/tv_label"
+            android:layout_width="133dp"
+            android:layout_height="@dimen/dp_15"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="13dp"
+            android:text="添加屏蔽关键词"
+            android:textSize="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_addLabel"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/iv_addLabel"
+            android:layout_width="12dp"
+            android:layout_height="13dp"
+            android:layout_marginStart="14dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/vector9" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2_label"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
+        android:layout_gravity="center"
+        android:layout_weight="30.0"
+        android:background="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include4">
+
+        <EditText
+            android:id="@+id/et_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="15dp"
+            android:background="@android:color/transparent"
+            android:focusable="true"
+            android:textColorHint="#CBCBCB"
+            android:focusableInTouchMode="true"
+            android:maxLength="7"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_addButton"
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="16dp"
+            android:text="添加"
+            android:textColor="@color/HH_BandColor_1"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/search" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="26dp"
+        android:orientation="vertical"
+        android:minHeight="@dimen/dp_256"
+        android:background="@color/GrayScale_100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout1_label">
+
+
+        <com.donkingliang.labels.LabelsView
+            android:id="@+id/labels"
+            android:layout_width="@dimen/dp_356"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            app:isIndicator="true"
+            app:labelBackground="@drawable/standard_button_white"
+            app:labelTextColor="#2D895F"
+            app:labelTextPaddingBottom="9dp"
+            app:labelTextPaddingLeft="13dp"
+            app:labelTextPaddingRight="27dp"
+            app:labelTextPaddingTop="9dp"
+            app:labelTextSize="14dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView6"
+            app:lineMargin="10dp"
+            app:maxLines="0"
+            app:maxSelect="0"
+            app:minSelect="0"
+            app:selectType="SINGLE"
+            app:wordMargin="22dp" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="19dp"
+            android:layout_marginTop="19dp"
+            android:text="已屏蔽的关键词"
+            android:textColor="@color/GrayScale_0"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_label_sheildnumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:text="(0/5)"
+            android:textColor="@color/GrayScale_0"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/textView6"
+            app:layout_constraintStart_toEndOf="@+id/textView6"
+            app:layout_constraintTop_toTopOf="@+id/textView6" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

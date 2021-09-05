@@ -48,10 +48,10 @@
             android:id="@+id/tv_verify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
             android:text="您还没有通过校园邮箱验证。1037树洞使用您注册时使用的学号对应的华科校园邮箱验证您的在校学生身份，并已给您的邮箱发送验证邮件。"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:layout_editor_absoluteX="0dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
             android:id="@+id/et_verify"
@@ -73,7 +73,7 @@
             android:id="@+id/btn_verify"
             android:layout_width="330dp"
             android:layout_height="56dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/standard_button_gray"
             android:clickable="true"
             android:text="验证"
@@ -96,6 +96,40 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_verify" />
 
+        <LinearLayout
+            android:id="@+id/ll_emailverify2"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_not"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_not">
+
+            <TextView
+                android:id="@+id/tv_emailverify_new"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/retrieve_password_vcode_5"
+                android:textColor="@color/GrayScale_80"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_emailverify_time"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/retrieve_password_vcode_6"
+                android:textColor="@color/HH_Reminder_Link"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:text="@string/retrieve_password_vcode_7"
+                android:textColor="@color/GrayScale_80"
+                android:textSize="14sp" />
+
+        </LinearLayout>
         <TextView
             android:id="@+id/tv_not"
             android:layout_width="wrap_content"
@@ -106,7 +140,6 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@id/tv_again"
             app:layout_constraintTop_toBottomOf="@+id/btn_verify" />
-
         <TextView
             android:id="@+id/tv_howTo"
             android:layout_width="wrap_content"
@@ -119,7 +152,6 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_again" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

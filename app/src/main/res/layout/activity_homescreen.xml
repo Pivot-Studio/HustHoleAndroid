@@ -31,7 +31,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <com.example.hustholetest1.model.BaseViewPager
+    <cn.pivotstudio.husthole.model.BaseViewPager
         android:id="@+id/vp_homescreen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
