@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:id="@+id/use_email_bar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/HH_BandColor_1"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/use_email_img"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:background="@drawable/back_green"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="center"
+            app:srcCompat="@drawable/back_black" />
+        <TextView
+            android:id="@+id/use_email_title"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="@string/校园邮箱"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="18sp" />
+    </LinearLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/dp_15">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_15"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="@string/HUST校园邮箱使用指南"
+                android:textSize="@dimen/sp_15"
+                android:textColor="@color/GrayScale_0"
+                android:gravity="center" />
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_1"
+                android:layout_marginTop="@dimen/dp_9"
+                android:background="@color/GrayScale_80" />
+            <TextView
+                android:id="@+id/tv_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
+                android:text="@string/tv_1"
+                android:textColor="@color/GrayScale_50"
+                android:textSize="@dimen/sp_12" />
+            <TextView
+                android:id="@+id/tv_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_13"
+                android:text="@string/tv_2"
+                android:textSize="@dimen/sp_12"
+                android:textColor="@color/GrayScale_20"/>
+            <TextView
+                android:id="@+id/tv_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_14"
+                android:text="@string/tv_3"
+                android:textSize="@dimen/sp_12"
+                android:textColor="@color/GrayScale_20"/>
+            <ImageView
+                android:layout_width="@dimen/dp_183"
+                android:layout_height="@dimen/dp_256"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_10"
+                app:srcCompat="@mipmap/hustmail_login_1" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp_10"
+                android:text="@string/tv_4"
+                android:textSize="@dimen/sp_12"
+                android:textColor="@color/GrayScale_20"/>
+            <ImageView
+                android:layout_width="@dimen/dp_183"
+                android:layout_height="@dimen/dp_256"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_10"
+                app:srcCompat="@mipmap/passhust_1" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

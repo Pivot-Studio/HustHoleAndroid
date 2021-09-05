@@ -149,6 +149,9 @@
         <activity android:name=".view.homescreen.mine.ScreenActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"/>
+        <activity android:name=".view.homescreen.mine.EmailHowToActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
 
     </application>
 </manifest>

@@ -35,6 +35,7 @@ import java.util.HashMap;
 import cn.pivotstudio.husthole.network.RetrofitManager;
 import cn.pivotstudio.husthole.view.emailverify.EmailVerifyActivity;
 import cn.pivotstudio.husthole.view.homescreen.activity.HomeScreenActivity;
+import cn.pivotstudio.husthole.view.homescreen.commentlist.CommentListActivity;
 import cn.pivotstudio.husthole.view.registerandlogin.activity.LoginActivity;
 import cn.pivotstudio.husthole.view.retrievepassword.activity.ModifyPasswordActivity;
 import cn.pivotstudio.husthole.view.retrievepassword.activity.VerificationCodeActivity;
@@ -148,21 +149,8 @@ public class VerifyActivity extends AppCompatActivity {
                         });
                     }
                 }).start();
-               /* match = true;
-//                match = verifyCodeMatch(verifyCode);
-                if (match) {
-                    SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
-                    editor.putBoolean("isVerified", true);
-                    editor.apply();
-                    Toast.makeText(getApplicationContext(), "验证成功。", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), "验证码不匹配，请重新输入。", Toast.LENGTH_SHORT).show();
-                    et.setText("");
-                }*/
                 break;
             case R.id.tv_again:
-
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -242,7 +230,8 @@ public class VerifyActivity extends AppCompatActivity {
 
                 break;
             case R.id.tv_howTo:
-                Toast.makeText(getApplicationContext(), "查询邮箱。", Toast.LENGTH_SHORT).show();
+                intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.email_verify2_img:
                 finish();

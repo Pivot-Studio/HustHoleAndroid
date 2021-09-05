@@ -210,7 +210,7 @@ public class MyStarFragment extends Fragment {
             Boolean more_condition=false;
             int position;
             TextView ID,date,content,text_up,text_talk,text_star;
-            ImageView img_up,img_star;
+            ImageView img_up,img_talk,img_star,moreWhat;
             ConstraintLayout myInform;
             View totalView;
 
@@ -230,7 +230,8 @@ public class MyStarFragment extends Fragment {
 
                 img_up = (ImageView) view.findViewById(R.id.img_up);
                 img_star = (ImageView) view.findViewById(R.id.img_star);
-                ImageView moreWhat = (ImageView) view.findViewById(R.id.threePoint);
+                img_talk = (ImageView) view.findViewById(R.id.img_talk);
+                moreWhat = (ImageView) view.findViewById(R.id.threePoint);
 
                 myInform = (ConstraintLayout) view.findViewById(R.id.inform);
                 myInform.setVisibility(View.GONE);
@@ -309,6 +310,12 @@ public class MyStarFragment extends Fragment {
                         Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
                         startActivity(intent);
                     }
+                });
+                img_talk.setOnClickListener(v -> {
+                    Intent intent = CommentListActivity.newIntent(getActivity(), null);
+                    intent.putExtra("reply","key_board");
+                    intent.putExtra("data_hole_id", myStarsList.get(position)[4]);
+                    startActivity(intent);
                 });
                 img_star.setOnClickListener(v -> {
                     if(CheckingToken.IfTokenExist()) {

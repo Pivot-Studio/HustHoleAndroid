@@ -157,5 +157,11 @@
     <string name="分享到">分享到</string>
     <string name="share_to">分享到</string>
     <string name="store">保存</string>
+    <string name="校园邮箱">校园邮箱</string>
+    <string name="HUST校园邮箱使用指南">HUST校园邮箱使用指南</string>
+    <string name="tv_1">如果您在注册1037树洞时对HUST校园邮箱的使用方式存疑，请阅读本指南。</string>
+    <string name="tv_2">一、登录华中大校园邮箱</string>
+    <string name="tv_3">方法一： 每位同学在入校注册后，将会自动获得一个以学号为用户名的电子邮箱，密码缺省为考生编号后八位（即校园网密码） ，可直接用于登录华中大校园邮箱： https://mail.hust.edu.cn/</string>
+    <string name="tv_4">方法二： 选择通过华中大统一身份认证登录： https://pass.hust.edu.cn/cas/login?service=https%3A%2F%2Fmail.hust.edu.cn%2Fsso%2Findex.jsp</string>
 
 </resources>
