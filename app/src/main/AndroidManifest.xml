@@ -1,140 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.hustholetest1">
+
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <permission android:name="android.permission.WRITE_SETTINGS" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
 
     <application
 
-        android:networkSecurityConfig="@xml/network_security"
         android:allowBackup="true"
-        android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.HustHoleTest1">
-        <activity android:name=".view.registerandlogin.activity.WelcomeActivity"
-                  android:screenOrientation="portrait"
-            >
+        <activity
+            android:name=".view.registerandlogin.activity.WelcomeActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.registerandlogin.activity.LoginActivity"
-                  android:launchMode="singleTask"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".view.registerandlogin.activity.LoginActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".view.registerandlogin.activity.RegisterActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.registerandlogin.activity.SetPasswordActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.retrievepassword.activity.ForgetPasswordActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.retrievepassword.activity.VerificationCodeActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.retrievepassword.activity.ModifyPasswordActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.homescreen.activity.HomeScreenActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
+        <activity
+            android:name=".view.homescreen.forest.AllForestsActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".view.registerandlogin.activity.RegisterActivity"
-                  android:launchMode="singleTask"
-                  android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".view.registerandlogin.activity.SetPasswordActivity"
-                  android:launchMode="singleTask"
-                  android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".view.retrievepassword.activity.ForgetPasswordActivity"
-                  android:launchMode="singleTask"
-                  android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".view.retrievepassword.activity.VerificationCodeActivity"
-                  android:launchMode="singleTask"
-                  android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".view.retrievepassword.activity.ModifyPasswordActivity"
-                  android:launchMode="singleTask"
-                  android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".view.homescreen.activity.HomeScreenActivity"
+        <activity
+            android:name=".view.homescreen.forest.DetailForestActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden">
-        </activity>
-        <activity android:name=".view.homescreen.forest.AllForestsActivity"
-                  android:launchMode="singleTask"
-                  android:screenOrientation="portrait">
+            android:theme="@style/ImageTranslucentTheme"/>
+        <activity
+            android:name=".view.homescreen.forest.ApplyForestActivity"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".view.homescreen.forest.DetailForestActivity"
+        <activity
+            android:name=".view.homescreen.commentlist.CommentListActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.homescreen.publishhole.PublishHoleActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.homescreen.forest.CropPictureActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.homescreen.message.SystemNotification"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".view.homescreen.mine.SettingsActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.homescreen.mine.RulesActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.homescreen.mine.AdviceActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.homescreen.mine.AboutActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/ImageTranslucentTheme">
-        </activity>
-        <activity android:name=".view.homescreen.forest.ApplyForestActivity"
-        android:screenOrientation="portrait">
-
-    </activity>
-        <activity android:name=".view.homescreen.commentlist.CommentListActivity"
+            android:theme="@style/myBarTheme" />
+        <activity
+            android:name=".view.homescreen.mine.UpdateActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-           >
-        </activity>
-        <activity android:name=".view.homescreen.publishhole.PublishHoleActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.homescreen.mine.HoleStarReplyActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            >
-        </activity>
-        <activity android:name=".view.homescreen.forest.CropPictureActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.homescreen.mine.EmailActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            >
-        </activity>
-        <activity android:name=".view.homescreen.message.SystemNotification"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.homescreen.mine.SecurityActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            >
-        </activity>
-        <activity android:name=".view.homescreen.mine.SettingsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.homescreen.mine.VerifyActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.RulesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.homescreen.mine.VerifyOkActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.AdviceActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.emailverify.EmailVerifyActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.AboutActivity"
-            android:theme="@style/myBarTheme"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.homescreen.forest.CropOblongPictureActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.UpdateActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.homescreen.mine.ShareCardActivity"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.HoleStarReplyActivity"
-<<<<<<< HEAD
-=======
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.MyHoleAndMyStarActivity"
->>>>>>> 48926acac6ef48e05f6101a1a7c345ed127d1bfe
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.EmailActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.SecurityActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.VerifyActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.VerifyOkActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.emailverify.EmailVerifyActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.forest.CropOblongPictureActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".view.homescreen.mine.ShareCardActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
     </application>
 </manifest>

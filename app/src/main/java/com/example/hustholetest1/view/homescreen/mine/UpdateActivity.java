@@ -18,9 +18,7 @@ import java.util.List;
 
 public class UpdateActivity extends AppCompatActivity {
 
-    private List<Update> updates = new ArrayList<>();
-
-
+    List<Update> updates = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

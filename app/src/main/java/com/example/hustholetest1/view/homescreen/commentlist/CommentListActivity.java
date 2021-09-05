@@ -63,7 +63,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import ru.noties.markwon.Markwon;
+//import ru.noties.markwon.Markwon;
 
 
 public class CommentListActivity extends AppCompatActivity {
@@ -1273,7 +1273,7 @@ public class CommentListActivity extends AppCompatActivity {
                 created_timestamp.setText(TimeCount.time(data[2]));
                //content.setText(data[1]);
                 String a=data[1];
-                Markwon.setMarkdown(content, a.replace("\n","\n\n"));
+//                Markwon.setMarkdown(content, a.replace("\n","\n\n"));
 
                 thumbup_num.setText(data[13]);
                 reply_num.setText(data[12]);

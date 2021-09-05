@@ -2,9 +2,12 @@ package com.example.hustholetest1.view.homescreen.mine;
 
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.hustholetest1.R;
+import com.example.hustholetest1.model.SaveImgUtil;
 import com.example.hustholetest1.network.RequestInterface;
 import com.example.hustholetest1.network.RetrofitManager;
 import com.githang.statusbar.StatusBarCompat;
@@ -27,7 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Map;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -44,6 +48,7 @@ public class ShareCardActivity extends AppCompatActivity {
     RequestInterface request;
     String TAG ="ShareCard";
     PopupWindow ppwShareTo;
+    Boolean isShow=false;
 
     protected void onCreate(Bundle savedInstanceState) {
         String BASE_URL = "http://hustholetest.pivotstudio.cn/api/";
@@ -62,7 +67,6 @@ public class ShareCardActivity extends AppCompatActivity {
         cardImg = findViewById(R.id.share_card_img);
         ppwLocation = findViewById(R.id.ppw_location);
 
-
         RetrofitManager.RetrofitBuilder(BASE_URL);
         retrofit = RetrofitManager.getRetrofit();
         request = retrofit.create(RequestInterface.class);
@@ -73,18 +77,28 @@ public class ShareCardActivity extends AppCompatActivity {
 
         store = ShareToView.findViewById(R.id.store);
 
+//        MediaStore.Images.Media.insertImage(getContentResolver(), mBitmap, "", "");
+
+        isShow = false;
         ppwShareTo = new PopupWindow(ShareToView);
         ppwShareTo.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         ppwShareTo.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         ppwShareTo.setAnimationStyle(R.style.Page2Anim);
         ppwShareTo.setOutsideTouchable(true);
 
-        cardImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ppwShareTo.showAsDropDown(ppwLocation);
-            }
-        });
+//        cardImg.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(!isShow){
+//                    ppwShareTo.showAtLocation(Objects.requireNonNull(getActivity()).getWindow().getDecorView(), Gravity.BOTTOM,0,0);
+//                    isShow = true;
+//                }else {
+//                    ppwShareTo.dismiss();
+//                    isShow = false;
+//                }
+//            }
+//        });
+        cardImg.setOnClickListener(this::onClick);
 
         store.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,17 +107,35 @@ public class ShareCardActivity extends AppCompatActivity {
                 ppwShareTo.dismiss();
             }
         });
+        MediaScannerConnection.scanFile(this,
+                new String[]{"path"},
+                new String[]{"image/jpeg"},
+                new MediaScannerConnection.OnScanCompletedListener() {
+                    @Override
+                    public void onScanCompleted(String path, Uri uri) {
+                        Log.i(TAG,"onScanCompleted"+path);
+                    }
+                });
 
-//        ppwShareTo.showAsDropDown(cardImg);
-//        ppwShareTo.setOutsideTouchable(true);
+        store.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                public static Uri saveAlbum(Context context, Bitmap bitmap, Bitmap.CompressFormat format, int quality, boolean recycle) {
+                cardImg.setDrawingCacheEnabled(true);
+                Bitmap bitmap = Bitmap.createBitmap(cardImg.getDrawingCache());
+                cardImg.setDrawingCacheEnabled(false);
+                if(bitmap != null){
+//                    Uri uri = SaveImgUtil.saveAlbum(getParent(),Bitmap.createBitmap(convertViewToBitmap(cardImg)), Bitmap.CompressFormat.PNG,3,true);
+                    MediaStore.Images.Media.insertImage(getContentResolver(), bitmap, "", "");
+                    Log.d(TAG,"ok");
 
-//        store.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getApplicationContext(),"保存成功",Toast.LENGTH_SHORT).show();
-//                ppwShareTo.dismiss();
-//            }
-//        });
+                }else {
+                    Log.d(TAG,"is null");
+                }
+                Toast.makeText(getApplicationContext(),"保存成功",Toast.LENGTH_SHORT).show();
+                ppwShareTo.dismiss();
+            }
+        });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,14 +144,32 @@ public class ShareCardActivity extends AppCompatActivity {
             }
         });
 
-
     }
+    public Bitmap convertViewToBitmap(View view){
+        view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+        view.buildDrawingCache();
+        return view.getDrawingCache();
+    }
+
+    private void onClick(View view) {
+        if(R.id.share_card_img == view.getId())
+            if(!isShow){
+                ppwShareTo.showAsDropDown(ppwLocation);
+//                ppwShareTo.showAtLocation(getParent().getWindow().getDecorView(), Gravity.BOTTOM,0,0);
+                isShow = true;
+            }else {
+                ppwShareTo.dismiss();
+                isShow = false;
+            }
+    }
+
+
 
     private void getImg(){
         new Thread(() -> {
             Call<ResponseBody> call = request.getShareImage();
             call.enqueue(new Callback<ResponseBody>() {
-                String jsonStr = "null";
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {

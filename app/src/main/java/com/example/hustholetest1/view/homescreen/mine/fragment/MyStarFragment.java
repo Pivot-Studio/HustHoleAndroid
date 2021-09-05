@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -206,20 +207,22 @@ public class MyStarFragment extends Fragment {
 
 
         public class ViewHolder extends RecyclerView.ViewHolder{
-            private Boolean more_condition=false;
-            private int position;
-            private TextView ID,date,content,text_up,text_talk,text_star;
-            private ImageView img_up,img_star;
-            private ConstraintLayout myInform;
+            Boolean more_condition=false;
+            int position;
+            TextView ID,date,content,text_up,text_talk,text_star;
+            ImageView img_up,img_star;
+            ConstraintLayout myInform;
+            View totalView;
 
             public ViewHolder(View view){
 
                 super(view);
 
-                //                rv = (RelativeLayout) view.findViewById(R.id.myhole_rv);
+                totalView= view.findViewById(R.id.my_follow_total);
                 ID = (TextView) view.findViewById(R.id.hole_id);
                 date = (TextView) view.findViewById(R.id.created_timestamp);
                 content = (TextView) view.findViewById(R.id.content);
+
 
                 text_up = (TextView) view.findViewById(R.id.text_up);
                 text_talk = (TextView) view.findViewById(R.id.text_talk);
@@ -240,30 +243,6 @@ public class MyStarFragment extends Fragment {
                         more_condition = false;
                     }
                 });
-                //                        TextView title = new TextView(getContext());
-//                        title.setGravity(Gravity.CENTER);
-//                        title.setTextColor(Color.BLACK);
-//                        title.setText("举报");
-//                        new AlertDialog.Builder(getContext())
-//                                .setCustomTitle(title)
-//                                .setMessage("你确认要举报该内容吗？")
-//                                .setPositiveButton("确认", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        Toast.makeText(getContext(),"举报成功",Toast.LENGTH_SHORT).show();
-//                                        myInform.setVisibility(View.GONE);
-//                                        more_condition = false;
-//                                    }
-//                                })
-//                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-//                                    @Override
-//                                    public void onClick(DialogInterface dialog, int which) {
-//                                        myInform.setVisibility(View.GONE);
-//                                        more_condition = false;
-//                                    }
-//                                })
-//                                .show();
-//                    }
                 myInform.setOnClickListener(v -> {
                     View mView = View.inflate(getContext(), R.layout.dialog_inform, null);
                     // mView.setBackgroundResource(R.drawable.homepage_notice);
@@ -377,7 +356,7 @@ public class MyStarFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
-                content.setOnClickListener(v -> {
+                totalView.setOnClickListener(v -> {
                     Log.d("data[2]1", myStarsList.get(position)[2]);
                     Intent intent= CommentListActivity.newIntent(getActivity(), null);
                     intent.putExtra("data_hole_id",myStarsList.get(position)[4]);

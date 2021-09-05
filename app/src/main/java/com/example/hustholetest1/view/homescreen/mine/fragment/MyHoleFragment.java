@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -200,12 +202,12 @@ public class MyHoleFragment extends Fragment {
     public class CardsRecycleViewAdapter extends RecyclerView.Adapter<CardsRecycleViewAdapter.ViewHolder> {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            private Boolean more_condition = false;
-            private int position;
-            //            private View totalView;
-            private TextView ID, date, content, text_up, text_talk, text_star;
-            private ImageView img_up,img_star;
-            private ConstraintLayout myDelete;
+            Boolean more_condition = false;
+            int position;
+            View totalView;
+            TextView ID, date, content, text_up, text_talk, text_star;
+            ImageView img_up,img_talk, img_star, moreWhat;
+            ConstraintLayout myDelete;
 
             public ViewHolder(View view) {
 
@@ -214,14 +216,17 @@ public class MyHoleFragment extends Fragment {
                 ID = (TextView) view.findViewById(R.id.hole_id);
                 date = (TextView) view.findViewById(R.id.created_timestamp);
                 content = (TextView) view.findViewById(R.id.content);
+                totalView = view.findViewById(R.id.my_hole_total);
 
                 text_up = (TextView) view.findViewById(R.id.text_up);
                 text_talk = (TextView) view.findViewById(R.id.text_talk);
                 text_star = (TextView) view.findViewById(R.id.text_star);
 
                 img_up = (ImageView) view.findViewById(R.id.img_up);
+                img_talk = (ImageView) view.findViewById(R.id.img_talk);
                 img_star = (ImageView) view.findViewById(R.id.img_star);
-                ImageView moreWhat = (ImageView) view.findViewById(R.id.threePoint);
+
+                moreWhat = (ImageView) view.findViewById(R.id.threePoint);
 
                 myDelete = (ConstraintLayout) view.findViewById(R.id.delete);
                 myDelete.setVisibility(View.GONE);
@@ -260,7 +265,6 @@ public class MyHoleFragment extends Fragment {
                     });
                     dialog.show();
                 });
-
                 img_up.setOnClickListener(v -> {
                     if (CheckingToken.IfTokenExist()) {
                         if (myHolesList.get(position)[6].equals("false")) {
@@ -308,6 +312,14 @@ public class MyHoleFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
+
+                img_talk.setOnClickListener(v -> {
+                    Intent intent = CommentListActivity.newIntent(getActivity(), null);
+                    intent.putExtra("reply","key_board");
+                    intent.putExtra("data_hole_id", myHolesList.get(position)[4]);
+                    startActivity(intent);
+                });
+
                 img_star.setOnClickListener(v -> {
                     if (CheckingToken.IfTokenExist()) {
                         if (myHolesList.get(position)[5].equals("false")) {
@@ -356,7 +368,8 @@ public class MyHoleFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
-                content.setOnClickListener(v -> {
+
+                totalView.setOnClickListener(v -> {
                     Log.d(TAG, "现在跳转到评论界面。");
                     Intent intent = CommentListActivity.newIntent(getActivity(), null);
                     intent.putExtra("data_hole_id", myHolesList.get(position)[4]);

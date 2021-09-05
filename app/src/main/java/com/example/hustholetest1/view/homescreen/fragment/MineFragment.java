@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +29,13 @@ import com.example.hustholetest1.view.homescreen.mine.RulesActivity;
 import com.example.hustholetest1.view.homescreen.mine.SettingsActivity;
 import com.example.hustholetest1.view.homescreen.mine.ShareCardActivity;
 import com.example.hustholetest1.view.homescreen.mine.UpdateActivity;
-import com.example.hustholetest1.view.homescreen.publishhole.PublishHoleActivity;
 import com.example.hustholetest1.view.registerandlogin.activity.WelcomeActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -45,21 +46,19 @@ import retrofit2.Retrofit;
 
 public class MineFragment extends Fragment {
 
-    private View rootView,shareCardView,backgroundView;
-    private RelativeLayout settings, rules, share, evaluate, advice, about, update, logout;
-    private LinearLayout myHole, myStar, myReply, shareCard;
-    private TextView tv_joinDays,tv_myStarNum,tv_myHoleNum,tv_myReplyNum,cancel,location;
-    private static String BASE_URL = "http://husthole.pivotstudio.cn/api/";
-    private org.json.JSONArray jsonArray;
-    private PopupWindow ppwBackground, ppwShare;
+    View rootView,shareCardView,backgroundView;
+    RelativeLayout settings, rules, share, evaluate, advice, about, update, logout;
+    LinearLayout myHole, myStar, myReply, shareCard;
+    TextView tv_joinDays,tv_myStarNum,tv_myHoleNum,tv_myReplyNum,cancel,location;
+    static String BASE_URL = "http://husthole.pivotstudio.cn/api/";
+    PopupWindow ppwBackground, ppwShare;
     
     Retrofit retrofit;
     RequestInterface request;
     String TAG = "isMine";
 
     public static MineFragment newInstance() {
-        MineFragment fragment = new MineFragment();
-        return fragment;
+        return new MineFragment();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -119,26 +118,17 @@ public class MineFragment extends Fragment {
         myStar.setOnClickListener(this::onClick);
         myReply.setOnClickListener(this::onClick);
 
-        backgroundView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ppwShare.dismiss();
-                ppwBackground.dismiss();
-            }
+        backgroundView.setOnClickListener(v -> {
+            ppwShare.dismiss();
+            ppwBackground.dismiss();
         });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ppwShare.dismiss();
-                ppwBackground.dismiss();
-            }
+        cancel.setOnClickListener(v -> {
+            ppwShare.dismiss();
+            ppwBackground.dismiss();
         });
-        shareCard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity().getApplicationContext(), ShareCardActivity.class);
-                startActivity(intent);
-            }
+        shareCard.setOnClickListener(v -> {
+            Intent intent = new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), ShareCardActivity.class);
+            startActivity(intent);
         });
 
         getMyData();
@@ -147,56 +137,53 @@ public class MineFragment extends Fragment {
     }
 
     private void getMyData(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Call<ResponseBody> call = request.myData();//进行封装
-                call.enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        Log.d(TAG,"in onResponse");
-                        try {
-                            if(response.errorBody() != null){
-                                Log.d(TAG,"in error: " + response.errorBody());
-                                Log.d(TAG,"in error: " + response.errorBody().string());
-                            }
-                            if (response.body() != null) {
-                                String jsonStr = response.body().string();
-                                Log.d(TAG,"1: " + response.body());
-                                Log.d(TAG,"2: " + jsonStr + "--");
+        new Thread(() -> {
+            Call<ResponseBody> call = request.myData();//进行封装
+            call.enqueue(new Callback<ResponseBody>() {
+                @Override
+                public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    Log.d(TAG,"in onResponse");
+                    try {
+                        if(response.errorBody() != null){
+                            Log.d(TAG,"in error: " + response.errorBody());
+                            Log.d(TAG,"in error: " + response.errorBody().string());
+                        }
+                        if (response.body() != null) {
+                            String jsonStr = response.body().string();
+                            Log.d(TAG,"1: " + response.body());
+                            Log.d(TAG,"2: " + jsonStr + "--");
 //                                jsonArray=new org.json.JSONArray(jsonStr);
 //                                JSONObject data = jsonArray.getJSONObject(0);
-                                JSONObject data = new JSONObject(jsonStr);
-                                int joinDays = data.getInt("join_days");
-                                int myHoleNum = data.getInt("hole_sum");
-                                int myStarNum = data.getInt("follow_num");
-                                int myReplyNum = data.getInt("replies_num");
-                                Log.d(TAG,joinDays+"");
-                                String days = "我来到树洞已经<font color=\"#02A9F5\">"+joinDays+"</font>天啦。";
-                                if(CheckingToken.IfTokenExist()){
-                                    Log.d(TAG,"已登陆");
-                                    tv_joinDays.setText(Html.fromHtml(days));
-                                    tv_myHoleNum.setText( String.valueOf(myHoleNum));
-                                    tv_myStarNum.setText( String.valueOf(myStarNum));
-                                    tv_myReplyNum.setText(String.valueOf(myReplyNum));
-                                }else {
-                                    days = "我来到树洞已经<font color=\"#02A9F5\">"+0+"</font>天啦。";
-                                    tv_joinDays.setText(Html.fromHtml(days));
-                                    tv_myHoleNum.setText( String.valueOf(0));
-                                    tv_myStarNum.setText( String.valueOf(0));
-                                    tv_myReplyNum.setText(String.valueOf(0));
-                                }
-                            }else{
-                                Log.d(TAG,"is null");
+                            JSONObject data = new JSONObject(jsonStr);
+                            int joinDays = data.getInt("join_days");
+                            int myHoleNum = data.getInt("hole_sum");
+                            int myStarNum = data.getInt("follow_num");
+                            int myReplyNum = data.getInt("replies_num");
+                            Log.d(TAG,joinDays+"");
+                            String days = "我来到树洞已经<font color=\"#02A9F5\">"+joinDays+"</font>天啦。";
+                            if(CheckingToken.IfTokenExist()){
+                                Log.d(TAG,"已登陆");
+                                tv_joinDays.setText(Html.fromHtml(days));
+                                tv_myHoleNum.setText( String.valueOf(myHoleNum));
+                                tv_myStarNum.setText( String.valueOf(myStarNum));
+                                tv_myReplyNum.setText(String.valueOf(myReplyNum));
+                            }else {
+                                days = "我来到树洞已经<font color=\"#02A9F5\">"+0+"</font>天啦。";
+                                tv_joinDays.setText(Html.fromHtml(days));
+                                tv_myHoleNum.setText( String.valueOf(0));
+                                tv_myStarNum.setText( String.valueOf(0));
+                                tv_myReplyNum.setText(String.valueOf(0));
                             }
-                        }catch (IOException | JSONException e) {
-                            e.printStackTrace();
+                        }else{
+                            Log.d(TAG,"is null");
                         }
+                    }catch (IOException | JSONException e) {
+                        e.printStackTrace();
                     }
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) { }
-                });
-            }
+                }
+                @Override
+                public void onFailure(Call<ResponseBody> call, Throwable t) { }
+            });
         }).start();
     }
 
@@ -204,17 +191,17 @@ public class MineFragment extends Fragment {
         Intent intent;
         switch (view.getId()) {
             case R.id.my_hole:
-                intent = new Intent(getActivity().getApplicationContext(), HoleStarReplyActivity.class);
+                intent = new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), HoleStarReplyActivity.class);
                 intent.putExtra("initFragmentId",0);
                 startActivity(intent);
                 break;
             case R.id.my_star:
-                intent = new Intent(getActivity().getApplicationContext(), HoleStarReplyActivity.class);
+                intent = new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), HoleStarReplyActivity.class);
                 intent.putExtra("initFragmentID",1);
                 startActivity(intent);
                 break;
             case R.id.my_reply:
-                intent = new Intent(getActivity().getApplicationContext(), HoleStarReplyActivity.class);
+                intent = new Intent(Objects.requireNonNull(getActivity()).getApplicationContext(), HoleStarReplyActivity.class);
                 intent.putExtra("initFragmentID",2);
                 startActivity(intent);
                 break;
@@ -228,7 +215,7 @@ public class MineFragment extends Fragment {
                 break;
             case R.id.share:
                 ppwBackground.showAsDropDown(rootView);
-                ppwShare.showAsDropDown(location);
+                ppwShare.showAtLocation(Objects.requireNonNull(getActivity()).getWindow().getDecorView(), Gravity.BOTTOM,0,0);
                 break;
             case R.id.about:
                 intent = new Intent(getActivity().getApplicationContext(), AboutActivity.class);
@@ -254,7 +241,6 @@ public class MineFragment extends Fragment {
                 btn_logout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                         dialog.dismiss();
                         SharedPreferences.Editor editor = getContext().getSharedPreferences("Depository", Context.MODE_PRIVATE).edit();//获取编辑器
                         editor.putString("token", "");

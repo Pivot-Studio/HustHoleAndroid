@@ -73,8 +73,7 @@ public class MessageFragment extends Fragment {
     private TextView latestSystemNotification;
 
     public static MessageFragment newInstance() {
-        MessageFragment fragment = new MessageFragment();
-        return fragment;
+        return new MessageFragment();
     }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -113,20 +112,17 @@ public class MessageFragment extends Fragment {
                 }*/
 
                 Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        /**
-                         *要执行的操作
-                         */
-                        if(finishRefresh){
-                            refreshlayout.finishRefresh();
-                            isRefreshing = false;
-                            finishRefresh = false;
-                        }
-                        else {
-                            refreshlayout.autoRefresh();
-                        }
+                handler.postDelayed(() -> {
+                    /**
+                     *要执行的操作
+                     */
+                    if(finishRefresh){
+                        refreshlayout.finishRefresh();
+                        isRefreshing = false;
+                        finishRefresh = false;
+                    }
+                    else {
+                        refreshlayout.autoRefresh();
                     }
                 }, 500);//0.5秒后执行Runnable中的run方法
                 refreshlayout.finishRefresh(4000/*,false*/);//传入false表示刷新失败
@@ -247,7 +243,7 @@ public class MessageFragment extends Fragment {
         }
     }
 
-    private Handler systemNotificationHandler = new Handler(){
+    private final Handler systemNotificationHandler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -317,7 +313,7 @@ public class MessageFragment extends Fragment {
     public static String removeCharAt(String s, int pos) {
         return s.substring(0, pos) + s.substring(pos + 1);
     }
-    private Handler handler = new Handler(){
+    private final Handler handler = new Handler(){
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
