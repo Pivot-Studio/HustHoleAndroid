@@ -370,6 +370,19 @@ public class MyStarFragment extends Fragment {
                     Log.d("holeid",myStarsList.get(position)[4]);
                     startActivity(intent);
                 });
+                myRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                    }
+
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        myInform.setVisibility(View.GONE);
+                        more_condition = false;
+                    }
+                });
             }
             public void bind(int position) {
                 this.position = position;

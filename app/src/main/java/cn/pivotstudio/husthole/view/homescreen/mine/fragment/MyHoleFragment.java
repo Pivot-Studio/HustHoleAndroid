@@ -190,7 +190,6 @@ public class MyHoleFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
-
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
                 }
@@ -375,6 +374,20 @@ public class MyHoleFragment extends Fragment {
                     intent.putExtra("data_hole_id", myHolesList.get(position)[4]);
                     startActivity(intent);
                 });
+
+                myRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                    }
+
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        myDelete.setVisibility(View.GONE);
+                        more_condition = false;
+                    }
+                });
             }
 
             public void bind(int position) {
@@ -390,6 +403,7 @@ public class MyHoleFragment extends Fragment {
                 text_up.setText(myHolesList.get(position)[8]);
 
             }
+
 
         }
 

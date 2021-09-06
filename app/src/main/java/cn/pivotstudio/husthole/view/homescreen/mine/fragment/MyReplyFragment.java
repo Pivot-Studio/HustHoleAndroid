@@ -252,6 +252,19 @@ public class MyReplyFragment extends Fragment {
                     intent.putExtra("data_hole_id", (myList.get(position)).hole_id+"");
                     startActivity(intent);
                 });
+                myRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                        super.onScrollStateChanged(recyclerView, newState);
+                    }
+
+                    @Override
+                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                        super.onScrolled(recyclerView, dx, dy);
+                        myDelete.setVisibility(View.GONE);
+                        more_condition = false;
+                    }
+                });
             }
 
             public void bind(int position) {

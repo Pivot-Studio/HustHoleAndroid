@@ -742,15 +742,16 @@ public class HomePageFragment extends Fragment {
             return null;
         }
     }
-        private void RemoveOnScrollListener() {
-            if (mOnscrollListener != null) {
-                mHomePageHolesRv.removeOnScrollListener(mOnscrollListener);
-            }
-            if(mMoreWhatCl!=null) {
-                mMoreWhatCl.setVisibility(View.INVISIBLE);
-                more_condition = false;
-            }
+    private void RemoveOnScrollListener() {
+        if (mOnscrollListener != null) {
+            mHomePageHolesRv.removeOnScrollListener(mOnscrollListener);
         }
+        if(mMoreWhatCl!=null) {
+            mMoreWhatCl.setVisibility(View.INVISIBLE);
+            more_condition = false;
+        }
+    }
+
 
 
         public class HoleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
