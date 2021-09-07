@@ -89,6 +89,9 @@ public interface RequestInterface {//接口
     @POST
     Call<ResponseBody> follow(@Url String url);
 
+    @POST
+    Call<ResponseBody> changeSecurityMode(@Url String url);
+
     @DELETE
     Call<ResponseBody>deletefollow(@Url String url);
 
@@ -173,8 +176,7 @@ public interface RequestInterface {//接口
     @GET("auth")
     Call<ResponseBody> isUnderSecurity();
 
-    @POST("auth/update")
-    Call<ResponseBody> changeSecurityMode(@Body HashMap map);
+
     /*
         @Multipart
         @POST("forests/apply")

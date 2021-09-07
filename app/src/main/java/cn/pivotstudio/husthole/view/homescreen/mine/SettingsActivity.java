@@ -202,11 +202,6 @@ public class SettingsActivity extends AppCompatActivity {
                             : new Intent(this, EmailVerifyActivity.class);
                     startActivity(intent);
                 }
-
-
-
-
-
                 break;
             case R.id.security:
                 intent = new Intent(this,SecurityActivity.class);
