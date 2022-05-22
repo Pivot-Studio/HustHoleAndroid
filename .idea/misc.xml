@@ -41,6 +41,9 @@
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/drawable/thumbup.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/activity_about.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/activity_advice.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/activity_allforest.xml" value="0.1" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/activity_cropoblongpicture.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/activity_croppicture.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/activity_detailupdate.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/activity_email_how_to.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/activity_email_verify1.xml" value="0.16666666666666666" />
@@ -58,6 +61,7 @@
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/card_myhole.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/constraintlayout_homepageoptionbox.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/dialog_delete.xml" value="0.1" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/dialog_forestquitnotice.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/dialog_homescreenupdate.xml" value="0.5" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/dialog_inform.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/dialog_screen.xml" value="0.16666666666666666" />
@@ -71,8 +75,14 @@
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/fragment_mine.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/fragment_myhole.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item1.xml" value="0.15104166666666666" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_allforesthead.xml" value="0.1" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_allforesticon.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_detailforest.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_detailforesthead.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_forest.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_forestdetailiconlist.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_foresticon.xml" value="0.11820652173913043" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_foresttype.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_homepagebottomblock.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.4466666666666667" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/item_label.xml" value="0.15081521739130435" />
@@ -84,6 +94,7 @@
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/notification_item.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/notification_item_footer.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/page3fragment.xml" value="0.11820652173913043" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/ppw_applyforest.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/ppw_homepage.xml" value="0.3333333333333333" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/ppw_homepagedarkscreen.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/ppw_share.xml" value="0.16666666666666666" />
@@ -93,7 +104,9 @@
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/refresh_header.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/refresh_header_transparent.xml" value="0.15104166666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/test.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/titlebar_centergreen.xml" value="0.22" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/titlebar_green.xml" value="0.16666666666666666" />
+        <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/titlebar_transparent.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/layout/titlebar_white.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/homeScreen/src/main/res/xml/file_paths.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesCore/loginAndRegister/src/main/res/drawable-night/lr_back_click.xml" value="0.1" />

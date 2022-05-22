@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="170dp"
+    android:layout_height="210dp"
+    android:background="@color/GrayScale_95"
+    android:orientation="horizontal">
+<TextView
+    android:layout_width="8dp"
+    android:layout_height="210dp"
+    android:background="@color/GrayScale_95"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="154dp"
+        android:layout_height="210dp"
+        android:background="@drawable/standard_forest_1">
+
+    <ImageView
+        android:id="@+id/iv_allforesticon_cover"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/standard_forest_1_head"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <ImageView
+        android:id="@+id/iv_allforesticon_iconframe"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/standard_forest_centerphoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_allforesticon_cover"
+
+        />
+
+        <TextView
+            android:id="@+id/tv_allforesticon_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="加载中"
+            android:textColor="@color/GrayScale_20"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.505"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_allforesticon_iconframe" />
+
+        <TextView
+        android:id="@+id/tv_allforesticon_number"
+        android:layout_width="wrap_content"
+        android:layout_height="17dp"
+        android:layout_marginTop="5dp"
+        android:text="Huster.树洞"
+        android:textSize="11sp"
+        android:textColor="@color/GrayScale_70"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_allforesticon_title" />
+
+    <TextView
+        android:id="@+id/tv_allforesticon_content"
+        android:layout_width="134dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="5dp"
+        android:text="加载中......"
+        android:textSize="11sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textColor="@color/GrayScale_50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_allforesticon_number" />
+
+
+        <Button
+            android:id="@+id/btn_allforesticon_join"
+            android:layout_width="68dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="13sp"
+            style="?android:attr/borderlessButtonStyle"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_allforesticon_icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_allforesticon_iconframe"
+            app:layout_constraintEnd_toEndOf="@+id/iv_allforesticon_iconframe"
+            app:layout_constraintStart_toStartOf="@+id/iv_allforesticon_iconframe"
+            app:layout_constraintTop_toTopOf="@+id/iv_allforesticon_iconframe" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        android:layout_width="8dp"
+        android:layout_height="210dp"
+        android:background="@color/GrayScale_95"/>
+</LinearLayout>
