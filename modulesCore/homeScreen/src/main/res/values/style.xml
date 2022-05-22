@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="contextMenuAnim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/popupwindow_enter</item>
+        <item name="android:windowExitAnimation">@anim/popupwindow_exit</item>
+    </style>
+    <style name="darkScreenAnim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/darkscreen_enter</item>
+        <item name="android:windowExitAnimation">@anim/darkscreen_exit</item>
+    </style>
+    <style name="popupwindow_button_click">
+        <item name="android:background">@drawable/standard_button</item>
+        <item name="android:textColor">@color/GrayScale_100</item>
+    </style>
+    <style name="popupwindow_button">
+    <item name="android:background">@drawable/standard_button_gray</item>
+    <item name="android:textColor">@color/GrayScale_20</item>
+
+
+    </style>
+    <style name="Page2Anim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/context_menu_enter</item>
+        <item name="android:windowExitAnimation">@anim/context_menu_exit</item>
+    </style>
+    <style name="myChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/bg_chip_state_list</item>
+        <item name="android:textColor">@color/tx_chip_state_list</item>
+
+    </style>
+    <style name="myBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/HH_BandColor_3</item>
+        <item name="colorPrimaryDark">@color/HH_BandColor_1</item>
+        <item name="colorAccent">@color/GrayScale_100</item>
+    </style>
+</resources>

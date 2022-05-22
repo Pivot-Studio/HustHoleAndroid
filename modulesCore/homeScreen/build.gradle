@@ -1,0 +1,71 @@
+if(isRelease){
+    apply plugin : 'com.android.library'
+}else{
+    apply plugin :'com.android.application'
+}
+
+android {
+    compileSdkVersion androidID.compileSdkVersion
+    defaultConfig {
+        minSdkVersion androidID.minSdkVersion
+        targetSdkVersion androidID.targetSdkVersion
+        versionCode androidID.versionCode
+        versionName androidID.versionName
+        if(!isRelease) {//当为release模式时不需要id
+            applicationId "cn.pivotstudio.modulec.homescreen"
+        }
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("boolean","isRelease",String.valueOf(isRelease))
+        javaCompileOptions {//ARouter跨组件需要
+            annotationProcessorOptions {
+                arguments = [AROUTER_MODULE_NAME: project.getName()]
+            }
+        }
+        dataBinding {//
+            enabled = true
+        }
+    }
+    sourceSets{
+        main{
+            if(!isRelease){//不同状态下使用不同清单文件
+                manifest.srcFile '/src/main/debug/AndroidManifest.xml'
+            }else{
+                manifest.srcFile '/src/main/AndroidManifest.xml'
+                java{
+                    //release时所有debug目录下的文件不合并
+                    exclude '**/debug/**'
+                }
+            }
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation project(':modulesBase:libBase')
+
+    annotationProcessor 'com.alibaba:arouter-compiler:1.5.2'
+    
+    implementation 'de.hdodenhof:circleimageview:3.1.0'//圆形图片
+
+    //老版本问题
+    implementation 'com.cdh.okone:okone:1.0.0'//messagefragment使用
+    implementation 'com.lovedise:permissiongen:0.0.6'//DetailUpdateActivity使用
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'com.github.donkingliang:LabelsView:1.6.5'//SetScreenKeyWordActivity使用
+
+    // navigation依赖 ui 和 fragment
+    implementation 'androidx.navigation:navigation-fragment:2.3.5'
+    implementation 'androidx.navigation:navigation-ui:2.3.5'
+}

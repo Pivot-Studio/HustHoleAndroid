@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--分支-->
+<!--正常灰色按钮-->
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 内部颜色 -->
+    <solid
+        android:color="@color/GrayScale_80"
+        android:state_pressed="false" />
+
+    <!-- 边缘线条颜色 -->
+    <stroke
+        android:width="0dp"
+        android:color="@color/HH_BandColor_1" />
+    <!-- 圆角的幅度 -->
+    <corners
+        android:topLeftRadius="15dip"
+        android:topRightRadius="15dip"
+        android:bottomLeftRadius="15dip"
+        android:bottomRightRadius="15dip"/>
+</shape>

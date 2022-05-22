@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <include android:id="@+id/bar"
+        layout="@layout/titlebar_green"/>
+    <RelativeLayout
+        android:id="@+id/layout2"
+        android:layout_below="@id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            android:layout_marginStart="20dp">
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cp_advice"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="建议"
+                android:clickable="true"
+                android:textColor="@color/GrayScale_100"
+                app:chipBackgroundColor="@color/GrayScale_80"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cp_error"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="故障"
+                android:clickable="true"
+                android:textColor="@color/GrayScale_100"
+                app:chipBackgroundColor="@color/GrayScale_80"/>
+            <com.google.android.material.chip.Chip
+                android:id="@+id/cp_other"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="其他"
+                android:clickable="true"
+                android:textColor="@color/GrayScale_100"
+                app:chipBackgroundColor="@color/GrayScale_80"/>
+        </com.google.android.material.chip.ChipGroup>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:paddingHorizontal="20dp"
+            android:paddingVertical="10dp"
+            android:text="提交"
+            android:textColor="@color/GrayScale_100"
+            app:backgroundTint="@color/GrayScale_80"
+            app:cornerRadius="20dp" />
+    </RelativeLayout>
+    <EditText
+        android:id="@+id/et_advice"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/layout2"/>
+</RelativeLayout>

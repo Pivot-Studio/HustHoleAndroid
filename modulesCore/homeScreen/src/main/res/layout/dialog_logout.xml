@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/homepage_notice">
+    <RelativeLayout
+        android:id="@+id/logout_dialog"
+        android:layout_width="@dimen/dp_316"
+        android:layout_height="@dimen/dp_228"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="@dimen/dp_30">
+
+        <TextView
+            android:id="@+id/logout_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="确认要退出登录吗？"
+            android:textColor="@color/GrayScale_0"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="@dimen/dp_256"
+            android:layout_height="@dimen/dp_50"
+            android:layout_below="@+id/logout_text"
+            android:layout_marginTop="@dimen/dp_30"
+            android:background="@drawable/button"
+            android:text="手滑了"
+            android:textAlignment="center"
+            android:textColor="@color/GrayScale_100" />
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="@dimen/dp_256"
+            android:layout_height="@dimen/dp_50"
+            android:layout_below="@+id/cancel"
+            android:layout_marginTop="@dimen/dp_15"
+            android:background="@drawable/button_white_red"
+            android:text="确认退出"
+            android:textColor="@color/HH_Reminder_Warning"
+            app:strokeColor="@color/HH_Reminder_Warning"
+            app:strokeWidth="1dp" />
+
+    </RelativeLayout>
+</LinearLayout>
+
+

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--弃用方案，无法保证旋转后维持停止状态-->
+    <rotate
+        android:duration="1000"
+        android:fromDegrees="0"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:repeatCount="0"
+        android:repeatMode="reverse"
+        android:toDegrees="180"
+        android:fillAfter="true"
+        android:fillEnabled="true"/>
+</set>

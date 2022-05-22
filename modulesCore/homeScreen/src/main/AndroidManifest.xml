@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cn.pivotstudio.modulec.homescreen">
+
+    <application>
+    <activity
+        android:name=".ui.activity.HomeScreenActivity"
+        android:exported="true"
+        android:launchMode="singleTask"
+        android:windowSoftInputMode="adjustPan"
+        android:screenOrientation="portrait">
+    </activity>
+        <activity
+            android:name=".oldversion.message.SystemNotification"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".oldversion.mine.AboutActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.AdviceActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.DetailUpdateActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.EmailActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+             />
+<!--        android:theme="@style/myBarTheme"-->
+        <activity
+            android:name=".oldversion.mine.EmailHowToActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.EvaluateAndAdviceActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.HoleStarReplyActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.MyHoleAndMyStarActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.RulesActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.ScreenActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.SecurityActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.SetScreenKeyWordActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".oldversion.mine.SettingsActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
+        <activity android:name=".oldversion.mine.ShareCardActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".oldversion.mine.UpdateActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".oldversion.mine.VerifyActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".oldversion.mine.VerifyOkActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
+    </application>
+
+</manifest>

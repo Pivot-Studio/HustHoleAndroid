@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/cl_mid_block"
+        android:layout_width="match_parent"
+        android:layout_height="29dp"
+        android:background="@color/GrayScale_100"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_homepage_forestsquare"
+            android:layout_width="wrap_content"
+            android:layout_height="29dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_homepage_triangle"
+                android:layout_width="@dimen/dp_7"
+                android:layout_height="@dimen/dp_4"
+                android:layout_marginStart="4dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_homepage_forestsquare"
+                app:layout_constraintStart_toEndOf="@+id/tv_homepage_forestsquare"
+                app:layout_constraintTop_toTopOf="@+id/tv_homepage_forestsquare" />
+
+
+            <TextView
+                android:id="@+id/tv_homepage_forestsquare"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="5dp"
+                android:text="@string/page1fragment_2"
+                android:textColor="@color/GrayScale_20"
+                android:textSize="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Button
+                android:id="@+id/btn_homepage_greenline"
+                android:layout_width="41dp"
+                android:layout_height="2dp"
+                android:background="@color/HH_BandColor_1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/tv_homepage_forestsquare"
+                app:layout_constraintStart_toStartOf="@+id/tv_homepage_forestsquare" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/GrayScale_95"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/settings_bar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/HH_BandColor_1"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/settings_img"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_centerInParent="true"
+            android:scaleType="center"
+            android:background="@drawable/back_green"
+            android:clickable="true"
+            app:srcCompat="@drawable/back_black" />
+        <TextView
+            android:id="@+id/settings_title"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="@string/个人设置"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+
+    <!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar_setting"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"/>-->
+    <RelativeLayout
+        android:id="@+id/email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings_bar"
+        android:background="@color/GrayScale_100"
+        android:clickable="true">
+        <!--        android:layout_below="@id/toolbar_setting">-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="校园邮箱" />
+
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@id/view1"
+            android:padding="12dp"
+            android:text="" />
+
+        <ImageView
+            android:id="@+id/view1"
+            android:layout_width="@dimen/dp_10"
+            android:layout_height="@dimen/dp_18"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_17"
+            android:scaleType="fitXY"
+            app:srcCompat="@mipmap/back_black2" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_0_5"
+        android:layout_below="@id/email"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="1dp"
+        android:background="@color/GrayScale_95" />
+    <RelativeLayout
+        android:id="@+id/security"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/line"
+        android:background="@color/GrayScale_100"
+        android:layout_marginTop="1dp"
+        android:clickable="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="隐私安全" />
+
+        <ImageView
+            android:layout_width="@dimen/dp_10"
+            android:layout_height="@dimen/dp_18"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_17"
+            android:scaleType="fitXY"
+            app:srcCompat="@mipmap/back_black2" />
+    </RelativeLayout>
+</RelativeLayout>

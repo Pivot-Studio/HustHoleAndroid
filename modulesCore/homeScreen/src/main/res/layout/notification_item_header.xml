@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/notification_item_header"
+    android:layout_height="@dimen/dp_90"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View
+        android:id="@+id/cut_off"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/GrayScale_95"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_70"
+        android:background="@color/GrayScale_100"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+
+        <ImageView
+            android:id="@+id/system_notification_image"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/dp_20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@mipmap/a138" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:layout_alignBottom="@id/system_notification_image"
+            android:layout_toRightOf="@id/system_notification_image"
+            android:orientation="vertical"
+            android:gravity="bottom">
+
+            <TextView
+                android:id="@+id/system_notification_tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_23"
+                android:layout_marginStart="@dimen/dp_20"
+                android:text="@string/page3fragment_1"
+                android:textColor="@color/GrayScale_20"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@id/system_notification_image" />
+
+            <TextView
+                android:id="@+id/latest_system_notification"
+                android:layout_width="@dimen/dp_264"
+                android:layout_height="@dimen/dp_15"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_7"
+                android:ellipsize="end"
+                android:lineSpacingExtra="1sp"
+                android:maxLines="1"
+                android:textColor="@color/GrayScale_50"
+                android:textSize="10sp"
+                app:layout_constraintBottom_toBottomOf="@id/system_notification_image" />
+        </LinearLayout>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/GrayScale_95"></View>
+</LinearLayout>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="emoji_res_list">
+        <item>@mipmap/resource_emoji1</item>
+        <item>@mipmap/resource_emoji2</item>
+        <item>@mipmap/resource_emoji3</item>
+        <item>@mipmap/resource_emoji4</item>
+        <item>@mipmap/resource_emoji5</item>
+        <item>@mipmap/resource_emoji6</item>
+        <item>@mipmap/resource_emoji7</item>
+        <item>@mipmap/resource_emoji8</item>
+        <item>@mipmap/resource_emoji9</item>
+        <item>@mipmap/resource_emoji10</item>
+        <item>@mipmap/resource_emoji11</item>
+        <item>@mipmap/resource_emoji12</item>
+        <item>@mipmap/resource_emoji13</item>
+        <item>@mipmap/resource_emoji14</item>
+        <item>@mipmap/resource_emoji15</item>
+        <item>@mipmap/resource_emoji16</item>
+        <item>@mipmap/resource_emoji17</item>
+        <item>@mipmap/resource_emoji18</item>
+        <item>@mipmap/resource_emoji19</item>
+        <item>@mipmap/resource_emoji20</item>
+        <item>@mipmap/resource_emoji21</item>
+        <item>@mipmap/resource_emoji22</item>
+        <item>@mipmap/resource_emoji23</item>
+        <item>@mipmap/resource_emoji24</item>
+        <item>@mipmap/resource_emoji25</item>
+        <item>@mipmap/resource_emoji26</item>
+        <item>@mipmap/resource_emoji27</item>
+        <item>@mipmap/resource_emoji28</item>
+        <item>@mipmap/resource_emoji29</item>
+        <item>@mipmap/resource_emoji30</item>
+        <item>@mipmap/resource_emoji31</item>
+    </array>
+
+    <string-array name="emoji_code_list">
+        <item>[微笑]</item>
+        <item>[委屈]</item>
+        <item>[星星眼]</item>
+        <item>[发呆]</item>
+        <item>[酷]</item>
+        <item>[大哭]</item>
+        <item>[害羞]</item>
+        <item>[困]</item>
+        <item>[抽泣]</item>
+        <item>[生气]</item>
+        <item>[耶]</item>
+        <item>[惊讶]</item>
+        <item>[尴尬]</item>
+        <item>[抓狂]</item>
+        <item>[呕吐]</item>
+        <item>[白眼]</item>
+        <item>[大笑]</item>
+        <item>[疑问]</item>
+        <item>[晕]</item>
+        <item>[叹气]</item>
+        <item>[吃瓜]</item>
+        <item>[再见]</item>
+        <item>[喜欢]</item>
+        <item>[奸笑]</item>
+        <item>[打call]</item>
+        <item>[偷看]</item>
+        <item>[奋斗]</item>
+        <item>[思考]</item>
+        <item>[ok]</item>
+        <item>[酸]</item>
+        <item>[哼]</item>
+    </string-array>
+</resources>

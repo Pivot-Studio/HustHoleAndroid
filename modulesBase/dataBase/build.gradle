@@ -1,0 +1,62 @@
+plugins {
+    id 'com.android.library'
+   // id 'dagger.hilt.android.plugin'
+}
+
+
+android {
+    compileSdkVersion androidID.compileSdkVersion
+    defaultConfig {
+        minSdkVersion androidID.minSdkVersion
+        targetSdkVersion androidID.targetSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        customDebugType {
+        }
+    }
+    dataBinding {
+        enabled = true
+
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+
+    //Room 支持RxJava2
+    implementation 'androidx.room:room-rxjava2:2.3.0'
+    //rxjava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
+    //Room数据库
+    api 'androidx.room:room-runtime:2.3.0'
+    annotationProcessor 'androidx.room:room-compiler:2.3.0'
+
+    //hilt组件化里面出bug搞崩溃了，暂时先不用
+//    // Hilt 和 Hilt注解处理器
+//    api 'com.google.dagger:hilt-android:2.41'
+//    annotationProcessor 'com.google.dagger:hilt-android-compiler:2.41'
+//    // Hilt 对于ViewModel的支持
+//    api 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
+//    annotationProcessor 'androidx.hilt:hilt-compiler:1.0.0'
+
+    api 'com.tencent:mmkv:1.2.13'//腾讯MMKV
+
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+}

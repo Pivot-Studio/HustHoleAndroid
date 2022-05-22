@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Page2Anim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/context_menu_enter</item>
+        <item name="android:windowExitAnimation">@anim/context_menu_exit</item>
+    </style>
+    <style name="darkScreenAnim" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/darkscreen_enter</item>
+        <item name="android:windowExitAnimation">@anim/darkscreen_exit</item>
+    </style>
+</resources>

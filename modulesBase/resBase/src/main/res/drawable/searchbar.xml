@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--分支-->
+<!--正常搜索框-->
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 内部颜色 -->
+    <solid
+        android:color="@color/GrayScale_95" android:state_pressed="false"/>
+
+
+    <!-- 边缘线条颜色 -->
+    <stroke
+        android:width="0dp"
+        android:color="@color/HH_BandColor_1" />
+    <!-- 圆角的幅度 -->
+    <corners
+        android:topLeftRadius="8dp"
+        android:topRightRadius="8dp"
+        android:bottomLeftRadius="8dp"
+        android:bottomRightRadius="8dp"/>
+    <padding
+        android:left="24dp"
+        />
+</shape>

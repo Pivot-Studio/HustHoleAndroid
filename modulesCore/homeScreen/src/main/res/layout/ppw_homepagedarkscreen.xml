@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ppw_homepagedarkscreen"
+    android:layout_width="match_parent"
+    android:layout_height="900dp">
+
+    <TextView
+        android:id="@+id/black"
+        android:layout_width="match_parent"
+        android:layout_height="900dp"
+        android:background="#66000000" />
+</LinearLayout>
