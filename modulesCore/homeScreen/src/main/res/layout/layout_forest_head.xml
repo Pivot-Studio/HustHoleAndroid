@@ -1,66 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/GrayScale_95"
-    >
-
-
-
-    <TextView
-        android:id="@+id/tv_foresthead_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text="@string/page2fragment_1"
-        android:textColor="@color/GrayScale_70"
-        android:textSize="11sp"
-        app:layout_constraintBottom_toTopOf="@+id/rv_foresthead"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:background="@color/GrayScale_95">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_foresthead"
-        android:layout_width="wrap_content"
-        android:layout_height="37dp"
-        app:layout_constraintBottom_toTopOf="@+id/rv_foresthead"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_37"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/tv_foresthead_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp_12"
+            android:text="@string/page2fragment_1"
+            android:textColor="@color/GrayScale_70"
+            android:textSize="@dimen/sp_11"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_foresthead_jumptoallforest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:text="@string/page2fragment_2"
             android:textColor="@color/GrayScale_70"
-            android:textSize="11sp"
+            android:textSize="@dimen/sp_11"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/iv_foresthead_jumptoallforest"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/iv_foresthead_jumptoallforest"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
+            android:layout_height="@dimen/dp_0"
+            android:contentDescription="@string/page2fragment_2"
+            android:scaleType="fitCenter"
             app:layout_constraintBottom_toBottomOf="@+id/tv_foresthead_jumptoallforest"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_foresthead_jumptoallforest"
             app:srcCompat="@mipmap/triangle_3" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_foresthead"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_marginTop="37dp"
+        android:layout_height="@dimen/dp_80"
         android:nestedScrollingEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/cl_foresthead" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

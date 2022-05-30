@@ -12,12 +12,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/GrayScale_95"/>
-        <cn.pivotstudio.modulec.homescreen.oldversion.model.MaxHeightRecyclerView
-            android:id="@+id/rv_forest"
+
+<!--        小树林主界面布局-->
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            />
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/layout_forest_head" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_forest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+
         <com.scwang.smart.refresh.footer.ClassicsFooter
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
