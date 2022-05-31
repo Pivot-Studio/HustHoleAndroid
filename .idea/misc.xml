@@ -3,6 +3,61 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar_button1.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar_button2.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar_button3.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/standard_forest_1.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/standard_forest_1_head.xml" value="0.1" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/standard_forest_centerphoto.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/standard_forest_hole.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/tag_gray.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/tag_red.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/tag_yellow.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/test.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/test2.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/thumbup.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/forest/src/main/res/drawable/ic_launcher_background.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_about.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_advice.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_allforest.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_applyforest.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_cropoblongpicture.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_croppicture.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_detailforest.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_detailupdate.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_email_how_to.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_hs_homescreen.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_screen.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/dialog_welcome.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_advice.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_evaluate.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_forest.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_homepage.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_message.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item1.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_allforesthead.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_allforesticon.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_detailforest.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_detailforesthead.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_forest.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_forestdetailiconlist.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_foresthead.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_foresticon.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_foresttype.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_homepagebottomblock.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/layout_forest_head.xml" value="0.3109375" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/ppw_homepage.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/refresh_header.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/system_notification.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/system_notification_item.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/test.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/titlebar_centergreen.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/titlebar_green.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/titlebar_transparent.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/titlebar_white.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/update_item.xml" value="0.2453125" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/app/src/main/res/layout/activity_rl_preparation.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/app/src/main/res/layout/activity_rl_welcome.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
@@ -174,7 +229,7 @@
   <component name="ProjectResources">
     <resource url="http://schemas.android.com/apk/res-auto" location="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
