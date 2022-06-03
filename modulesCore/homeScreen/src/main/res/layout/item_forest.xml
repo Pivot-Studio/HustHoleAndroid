@@ -1,225 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dp_5"
-    android:layout_marginHorizontal="@dimen/dp_10"
-    android:background="@color/GrayScale_95"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <LinearLayout
+    <data>
+        <variable
+            name="forestHole"
+            type="cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse.ForestHole" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/GrayScale_95"
-        android:orientation="horizontal">
+        android:background="@drawable/standard_forest_hole"
+        android:minHeight="110dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/image_item_forest_avatar"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_12"
+            android:background="@color/GrayScale_100"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_itemforest_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="@string/default_string_zh_short"
+            android:textColor="@color/GrayScale_50"
+            android:textSize="@dimen/sp_13"
+            app:layout_constraintStart_toEndOf="@+id/image_item_forest_avatar"
+            app:layout_constraintTop_toTopOf="@+id/image_item_forest_avatar" />
+
+        <TextView
+            android:id="@+id/tv_itemforest_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_10"
+            android:text="19:20  2020-09-16"
+            android:textColor="@color/GrayScale_80"
+            android:textSize="@dimen/sp_11"
+            app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_avatar"
+            app:layout_constraintStart_toEndOf="@+id/image_item_forest_avatar" />
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_item_forest_thumbs_up"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_40"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/image_item_forest_avatar"
+            app:layout_constraintTop_toBottomOf="@+id/text_item_forest_content">
+
+            <ImageView
+                android:id="@+id/image_item_forest_thumbs_up"
+                android:layout_width="@dimen/dp_17"
+                android:layout_height="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@mipmap/inactive" />
+
+            <TextView
+                android:id="@+id/text_item_forest_thumbs_up_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_6"
+                android:text="@string/default_string_number_short"
+                android:textColor="@color/GrayScale_70"
+                android:textSize="@dimen/sp_11"
+                app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_thumbs_up"
+                app:layout_constraintStart_toEndOf="@+id/image_item_forest_thumbs_up" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_item_forest_reply"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_67"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/layout_item_forest_thumbs_up"
+            app:layout_constraintTop_toTopOf="@+id/layout_item_forest_thumbs_up">
+
+            <ImageView
+                android:id="@+id/image_item_forest_reply"
+                android:layout_width="@dimen/dp_16"
+                android:layout_height="@dimen/dp_16"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@mipmap/inactive_2" />
+
+            <TextView
+                android:id="@+id/text_item_forest_reply_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_6"
+                android:text="@string/default_string_number_short"
+                android:textColor="@color/GrayScale_70"
+                android:textSize="@dimen/sp_11"
+                app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_reply"
+                app:layout_constraintStart_toEndOf="@+id/image_item_forest_reply" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_item_forest_follow"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginStart="@dimen/dp_67"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/layout_item_forest_reply"
+            app:layout_constraintTop_toTopOf="@+id/layout_item_forest_thumbs_up">
+
+            <ImageView
+                android:id="@+id/image_item_forest_follow"
+                android:layout_width="@dimen/dp_16"
+                android:layout_height="@dimen/dp_16"
+                android:layout_marginBottom="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@mipmap/inactive_3" />
+
+            <TextView
+                android:id="@+id/text_item_forest_follow_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_6"
+                android:text="@string/default_string_number_short"
+                android:textColor="@color/GrayScale_70"
+                android:textSize="@dimen/sp_11"
+                app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_follow"
+                app:layout_constraintStart_toEndOf="@+id/image_item_forest_follow" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/text_item_forest_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/standard_forest_hole"
-            android:minHeight="110dp"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:ellipsize="end"
+            android:lineSpacingExtra="@dimen/sp_6"
+            android:maxWidth="@dimen/dp_310"
+            android:maxLines="5"
+            android:textColor="@color/GrayScale_20"
+            android:textSize="@dimen/sp_13"
+            app:layout_constraintTop_toBottomOf="@+id/image_item_forest_avatar"
+            tools:text="@string/default_string_zh_long" />
+
+        <TextView
+            android:id="@+id/text_item_forest_hole_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_12"
+            android:text="#1037"
+            android:textColor="@color/GrayScale_0"
+            android:textSize="@dimen/sp_13"
+            android:textStyle="bold"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_item_forest_more"
+            android:layout_width="@dimen/dp_25"
+            android:layout_height="@dimen/dp_25"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:srcCompat="@mipmap/threepoint" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_item_forest_more_list"
+            android:layout_width="@dimen/dp_158"
+            android:layout_height="@dimen/dp_48"
+            android:background="@drawable/more"
+            android:elevation="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+            <!--            加上这个属性使more list隐形-->
+            <!--            tools:visibility="invisible"-->
 
             <ImageView
-                android:id="@+id/iv_itemforest_icon"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:id="@+id/image_item_forest_more_icon"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
                 android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:background="@color/GrayScale_100"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/vector4" />
 
             <TextView
-                android:id="@+id/tv_itemforest_title"
+                android:id="@+id/tv_itemforest_moretext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="树洞测试"
-                android:textColor="@color/GrayScale_50"
-                android:textSize="13sp"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemforest_icon"
-                app:layout_constraintTop_toTopOf="@+id/iv_itemforest_icon" />
-
-            <TextView
-                android:id="@+id/tv_itemforest_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:text="19:20  2020-09-16"
-                android:textColor="@color/GrayScale_80"
-                android:textSize="11sp"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_itemforest_icon"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemforest_icon" />
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_itemforest_thumbup"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_40"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/tv_itemforest_content"
-                app:layout_constraintTop_toBottomOf="@+id/tv_itemforest_content">
-
-                <ImageView
-                    android:id="@+id/iv_itemforest_thumbup"
-                    android:layout_width="@dimen/dp_17"
-                    android:layout_height="@dimen/dp_20"
-                    android:layout_marginBottom="12dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:srcCompat="@mipmap/inactive" />
-
-                <TextView
-                    android:id="@+id/tv_itemforest_thumbupnumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_6"
-                    android:text="15"
-                    android:textColor="@color/GrayScale_70"
-                    android:textSize="@dimen/sp_11"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_itemforest_thumbup"
-                    app:layout_constraintStart_toEndOf="@+id/iv_itemforest_thumbup" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_itemforest_reply"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_40"
-                android:layout_marginStart="@dimen/dp_67"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/cl_itemforest_thumbup">
-
-                <ImageView
-                    android:id="@+id/iv_itemforest_reply"
-                    android:layout_width="@dimen/dp_16"
-                    android:layout_height="@dimen/dp_16"
-                    android:layout_marginBottom="12dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:srcCompat="@mipmap/inactive_2" />
-
-                <TextView
-                    android:id="@+id/tv_itemforest_replynumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_6"
-                    android:text="15"
-                    android:textColor="@color/GrayScale_70"
-                    android:textSize="@dimen/sp_11"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_itemforest_reply"
-                    app:layout_constraintStart_toEndOf="@+id/iv_itemforest_reply" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_itemforest_follow"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_40"
-                android:layout_marginStart="@dimen/dp_67"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/cl_itemforest_reply">
-
-                <ImageView
-                    android:id="@+id/iv_itemforest_follow"
-                    android:layout_width="@dimen/dp_16"
-                    android:layout_height="@dimen/dp_16"
-                    android:layout_marginBottom="12dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:srcCompat="@mipmap/inactive_3" />
-
-                <TextView
-                    android:id="@+id/tv_itemforest_follownumber"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_6"
-                    android:text="15"
-                    android:textColor="@color/GrayScale_70"
-                    android:textSize="@dimen/sp_11"
-                    app:layout_constraintBottom_toBottomOf="@+id/iv_itemforest_follow"
-                    app:layout_constraintStart_toEndOf="@+id/iv_itemforest_follow" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/tv_itemforest_content"
-                android:layout_width="@dimen/dp_335"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="4dp"
-                android:ellipsize="end"
-                android:lineSpacingExtra="@dimen/sp_6"
-                android:maxWidth="@dimen/dp_310"
-                android:maxLines="5"
+                android:layout_marginStart="15dp"
+                android:text="举报"
                 android:textColor="@color/GrayScale_20"
-                android:textSize="13sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_itemforest_icon" />
-
-            <TextView
-                android:id="@+id/tv_itemforest_holeid"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:text="#1037"
-                android:textColor="@color/GrayScale_0"
-                android:textSize="13sp"
-                android:textStyle="bold"
-
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/image_item_forest_more_icon"
                 app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:id="@+id/iv_itemforest_more"
-                android:layout_width="@dimen/dp_25"
-                android:layout_height="@dimen/dp_25"
-                android:layout_marginEnd="14dp"
-                android:layout_marginBottom="10dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:srcCompat="@mipmap/threepoint" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/cl_itemforest_morelist"
-                android:layout_width="@dimen/dp_158"
-                android:layout_height="@dimen/dp_48"
-                android:background="@drawable/more"
-                android:elevation="20dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <ImageView
-                    android:id="@+id/iv_itemforest_moreicon"
-                    android:layout_width="@dimen/dp_24"
-                    android:layout_height="@dimen/dp_24"
-                    android:layout_marginStart="12dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@mipmap/vector4" />
-
-                <TextView
-                    android:id="@+id/tv_itemforest_moretext"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="举报"
-                    android:textColor="@color/GrayScale_20"
-                    android:textSize="14sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/iv_itemforest_moreicon"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </LinearLayout>
-
-</LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
