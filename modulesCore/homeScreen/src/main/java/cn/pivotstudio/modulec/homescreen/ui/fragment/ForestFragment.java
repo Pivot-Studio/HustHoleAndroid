@@ -13,6 +13,7 @@ import com.example.libbase.base.ui.fragment.BaseFragment;
 
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding;
+import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter;
 
 /**
  * @classname:ForestFragment
@@ -24,14 +25,11 @@ import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding;
 public class ForestFragment extends BaseFragment {
     private FragmentForestBinding binding;
 
-    public static ForestFragment newInstance() {
-        return new ForestFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_forest, container, false);
+        binding.recyclerViewForestHoles.setAdapter(new ForestHoleAdapter());
         return binding.getRoot();
     }
 }

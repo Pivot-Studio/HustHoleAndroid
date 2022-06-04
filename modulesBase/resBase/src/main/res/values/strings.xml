@@ -1,5 +1,11 @@
 <resources>
 
+    <string name="default_string_en">Hust Hole</string>
+    <string name="default_string_zh_short">1037树洞</string>
+    <string name="default_string_zh_long">1037树洞1037洞1037树洞10371037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞</string>
+    <string name="default_string_number_short">1037</string>
+    <string name="default_string_number_long">1037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037</string>
+
     <string name="homepage_1">1037树洞</string>
     <string name="homepage_2">叮~来自1037树洞的悄悄话！</string>
     <string name="homepage_3">知道啦</string>

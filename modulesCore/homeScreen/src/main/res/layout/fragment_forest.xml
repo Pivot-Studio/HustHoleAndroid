@@ -12,15 +12,81 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/GrayScale_95"/>
-        <cn.pivotstudio.modulec.homescreen.oldversion.model.MaxHeightRecyclerView
-            android:id="@+id/rv_forest"
+
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:nestedScrollingEnabled="false"
-            />
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_forest_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_37"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/tv_forest_head_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/dp_12"
+                        android:text="@string/page2fragment_1"
+                        android:textColor="@color/GrayScale_70"
+                        android:textSize="@dimen/sp_11"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/text_forest_head_jump_to_all_forest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/page2fragment_2"
+                        android:textColor="@color/GrayScale_70"
+                        android:textSize="@dimen/sp_11"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/image_forest_head_jump_to_all_forest"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/image_forest_head_jump_to_all_forest"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/dp_0"
+                        android:contentDescription="@string/page2fragment_2"
+                        android:scaleType="fitCenter"
+                        app:layout_constraintBottom_toBottomOf="@+id/text_forest_head_jump_to_all_forest"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/text_forest_head_jump_to_all_forest"
+                        app:srcCompat="@mipmap/triangle_3" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_forest_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_80"
+                    android:nestedScrollingEnabled="false"
+                    android:orientation="horizontal" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_forest_holes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
         <com.scwang.smart.refresh.footer.ClassicsFooter
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/GrayScale_95"/>
+
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </layout>
