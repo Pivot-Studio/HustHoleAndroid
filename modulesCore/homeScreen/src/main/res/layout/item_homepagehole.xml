@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
     <data>
-        <import type="cn.pivotstudio.modulec.homescreen.ui.adapter.HomePageItemAdapter" />
         <import type="com.example.libbase.util.data.TimeUtil"/>
         <variable
             name="homePageHole"

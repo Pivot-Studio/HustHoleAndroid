@@ -1,4 +1,4 @@
-package cn.pivotstudio.modulec.homescreen.ui.adapter;
+package cn.pivotstudio.modulec.homescreen.ui;
 
 import android.graphics.drawable.Drawable;
 import android.view.View;
@@ -7,34 +7,37 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.databinding.BindingAdapter;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.libbase.util.data.TimeUtil;
 
 import cn.pivotstudio.modulec.homescreen.R;
 
 /**
- * @classname:HomePageItemAdapter
- * @description:item的view加载适配器
- * @date:2022/5/4 15:40
- * @version:1.0
- * @author:
+ * @author mhh
+ * @version :1.0
+ * @classname BingdingAdapters
+ * @description:
+ * @date :2022/6/4 18:54
  */
-public class HomePageItemAdapter {
+public class BindingAdapters {
+
+    private BindingAdapters() { }
     /**
      * 点赞按钮
-     * @param view
-     * @param is_thumbup
+     * @param view todo
+     * @param is_thumbup todo
      */
     @BindingAdapter({"thumbupIcon"})
     public static void onClickThumbup(ImageView view, boolean is_thumbup){
-    view.setImageResource(is_thumbup? R.mipmap.active:R.mipmap.inactive);
+        view.setImageResource(is_thumbup? R.mipmap.active:R.mipmap.inactive);
 
     }
 
     /**
      * 回复按钮
-     * @param view
-     * @param is_reply
+     * @param view todo
+     * @param is_reply todo
      */
     @BindingAdapter({"replyIcon"})
     public static void onClickReply(ImageView view, boolean is_reply){
@@ -44,8 +47,8 @@ public class HomePageItemAdapter {
 
     /**
      * 收藏按钮
-     * @param view
-     * @param is_follow
+     * @param view todo
+     * @param is_follow todo
      */
     @BindingAdapter({"followIcon"})
     public static void onClickFollow(ImageView view, boolean is_follow){
@@ -55,8 +58,8 @@ public class HomePageItemAdapter {
 
     /**
      * 举报，删除
-     * @param view
-     * @param is_mine
+     * @param view todo
+     * @param is_mine todo
      */
     @BindingAdapter({"moreListIcon"})
     public static void onClickMore(ImageView view,boolean is_mine){
@@ -65,12 +68,12 @@ public class HomePageItemAdapter {
 
     /**
      * 时间加载
-     * @param view
-     * @param is_last_reply
-     * @param created_timestamp
+     * @param view todo
+     * @param is_last_reply todo
+     * @param created_timestamp todo
      */
     @BindingAdapter({"timeSign","time"})
-    public static void onTime(TextView view,boolean is_last_reply,String created_timestamp){
+    public static void onTime(TextView view, boolean is_last_reply, String created_timestamp){
         //后端搜索给的时间慢半个小时，麻
         String time= TimeUtil.time(created_timestamp)+((is_last_reply)?"更新":"发布");
         view.setText(time);
@@ -78,12 +81,12 @@ public class HomePageItemAdapter {
 
     /**
      * 右上角小树林icon
-     * @param view
-     * @param forestName
-     * @param role
+     * @param view todo
+     * @param forestName todo
+     * @param role todo
      */
     @BindingAdapter({"forestIcon","role"})
-    public static void onForestIconShow(Button view, String forestName,String role){
+    public static void onForestIconShow(Button view, String forestName, String role){
         if(role==null||forestName.equals("")){//搜索方式获得的数据没role,麻了
             view.setVisibility(View.INVISIBLE);
             return;
@@ -135,11 +138,10 @@ public class HomePageItemAdapter {
 
     /**
      * 右上角圆形icon
-     * @param view
-     * @param forestName
-     * @param role
+     * @param view todo
+     * @param forestName todo
+     * @param role todo
      */
-
     @BindingAdapter({"psIcon","role"})
     public static void onPsIconShow(ImageView view, String forestName,String role){
         if(role==null){
