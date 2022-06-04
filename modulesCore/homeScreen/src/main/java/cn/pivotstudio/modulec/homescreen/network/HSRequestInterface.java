@@ -17,11 +17,11 @@ import retrofit2.http.Query;
 import retrofit2.http.Url;
 
 /**
- * @classname:HSRequestInterface
- * @description:首页网络请求接口
- * @date:2022/5/3 0:42
+ * @classname HSRequestInterface
+ * @description: 首页网络请求接口
+ * @date 2022/5/3 0:42
  * @version:1.0
- * @author:
+ * @author: lzt
  */
 public interface HSRequestInterface {
     @GET("version")

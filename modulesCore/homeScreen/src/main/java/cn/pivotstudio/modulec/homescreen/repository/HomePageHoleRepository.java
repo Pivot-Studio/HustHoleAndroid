@@ -22,7 +22,7 @@ import cn.pivotstudio.modulec.homescreen.network.HSRequestInterface;
 import io.reactivex.Observable;
 
 /**
- * @classname:HomePageHoleResponse
+ * @classname: HomePageHoleResponse
  * @description:
  * @date:2022/5/3 22:55
  * @version:1.0

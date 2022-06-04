@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
+
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/GrayScale_95"
-        >
+        android:background="@color/GrayScale_95">
+
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/GrayScale_95"/>
+            android:background="@color/GrayScale_95" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,12 +72,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_80"
                     android:nestedScrollingEnabled="false"
-                    android:orientation="horizontal" />
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="10"
+                    tools:listitem="@layout/item_forest_head" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_view_forest_holes"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:background="@color/GrayScale_95"
+                    android:orientation="vertical"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:itemCount="3"
+                    tools:listitem="@layout/item_forest" />
 
             </LinearLayout>
 
@@ -86,7 +94,7 @@
         <com.scwang.smart.refresh.footer.ClassicsFooter
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/GrayScale_95"/>
+            android:background="@color/GrayScale_95" />
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 </layout>
