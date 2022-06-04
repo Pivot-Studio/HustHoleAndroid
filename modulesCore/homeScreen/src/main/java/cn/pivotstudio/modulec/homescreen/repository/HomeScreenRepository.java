@@ -11,11 +11,11 @@ import cn.pivotstudio.modulec.homescreen.model.VersionResponse;
 import cn.pivotstudio.modulec.homescreen.network.HSRequestInterface;
 
 /**
- * @classname:HomeScreenRepository
+ * @classname HomeScreenRepository
  * @description:
- * @date:2022/5/3 0:50
+ * @date 2022/5/3 0:50
  * @version:1.0
- * @author:
+ * @author: lzt
  */
 @SuppressLint("CheckResult")
 public class HomeScreenRepository {

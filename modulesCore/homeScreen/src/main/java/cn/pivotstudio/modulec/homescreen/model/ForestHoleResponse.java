@@ -1,5 +1,7 @@
 package cn.pivotstudio.modulec.homescreen.model;
 
+import cn.pivotstudio.modulec.homescreen.R;
+
 /**
  * @author mhh
  * @version :1.0
@@ -10,9 +12,49 @@ package cn.pivotstudio.modulec.homescreen.model;
 public class ForestHoleResponse {
 
     public static class ForestHole {
-        public final String content = null;
-        public final String holeId = null;
-        public final String forestId = null;
+        private String content = "content";
+        private String holeId = "holdId";
+        private String forestId = "forestId";
+        private String title = "title";
+
+        public String getContent() {
+            return content;
+        }
+
+        public String getHoleId() {
+            return holeId;
+        }
+
+        public String getForestId() {
+            return forestId;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+    }
+
+    public static class ForestHead {
+        private String content = "content";
+        private String holeId = "holdId";
+        private String forestId = "forestId";
+        private String title = "title";
+
+        public String getContent() {
+            return content;
+        }
+
+        public String getHoleId() {
+            return holeId;
+        }
+
+        public String getForestId() {
+            return forestId;
+        }
+
+        public String getTitle() {
+            return title;
+        }
     }
 
 }

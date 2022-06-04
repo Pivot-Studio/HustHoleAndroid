@@ -3,10 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/add.xml" value="0.25" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar.xml" value="0.2095" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar_button1.xml" value="0.2095" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar_button2.xml" value="0.2095" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar_button3.xml" value="0.2095" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/icon.xml" value="0.25" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/item.xml" value="0.25" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/label_text_color.xml" value="0.25" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/more.xml" value="0.25" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/notice.xml" value="0.25" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/standard_forest_1.xml" value="0.2095" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/standard_forest_1_head.xml" value="0.1" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/standard_forest_centerphoto.xml" value="0.2095" />
@@ -42,9 +48,10 @@
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_detailforest.xml" value="0.2453125" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_detailforesthead.xml" value="0.2453125" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_forest.xml" value="0.33" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_forest_head.xml" value="0.16485507246376813" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_forestdetailiconlist.xml" value="0.2453125" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_foresthead.xml" value="0.2453125" />
-        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_foresticon.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_foresticon.xml" value="0.33" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_foresttype.xml" value="0.2453125" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_homepagebottomblock.xml" value="0.2453125" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.2453125" />

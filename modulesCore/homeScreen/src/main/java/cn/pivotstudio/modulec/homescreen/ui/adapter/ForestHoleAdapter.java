@@ -1,6 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter;
 
-import android.view.View;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -8,9 +8,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
-import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding;
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestBinding;
 import cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse;
 
@@ -24,49 +21,42 @@ import cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse;
  */
 public class ForestHoleAdapter extends ListAdapter<ForestHoleResponse.ForestHole, ForestHoleAdapter.ForestHoleViewHolder> {
 
-    // DiffCallback 是一个饿汉式单例类，用法参照 ListAdapter 官方使用方法
-    public static class DiffCallback extends DiffUtil.ItemCallback<ForestHoleResponse.ForestHole> {
-
-        private static final DiffCallback DIFF_CALLBACK = new DiffCallback();
-
-        public static DiffCallback getInstance() {
-            return DIFF_CALLBACK;
-        }
-
-        private DiffCallback() { }
-
+    public static final DiffUtil.ItemCallback<ForestHoleResponse.ForestHole> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestHoleResponse.ForestHole>() {
         @Override
         public boolean areItemsTheSame(@NonNull ForestHoleResponse.ForestHole oldItem, @NonNull ForestHoleResponse.ForestHole newItem) {
-            return oldItem.holeId.equals(newItem.holeId);
+            return false;
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull ForestHoleResponse.ForestHole oldItem, @NonNull ForestHoleResponse.ForestHole newItem) {
-            return oldItem.content.equals(newItem.content);
+            return false;
         }
-    }
+    };
 
     public ForestHoleAdapter() {
-        super(DiffCallback.getInstance());
+        super(DIFF_CALLBACK);
     }
 
 
     @NonNull
     @Override
     public ForestHoleViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return null;
+        return new ForestHoleViewHolder(
+                ItemForestBinding.inflate(LayoutInflater.from(parent.getContext()),
+                        parent,
+                        false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull ForestHoleViewHolder holder, int position) {
-
+        final ForestHoleResponse.ForestHole forestHole = getItem(position);
+        holder.bind(forestHole);
     }
 
     static class ForestHoleViewHolder extends RecyclerView.ViewHolder {
 
-        private ItemForestBinding binding;
+        private final ItemForestBinding binding;
 
-        // Constructor
         public ForestHoleViewHolder(ItemForestBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
@@ -76,8 +66,7 @@ public class ForestHoleAdapter extends ListAdapter<ForestHoleResponse.ForestHole
             binding.setForestHole(forestHole);
         }
 
-
     }
 
-
 }
+
