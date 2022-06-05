@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/dp_154"
     android:layout_height="@dimen/dp_210"
+    android:layout_margin="@dimen/dp_5"
     android:background="@drawable/standard_forest_1">
 
     <ImageView
@@ -77,7 +78,7 @@
 
     <Button
         android:id="@+id/btn_join_forest"
-        style="?android:attr/borderlessButtonStyle"
+        android:background="@drawable/forest_button_white"
         android:layout_width="@dimen/dp_68"
         android:layout_height="@dimen/dp_32"
         android:layout_marginEnd="@dimen/dp_10"
