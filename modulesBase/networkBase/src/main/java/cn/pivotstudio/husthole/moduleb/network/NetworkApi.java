@@ -21,10 +21,10 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * @classname:NetworkApi
+ * @classname: NetworkApi
  * @description:
- * @date:2022/4/29 14:31
- * @version:1.0
+ * @date: 2022/4/29 14:31
+ * @version: 1.0
  * @author:
  */
 public class NetworkApi {
@@ -127,18 +127,25 @@ public class NetworkApi {
         //初始化Retrofit  Retrofit是对OKHttp的封装，通常是对网络请求做处理，也可以处理返回数据。
         //Retrofit构建器
         Retrofit.Builder builder = new Retrofit.Builder();
+
         //设置访问地址
         builder.baseUrl(BASE_URL);
+
         //设置OkHttp客户端，传入上面写好的方法即可获得配置后的OkHttp客户端。
         builder.client(getOkHttpClient());
+
         //设置数据解析器 会自动把请求返回的结果（json字符串）通过Gson转化工厂自动转化成与其结构相符的实体Bean
         builder.addConverterFactory(GsonConverterFactory.create());
+
         //设置请求回调，使用RxJava 对网络返回进行处理
         builder.addCallAdapterFactory(RxJava2CallAdapterFactory.create());
+
         //retrofit配置完成
         Retrofit retrofit = builder.build();
+
         //放入Map中
         retrofitHashMap.put(BASE_URL + serviceClass.getName(), retrofit);
+
         //最后返回即可
         return retrofit;
     }
@@ -179,5 +186,9 @@ public class NetworkApi {
             return response;
         };
     }
+}
+
+enum RequestType {
+    TYPE_TEST, TYPE_COMMON;
 }
 

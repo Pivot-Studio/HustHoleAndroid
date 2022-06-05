@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/dp_154"
+    android:layout_height="@dimen/dp_210"
+    android:background="@drawable/standard_forest_1">
+
+    <ImageView
+        android:id="@+id/image_top_background"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_60"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src=""/>
+
+    <ImageView
+        android:id="@+id/image_avatar_frame"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_36"
+        android:background="@drawable/standard_forest_centerphoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/image_forest_avatar"
+        android:layout_width="@dimen/dp_42"
+        android:layout_height="@dimen/dp_42"
+        app:layout_constraintBottom_toBottomOf="@+id/image_avatar_frame"
+        app:layout_constraintEnd_toEndOf="@+id/image_avatar_frame"
+        app:layout_constraintStart_toStartOf="@+id/image_avatar_frame"
+        app:layout_constraintTop_toTopOf="@+id/image_avatar_frame"
+        tools:src="@drawable/icon"/>
+
+    <TextView
+        android:id="@+id/text_forest_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_3"
+        android:text="@string/default_string_zh_short"
+        android:textColor="@color/GrayScale_20"
+        android:textSize="@dimen/sp_13"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image_avatar_frame" />
+
+    <TextView
+        android:id="@+id/text_forest_follow_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_17"
+        android:layout_marginTop="@dimen/dp_5"
+        android:text="Huster.树洞"
+        android:textColor="@color/GrayScale_70"
+        android:textSize="@dimen/sp_11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_forest_title" />
+
+    <TextView
+        android:id="@+id/text_forest_overview"
+        android:layout_width="@dimen/dp_134"
+        android:layout_height="@dimen/dp_34"
+        android:layout_marginTop="@dimen/dp_5"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/default_string_zh_long"
+        android:textColor="@color/GrayScale_50"
+        android:textSize="@dimen/sp_11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_forest_follow_msg" />
+
+
+    <Button
+        android:id="@+id/btn_join_forest"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="@dimen/dp_68"
+        android:layout_height="@dimen/dp_32"
+        android:layout_marginEnd="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_10"
+        android:textSize="@dimen/sp_13"
+        app:layout_constraintTop_toBottomOf="@id/text_forest_overview"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
