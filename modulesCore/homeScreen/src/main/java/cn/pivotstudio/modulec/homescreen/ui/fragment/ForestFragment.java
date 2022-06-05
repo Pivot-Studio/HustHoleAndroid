@@ -19,10 +19,10 @@ import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter;
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel;
 
 /**
- * @classname:ForestFragment
+ * @classname: ForestFragment
  * @description:
- * @date:2022/5/2 22:57
- * @version:1.0
+ * @date: 2022/5/2 22:57
+ * @version: 1.0
  * @author:
  */
 public class ForestFragment extends BaseFragment {
