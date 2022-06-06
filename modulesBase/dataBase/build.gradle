@@ -38,13 +38,13 @@ android {
 dependencies {
 
     //Room 支持RxJava2
-    implementation 'androidx.room:room-rxjava2:2.3.0'
+    implementation 'androidx.room:room-rxjava2:2.4.2'
     //rxjava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
     //Room数据库
-    api 'androidx.room:room-runtime:2.3.0'
-    annotationProcessor 'androidx.room:room-compiler:2.3.0'
+    api 'androidx.room:room-runtime:2.4.2'
+    annotationProcessor 'androidx.room:room-compiler:2.4.2'
 
     //hilt组件化里面出bug搞崩溃了，暂时先不用
 //    // Hilt 和 Hilt注解处理器
