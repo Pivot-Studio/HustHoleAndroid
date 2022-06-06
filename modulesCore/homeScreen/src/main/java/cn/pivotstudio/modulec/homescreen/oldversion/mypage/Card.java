@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.mypage;
 
+@Deprecated
 public class Card {
     String ID,date,content,up,talk,star;
 //    Integer img_up,img_talk,img_star,threePoint;

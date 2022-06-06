@@ -546,12 +546,12 @@ public class DetailForestActivity extends AppCompatActivity {
             private ImageView head;
             public HeadHolder(View view){
                 super(view);
-                title=(TextView)view.findViewById(R.id.tv_detailforesthead_title);
-                hole_and_number=(TextView)view.findViewById(R.id.tv_detailforesthead_number);
-                content=(TextView)view.findViewById(R.id.tv_detailforesthead_content);
-                button=(Button)view.findViewById(R.id.btn_detailforesthead_join);
-                head=(ImageView)view.findViewById(R.id.iv_detailforesthead_icon);
-                greenline=(Button)view.findViewById(R.id.btn_detailforesthead_greenline);
+                title=(TextView)view.findViewById(R.id.text_forest_detail_title);
+                hole_and_number=(TextView)view.findViewById(R.id.text_forest_detail_follow_msg);
+                content=(TextView)view.findViewById(R.id.text_forest_detail_overview);
+                button=(Button)view.findViewById(R.id.btn_forest_detail_join);
+                head=(ImageView)view.findViewById(R.id.image_forest_detail_avatar);
+
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -676,7 +676,7 @@ public class DetailForestActivity extends AppCompatActivity {
                      //   Log.d("mDis",mDistanceY+"");
                         //toolbar的高度
                         if(headHeight==0) {
-                            headHeight = greenline.getBottom()+30;
+
                         }
                     //    Log.d("headHeight",headHeight+"");
                         //当滑动的距离 <= toolbar高度的时候，改变Toolbar背景色的透明度，达到渐变的效果
@@ -791,26 +791,26 @@ public class DetailForestActivity extends AppCompatActivity {
 
             public ViewHolder(View view) {
                 super(view);
-                thumbup=(ConstraintLayout)view.findViewById(R.id.cl_detailforest_thumbup);
-                follow=(ConstraintLayout)view.findViewById(R.id.cl_detailforest_follow);
-                reply=(ConstraintLayout)view.findViewById(R.id.cl_detailforest_reply);
+                thumbup=(ConstraintLayout)view.findViewById(R.id.layout_forest_detail_thumbup);
+                follow=(ConstraintLayout)view.findViewById(R.id.layout_forest_detail_follow);
+                reply=(ConstraintLayout)view.findViewById(R.id.layout_forest_detail_reply);
 
-                content=(TextView)view.findViewById(R.id.tv_itemdetailforest_content);
-                created_timestamp=(TextView)view.findViewById(R.id.tv_itemdetailforest_time);
+                content=(TextView)view.findViewById(R.id.text_item_forest_detail_content);
+                created_timestamp=(TextView)view.findViewById(R.id.text_item_forest_detail_date_time);
                // forest_name=(TextView)view.findViewById(R.id.textView32);
-                thumbup_num=(TextView)view.findViewById(R.id.tv_itemdetailforest_thumbupnumber);
-                reply_num=(TextView)view.findViewById(R.id.tv_itemdetailforest_replynumber);
-                follow_num =(TextView)view.findViewById(R.id.tv_itemdetailforest_follownumber);
-                hole_id=(TextView)view.findViewById(R.id.tv_itemdetailforest_title);
-               // background_image_url=(ImageView)view.findViewById(R.id.imageView12);
-                is_thumbup =(ImageView)view.findViewById(R.id.iv_itemdetailforest_thumbup);
-                is_reply=(ImageView)view.findViewById(R.id.iv_itemdetailforest_reply);
-                is_follow=(ImageView)view.findViewById(R.id.iv_itemdetailforest_follow);
+                thumbup_num=(TextView)view.findViewById(R.id.text_item_forest_detail_thumbup_num);
+                reply_num=(TextView)view.findViewById(R.id.text_item_forest_detail_reply_num);
 
-                more=(ImageView)view.findViewById(R.id.iv_itemdetailforest_more);
+                hole_id=(TextView)view.findViewById(R.id.text_item_forest_detail_hole_id);
+               // background_image_url=(ImageView)view.findViewById(R.id.imageView12);
+                is_thumbup =(ImageView)view.findViewById(R.id.image_item_forest_detail_thumbup);
+                is_reply=(ImageView)view.findViewById(R.id.image_item_forest_detail_reply);
+                is_follow=(ImageView)view.findViewById(R.id.image_item_forest_detail_follow);
+
+
                 more_1=(ImageView)view.findViewById(R.id.iv_itemdetailforest_moreicon);
                 more_2=(TextView)view.findViewById(R.id.tv_itemdetailforest_moretext);
-                morewhat=(ConstraintLayout)view.findViewById(R.id.cl_itemdetailforest_morelist);
+                
                 morewhat.setVisibility(View.INVISIBLE);
                 more.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -1213,7 +1213,7 @@ public class DetailForestActivity extends AppCompatActivity {
                         .inflate(R.layout.item_detailforesthead,parent,false));
             } else if (viewType == ITEM_TYPE_CONTENT) {
                 return new ViewHolder(LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_detailforest,parent,false));
+                        .inflate(R.layout.item_forest_detail,parent,false));
             }
 
 

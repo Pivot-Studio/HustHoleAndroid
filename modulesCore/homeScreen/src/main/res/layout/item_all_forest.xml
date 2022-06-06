@@ -8,7 +8,7 @@
     android:background="@drawable/standard_forest_1">
 
     <ImageView
-        android:id="@+id/image_top_background"
+        android:id="@+id/image_item_all_forest_top_background"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_60"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,7 +17,7 @@
         tools:src=""/>
 
     <ImageView
-        android:id="@+id/image_avatar_frame"
+        android:id="@+id/image_item_all_forest_avatar_frame"
         android:layout_width="@dimen/dp_48"
         android:layout_height="@dimen/dp_48"
         android:layout_marginTop="@dimen/dp_36"
@@ -27,17 +27,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/image_forest_avatar"
+        android:id="@+id/image_item_all_forest_avatar"
         android:layout_width="@dimen/dp_42"
         android:layout_height="@dimen/dp_42"
-        app:layout_constraintBottom_toBottomOf="@+id/image_avatar_frame"
-        app:layout_constraintEnd_toEndOf="@+id/image_avatar_frame"
-        app:layout_constraintStart_toStartOf="@+id/image_avatar_frame"
-        app:layout_constraintTop_toTopOf="@+id/image_avatar_frame"
+        app:layout_constraintBottom_toBottomOf="@+id/image_item_all_forest_avatar_frame"
+        app:layout_constraintEnd_toEndOf="@+id/image_item_all_forest_avatar_frame"
+        app:layout_constraintStart_toStartOf="@+id/image_item_all_forest_avatar_frame"
+        app:layout_constraintTop_toTopOf="@+id/image_item_all_forest_avatar_frame"
         tools:src="@drawable/icon"/>
 
     <TextView
-        android:id="@+id/text_forest_title"
+        android:id="@+id/text_item_all_forest_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_3"
@@ -47,10 +47,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_avatar_frame" />
+        app:layout_constraintTop_toBottomOf="@+id/image_item_all_forest_avatar_frame" />
 
     <TextView
-        android:id="@+id/text_forest_follow_msg"
+        android:id="@+id/text_item_all_forest_follow_msg"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_17"
         android:layout_marginTop="@dimen/dp_5"
@@ -59,7 +59,7 @@
         android:textSize="@dimen/sp_11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_forest_title" />
+        app:layout_constraintTop_toBottomOf="@+id/text_item_all_forest_title" />
 
     <TextView
         android:id="@+id/text_forest_overview"
@@ -73,7 +73,7 @@
         android:textSize="@dimen/sp_11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_forest_follow_msg" />
+        app:layout_constraintTop_toBottomOf="@+id/text_item_all_forest_follow_msg" />
 
 
     <Button

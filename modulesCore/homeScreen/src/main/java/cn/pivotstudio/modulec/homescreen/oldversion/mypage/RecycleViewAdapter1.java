@@ -13,7 +13,6 @@ import java.util.List;
 
 import cn.pivotstudio.modulec.homescreen.R;
 
-
 public class RecycleViewAdapter1 extends RecyclerView.Adapter<RecycleViewAdapter1.ViewHolder> {
     private List<Item1> Item1List;
 

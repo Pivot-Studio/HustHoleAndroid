@@ -5,6 +5,8 @@
       <map>
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.303" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/add.xml" value="0.25" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/add_photo_gray.xml" value="0.281" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/add_t.xml" value="0.281" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar.xml" value="0.2095" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar_button1.xml" value="0.2095" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/bottombar_button2.xml" value="0.2095" />
@@ -51,6 +53,7 @@
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_all_frorest.xml" value="0.309375" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_evaluate.xml" value="0.2453125" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_forest.xml" value="0.33" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_forest_detail.xml" value="0.4855072463768116" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_homepage.xml" value="0.2453125" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_message.xml" value="0.2453125" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item1.xml" value="0.2453125" />
@@ -58,7 +61,7 @@
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_allforesthead.xml" value="0.2453125" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_allforesticon.xml" value="0.2453125" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_detailforest.xml" value="0.2453125" />
-        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_detailforesthead.xml" value="0.2453125" />
+        <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_detailforesthead.xml" value="0.5" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_forest.xml" value="0.33" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_forest_head.xml" value="0.16485507246376813" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_forestdetailiconlist.xml" value="0.2453125" />
