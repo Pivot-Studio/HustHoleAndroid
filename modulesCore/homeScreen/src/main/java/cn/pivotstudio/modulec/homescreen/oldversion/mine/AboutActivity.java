@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.mine;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;

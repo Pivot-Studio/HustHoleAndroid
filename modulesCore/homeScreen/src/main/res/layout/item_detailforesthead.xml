@@ -3,111 +3,118 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="#00FFFFFF">
+    android:layout_height="@dimen/dp_120"
+    tools:background="@color/GrayScale_70">
 
 
     <ImageView
-        android:id="@+id/iv_detailforesthead_iconframe"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="8dp"
+        android:id="@+id/image_forest_detail_avatar_frame"
+        android:layout_width="@dimen/dp_48"
+        android:layout_height="@dimen/dp_48"
+        android:layout_marginStart="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_8"
         android:background="@drawable/standard_forest_centerphoto"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_detailforesthead_title"
+        android:id="@+id/text_forest_detail_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:text="测试测试测试测试"
+        android:layout_marginStart="@dimen/dp_15"
+        android:text="@string/default_string_zh_short"
         android:textColor="@color/GrayScale_100"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_detailforesthead_iconframe"
-        app:layout_constraintStart_toEndOf="@+id/iv_detailforesthead_iconframe"
-        app:layout_constraintTop_toTopOf="@+id/iv_detailforesthead_iconframe" />
+        android:textSize="@dimen/sp_18"
+        app:layout_constraintBottom_toBottomOf="@+id/image_forest_detail_avatar_frame"
+        app:layout_constraintStart_toEndOf="@+id/image_forest_detail_avatar_frame"
+        app:layout_constraintTop_toTopOf="@+id/image_forest_detail_avatar_frame" />
 
     <TextView
-        android:id="@+id/tv_detailforesthead_number"
+        android:id="@+id/text_forest_detail_follow_msg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="250 Huster . 250 树洞"
+        android:layout_marginTop="@dimen/dp_5"
+        android:text="@string/follow_msg"
         android:textColor="@color/GrayScale_100"
-        android:textSize="11sp"
-        app:layout_constraintStart_toStartOf="@+id/iv_detailforesthead_iconframe"
-        app:layout_constraintTop_toBottomOf="@+id/iv_detailforesthead_iconframe" />
+        android:textSize="@dimen/sp_11"
+        app:layout_constraintStart_toStartOf="@+id/image_forest_detail_avatar_frame"
+        app:layout_constraintTop_toBottomOf="@+id/image_forest_detail_avatar_frame" />
 
     <TextView
-        android:id="@+id/tv_detailforesthead_content"
+        android:id="@+id/text_forest_detail_overview"
         android:layout_width="@dimen/dp_254"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
-        android:text="最多两行最多两行最多两行最多两行最多两行最多两行最多两行最多两行最多两行"
+        android:layout_marginTop="@dimen/dp_3"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="@string/default_string_zh_long"
         android:textColor="@color/GrayScale_100"
-        android:textSize="11sp"
-        app:layout_constraintStart_toStartOf="@+id/tv_detailforesthead_number"
-        app:layout_constraintTop_toBottomOf="@+id/tv_detailforesthead_number" />
+        android:textSize="@dimen/sp_11"
+        app:layout_constraintStart_toStartOf="@+id/text_forest_detail_follow_msg"
+        app:layout_constraintTop_toBottomOf="@+id/text_forest_detail_follow_msg" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ll_detailforesthead"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/GrayScale_100"
-        app:layout_constraintTop_toBottomOf="@+id/tv_detailforesthead_content"
-        tools:layout_editor_absoluteX="22dp">
+    <!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+    <!--        android:id="@+id/ll_detailforesthead"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="35dp"-->
+    <!--        android:layout_marginTop="15dp"-->
+    <!--        android:background="@color/GrayScale_100"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/tv_detailforesthead_content"-->
+    <!--        tools:layout_editor_absoluteX="22dp">-->
 
-        <TextView
-            android:id="@+id/tv_detailforesthead_new"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/page2_detailforest_1"
-            android:textColor="@color/GrayScale_20"
-            android:textSize="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.054"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <!--        <TextView-->
+    <!--            android:id="@+id/tv_detailforesthead_new"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_marginTop="8dp"-->
+    <!--            android:text="@string/page2_detailforest_1"-->
+    <!--            android:textColor="@color/GrayScale_20"-->
+    <!--            android:textSize="14dp"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintHorizontal_bias="0.054"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
-        <Button
-            android:id="@+id/btn_detailforesthead_greenline"
-            android:layout_width="28dp"
-            android:layout_height="2dp"
-            android:layout_marginBottom="2dp"
-            android:background="@color/HH_BandColor_1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_detailforesthead_new" />
+    <!--        <Button-->
+    <!--            android:id="@+id/btn_detailforesthead_greenline"-->
+    <!--            android:layout_width="28dp"-->
+    <!--            android:layout_height="2dp"-->
+    <!--            android:layout_marginBottom="2dp"-->
+    <!--            android:background="@color/HH_BandColor_1"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="@+id/tv_detailforesthead_new" />-->
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
-            android:background="@color/GrayScale_80"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!--        <TextView-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="@dimen/dp_1"-->
+    <!--            android:background="@color/GrayScale_80"-->
+    <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintHorizontal_bias="0.0"-->
+    <!--            app:layout_constraintStart_toStartOf="parent" />-->
+    <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <ImageView
-        android:id="@+id/iv_detailforesthead_icon"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_detailforesthead_iconframe"
-        app:layout_constraintEnd_toEndOf="@+id/iv_detailforesthead_iconframe"
-        app:layout_constraintStart_toStartOf="@+id/iv_detailforesthead_iconframe"
-        app:layout_constraintTop_toTopOf="@+id/iv_detailforesthead_iconframe"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:id="@+id/image_forest_detail_avatar"
+        android:layout_width="@dimen/dp_42"
+        android:layout_height="@dimen/dp_42"
+        app:layout_constraintBottom_toBottomOf="@+id/image_forest_detail_avatar_frame"
+        app:layout_constraintEnd_toEndOf="@+id/image_forest_detail_avatar_frame"
+        app:layout_constraintStart_toStartOf="@+id/image_forest_detail_avatar_frame"
+        app:layout_constraintTop_toTopOf="@+id/image_forest_detail_avatar_frame"
+        tools:srcCompat="@drawable/icon" />
 
-    <Button
-        android:id="@+id/btn_detailforesthead_join"
-        android:layout_width="68dp"
-        android:layout_height="32dp"
-        android:layout_marginEnd="20dp"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_detailforesthead_title"
-        app:layout_constraintEnd_toEndOf="parent" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_forest_detail_join"
+        android:layout_width="@dimen/dp_68"
+        android:layout_height="@dimen/dp_32"
+        android:layout_marginEnd="@dimen/dp_20"
+        android:text="加入"
+        android:textSize="@dimen/sp_14"
+        app:cornerRadius="@dimen/dp_16"
+        app:icon="@drawable/add"
+        app:layout_constraintBottom_toBottomOf="@+id/text_forest_detail_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/text_forest_detail_title" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

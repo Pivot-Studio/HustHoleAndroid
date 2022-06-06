@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_fragment_forest_detail_top"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_120"
+        android:background="@color/GrayScale_70"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <ImageView
+            android:id="@+id/image_forest_detail_avatar_frame"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_8"
+            android:background="@drawable/standard_forest_centerphoto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_forest_detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_15"
+            android:text="@string/default_string_zh_short"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="@dimen/sp_18"
+            app:layout_constraintBottom_toBottomOf="@+id/image_forest_detail_avatar_frame"
+            app:layout_constraintStart_toEndOf="@+id/image_forest_detail_avatar_frame"
+            app:layout_constraintTop_toTopOf="@+id/image_forest_detail_avatar_frame" />
+
+        <TextView
+            android:id="@+id/text_forest_detail_follow_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_5"
+            android:text="@string/follow_msg"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="@dimen/sp_11"
+            app:layout_constraintStart_toStartOf="@+id/image_forest_detail_avatar_frame"
+            app:layout_constraintTop_toBottomOf="@+id/image_forest_detail_avatar_frame" />
+
+        <TextView
+            android:id="@+id/text_forest_detail_overview"
+            android:layout_width="@dimen/dp_254"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_3"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@string/default_string_zh_long"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="@dimen/sp_11"
+            app:layout_constraintStart_toStartOf="@+id/text_forest_detail_follow_msg"
+            app:layout_constraintTop_toBottomOf="@+id/text_forest_detail_follow_msg" />
+
+        <ImageView
+            android:id="@+id/image_forest_detail_avatar"
+            android:layout_width="@dimen/dp_42"
+            android:layout_height="@dimen/dp_42"
+            app:layout_constraintBottom_toBottomOf="@+id/image_forest_detail_avatar_frame"
+            app:layout_constraintEnd_toEndOf="@+id/image_forest_detail_avatar_frame"
+            app:layout_constraintStart_toStartOf="@+id/image_forest_detail_avatar_frame"
+            app:layout_constraintTop_toTopOf="@+id/image_forest_detail_avatar_frame"
+            tools:srcCompat="@drawable/icon" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_forest_detail_join"
+            android:layout_width="@dimen/dp_68"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginEnd="@dimen/dp_20"
+            android:backgroundTint="@color/HH_BandColor_3"
+            android:elevation="@dimen/dp_0"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="@dimen/dp_5"
+            android:text="加入"
+            android:textAlignment="center"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="@dimen/sp_14"
+            app:cornerRadius="@dimen/dp_16"
+            app:icon="@drawable/add"
+            app:iconPadding="@dimen/dp_0"
+            app:iconSize="@dimen/dp_24"
+            app:layout_constraintBottom_toBottomOf="@+id/text_forest_detail_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/text_forest_detail_title" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_forest_detail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/GrayScale_95"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layout_fragment_forest_detail_top"
+        tools:listitem="@layout/item_forest_detail" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="@dimen/dp_49"
+        android:layout_height="@dimen/dp_49"
+        android:layout_margin="@dimen/dp_22"
+        android:contentDescription="@string/description_publish_hole"
+        android:src="@drawable/add"
+        android:backgroundTint="@color/HH_BandColor_1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
