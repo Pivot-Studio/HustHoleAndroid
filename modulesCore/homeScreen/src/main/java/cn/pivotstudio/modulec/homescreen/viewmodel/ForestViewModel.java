@@ -5,7 +5,7 @@ import com.example.libbase.base.viewmodel.BaseViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse;
+import cn.pivotstudio.modulec.homescreen.model.ForestResponse;
 
 /**
  * @classname ForestViewModel
@@ -16,26 +16,26 @@ import cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse;
  */
 public class ForestViewModel extends BaseViewModel {
 
-    private List<ForestHoleResponse.ForestHole> forestHoles = new ArrayList<>();
+    private List<ForestResponse.ForestHole> forestHoles = new ArrayList<>();
 
-    private List<ForestHoleResponse.ForestHead> forestHeads = new ArrayList<>();
+    private List<ForestResponse.ForestHead> forestHeads = new ArrayList<>();
 
     // TODO 数据应该从model层获取， 这里暂时在 viewModel 层创建
     public ForestViewModel() {
-        forestHoles.add(new ForestHoleResponse.ForestHole());
-        forestHoles.add(new ForestHoleResponse.ForestHole());
-        forestHoles.add(new ForestHoleResponse.ForestHole());
+        forestHoles.add(new ForestResponse.ForestHole());
+        forestHoles.add(new ForestResponse.ForestHole());
+        forestHoles.add(new ForestResponse.ForestHole());
 
-        forestHeads.add(new ForestHoleResponse.ForestHead());
-        forestHeads.add(new ForestHoleResponse.ForestHead());
-        forestHeads.add(new ForestHoleResponse.ForestHead());
+        forestHeads.add(new ForestResponse.ForestHead());
+        forestHeads.add(new ForestResponse.ForestHead());
+        forestHeads.add(new ForestResponse.ForestHead());
     }
 
-    public List<ForestHoleResponse.ForestHole> getForestHoles() {
+    public List<ForestResponse.ForestHole> getForestHoles() {
         return forestHoles;
     }
 
-    public List<ForestHoleResponse.ForestHead> getForestHeads() {
+    public List<ForestResponse.ForestHead> getForestHeads() {
         return forestHeads;
     }
 }

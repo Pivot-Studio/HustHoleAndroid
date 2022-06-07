@@ -92,6 +92,7 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/hot_recycler_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -109,6 +110,7 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/limited_recycler_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -126,6 +128,7 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/emo_recycler_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -143,6 +146,7 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/campus_recycler_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -160,6 +164,7 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/study_recycler_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -177,6 +182,7 @@
                     android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/entertainment_recycler_view"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
