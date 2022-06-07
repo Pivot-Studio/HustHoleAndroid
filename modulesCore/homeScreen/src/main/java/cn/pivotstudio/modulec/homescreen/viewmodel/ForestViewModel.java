@@ -20,6 +20,7 @@ public class ForestViewModel extends BaseViewModel {
 
     private List<ForestHoleResponse.ForestHead> forestHeads = new ArrayList<>();
 
+    // TODO 数据应该从model层获取， 这里暂时在 viewModel 层创建
     public ForestViewModel() {
         forestHoles.add(new ForestHoleResponse.ForestHole());
         forestHoles.add(new ForestHoleResponse.ForestHole());

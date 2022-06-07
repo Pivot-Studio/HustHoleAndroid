@@ -14,10 +14,10 @@ import cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse;
 
 /**
  * @classname: ForestHeadAdapter
- * @description:
- * @date:2022/6/5 2:13
- * @version:1.0
- * @author:
+ * @description: 小树林头部"已关注小树林"的 Adapter
+ * @date: 2022/6/5 2:13
+ * @version: 1.0
+ * @author: mhh
  */
 public class ForestHeadAdapter extends ListAdapter<ForestHoleResponse.ForestHead, ForestHeadAdapter.ForestHoleViewHolder> {
 

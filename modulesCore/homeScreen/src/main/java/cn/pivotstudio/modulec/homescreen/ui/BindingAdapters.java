@@ -22,78 +22,86 @@ import cn.pivotstudio.modulec.homescreen.R;
  */
 public class BindingAdapters {
 
-    private BindingAdapters() { }
+    private BindingAdapters() {
+    }
+
     /**
      * 点赞按钮
-     * @param view todo
+     *
+     * @param view       todo
      * @param is_thumbup todo
      */
     @BindingAdapter({"thumbupIcon"})
-    public static void onClickThumbup(ImageView view, boolean is_thumbup){
-        view.setImageResource(is_thumbup? R.mipmap.active:R.mipmap.inactive);
+    public static void onClickThumbup(ImageView view, boolean is_thumbup) {
+        view.setImageResource(is_thumbup ? R.mipmap.active : R.mipmap.inactive);
 
     }
 
     /**
      * 回复按钮
-     * @param view todo
+     *
+     * @param view     todo
      * @param is_reply todo
      */
     @BindingAdapter({"replyIcon"})
-    public static void onClickReply(ImageView view, boolean is_reply){
-        view.setImageResource(is_reply? R.mipmap.active_2:R.mipmap.inactive_2);
+    public static void onClickReply(ImageView view, boolean is_reply) {
+        view.setImageResource(is_reply ? R.mipmap.active_2 : R.mipmap.inactive_2);
 
     }
 
     /**
      * 收藏按钮
-     * @param view todo
+     *
+     * @param view      todo
      * @param is_follow todo
      */
     @BindingAdapter({"followIcon"})
-    public static void onClickFollow(ImageView view, boolean is_follow){
-        view.setImageResource(is_follow? R.mipmap.active_3:R.mipmap.inactive_3);
+    public static void onClickFollow(ImageView view, boolean is_follow) {
+        view.setImageResource(is_follow ? R.mipmap.active_3 : R.mipmap.inactive_3);
 
     }
 
     /**
      * 举报，删除
-     * @param view todo
+     *
+     * @param view    todo
      * @param is_mine todo
      */
     @BindingAdapter({"moreListIcon"})
-    public static void onClickMore(ImageView view,boolean is_mine){
-        view.setImageResource(is_mine?R.mipmap.vector6:R.mipmap.vector4);
+    public static void onClickMore(ImageView view, boolean is_mine) {
+        view.setImageResource(is_mine ? R.mipmap.vector6 : R.mipmap.vector4);
     }
 
     /**
      * 时间加载
-     * @param view todo
-     * @param is_last_reply todo
+     *
+     * @param view              todo
+     * @param is_last_reply     todo
      * @param created_timestamp todo
      */
-    @BindingAdapter({"timeSign","time"})
-    public static void onTime(TextView view, boolean is_last_reply, String created_timestamp){
+    @BindingAdapter({"timeSign", "time"})
+    public static void onTime(TextView view, boolean is_last_reply, String created_timestamp) {
         //后端搜索给的时间慢半个小时，麻
-        String time= TimeUtil.time(created_timestamp)+((is_last_reply)?"更新":"发布");
+        String time = TimeUtil.time(created_timestamp) + ((is_last_reply) ? "更新" : "发布");
         view.setText(time);
     }
 
     /**
      * 右上角小树林icon
-     * @param view todo
+     *
+     * @param view       todo
      * @param forestName todo
-     * @param role todo
+     * @param role       todo
      */
-    @BindingAdapter({"forestIcon","role"})
-    public static void onForestIconShow(Button view, String forestName, String role){
-        if(role==null||forestName.equals("")){//搜索方式获得的数据没role,麻了
+    @BindingAdapter({"forestIcon", "role"})
+    public static void onForestIconShow(Button view, String forestName, String role) {
+        if (role == null || forestName.equals("")) {//搜索方式获得的数据没role,麻了
             view.setVisibility(View.INVISIBLE);
             return;
         }
-        switch(role) {
+        switch (role) {
             case "pivot":
-                if(forestName.equals("")){
+                if (forestName.equals("")) {
                     view.setVisibility(View.VISIBLE);
                     view.setPadding(15, 5, 6, 6);
                     view.setTextColor(view.getContext().getResources().getColor(R.color.GrayScale_50));
@@ -104,15 +112,15 @@ public class BindingAdapters {
                     view.setCompoundDrawables(homepressed, null, null, null);
                     view.setBackgroundResource(R.drawable.tag_gray);
                     view.setOnClickListener(null);
-                }else {
+                } else {
                     view.setVisibility(View.VISIBLE);
-                    view.setText("  " + forestName+ "   ");
+                    view.setText("  " + forestName + "   ");
                 }
                 break;
 
             case "counseling_center":
 
-                if(forestName.equals("")){
+                if (forestName.equals("")) {
                     view.setVisibility(View.VISIBLE);
                     view.setPadding(15, 5, 6, 6);
                     view.setTextColor(view.getContext().getResources().getColor(R.color.red));
@@ -124,9 +132,9 @@ public class BindingAdapters {
                     view.setBackgroundResource(R.drawable.tag_red);
                     view.setOnClickListener(null);
 
-                }else {
+                } else {
                     view.setVisibility(View.VISIBLE);
-                    view.setText("  " + forestName+ "   ");
+                    view.setText("  " + forestName + "   ");
                 }
                 break;
 
@@ -138,22 +146,23 @@ public class BindingAdapters {
 
     /**
      * 右上角圆形icon
-     * @param view todo
+     *
+     * @param view       todo
      * @param forestName todo
-     * @param role todo
+     * @param role       todo
      */
-    @BindingAdapter({"psIcon","role"})
-    public static void onPsIconShow(ImageView view, String forestName,String role){
-        if(role==null){
+    @BindingAdapter({"psIcon", "role"})
+    public static void onPsIconShow(ImageView view, String forestName, String role) {
+        if (role == null) {
             view.setVisibility(View.GONE);
             return;
         }
-        switch(role) {
+        switch (role) {
             case "pivot":
 
-                if(forestName.equals("")){
+                if (forestName.equals("")) {
                     view.setVisibility(View.INVISIBLE);
-                }else{
+                } else {
                     view.setVisibility(View.VISIBLE);
                     view.setImageResource(R.mipmap.pivot);
                 }
@@ -161,9 +170,9 @@ public class BindingAdapters {
 
             case "counseling_center":
 
-                if(forestName.equals("")){
+                if (forestName.equals("")) {
                     view.setVisibility(View.INVISIBLE);
-                }else{
+                } else {
                     view.setVisibility(View.VISIBLE);
                     view.setImageResource(R.mipmap.counselingcenter);
                 }
@@ -174,5 +183,8 @@ public class BindingAdapters {
                 break;
         }
     }
+
+//    @BindingAdapter({"listData"})
+//    public static void bindRecyclerView(RecyclerView recyclerView, List<>)
 
 }
