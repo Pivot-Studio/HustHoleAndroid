@@ -5,6 +5,9 @@
 
     <data>
         <variable
+            name="forestFragment"
+            type="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment" />
+        <variable
             name="viewModel"
             type="cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel" />
     </data>
@@ -53,6 +56,7 @@
                         android:id="@+id/layout_jump_to_all_forest"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:onClick="@{ () -> forestFragment.navToAllForests() }"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent">

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestBinding;
-import cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse;
+import cn.pivotstudio.modulec.homescreen.model.ForestResponse;
 
 
 /**
@@ -19,16 +19,16 @@ import cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse;
  * @version:1.0
  * @author: mhh
  */
-public class ForestHoleAdapter extends ListAdapter<ForestHoleResponse.ForestHole, ForestHoleAdapter.ForestHoleViewHolder> {
+public class ForestHoleAdapter extends ListAdapter<ForestResponse.ForestHole, ForestHoleAdapter.ForestHoleViewHolder> {
 
-    public static final DiffUtil.ItemCallback<ForestHoleResponse.ForestHole> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestHoleResponse.ForestHole>() {
+    public static final DiffUtil.ItemCallback<ForestResponse.ForestHole> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestResponse.ForestHole>() {
         @Override
-        public boolean areItemsTheSame(@NonNull ForestHoleResponse.ForestHole oldItem, @NonNull ForestHoleResponse.ForestHole newItem) {
+        public boolean areItemsTheSame(@NonNull ForestResponse.ForestHole oldItem, @NonNull ForestResponse.ForestHole newItem) {
             return false;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull ForestHoleResponse.ForestHole oldItem, @NonNull ForestHoleResponse.ForestHole newItem) {
+        public boolean areContentsTheSame(@NonNull ForestResponse.ForestHole oldItem, @NonNull ForestResponse.ForestHole newItem) {
             return false;
         }
     };
@@ -49,7 +49,7 @@ public class ForestHoleAdapter extends ListAdapter<ForestHoleResponse.ForestHole
 
     @Override
     public void onBindViewHolder(@NonNull ForestHoleViewHolder holder, int position) {
-        final ForestHoleResponse.ForestHole forestHole = getItem(position);
+        final ForestResponse.ForestHole forestHole = getItem(position);
         holder.bind(forestHole);
     }
 
@@ -62,7 +62,7 @@ public class ForestHoleAdapter extends ListAdapter<ForestHoleResponse.ForestHole
             this.binding = binding;
         }
 
-        void bind(ForestHoleResponse.ForestHole forestHole) {
+        void bind(ForestResponse.ForestHole forestHole) {
             binding.setForestHole(forestHole);
         }
 

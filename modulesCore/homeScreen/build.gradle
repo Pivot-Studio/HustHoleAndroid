@@ -26,19 +26,19 @@ android {
             enabled = true
         }
     }
-    sourceSets{
-        main{
-            if(!isRelease){//不同状态下使用不同清单文件
-                manifest.srcFile '/src/main/debug/AndroidManifest.xml'
-            }else{
-                manifest.srcFile '/src/main/AndroidManifest.xml'
-                java{
-                    //release时所有debug目录下的文件不合并
-                    exclude '**/debug/**'
-                }
-            }
-        }
-    }
+//    sourceSets{
+//        main{
+//            if(!isRelease){//不同状态下使用不同清单文件
+//                manifest.srcFile '/src/main/debug/AndroidManifest.xml'
+//            }else{
+//                manifest.srcFile '/src/main/AndroidManifest.xml'
+//                java{
+//                    //release时所有debug目录下的文件不合并
+//                    exclude '**/debug/**'
+//                }
+//            }
+//        }
+//    }
     buildTypes {
         release {
             minifyEnabled true

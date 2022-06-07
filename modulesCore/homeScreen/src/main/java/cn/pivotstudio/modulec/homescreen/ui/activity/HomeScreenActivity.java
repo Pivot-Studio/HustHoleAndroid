@@ -34,9 +34,9 @@ import cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment;
 
 
 /**
- * @classname:HomeScreenActivity
+ * @classname: HomeScreenActivity
  * @description:
- * @date:2022/4/28 20:58
+ * @date: 2022/4/28 20:58
  * @version:1.0
  * @author:
  */

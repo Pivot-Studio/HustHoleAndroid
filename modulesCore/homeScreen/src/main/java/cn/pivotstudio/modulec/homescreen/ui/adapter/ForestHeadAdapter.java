@@ -8,27 +8,26 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import cn.pivotstudio.modulec.homescreen.databinding.ItemForestBinding;
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHeadBinding;
-import cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse;
+import cn.pivotstudio.modulec.homescreen.model.ForestResponse;
 
 /**
  * @classname: ForestHeadAdapter
- * @description:
- * @date:2022/6/5 2:13
- * @version:1.0
- * @author:
+ * @description: 小树林头部"已关注小树林"的 Adapter
+ * @date: 2022/6/5 2:13
+ * @version: 1.0
+ * @author: mhh
  */
-public class ForestHeadAdapter extends ListAdapter<ForestHoleResponse.ForestHead, ForestHeadAdapter.ForestHoleViewHolder> {
+public class ForestHeadAdapter extends ListAdapter<ForestResponse.ForestHead, ForestHeadAdapter.ForestHoleViewHolder> {
 
-    public static final DiffUtil.ItemCallback<ForestHoleResponse.ForestHead> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestHoleResponse.ForestHead>() {
+    public static final DiffUtil.ItemCallback<ForestResponse.ForestHead> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestResponse.ForestHead>() {
         @Override
-        public boolean areItemsTheSame(@NonNull ForestHoleResponse.ForestHead oldItem, @NonNull ForestHoleResponse.ForestHead newItem) {
+        public boolean areItemsTheSame(@NonNull ForestResponse.ForestHead oldItem, @NonNull ForestResponse.ForestHead newItem) {
             return false;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull ForestHoleResponse.ForestHead oldItem, @NonNull ForestHoleResponse.ForestHead newItem) {
+        public boolean areContentsTheSame(@NonNull ForestResponse.ForestHead oldItem, @NonNull ForestResponse.ForestHead newItem) {
             return false;
         }
     };
@@ -49,7 +48,7 @@ public class ForestHeadAdapter extends ListAdapter<ForestHoleResponse.ForestHead
 
     @Override
     public void onBindViewHolder(@NonNull ForestHoleViewHolder holder, int position) {
-        final ForestHoleResponse.ForestHead forestHead = getItem(position);
+        final ForestResponse.ForestHead forestHead = getItem(position);
         holder.bind(forestHead);
     }
 
@@ -62,7 +61,7 @@ public class ForestHeadAdapter extends ListAdapter<ForestHoleResponse.ForestHead
             this.binding = binding;
         }
 
-        void bind(ForestHoleResponse.ForestHead forestHead) {
+        void bind(ForestResponse.ForestHead forestHead) {
             binding.setForestHead(forestHead);
         }
 

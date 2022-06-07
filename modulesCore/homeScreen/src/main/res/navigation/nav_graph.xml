@@ -16,7 +16,11 @@
         android:id="@+id/forest_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment"
         android:label="forest_fragment"
-        tools:layout="@layout/fragment_forest" />
+        tools:layout="@layout/fragment_forest" >
+        <action
+            android:id="@+id/action_forest_fragment_to_all_forest_fragment"
+            app:destination="@id/all_forest_fragment" />
+    </fragment>
 <!--    <fragment-->
 <!--        android:id="@+id/message_fragment"-->
 <!--        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.MessageFragment"-->
@@ -37,4 +41,10 @@
         android:name="cn.pivotstudio.modulec.homescreen.oldversion.fragment.MineFragment"
         android:label="mine_fragment"
         tools:layout="@layout/page4fragment" />
+
+    <fragment
+        android:id="@+id/all_forest_fragment"
+        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.AllForestFragment"
+        android:label="all_forest_fragment"
+        tools:layout="@layout/fragment_all_frorest"/>
 </navigation>

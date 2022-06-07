@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.example.libbase.base.ui.fragment.BaseFragment;
 
@@ -46,4 +47,22 @@ public class ForestFragment extends BaseFragment {
 
         return binding.getRoot();
     }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        if (binding.getForestFragment() == null) {
+            binding.setForestFragment(this);
+        }
+    }
+
+    /**
+     * 利用 Navigation 导航到 AllForestFragment
+     * <p>相关类 {@link AllForestFragment},nav_graph.xml</p>
+     */
+    public void navToAllForests() {
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment)
+                .navigate(R.id.action_forest_fragment_to_all_forest_fragment);
+    }
+
 }

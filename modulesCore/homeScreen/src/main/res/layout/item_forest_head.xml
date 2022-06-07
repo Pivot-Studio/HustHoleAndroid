@@ -6,7 +6,7 @@
     <data>
         <variable
             name="forestHead"
-            type="cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse.ForestHead" />
+            type="cn.pivotstudio.modulec.homescreen.model.ForestResponse.ForestHead" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -33,4 +33,13 @@
         <item name="colorPrimaryDark">@color/HH_BandColor_1</item>
         <item name="colorAccent">@color/GrayScale_100</item>
     </style>
+
+    <!--ShapeableImageView 圆角-->
+    <style name="ForestCardRoundedStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/dp_13</item>
+        <item name="cornerSizeTopRight">@dimen/dp_13</item>
+
+    </style>
+
 </resources>
