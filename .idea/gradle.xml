@@ -18,7 +18,6 @@
             <option value="$PROJECT_DIR$/modulesBase/networkBase" />
             <option value="$PROJECT_DIR$/modulesBase/resBase" />
             <option value="$PROJECT_DIR$/modulesCore" />
-            <option value="$PROJECT_DIR$/modulesCore/forest" />
             <option value="$PROJECT_DIR$/modulesCore/homeScreen" />
             <option value="$PROJECT_DIR$/modulesCore/loginAndRegister" />
             <option value="$PROJECT_DIR$/modulesPublic" />
