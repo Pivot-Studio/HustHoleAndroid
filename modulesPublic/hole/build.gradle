@@ -1,7 +1,7 @@
-if(isRelease){
-    apply plugin : 'com.android.library'
-}else{
-    apply plugin :'com.android.application'
+if (isRelease) {
+    apply plugin: 'com.android.library'
+} else {
+    apply plugin: 'com.android.application'
 }
 
 android {
@@ -12,13 +12,13 @@ android {
         versionCode androidID.versionCode
         versionName androidID.versionName
 
-        if(!isRelease) {//当为release模式时不需要id
+        if (!isRelease) {//当为release模式时不需要id
             applicationId "cn.pivotstudio.modulep.hole"
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("boolean","isRelease",String.valueOf(isRelease))
+        buildConfigField("boolean", "isRelease", String.valueOf(isRelease))
 
         javaCompileOptions {//ARouter跨组件需要
             annotationProcessorOptions {
@@ -31,18 +31,20 @@ android {
         }
     }
 
-    sourceSets{
-//        main{
-//            if(!isRelease){//不同状态下使用不同清单文件
-//                manifest.srcFile '/src/main/debug/AndroidManifest.xml'
-//            }else{
-//                manifest.srcFile '/src/main/AndroidManifest.xml'
-//                java{
-//                    //release时所有debug目录下的文件不合并
-//                    exclude '**/debug/**'
-//                }
-//            }
-//        }
+    sourceSets {
+        if (!isMac) {
+            main {
+                if (!isRelease) {//不同状态下使用不同清单文件
+                    manifest.srcFile '/src/main/debug/AndroidManifest.xml'
+                } else {
+                    manifest.srcFile '/src/main/AndroidManifest.xml'
+                    java {
+                        //release时所有debug目录下的文件不合并
+                        exclude '**/debug/**'
+                    }
+                }
+            }
+        }
     }
 
     buildTypes {
@@ -63,9 +65,7 @@ dependencies {
 
     annotationProcessor 'com.alibaba:arouter-compiler:1.5.2'//每个组件都要添加
 
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.3.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 }
