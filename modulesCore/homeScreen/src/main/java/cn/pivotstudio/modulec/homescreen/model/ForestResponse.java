@@ -1,5 +1,8 @@
 package cn.pivotstudio.modulec.homescreen.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author mhh
  * @version :1.0
@@ -123,5 +126,27 @@ public class ForestResponse {
             this.holeCount = holeCount;
         }
     }
+
+    public static class ForestDetail {
+        private boolean joined = false;
+        List<ForestHole> forestDetailHoles = new ArrayList<>();
+
+        public boolean isJoined() {
+            return joined;
+        }
+
+        public void Join() {
+            this.joined = true;
+        }
+
+        public List<ForestHole> getForestDetailHoles() {
+            return forestDetailHoles;
+        }
+
+        public void setForestDetailHoles(List<ForestHole> forestDetailHoles) {
+            this.forestDetailHoles = forestDetailHoles;
+        }
+    }
+
 
 }

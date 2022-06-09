@@ -35,7 +35,13 @@ public class ForestFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_forest, container, false);
         viewModel = new ViewModelProvider(this).get(ForestViewModel.class);
+        binding.setViewModel(viewModel);
+        return binding.getRoot();
+    }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         // 初始化两个RecyclerView
         ForestHoleAdapter holeAdapter = new ForestHoleAdapter();
         binding.recyclerViewForestHoles.setAdapter(holeAdapter);
@@ -44,13 +50,6 @@ public class ForestFragment extends BaseFragment {
         ForestHeadAdapter headAdapter = new ForestHeadAdapter();
         binding.recyclerViewForestHead.setAdapter(headAdapter);
         headAdapter.submitList(viewModel.getForestHeads());
-
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
         if (binding.getForestFragment() == null) {
             binding.setForestFragment(this);
         }

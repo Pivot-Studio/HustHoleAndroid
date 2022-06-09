@@ -16,7 +16,7 @@ import cn.pivotstudio.modulec.homescreen.R;
 /**
  * @author mhh
  * @version :1.0
- * @classname BingdingAdapters
+ * @classname BindingAdapters
  * @description:
  * @date :2022/6/4 18:54
  */
@@ -183,8 +183,5 @@ public class BindingAdapters {
                 break;
         }
     }
-
-//    @BindingAdapter({"listData"})
-//    public static void bindRecyclerView(RecyclerView recyclerView, List<>)
 
 }
