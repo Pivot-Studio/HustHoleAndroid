@@ -23,7 +23,7 @@ class ForestDetailFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil
-            .inflate<FragmentForestDetailBinding>(inflater, R.layout.fragment_forest_detail, container, false)
+            .inflate(inflater, R.layout.fragment_forest_detail, container, false)
         return binding.root
     }
 

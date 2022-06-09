@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

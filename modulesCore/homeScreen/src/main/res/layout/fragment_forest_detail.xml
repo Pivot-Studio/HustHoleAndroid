@@ -7,6 +7,9 @@
         <variable
             name="viewModel"
             type="cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel" />
+        <variable
+            name="fragment"
+            type="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
