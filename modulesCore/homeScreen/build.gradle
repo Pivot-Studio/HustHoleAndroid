@@ -1,8 +1,10 @@
-if(isRelease){
-    apply plugin : 'com.android.library'
-}else{
-    apply plugin :'com.android.application'
+if (isRelease) {
+    apply plugin: 'com.android.library'
+} else {
+    apply plugin: 'com.android.application'
 }
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion androidID.compileSdkVersion
@@ -11,12 +13,12 @@ android {
         targetSdkVersion androidID.targetSdkVersion
         versionCode androidID.versionCode
         versionName androidID.versionName
-        if(!isRelease) {//当为release模式时不需要id
+        if (!isRelease) {//当为release模式时不需要id
             applicationId "cn.pivotstudio.modulec.homescreen"
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        buildConfigField("boolean","isRelease",String.valueOf(isRelease))
+        buildConfigField("boolean", "isRelease", String.valueOf(isRelease))
         javaCompileOptions {//ARouter跨组件需要
             annotationProcessorOptions {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
@@ -26,7 +28,7 @@ android {
             enabled = true
         }
     }
-    sourceSets{
+    sourceSets {
 //        main{
 //            if(!isRelease){//不同状态下使用不同清单文件
 //                manifest.srcFile '/src/main/debug/AndroidManifest.xml'
@@ -54,8 +56,8 @@ android {
 dependencies {
     implementation project(':modulesBase:libBase')
 
-    annotationProcessor 'com.alibaba:arouter-compiler:1.5.2'
-    
+    kapt 'com.alibaba:arouter-compiler:1.5.2'
+
     implementation 'de.hdodenhof:circleimageview:3.1.0'//圆形图片
 
     //老版本问题
