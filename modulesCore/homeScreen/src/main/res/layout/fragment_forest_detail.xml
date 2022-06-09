@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel" />
+
         <variable
             name="fragment"
             type="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment" />
@@ -25,16 +27,27 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-
             <ImageView
-                android:id="@+id/image_forest_detail_avatar_frame"
+                android:id="@+id/forest_detail_upper_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/test_background"
+                android:scaleType="fitXY"
+                android:contentDescription="@string/default_string_zh_long" />
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/image_forest_detail_avatar"
                 android:layout_width="@dimen/dp_48"
                 android:layout_height="@dimen/dp_48"
                 android:layout_marginStart="@dimen/dp_20"
                 android:layout_marginTop="@dimen/dp_8"
-                android:background="@drawable/standard_forest_centerphoto"
+                android:src="@drawable/icon"
+                android:padding="@dimen/dp_2"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearance="@style/AvatarRoundedStyle"
+                app:strokeColor="@color/GrayScale_100"
+                app:strokeWidth="@dimen/dp_2" />
 
             <TextView
                 android:id="@+id/text_forest_detail_title"
@@ -44,9 +57,9 @@
                 android:text="@string/default_string_zh_short"
                 android:textColor="@color/GrayScale_100"
                 android:textSize="@dimen/sp_18"
-                app:layout_constraintBottom_toBottomOf="@+id/image_forest_detail_avatar_frame"
-                app:layout_constraintStart_toEndOf="@+id/image_forest_detail_avatar_frame"
-                app:layout_constraintTop_toTopOf="@+id/image_forest_detail_avatar_frame" />
+                app:layout_constraintBottom_toBottomOf="@+id/image_forest_detail_avatar"
+                app:layout_constraintStart_toEndOf="@+id/image_forest_detail_avatar"
+                app:layout_constraintTop_toTopOf="@+id/image_forest_detail_avatar" />
 
             <TextView
                 android:id="@+id/text_forest_detail_follow_msg"
@@ -56,8 +69,8 @@
                 android:text="@string/follow_msg"
                 android:textColor="@color/GrayScale_100"
                 android:textSize="@dimen/sp_11"
-                app:layout_constraintStart_toStartOf="@+id/image_forest_detail_avatar_frame"
-                app:layout_constraintTop_toBottomOf="@+id/image_forest_detail_avatar_frame" />
+                app:layout_constraintStart_toStartOf="@+id/image_forest_detail_avatar"
+                app:layout_constraintTop_toBottomOf="@+id/image_forest_detail_avatar" />
 
             <TextView
                 android:id="@+id/text_forest_detail_overview"
@@ -72,15 +85,6 @@
                 app:layout_constraintStart_toStartOf="@+id/text_forest_detail_follow_msg"
                 app:layout_constraintTop_toBottomOf="@+id/text_forest_detail_follow_msg" />
 
-            <ImageView
-                android:id="@+id/image_forest_detail_avatar"
-                android:layout_width="@dimen/dp_42"
-                android:layout_height="@dimen/dp_42"
-                app:layout_constraintBottom_toBottomOf="@+id/image_forest_detail_avatar_frame"
-                app:layout_constraintEnd_toEndOf="@+id/image_forest_detail_avatar_frame"
-                app:layout_constraintStart_toStartOf="@+id/image_forest_detail_avatar_frame"
-                app:layout_constraintTop_toTopOf="@+id/image_forest_detail_avatar_frame"
-                tools:srcCompat="@drawable/icon" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_forest_detail_join"
@@ -119,9 +123,9 @@
             android:layout_width="@dimen/dp_49"
             android:layout_height="@dimen/dp_49"
             android:layout_margin="@dimen/dp_22"
+            android:backgroundTint="@color/HH_BandColor_1"
             android:contentDescription="@string/description_publish_hole"
             android:src="@drawable/add"
-            android:backgroundTint="@color/HH_BandColor_1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

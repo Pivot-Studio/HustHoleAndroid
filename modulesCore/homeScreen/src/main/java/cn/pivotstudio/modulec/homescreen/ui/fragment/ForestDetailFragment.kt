@@ -15,7 +15,7 @@ class ForestDetailFragment : BaseFragment() {
 
     private lateinit var binding: FragmentForestDetailBinding
 
-    private val viewModel: ForestDetailViewModel = ViewModelProvider(requireActivity()).get(ForestDetailViewModel::class.java)
+    private lateinit var viewModel: ForestDetailViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -24,6 +24,7 @@ class ForestDetailFragment : BaseFragment() {
     ): View? {
         binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_forest_detail, container, false)
+        viewModel = ViewModelProvider(requireActivity()).get(ForestDetailViewModel::class.java)
         return binding.root
     }
 

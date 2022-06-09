@@ -16,7 +16,7 @@
         android:id="@+id/forest_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment"
         android:label="forest_fragment"
-        tools:layout="@layout/fragment_forest" >
+        tools:layout="@layout/fragment_forest">
         <action
             android:id="@+id/action_forest_fragment_to_all_forest_fragment"
             app:destination="@id/all_forest_fragment" />
@@ -44,8 +44,9 @@
             app:destination="@id/forest_detail_fragment" />
     </fragment>
 
-    <fragment android:id="@+id/forest_detail_fragment"
+    <fragment
+        android:id="@+id/forest_detail_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment"
         android:label="forest_detail_fragment"
-        tools:layout="@layout/fragment_forest_detail"/>
+        tools:layout="@layout/fragment_forest_detail" />
 </navigation>

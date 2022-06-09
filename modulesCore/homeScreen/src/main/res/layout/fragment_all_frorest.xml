@@ -21,18 +21,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <Button
-                android:id="@+id/btn_apply_new_forest"
-                android:layout_width="@dimen/dp_76"
-                android:layout_height="@dimen/dp_32"
-                android:layout_marginStart="@dimen/dp_12"
-                android:background="@drawable/forest_button_white"
-                android:text="申请新建"
-                android:textColor="@color/HH_BandColor_3"
-                android:textSize="13sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_all_forest_head_content" />
+<!--            <Button-->
+<!--                android:id="@+id/btn_apply_new_forest"-->
+<!--                android:layout_width="@dimen/dp_76"-->
+<!--                android:layout_height="@dimen/dp_32"-->
+<!--                android:layout_marginStart="@dimen/dp_12"-->
+<!--                android:background="@drawable/forest_button_white"-->
+<!--                android:text="申请新建"-->
+<!--                android:textColor="@color/HH_BandColor_3"-->
+<!--                android:textSize="13sp"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/text_all_forest_head_content" />-->
 
 
             <TextView

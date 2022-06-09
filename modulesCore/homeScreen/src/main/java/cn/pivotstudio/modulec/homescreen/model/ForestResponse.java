@@ -131,7 +131,6 @@ public class ForestResponse {
         private boolean joined = false;
         List<ForestHole> forestDetailHoles = new ArrayList<>();
 
-
         public boolean isJoined() {
             return joined;
         }

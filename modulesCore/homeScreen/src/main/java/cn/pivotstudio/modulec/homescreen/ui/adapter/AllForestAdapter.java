@@ -1,17 +1,18 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-
 import cn.pivotstudio.modulec.homescreen.databinding.ItemAllForestBinding;
 import cn.pivotstudio.modulec.homescreen.model.ForestResponse;
 
 public class AllForestAdapter extends ListAdapter<ForestResponse.ForestCard, AllForestAdapter.ForestCardViewHolder> {
+
+    private View.OnClickListener itemClickListener;
 
     public static final DiffUtil.ItemCallback<ForestResponse.ForestCard> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestResponse.ForestCard>() {
         @Override
@@ -25,8 +26,9 @@ public class AllForestAdapter extends ListAdapter<ForestResponse.ForestCard, All
         }
     };
 
-    public AllForestAdapter() {
+    public AllForestAdapter(View.OnClickListener clickListener) {
         super(DIFF_CALLBACK);
+        itemClickListener = clickListener;
     }
 
     @NonNull
@@ -42,6 +44,7 @@ public class AllForestAdapter extends ListAdapter<ForestResponse.ForestCard, All
     @Override
     public void onBindViewHolder(@NonNull ForestCardViewHolder holder, int position) {
         ForestResponse.ForestCard card = getItem(position);
+        holder.itemView.setOnClickListener(itemClickListener);
         holder.bind(card);
     }
 

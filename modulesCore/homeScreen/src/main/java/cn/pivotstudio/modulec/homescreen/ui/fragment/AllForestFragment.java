@@ -9,14 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.example.libbase.base.ui.fragment.BaseFragment;
 
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentAllFrorestBinding;
+
 import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestAdapter;
-import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHeadAdapter;
-import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter;
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel;
 
 public class AllForestFragment extends BaseFragment {
@@ -26,13 +27,24 @@ public class AllForestFragment extends BaseFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_all_frorest, container, false);
-
+        binding = DataBindingUtil
+                .inflate(inflater, R.layout.fragment_all_frorest, container, false);
         // 初始化ViewModel
         viewModel = new ViewModelProvider(requireActivity()).get(AllForestViewModel.class);
+        return binding.getRoot();
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        View.OnClickListener onCardClick = (v) -> {
+            navToForestDetail();
+        };
 
         // 初始化6个RecyclerView
-        AllForestAdapter allForestAdapter = new AllForestAdapter();
+        AllForestAdapter allForestAdapter = new AllForestAdapter(onCardClick);
+
         binding.hotRecyclerView.setAdapter(allForestAdapter);
         allForestAdapter.submitList(viewModel.getForestCards());
 
@@ -50,7 +62,10 @@ public class AllForestFragment extends BaseFragment {
 
         binding.entertainmentRecyclerView.setAdapter(allForestAdapter);
         allForestAdapter.submitList(viewModel.getForestCards());
+    }
 
-        return binding.getRoot();
+    public void navToForestDetail() {
+        NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
+        navController.navigate(R.id.action_all_forest_fragment_to_forest_detail_fragment);
     }
 }
