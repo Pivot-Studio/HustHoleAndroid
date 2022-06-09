@@ -21,21 +21,13 @@
             android:id="@+id/action_forest_fragment_to_all_forest_fragment"
             app:destination="@id/all_forest_fragment" />
     </fragment>
-<!--    <fragment-->
-<!--        android:id="@+id/message_fragment"-->
-<!--        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.MessageFragment"-->
-<!--        android:label="message_fragment"-->
-<!--        tools:layout="@layout/fragment_message" />-->
+
     <fragment
         android:id="@+id/message_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.oldversion.fragment.MessageFragment"
         android:label="message_fragment"
         tools:layout="@layout/page3fragment" />
-<!--    <fragment-->
-<!--        android:id="@+id/mine_fragment"-->
-<!--        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragment"-->
-<!--        android:label="mine_fragment"-->
-<!--        tools:layout="@layout/fragment_mine" />-->
+
     <fragment
         android:id="@+id/mine_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.oldversion.fragment.MineFragment"
@@ -46,5 +38,14 @@
         android:id="@+id/all_forest_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.AllForestFragment"
         android:label="all_forest_fragment"
-        tools:layout="@layout/fragment_all_frorest"/>
+        tools:layout="@layout/fragment_all_frorest">
+        <action
+            android:id="@+id/action_all_forest_fragment_to_forest_detail_fragment"
+            app:destination="@id/forest_detail_fragment" />
+    </fragment>
+
+    <fragment android:id="@+id/forest_detail_fragment"
+        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment"
+        android:label="forest_detail_fragment"
+        tools:layout="@layout/fragment_forest_detail"/>
 </navigation>
