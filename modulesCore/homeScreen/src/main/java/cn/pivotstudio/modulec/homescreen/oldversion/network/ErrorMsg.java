@@ -14,7 +14,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class ErrorMsg {
-    public static void getErrorMsg(Response<ResponseBody> response, Context context){
+    public static void getErrorMsg(Response<ResponseBody> response, Context context) {
         String json = "null";
         String returncondition = null;
         if (response.errorBody() != null) {
@@ -26,8 +26,8 @@ public class ErrorMsg {
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            Toast.makeText(context, R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(context, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
         }
     }
 }

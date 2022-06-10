@@ -1,7 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.fragment;
 
 
-
 import static cn.pivotstudio.modulec.homescreen.oldversion.message.ParseNotificationData.parseJson;
 import static cn.pivotstudio.modulec.homescreen.oldversion.message.ParseNotificationData.parseSysJson;
 
@@ -73,7 +72,7 @@ public class MessageFragment extends Fragment {
     private Boolean isAll = false;
     private Boolean hasInit = false;
 
-    public String url = RetrofitManager.API+"notices/";
+    public String url = RetrofitManager.API + "notices/";
     private String token;
 
 
@@ -89,6 +88,7 @@ public class MessageFragment extends Fragment {
         MessageFragment fragment = new MessageFragment();
         return fragment;
     }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.page3fragment, container, false);
@@ -102,9 +102,9 @@ public class MessageFragment extends Fragment {
         //refreshLayout.setEnableAutoLoadMore(false);//是否启用列表惯性滑动到底部时自动加载更多
 
         refreshLayout.setOnRefreshListener(refreshlayout -> {
-            if(CheckingToken.IfTokenExist()){
-              //  Log.d(TAG, "onCreateView: here are refresh");
-                if(page > 1){
+            if (CheckingToken.IfTokenExist()) {
+                //  Log.d(TAG, "onCreateView: here are refresh");
+                if (page > 1) {
                     myNotificationList.clear();
                     //mSystemNotificationList.clear();
                     adapter.getSystemNotification(null);
@@ -132,29 +132,27 @@ public class MessageFragment extends Fragment {
                         /**
                          *要执行的操作
                          */
-                        if(finishRefresh){
+                        if (finishRefresh) {
                             refreshlayout.finishRefresh();
                             isRefreshing = false;
                             finishRefresh = false;
-                        }
-                        else {
+                        } else {
                             refreshlayout.autoRefresh();
                         }
                     }
                 }, 500);//0.5秒后执行Runnable中的run方法
                 refreshlayout.finishRefresh(1500/*,false*/);//传入false表示刷新失败
-            }
-            else{
+            } else {
                 refreshLayout.finishRefresh();
-              //  Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
-             //   startActivity(intent);
+                //  Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
+                //   startActivity(intent);
 
             }
 
         });
         refreshLayout.setOnLoadMoreListener(refreshlayout -> {
-            if(CheckingToken.IfTokenExist()){
-                if(!isAll) {
+            if (CheckingToken.IfTokenExist()) {
+                if (!isAll) {
                     getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +
                             "list_size=" + list_size);
                     isOnLoadMore = true;
@@ -163,23 +161,20 @@ public class MessageFragment extends Fragment {
                         /**
                          *要执行的操作
                          */
-                        if(finishOnLoadMore){
+                        if (finishOnLoadMore) {
                             refreshlayout.finishLoadMore();
                             isOnLoadMore = false;
                             finishOnLoadMore = false;
                             adapter.notifyDataSetChanged();
-                        }
-                        else {
+                        } else {
                             refreshlayout.autoLoadMore();
                         }
                     }, 500);
-                }
-                else{
+                } else {
                     refreshlayout.finishLoadMoreWithNoMoreData();
                 }
                 refreshlayout.finishLoadMore(1500/*,false*/);//传入false表示加载失败
-            }
-            else{
+            } else {
                 refreshlayout.finishLoadMore();
             }
 
@@ -188,39 +183,36 @@ public class MessageFragment extends Fragment {
 
         constraintLayout = rootView.findViewById(R.id.constraintLayout);
         constraintLayout.setOnClickListener(v -> {
-          //  Intent intent = new Intent(getActivity(), SystemNotification.class);
-         //   startActivity(intent);
+            //  Intent intent = new Intent(getActivity(), SystemNotification.class);
+            //   startActivity(intent);
         });
 
         noNotificationImage = rootView.findViewById(R.id.no_notification_image);
         thereIsNoNotification = rootView.findViewById(R.id.there_is_no_notification);
         constraintLayout = rootView.findViewById(R.id.constraintLayout);
         notificationRecyclerView = rootView.findViewById(R.id.notification);
-        if(!hasInit){
-            getStringByOkhttp(url+"?"+"start_id="+start_id+"&"+
-                    "list_size="+list_size);
-        }
-        else if(myNotificationList!= null && hasInit && page >1){ //已经初始化直接显示,每次回到这个页面时直接显示
+        if (!hasInit) {
+            getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +
+                    "list_size=" + list_size);
+        } else if (myNotificationList != null && hasInit && page > 1) { //已经初始化直接显示,每次回到这个页面时直接显示
             noNotificationImage.setVisibility(View.GONE);
             thereIsNoNotification.setVisibility(View.GONE);
             constraintLayout.setVisibility(View.GONE);
             adapter = new NotificationAdapter(getActivity(), myNotificationList);
-            notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity() , LinearLayoutManager.VERTICAL,false));
+            notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
             notificationRecyclerView.setAdapter(adapter);
             adapter.getSystemNotification(mSystemNotificationList.get(0).getSystemContent());
             adapter.setOnItemClickListener(position -> {
-                if(position>0){
+                if (position > 0) {
                     startHoleActivity(position);
                     //Toast.makeText(getActivity(), "click " + position, Toast.LENGTH_SHORT).show();
-                }
-                else {
+                } else {
                     Intent intent = new Intent(getActivity(), SystemNotification.class);
                     startActivity(intent);
                 }
             });
-        }
-        else{ //数据为null
+        } else { //数据为null
             noNotificationImage.setVisibility(View.VISIBLE);
             thereIsNoNotification.setVisibility(View.VISIBLE);
             constraintLayout.setVisibility(View.VISIBLE);
@@ -234,78 +226,77 @@ public class MessageFragment extends Fragment {
     }
 
 
-    public void getLatestSystemNotification(){
-        String mPath= RetrofitManager.API+"system_notices?start_id=0&list_size=1";
+    public void getLatestSystemNotification() {
+        String mPath = RetrofitManager.API + "system_notices?start_id=0&list_size=1";
 
         OkOne.enableRequestPriority(true);
         OkHttpClient client = new OkHttpClient();
         Message message = Message.obtain();
 
-        MMKVUtil mmkvUtil= MMKVUtil.getMMKVUtils(getContext());
-        String token =mmkvUtil.getString("USER_TOKEN");
-      //  Log.d(TAG, "getStringByOkhttp: token "+token);
-        Request request = new Request.Builder().get().addHeader("Authorization", "Bearer "+token).url(mPath).build();
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(getContext());
+        String token = mmkvUtil.getString("USER_TOKEN");
+        //  Log.d(TAG, "getStringByOkhttp: token "+token);
+        Request request = new Request.Builder().get().addHeader("Authorization", "Bearer " + token).url(mPath).build();
 
         OkOne.setRequestPriority(request, latestSystemNotificationPriority);
 
-     //   Log.d(TAG, "getStringByOkhttp: request");
+        //   Log.d(TAG, "getStringByOkhttp: request");
         try {
             Call call = client.newCall(request);
-          //  Log.d(TAG, "getStringByOkhttp: call");
+            //  Log.d(TAG, "getStringByOkhttp: call");
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
                     message.what = 1;
                     message.obj = e.getMessage();
-                //    Log.d(TAG, "onFailure: e.toString " + e.toString());
-               //     Log.d(TAG, "e.getLocalizedMessage" + e.getLocalizedMessage());
+                    //    Log.d(TAG, "onFailure: e.toString " + e.toString());
+                    //     Log.d(TAG, "e.getLocalizedMessage" + e.getLocalizedMessage());
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     if (response.isSuccessful()) {//回调的方法执行在子线程。
-                   //     Log.d(TAG, "获取数据成功了");
-                   //     Log.d(TAG, "response.code()==" + response.code());
+                        //     Log.d(TAG, "获取数据成功了");
+                        //     Log.d(TAG, "response.code()==" + response.code());
                         final String responseData = response.body().string();
-                    //    Log.d(TAG, "response.body().string()== " + responseData);
-                   //     Log.d(TAG, "obtain message");
+                        //    Log.d(TAG, "response.body().string()== " + responseData);
+                        //     Log.d(TAG, "obtain message");
                         String temp = responseData.replace("{\"system_notices\":", "");
-                        temp = removeCharAt(temp, temp.length()-1);
+                        temp = removeCharAt(temp, temp.length() - 1);
                         message.what = 0;
                         message.obj = temp;
                         systemNotificationHandler.sendMessage(message);
-                  //      Log.d(TAG, "onResponse: handler message");
+                        //      Log.d(TAG, "onResponse: handler message");
                     } else {
                         message.what = 1;
-                  //      Log.d(TAG, "onResponse: response " + response.networkResponse());
+                        //      Log.d(TAG, "onResponse: response " + response.networkResponse());
                     }
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
-        //   Log.d(TAG, "getStringByOkhttp:i am exception, e.toString() " + e.toString());
+            //   Log.d(TAG, "getStringByOkhttp:i am exception, e.toString() " + e.toString());
         }
     }
 
-    private Handler systemNotificationHandler = new Handler(){
+    private Handler systemNotificationHandler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-          //  Log.d(TAG, "handleMessage: msr.what " +msg.what);
-            switch (msg.what){
+            //  Log.d(TAG, "handleMessage: msr.what " +msg.what);
+            switch (msg.what) {
                 case 0://请求网络成功
-                    String Data = (String)msg.obj;
-                //    Log.d(TAG, "SystemNotificationhandleMessage: get Data "+ Data);
+                    String Data = (String) msg.obj;
+                    //    Log.d(TAG, "SystemNotificationhandleMessage: get Data "+ Data);
                     try {
                         mSystemNotificationList = parseSysJson(Data);
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
 
                     }
                     latestSystemNotification.setText(mSystemNotificationList.get(0).getSystemContent());
                     mSystemMessage = mSystemNotificationList.get(0).getSystemContent();
                     getMySystemMessage = true;
-                  //  Log.d(TAG, "handleMessage: adapter.content"+mSystemNotificationList.get(0).getSystemContent());
+                    //  Log.d(TAG, "handleMessage: adapter.content"+mSystemNotificationList.get(0).getSystemContent());
                     break;
                 case 1://失败
                     break;
@@ -314,18 +305,16 @@ public class MessageFragment extends Fragment {
     };
 
 
-
-
-    public void startHoleActivity(int mPosition){
-        String data_hole_id = myNotificationList.get(mPosition-1).getHole_id();//position-1是因为SystemNotification为第一个item
+    public void startHoleActivity(int mPosition) {
+        String data_hole_id = myNotificationList.get(mPosition - 1).getHole_id();//position-1是因为SystemNotification为第一个item
         String[] data = null;
 
-        if(BuildConfig.isRelease) {
+        if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
                     .withInt(Constant.HOLE_ID, Integer.valueOf(data_hole_id))
-                    .withBoolean(Constant.IF_OPEN_KEYBOARD,false)
+                    .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                     .navigation();
-        }else{
+        } else {
             //测试阶段不可跳转
         }
 
@@ -375,40 +364,40 @@ public class MessageFragment extends Fragment {
     public static String removeCharAt(String s, int pos) {
         return s.substring(0, pos) + s.substring(pos + 1);
     }
-    private Handler handler = new Handler(){
+
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            Log.d(TAG, "handleMessage: msr.what " +msg.what);
-            switch (msg.what){
+            Log.d(TAG, "handleMessage: msr.what " + msg.what);
+            switch (msg.what) {
                 case 0://初次请求网络成功
-                    String Data = (String)msg.obj;
-                    Data = Data.replace("{\"msg\":","");
-                    Data = removeCharAt(Data, Data.length()-1);
-                    Log.d(TAG, "handleMessage: get Data1 "+ Data);
+                    String Data = (String) msg.obj;
+                    Data = Data.replace("{\"msg\":", "");
+                    Data = removeCharAt(Data, Data.length() - 1);
+                    Log.d(TAG, "handleMessage: get Data1 " + Data);
                     myNotificationList = parseJson(Data);
                     isNotification = true;
-                    if(isNotification){ //有通知就不显示
+                    if (isNotification) { //有通知就不显示
                         noNotificationImage.setVisibility(View.GONE);
                         thereIsNoNotification.setVisibility(View.GONE);
                         constraintLayout.setVisibility(View.GONE);
                         //Log.d(TAG, "handleMessage: size  " + myNotificationList.size());
                         adapter = new NotificationAdapter(getActivity(), myNotificationList);
-                        notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity() , LinearLayoutManager.VERTICAL,false));
+                        notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                         notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
                         notificationRecyclerView.setAdapter(adapter);
-                        if(getMySystemMessage){
+                        if (getMySystemMessage) {
                             adapter.getSystemNotification(mSystemNotificationList.get(0).getSystemContent());
                             adapter.setMContent = true;
-                        }
-                        else{
+                        } else {
                             handler.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
                                     /**
                                      *要执行的操作
                                      */
-                                adapter.getSystemNotification(mSystemMessage);
+                                    adapter.getSystemNotification(mSystemMessage);
                                 }
                             }, 500);
                         }
@@ -417,46 +406,44 @@ public class MessageFragment extends Fragment {
                         adapter.setOnItemClickListener(new NotificationAdapter.OnItemClickListener() {
                             @Override
                             public void onClick(int position) {
-                                if(position>0){
+                                if (position > 0) {
                                     startHoleActivity(position);
                                     //Toast.makeText(getActivity(), "click " + position, Toast.LENGTH_SHORT).show();
-                                }
-                                else {
-                                    Intent intent = new Intent(getActivity(),SystemNotification.class);
+                                } else {
+                                    Intent intent = new Intent(getActivity(), SystemNotification.class);
                                     startActivity(intent);
                                 }
 
                             }
                         });
-                        page ++;
-                        start_id+=list_size;
-                        Log.d(TAG, "handleMessage: start_id :"+start_id);
-                    }
-                    else {
+                        page++;
+                        start_id += list_size;
+                        Log.d(TAG, "handleMessage: start_id :" + start_id);
+                    } else {
                         noNotificationImage.setVisibility(View.VISIBLE);
                         thereIsNoNotification.setVisibility(View.VISIBLE);
                         constraintLayout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onCreateView: visible");
                     }
-                    if(isRefreshing){
+                    if (isRefreshing) {
                         finishRefresh = true;
                     }
                     break;
                 case 1://失败
                     constraintLayout.setVisibility(View.VISIBLE);
                     thereIsNoNotification.setText("");
-                    if(isRefreshing){
+                    if (isRefreshing) {
                         finishRefresh = true;
                     }
-                    if(isOnLoadMore){
+                    if (isOnLoadMore) {
                         finishOnLoadMore = true;
                     }
                     break;
                 case 2://不是首次请求网络
-                    String Data2 = (String)msg.obj;
-                    Data2 = Data2.replace("{\"msg\":","");
-                    Data2 = removeCharAt(Data2, Data2.length()-1);
-                    Log.d(TAG, "handleMessage: get Data2 "+ Data2);
+                    String Data2 = (String) msg.obj;
+                    Data2 = Data2.replace("{\"msg\":", "");
+                    Data2 = removeCharAt(Data2, Data2.length() - 1);
+                    Log.d(TAG, "handleMessage: get Data2 " + Data2);
                     myNotificationList.addAll(parseJson(Data2));
                     adapter.getSystemNotification(mSystemNotificationList.get(0).getSystemContent());
                     Log.d(TAG, "handleMessage: size  " + myNotificationList.size());
@@ -466,8 +453,8 @@ public class MessageFragment extends Fragment {
                         @Override
                         public void run() {
                             *//**
-                             *要执行的操作
-                             *//*
+                 *要执行的操作
+                 *//*
                             adapter.notifyDataSetChanged();
                         }
                     }, 400);//0.4秒后执行Runnable中的run方法*/
@@ -476,48 +463,46 @@ public class MessageFragment extends Fragment {
                     adapter.setOnItemClickListener(new NotificationAdapter.OnItemClickListener() {
                         @Override
                         public void onClick(int position) {
-                            if(position>0){
+                            if (position > 0) {
                                 startHoleActivity(position);
                                 //Toast.makeText(getActivity(), "click " + position, Toast.LENGTH_SHORT).show();
-                            }
-                            else {
-                                Intent intent = new Intent(getActivity(),SystemNotification.class);
+                            } else {
+                                Intent intent = new Intent(getActivity(), SystemNotification.class);
                                 startActivity(intent);
                             }
 
                         }
                     });
-                    page ++;
-                    start_id+=list_size;
-                    Log.d(TAG, "handleMessage: start_id :"+start_id);
-                    if(isRefreshing){
+                    page++;
+                    start_id += list_size;
+                    Log.d(TAG, "handleMessage: start_id :" + start_id);
+                    if (isRefreshing) {
                         finishRefresh = true;
                     }
 
-                    if(isOnLoadMore){
+                    if (isOnLoadMore) {
                         finishOnLoadMore = true;
                     }
                     break;
-                
+
                 case 3:
-                    if(myNotificationList != null && page!=1 ){
+                    if (myNotificationList != null && page != 1) {
                         /*adapter = new NotificationAdapter( getActivity(), myNotificationList);
                         notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity() , LinearLayoutManager.VERTICAL,false));
                         notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
                         notificationRecyclerView.setAdapter(adapter);*/
                         adapter.notifyDataSetChanged();
                         Log.d(TAG, "handleMessage: case3");
-                    }
-                    else {
+                    } else {
                         noNotificationImage.setVisibility(View.VISIBLE);
                         thereIsNoNotification.setVisibility(View.VISIBLE);
                         constraintLayout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onCreateView: visible");
                     }
-                    if(isRefreshing){
+                    if (isRefreshing) {
                         finishRefresh = true;
                     }
-                    if(isOnLoadMore){
+                    if (isOnLoadMore) {
                         finishOnLoadMore = true;
                     }
                     break;
@@ -525,7 +510,7 @@ public class MessageFragment extends Fragment {
         }
     };
 
-    public void getStringByOkhttp(String path){
+    public void getStringByOkhttp(String path) {
         OkOne.enableRequestPriority(true);
         OkHttpClient client = new OkHttpClient();
         Message message = Message.obtain();
@@ -533,11 +518,11 @@ public class MessageFragment extends Fragment {
 
 //        SharedPreferences editor = getContext().getSharedPreferences("Depository", Context.MODE_PRIVATE);//
 //        token = editor.getString("token", "");
-       // Log.d("bala", "getStringByOkhttp: token "+token);
-        MMKVUtil mmkvUtil= MMKVUtil.getMMKVUtils(getContext());
-        String token =mmkvUtil.getString("USER_TOKEN");
+        // Log.d("bala", "getStringByOkhttp: token "+token);
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(getContext());
+        String token = mmkvUtil.getString("USER_TOKEN");
 
-        Request request = new Request.Builder().addHeader("Authorization","Bearer "+token).get().url(path).build();
+        Request request = new Request.Builder().addHeader("Authorization", "Bearer " + token).get().url(path).build();
         OkOne.setRequestPriority(request, getNotificationPriority);
 
 
@@ -545,44 +530,42 @@ public class MessageFragment extends Fragment {
         try {
             Call call = client.newCall(request);
             Log.d(TAG, "getStringByOkhttp: call");
-            call.enqueue(new Callback(){
+            call.enqueue(new Callback() {
                 @Override
-                public void onFailure(Call call, IOException e){
+                public void onFailure(Call call, IOException e) {
                     message.what = 1;
                     message.obj = e.getMessage();
                     System.out.println("Failed");
                     Log.d(TAG, "onFailure: i am on Failure");
-                    Log.d(TAG, "onFailure: e.toString "+ e.toString());
-                    Log.d(TAG,"e.getLocalizedMessage"+e.getLocalizedMessage());
+                    Log.d(TAG, "onFailure: e.toString " + e.toString());
+                    Log.d(TAG, "e.getLocalizedMessage" + e.getLocalizedMessage());
                 }
-                @Override
-                public void onResponse(Call call, Response response)throws IOException{
-                    if(response.isSuccessful()){//回调的方法执行在子线程。
-                        Log.d(TAG,"获取数据成功了");
-                        Log.d(TAG,"response.code()=="+response.code());
-                        final String responseData = response.body().string();
-                        Log.d(TAG,"response.body().string()== "+responseData);
-                        Log.d(TAG,"obtain message");
 
-                        String temp = responseData.replace("{\"msg\":","");
-                        temp = temp.replace("}","");
-                        if(temp.equals("null")){  //已经全部请求完或者是第一次请求就没有消息
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {//回调的方法执行在子线程。
+                        Log.d(TAG, "获取数据成功了");
+                        Log.d(TAG, "response.code()==" + response.code());
+                        final String responseData = response.body().string();
+                        Log.d(TAG, "response.body().string()== " + responseData);
+                        Log.d(TAG, "obtain message");
+
+                        String temp = responseData.replace("{\"msg\":", "");
+                        temp = temp.replace("}", "");
+                        if (temp.equals("null")) {  //已经全部请求完或者是第一次请求就没有消息
                             message.what = 3;
                             isAll = true;
                             hasInit = true;
-                        }
-                        else if(page == 1){
+                        } else if (page == 1) {
                             message.what = 0;
                             hasInit = true;
-                        }
-                        else if(page >1){
+                        } else if (page > 1) {
                             message.what = 2;
                         }
                         message.obj = responseData;
                         handler.sendMessage(message);
                         Log.d(TAG, "onResponse: handler message");
-                    }
-                    else{
+                    } else {
                         Log.d(TAG, "onResponse: response " + response.networkResponse());
                     }
                 }
@@ -590,7 +573,7 @@ public class MessageFragment extends Fragment {
         } catch (Exception e) {
             Log.d(TAG, "getStringByOkhttp: i am exception");
             e.printStackTrace();
-            Log.d(TAG, "getStringByOkhttp: e.toString() "+ e.toString());
+            Log.d(TAG, "getStringByOkhttp: e.toString() " + e.toString());
         }
         Log.d(TAG, "getStringByOkhttp: getResponseData: null ");
     }

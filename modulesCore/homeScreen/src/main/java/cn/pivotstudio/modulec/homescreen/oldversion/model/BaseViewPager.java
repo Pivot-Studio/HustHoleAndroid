@@ -8,19 +8,20 @@ import androidx.viewpager.widget.ViewPager;
 
 public class BaseViewPager extends ViewPager {//用来禁掉滑动
     private boolean scrollable = true;
+
     public BaseViewPager(Context context) {
         super(context);
     }
+
     public BaseViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return false;
     }
+
     //2.禁掉viewpager左右滑动事件
     @Override
     public boolean onInterceptTouchEvent(MotionEvent arg0) {

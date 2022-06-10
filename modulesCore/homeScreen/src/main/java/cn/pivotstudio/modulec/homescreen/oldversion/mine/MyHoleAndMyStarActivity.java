@@ -22,7 +22,7 @@ import cn.pivotstudio.modulec.homescreen.oldversion.mine.fragment.MyStarFragment
 import cn.pivotstudio.modulec.homescreen.oldversion.mypage.FragmentAdapter;
 
 
-public class MyHoleAndMyStarActivity extends AppCompatActivity{
+public class MyHoleAndMyStarActivity extends AppCompatActivity {
 
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
@@ -97,6 +97,7 @@ public class MyHoleAndMyStarActivity extends AppCompatActivity{
 
         mViewPager.addOnPageChangeListener(pageChangeListener);
     }
+
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

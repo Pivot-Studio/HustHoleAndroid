@@ -21,28 +21,30 @@ import cn.pivotstudio.modulec.homescreen.network.HSRequestInterface;
 public class HomeScreenRepository {
     public MutableLiveData<VersionResponse> pHomeScreenVersionMsg;//版本信息
     public final MutableLiveData<String> failed;
+
     /**
      * 初始化
      */
     public HomeScreenRepository() {
-        pHomeScreenVersionMsg =new MutableLiveData<>();
+        pHomeScreenVersionMsg = new MutableLiveData<>();
         failed = new MutableLiveData<>();
     }
+
     /**
      * 获取版本号
      */
-    public void getVersionMsgForNetwork(){
+    public void getVersionMsgForNetwork() {
         NetworkApi.createService(HSRequestInterface.class, 2).
                 checkUpdate().compose(NetworkApi.applySchedulers(new BaseObserver<VersionResponse>() {
-            @Override
-            public void onSuccess(VersionResponse versionResponse) {
-                pHomeScreenVersionMsg.setValue(versionResponse);
-            }
+                    @Override
+                    public void onSuccess(VersionResponse versionResponse) {
+                        pHomeScreenVersionMsg.setValue(versionResponse);
+                    }
 
-            @Override
-            public void onFailure(Throwable e) {
-                failed.postValue(((ExceptionHandler.ResponseThrowable) e).message);
-            }
-        }));
+                    @Override
+                    public void onFailure(Throwable e) {
+                        failed.postValue(((ExceptionHandler.ResponseThrowable) e).message);
+                    }
+                }));
     }
 }

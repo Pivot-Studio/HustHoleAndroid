@@ -31,7 +31,7 @@ public class EvaluateAndAdviceActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private ImageView imgMy;
-    private TextView  myTitle;
+    private TextView myTitle;
 
     Intent intent;
     List<Fragment> fragments = new ArrayList<>();
@@ -41,8 +41,8 @@ public class EvaluateAndAdviceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hole_star);
 
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
 
@@ -102,6 +102,7 @@ public class EvaluateAndAdviceActivity extends AppCompatActivity {
         mViewPager.setCurrentItem(intent.getIntExtra("initFragmentID", 0));
 
     }
+
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

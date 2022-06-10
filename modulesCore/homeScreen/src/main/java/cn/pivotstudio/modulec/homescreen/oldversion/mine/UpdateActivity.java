@@ -25,8 +25,8 @@ public class UpdateActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
         super.onCreate(savedInstanceState);
@@ -34,22 +34,23 @@ public class UpdateActivity extends AppCompatActivity {
         ImageView img = findViewById(R.id.update_img);
         img.setOnClickListener(v -> finish());
         init();
-        RecyclerView  updateRecycleView = (RecyclerView)findViewById(R.id.update_recyclerview);
+        RecyclerView updateRecycleView = (RecyclerView) findViewById(R.id.update_recyclerview);
         updateRecycleView.setLayoutManager(new LinearLayoutManager(this));
-       UpdateRecycleViewAdapter adapter = new UpdateRecycleViewAdapter(updates);
+        UpdateRecycleViewAdapter adapter = new UpdateRecycleViewAdapter(updates);
         updateRecycleView.setAdapter(adapter);
     }
-    private void init(){
-        for(int i = 0; i < 10; i++) {
-            Update _1_0_1=new Update("v 1.0","2021-09-21"," 1037树洞是一个华科校内匿名社区，您不用担心被熟悉的人发现身份.\n"+
-                    " -身份验证：允许在注册后通过华科校内邮箱来验证在校学生身份；\n"+
-                    "-树洞发布：可匿名发布文字内容到所有人都能看到的树洞广场\n"+
-                    "-树洞搜索：支持洞号、关键词搜索，方便您找到有趣的树洞；\n"+
-                    "-树洞交流：您可以对感兴趣的树洞进行点赞、评论、关注的操作，您的树洞在被评论后会收到通知；\n"+
-                    "-小树林：聚合同类型树洞，方便您浏览感兴趣话题；\n"+
-                    "-关键词屏蔽：对您不感兴趣的树洞内容，支持自定义设置关键词进行屏蔽；\n"+
-                    "-只看洞主：浏览树洞内容时，您可以选择只看洞主发布的评论；\n"+
-                    "-热门评论：浏览树洞内容时，您可以查看树洞下的最热评论；\n"+
+
+    private void init() {
+        for (int i = 0; i < 10; i++) {
+            Update _1_0_1 = new Update("v 1.0", "2021-09-21", " 1037树洞是一个华科校内匿名社区，您不用担心被熟悉的人发现身份.\n" +
+                    " -身份验证：允许在注册后通过华科校内邮箱来验证在校学生身份；\n" +
+                    "-树洞发布：可匿名发布文字内容到所有人都能看到的树洞广场\n" +
+                    "-树洞搜索：支持洞号、关键词搜索，方便您找到有趣的树洞；\n" +
+                    "-树洞交流：您可以对感兴趣的树洞进行点赞、评论、关注的操作，您的树洞在被评论后会收到通知；\n" +
+                    "-小树林：聚合同类型树洞，方便您浏览感兴趣话题；\n" +
+                    "-关键词屏蔽：对您不感兴趣的树洞内容，支持自定义设置关键词进行屏蔽；\n" +
+                    "-只看洞主：浏览树洞内容时，您可以选择只看洞主发布的评论；\n" +
+                    "-热门评论：浏览树洞内容时，您可以查看树洞下的最热评论；\n" +
                     "-我的：支持对我的树洞、我的关注、我的评论进行统一管理，您可以保存图片分享树洞给好友。");
             /*
             Update _1_0_0 = new Update("v 1.0","2021-03-08","新增功能：\n" +

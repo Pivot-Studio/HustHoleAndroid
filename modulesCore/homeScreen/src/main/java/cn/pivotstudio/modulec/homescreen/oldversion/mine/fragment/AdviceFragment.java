@@ -40,6 +40,7 @@ public class AdviceFragment extends Fragment {
     private TextView length;
     private EditText et_advice;
     private Chip chipAdvice, chipBug, chipOthers;
+
     public static AdviceFragment newInstance() {
         return new AdviceFragment();
     }
@@ -58,17 +59,17 @@ public class AdviceFragment extends Fragment {
 
         final int[] type = {0};
 
-        SoftKeyBoardListener.setListener(getActivity(),new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+        SoftKeyBoardListener.setListener(getActivity(), new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
             @Override
             public void keyBoardShow(int height) {
                 et_advice.setHeight(600);
-                length.setPadding(0,0,0,700);
+                length.setPadding(0, 0, 0, 700);
             }
 
             @Override
             public void keyBoardHide(int height) {
                 et_advice.setHeight(900);
-                length.setPadding(0,0,0,0);
+                length.setPadding(0, 0, 0, 0);
             }
         });
         RetrofitManager.RetrofitBuilder(BASE_URL);
@@ -78,13 +79,13 @@ public class AdviceFragment extends Fragment {
 
         chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
             String s = et_advice.getText().toString();
-            if(s.length() >= 300){
-                Toast.makeText(getContext(),"输入内容过长！",Toast.LENGTH_SHORT).show();
+            if (s.length() >= 300) {
+                Toast.makeText(getContext(), "输入内容过长！", Toast.LENGTH_SHORT).show();
             }
-            if(s.length() >0 && (chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked())){
+            if (s.length() > 0 && (chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked())) {
                 btn_ok.setBackgroundResource(R.drawable.advice_button_green);
                 btn_ok.setTextColor(getResources().getColor(R.color.GrayScale_100));
-            }else{
+            } else {
                 btn_ok.setBackgroundResource(R.drawable.advice_button);
                 btn_ok.setTextColor(getResources().getColor(R.color.GrayScale_20));
             }
@@ -97,8 +98,8 @@ public class AdviceFragment extends Fragment {
             }
         });
         btn_ok.setOnClickListener(v -> {
-            String content=et_advice.getText().toString().replace("\n","%0A");
-            if((chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked()) && content.length() > 0) {
+            String content = et_advice.getText().toString().replace("\n", "%0A");
+            if ((chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked()) && content.length() > 0) {
                 new Thread(() -> {
                     Call<ResponseBody> call = request.advice(BASE_URL + "feedback?type=" + type[0] + "&content=" + content);
                     call.enqueue(new Callback<ResponseBody>() {
@@ -130,9 +131,9 @@ public class AdviceFragment extends Fragment {
                         }
                     });
                 }).start();
-            }else if(chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked()){
+            } else if (chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked()) {
                 Toast.makeText(getContext(), "请输入建议再提交！", Toast.LENGTH_SHORT).show();
-            }else{
+            } else {
                 Toast.makeText(getContext(), "请选择反馈类型再提交！", Toast.LENGTH_SHORT).show();
             }
         });
@@ -143,21 +144,21 @@ public class AdviceFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                length.setText(s.length()+"/300");
-                if(s.length() >= 300){
-                    Toast.makeText(getContext(),"输入内容过长！",Toast.LENGTH_SHORT).show();
+                length.setText(s.length() + "/300");
+                if (s.length() >= 300) {
+                    Toast.makeText(getContext(), "输入内容过长！", Toast.LENGTH_SHORT).show();
                 }
-                if(s.length() >0 && (chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked())){
+                if (s.length() > 0 && (chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked())) {
                     btn_ok.setBackgroundResource(R.drawable.advice_button_green);
                     btn_ok.setTextColor(getResources().getColor(R.color.GrayScale_100));
-                }else{
+                } else {
                     btn_ok.setBackgroundResource(R.drawable.advice_button);
                     btn_ok.setTextColor(getResources().getColor(R.color.GrayScale_20));
                 }
                 InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                if(imm.isActive()){
+                if (imm.isActive()) {
                     et_advice.setHeight(300);
-                }else{
+                } else {
                     et_advice.setHeight(500);
                 }
             }

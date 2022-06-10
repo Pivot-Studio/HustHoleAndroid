@@ -8,7 +8,7 @@ public class MyReplyItem {
     public int hole_id;
     public int local_reply_id;
 
-    public MyReplyItem(String alias, String content, String created_timestamp, String hole_content, int hole_id, int local_reply_id){
+    public MyReplyItem(String alias, String content, String created_timestamp, String hole_content, int hole_id, int local_reply_id) {
         this.alias = alias;
         this.content = content;
         this.created_timestamp = created_timestamp;

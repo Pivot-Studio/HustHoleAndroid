@@ -25,7 +25,7 @@ public class SingletonNameViewModelFactory extends ViewModelProvider.NewInstance
     @NonNull
     @Override
     public <H extends ViewModel> H create(@NonNull Class<H> modelClass) {
-        return (H)t;
+        return (H) t;
     }
 
 

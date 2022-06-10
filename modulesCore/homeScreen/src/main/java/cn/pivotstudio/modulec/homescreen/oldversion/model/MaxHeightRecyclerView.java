@@ -39,7 +39,7 @@ public class MaxHeightRecyclerView extends RecyclerView {
 
     @Override
     protected void onMeasure(int widthSpec, int heightSpec) {
-        if(mHeight > 0) {
+        if (mHeight > 0) {
             heightSpec = MeasureSpec.makeMeasureSpec(mHeight, MeasureSpec.AT_MOST);
         }
         super.onMeasure(widthSpec, heightSpec);

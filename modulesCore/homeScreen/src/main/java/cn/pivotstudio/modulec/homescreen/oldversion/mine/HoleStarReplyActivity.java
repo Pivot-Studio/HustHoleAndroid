@@ -30,7 +30,7 @@ import cn.pivotstudio.modulec.homescreen.oldversion.mine.fragment.MyStarFragment
 import cn.pivotstudio.modulec.homescreen.oldversion.mypage.FragmentAdapter;
 
 
-public class HoleStarReplyActivity extends AppCompatActivity{
+public class HoleStarReplyActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private ImageView imgMy;
@@ -43,8 +43,8 @@ public class HoleStarReplyActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_hole_star);
 
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
 
@@ -92,7 +92,7 @@ public class HoleStarReplyActivity extends AppCompatActivity{
 
         intent = getIntent();
         mViewPager.setCurrentItem(intent.getIntExtra("initFragmentID", 0));
-        changeTabIndicatorWidth(mTabLayout,10);
+        changeTabIndicatorWidth(mTabLayout, 10);
     }
 
     private void initViewPager() {
@@ -111,6 +111,7 @@ public class HoleStarReplyActivity extends AppCompatActivity{
 
         mViewPager.addOnPageChangeListener(pageChangeListener);
     }
+
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -127,8 +128,9 @@ public class HoleStarReplyActivity extends AppCompatActivity{
 
         }
     };
+
     public void changeTabIndicatorWidth(final TabLayout tabLayout, final int margin) {
-        Log.d("inin","in this");
+        Log.d("inin", "in this");
         tabLayout.post(() -> {
             try {
                 Field mTabStripField = tabLayout.getClass().getDeclaredField("mTabStrip");

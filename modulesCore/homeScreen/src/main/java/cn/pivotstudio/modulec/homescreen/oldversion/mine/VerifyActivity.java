@@ -42,13 +42,13 @@ public class VerifyActivity extends AppCompatActivity {
     Button btn_verify;
     Boolean match = false;
     EditText et;
-    TextView tv_again, tv_howTo,tv_time,tv_not;
+    TextView tv_again, tv_howTo, tv_time, tv_not;
     ImageView img;
     LinearLayout ll_retry;
     Retrofit retrofit;
-    Boolean mIfResend=false;
+    Boolean mIfResend = false;
     private RequestInterface request;
-    private static final String ACTIVITY_IDENTIFY="email";
+    private static final String ACTIVITY_IDENTIFY = "email";
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -65,28 +65,30 @@ public class VerifyActivity extends AppCompatActivity {
         tv_again = findViewById(R.id.tv_again);
         tv_howTo = findViewById(R.id.tv_howTo);
         img = findViewById(R.id.email_verify2_img);
-        ll_retry=findViewById(R.id.ll_emailverify2);
+        ll_retry = findViewById(R.id.ll_emailverify2);
         ll_retry.setVisibility(View.INVISIBLE);
-        tv_time=findViewById(R.id.tv_emailverify_time);
-        tv_not=findViewById(R.id.tv_not);
+        tv_time = findViewById(R.id.tv_emailverify_time);
+        tv_not = findViewById(R.id.tv_not);
         btn_verify.setOnClickListener(this::onClick);
         tv_again.setOnClickListener(this::onClick);
         tv_howTo.setOnClickListener(this::onClick);
         img.setOnClickListener(this::onClick);
-        retrofit= RetrofitManager.getRetrofit();
-        request=RetrofitManager.getRequest();
+        retrofit = RetrofitManager.getRetrofit();
+        request = RetrofitManager.getRequest();
         SpannableString string1 = new SpannableString("输入验证码");
-        EditTextReaction.EditTextSize(et,string1,14);
+        EditTextReaction.EditTextSize(et, string1, 14);
         btn_verify.setEnabled(false);
-        EditTextReaction.ButtonReaction(et,btn_verify);
+        EditTextReaction.ButtonReaction(et, btn_verify);
 
     }
-    public static Intent newIntent(Context context, String useremail){
-        Intent intent=new Intent(context,VerifyActivity.class);
-        intent.putExtra(ACTIVITY_IDENTIFY,useremail);
+
+    public static Intent newIntent(Context context, String useremail) {
+        Intent intent = new Intent(context, VerifyActivity.class);
+        intent.putExtra(ACTIVITY_IDENTIFY, useremail);
         //intent1.putExtra(ACTIVITY_IDENTIFY2,vertify);
         return intent;
     }
+
     public void onClick(View view) {
         Intent intent;
         int id = view.getId();
