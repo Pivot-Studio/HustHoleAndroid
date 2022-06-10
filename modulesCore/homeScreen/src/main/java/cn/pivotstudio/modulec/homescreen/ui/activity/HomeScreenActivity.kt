@@ -67,6 +67,31 @@ class HomeScreenActivity : BaseActivity() {
         navController = navHostFragment.navController
         binding!!.bottomNavigation.setOptionsListener { v: View -> onClick(v) }
         setupActionBarWithNavController(navController)
+
+        binding!!.bottomNavigationView.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.page_home -> {
+                    navController.navigate(R.id.homepage_fragment)
+                    true
+                }
+
+                R.id.page_forest -> {
+                    navController.navigate(R.id.forest_fragment)
+                    true
+                }
+
+                R.id.page_msg -> {
+                    navController.navigate(R.id.message_fragment)
+                    true
+                }
+
+                R.id.page_mine -> {
+                    navController.navigate(R.id.mine_fragment)
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     /**
@@ -164,17 +189,18 @@ class HomeScreenActivity : BaseActivity() {
      * @param visibility true：可见 / false 不可见
      */
     fun setBottomNavVisibility(visibility: Boolean) {
-        if (!visibility) {
-            findViewById<View>(R.id.iv_homescreen_optionbox).visibility =
-                View.GONE
-            findViewById<View>(R.id.bottom_navigation).visibility = View.GONE
-            findViewById<View>(R.id.fab_homescreen_publishhole).visibility =
-                View.GONE
-        } else {
-            findViewById<View>(R.id.iv_homescreen_optionbox).visibility =
-                View.VISIBLE
-            findViewById<View>(R.id.bottom_navigation).visibility = View.VISIBLE
-            findViewById<View>(R.id.fab_homescreen_publishhole).visibility = View.VISIBLE
+        binding?.run {
+            if (!visibility) {
+                ivHomescreenOptionbox.visibility = View.GONE
+                bottomNavigation.visibility = View.GONE
+                fabHomescreenPublishhole.visibility = View.GONE
+                iconFabHomeScreen.visibility = View.GONE
+            } else {
+                ivHomescreenOptionbox.visibility = View.VISIBLE
+                bottomNavigation.visibility = View.VISIBLE
+                fabHomescreenPublishhole.visibility = View.VISIBLE
+                iconFabHomeScreen.visibility = View.VISIBLE
+            }
         }
     }
 

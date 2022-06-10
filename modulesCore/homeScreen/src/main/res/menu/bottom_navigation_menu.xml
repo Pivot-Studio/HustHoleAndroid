@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/page_home"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="首页" />
+
+    <item
+        android:id="@+id/page_forest"
+        android:enabled="true"
+        android:icon="@drawable/ic_forest"
+        android:title="小树林" />
+
+    <item
+        android:id="@+id/page_null"
+        android:enabled="false"
+        android:title="" />
+
+    <item
+        android:id="@+id/page_msg"
+        android:enabled="true"
+        android:icon="@drawable/ic_msg"
+        android:title="通知" />
+
+    <item
+        android:id="@+id/page_mine"
+        android:enabled="true"
+        android:icon="@drawable/ic_mine"
+        android:title="我的" />
+
+</menu>

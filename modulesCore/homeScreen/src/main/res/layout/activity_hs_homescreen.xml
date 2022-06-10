@@ -91,7 +91,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView7"
+                android:id="@+id/icon_fab_home_screen"
                 android:layout_width="@dimen/dp_15"
                 android:layout_height="@dimen/dp_15"
                 android:elevation="@dimen/dp_20"
@@ -100,6 +100,14 @@
                 app:layout_constraintStart_toStartOf="@+id/fab_homescreen_publishhole"
                 app:layout_constraintTop_toTopOf="@+id/fab_homescreen_publishhole"
                 app:srcCompat="@mipmap/group243" />
+
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_navigation_view"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_54"
+                style="@style/BottomNavigationBarTheme"
+                app:menu="@menu/bottom_navigation_menu"
+                app:layout_constraintBottom_toTopOf="@id/bottom_navigation"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.drawerlayout.widget.DrawerLayout>
