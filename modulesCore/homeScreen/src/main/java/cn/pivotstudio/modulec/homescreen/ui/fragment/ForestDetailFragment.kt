@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestDetailBinding
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel
 
 class ForestDetailFragment : Fragment() {
@@ -22,6 +23,8 @@ class ForestDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        (requireActivity() as HomeScreenActivity).setBottomNavVisibility(false)
+
         binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_forest_detail, container, false)
         viewModel = ViewModelProvider(requireActivity()).get(ForestDetailViewModel::class.java)

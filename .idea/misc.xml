@@ -306,6 +306,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_myfollow.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_myhole.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_myreply.xml" value="0.28229166666666666" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_advice.xml" value="0.103125" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_all_frorest.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_evaluate.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest.xml" value="0.28229166666666666" />
@@ -328,6 +329,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_nosearch.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_requestfailed.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_updatehead.xml" value="0.28229166666666666" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/linearlayout_bottomnavigationbar.xml" value="0.27853260869565216" />
       </map>
     </option>
   </component>
