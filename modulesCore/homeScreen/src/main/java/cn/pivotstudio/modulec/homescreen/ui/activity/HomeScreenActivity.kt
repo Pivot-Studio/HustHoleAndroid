@@ -68,6 +68,7 @@ class HomeScreenActivity : BaseActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
+
         navController.addOnDestinationChangedListener {_, destination, argument ->
             supportActionBar?.title = destination.label
 
