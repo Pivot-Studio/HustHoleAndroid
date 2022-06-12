@@ -2,80 +2,55 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!--主页面布局-->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <!--主页面布局-->
-            <RelativeLayout
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/nav_host_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true">
+                app:navGraph="@navigation/nav_graph" />
 
 
-                <!--NavHost-->
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/ll_homescreen_titlebar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_52"
-                    android:background="@color/HH_BandColor_1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+        </RelativeLayout>
+        <!--底部导航-->
+        <!--            <ImageView-->
+        <!--                android:id="@+id/iv_homescreen_optionbox"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:visibility="gone"-->
+        <!--                android:layout_height="@dimen/dp_54"-->
+        <!--                android:elevation="@dimen/dp_30"-->
+        <!--                android:scaleType="fitXY"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintStart_toStartOf="parent"-->
+        <!--                app:layout_constraintVertical_bias="0.5"-->
+        <!--                app:srcCompat="@drawable/bottombar" />-->
 
-                    <TextView
-                        android:id="@+id/tv_homescreen_titlebarname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="52dp"
-                        android:gravity="center"
-                        android:text="@string/hust_hole_1037_zh"
-                        android:textColor="@color/GrayScale_100"
-                        android:textSize="18sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0478"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.fragment.app.FragmentContainerView
-                    android:id="@+id/nav_host_fragment"
-                    android:name="androidx.navigation.fragment.NavHostFragment"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/ll_homescreen_titlebar"
-                    app:navGraph="@navigation/nav_graph" />
-
-
-            </RelativeLayout>
-            <!--底部导航-->
-            <ImageView
-                android:id="@+id/iv_homescreen_optionbox"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_54"
-                android:elevation="@dimen/dp_30"
-                android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintVertical_bias="0.5"
-                app:srcCompat="@drawable/bottombar" />
-
-            <cn.pivotstudio.modulec.homescreen.custom_view.BottomNavigationBar
-                android:id="@+id/bottom_navigation"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_54"
-                android:layout_alignParentBottom="true"
-                android:elevation="@dimen/dp_32"
-                android:orientation="horizontal"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+        <!--            <cn.pivotstudio.modulec.homescreen.custom_view.BottomNavigationBar-->
+        <!--                android:id="@+id/bottom_navigation"-->
+        <!--                android:visibility="gone"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="@dimen/dp_54"-->
+        <!--                android:layout_alignParentBottom="true"-->
+        <!--                android:elevation="@dimen/dp_32"-->
+        <!--                android:orientation="horizontal"-->
+        <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--                app:layout_constraintEnd_toEndOf="parent"-->
+        <!--                app:layout_constraintStart_toStartOf="parent" />-->
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/layout_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab_homescreen_publishhole"
@@ -83,32 +58,41 @@
                 android:layout_height="@dimen/dp_49"
                 android:layout_marginBottom="27dp"
                 android:backgroundTint="@color/HH_BandColor_1"
+                android:contentDescription="@string/publishhole_1"
+                android:elevation="0dp"
                 android:onClick="onClick"
-                app:borderWidth="0.0dip"
-                app:fabSize="auto"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_anchor="@id/bottom_app_bar"
+                app:srcCompat="@drawable/add" />
 
-            <ImageView
-                android:id="@+id/icon_fab_home_screen"
-                android:layout_width="@dimen/dp_15"
-                android:layout_height="@dimen/dp_15"
-                android:elevation="@dimen/dp_20"
-                app:layout_constraintBottom_toBottomOf="@+id/fab_homescreen_publishhole"
-                app:layout_constraintEnd_toEndOf="@+id/fab_homescreen_publishhole"
-                app:layout_constraintStart_toStartOf="@+id/fab_homescreen_publishhole"
-                app:layout_constraintTop_toTopOf="@+id/fab_homescreen_publishhole"
-                app:srcCompat="@mipmap/group243" />
-
-            <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_navigation_view"
+            <!--            <ImageView-->
+            <!--                android:id="@+id/icon_fab_home_screen"-->
+            <!--                android:layout_width="@dimen/dp_15"-->
+            <!--                android:layout_height="@dimen/dp_15"-->
+            <!--                android:elevation="@dimen/dp_20"-->
+            <!--                android:visibility="gone"-->
+            <!--                app:layout_constraintBottom_toBottomOf="@+id/fab_homescreen_publishhole"-->
+            <!--                app:layout_constraintEnd_toEndOf="@+id/fab_homescreen_publishhole"-->
+            <!--                app:layout_constraintStart_toStartOf="@+id/fab_homescreen_publishhole"-->
+            <!--                app:layout_constraintTop_toTopOf="@+id/fab_homescreen_publishhole"-->
+            <!--                app:srcCompat="@mipmap/group243" />-->
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottom_app_bar"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_54"
-                style="@style/BottomNavigationBarTheme"
-                app:menu="@menu/bottom_navigation_menu"
-                app:layout_constraintBottom_toTopOf="@id/bottom_navigation"/>
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:elevation="@{0.0f}"
+                app:fabCradleMargin="@dimen/dp_10"
+                app:fabCradleRoundedCornerRadius="@dimen/dp_35">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.drawerlayout.widget.DrawerLayout>
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottom_navigation_view"
+                    style="@style/BottomNavigationBarTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_54"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:menu="@menu/bottom_navigation_menu" />
+            </com.google.android.material.bottomappbar.BottomAppBar>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

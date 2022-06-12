@@ -31,8 +31,6 @@ public class AllForestFragment extends BaseFragment {
         binding = DataBindingUtil
                 .inflate(inflater, R.layout.fragment_all_frorest, container, false);
         // 初始化ViewModel
-        HomeScreenActivity parent = (HomeScreenActivity) requireActivity();
-        parent.setBottomNavVisibility(false);
         viewModel = new ViewModelProvider(requireActivity()).get(AllForestViewModel.class);
         return binding.getRoot();
     }
@@ -65,6 +63,10 @@ public class AllForestFragment extends BaseFragment {
 
         binding.entertainmentRecyclerView.setAdapter(allForestAdapter);
         allForestAdapter.submitList(viewModel.getForestCards());
+
+        binding.btnApplyNewForest.setOnClickListener( btn -> {
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).popBackStack();
+        });
     }
 
 

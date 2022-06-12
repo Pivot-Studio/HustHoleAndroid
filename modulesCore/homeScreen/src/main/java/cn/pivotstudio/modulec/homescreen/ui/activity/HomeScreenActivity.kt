@@ -5,13 +5,16 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
-import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.NavigationUI
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupWithNavController
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
@@ -65,33 +68,17 @@ class HomeScreenActivity : BaseActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        binding!!.bottomNavigation.setOptionsListener { v: View -> onClick(v) }
-        setupActionBarWithNavController(navController)
+        navController.addOnDestinationChangedListener {_, destination, argument ->
+            supportActionBar?.title = destination.label
 
-        binding!!.bottomNavigationView.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.page_home -> {
-                    navController.navigate(R.id.homepage_fragment)
-                    true
-                }
-
-                R.id.page_forest -> {
-                    navController.navigate(R.id.forest_fragment)
-                    true
-                }
-
-                R.id.page_msg -> {
-                    navController.navigate(R.id.message_fragment)
-                    true
-                }
-
-                R.id.page_mine -> {
-                    navController.navigate(R.id.mine_fragment)
-                    true
-                }
-                else -> false
+            binding?.apply {
+                layoutBottomBar.isVisible =
+                    (destination.id != R.id.all_forest_fragment && destination.id != R.id.forest_detail_fragment)
+                bottomNavigationView.setupWithNavController(navController)
+                bottomAppBar.background = null;
             }
         }
+
     }
 
     /**
@@ -145,18 +132,6 @@ class HomeScreenActivity : BaseActivity() {
             } else {
                 showMsg("当前为模块测试阶段")
             }
-        } else if (id == R.id.cl_homescreen_hompage) {
-            navController!!.navigate(R.id.homepage_fragment)
-            binding!!.tvHomescreenTitlebarname.text = "1037树洞"
-        } else if (id == R.id.cl_homescreen_forest) {
-            navController!!.navigate(R.id.forest_fragment)
-            binding!!.tvHomescreenTitlebarname.text = "小树林"
-        } else if (id == R.id.cl_homescreen_message) {
-            navController!!.navigate(R.id.message_fragment)
-            binding!!.tvHomescreenTitlebarname.text = "通知"
-        } else if (id == R.id.cl_homescreen_mine) {
-            navController!!.navigate(R.id.mine_fragment)
-            binding!!.tvHomescreenTitlebarname.text = "我的"
         }
     }
 
@@ -183,28 +158,11 @@ class HomeScreenActivity : BaseActivity() {
         return super.onKeyUp(keyCode, event)
     }
 
-    /**
-     * 提供给 NavHostFragment 管理的 Fragment 设置底部导航栏能见性
-     *
-     * @param visibility true：可见 / false 不可见
-     */
-    fun setBottomNavVisibility(visibility: Boolean) {
-        binding?.run {
-            if (!visibility) {
-                ivHomescreenOptionbox.visibility = View.GONE
-                bottomNavigation.visibility = View.GONE
-                fabHomescreenPublishhole.visibility = View.GONE
-                iconFabHomeScreen.visibility = View.GONE
-            } else {
-                ivHomescreenOptionbox.visibility = View.VISIBLE
-                bottomNavigation.visibility = View.VISIBLE
-                fabHomescreenPublishhole.visibility = View.VISIBLE
-                iconFabHomeScreen.visibility = View.VISIBLE
-            }
-        }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        return navController.navigateUp() || super.onSupportNavigateUp()
+    override fun onNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onNavigateUp()
     }
 }

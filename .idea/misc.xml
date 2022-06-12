@@ -257,14 +257,22 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/advice_button_green.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/back.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bg_bottom_bar.xml" value="0.1415" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/block_line.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bottombar.xml" value="0.1415" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/bottombar_button1.xml" value="0.1475" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/bottombar_button2.xml" value="0.1475" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/bottombar_button3.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bottombar_button4.xml" value="0.1065" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/button.xml" value="0.1475" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/button_white.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/checkbox.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/checkbox_true.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/click_button.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/forest_button.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/forest_button_white.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/forest_gray.xml" value="0.1065" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/homepage_notice.xml" value="0.1475" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forward_arrow.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_launcher_background.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_onlylookmaster.xml" value="0.1065" />

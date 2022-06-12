@@ -23,7 +23,6 @@ class ForestDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        (requireActivity() as HomeScreenActivity).setBottomNavVisibility(false)
 
         binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_forest_detail, container, false)

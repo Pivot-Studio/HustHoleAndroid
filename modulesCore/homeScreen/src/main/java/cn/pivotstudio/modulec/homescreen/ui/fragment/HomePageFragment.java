@@ -57,9 +57,6 @@ public class HomePageFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        // 打开底部导航栏
-        HomeScreenActivity parent = (HomeScreenActivity) requireActivity();
-        parent.setBottomNavVisibility(true);
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_homepage, container, false);
         mViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
