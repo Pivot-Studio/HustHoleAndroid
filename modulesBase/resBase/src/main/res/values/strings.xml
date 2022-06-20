@@ -6,12 +6,12 @@
     <string name="default_string_number_short">1037</string>
     <string name="default_string_number_long">1037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037</string>
 
-    <string name="homepage_1">1037树洞</string>
+    <string name="hust_hole_1037_zh">1037树洞</string>
     <string name="homepage_2">叮~来自1037树洞的悄悄话！</string>
     <string name="homepage_3">知道啦</string>
-    <string name="homepage_4">小树林</string>
-    <string name="homepage_5">通知</string>
-    <string name="homepage_6">我的</string>
+    <string name="forest_zh">小树林</string>
+    <string name="notification_zh">通知</string>
+    <string name="mine_zh">我的</string>
 
 
 
@@ -135,4 +135,5 @@
     <string name="chip_8">8</string>
     <string name="chip_9">9</string>
     <string name="chip_10">10</string>
+    <string name="all_forest_zh">所有小树林</string>
 </resources>

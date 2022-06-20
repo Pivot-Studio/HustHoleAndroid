@@ -22,9 +22,9 @@ import cn.pivotstudio.modulec.homescreen.R;
 
 public class TransparentRefreshHeader extends LinearLayout implements RefreshHeader {
 
-    private ImageView mImage,mImage2,mImage3;
+    private ImageView mImage, mImage2, mImage3;
     private AnimationDrawable pullDownAnim;
-    private AnimationDrawable refreshingAnim,refreshingAnim2,refreshingAnim3;
+    private AnimationDrawable refreshingAnim, refreshingAnim2, refreshingAnim3;
 
     private boolean hasSetPullDownAnim = false;
 
@@ -42,7 +42,7 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
         mImage = (ImageView) view.findViewById(R.id.refresh_header);
         mImage2 = (ImageView) view.findViewById(R.id.refresh_header_2);
         mImage3 = (ImageView) view.findViewById(R.id.refresh_header_3);
-        Log.e("刷新：","刷心前");
+        Log.e("刷新：", "刷心前");
     }
 
     @NonNull
@@ -70,7 +70,7 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
                 mImage.setImageResource(R.drawable.refresh_point);
                 mImage2.setImageResource(R.drawable.refresh_point);
                 mImage3.setImageResource(R.drawable.refresh_point);
-                Log.e("刷新：","PullDownToRefresh");
+                Log.e("刷新：", "PullDownToRefresh");
                 break;
             case Refreshing: //正在刷新。只调用一次
                 //状态切换为正在刷新状态时，设置图片资源为小人卖萌的动画并开始执行
@@ -83,10 +83,10 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
                 refreshingAnim2.start();
                 refreshingAnim3 = (AnimationDrawable) mImage3.getDrawable();
                 refreshingAnim3.start();
-                Log.e("刷新：","Refreshing");
+                Log.e("刷新：", "Refreshing");
                 break;
             case ReleaseToRefresh:
-                Log.e("刷新：","ReleaseToRefresh");
+                Log.e("刷新：", "ReleaseToRefresh");
                 break;
         }
     }
@@ -97,14 +97,14 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
         // 结束动画
         if (pullDownAnim != null && pullDownAnim.isRunning()) {
             pullDownAnim.stop();
-            Log.e("刷新："," pullDownAnim.stop();");
+            Log.e("刷新：", " pullDownAnim.stop();");
 
         }
         if (refreshingAnim != null && refreshingAnim.isRunning()) {
             refreshingAnim.stop();
             refreshingAnim2.stop();
             refreshingAnim3.stop();
-            Log.e("刷新："," refreshingAnim n.stop();");
+            Log.e("刷新：", " refreshingAnim n.stop();");
         }
         //重置状态
         hasSetPullDownAnim = false;
@@ -138,12 +138,12 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
         mImage.setScaleY(1);
 
         if (percent < 1) {
-            mImage2.setScaleX(3*percent/2);
-            mImage2.setScaleY(3*percent/2);
-            mImage3.setScaleX(3*percent/2);
-            mImage3.setScaleY(3*percent/2);
-            mImage2.setTranslationX(percent*45);
-            mImage3.setTranslationX(-(percent*45));
+            mImage2.setScaleX(3 * percent / 2);
+            mImage2.setScaleY(3 * percent / 2);
+            mImage3.setScaleX(3 * percent / 2);
+            mImage3.setScaleY(3 * percent / 2);
+            mImage2.setTranslationX(percent * 45);
+            mImage3.setTranslationX(-(percent * 45));
 
 
             if (hasSetPullDownAnim) {
@@ -175,8 +175,6 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
 
     @Override
     public void onReleased(@NonNull RefreshLayout refreshLayout, int height, int maxDragHeight) {
-
-
 
 
     }

@@ -76,11 +76,12 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
         scaleGestureDetector = new ScaleGestureDetector(context, this);
         initListener();
     }
-public void init(Context context){
-    setOnTouchListener(this);
-    scaleGestureDetector = new ScaleGestureDetector(context, this);
-    initListener();
-}
+
+    public void init(Context context) {
+        setOnTouchListener(this);
+        scaleGestureDetector = new ScaleGestureDetector(context, this);
+        initListener();
+    }
 
     /**
      * 初始化事件监听
@@ -122,11 +123,11 @@ public void init(Context context){
         // 图片宽度大于控件宽度，图片高度小于控件高度
         if (mDrawableWidth > mWidth && mDrawableHeight < mHeight)
             //scale = mWidth * 1.0f / mDrawableWidth;
-            scale=mHeight*1.0f/mDrawableHeight;
+            scale = mHeight * 1.0f / mDrawableHeight;
             // 图片高度度大于控件宽高，图片宽度小于控件宽度
         else if (mDrawableHeight > mHeight && mDrawableWidth < mWidth)
             //scale = mHeight * 1.0f / mDrawableHeight;
-            scale=mWidth*1.0f/mDrawableWidth;
+            scale = mWidth * 1.0f / mDrawableWidth;
             // 图片宽度大于控件宽度，图片高度大于控件高度
         else if (mDrawableHeight > mHeight && mDrawableWidth > mWidth)
             scale = Math.max(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
@@ -258,8 +259,6 @@ public void init(Context context){
     private boolean isFirstMoved = false;
 
 
-
-
     private Matrix matrix1 = new Matrix();
     private Matrix savedMatrix = new Matrix();
 
@@ -281,7 +280,7 @@ public void init(Context context){
     private float distance(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
-        return Float.valueOf(String.valueOf(Math.sqrt(x * x + y * y))) ;
+        return Float.valueOf(String.valueOf(Math.sqrt(x * x + y * y)));
     }
 
 
@@ -334,17 +333,17 @@ public void init(Context context){
                 if (rectf.width() > mWidth && canSmoothX()) {
                     dX = nowMovingX - lastMovedX;
                 }
-                if(mode==DRAG) {
+                if (mode == DRAG) {
                     matrix.postTranslate(dX, dY);
-                    remedyXAndY(dX,dY);
-                }else if(mode==ZOOM){
+                    remedyXAndY(dX, dY);
+                } else if (mode == ZOOM) {
                     float newDist = distance(event);
-                    if (newDist >0) {
+                    if (newDist > 0) {
                         matrix1.set(savedMatrix);
                         float scale = newDist / oriDis;
                         matrix1.postScale(scale, scale, midPoint.x, midPoint.y);
                         //setImageMatrix(matrix1);
-                        remedyXAndY(dX,dY);
+                        remedyXAndY(dX, dY);
                     }
                 }
 
@@ -366,36 +365,39 @@ public void init(Context context){
 
     /**
      * 判断x方向上能不能滑动
+     *
      * @return 可以滑动返回true
      */
-    private boolean canSmoothX(){
+    private boolean canSmoothX() {
         RectF rectf = getRectf(matrix);
-        if (rectf.left >0 || rectf.right <getWidth())
+        if (rectf.left > 0 || rectf.right < getWidth())
             return false;
         return true;
     }
 
     /**
      * 判断y方向上可不可以滑动
+     *
      * @return 可以滑动返回true
      */
-    private boolean canSmoothY(){
+    private boolean canSmoothY() {
         RectF rectf = getRectf(matrix);
-        if (rectf.top>0 || rectf.bottom < getHeight())
+        if (rectf.top > 0 || rectf.bottom < getHeight())
             return false;
         return true;
     }
 
     /**
      * 纠正出界的横和众线
+     *
      * @param dx 出界偏移的横线
      * @param dy 出街便宜的众线
      */
-    private void remedyXAndY(float dx,float dy){
+    private void remedyXAndY(float dx, float dy) {
         if (!canSmoothX())
-            matrix.postTranslate(-dx,0);
+            matrix.postTranslate(-dx, 0);
         if (!canSmoothY())
-            matrix.postTranslate(0,-dy);
+            matrix.postTranslate(0, -dy);
         setImageMatrix(matrix);
     }
 }

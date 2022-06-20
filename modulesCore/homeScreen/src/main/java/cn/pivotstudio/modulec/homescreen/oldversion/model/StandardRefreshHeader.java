@@ -22,9 +22,9 @@ import cn.pivotstudio.modulec.homescreen.R;
 
 public class StandardRefreshHeader extends LinearLayout implements RefreshHeader {
 
-    private ImageView mImage,mImage2,mImage3;
+    private ImageView mImage, mImage2, mImage3;
     private AnimationDrawable pullDownAnim;
-    private AnimationDrawable refreshingAnim,refreshingAnim2,refreshingAnim3;
+    private AnimationDrawable refreshingAnim, refreshingAnim2, refreshingAnim3;
 
     private boolean hasSetPullDownAnim = false;
 
@@ -42,7 +42,7 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
         mImage = (ImageView) view.findViewById(R.id.refresh_header);
         mImage2 = (ImageView) view.findViewById(R.id.refresh_header_2);
         mImage3 = (ImageView) view.findViewById(R.id.refresh_header_3);
-        Log.e("刷新：","刷心前");
+        Log.e("刷新：", "刷心前");
     }
 
     @NonNull
@@ -69,7 +69,7 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
                 mImage.setImageResource(R.drawable.refresh_point);
                 mImage2.setImageResource(R.drawable.refresh_point);
                 mImage3.setImageResource(R.drawable.refresh_point);
-                Log.e("刷新：","PullDownToRefresh");
+                Log.e("刷新：", "PullDownToRefresh");
                 break;
             case Refreshing: //正在刷新。只调用一次
                 mImage.setImageResource(R.drawable.refresh_2);
@@ -81,10 +81,10 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
                 refreshingAnim2.start();
                 refreshingAnim3 = (AnimationDrawable) mImage3.getDrawable();
                 refreshingAnim3.start();
-                Log.e("刷新：","Refreshing");
+                Log.e("刷新：", "Refreshing");
                 break;
             case ReleaseToRefresh:
-                Log.e("刷新：","ReleaseToRefresh");
+                Log.e("刷新：", "ReleaseToRefresh");
                 break;
         }
     }
@@ -96,7 +96,7 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
 
         if (pullDownAnim != null && pullDownAnim.isRunning()) {
             pullDownAnim.stop();
-            Log.e("刷新："," pullDownAnim.stop();");
+            Log.e("刷新：", " pullDownAnim.stop();");
 
         }
 
@@ -104,7 +104,7 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
             refreshingAnim.stop();
             refreshingAnim2.stop();
             refreshingAnim3.stop();
-            Log.e("刷新："," refreshingAnim n.stop();");
+            Log.e("刷新：", " refreshingAnim n.stop();");
         }
         //重置状态
         hasSetPullDownAnim = false;
@@ -138,12 +138,12 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
         mImage.setScaleY(1);
 
         if (percent < 1) {
-            mImage2.setScaleX(3*percent/2);
-            mImage2.setScaleY(3*percent/2);
-            mImage3.setScaleX(3*percent/2);
-            mImage3.setScaleY(3*percent/2);
-            mImage2.setTranslationX(percent*45);
-            mImage3.setTranslationX(-(percent*45));
+            mImage2.setScaleX(3 * percent / 2);
+            mImage2.setScaleY(3 * percent / 2);
+            mImage3.setScaleX(3 * percent / 2);
+            mImage3.setScaleY(3 * percent / 2);
+            mImage2.setTranslationX(percent * 45);
+            mImage3.setTranslationX(-(percent * 45));
 
 
             if (hasSetPullDownAnim) {
@@ -164,7 +164,7 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
                 mImage3.setTranslationX(-45);
                 //mImage.setImageResource(R.drawable.anim_pull_end);
                 //pullDownAnim = (AnimationDrawable) mImage.getDrawable();
-               // pullDownAnim.start();
+                // pullDownAnim.start();
 
                 hasSetPullDownAnim = true;
             }
@@ -175,8 +175,6 @@ public class StandardRefreshHeader extends LinearLayout implements RefreshHeader
 
     @Override
     public void onReleased(@NonNull RefreshLayout refreshLayout, int height, int maxDragHeight) {
-
-
 
 
     }

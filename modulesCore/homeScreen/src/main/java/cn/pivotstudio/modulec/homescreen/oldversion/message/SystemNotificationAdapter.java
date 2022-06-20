@@ -13,26 +13,30 @@ import java.util.List;
 import cn.pivotstudio.modulec.homescreen.R;
 
 
-public class SystemNotificationAdapter extends RecyclerView.Adapter<SystemNotificationAdapter.MyHolder>{
+public class SystemNotificationAdapter extends RecyclerView.Adapter<SystemNotificationAdapter.MyHolder> {
     private List<SystemNotificationBean> mSystemNotificationList;
     /*private LayoutInflater mInflater;*/
     private OnItemClickListener onItemClickListener;
-    public SystemNotificationAdapter(List<SystemNotificationBean> mSystemNotificationList/*,Context context*/){
+
+    public SystemNotificationAdapter(List<SystemNotificationBean> mSystemNotificationList/*,Context context*/) {
         this.mSystemNotificationList = mSystemNotificationList;
         /*this.mInflater = LayoutInflater.from(context);*/
     }
 
-    public interface OnItemClickListener{
+    public interface OnItemClickListener {
         void onClick(int position);
     }
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
+
     class MyHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public TextView content;
         public TextView time;
-        public MyHolder(View view){
+
+        public MyHolder(View view) {
             super(view);
             time = view.findViewById(R.id.system_notification_time);
             title = view.findViewById(R.id.system_notification_title);
@@ -57,8 +61,8 @@ public class SystemNotificationAdapter extends RecyclerView.Adapter<SystemNotifi
             public void onClick(View v) {
                 if (onItemClickListener != null) {
                     onItemClickListener.onClick(position);
-                    String TAG ="tag";
-                    Log.d(TAG, "onClick: click "+position);
+                    String TAG = "tag";
+                    Log.d(TAG, "onClick: click " + position);
                 }
             }
         });

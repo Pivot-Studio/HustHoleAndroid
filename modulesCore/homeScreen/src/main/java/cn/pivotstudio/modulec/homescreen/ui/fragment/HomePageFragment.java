@@ -34,6 +34,7 @@ import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFoot
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader;
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomepageBinding;
 
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel;
 import cn.pivotstudio.modulec.homescreen.ui.adapter.HoleRecyclerViewAdapter;
 
@@ -56,6 +57,7 @@ public class HomePageFragment extends BaseFragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_homepage, container, false);
         mViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         //

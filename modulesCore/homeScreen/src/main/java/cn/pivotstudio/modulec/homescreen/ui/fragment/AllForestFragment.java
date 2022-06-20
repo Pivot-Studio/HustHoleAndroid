@@ -17,6 +17,7 @@ import com.example.libbase.base.ui.fragment.BaseFragment;
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentAllFrorestBinding;
 
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
 import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestAdapter;
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel;
 
@@ -62,10 +63,17 @@ public class AllForestFragment extends BaseFragment {
 
         binding.entertainmentRecyclerView.setAdapter(allForestAdapter);
         allForestAdapter.submitList(viewModel.getForestCards());
+
+        binding.btnApplyNewForest.setOnClickListener( btn -> {
+            Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).popBackStack();
+        });
     }
+
+
 
     public void navToForestDetail() {
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment);
         navController.navigate(R.id.action_all_forest_fragment_to_forest_detail_fragment);
     }
+
 }

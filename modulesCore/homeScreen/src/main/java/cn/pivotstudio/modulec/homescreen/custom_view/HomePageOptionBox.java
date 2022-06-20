@@ -28,8 +28,9 @@ public class HomePageOptionBox extends ConstraintLayout {
     private OptionsListener mOptionsListener;
     private ImageView mTriangleIv;
     private PopupWindow mSlideBoxPpw, mDarkScreenPpw;
-    private Button mNewPublishBtn,mNewCommentBtn;
-    private Boolean mFlag=false;
+    private Button mNewPublishBtn, mNewCommentBtn;
+    private Boolean mFlag = false;
+
     public HomePageOptionBox(@NonNull Context context) {
         super(context);
         initView(context);
@@ -52,6 +53,7 @@ public class HomePageOptionBox extends ConstraintLayout {
 
     /**
      * 额外监听器
+     *
      * @param mOptionsListener
      */
     public void setOptionsListener(OptionsListener mOptionsListener) {
@@ -60,20 +62,21 @@ public class HomePageOptionBox extends ConstraintLayout {
 
     /**
      * 初始化view
+     *
      * @param context
      */
-    private void initView(Context context){
-        LayoutInflater.from(context).inflate(R.layout.constraintlayout_homepageoptionbox, this,true);
-        mTriangleIv = (ImageView)findViewById(R.id.iv_homepage_triangle);
+    private void initView(Context context) {
+        LayoutInflater.from(context).inflate(R.layout.constraintlayout_homepageoptionbox, this, true);
+        mTriangleIv = (ImageView) findViewById(R.id.iv_homepage_triangle);
         mTriangleIv.setImageResource(R.mipmap.triangle);
-        ConstraintLayout mForestSquareCl=findViewById(R.id.cl_homepage_forestsquare);
+        ConstraintLayout mForestSquareCl = findViewById(R.id.cl_homepage_forestsquare);
         mForestSquareCl.setOnClickListener(this::onClick);
-        View contentView=LayoutInflater.from(context).inflate(R.layout.ppw_homepage, null);
-        View darkScreen=LayoutInflater.from(context).inflate(R.layout.ppw_homepagedarkscreen, null);
-        mSlideBoxPpw =new PopupWindow(contentView);
-        mDarkScreenPpw =new PopupWindow(darkScreen);
-        mNewPublishBtn =(Button)contentView.findViewById(R.id.btn_ppwhomepage_newpublish);
-        mNewCommentBtn =(Button)contentView.findViewById(R.id.btn_ppwhomepage_newcomment);
+        View contentView = LayoutInflater.from(context).inflate(R.layout.ppw_homepage, null);
+        View darkScreen = LayoutInflater.from(context).inflate(R.layout.ppw_homepagedarkscreen, null);
+        mSlideBoxPpw = new PopupWindow(contentView);
+        mDarkScreenPpw = new PopupWindow(darkScreen);
+        mNewPublishBtn = (Button) contentView.findViewById(R.id.btn_ppwhomepage_newpublish);
+        mNewCommentBtn = (Button) contentView.findViewById(R.id.btn_ppwhomepage_newcomment);
         mNewPublishBtn.setOnClickListener(this::onClick);
         mNewCommentBtn.setOnClickListener(this::onClick);
         darkScreen.setOnClickListener(this::onClick);
@@ -81,9 +84,10 @@ public class HomePageOptionBox extends ConstraintLayout {
 
     /**
      * 点击事件
+     *
      * @param v
      */
-    private void onClick(View v){
+    private void onClick(View v) {
         int id = v.getId();
         if (id == R.id.cl_homepage_forestsquare) {
             if (!mFlag) {
@@ -108,20 +112,21 @@ public class HomePageOptionBox extends ConstraintLayout {
             EndTriangleAnim();
             mFlag = !mFlag;
             mOptionsListener.onClick(v);
-        }else if(id==R.id.ppw_homepagedarkscreen){
+        } else if (id == R.id.ppw_homepagedarkscreen) {
             EndTriangleAnim();
             mFlag = !mFlag;
             mSlideBoxPpw.dismiss();
             mDarkScreenPpw.dismiss();
         }
     }
+
     /**
      * 启动树洞广场后的动画
      */
-    private void beginTriangleAnim(){
+    private void beginTriangleAnim() {
         RotateAnimation rotate;
-        rotate =new RotateAnimation(0f,180f, Animation.RELATIVE_TO_SELF,
-                0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        rotate = new RotateAnimation(0f, 180f, Animation.RELATIVE_TO_SELF,
+                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotate.setDuration(200);
         rotate.setFillAfter(true);
         mTriangleIv.startAnimation(rotate);
@@ -129,10 +134,12 @@ public class HomePageOptionBox extends ConstraintLayout {
             @Override
             public void onAnimationStart(Animation animation) {
             }
+
             @Override
             public void onAnimationEnd(Animation animation) {
                 mTriangleIv.setImageResource(R.mipmap.triangle);
             }
+
             @Override
             public void onAnimationRepeat(Animation animation) {
 
@@ -153,10 +160,10 @@ public class HomePageOptionBox extends ConstraintLayout {
     /**
      * 关闭树洞广场选项的动画
      */
-    private void EndTriangleAnim(){
+    private void EndTriangleAnim() {
         RotateAnimation rotate;
-        rotate =new RotateAnimation(180f,360f,Animation.RELATIVE_TO_SELF,
-                0.5f,Animation.RELATIVE_TO_SELF,0.5f);
+        rotate = new RotateAnimation(180f, 360f, Animation.RELATIVE_TO_SELF,
+                0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotate.setDuration(200);
         rotate.setFillAfter(true);
         mTriangleIv.startAnimation(rotate);
@@ -165,10 +172,12 @@ public class HomePageOptionBox extends ConstraintLayout {
             @Override
             public void onAnimationStart(Animation animation) {
             }
+
             @Override
             public void onAnimationEnd(Animation animation) {
                 mTriangleIv.setImageResource(R.mipmap.triangle);
             }
+
             @Override
             public void onAnimationRepeat(Animation animation) {
 

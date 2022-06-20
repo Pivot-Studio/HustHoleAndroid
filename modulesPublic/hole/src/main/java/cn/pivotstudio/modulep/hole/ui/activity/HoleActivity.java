@@ -50,60 +50,63 @@ import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel;
  * @author:
  */
 
-@Route(path="/hole/HoleActivity")
+@Route(path = "/hole/HoleActivity")
 public class HoleActivity extends BaseActivity {
-    @Autowired(name= Constant.HOLE_ID)
+    @Autowired(name = Constant.HOLE_ID)
     int hole_id;
-    @Autowired(name=Constant.IF_OPEN_KEYBOARD)
+    @Autowired(name = Constant.IF_OPEN_KEYBOARD)
     boolean ifOpenKeyboard;
 
-    private ActivityHoleBinding mBinding;
-    private HoleViewModel mViewModel;
+    private ActivityHoleBinding binding;
+    private HoleViewModel viewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ARouter.getInstance().inject(this);//初始化@Autowired
-
-
         initView();
         initRefresh();
         initObserver();
         initListener();
     }
-    private void initView(){
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
 
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_hole);
+    private void initView() {
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
 
-        mViewModel=new ViewModelProvider(this,new ViewModelProvider.NewInstanceFactory()).get(HoleViewModel.class);
-        mBinding.setViewmodel(mViewModel);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_hole);
+
+        if (getSupportActionBar() != null)
+            getSupportActionBar().hide();
+
+        viewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(HoleViewModel.class);
+        binding.setViewmodel(viewModel);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        mBinding.rvEmoji.setVisibility(View.GONE);
+        binding.rvEmoji.setVisibility(View.GONE);
 
 
-        if(ifOpenKeyboard)openKeyBoard(mBinding.etReplyPost);
+        if (ifOpenKeyboard) openKeyBoard(binding.etReplyPost);
 
-        mViewModel.setHole_id(hole_id);
+        viewModel.setHole_id(hole_id);
 
-        mViewModel.getListData(false);
-        mViewModel.getInputText();
-        mViewModel.getUsedEmojiList();
+        viewModel.getListData(false);
+        viewModel.getInputText();
+        viewModel.getUsedEmojiList();
 
-        EditTextUtil.ButtonReaction(mBinding.etReplyPost,mBinding.btnCommentSendmsg);
+        EditTextUtil.ButtonReaction(binding.etReplyPost, binding.btnCommentSendmsg);
 
-        mBinding.rvCommentlist.setLayoutManager(new LinearLayoutManager(context));
-        mBinding.rvCommentlist.setAdapter(new ReplyListRecyclerViewAdapter(this,mViewModel));
-        mBinding.rvCommentlist.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        binding.rvCommentlist.setLayoutManager(new LinearLayoutManager(context));
+        binding.rvCommentlist.setAdapter(new ReplyListRecyclerViewAdapter(this, viewModel));
+        binding.rvCommentlist.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                ConstraintLayout lastMoreListCl=((ReplyListRecyclerViewAdapter)mBinding.rvCommentlist.getAdapter()).lastMoreListCl;
-                if(lastMoreListCl!=null)lastMoreListCl.setVisibility(View.GONE);
-                lastMoreListCl=null;
+                ConstraintLayout lastMoreListCl = ((ReplyListRecyclerViewAdapter) binding.rvCommentlist.getAdapter()).lastMoreListCl;
+                if (lastMoreListCl != null) lastMoreListCl.setVisibility(View.GONE);
+                lastMoreListCl = null;
             }
         });
 
-        GridLayoutManager layoutManager= new GridLayoutManager(
+        GridLayoutManager layoutManager = new GridLayoutManager(
                 this,
                 6,
                 RecyclerView.VERTICAL,
@@ -111,42 +114,45 @@ public class HoleActivity extends BaseActivity {
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if((position==0)||(position==7)){
+                if ((position == 0) || (position == 7)) {
                     return 6;
-                }else{
+                } else {
                     return 1;
                 }
             }
         });
-        mBinding.rvEmoji.setLayoutManager(layoutManager);
-        mBinding.rvEmoji.setAdapter(new EmojiRecyclerViewAdapter(this,mBinding,mViewModel));
+        binding.rvEmoji.setLayoutManager(layoutManager);
+        binding.rvEmoji.setAdapter(new EmojiRecyclerViewAdapter(this, binding, viewModel));
 
-        mBinding.includeHoletitlebar.tvTitlebargreenTitle.setText("#"+hole_id);
-        mBinding.includeHoletitlebar.titlebarAVLoadingIndicatorView.hide();
-        mBinding.includeHoletitlebar.titlebarAVLoadingIndicatorView.setVisibility(View.GONE);
-        mBinding.includeHoletitlebar.clTitlebargreenBack.setOnClickListener(this::onClick);
+        binding.includeHoletitlebar.tvTitlebargreenTitle.setText("#" + hole_id);
+        binding.includeHoletitlebar.titlebarAVLoadingIndicatorView.hide();
+        binding.includeHoletitlebar.titlebarAVLoadingIndicatorView.setVisibility(View.GONE);
+        binding.includeHoletitlebar.clTitlebargreenBack.setOnClickListener(this::onClick);
     }
-    private void initRefresh(){
-        mBinding.srlCommmentlistLoadmore.setRefreshHeader(new StandardRefreshHeader(this));//设置自定义刷新头
-        mBinding.srlCommmentlistLoadmore.setRefreshFooter(new ClassicsFooter(this));//设置自定义刷新底
 
-        mBinding.srlCommmentlistLoadmore.setOnRefreshListener(refreshlayout -> {//下拉刷新触发
-            mViewModel.setStart_id(0);
-            mViewModel.getListData(false);
-            mBinding.rvCommentlist.setOnTouchListener((v, event) -> true); //加载时静止滑动
+    private void initRefresh() {
+        binding.srlCommmentlistLoadmore.setRefreshHeader(new StandardRefreshHeader(this));//设置自定义刷新头
+        binding.srlCommmentlistLoadmore.setRefreshFooter(new ClassicsFooter(this));//设置自定义刷新底
+
+        binding.srlCommmentlistLoadmore.setOnRefreshListener(refreshlayout -> {//下拉刷新触发
+            viewModel.setStart_id(0);
+            viewModel.getListData(false);
+            binding.rvCommentlist.setOnTouchListener((v, event) -> true); //加载时静止滑动
         });
 
-        mBinding.srlCommmentlistLoadmore.setOnLoadMoreListener(refreshlayout -> {//上拉加载触发
-            mViewModel.getListData(true);
-            mBinding.rvCommentlist.setOnTouchListener((v, event) -> true);
-        }); 
+        binding.srlCommmentlistLoadmore.setOnLoadMoreListener(refreshlayout -> {//上拉加载触发
+            viewModel.getListData(true);
+            binding.rvCommentlist.setOnTouchListener((v, event) -> true);
+        });
     }
-    private void initObserver(){
 
-        mViewModel.pHole.observe(this,holeResponse -> {});
+    private void initObserver() {
 
-        mViewModel.pReplyList.observe(this,replyListResponse -> {
-            switch(replyListResponse.getModel()){
+        viewModel.pHole.observe(this, holeResponse -> {
+        });
+
+        viewModel.pReplyList.observe(this, replyListResponse -> {
+            switch (replyListResponse.getModel()) {
                 case "REFRESH":
                     finishRefresh();
                     break;
@@ -162,90 +168,99 @@ public class HoleActivity extends BaseActivity {
             finishRefreshAnim();
         });
 
-        mViewModel.pInputText.observe(this,replyResponse->{
-            mBinding.etReplyPost.setText(replyResponse.getContent());
-            mViewModel.getAnswered().set(replyResponse);
+        viewModel.pInputText.observe(this, replyResponse -> {
+            binding.etReplyPost.setText(replyResponse.getContent());
+            viewModel.getAnswered().set(replyResponse);
         });
-        mViewModel.pSendReply.observe((HoleActivity)context,msgResponse->{
-            mBinding.btnCommentSendmsg.setClickable(true);//发送成功运行点击，以免重复发送
+        viewModel.pSendReply.observe((HoleActivity) context, msgResponse -> {
+            binding.btnCommentSendmsg.setClickable(true);//发送成功运行点击，以免重复发送
             showMsg(msgResponse.getMsg());
-            mBinding.etReplyPost.setText("");//将输入框内容清空
+            binding.etReplyPost.setText("");//将输入框内容清空
 
             //将表情包栏关掉
-            mBinding.rvEmoji.setVisibility(View.GONE);
+            binding.rvEmoji.setVisibility(View.GONE);
             // setVisibility(View.GONE);
-            ObservableField<Boolean> is_opened=mViewModel.getIs_emoji();
+            ObservableField<Boolean> is_opened = viewModel.getIs_emoji();
             is_opened.set(false);
 
-            mViewModel.getListData(false);//重新刷新数据
+            viewModel.getListData(false);//重新刷新数据
         });
 
-        mViewModel.pClickMsg.observe(this,msgResponse -> {
+        viewModel.pClickMsg.observe(this, msgResponse -> {
             showMsg(msgResponse.getMsg());
-            switch(msgResponse.getModel()){
+            switch (msgResponse.getModel()) {
                 case "DELETE_HOLE":
                     finish();
                     break;
                 case "DELETE_REPLY":
-                    mViewModel.getListData(false);
+                    viewModel.getListData(false);
                     break;
             }
         });
 
-        mViewModel.failed.observe(this, s->{
-            mBinding.btnCommentSendmsg.setClickable(true);
+        viewModel.failed.observe(this, s -> {
+            binding.btnCommentSendmsg.setClickable(true);
             showMsg(s);
         });
     }
-    private void initListener(){
-        mBinding.etReplyPost.addTextChangedListener(new TextWatcher() {
+
+    private void initListener() {
+        binding.etReplyPost.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) { }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() >=500) {
-                    Toast.makeText(HoleActivity.this,"评论不得超过500个字噢~",Toast.LENGTH_SHORT).show();
+                if (s.length() >= 500) {
+                    Toast.makeText(HoleActivity.this, "评论不得超过500个字噢~", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
     /**
-     *下拉刷新或搜索的数据更新
+     * 下拉刷新或搜索的数据更新
      */
-    private void finishRefresh(){
-        mViewModel.setStart_id(0);
+    private void finishRefresh() {
+        viewModel.setStart_id(0);
     }
+
     /**
      * 上拉加载的数据更新
      */
-    private void finishLoadMore(){
-        mViewModel.setStart_id(mViewModel.getStart_id()+20);
+    private void finishLoadMore() {
+        viewModel.setStart_id(viewModel.getStart_id() + 20);
     }
+
     /**
      * 刷新结束后动画的流程
      */
-    private void finishRefreshAnim(){
-        mBinding.srlCommmentlistLoadmore.finishRefresh();//结束下拉刷新动画
-        mBinding.srlCommmentlistLoadmore.finishLoadMore();//结束上拉加载动画
-        mBinding.rvCommentlist.setOnTouchListener((v, event) -> false);//加载结束后允许滑动
+    private void finishRefreshAnim() {
+        binding.srlCommmentlistLoadmore.finishRefresh();//结束下拉刷新动画
+        binding.srlCommmentlistLoadmore.finishLoadMore();//结束上拉加载动画
+        binding.rvCommentlist.setOnTouchListener((v, event) -> false);//加载结束后允许滑动
     }
 
     /**
      * 处理activity点击事件
+     *
      * @param view
      */
     public void onClick(View view) {
-        if(view.getId() ==R.id.btn_comment_sendmsg){
-            mBinding.btnCommentSendmsg.setClickable(false);//避免重复发送
-            mViewModel.sendReply(mBinding.etReplyPost.getText().toString());
+        if (view.getId() == R.id.btn_comment_sendmsg) {
+            binding.btnCommentSendmsg.setClickable(false);//避免重复发送
+            viewModel.sendReply(binding.etReplyPost.getText().toString());
             closeKeyBoard();
-        }else if(view.getId() ==R.id.btn_replylist_owner){
-            ObservableField<Boolean> observableField=mViewModel.getIs_owner();
+        } else if (view.getId() == R.id.btn_replylist_owner) {
+            ObservableField<Boolean> observableField = viewModel.getIs_owner();
             observableField.set(!observableField.get());
-            mViewModel.getListData(false);
-        }else if (view.getId() == R.id.cl_titlebargreen_back) {
+            viewModel.getListData(false);
+        } else if (view.getId() == R.id.cl_titlebargreen_back) {
             if (BuildConfig.isRelease) {
                 saveData();//保存数据
                 finish();//关闭活动
@@ -253,37 +268,38 @@ public class HoleActivity extends BaseActivity {
             } else {
                 showMsg("当前处于模块测试阶段");
             }
-        }else if(view.getId()==R.id.iv_openemoji) {
-            ObservableField<Boolean> is_opened=mViewModel.getIs_emoji();
-            if(!is_opened.get()){
+        } else if (view.getId() == R.id.iv_openemoji) {
+            ObservableField<Boolean> is_opened = viewModel.getIs_emoji();
+            if (!is_opened.get()) {
                 closeKeyBoard();
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-                ((EmojiRecyclerViewAdapter)(mBinding.rvEmoji.getAdapter())).refreshData();
-                mBinding.rvEmoji.setVisibility(View.VISIBLE);
+                ((EmojiRecyclerViewAdapter) (binding.rvEmoji.getAdapter())).refreshData();
+                binding.rvEmoji.setVisibility(View.VISIBLE);
                 is_opened.set(true);
-            }else{
+            } else {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                mBinding.rvEmoji.setVisibility(View.GONE);
-               // setVisibility(View.GONE);
+                binding.rvEmoji.setVisibility(View.GONE);
+                // setVisibility(View.GONE);
                 is_opened.set(false);
             }
-        }else if(view.getId()==R.id.et_reply_post){
-            ObservableField<Boolean> is_opened=mViewModel.getIs_emoji();
+        } else if (view.getId() == R.id.et_reply_post) {
+            ObservableField<Boolean> is_opened = viewModel.getIs_emoji();
             getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-            mBinding.rvEmoji.setVisibility(View.VISIBLE);
-            openKeyBoard(mBinding.etReplyPost);
+            binding.rvEmoji.setVisibility(View.VISIBLE);
+            openKeyBoard(binding.etReplyPost);
             is_opened.set(false);
         }
     }
 
     /**
      * 监听手机回退键
+     *
      * @param keyCode
      * @param event
      * @return
      */
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)  {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) { //按下的如果是BACK，同时没有重复
             saveData();
         }
@@ -294,11 +310,11 @@ public class HoleActivity extends BaseActivity {
     /**
      * 保存输入内容以及选择回复的人
      */
-    private void saveData(){
+    private void saveData() {
         Intent intent = new Intent();
         HoleReturnInfo holeReturnInfo = new HoleReturnInfo();
-        HoleResponse holeResponse=mViewModel.pHole.getValue();
-        if(holeResponse!=null) {
+        HoleResponse holeResponse = viewModel.pHole.getValue();
+        if (holeResponse != null) {
             holeReturnInfo.setIs_thumbup(holeResponse.getIs_thumbup());
             holeReturnInfo.setIs_follow(holeResponse.getIs_follow());
             holeReturnInfo.setIs_reply(holeResponse.getIs_reply());
@@ -306,23 +322,23 @@ public class HoleActivity extends BaseActivity {
             holeReturnInfo.setReply_num(holeResponse.getReply_num());
             holeReturnInfo.setFollow_num(holeResponse.getFollow_num());
         }
-        intent.putExtra(Constant.HOLE_RETURN_INFO,holeReturnInfo);
-        setResult(ResultCodeConstant.Hole,intent);
+        intent.putExtra(Constant.HOLE_RETURN_INFO, holeReturnInfo);
+        setResult(ResultCodeConstant.Hole, intent);
 
-        MMKVUtil mmkvUtil=MMKVUtil.getMMKVUtils(context);
-        mmkvUtil.setArray(Constant.UsedEmoji,mViewModel.pUsedEmojiList.getValue());
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(context);
+        mmkvUtil.setArray(Constant.UsedEmoji, viewModel.pUsedEmojiList.getValue());
 
-        String inputText=mBinding.etReplyPost.getText().toString();
-        ReplyListResponse.ReplyResponse lastInputText=mViewModel.pInputText.getValue();
-        if(lastInputText==null){
-            if(!inputText.equals("")) {
-                mViewModel.saveInputText(inputText);
+        String inputText = binding.etReplyPost.getText().toString();
+        ReplyListResponse.ReplyResponse lastInputText = viewModel.pInputText.getValue();
+        if (lastInputText == null) {
+            if (!inputText.equals("")) {
+                viewModel.saveInputText(inputText);
             }
-        }else{
-            if(!inputText.equals("")){
-                mViewModel.updateInputText(inputText);
-            }else{
-                mViewModel.deleteInputText();
+        } else {
+            if (!inputText.equals("")) {
+                viewModel.updateInputText(inputText);
+            } else {
+                viewModel.deleteInputText();
             }
         }
     }

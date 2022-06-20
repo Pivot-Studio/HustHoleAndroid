@@ -59,23 +59,23 @@ import retrofit2.Retrofit;
 
 public class DetailUpdateActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private RelativeLayout update,checkupdate;
+    private RelativeLayout update, checkupdate;
     private ImageView back;
     private Notification notification;
     private NotificationCompat.Builder builder;
     private NotificationManager notificationManager;
     private String versionName;
-    private String  AndroidUpdateUrl="";
+    private String AndroidUpdateUrl = "";
     Retrofit retrofit;
     RequestInterface request;
-    private Boolean updateCondition=false,dialogCondition=false;
+    private Boolean updateCondition = false, dialogCondition = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailupdate);
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
         retrofit = RetrofitManager.getRetrofit();
@@ -87,12 +87,12 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
 
     private void initView() {
         update = (RelativeLayout) findViewById(R.id.update);
-        checkupdate=(RelativeLayout)findViewById(R.id.checkupdate);
-        back=(ImageView)findViewById(R.id.settings_img);
+        checkupdate = (RelativeLayout) findViewById(R.id.checkupdate);
+        back = (ImageView) findViewById(R.id.settings_img);
         update.setOnClickListener(this);
         checkupdate.setOnClickListener(this);
         back.setOnClickListener(this);
-        versionName=packageName(DetailUpdateActivity.this);
+        versionName = packageName(DetailUpdateActivity.this);
     }
 
     private void permissiongen() {
@@ -114,7 +114,7 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
     @PermissionSuccess(requestCode = 200)
     public void doSomething() {
         //在这个方法中做一些权限申请成功的事情
-       // Toast.makeText(getApplication(), "成功", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(getApplication(), "成功", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -123,6 +123,7 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
     public void doFailSomething() {
         Toast.makeText(getApplication(), "失败", Toast.LENGTH_SHORT).show();
     }
+
     public static String packageName(Context context) {
         PackageManager manager = context.getPackageManager();
         String name = null;
@@ -297,10 +298,9 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
         */
 
 
-
         //创建Notification
-        builder = new NotificationCompat.Builder(this,"sss");
-                builder.setContentTitle("正在更新...") //设置通知标题
+        builder = new NotificationCompat.Builder(this, "sss");
+        builder.setContentTitle("正在更新...") //设置通知标题
                 .setContentIntent(contentIntent)
                 .setSmallIcon(R.drawable.icon)//设置通知的小图标(有些手机设置Icon图标不管用，默认图标就是Manifest.xml里的图标)
                 .setLargeIcon(BitmapFactory.decodeResource(DetailUpdateActivity.this.getResources(), R.drawable.icon)) //设置通知的大图标
@@ -310,7 +310,7 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
                 .setContentText("下载进度:0%")
                 .setChannelId(PUSH_CHANNEL_ID)
                 .setProgress(100, 0, false);
-                //进度最大100，默认是从0开始
+        //进度最大100，默认是从0开始
 
         Notification notify = null;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -323,14 +323,12 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
             builder.setChannelId("to-do");
             notify = builder.build();
         } else {
-           notify = builder.build();
+            notify = builder.build();
         }
 
         notify.flags |= Notification.FLAG_AUTO_CANCEL; // 但用户点击消息后，消息自动在通知栏自动消失
 
-       notificationManager.notify(1, notify);// 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
-
-
+        notificationManager.notify(1, notify);// 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
 
 
     }
@@ -350,7 +348,7 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        updateCondition=false;
+                        updateCondition = false;
                         Toast.makeText(getApplication(), "网络请求失败！", Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -374,7 +372,6 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
      * 参    数：Response response, File file
      * 返回值：无
      */
-
 
 
     private void localStorage(final Response response, final File file) throws FileNotFoundException {
@@ -418,10 +415,9 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    updateCondition=false;
+                    updateCondition = false;
                     Toast.makeText(getApplication(), "下载失败", Toast.LENGTH_SHORT).show();
                     notificationManager.cancel(1);
-
 
 
                     notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -433,9 +429,8 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
                     String PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME";
 
 
-
                     //创建Notification
-                    builder = new NotificationCompat.Builder(DetailUpdateActivity.this,"sss2");
+                    builder = new NotificationCompat.Builder(DetailUpdateActivity.this, "sss2");
                     builder.setContentTitle("下载失败") //设置通知标题
                             .setContentIntent(contentIntent)
                             .setSmallIcon(R.mipmap.icon)//设置通知的小图标(有些手机设置Icon图标不管用，默认图标就是Manifest.xml里的图标)
@@ -456,7 +451,7 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
                                 NotificationManager.IMPORTANCE_HIGH);
                         channel.enableVibration(false);
                         channel.setSound(null, null);
-                       // channel.setVibrationPattern(new long[]{500});
+                        // channel.setVibrationPattern(new long[]{500});
                         notificationManager.createNotificationChannel(channel);
                         builder.setChannelId("to-do");
                         notify = builder.build();
@@ -464,14 +459,12 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
                         notify = builder.build();
                     }
                     //使用默认的声音
-                  //  notify.defaults |= Notification.DEFAULT_SOUND;
+                    //  notify.defaults |= Notification.DEFAULT_SOUND;
                     //notify.sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.doorbell);
-                 //   notify.defaults |= Notification.DEFAULT_VIBRATE;
+                    //   notify.defaults |= Notification.DEFAULT_VIBRATE;
                     notify.flags |= Notification.FLAG_AUTO_CANCEL; // 但用户点击消息后，消息自动在通知栏自动消失
 
                     notificationManager.notify(1, notify);// 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
-
-
 
 
                     //构建通知对象
@@ -530,7 +523,7 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
 */
 
 
-        if(NotificationManagerCompat.from(DetailUpdateActivity.this).areNotificationsEnabled()) {
+        if (NotificationManagerCompat.from(DetailUpdateActivity.this).areNotificationsEnabled()) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
             //安卓7.0以上需要在在Manifest.xml里的application里，设置provider路径
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -544,7 +537,7 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
 
             }
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
-            updateCondition=false;
+            updateCondition = false;
             //下载完成后，设置notification为点击一次就关闭，并设置完成标题内容。并设置跳转到安装页面。
             builder.setContentTitle("下载完成")
                     .setContentText("点击安装")
@@ -553,7 +546,7 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
 
             Notification notification = builder.build();
             notificationManager.notify(1, notification);
-        }else {
+        } else {
             Intent var2 = new Intent();
             var2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             var2.setAction(Intent.ACTION_VIEW);
@@ -571,7 +564,6 @@ public class DetailUpdateActivity extends AppCompatActivity implements View.OnCl
                 Toast.makeText(DetailUpdateActivity.this, "没有找到打开此类文件的程序", Toast.LENGTH_SHORT).show();
             }
         }
-
 
 
     }

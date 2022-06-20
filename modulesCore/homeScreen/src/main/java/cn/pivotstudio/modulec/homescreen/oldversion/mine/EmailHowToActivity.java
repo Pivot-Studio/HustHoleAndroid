@@ -19,8 +19,8 @@ public class EmailHowToActivity extends AppCompatActivity {
         setContentView(R.layout.activity_email_how_to);
 
 
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
 
