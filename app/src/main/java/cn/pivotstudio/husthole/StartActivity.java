@@ -43,4 +43,6 @@ public class StartActivity extends BaseActivity {
         new Handler().postDelayed(runnable,0);
     }
 
+
+
 }
