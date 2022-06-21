@@ -1,4 +1,4 @@
-package cn.pivotstudio.modulec.homescreen.model;
+package cn.pivotstudio.modulec.homescreen.network;
 
 /**
  * @classname:VersionResponse

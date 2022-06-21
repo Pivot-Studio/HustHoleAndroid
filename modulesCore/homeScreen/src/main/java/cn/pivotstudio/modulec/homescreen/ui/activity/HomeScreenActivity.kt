@@ -12,7 +12,6 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import cn.pivotstudio.moduleb.database.MMKVUtil
@@ -20,7 +19,7 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.WelcomeDialog
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityHsHomescreenBinding
-import cn.pivotstudio.modulec.homescreen.model.VersionResponse
+import cn.pivotstudio.modulec.homescreen.network.VersionResponse
 import cn.pivotstudio.modulec.homescreen.repository.HomeScreenRepository
 import cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment
 import com.alibaba.android.arouter.facade.annotation.Route

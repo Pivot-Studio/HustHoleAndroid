@@ -13,8 +13,9 @@ import cn.pivotstudio.modulec.homescreen.BuildConfig;
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.custom_view.OptionsListener;
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog;
-import cn.pivotstudio.modulec.homescreen.model.HomepageHoleResponse;
-import cn.pivotstudio.modulec.homescreen.model.MsgResponse;
+
+import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse;
+import cn.pivotstudio.modulec.homescreen.network.MsgResponse;
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository;
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
 

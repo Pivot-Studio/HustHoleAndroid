@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHeadBinding;
+import cn.pivotstudio.modulec.homescreen.model.ForestHead;
 import cn.pivotstudio.modulec.homescreen.model.ForestResponse;
 
 /**
@@ -18,16 +19,16 @@ import cn.pivotstudio.modulec.homescreen.model.ForestResponse;
  * @version: 1.0
  * @author: mhh
  */
-public class ForestHeadAdapter extends ListAdapter<ForestResponse.ForestHead, ForestHeadAdapter.ForestHoleViewHolder> {
+public class ForestHeadAdapter extends ListAdapter<ForestHead, ForestHeadAdapter.ForestHoleViewHolder> {
 
-    public static final DiffUtil.ItemCallback<ForestResponse.ForestHead> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestResponse.ForestHead>() {
+    public static final DiffUtil.ItemCallback<ForestHead> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestHead>() {
         @Override
-        public boolean areItemsTheSame(@NonNull ForestResponse.ForestHead oldItem, @NonNull ForestResponse.ForestHead newItem) {
+        public boolean areItemsTheSame(@NonNull ForestHead oldItem, @NonNull ForestHead newItem) {
             return false;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull ForestResponse.ForestHead oldItem, @NonNull ForestResponse.ForestHead newItem) {
+        public boolean areContentsTheSame(@NonNull ForestHead oldItem, @NonNull ForestHead newItem) {
             return false;
         }
     };
@@ -48,7 +49,7 @@ public class ForestHeadAdapter extends ListAdapter<ForestResponse.ForestHead, Fo
 
     @Override
     public void onBindViewHolder(@NonNull ForestHoleViewHolder holder, int position) {
-        final ForestResponse.ForestHead forestHead = getItem(position);
+        final ForestHead forestHead = getItem(position);
         holder.bind(forestHead);
     }
 
@@ -61,7 +62,7 @@ public class ForestHeadAdapter extends ListAdapter<ForestResponse.ForestHead, Fo
             this.binding = binding;
         }
 
-        void bind(ForestResponse.ForestHead forestHead) {
+        void bind(ForestHead forestHead) {
             binding.setForestHead(forestHead);
         }
 

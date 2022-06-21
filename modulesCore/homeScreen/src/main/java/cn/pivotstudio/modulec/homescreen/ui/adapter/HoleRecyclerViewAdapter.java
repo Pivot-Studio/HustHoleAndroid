@@ -16,7 +16,7 @@ import java.util.List;
 
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.databinding.ItemHomepageholeBinding;
-import cn.pivotstudio.modulec.homescreen.model.HomepageHoleResponse;
+import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse;
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel;
 

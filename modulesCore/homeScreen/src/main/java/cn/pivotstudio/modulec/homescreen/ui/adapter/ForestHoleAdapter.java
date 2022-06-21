@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestBinding;
-import cn.pivotstudio.modulec.homescreen.model.ForestResponse;
+import cn.pivotstudio.modulec.homescreen.model.ForestHole;
 
 
 /**
@@ -19,17 +19,17 @@ import cn.pivotstudio.modulec.homescreen.model.ForestResponse;
  * @version:1.0
  * @author: mhh
  */
-public class ForestHoleAdapter extends ListAdapter<ForestResponse.ForestHole, ForestHoleAdapter.ForestHoleViewHolder> {
+public class ForestHoleAdapter extends ListAdapter<ForestHole, ForestHoleAdapter.ForestHoleViewHolder> {
 
-    public static final DiffUtil.ItemCallback<ForestResponse.ForestHole> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestResponse.ForestHole>() {
+    public static final DiffUtil.ItemCallback<ForestHole> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestHole>() {
         @Override
-        public boolean areItemsTheSame(@NonNull ForestResponse.ForestHole oldItem, @NonNull ForestResponse.ForestHole newItem) {
-            return false;
+        public boolean areItemsTheSame(@NonNull ForestHole oldItem, @NonNull ForestHole newItem) {
+            return oldItem.getHoleId() == newItem.getHoleId();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull ForestResponse.ForestHole oldItem, @NonNull ForestResponse.ForestHole newItem) {
-            return false;
+        public boolean areContentsTheSame(@NonNull ForestHole oldItem, @NonNull ForestHole newItem) {
+            return oldItem.getContent().equals(newItem.getContent());
         }
     };
 
@@ -49,7 +49,7 @@ public class ForestHoleAdapter extends ListAdapter<ForestResponse.ForestHole, Fo
 
     @Override
     public void onBindViewHolder(@NonNull ForestHoleViewHolder holder, int position) {
-        final ForestResponse.ForestHole forestHole = getItem(position);
+        ForestHole forestHole = getItem(position);
         holder.bind(forestHole);
     }
 
@@ -62,7 +62,7 @@ public class ForestHoleAdapter extends ListAdapter<ForestResponse.ForestHole, Fo
             this.binding = binding;
         }
 
-        void bind(ForestResponse.ForestHole forestHole) {
+        void bind(ForestHole forestHole) {
             binding.setForestHole(forestHole);
         }
 

@@ -29,17 +29,19 @@ android {
         }
     }
     sourceSets {
-//        main{
-//            if(!isRelease){//不同状态下使用不同清单文件
-//                manifest.srcFile '/src/main/debug/AndroidManifest.xml'
-//            }else{
-//                manifest.srcFile '/src/main/AndroidManifest.xml'
-//                java{
-//                    //release时所有debug目录下的文件不合并
-//                    exclude '**/debug/**'
-//                }
-//            }
-//        }
+        if (!isMac) {
+            main {
+                if (!isRelease) {//不同状态下使用不同清单文件
+                    manifest.srcFile '/src/main/debug/AndroidManifest.xml'
+                } else {
+                    manifest.srcFile '/src/main/AndroidManifest.xml'
+                    java {
+                        //release时所有debug目录下的文件不合并
+                        exclude '**/debug/**'
+                    }
+                }
+            }
+        }
     }
     buildTypes {
         release {
@@ -55,6 +57,7 @@ android {
 
 dependencies {
     implementation project(':modulesBase:libBase')
+    implementation "androidx.paging:paging-common-ktx:$paging_version"
 
     kapt 'com.alibaba:arouter-compiler:1.5.2'
 
