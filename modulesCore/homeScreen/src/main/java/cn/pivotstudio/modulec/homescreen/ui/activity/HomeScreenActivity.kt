@@ -68,7 +68,7 @@ class HomeScreenActivity : BaseActivity() {
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
 
-        navController.addOnDestinationChangedListener {_, destination, argument ->
+        navController.addOnDestinationChangedListener { _, destination, argument ->
             supportActionBar?.title = destination.label
 
             binding?.apply {
@@ -145,16 +145,24 @@ class HomeScreenActivity : BaseActivity() {
      * @return
      */
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
-            val secondTime = System.currentTimeMillis()
-            if (secondTime - firstTime > 2000) {
-                Toast.makeText(this@HomeScreenActivity, "再按一次退出程序", Toast.LENGTH_SHORT).show()
-                firstTime = secondTime
-                return true
-            } else {
-                finish()
+        navController.currentDestination?.let {
+            if (it.id == R.id.all_forest_fragment || it.id == R.id.forest_detail_fragment) {
+                return navController.popBackStack()
+            }
+
+            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+                val secondTime = System.currentTimeMillis()
+                if (secondTime - firstTime > 2000) {
+                    Toast.makeText(this@HomeScreenActivity, "再按一次退出程序", Toast.LENGTH_SHORT).show()
+                    firstTime = secondTime
+                    return true
+                } else {
+                    finish()
+                }
             }
         }
+
+
         return super.onKeyUp(keyCode, event)
     }
 

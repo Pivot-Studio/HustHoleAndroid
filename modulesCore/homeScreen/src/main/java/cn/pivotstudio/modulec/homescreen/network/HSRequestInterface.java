@@ -71,4 +71,10 @@ public interface HSRequestInterface {
             @Query("list_size") int listSize
     );
 
+    @GET("forests/types?")
+    Observable<List<String>> searchForestTypes(
+            @Query("start_id") int startId,
+            @Query("list_size") int listSize
+    );
+
 }
