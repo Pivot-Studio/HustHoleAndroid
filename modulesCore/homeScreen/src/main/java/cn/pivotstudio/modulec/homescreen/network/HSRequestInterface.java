@@ -2,6 +2,8 @@ package cn.pivotstudio.modulec.homescreen.network;
 
 import java.util.List;
 
+import cn.pivotstudio.modulec.homescreen.model.ForestHead;
+import cn.pivotstudio.modulec.homescreen.model.ForestHeads;
 import cn.pivotstudio.modulec.homescreen.model.ForestHole;
 import io.reactivex.Observable;
 import retrofit2.Response;
@@ -63,6 +65,10 @@ public interface HSRequestInterface {
             @Query("is_last_reply") Boolean isLastReply
             );
 
-
+    @GET("forests/joined?")
+    Observable<ForestHeads> searchForestHeads(
+            @Query("start_id") int startId,
+            @Query("list_size") int listSize
+    );
 
 }

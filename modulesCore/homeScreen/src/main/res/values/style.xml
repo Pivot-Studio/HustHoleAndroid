@@ -57,4 +57,9 @@
         <item name="itemIconTint">@color/navigation_bar_colored_item_tint</item>
     </style>
 
+    <style name="ShapeableImageViewCircleStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

@@ -38,16 +38,22 @@ class ForestFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // 初始化两个RecyclerView
-        val holeAdapter = ForestHoleAdapter()
-        binding.recyclerViewForestHoles.adapter = holeAdapter
-        viewModel.forestHoles.observe(viewLifecycleOwner) {
-            holeAdapter.submitList(it)
-        }
-//        val headAdapter = ForestHeadAdapter()
-//        binding.recyclerViewForestHead.adapter = headAdapter
-//        headAdapter.submitList(emptyList())
-        if (binding.forestFragment == null) {
-            binding.forestFragment = this
+        binding.apply {
+            val holeAdapter = ForestHoleAdapter()
+            recyclerViewForestHoles.adapter = holeAdapter
+            viewModel!!.forestHoles.observe(viewLifecycleOwner) {
+                holeAdapter.submitList(it)
+            }
+
+            val headAdapter = ForestHeadAdapter()
+            recyclerViewForestHead.adapter = headAdapter
+            viewModel!!.forestHeads.observe(viewLifecycleOwner) {
+                headAdapter.submitList(it.forests)
+            }
+
+            if (forestFragment == null) {
+                this.forestFragment = this@ForestFragment
+            }
         }
     }
 

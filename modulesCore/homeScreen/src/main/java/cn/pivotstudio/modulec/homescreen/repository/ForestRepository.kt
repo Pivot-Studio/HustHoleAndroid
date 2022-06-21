@@ -5,43 +5,75 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
+import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 
-const val TAG = "ForestRepository1"
+const val TAG = "ForestRepositoryDebug"
 
 enum class ForestHoleStatus { LOADING, ERROR, DONE }
+enum class ForestHeadStatus { LOADING, ERROR, DONE }
+enum class LoadStatus { LOADING, ERROR, DONE }
 
 @SuppressLint("CheckResult")
 class ForestRepository {
-    private var _state: ForestHoleStatus? = null
-    val state = _state
+    private var _holeState: ForestHoleStatus? = null
+    private var _headState: ForestHeadStatus? = null
+    val state: LoadStatus
+        get() {
+            if (_holeState == ForestHoleStatus.LOADING && _headState == ForestHeadStatus.LOADING)
+                return LoadStatus.DONE
+
+            if (_holeState == ForestHoleStatus.ERROR || _headState == ForestHeadStatus.ERROR)
+                return LoadStatus.ERROR
+
+            return LoadStatus.LOADING
+        }
+
 
     private var _forestHoles = MutableLiveData<List<ForestHole>>()
+    private var _forestHeads = MutableLiveData<ForestHeads>()
+
+    val forestHeads = _forestHeads
     val forestHoles = _forestHoles
 
     fun loadForestHoles() {
-        _state = ForestHoleStatus.LOADING
-        Log.d(TAG, "Loading")
+        _holeState = ForestHoleStatus.LOADING
         HomeScreenNetworkApi.retrofitService
-            .searchForestHoles(STARTING_ID, LIST_SIZE, sortByLatestReply)
+            .searchForestHoles(STARTING_ID, HOLES_LIST_SIZE, sortByLatestReply)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
-                @SuppressLint("CheckResult")
                 override fun onSuccess(items: List<ForestHole>) {
-                    _state = ForestHoleStatus.DONE
+                    _holeState = ForestHoleStatus.DONE
                     forestHoles.value = items
-                    Log.d(TAG, "onSuccess: ${items.size}" )
                 }
 
                 override fun onFailure(e: Throwable?) {
-                    _state = ForestHoleStatus.ERROR
+                    _holeState = ForestHoleStatus.ERROR
                 }
+            }))
+    }
+
+    fun loadForestHeads() {
+        _headState = ForestHeadStatus.LOADING
+        HomeScreenNetworkApi.retrofitService
+            .searchForestHeads(STARTING_ID, HEADS_LIST_SIZE)
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<ForestHeads>() {
+                override fun onSuccess(items: ForestHeads?) {
+                    _headState = ForestHeadStatus.DONE
+                    forestHeads.value = items
+                }
+
+                override fun onFailure(e: Throwable?) {
+                    _headState = ForestHeadStatus.ERROR
+                }
+
             }))
     }
 
     companion object {
         const val STARTING_ID = 0
-        const val LIST_SIZE = 10
+        const val HOLES_LIST_SIZE = 10
+        const val HEADS_LIST_SIZE = 20
         const val sortByLatestReply = true
     }
 
