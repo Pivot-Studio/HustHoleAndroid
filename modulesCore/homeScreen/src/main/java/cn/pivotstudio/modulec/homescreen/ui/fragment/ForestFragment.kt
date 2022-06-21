@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation.findNavController
 import cn.pivotstudio.modulec.homescreen.R
@@ -23,20 +24,20 @@ import com.example.libbase.base.ui.fragment.BaseFragment
  */
 class ForestFragment : BaseFragment() {
     private lateinit var binding: FragmentForestBinding
-    private lateinit var viewModel: ForestViewModel
+    private val viewModel: ForestViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_forest, container, false)
-        viewModel = ViewModelProvider(this).get(ForestViewModel::class.java)
-        binding.viewModel = viewModel
-
+        binding = DataBindingUtil
+            .inflate(inflater, R.layout.fragment_forest, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = viewModel
         // 初始化两个RecyclerView
         binding.apply {
             val holeAdapter = ForestHoleAdapter()

@@ -22,8 +22,7 @@ class ForestViewModel : ViewModel() {
     val forestHeads: LiveData<ForestHeads> = repository.forestHeads
 
     init {
-        repository.loadForestHoles()
-        repository.loadForestHeads()
+        loadHolesAndHeads()
     }
 
     fun loadHolesAndHeads() {

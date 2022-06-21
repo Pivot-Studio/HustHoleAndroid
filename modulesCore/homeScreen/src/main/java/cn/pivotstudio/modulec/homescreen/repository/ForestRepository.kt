@@ -1,7 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.repository
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
@@ -40,7 +39,7 @@ class ForestRepository {
     fun loadForestHoles() {
         _holeState = ForestHoleStatus.LOADING
         HomeScreenNetworkApi.retrofitService
-            .searchForestHoles(STARTING_ID, HOLES_LIST_SIZE, sortByLatestReply)
+            .searchForestHoles(STARTING_ID, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
                 override fun onSuccess(items: List<ForestHole>) {
                     _holeState = ForestHoleStatus.DONE
@@ -70,11 +69,13 @@ class ForestRepository {
             }))
     }
 
+
+
     companion object {
         const val STARTING_ID = 0
         const val HOLES_LIST_SIZE = 10
         const val HEADS_LIST_SIZE = 20
-        const val sortByLatestReply = true
+        const val SORT_BY_LATEST_REPLY = true
     }
 
 }
