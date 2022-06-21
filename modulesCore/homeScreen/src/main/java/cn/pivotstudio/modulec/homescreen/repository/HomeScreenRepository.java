@@ -7,7 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver;
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi;
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler;
-import cn.pivotstudio.modulec.homescreen.model.VersionResponse;
+import cn.pivotstudio.modulec.homescreen.network.VersionResponse;
 import cn.pivotstudio.modulec.homescreen.network.HSRequestInterface;
 
 /**

@@ -4,7 +4,7 @@
         <import type="com.example.libbase.util.data.TimeUtil"/>
         <variable
             name="homePageHole"
-            type="cn.pivotstudio.modulec.homescreen.model.HomepageHoleResponse.DataBean" />
+            type="cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean" />
         <variable
             name="onClick"
             type="cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel" />
@@ -35,7 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="45"
-                android:onClick="@{(v)->onClick.itemClick(v,homePageHole)}"
+                android:onClick="@{(v)->onClick.itemClick(v, homePageHole)}"
                 android:background="@drawable/standard_forest_hole"
                 android:minHeight="110dp"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -54,7 +54,7 @@
                     android:background="@drawable/tag_yellow"
                     android:drawableLeft="@mipmap/a218"
                     android:paddingLeft="6dp"
-                    android:text="@{` `+homePageHole.forest_name+`   `}"
+                    android:text="@{` `+homePageHole.getForest_name()+`   `}"
                     android:onClick="@{(v)->onClick.itemClick(v,homePageHole)}"
                     android:textAllCaps="false"
                     android:textColor="@color/HH_BandColor_7"

@@ -61,7 +61,6 @@ public class HomePageFragment extends BaseFragment {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_homepage, container, false);
         mViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
         //
-        mViewModel = new HomePageViewModel();
         mViewModel.refreshHoleList(0);//初次加载
         initView();
         initRefresh();
@@ -152,7 +151,6 @@ public class HomePageFragment extends BaseFragment {
      */
     private void initObserver() {
         mViewModel.pHomePageHoles.observe(context, homepageHoleResponse -> {//监听列表信息变化
-//            ((HoleRecyclerViewAdapter)binding.recyclerView.getAdapter()).refreshData(homepageHoleResponse.getData());
             if (binding.recyclerView.getAdapter() == null)
                 binding.recyclerView.setAdapter(holeRecyclerViewAdapter);
             int length = homepageHoleResponse.getData().size();

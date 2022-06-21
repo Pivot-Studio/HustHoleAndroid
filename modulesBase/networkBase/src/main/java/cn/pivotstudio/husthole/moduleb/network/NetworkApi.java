@@ -59,6 +59,12 @@ public class NetworkApi {
         return getRetrofit(serviceClass).create(serviceClass);
     }
 
+    public static <T> T createService(Class<T> serviceClass) {
+        //设置Url类型
+        setUrlType(2);
+        return getRetrofit(serviceClass).create(serviceClass);
+    }
+
     /**
      * 设置访问Url类型
      *
@@ -186,9 +192,5 @@ public class NetworkApi {
             return response;
         };
     }
-}
-
-enum RequestType {
-    TYPE_TEST, TYPE_COMMON;
 }
 

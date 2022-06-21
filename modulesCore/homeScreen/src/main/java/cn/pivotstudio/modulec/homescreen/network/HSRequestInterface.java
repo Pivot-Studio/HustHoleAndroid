@@ -2,12 +2,9 @@ package cn.pivotstudio.modulec.homescreen.network;
 
 import java.util.List;
 
-import cn.pivotstudio.modulec.homescreen.model.HomepageHoleResponse;
-import cn.pivotstudio.modulec.homescreen.model.MsgResponse;
-import cn.pivotstudio.modulec.homescreen.model.VersionResponse;
+import cn.pivotstudio.modulec.homescreen.model.ForestHole;
 import io.reactivex.Observable;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
@@ -58,6 +55,14 @@ public interface HSRequestInterface {
     Observable<List<HomepageHoleResponse.DataBean>> searchHoles(@Query("keyword") String keyword,
                                                                 @Query("start_id") int start_id,
                                                                 @Query("list_size") int list_size);
+
+    @GET("forests/holes?")
+    Observable<List<ForestHole>> searchForestHoles(
+            @Query("start_id") int startId,
+            @Query("list_size") int listSize,
+            @Query("is_last_reply") Boolean isLastReply
+            );
+
 
 
 }

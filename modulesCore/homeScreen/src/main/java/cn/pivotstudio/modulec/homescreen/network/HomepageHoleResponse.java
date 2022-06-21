@@ -1,10 +1,9 @@
-package cn.pivotstudio.modulec.homescreen.model;
+package cn.pivotstudio.modulec.homescreen.network;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.pivotstudio.modulec.homescreen.BR;
