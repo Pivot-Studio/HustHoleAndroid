@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/dp_12"
-        android:layout_marginVertical="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_10"
         android:background="@drawable/standard_forest_hole"
         android:minHeight="110dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,7 +28,7 @@
             android:layout_height="@dimen/dp_32"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginTop="@dimen/dp_12"
-            android:src="@drawable/icon"
+            imageUrl="@{forestHole.backgroundImageUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/AvatarRoundedStyle"
@@ -38,12 +38,14 @@
             android:id="@+id/text_item_forest_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
             android:layout_marginStart="@dimen/dp_10"
             android:text="@{forestHole.forestName}"
             android:textColor="@color/GrayScale_50"
             android:textSize="@dimen/sp_13"
+
             app:layout_constraintStart_toEndOf="@+id/image_item_forest_avatar"
-            app:layout_constraintTop_toTopOf="@+id/image_item_forest_avatar"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/default_string_zh_short" />
 
         <TextView

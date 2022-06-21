@@ -41,7 +41,6 @@ class ForestFragment : BaseFragment() {
         val holeAdapter = ForestHoleAdapter()
         binding.recyclerViewForestHoles.adapter = holeAdapter
         viewModel.forestHoles.observe(viewLifecycleOwner) {
-            showMsg(it.size.toString())
             holeAdapter.submitList(it)
         }
 //        val headAdapter = ForestHeadAdapter()
