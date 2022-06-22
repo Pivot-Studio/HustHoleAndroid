@@ -42,13 +42,13 @@ class ForestFragment : BaseFragment() {
         binding.apply {
             val holeAdapter = ForestHoleAdapter()
             recyclerViewForestHoles.adapter = holeAdapter
-            viewModel!!.forestHoles.observe(viewLifecycleOwner) {
+            this@ForestFragment.viewModel.forestHoles.observe(viewLifecycleOwner) {
                 holeAdapter.submitList(it)
             }
 
             val headAdapter = ForestHeadAdapter()
             recyclerViewForestHead.adapter = headAdapter
-            viewModel!!.forestHeads.observe(viewLifecycleOwner) {
+            this@ForestFragment.viewModel.forestHeads.observe(viewLifecycleOwner) {
                 headAdapter.submitList(it.forests)
             }
 

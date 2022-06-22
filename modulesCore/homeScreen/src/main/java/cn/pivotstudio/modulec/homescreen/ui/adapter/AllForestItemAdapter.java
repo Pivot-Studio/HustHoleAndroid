@@ -7,26 +7,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
-import cn.pivotstudio.modulec.homescreen.databinding.ItemAllForestBinding;
-import cn.pivotstudio.modulec.homescreen.model.ForestResponse;
+import cn.pivotstudio.modulec.homescreen.databinding.ItemForestCardBinding;
+import cn.pivotstudio.modulec.homescreen.model.ForestCard;
 
-public class AllForestAdapter extends ListAdapter<ForestResponse.ForestCard, AllForestAdapter.ForestCardViewHolder> {
+public class AllForestItemAdapter extends ListAdapter<ForestCard, AllForestItemAdapter.ForestCardViewHolder> {
 
-    private View.OnClickListener itemClickListener;
+    private final View.OnClickListener itemClickListener;
 
-    public static final DiffUtil.ItemCallback<ForestResponse.ForestCard> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestResponse.ForestCard>() {
+    public static final DiffUtil.ItemCallback<ForestCard> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestCard>() {
         @Override
-        public boolean areItemsTheSame(@NonNull ForestResponse.ForestCard oldItem, @NonNull ForestResponse.ForestCard newItem) {
+        public boolean areItemsTheSame(@NonNull ForestCard oldItem, @NonNull ForestCard newItem) {
             return false;
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull ForestResponse.ForestCard oldItem, @NonNull ForestResponse.ForestCard newItem) {
+        public boolean areContentsTheSame(@NonNull ForestCard oldItem, @NonNull ForestCard newItem) {
             return false;
         }
     };
 
-    public AllForestAdapter(View.OnClickListener clickListener) {
+    public AllForestItemAdapter(View.OnClickListener clickListener) {
         super(DIFF_CALLBACK);
         itemClickListener = clickListener;
     }
@@ -35,7 +35,7 @@ public class AllForestAdapter extends ListAdapter<ForestResponse.ForestCard, All
     @Override
     public ForestCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ForestCardViewHolder(
-                ItemAllForestBinding.inflate(LayoutInflater.from(parent.getContext()),
+                ItemForestCardBinding.inflate(LayoutInflater.from(parent.getContext()),
                         parent,
                         false)
         );
@@ -43,20 +43,20 @@ public class AllForestAdapter extends ListAdapter<ForestResponse.ForestCard, All
 
     @Override
     public void onBindViewHolder(@NonNull ForestCardViewHolder holder, int position) {
-        ForestResponse.ForestCard card = getItem(position);
+        ForestCard card = getItem(position);
         holder.itemView.setOnClickListener(itemClickListener);
         holder.bind(card);
     }
 
     static class ForestCardViewHolder extends RecyclerView.ViewHolder {
-        private final ItemAllForestBinding binding;
+        private final ItemForestCardBinding binding;
 
-        public ForestCardViewHolder(ItemAllForestBinding binding) {
+        public ForestCardViewHolder(ItemForestCardBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }
 
-        void bind(ForestResponse.ForestCard forestCard) {
+        void bind(ForestCard forestCard) {
             binding.setForestCard(forestCard);
         }
 

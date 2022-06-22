@@ -10,6 +10,7 @@ import androidx.navigation.Navigation.findNavController
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentAllFrorestBinding
 import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestAdapter
+import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestItemAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 import com.example.libbase.base.ui.fragment.BaseFragment
 
@@ -29,30 +30,15 @@ class AllForestFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val onCardClick = View.OnClickListener { navToForestDetail() }
-
         binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        // 初始化6个RecyclerView
-        val allForestAdapter = AllForestAdapter(onCardClick)
-        binding.hotRecyclerView.adapter = allForestAdapter
-        allForestAdapter.submitList(viewModel.forestCards)
-        binding.limitedRecyclerView.adapter = allForestAdapter
-        allForestAdapter.submitList(viewModel.forestCards)
-        binding.emoRecyclerView.adapter = allForestAdapter
-        allForestAdapter.submitList(viewModel.forestCards)
-        binding.campusRecyclerView.adapter = allForestAdapter
-        allForestAdapter.submitList(viewModel.forestCards)
-        binding.studyRecyclerView.adapter = allForestAdapter
-        allForestAdapter.submitList(viewModel.forestCards)
-        binding.entertainmentRecyclerView.adapter = allForestAdapter
-        allForestAdapter.submitList(viewModel.forestCards)
-        binding.btnApplyNewForest.setOnClickListener { btn: View? ->
-            findNavController(
-                requireActivity(),
-                R.id.nav_host_fragment
-            ).popBackStack()
+        val adapter = AllForestAdapter { navToForestDetail() }
+        binding.allForestRecyclerView.adapter = adapter
+        viewModel.forestCards.observe(viewLifecycleOwner) {
+            adapter.submit(it)
         }
+
 
     }
 

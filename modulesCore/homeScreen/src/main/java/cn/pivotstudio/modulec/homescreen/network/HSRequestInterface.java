@@ -2,6 +2,7 @@ package cn.pivotstudio.modulec.homescreen.network;
 
 import java.util.List;
 
+import cn.pivotstudio.modulec.homescreen.model.ForestCard;
 import cn.pivotstudio.modulec.homescreen.model.ForestHead;
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads;
 import cn.pivotstudio.modulec.homescreen.model.ForestHole;
@@ -76,5 +77,11 @@ public interface HSRequestInterface {
             @Query("start_id") int startId,
             @Query("list_size") int listSize
     );
+
+    @GET("forest/type/{forest_type}")
+    Observable<List<ForestCard>> searchForestByType(@Path("forest_type") String type,
+                                                    @Query("start_id") int startId,
+                                                    @Query("list_size") int listSize
+                                                      );
 
 }
