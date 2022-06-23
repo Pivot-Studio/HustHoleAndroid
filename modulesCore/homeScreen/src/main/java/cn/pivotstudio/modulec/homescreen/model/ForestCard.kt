@@ -14,6 +14,10 @@ data class ForestCard(
 )
 
 data class ForestCardList(
-    val forests: List<ForestCard>,
+    val forests: List<ForestCard>
+)
+
+data class ForestTypes(
+    val types: List<String>
 )
 

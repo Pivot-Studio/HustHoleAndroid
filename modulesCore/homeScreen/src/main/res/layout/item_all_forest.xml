@@ -4,7 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="type"
+            type="String" />
+        <variable
+            name="forestCardList"
+            type="cn.pivotstudio.modulec.homescreen.model.ForestCardList" />
     </data>
 
     <LinearLayout
@@ -13,11 +18,12 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/item_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp_5"
             android:layout_marginVertical="@dimen/dp_10"
-            android:text="@string/default_string_zh_short"
+            android:text="@{type, default = 1037}"
             android:textColor="@color/GrayScale_20"
             android:textSize="@dimen/sp_15"
             android:textStyle="bold" />

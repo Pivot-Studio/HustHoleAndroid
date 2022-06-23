@@ -7,37 +7,44 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.modulec.homescreen.databinding.ItemAllForestBinding
-import cn.pivotstudio.modulec.homescreen.model.ForestCard
 import cn.pivotstudio.modulec.homescreen.model.ForestCardList
 
 class AllForestAdapter(
     private val onItemClick: (View) -> Unit
-) : ListAdapter<ForestCardList, AllForestAdapter.AllForestViewHolder>(DiffCallback) {
+) : ListAdapter<Pair<String, ForestCardList>, AllForestAdapter.AllForestViewHolder>(DiffCallback) {
 
     inner class AllForestViewHolder(
         private var binding: ItemAllForestBinding,
-        private val onItemClick: (View) -> Unit
+        private var onItemClick: (View) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(forestCardList: ForestCardList) {
-            val adapter =
-                AllForestItemAdapter {
-                    onItemClick
-                }
+        fun bind(forestCardList: Pair<String, ForestCardList>) {
+            val adapter = AllForestItemAdapter {
+                onItemClick
+            }
             binding.itemRecyclerView.adapter = adapter
-            adapter.submitList(forestCardList.forests)
+            binding.type = forestCardList.first
+            binding.forestCardList = forestCardList.second
+            adapter.submitList(forestCardList.second.forests)
         }
 
     }
 
-    companion object DiffCallback: DiffUtil.ItemCallback<ForestCardList>() {
-        override fun areItemsTheSame(oldItem: ForestCardList, newItem: ForestCardList): Boolean {
-            return oldItem.forests.last().forestId == newItem.forests.last().forestId
+    companion object DiffCallback : DiffUtil.ItemCallback<Pair<String, ForestCardList>>() {
+        override fun areItemsTheSame(
+            oldItem: Pair<String, ForestCardList>,
+            newItem: Pair<String, ForestCardList>
+        ): Boolean {
+            return oldItem.first == newItem.first
         }
 
-        override fun areContentsTheSame(oldItem: ForestCardList, newItem: ForestCardList): Boolean {
-            return oldItem.forests == newItem.forests
+        override fun areContentsTheSame(
+            oldItem: Pair<String, ForestCardList>,
+            newItem: Pair<String, ForestCardList>
+        ): Boolean {
+            return oldItem.second == newItem.second
         }
+
 
     }
 
@@ -54,11 +61,4 @@ class AllForestAdapter(
         holder.bind(cardList)
     }
 
-    fun submit(dataItems: HashMap<String, List<ForestCard>>) {
-        val allTypesOfForestCards = listOf<ForestCardList>().toMutableList()
-        dataItems.keys.forEach { type ->
-            dataItems[type]?.let { allTypesOfForestCards.add(ForestCardList(it)) }
-        }
-        this.submitList(allTypesOfForestCards)
-    }
 }

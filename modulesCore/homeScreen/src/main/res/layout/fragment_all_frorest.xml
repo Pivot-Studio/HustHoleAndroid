@@ -88,8 +88,9 @@
                     android:id="@+id/all_forest_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/item_all_forest"
-                    tools:itemCount="5"/>
+                    tools:itemCount="2"/>
 
             </LinearLayout>
 

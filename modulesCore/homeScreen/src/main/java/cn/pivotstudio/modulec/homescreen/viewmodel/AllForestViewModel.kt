@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.modulec.homescreen.model.ForestCard
 import cn.pivotstudio.modulec.homescreen.model.ForestResponse
+import cn.pivotstudio.modulec.homescreen.model.ForestTypes
 import cn.pivotstudio.modulec.homescreen.repository.AllForestRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,16 +17,15 @@ class AllForestViewModel : ViewModel() {
     // model
     private val repository = AllForestRepository()
 
-    val forestTypes: LiveData<List<String>> = repository.forestTypes
-    val forestCards: LiveData<List<ForestCard>> = repository.forestCards
+    val forestCardsWithOneType = repository.forestCardWithOneType
+    val forestCards = repository.forestCards
+
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            loadAllTypeOfForestCards()
-        }
+        loadAllTypeOfForestCards()
     }
 
     fun loadAllTypeOfForestCards() {
-        repository.loadForestTypesloadAllTypeOfForestCards()
+        repository.loadAllTypeOfForestCards()
     }
 }

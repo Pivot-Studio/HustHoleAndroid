@@ -12,17 +12,17 @@ import cn.pivotstudio.modulec.homescreen.model.ForestCard;
 
 public class AllForestItemAdapter extends ListAdapter<ForestCard, AllForestItemAdapter.ForestCardViewHolder> {
 
-    private final View.OnClickListener itemClickListener;
+    private View.OnClickListener itemClickListener;
 
     public static final DiffUtil.ItemCallback<ForestCard> DIFF_CALLBACK = new DiffUtil.ItemCallback<ForestCard>() {
         @Override
         public boolean areItemsTheSame(@NonNull ForestCard oldItem, @NonNull ForestCard newItem) {
-            return false;
+            return oldItem.getForestId() == newItem.getForestId();
         }
 
         @Override
         public boolean areContentsTheSame(@NonNull ForestCard oldItem, @NonNull ForestCard newItem) {
-            return false;
+            return oldItem.getName().equals(newItem.getName());
         }
     };
 

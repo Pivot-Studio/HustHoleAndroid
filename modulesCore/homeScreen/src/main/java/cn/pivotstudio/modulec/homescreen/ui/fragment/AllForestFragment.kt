@@ -1,6 +1,7 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +10,13 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation.findNavController
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentAllFrorestBinding
+import cn.pivotstudio.modulec.homescreen.model.ForestCardList
 import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestAdapter
 import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestItemAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 import com.example.libbase.base.ui.fragment.BaseFragment
 
+const val TAG = "AllForestFragmentDebug"
 class AllForestFragment : BaseFragment() {
     private lateinit var binding: FragmentAllFrorestBinding
     private val viewModel: AllForestViewModel by activityViewModels()
@@ -35,10 +38,9 @@ class AllForestFragment : BaseFragment() {
 
         val adapter = AllForestAdapter { navToForestDetail() }
         binding.allForestRecyclerView.adapter = adapter
-        viewModel.forestCards.observe(viewLifecycleOwner) {
-            adapter.submit(it)
+        viewModel.forestCardsWithOneType.observe(viewLifecycleOwner) {
+                adapter.submitList(viewModel.forestCards.toList())
         }
-
 
     }
 
