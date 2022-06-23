@@ -17,6 +17,7 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 import com.example.libbase.base.ui.fragment.BaseFragment
 
 const val TAG = "AllForestFragmentDebug"
+
 class AllForestFragment : BaseFragment() {
     private lateinit var binding: FragmentAllFrorestBinding
     private val viewModel: AllForestViewModel by activityViewModels()
@@ -39,13 +40,12 @@ class AllForestFragment : BaseFragment() {
         val adapter = AllForestAdapter { navToForestDetail() }
         binding.allForestRecyclerView.adapter = adapter
         viewModel.forestCardsWithOneType.observe(viewLifecycleOwner) {
-                adapter.submitList(viewModel.forestCards.toList())
+            adapter.submitList(viewModel.forestCards.toList())
         }
-
     }
 
     fun navToForestDetail() {
-        val navController = findNavController(requireActivity(), R.id.nav_host_fragment)
-        navController.navigate(R.id.action_all_forest_fragment_to_forest_detail_fragment)
+        findNavController(requireActivity(), R.id.nav_host_fragment)
+            .navigate(R.id.action_all_forest_fragment_to_forest_detail_fragment)
     }
 }

@@ -10,21 +10,17 @@ import cn.pivotstudio.modulec.homescreen.databinding.ItemAllForestBinding
 import cn.pivotstudio.modulec.homescreen.model.ForestCardList
 
 class AllForestAdapter(
-    private val onItemClick: (View) -> Unit
+    val onItemClick: () -> Unit
 ) : ListAdapter<Pair<String, ForestCardList>, AllForestAdapter.AllForestViewHolder>(DiffCallback) {
 
     inner class AllForestViewHolder(
         private var binding: ItemAllForestBinding,
-        private var onItemClick: (View) -> Unit
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(forestCardList: Pair<String, ForestCardList>) {
-            val adapter = AllForestItemAdapter {
-                onItemClick
-            }
+            val adapter = AllForestItemAdapter(onItemClick)
             binding.itemRecyclerView.adapter = adapter
             binding.type = forestCardList.first
-            binding.forestCardList = forestCardList.second
             adapter.submitList(forestCardList.second.forests)
         }
 
@@ -52,7 +48,6 @@ class AllForestAdapter(
         val layoutInflater = LayoutInflater.from(parent.context)
         return AllForestViewHolder(
             ItemAllForestBinding.inflate(layoutInflater, parent, false),
-            onItemClick
         )
     }
 

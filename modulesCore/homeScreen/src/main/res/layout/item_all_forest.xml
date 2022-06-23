@@ -7,9 +7,6 @@
         <variable
             name="type"
             type="String" />
-        <variable
-            name="forestCardList"
-            type="cn.pivotstudio.modulec.homescreen.model.ForestCardList" />
     </data>
 
     <LinearLayout
