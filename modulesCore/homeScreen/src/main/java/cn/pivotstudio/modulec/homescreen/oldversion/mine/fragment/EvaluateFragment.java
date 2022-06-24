@@ -30,6 +30,7 @@ public class EvaluateFragment extends Fragment {
     private Retrofit retrofit;
     private RequestInterface request;
     Button btn_ok;
+
     public static EvaluateFragment newInstance() {
         return new EvaluateFragment();
     }
@@ -57,11 +58,11 @@ public class EvaluateFragment extends Fragment {
         chipGroup.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(ChipGroup group, @IdRes int checkedId) {
-                if(chip_1.isChecked() || chip_2.isChecked() || chip_3.isChecked() || chip_4.isChecked() || chip_5.isChecked()
-                || chip_6.isChecked() || chip_7.isChecked() || chip_8.isChecked() || chip_9.isChecked() || chip_10.isChecked()){
+                if (chip_1.isChecked() || chip_2.isChecked() || chip_3.isChecked() || chip_4.isChecked() || chip_5.isChecked()
+                        || chip_6.isChecked() || chip_7.isChecked() || chip_8.isChecked() || chip_9.isChecked() || chip_10.isChecked()) {
                     btn_ok.setBackgroundResource(R.drawable.button);
                     btn_ok.setTextColor(getResources().getColor(R.color.GrayScale_100));
-                }else{
+                } else {
                     btn_ok.setBackgroundResource(R.drawable.standard_button_gray);
                     btn_ok.setTextColor(getResources().getColor(R.color.GrayScale_20));
                 }
@@ -91,7 +92,7 @@ public class EvaluateFragment extends Fragment {
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(chip_1.isChecked() || chip_2.isChecked() || chip_3.isChecked() || chip_4.isChecked() || chip_5.isChecked()
+                if (chip_1.isChecked() || chip_2.isChecked() || chip_3.isChecked() || chip_4.isChecked() || chip_5.isChecked()
                         || chip_6.isChecked() || chip_7.isChecked() || chip_8.isChecked() || chip_9.isChecked() || chip_10.isChecked()) {
                     new Thread(() -> {
                         RetrofitManager.RetrofitBuilder(BASE_URL);
@@ -114,18 +115,19 @@ public class EvaluateFragment extends Fragment {
                                     chip_8.setChecked(false);
                                     chip_9.setChecked(false);
                                     chip_10.setChecked(false);
-                                    Toast.makeText(getContext(),"感谢您的评分！",Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "感谢您的评分！", Toast.LENGTH_SHORT).show();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
                             }
+
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable tr) {
                             }
                         });
                     }).start();
-                }else{
-                    Toast.makeText(getContext(),"请先评分再提交！",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "请先评分再提交！", Toast.LENGTH_SHORT).show();
                 }
             }
         });

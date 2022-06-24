@@ -15,13 +15,12 @@ import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 
 import java.security.MessageDigest;
 
-public class GlideRoundTransform  extends BitmapTransformation {
+public class GlideRoundTransform extends BitmapTransformation {
     private static float radius = 0f;
 
     public GlideRoundTransform() {
         this(4);
     }
-
 
 
     public GlideRoundTransform(int dp) {

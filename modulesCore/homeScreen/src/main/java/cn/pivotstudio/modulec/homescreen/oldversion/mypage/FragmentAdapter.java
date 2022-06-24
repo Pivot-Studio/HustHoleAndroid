@@ -1,7 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.mypage;
 
 
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;

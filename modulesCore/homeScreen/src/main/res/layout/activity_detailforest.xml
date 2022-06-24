@@ -69,7 +69,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
     <ImageView
-        android:id="@+id/imageView7"
+        android:id="@+id/icon_fab_home_screen"
         android:layout_width="@dimen/dp_15"
         android:layout_height="@dimen/dp_15"
         app:layout_constraintBottom_toBottomOf="@+id/fab_detailforest_publishhole"

@@ -16,7 +16,7 @@ import java.util.List;
 import cn.pivotstudio.modulec.homescreen.R;
 
 
-public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<NotificationBean> mNotificationList;
     Context context;
     private LayoutInflater mLayoutInflater;
@@ -24,19 +24,21 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
     public static final int ITEM_TYPE_HEADER = 0;
     public static final int ITEM_TYPE_CONTENT = 1;
     public static final int ITEM_TYPE_BOTTOM = 2;
-    private int mHeaderCount=1;//头部View个数
-    private int mBottomCount=1;//底部View个数
+    private int mHeaderCount = 1;//头部View个数
+    private int mBottomCount = 1;//底部View个数
 
     public String mContent = null;
     public boolean setMContent = false;
+
     public interface OnItemClickListener {
         void onClick(int position);
     }
+
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    public NotificationAdapter(Context context,List<NotificationBean> notificationList){
+    public NotificationAdapter(Context context, List<NotificationBean> notificationList) {
         mNotificationList = notificationList;
         this.context = context;
         mLayoutInflater = LayoutInflater.from(context);
@@ -44,7 +46,7 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
 
 
     //内容长度
-    public int getContentItemCount(){
+    public int getContentItemCount() {
         return mNotificationList.size();
     }
 
@@ -52,13 +54,14 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
     public boolean isHeaderView(int position) {
         return mHeaderCount != 0 && position < mHeaderCount;
     }
+
     //判断当前item是否是FooterView
     public boolean isBottomView(int position) {
         return mBottomCount != 0 && position >= (mHeaderCount + getContentItemCount());
     }
 
-    public void getSystemNotification(String content){
-        this.mContent=content;
+    public void getSystemNotification(String content) {
+        this.mContent = content;
     }
 
     @Override
@@ -97,15 +100,18 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
             relativeLayout = view.findViewById(R.id.relative_layout);
         }
     }
+
     //头部 ViewHolder
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
         TextView latestSystemNotification;
+
         public HeaderViewHolder(View itemView) {
             super(itemView);
             latestSystemNotification = itemView.findViewById(R.id.latest_system_notification);
         }
 
     }
+
     //底部 ViewHolder
     public static class BottomViewHolder extends RecyclerView.ViewHolder {
 
@@ -117,11 +123,11 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType ==ITEM_TYPE_HEADER) {
+        if (viewType == ITEM_TYPE_HEADER) {
             return new HeaderViewHolder(mLayoutInflater.inflate(R.layout.notification_item_header,
                     parent, false));
         } else if (viewType == ITEM_TYPE_CONTENT) {
-            return  new ContentViewHolder(mLayoutInflater.inflate(R.layout.notification_item,
+            return new ContentViewHolder(mLayoutInflater.inflate(R.layout.notification_item,
                     parent, false));
         } else if (viewType == ITEM_TYPE_BOTTOM) {
             return new BottomViewHolder(mLayoutInflater.inflate(R.layout.notification_item_footer,
@@ -129,8 +135,9 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
         }
         return null;
     }
+
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder,int position){
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         /*if(position == mNotificationList.size() *//*||position > mNotificationList.size()*//*){
            holder.alias.setText("");
            holder.time.setText("");
@@ -156,21 +163,21 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
 
 
         if (holder instanceof HeaderViewHolder) {
-            if(setMContent){
-                ((HeaderViewHolder)holder).latestSystemNotification.setText(mContent);
+            if (setMContent) {
+                ((HeaderViewHolder) holder).latestSystemNotification.setText(mContent);
             }
         } else if (holder instanceof ContentViewHolder) {
 
-            NotificationBean notification = mNotificationList.get(position-mHeaderCount);
-            ((ContentViewHolder)holder).alias.setText(notification.getAlias());
-            ((ContentViewHolder)holder).time.setText(notification.getTime());
+            NotificationBean notification = mNotificationList.get(position - mHeaderCount);
+            ((ContentViewHolder) holder).alias.setText(notification.getAlias());
+            ((ContentViewHolder) holder).time.setText(notification.getTime());
             if (notification.getType().equals("0")) {
-                ((ContentViewHolder)holder).type.setText("评论了你的树洞");
+                ((ContentViewHolder) holder).type.setText("评论了你的树洞");
             } else if (notification.getType().equals("1")) {
-                ((ContentViewHolder)holder).type.setText("回复了你的评论");
+                ((ContentViewHolder) holder).type.setText("回复了你的评论");
             }
-            ((ContentViewHolder)holder).content.setText(notification.getReplyContent());
-            ((ContentViewHolder)holder).hole_id.setText("# " + notification.getHole_id());
+            ((ContentViewHolder) holder).content.setText(notification.getReplyContent());
+            ((ContentViewHolder) holder).hole_id.setText("# " + notification.getHole_id());
 
         } else if (holder instanceof BottomViewHolder) {
         }
@@ -184,12 +191,11 @@ public class NotificationAdapter extends  RecyclerView.Adapter<RecyclerView.View
             public void onClick(View v) {
                 if (listener != null) {
                     listener.onClick(position);
-                    String TAG ="tag";
-                    Log.d(TAG, "onClick: click "+position);
+                    String TAG = "tag";
+                    Log.d(TAG, "onClick: click " + position);
                 }
             }
         });
-
 
 
     }

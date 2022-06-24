@@ -9,10 +9,8 @@ public class CommonUtils {
 
         long timeD = time - lastClickTime;
 
-        if ( 0 < timeD && timeD < 800) {
-
+        if (0 < timeD && timeD < 800) {
             return true;
-
         }
 
         lastClickTime = time;

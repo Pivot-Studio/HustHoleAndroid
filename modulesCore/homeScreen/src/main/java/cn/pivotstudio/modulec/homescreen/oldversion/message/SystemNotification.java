@@ -1,7 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.message;
 
 
-
 import static cn.pivotstudio.modulec.homescreen.oldversion.fragment.MessageFragment.removeCharAt;
 import static cn.pivotstudio.modulec.homescreen.oldversion.message.ParseNotificationData.parseSysJson;
 
@@ -45,7 +44,7 @@ public class SystemNotification extends AppCompatActivity {
     private SystemNotificationAdapter adapter;
     private RecyclerView sysNotificationRecyclerView;
     private String TAG = "tag";
-    public String url = RetrofitManager.API+"system_notices";
+    public String url = RetrofitManager.API + "system_notices";
     private final static int list_size = 20;
     private int start_id = 0;
     private ImageView backView;
@@ -53,6 +52,7 @@ public class SystemNotification extends AppCompatActivity {
 
     private String token;
     private AVLoadingIndicatorView mAVLoadingIndicatorView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,11 +82,10 @@ public class SystemNotification extends AppCompatActivity {
                 Toast.makeText(SystemNotification.this, "click " + position, Toast.LENGTH_SHORT).show();
             }
         });*/
-        if(CheckingToken.IfTokenExist()){
-            getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +"list_size=" + list_size);
+        if (CheckingToken.IfTokenExist()) {
+            getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" + "list_size=" + list_size);
             Log.d("bala", "getStringByOkhttp: token ");
-        }
-        else{
+        } else {
             mAVLoadingIndicatorView.hide();
             mAVLoadingIndicatorView.setVisibility(View.GONE);
             mTitle.setText("系统通知");
@@ -98,10 +97,10 @@ public class SystemNotification extends AppCompatActivity {
 
         private Context context;
 
-        public onClickBack(Context context)
-        {
+        public onClickBack(Context context) {
             this.context = context;
         }
+
         @Override
         public void onClick(View v) {
             finish();
@@ -124,22 +123,21 @@ public class SystemNotification extends AppCompatActivity {
         mSystemNotificationList.add(systemNotification3);
         Log.d(TAG, "onCreate: bbbbb");
     }*/
-    private Handler handler = new Handler(){
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
-            Log.d(TAG, "handleMessage: msr.what " +msg.what);
-            switch (msg.what){
+            Log.d(TAG, "handleMessage: msr.what " + msg.what);
+            switch (msg.what) {
                 case 0://请求网络成功
-                    String Data = (String)msg.obj;
-                    Log.d(TAG, "handleMessage: get Data "+ Data);
+                    String Data = (String) msg.obj;
+                    Log.d(TAG, "handleMessage: get Data " + Data);
                     try {
                         mSystemNotificationList = parseSysJson(Data);
-                    }
-                    catch (Exception e){
+                    } catch (Exception e) {
 
                     }
-                    Log.d(TAG, "handler: mSystemNotificationList "+ mSystemNotificationList.get(0).getSystemContent());
+                    Log.d(TAG, "handler: mSystemNotificationList " + mSystemNotificationList.get(0).getSystemContent());
                     adapter = new SystemNotificationAdapter(mSystemNotificationList);
                     sysNotificationRecyclerView.setLayoutManager(new LinearLayoutManager(getParent(),
                             LinearLayoutManager.VERTICAL, false));
@@ -170,10 +168,10 @@ public class SystemNotification extends AppCompatActivity {
 
 //        SharedPreferences editor = this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
 //        token = editor.getString("token", "");
-        MMKVUtil mmkvUtil= MMKVUtil.getMMKVUtils(this);
-        String token =mmkvUtil.getString("USER_TOKEN");
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(this);
+        String token = mmkvUtil.getString("USER_TOKEN");
 
-        Request request = new Request.Builder().get().addHeader("Authorization", "Bearer "+token).url(path).build();
+        Request request = new Request.Builder().get().addHeader("Authorization", "Bearer " + token).url(path).build();
 
         Log.d(TAG, "getStringByOkhttp: request");
         try {
@@ -197,7 +195,7 @@ public class SystemNotification extends AppCompatActivity {
                         Log.d(TAG, "response.body().string()== " + responseData);
                         Log.d(TAG, "obtain message");
                         String temp = responseData.replace("{\"system_notices\":", "");
-                        temp = removeCharAt(temp, temp.length()-1);
+                        temp = removeCharAt(temp, temp.length() - 1);
                         message.what = 0;
                         message.obj = temp;
                         handler.sendMessage(message);
@@ -213,7 +211,6 @@ public class SystemNotification extends AppCompatActivity {
             Log.d(TAG, "getStringByOkhttp:i am exception, e.toString() " + e.toString());
         }
     }
-
 
 
 }

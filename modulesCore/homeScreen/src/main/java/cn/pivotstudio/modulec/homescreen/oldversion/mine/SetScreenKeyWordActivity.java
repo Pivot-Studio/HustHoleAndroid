@@ -43,45 +43,45 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
     private LabelsView labelsView;
     private EditText et_label;
     private ImageView screen_keyword_img;
-    private TextView addButton,number;
-    private ConstraintLayout constraintLayout1_label,constraintLayout2_label;
+    private TextView addButton, number;
+    private ConstraintLayout constraintLayout1_label, constraintLayout2_label;
     private ArrayList<String> label = new ArrayList<>();
-    private Boolean mSetCondition=false;
-    private static final String ACTIVITY_TAG="LogDemo";
+    private Boolean mSetCondition = false;
+    private static final String ACTIVITY_TAG = "LogDemo";
     private Retrofit retrofit;
     private RequestInterface request;
-    protected void onCreate (Bundle savedInstanceState){
+
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null) {getSupportActionBar().hide();}
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         setContentView(R.layout.item_label);
-        et_label =  findViewById(R.id.et_label);
-        addButton= findViewById(R.id.tv_addButton);
-        number=(TextView)findViewById(R.id.tv_label_sheildnumber);
-        constraintLayout1_label =  findViewById(R.id.constraintLayout1_label);
-        constraintLayout2_label =  findViewById(R.id.constraintLayout2_label);
+        et_label = findViewById(R.id.et_label);
+        addButton = findViewById(R.id.tv_addButton);
+        number = (TextView) findViewById(R.id.tv_label_sheildnumber);
+        constraintLayout1_label = findViewById(R.id.constraintLayout1_label);
+        constraintLayout2_label = findViewById(R.id.constraintLayout2_label);
         constraintLayout2_label.setVisibility(View.INVISIBLE);
-        labelsView =  findViewById(R.id.labels);
+        labelsView = findViewById(R.id.labels);
 
         //mOnlyMaster.setBackground(getDrawable(R.drawable.forest_button));
         //mOnlyMaster.setText("加入");
         ///labelsView .setTextColor(getResources().getColor(R.color.HH_BandColor_3));
 
 
-
-
-
-        screen_keyword_img=findViewById(R.id.screen_keyword_img);
+        screen_keyword_img = findViewById(R.id.screen_keyword_img);
         screen_keyword_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        retrofit= RetrofitManager.getRetrofit();
-        request=RetrofitManager.getRequest();
+        retrofit = RetrofitManager.getRetrofit();
+        request = RetrofitManager.getRequest();
 
         SpannableString string1 = new SpannableString("请尽可能简单地输入您想屏蔽的关键词");
-        EditTextReaction.EditTextSize(et_label,string1,14);
+        EditTextReaction.EditTextSize(et_label, string1, 14);
 
 
         constraintLayout1_label.setOnClickListener(new View.OnClickListener() {
@@ -97,17 +97,17 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                 new Thread(new Runnable() {//加载纵向列表标题
                     @Override
                     public void run() {
-                        HashMap map=new HashMap();
-                        map.put("word",et_label.getText().toString());
+                        HashMap map = new HashMap();
+                        map.put("word", et_label.getText().toString());
                         Call<ResponseBody> call;
-                        call=request.addblockword(RetrofitManager.API+"blockwords?word="+et_label.getText().toString());
-                       // call = request.addblockword(map);
+                        call = request.addblockword(RetrofitManager.API + "blockwords?word=" + et_label.getText().toString());
+                        // call = request.addblockword(map);
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                if(response.code()==200) {
+                                if (response.code() == 200) {
                                     String json = null;
-                                    String returncondition=null;
+                                    String returncondition = null;
                                     try {
                                         if (response.body() != null) {
                                             json = response.body().string();
@@ -115,7 +115,7 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                                         JSONObject jsonObject = new JSONObject(json);
                                         returncondition = jsonObject.getString("msg");
                                         Toast.makeText(SetScreenKeyWordActivity.this, returncondition, Toast.LENGTH_SHORT).show();
-                                        label.add(et_label.getText().toString()+"  ×");
+                                        label.add(et_label.getText().toString() + "  ×");
                                         labelsView.setLabels(label);
                                         number.setText("(" + label.size() + "/5)");
                                         et_label.setText("");
@@ -124,12 +124,12 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                                         et_label.setFocusable(true);
                                         et_label.setFocusableInTouchMode(true);
                                         et_label.requestFocus();
-                                        InputMethodManager imm = (InputMethodManager)et_label.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        InputMethodManager imm = (InputMethodManager) et_label.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                                         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_NOT_ALWAYS);
                                     } catch (IOException | JSONException e) {
                                         e.printStackTrace();
                                     }
-                                }else{
+                                } else {
                                     String json = "null";
                                     String returncondition = null;
                                     if (response.errorBody() != null) {
@@ -141,15 +141,15 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                                         } catch (IOException | JSONException e) {
                                             e.printStackTrace();
                                         }
-                                    }else{
-                                        Toast.makeText(SetScreenKeyWordActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(SetScreenKeyWordActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                                Toast.makeText(SetScreenKeyWordActivity.this,R.string.network_loadfailure,Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SetScreenKeyWordActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
 
                             }
 
@@ -159,10 +159,9 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                 }).start();
 
 
-                    //网络层
+                //网络层
 
-                    //视图
-
+                //视图
 
 
             }
@@ -180,8 +179,8 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                 dialog.getWindow().setBackgroundDrawableResource(R.drawable.notice);
                 TextView no = (TextView) mView.findViewById(R.id.tv_dialog_screen_notquit);
                 TextView yes = (TextView) mView.findViewById(R.id.tv_dialog_screen_quit);
-                TextView content=(TextView) mView.findViewById(R.id.tv_dialog_screen_content);
-                content.setText("你确认要删除对关键词\""+label.get(position).substring(0,label.get(position).length() -3)+"\"的屏蔽吗？");
+                TextView content = (TextView) mView.findViewById(R.id.tv_dialog_screen_content);
+                content.setText("你确认要删除对关键词\"" + label.get(position).substring(0, label.get(position).length() - 3) + "\"的屏蔽吗？");
                 no.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -195,13 +194,13 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 Call<ResponseBody> call;
-                                call = request.deleteblockword(RetrofitManager.API+"blockwords?word="+label.get(position).substring(0,label.get(position).length() -3));
+                                call = request.deleteblockword(RetrofitManager.API + "blockwords?word=" + label.get(position).substring(0, label.get(position).length() - 3));
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                                        if(response.code()==200) {
+                                        if (response.code() == 200) {
                                             String json = null;
-                                            String returncondition=null;
+                                            String returncondition = null;
                                             dialog.dismiss();
                                             try {
                                                 if (response.body() != null) {
@@ -212,12 +211,12 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                                                 Toast.makeText(SetScreenKeyWordActivity.this, returncondition, Toast.LENGTH_SHORT).show();
                                                 label.remove(label.get(position));
                                                 labelsView.setLabels(label);
-                                                number.setText("("+label.size()+"/5)");
+                                                number.setText("(" + label.size() + "/5)");
                                             } catch (IOException | JSONException e) {
 
                                                 e.printStackTrace();
                                             }
-                                        }else{
+                                        } else {
                                             dialog.dismiss();
                                             String json = "null";
                                             String returncondition = null;
@@ -231,15 +230,15 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                                                 } catch (IOException | JSONException e) {
                                                     e.printStackTrace();
                                                 }
-                                            }else{
-                                                Toast.makeText(SetScreenKeyWordActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                Toast.makeText(SetScreenKeyWordActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                                        Toast.makeText(SetScreenKeyWordActivity.this,R.string.network_loadfailure,Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SetScreenKeyWordActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
 
                                     }
 
@@ -257,17 +256,18 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
         upDate();
         initListener();
     }
-    private void upDate(){
+
+    private void upDate() {
         new Thread(new Runnable() {//加载纵向列表标题
             @Override
             public void run() {
 
                 Call<ResponseBody> call;
-                call = request.blockwords(RetrofitManager.API+"blockwords");
+                call = request.blockwords(RetrofitManager.API + "blockwords");
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.code()==200) {
+                        if (response.code() == 200) {
                             String json = "null";
                             try {
                                 if (response.body() != null) {
@@ -275,17 +275,17 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                                 }
 
                                 JSONArray jsonArray = new JSONArray(json);
-                                for(int i=0;i<jsonArray.length();i++) {
+                                for (int i = 0; i < jsonArray.length(); i++) {
                                     JSONObject sonObject2 = jsonArray.getJSONObject(i);
-                                    label.add(sonObject2.getString("word")+"  ×");
+                                    label.add(sonObject2.getString("word") + "  ×");
                                 }
                                 labelsView.setLabels(label);
-                                number.setText("("+label.size()+"/5)");
+                                number.setText("(" + label.size() + "/5)");
 
                             } catch (IOException | JSONException e) {
                                 e.printStackTrace();
                             }
-                        }else{
+                        } else {
                             String json = "null";
                             String returncondition = null;
                             if (response.errorBody() != null) {
@@ -297,15 +297,15 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                                 } catch (IOException | JSONException e) {
                                     e.printStackTrace();
                                 }
-                            }else{
-                                Toast.makeText(SetScreenKeyWordActivity.this,R.string.network_unknownfailture,Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(SetScreenKeyWordActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                        Toast.makeText(SetScreenKeyWordActivity.this,R.string.network_loadfailure,Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SetScreenKeyWordActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
 
                     }
 
@@ -314,14 +314,16 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
             }
         }).start();
     }
-        //监听字数
+
+    //监听字数
     private class MyTextWatcher implements TextWatcher {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
+
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if(et_label.getText().toString().length()==7){
+            if (et_label.getText().toString().length() == 7) {
                 View mView = View.inflate(getApplicationContext(), R.layout.dialog_screen, null);
                 Dialog dialog = new Dialog(SetScreenKeyWordActivity.this);
                 dialog.setContentView(mView);
@@ -329,7 +331,7 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
                 TextView no = (TextView) mView.findViewById(R.id.tv_dialog_screen_notquit);
                 no.setVisibility(View.INVISIBLE);
                 TextView yes = (TextView) mView.findViewById(R.id.tv_dialog_screen_quit);
-                TextView content=(TextView) mView.findViewById(R.id.tv_dialog_screen_content);
+                TextView content = (TextView) mView.findViewById(R.id.tv_dialog_screen_content);
                 content.setText("关键词长度不得超过7个字符，请重新添加！");
                 yes.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -341,16 +343,19 @@ public class SetScreenKeyWordActivity extends AppCompatActivity {
             }
 
         }
+
         @Override
         public void afterTextChanged(Editable s) {
 
 
         }
     }
-    private void initListener(){
+
+    private void initListener() {
         et_label.addTextChangedListener(new MyTextWatcher());
     }
-    public void update(){
+
+    public void update() {
         //网络层
         label.clear();//先清空
         try {

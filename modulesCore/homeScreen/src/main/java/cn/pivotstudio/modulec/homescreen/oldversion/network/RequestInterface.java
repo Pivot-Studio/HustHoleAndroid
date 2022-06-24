@@ -14,22 +14,27 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.Url;
 
-public interface RequestInterface{//接口
+public interface RequestInterface {//接口
 
 
     @POST("mobileLogin")
     Call<ResponseBody> mobileLogin(@Body HashMap map);
+
     @POST
     Call<ResponseBody> sendVerifyCode(@Url String url);
+
     @POST("sendVerifyCode")
     Call<ResponseBody> sendVerifyCode2(@Body HashMap map);
+
     @POST
     Call<ResponseBody> resetPassword(@Url String url);
 
     @POST
     Call<ResponseBody> verifyCodeMatch(@Url String url);
+
     @POST("activation")
     Call<ResponseBody> verifyCodeMatch2(@Body HashMap map);
+
     @POST("mobileRegister")
     Call<ResponseBody> register(@Body HashMap map);
 
@@ -50,11 +55,9 @@ public interface RequestInterface{//接口
 
     @POST
     Call<ResponseBody> join(@Url String url);
+
     @DELETE
     Call<ResponseBody> delete(@Url String url);
-
-
-
 
 
     @GET("forests/joined?")
@@ -67,45 +70,43 @@ public interface RequestInterface{//接口
                                     @Query("is_last_reply") Boolean is_last_reply);
 
 
-
     @GET
     Call<ResponseBody> detailholes2(@Url String url);
 
-   @HTTP(method = "GET", path = "forests/detail/{hole_id}", hasBody = false)
+    @HTTP(method = "GET", path = "forests/detail/{hole_id}", hasBody = false)
     Call<ResponseBody> detailforest(@Path("hole_id") String hole_id);
 
 
     @HTTP(method = "GET", path = "forests/{hole_id}/holes?", hasBody = true)
-    Call<ResponseBody> detailholes( @Path("hole_id") String hole_id,
-                                    @Query("list_size") int list_size,
-                                    @Query("start_id") int start_id,
-                                    @Query("is_last_active") Boolean is_last_active);
-
-
-
+    Call<ResponseBody> detailholes(@Path("hole_id") String hole_id,
+                                   @Query("list_size") int list_size,
+                                   @Query("start_id") int start_id,
+                                   @Query("is_last_active") Boolean is_last_active);
 
 
     @POST
     Call<ResponseBody> changeSecurityMode(@Url String url);
+
     @POST
     Call<ResponseBody> follow(@Url String url);
+
     @DELETE
-    Call<ResponseBody>deletefollow(@Url String url);
+    Call<ResponseBody> deletefollow(@Url String url);
 
     @POST
     Call<ResponseBody> thumbups(@Url String url);
 
     @DELETE
     Call<ResponseBody> deletethumbups(@Url String url);
+
     @GET
     Call<ResponseBody> replies(@Url String url);
 
-   @POST
+    @POST
     Call<ResponseBody> replies_add(@Url String url);
 
 
-
-   // @POST("replies")
+    // @POST("replies")
     //Call<ResponseBody> replies_add(@Body HashMap map);
 
     @POST
@@ -134,20 +135,19 @@ public interface RequestInterface{//接口
     Call<ResponseBody> delete_hole_2(@Url String url);
 
 
-
     // @POST("reports")
     // Call<ResponseBody> report(@Body HashMap map);
     //Call<ResponseBody> report(@Path("hole_id") String hole_id);
     @POST("reports")
     Call<ResponseBody> report(@Body HashMap map);
-//
+
+    //
     @POST
     Call<ResponseBody> report_2(@Url String url);
 
 
-
-   // @POST("auth/verifyCodeMatch?email=U202011988.edu.cn&verify_code=1234")
-   // Call<ResponseBody> verifyCodeMatch();
+    // @POST("auth/verifyCodeMatch?email=U202011988.edu.cn&verify_code=1234")
+    // Call<ResponseBody> verifyCodeMatch();
 
     @GET("myself/mydata")
     Call<ResponseBody> myData();
@@ -159,7 +159,6 @@ public interface RequestInterface{//接口
     @GET("myself/myfollow?")
     Call<ResponseBody> myFollow(@Query("start_id") int start_id,
                                 @Query("list_size") int list_size);
-
 
 
     @GET("myself/myreplies?")
@@ -213,27 +212,29 @@ Call<ResponseBody> owner(@Query("hole_id") String hole_id,
                              @Query("start_id") int start_id,
                              @Query("list_size") int list_size,
                              @Query("is_descend") String is_descend);
+
     @GET("auth/checkActivation")
     Call<ResponseBody> checkActivation();
 
 
     @GET
-    Call<ResponseBody>blockwords(@Url String url);
+    Call<ResponseBody> blockwords(@Url String url);
 
     @POST
-    Call<ResponseBody>addblockword(@Url String url);
+    Call<ResponseBody> addblockword(@Url String url);
 
     @POST
-    Call<ResponseBody>evaluate(@Url String url);
+    Call<ResponseBody> evaluate(@Url String url);
 
     @POST
-    Call<ResponseBody>advice(@Url String url);
+    Call<ResponseBody> advice(@Url String url);
 
     @DELETE
-    Call<ResponseBody>deleteblockword(@Url String url);
+    Call<ResponseBody> deleteblockword(@Url String url);
 
     @GET("myself/latestShareImage")
     Call<ResponseBody> checkupdate();
+
     @GET("version")
     Call<ResponseBody> checkupdate2();
 }

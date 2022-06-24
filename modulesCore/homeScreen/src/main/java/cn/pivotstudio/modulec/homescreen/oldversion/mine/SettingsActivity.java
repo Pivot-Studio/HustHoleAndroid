@@ -38,13 +38,14 @@ public class SettingsActivity extends AppCompatActivity {
     Retrofit retrofit;
     RequestInterface request;
     String returncondition = "0";
-    String emailid="";
-//    Boolean isVerified;
+    String emailid = "";
+
+    //    Boolean isVerified;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
 
@@ -60,8 +61,8 @@ public class SettingsActivity extends AppCompatActivity {
         email.setOnClickListener(this::onClick);
         security.setOnClickListener(this::onClick);
         img.setOnClickListener(this::onClick);
-        retrofit= RetrofitManager.getRetrofit();
-        request=RetrofitManager.getRequest();
+        retrofit = RetrofitManager.getRetrofit();
+        request = RetrofitManager.getRequest();
 
         new Thread(new Runnable() {
             @Override
@@ -70,7 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if(response.code()==200) {
+                        if (response.code() == 200) {
                             String json = "null";
                             try {
                                 if (response.body() != null) {
@@ -78,18 +79,18 @@ public class SettingsActivity extends AppCompatActivity {
                                 }
                                 JSONObject jsonObject = new JSONObject(json);
                                 returncondition = jsonObject.getString("is_email_activated");
-                                emailid=jsonObject.getString("email");
-                             //   Log.d("email",returncondition);
-                                if(returncondition.equals("false")){
+                                emailid = jsonObject.getString("email");
+                                //   Log.d("email",returncondition);
+                                if (returncondition.equals("false")) {
                                     isVerified.setText("未验证");
-                                }else if(returncondition.equals("true")){
+                                } else if (returncondition.equals("true")) {
                                     isVerified.setText("已验证");
                                 }
 
                             } catch (IOException | JSONException e) {
                                 e.printStackTrace();
                             }
-                        }else {
+                        } else {
                             //followCondition = false;
                             String json = "null";
                             if (response.errorBody() != null) {
@@ -98,7 +99,7 @@ public class SettingsActivity extends AppCompatActivity {
                                     //JSONObject jsonObject = new JSONObject(json);
                                     // returncondition = jsonObject.getString("msg");
                                     Toast.makeText(SettingsActivity.this, json, Toast.LENGTH_SHORT).show();
-                                } catch (IOException  e) {
+                                } catch (IOException e) {
                                     e.printStackTrace();
                                 }
                             } else {
@@ -106,6 +107,7 @@ public class SettingsActivity extends AppCompatActivity {
                             }
                         }
                     }
+
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
                         isVerified.setText("请检查网络");
@@ -118,6 +120,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         initView();
     }
+
     public void initView() {
 
     }

@@ -16,8 +16,9 @@ import java.util.List;
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver;
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi;
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler;
-import cn.pivotstudio.modulec.homescreen.model.HomepageHoleResponse;
-import cn.pivotstudio.modulec.homescreen.model.MsgResponse;
+import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi;
+import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse;
+import cn.pivotstudio.modulec.homescreen.network.MsgResponse;
 import cn.pivotstudio.modulec.homescreen.network.HSRequestInterface;
 import io.reactivex.Observable;
 
@@ -50,7 +51,7 @@ public class HomePageHoleRepository {
      * @param mStartingLoadId         起始id
      */
     public void getHolesForNetwork(Boolean mHolesSequenceCondition, int mStartingLoadId) {
-        NetworkApi.createService(HSRequestInterface.class, 2).
+        HomeScreenNetworkApi.INSTANCE.getRetrofitService().
                 homepageHoles(true, mHolesSequenceCondition, mStartingLoadId, CONSTANT_STANDARD_LOAD_SIZE).
                 compose(NetworkApi.applySchedulers(new BaseObserver<List<HomepageHoleResponse.DataBean>>() {
                     @Override
@@ -91,7 +92,7 @@ public class HomePageHoleRepository {
      * @param mStartingLoadId 起始id
      */
     public void searchHolesForNetwork(String et, Integer mStartingLoadId) {
-        NetworkApi.createService(HSRequestInterface.class, 2).
+        HomeScreenNetworkApi.INSTANCE.getRetrofitService().
                 searchHoles(et, mStartingLoadId, CONSTANT_STANDARD_LOAD_SIZE).
                 compose(NetworkApi.applySchedulers(new BaseObserver<List<HomepageHoleResponse.DataBean>>() {
                     @Override
@@ -131,7 +132,7 @@ public class HomePageHoleRepository {
      * @param et 树洞号
      */
     public void searchSingleHoleForNetwork(String et) {
-        NetworkApi.createService(HSRequestInterface.class, 2).
+        HomeScreenNetworkApi.INSTANCE.getRetrofitService().
                 searchSingleHole(Constant.BASE_URL + "holes/" + et).compose(NetworkApi.applySchedulers(new BaseObserver<HomepageHoleResponse.DataBean>() {
                     @Override
                     public void onSuccess(HomepageHoleResponse.DataBean requestedData) {
@@ -166,9 +167,9 @@ public class HomePageHoleRepository {
     public void thumbupForNetwork(int hole_id, int thumbup_num, boolean is_thumbup, HomepageHoleResponse.DataBean dataBean) {
         Observable<MsgResponse> observable;
         if (!is_thumbup) {
-            observable = NetworkApi.createService(HSRequestInterface.class, 2).thumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/-1");
+            observable = HomeScreenNetworkApi.INSTANCE.getRetrofitService().thumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/-1");
         } else {
-            observable = NetworkApi.createService(HSRequestInterface.class, 2).deleteThumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/-1");
+            observable = HomeScreenNetworkApi.INSTANCE.getRetrofitService().deleteThumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/-1");
         }
         observable.compose(NetworkApi.applySchedulers(new BaseObserver<MsgResponse>() {
             @Override
@@ -200,9 +201,9 @@ public class HomePageHoleRepository {
     public void followForNetwork(int hole_id, int follow_num, boolean is_follow, HomepageHoleResponse.DataBean dataBean) {
         Observable<MsgResponse> observable;
         if (!is_follow) {
-            observable = NetworkApi.createService(HSRequestInterface.class, 2).follow(Constant.BASE_URL + "follows/" + hole_id);
+            observable = HomeScreenNetworkApi.INSTANCE.getRetrofitService().follow(Constant.BASE_URL + "follows/" + hole_id);
         } else {
-            observable = NetworkApi.createService(HSRequestInterface.class, 2).deleteFollow(Constant.BASE_URL + "follows/" + hole_id);
+            observable = HomeScreenNetworkApi.INSTANCE.getRetrofitService().deleteFollow(Constant.BASE_URL + "follows/" + hole_id);
         }
         observable.compose(NetworkApi.applySchedulers(new BaseObserver<MsgResponse>() {
             @Override
@@ -234,7 +235,7 @@ public class HomePageHoleRepository {
     public void moreActionForNetwork(int hole_id, boolean is_mine) {
         Observable<MsgResponse> observable;
         if (is_mine) {
-            observable = NetworkApi.createService(HSRequestInterface.class, 2).deleteHole(String.valueOf(hole_id));
+            observable = HomeScreenNetworkApi.INSTANCE.getRetrofitService().deleteHole(String.valueOf(hole_id));
             observable.compose(NetworkApi.applySchedulers(new BaseObserver<MsgResponse>() {
                 @Override
                 public void onSuccess(MsgResponse msg) {
@@ -252,7 +253,6 @@ public class HomePageHoleRepository {
                     .withInt(Constant.REPLY_LOCAL_ID, -1)
                     .withString(Constant.ALIAS, "洞主")
                     .navigation();
-            //observable=NetworkApi.createService(HSRequestInterface.class, 2).report(Constant.BASE_URL +"reports?hole_id=" + hole_id + "&reply_local_id= -1");
         }
 
     }

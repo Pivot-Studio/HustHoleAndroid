@@ -82,8 +82,8 @@ public class MyHoleFragment extends Fragment {
 
         refreshLayout.setOnRefreshListener(mRefreshLayout -> {
             myHolesList.clear();
-            start_id=0;
-           // start_id += list_size;
+            start_id = 0;
+            // start_id += list_size;
             isRefresh = true;
             update();
             Handler handler = new Handler();
@@ -91,12 +91,11 @@ public class MyHoleFragment extends Fragment {
                 /**
                  *要执行的操作
                  */
-                if(finishRefresh){
+                if (finishRefresh) {
                     refreshLayout.finishRefresh();
                     isRefresh = false;
                     finishRefresh = false;
-                }
-                else {
+                } else {
                     refreshLayout.autoRefresh();
                 }
             }, 500);
@@ -105,18 +104,17 @@ public class MyHoleFragment extends Fragment {
         refreshLayout.setOnLoadMoreListener(mRefreshLayout -> {
             isOnLoadMore = true;
             start_id = myHolesList.size();
-            Log.d(TAG, "onCreateView: start_id = "+start_id);
+            Log.d(TAG, "onCreateView: start_id = " + start_id);
             Handler handler = new Handler();
             handler.postDelayed(() -> {
                 /**
                  *要执行的操作
                  */
-                if(finishOnLoadMore){
+                if (finishOnLoadMore) {
                     refreshLayout.finishLoadMore();
                     isOnLoadMore = false;
                     finishOnLoadMore = false;
-                }
-                else {
+                } else {
                     refreshLayout.autoLoadMore();
                 }
             }, 500);
@@ -128,9 +126,9 @@ public class MyHoleFragment extends Fragment {
 
         myRecycleView = myHoleView.findViewById(R.id.myHoleRecyclerView);
         myRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        if(myHolesList.size()==0) {
+        if (myHolesList.size() == 0) {
             update();
-        }else{
+        } else {
             myRecycleView.setAdapter(new CardsRecycleViewAdapter());
             //myRecycleView.getAdapter().notifyDataSetChanged();
         }
@@ -186,9 +184,9 @@ public class MyHoleFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        if(isRefresh) finishRefresh = true;
+                        if (isRefresh) finishRefresh = true;
 
-                        if(isOnLoadMore){
+                        if (isOnLoadMore) {
                             myRecycleView.getAdapter().notifyDataSetChanged();
                             finishOnLoadMore = true;
                         } else {
@@ -198,6 +196,7 @@ public class MyHoleFragment extends Fragment {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable tr) {
                 }
@@ -213,7 +212,7 @@ public class MyHoleFragment extends Fragment {
             int position;
             View totalView;
             TextView ID, date, content, text_up, text_talk, text_star;
-            ImageView img_up,img_talk, img_star, moreWhat;
+            ImageView img_up, img_talk, img_star, moreWhat;
             ConstraintLayout myDelete;
 
             public ViewHolder(View view) {
@@ -265,15 +264,15 @@ public class MyHoleFragment extends Fragment {
                         new Thread(new Runnable() {//加载纵向列表标题
                             @Override
                             public void run() {
-                                Call<ResponseBody> call = request.delete_hole( myHolesList.get(position)[4]);//进行封装
-                                call.enqueue(new Callback<ResponseBody>(){
+                                Call<ResponseBody> call = request.delete_hole(myHolesList.get(position)[4]);//进行封装
+                                call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         dialog.dismiss();
                                         myDelete.setVisibility(View.GONE);
                                         more_condition = false;
 
-                                        if(response.code()==200) {
+                                        if (response.code() == 200) {
                                             String json = "null";
                                             String returncondition = null;
                                             if (response.body() != null) {
@@ -290,8 +289,8 @@ public class MyHoleFragment extends Fragment {
                                             } else {
                                                 Toast.makeText(getContext(), "删除失败，超过可删除的时间范围", Toast.LENGTH_SHORT).show();
                                             }
-                                        }else{
-                                            ErrorMsg.getErrorMsg(response,getContext());
+                                        } else {
+                                            ErrorMsg.getErrorMsg(response, getContext());
                                         }
                                     }
 
@@ -366,7 +365,7 @@ public class MyHoleFragment extends Fragment {
                             new Thread(() -> {
                                 request = retrofit.create(RequestInterface.class);
 
-                                Call<ResponseBody> call = request.thumbups(RetrofitManager.API+"thumbups/" + myHolesList.get(position)[4] + "/-1");//进行封装
+                                Call<ResponseBody> call = request.thumbups(RetrofitManager.API + "thumbups/" + myHolesList.get(position)[4] + "/-1");//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -384,7 +383,7 @@ public class MyHoleFragment extends Fragment {
                             }).start();
                         } else {
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API+"thumbups/" + myHolesList.get(position)[4] + "/-1");//进行封装
+                                Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API + "thumbups/" + myHolesList.get(position)[4] + "/-1");//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -403,20 +402,20 @@ public class MyHoleFragment extends Fragment {
                             }).start();
                         }
                     } else {
-                      //  Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
-                      //  startActivity(intent);
+                        //  Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
+                        //  startActivity(intent);
                     }
                 });
 
                 img_talk.setOnClickListener(v -> {
                     ARouter.getInstance().build("/hole/HoleActivity")
                             .withInt(Constant.HOLE_ID, Integer.valueOf(myHolesList.get(position)[4]))
-                            .withBoolean(Constant.IF_OPEN_KEYBOARD,true)
-                            .navigation((HoleStarReplyActivity)v.getContext(),2);
-                  //  Intent intent = CommentListActivity.newIntent(getActivity(), null);
-                  //  intent.putExtra("reply","key_board");
-                  //  intent.putExtra("data_hole_id", myHolesList.get(position)[4]);
-                  //  startActivity(intent);
+                            .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
+                            .navigation((HoleStarReplyActivity) v.getContext(), 2);
+                    //  Intent intent = CommentListActivity.newIntent(getActivity(), null);
+                    //  intent.putExtra("reply","key_board");
+                    //  intent.putExtra("data_hole_id", myHolesList.get(position)[4]);
+                    //  startActivity(intent);
                 });
 
                 img_star.setOnClickListener(v -> {
@@ -424,7 +423,7 @@ public class MyHoleFragment extends Fragment {
                         if (myHolesList.get(position)[5].equals("false")) {
                             //加载纵向列表标题
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.follow(RetrofitManager.API+"follows/" + myHolesList.get(position)[4]);//进行封装
+                                Call<ResponseBody> call = request.follow(RetrofitManager.API + "follows/" + myHolesList.get(position)[4]);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -443,7 +442,7 @@ public class MyHoleFragment extends Fragment {
                             }).start();
                         } else {
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.deletefollow(RetrofitManager.API+"follows/" + myHolesList.get(position)[4]);//进行封装
+                                Call<ResponseBody> call = request.deletefollow(RetrofitManager.API + "follows/" + myHolesList.get(position)[4]);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -463,8 +462,8 @@ public class MyHoleFragment extends Fragment {
                             }).start();
                         }
                     } else {
-                   //     Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
-                 //       startActivity(intent);
+                        //     Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
+                        //       startActivity(intent);
                     }
                 });
 
@@ -472,11 +471,11 @@ public class MyHoleFragment extends Fragment {
                     Log.d(TAG, "现在跳转到评论界面。");
                     ARouter.getInstance().build("/hole/HoleActivity")
                             .withInt(Constant.HOLE_ID, Integer.valueOf(myHolesList.get(position)[4]))
-                            .withBoolean(Constant.IF_OPEN_KEYBOARD,false)
-                            .navigation((HoleStarReplyActivity)v.getContext(),2);
-                   // Intent intent = CommentListActivity.newIntent(getActivity(), null);
-                   // intent.putExtra("data_hole_id", myHolesList.get(position)[4]);
-                   // startActivity(intent);
+                            .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                            .navigation((HoleStarReplyActivity) v.getContext(), 2);
+                    // Intent intent = CommentListActivity.newIntent(getActivity(), null);
+                    // intent.putExtra("data_hole_id", myHolesList.get(position)[4]);
+                    // startActivity(intent);
                 });
 
                 myRecycleView.addOnScrollListener(new RecyclerView.OnScrollListener() {

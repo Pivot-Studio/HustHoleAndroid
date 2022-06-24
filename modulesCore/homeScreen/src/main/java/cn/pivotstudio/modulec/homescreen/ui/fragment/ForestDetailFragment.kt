@@ -5,26 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestDetailBinding
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel
-import com.example.libbase.base.ui.fragment.BaseFragment
 
-class ForestDetailFragment : BaseFragment() {
+class ForestDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentForestDetailBinding
 
-    private lateinit var viewModel: ForestDetailViewModel
+    private val viewModel: ForestDetailViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_forest_detail, container, false)
-        viewModel = ViewModelProvider(requireActivity()).get(ForestDetailViewModel::class.java)
         return binding.root
     }
 

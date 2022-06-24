@@ -16,13 +16,14 @@ import cn.pivotstudio.modulec.homescreen.R;
 public class AdviceActivity extends AppCompatActivity {
 
     //    MaterialButton
-    Chip advice,error,other;
+    Chip advice, error, other;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         View bar;
         TextView tv;
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
         bar = findViewById(R.id.bar);
@@ -34,6 +35,7 @@ public class AdviceActivity extends AppCompatActivity {
         advice = findViewById(R.id.cp_advice);
         advice.setOnClickListener(this::onClick);
     }
+
     void onClick(View view) {
         Intent intent;
         if (view.getId() == R.id.cp_advice) {//                advice.setText("123");

@@ -2,11 +2,6 @@ ext {
     isRelease = true
     isMac = false
 
-    url = [
-            "debug"  : "...",
-            "release": "..."
-    ]
-
     androidID = [
             compileSdkVersion: 31,
             minSdkVersion    : 29,
@@ -15,11 +10,6 @@ ext {
             versionName      : "v1.1.9-测试版"
     ]
 
-    basedependenciesID = [
-            "appcompat": "androidx.appcompat:appcompat:1.2.0",//key尽量不要带版本号， 会冲突
-            "material" : "com.google.android.material:material:1.3.0",
-
-    ]
     networkID = [
             //okhttp网络请求
             "okhttp-bom"        : "com.squareup.okhttp3:okhttp-bom:4.9.3",// define a BOM and its version
@@ -27,10 +17,15 @@ ext {
             "okhttp-intercepter": "com.squareup.okhttp3:logging-interceptor",
             //retrofit网络请求
             "retrofit"          : "com.squareup.retrofit2:retrofit:2.9.0",
-            "retrofit-gson"     : 'com.squareup.retrofit2:converter-gson:2.1.0',
+            "retrofit-gson"     : 'com.squareup.retrofit2:converter-gson:2.9.0',
             "retrofit-adapter"  : 'com.squareup.retrofit2:adapter-rxjava2:2.4.0',
+
             //rxjava
             "rxjava2-rxandroid" : 'io.reactivex.rxjava2:rxandroid:2.1.1',
             "rxjava2"           : 'io.reactivex.rxjava2:rxjava:2.2.12'
     ]
+
+
+
+
 }

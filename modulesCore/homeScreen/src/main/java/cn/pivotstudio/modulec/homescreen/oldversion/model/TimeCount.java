@@ -15,14 +15,14 @@ public class TimeCount {
     public static void main(String[] args) {
         String created_timestamp = "2021-03-06T19:30:41+08:00";
         String created_timestamp1 = "2021-08-15T10:30:41+08:00";
-        String set=time(created_timestamp);
-        String set1=time(created_timestamp1);
+        String set = time(created_timestamp);
+        String set1 = time(created_timestamp1);
         System.out.println(set);
         System.out.println(set1);
     }
 
 
-    public static String replytime(String created_timestamp){
+    public static String replytime(String created_timestamp) {
         String myDate = created_timestamp.substring(0, 10) + " " + created_timestamp.substring(11, 19);
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         Date date = calendar.getTime();
@@ -32,17 +32,17 @@ public class TimeCount {
             long dt1 = dateFormat.parse(myDate).getTime();
             long dt2 = dateFormat.parse(dateString).getTime();
             long dc = Math.abs(dt2 - dt1);
-            Log.d("dc",dc+"");
-            long seconds = (dc / 1000)-(60*60*8);
+            Log.d("dc", dc + "");
+            long seconds = (dc / 1000) - (60 * 60 * 8);
             long day = seconds / (24 * 60 * 60);     //相差的天数
             long hour = (seconds - day * 24 * 60 * 60) / (60 * 60);//相差的小时数
             long minute = (seconds - day * 24 * 60 * 60 - hour * 60 * 60) / (60);//相差的分钟数
             long second = (seconds - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60);//相差的秒数
 
-            if (day >8) return created_timestamp.substring(0, 10);
-            else if (day >0) return day + "天前";
-            else if (hour >0) return hour + "小时前";
-            else if (minute >0) return minute + "分钟前";
+            if (day > 8) return created_timestamp.substring(0, 10);
+            else if (day > 0) return day + "天前";
+            else if (hour > 0) return hour + "小时前";
+            else if (minute > 0) return minute + "分钟前";
             else return "刚刚";
 
         } catch (ParseException e) {
@@ -50,6 +50,7 @@ public class TimeCount {
         }
         return null;
     }
+
     public static String time(String created_timestamp) {
         String myDate = created_timestamp.substring(0, 10) + " " + created_timestamp.substring(11, 19);
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
@@ -66,10 +67,10 @@ public class TimeCount {
             long minute = (seconds - day * 24 * 60 * 60 - hour * 60 * 60) / (60);//相差的分钟数
             long second = (seconds - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60);//相差的秒数
 
-            if (day >8) return created_timestamp.substring(0, 10);
-            else if (day >0) return day + "天前";
-            else if (hour >0) return hour + "小时前";
-            else if (minute >0) return minute + "分钟前";
+            if (day > 8) return created_timestamp.substring(0, 10);
+            else if (day > 0) return day + "天前";
+            else if (hour > 0) return hour + "小时前";
+            else if (minute > 0) return minute + "分钟前";
             else return "刚刚";
 
         } catch (ParseException e) {

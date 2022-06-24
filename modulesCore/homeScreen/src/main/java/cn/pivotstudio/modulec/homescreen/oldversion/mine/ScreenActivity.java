@@ -24,8 +24,8 @@ public class ScreenActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
 
@@ -39,7 +39,7 @@ public class ScreenActivity extends AppCompatActivity {
 //        SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
 //        editor.putBoolean("isVerified",false);
 
-        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
 
 
         //screen_keyword .setOnClickListener(this::onClick);
@@ -62,6 +62,7 @@ public class ScreenActivity extends AppCompatActivity {
             }
         });
     }
+
     public void initView() {
         RelativeLayout screen_keyword;
         screen_keyword = findViewById(R.id.screen_keyword);

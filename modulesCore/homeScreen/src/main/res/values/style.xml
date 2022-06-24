@@ -5,29 +5,33 @@
         <item name="android:windowEnterAnimation">@anim/popupwindow_enter</item>
         <item name="android:windowExitAnimation">@anim/popupwindow_exit</item>
     </style>
+
     <style name="darkScreenAnim" parent="@android:style/Animation.Activity">
         <item name="android:windowEnterAnimation">@anim/darkscreen_enter</item>
         <item name="android:windowExitAnimation">@anim/darkscreen_exit</item>
     </style>
+
     <style name="popupwindow_button_click">
         <item name="android:background">@drawable/standard_button</item>
         <item name="android:textColor">@color/GrayScale_100</item>
     </style>
+
     <style name="popupwindow_button">
-    <item name="android:background">@drawable/standard_button_gray</item>
-    <item name="android:textColor">@color/GrayScale_20</item>
-
-
+        <item name="android:background">@drawable/standard_button_gray</item>
+        <item name="android:textColor">@color/GrayScale_20</item>
     </style>
+
     <style name="Page2Anim" parent="@android:style/Animation.Activity">
         <item name="android:windowEnterAnimation">@anim/context_menu_enter</item>
         <item name="android:windowExitAnimation">@anim/context_menu_exit</item>
     </style>
+
     <style name="myChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/bg_chip_state_list</item>
         <item name="android:textColor">@color/tx_chip_state_list</item>
 
     </style>
+
     <style name="myBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="colorPrimary">@color/HH_BandColor_3</item>
         <item name="colorPrimaryDark">@color/HH_BandColor_1</item>
@@ -39,13 +43,23 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSizeTopLeft">@dimen/dp_13</item>
         <item name="cornerSizeTopRight">@dimen/dp_13</item>
-
     </style>
 
     <!--ShapeableImageView 圆角-->
     <style name="AvatarRoundedStyle">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/dp_8</item>
+    </style>
+
+    <style name="BottomNavigationBarTheme" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">@drawable/bg_bottom_bar</item>
+        <item name="itemTextColor">@color/navigation_bar_colored_item_tint</item>
+        <item name="itemIconTint">@color/navigation_bar_colored_item_tint</item>
+    </style>
+
+    <style name="ShapeableImageViewCircleStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
     </style>
 
 </resources>

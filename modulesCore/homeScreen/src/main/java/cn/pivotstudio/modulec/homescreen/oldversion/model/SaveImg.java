@@ -34,10 +34,6 @@ public class SaveImg {
             }
 
 
-
-
-
-
             String sdcardPath = System.getenv("EXTERNAL_STORAGE");      //获得sd卡路径
             String dir = sdcardPath + "/1037树洞/";                    //图片保存的文件夹名
             File file = new File(dir);                                 //已File来构建
@@ -62,6 +58,7 @@ public class SaveImg {
         }
         return false;
     }
+
     public void requestAllPower() {
 
     }
