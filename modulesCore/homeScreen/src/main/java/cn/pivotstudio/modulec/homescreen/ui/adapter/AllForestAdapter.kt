@@ -1,7 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -10,7 +9,7 @@ import cn.pivotstudio.modulec.homescreen.databinding.ItemAllForestBinding
 import cn.pivotstudio.modulec.homescreen.model.ForestCardList
 
 class AllForestAdapter(
-    val onItemClick: () -> Unit
+    val onItemClick: (Int) -> Unit
 ) : ListAdapter<Pair<String, ForestCardList>, AllForestAdapter.AllForestViewHolder>(DiffCallback) {
 
     inner class AllForestViewHolder(
@@ -40,7 +39,6 @@ class AllForestAdapter(
         ): Boolean {
             return oldItem.second == newItem.second
         }
-
 
     }
 

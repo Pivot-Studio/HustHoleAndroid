@@ -1,9 +1,8 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
 import android.util.Log
-import android.view.ViewGroup
 import android.view.LayoutInflater
-import android.view.View
+import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,7 +12,7 @@ import cn.pivotstudio.modulec.homescreen.model.ForestCard
 const val TAG = "AllForestItemAdapter"
 
 class AllForestItemAdapter(
-    val onItemClick: () -> Unit
+    val onItemClick: (Int) -> Unit
 ) : ListAdapter<ForestCard, AllForestItemAdapter.ForestCardViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestCardViewHolder {
@@ -29,7 +28,7 @@ class AllForestItemAdapter(
     override fun onBindViewHolder(holder: ForestCardViewHolder, position: Int) {
         val card = getItem(position)
         holder.itemView.setOnClickListener {
-            onItemClick()
+            onItemClick(card.forestId)
         }
         holder.bind(card)
     }
@@ -42,7 +41,7 @@ class AllForestItemAdapter(
         fun bind(forestCard: ForestCard) {
             binding.forestCard = forestCard
             binding.btnJoinForest.setOnClickListener {
-                Log.d(TAG, "bind: tap")
+                Log.d(TAG, "bind: Join Forest Btn tapped")
             }
         }
     }

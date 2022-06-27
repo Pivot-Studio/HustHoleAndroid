@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.libbase.util.data.TimeUtil
 
 /**
@@ -151,6 +152,7 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {
         Glide.with(imgView.context)
             .load(it)
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .error(R.drawable.icon)
             .into(imgView)
     }

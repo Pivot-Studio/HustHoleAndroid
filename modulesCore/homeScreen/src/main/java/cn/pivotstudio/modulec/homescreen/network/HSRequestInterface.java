@@ -2,6 +2,7 @@ package cn.pivotstudio.modulec.homescreen.network;
 
 import java.util.List;
 
+import cn.pivotstudio.modulec.homescreen.model.DetailForestHole;
 import cn.pivotstudio.modulec.homescreen.model.ForestCard;
 import cn.pivotstudio.modulec.homescreen.model.ForestCardList;
 import cn.pivotstudio.modulec.homescreen.model.ForestHead;
@@ -66,7 +67,7 @@ public interface HSRequestInterface {
             @Query("start_id") int startId,
             @Query("list_size") int listSize,
             @Query("is_last_reply") Boolean isLastReply
-            );
+    );
 
     @GET("forests/joined?")
     Observable<ForestHeads> searchForestHeads(
@@ -81,9 +82,21 @@ public interface HSRequestInterface {
     );
 
     @GET("forests/type/{forest_type}")
-    Observable<ForestCardList> searchForestByType(@Path("forest_type") String type,
-                                                  @Query("start_id") int startId,
-                                                  @Query("list_size") int listSize
-                                                      );
+    Observable<ForestCardList> searchForestByType(
+            @Path("forest_type") String type,
+            @Query("start_id") int startId,
+            @Query("list_size") int listSize
+    );
 
+    @GET("forests/{forest_id}/holes")
+    Observable<List<DetailForestHole>> searchDetailForestHolesByForestId(
+            @Path("forest_id") int forestId,
+            @Query("start_id") int startId,
+            @Query("list_size") int listSize
+    );
+
+    @GET("forests/detail/{forest_id}")
+    Observable<ForestCardList> searchDetailForestOverviewByForestId(
+            @Path("forest_id") int forestId
+    );
 }
