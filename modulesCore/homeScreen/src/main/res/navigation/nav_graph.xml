@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_forest_fragment_to_all_forest_fragment"
             app:destination="@id/all_forest_fragment" />
+        <action
+            android:id="@+id/action_forest_fragment_to_forest_detail_fragment"
+            app:destination="@id/forest_detail_fragment" />
     </fragment>
 
     <fragment

@@ -330,6 +330,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_applyforest.xml" value="0.27853260869565216" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_cropoblongpicture.xml" value="0.286231884057971" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_croppicture.xml" value="0.27853260869565216" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/activity_detail_forest.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_detailforest.xml" value="0.27853260869565216" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_detailupdate.xml" value="0.27853260869565216" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_email_how_to.xml" value="0.27853260869565216" />
@@ -337,7 +338,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_email_verify1.xml" value="0.27853260869565216" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_email_verify2.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_hole_star.xml" value="0.28229166666666666" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/activity_hs_homescreen.xml" value="0.25" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/activity_hs_homescreen.xml" value="0.165" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_rules.xml" value="0.286231884057971" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_screen.xml" value="0.286231884057971" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_hole.xml" value="0.28229166666666666" />
