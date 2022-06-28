@@ -37,7 +37,7 @@ class AllForestAdapter(
             oldItem: Pair<String, ForestCardList>,
             newItem: Pair<String, ForestCardList>
         ): Boolean {
-            return oldItem.second == newItem.second
+            return false
         }
 
     }

@@ -41,6 +41,7 @@
                         android:layout_marginStart="@dimen/dp_12"
                         android:background="@drawable/forest_button_white"
                         android:text="申请新建"
+                        android:visibility="gone"
                         android:textColor="@color/HH_BandColor_3"
                         android:textSize="13sp"
                         app:layout_constraintBottom_toBottomOf="parent"

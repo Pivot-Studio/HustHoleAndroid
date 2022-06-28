@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHeadBinding;
 import cn.pivotstudio.modulec.homescreen.model.ForestHead;
-import cn.pivotstudio.modulec.homescreen.model.ForestResponse;
 
 /**
  * @classname: ForestHeadAdapter

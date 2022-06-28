@@ -2,6 +2,7 @@ package cn.pivotstudio.modulec.homescreen.viewmodel;
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cn.pivotstudio.modulec.homescreen.model.ForestHead
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
 
 class ForestDetailViewModel(val forestId: Int) : ViewModel() {
@@ -21,6 +22,17 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     fun loadOverviewByForestId(forestId: Int) {
         repository.loadOverviewByForestId(forestId)
+    }
+
+    fun checkIfJoinedTheForest(forestsJoined: List<ForestHead>) {
+
+        overview.value?.let { overview ->
+            forestsJoined.forEach {
+                if (it.forestId == overview.forestId)
+                    overview.Joined = true
+            }
+        }
+
     }
 
 }

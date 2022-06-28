@@ -64,6 +64,7 @@ class HomeScreenActivity : BaseActivity() {
      * 视图初始化
      */
     private fun initView() {
+
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -136,7 +137,7 @@ class HomeScreenActivity : BaseActivity() {
     /**
      * 监听点击事件
      */
-    fun onClick(v: View) {
+    fun jumpToPublishHoleByARouter(v: View) {
         val id = v.id
         if (id == R.id.fab_homescreen_publishhole) {
             if (BuildConfig.isRelease) {

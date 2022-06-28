@@ -12,7 +12,8 @@ data class ForestCard(
     @field:SerializedName("hole_number") val holeNumber: Int,
     @field:SerializedName("joined_number") val joinedNumber: Int,
     @field:SerializedName("last_active_time") val lastActiveTime: String,
-    @field:SerializedName("name") val name: String
+    @field:SerializedName("name") val name: String,
+    var Joined: Boolean = false
 )
 
 data class ForestCardList(

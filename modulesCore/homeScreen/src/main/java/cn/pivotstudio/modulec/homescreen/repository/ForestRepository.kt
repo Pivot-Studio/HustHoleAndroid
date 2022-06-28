@@ -18,6 +18,11 @@ enum class LoadStatus { LOADING, ERROR, DONE }
 class ForestRepository {
     private var _holeState: ForestHoleStatus? = null
     private var _headState: ForestHeadStatus? = null
+    private var _forestHoles = MutableLiveData<List<ForestHole>>()
+    private var _forestHeads = MutableLiveData<ForestHeads>()
+
+    val forestHeads = _forestHeads
+    val forestHoles = _forestHoles
     val state: LoadStatus
         get() {
             if (_holeState == ForestHoleStatus.LOADING && _headState == ForestHeadStatus.LOADING)
@@ -28,13 +33,6 @@ class ForestRepository {
 
             return LoadStatus.LOADING
         }
-
-
-    private var _forestHoles = MutableLiveData<List<ForestHole>>()
-    private var _forestHeads = MutableLiveData<ForestHeads>()
-
-    val forestHeads = _forestHeads
-    val forestHoles = _forestHoles
 
     fun loadForestHoles() {
         _holeState = ForestHoleStatus.LOADING

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel" />
@@ -91,13 +90,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/text_forest_detail_follow_msg" />
 
 
-            <Button
+            <ToggleButton
                 android:id="@+id/btn_forest_detail_join"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_32"
                 android:layout_marginEnd="@dimen/dp_20"
-                android:background="@drawable/forest_button"
-                android:text="加入"
+                android:background="@drawable/detail_forest_join_button"
+                android:checked="@{viewModel.overview.joined}"
+                android:textOn="已加入"
+                android:textOff="加入"
+                android:textSize="@dimen/sp_16"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/text_forest_detail_title"
                 app:layout_constraintEnd_toEndOf="parent"

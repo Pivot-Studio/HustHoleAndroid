@@ -82,13 +82,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_item_all_forest_follow_msg" />
 
-        <Button
+        <!--        后端返回数据没有"是否加入"，所以这里就暂时不显示加入按钮，而且个人感觉，这个界面加合格按钮很没必要 from mhh-->
+        <ToggleButton
             android:id="@+id/btn_join_forest"
             android:layout_width="@dimen/dp_68"
             android:layout_height="@dimen/dp_32"
             android:layout_marginEnd="@dimen/dp_10"
             android:layout_marginBottom="@dimen/dp_10"
-            android:background="@drawable/forest_button_white"
+            android:visibility="gone"
+            android:background="@drawable/detail_forest_join_button"
+            android:checked="@{forestCard.joined}"
             android:textSize="@dimen/sp_13"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/text_forest_overview" />
