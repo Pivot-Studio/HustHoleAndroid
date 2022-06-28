@@ -63,7 +63,7 @@
         android:layout_marginEnd="@dimen/dp_22"
         android:layout_marginBottom="@dimen/dp_30"
         android:backgroundTint="@color/HH_BandColor_1"
-        android:onClick="onClick"
+        android:onClick="jumpToPublishHoleByARouter"
         app:borderWidth="0.0dip"
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"

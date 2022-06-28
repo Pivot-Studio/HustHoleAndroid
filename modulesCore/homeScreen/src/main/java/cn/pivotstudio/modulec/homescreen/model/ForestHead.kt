@@ -9,7 +9,7 @@ data class ForestHead(
     @field:SerializedName("forest_id") val forestId: Int,
     @field:SerializedName("hole_number") val holeNumber: Int,
     @field:SerializedName("joined_number") val joinedNumber: Int,
-    @field:SerializedName("last_active_time") val lastActiveTime: Any,
+    @field:SerializedName("last_active_time") val lastActiveTime: String,
     @field:SerializedName("name") val name: String
 )
 

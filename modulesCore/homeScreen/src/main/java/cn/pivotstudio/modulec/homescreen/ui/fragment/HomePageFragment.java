@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -19,24 +18,18 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.libbase.base.model.HoleReturnInfo;
+import com.example.libbase.base.ui.fragment.BaseFragment;
 import com.example.libbase.constant.Constant;
 import com.example.libbase.constant.RequestCodeConstant;
 import com.example.libbase.constant.ResultCodeConstant;
-import com.example.libbase.base.ui.fragment.BaseFragment;
-import com.example.libbase.base.model.HoleReturnInfo;
 import com.example.libbase.util.ui.EditTextUtil;
-
-
 import cn.pivotstudio.modulec.homescreen.R;
-
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter;
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader;
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomepageBinding;
-
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
-import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel;
 import cn.pivotstudio.modulec.homescreen.ui.adapter.HoleRecyclerViewAdapter;
+import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel;
 
 /**
  * @classname:HomePageFragment

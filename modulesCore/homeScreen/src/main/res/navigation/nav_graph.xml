@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_forest_fragment_to_all_forest_fragment"
             app:destination="@id/all_forest_fragment" />
+        <action
+            android:id="@+id/action_forest_fragment_to_forest_detail_fragment"
+            app:destination="@id/forest_detail_fragment" />
     </fragment>
 
     <fragment
@@ -44,27 +47,18 @@
         <action
             android:id="@+id/action_all_forest_fragment_to_forest_fragment"
             app:destination="@id/forest_fragment" />
-        <argument
-            android:name="showBottomBar"
-            app:argType="boolean"
-            android:defaultValue="false" />
     </fragment>
 
     <fragment
         android:id="@+id/forest_detail_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment"
         android:label=""
-        tools:layout="@layout/fragment_forest_detail" >
+        tools:layout="@layout/fragment_forest_detail">
         <action
             android:id="@+id/action_forest_detail_fragment_to_forest_fragment"
             app:destination="@id/forest_fragment" />
         <argument
-            android:name="title"
-            app:argType="string"
-            android:defaultValue="xxx" />
-        <argument
-            android:name="showBottomBar"
-            app:argType="boolean"
-            android:defaultValue="false" />
+            android:name="forestId"
+            app:argType="integer" />
     </fragment>
 </navigation>

@@ -2,9 +2,13 @@ package cn.pivotstudio.modulec.homescreen.network;
 
 import java.util.List;
 
+import cn.pivotstudio.modulec.homescreen.model.DetailForestHole;
+import cn.pivotstudio.modulec.homescreen.model.ForestCard;
+import cn.pivotstudio.modulec.homescreen.model.ForestCardList;
 import cn.pivotstudio.modulec.homescreen.model.ForestHead;
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads;
 import cn.pivotstudio.modulec.homescreen.model.ForestHole;
+import cn.pivotstudio.modulec.homescreen.model.ForestTypes;
 import io.reactivex.Observable;
 import retrofit2.Response;
 import retrofit2.http.DELETE;
@@ -63,7 +67,7 @@ public interface HSRequestInterface {
             @Query("start_id") int startId,
             @Query("list_size") int listSize,
             @Query("is_last_reply") Boolean isLastReply
-            );
+    );
 
     @GET("forests/joined?")
     Observable<ForestHeads> searchForestHeads(
@@ -72,9 +76,27 @@ public interface HSRequestInterface {
     );
 
     @GET("forests/types?")
-    Observable<List<String>> searchForestTypes(
+    Observable<ForestTypes> searchForestTypes(
             @Query("start_id") int startId,
             @Query("list_size") int listSize
     );
 
+    @GET("forests/type/{forest_type}")
+    Observable<ForestCardList> searchForestByType(
+            @Path("forest_type") String type,
+            @Query("start_id") int startId,
+            @Query("list_size") int listSize
+    );
+
+    @GET("forests/{forest_id}/holes")
+    Observable<List<DetailForestHole>> searchDetailForestHolesByForestId(
+            @Path("forest_id") int forestId,
+            @Query("start_id") int startId,
+            @Query("list_size") int listSize
+    );
+
+    @GET("forests/detail/{forest_id}")
+    Observable<ForestCardList> searchDetailForestOverviewByForestId(
+            @Path("forest_id") int forestId
+    );
 }

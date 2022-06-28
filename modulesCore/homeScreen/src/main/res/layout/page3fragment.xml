@@ -25,7 +25,7 @@
         android:background="@color/GrayScale_100"
         app:layout_constraintTop_toTopOf="parent"
         android:clickable="true"
-        android:onClick="onClick"
+        android:onClick="jumpToPublishHoleByARouter"
         android:visibility="visible">
 
         <View

@@ -17,7 +17,7 @@
         android:layout_height="@dimen/dp_54"
         android:layout_weight="1.0"
         android:elevation="@dimen/dp_32"
-        android:onClick="onClick">
+        android:onClick="jumpToPublishHoleByARouter">
 
         <TextView
             android:id="@+id/tv_homescreen_homepagename"
@@ -49,7 +49,7 @@
         android:layout_height="@dimen/dp_54"
         android:layout_weight="1.0"
         android:elevation="@dimen/dp_32"
-        android:onClick="onClick">
+        android:onClick="jumpToPublishHoleByARouter">
 
         <ImageView
             android:id="@+id/iv_homescreen_foresticon"
@@ -86,7 +86,7 @@
         android:layout_height="@dimen/dp_54"
         android:layout_weight="1.0"
         android:elevation="@dimen/dp_32"
-        android:onClick="onClick">
+        android:onClick="jumpToPublishHoleByARouter">
 
         <ImageView
             android:id="@+id/iv_homescreen_messageicon"
@@ -118,7 +118,7 @@
         android:layout_height="@dimen/dp_54"
         android:layout_weight="1.0"
         android:elevation="@dimen/dp_32"
-        android:onClick="onClick">
+        android:onClick="jumpToPublishHoleByARouter">
 
         <ImageView
             android:id="@+id/iv_homescreen_mineicon"

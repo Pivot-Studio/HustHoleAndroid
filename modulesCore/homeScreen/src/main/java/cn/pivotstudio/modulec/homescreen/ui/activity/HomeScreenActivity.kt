@@ -3,6 +3,7 @@ package cn.pivotstudio.modulec.homescreen.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -63,7 +64,7 @@ class HomeScreenActivity : BaseActivity() {
      * 视图初始化
      */
     private fun initView() {
-        StatusBarCompat.setStatusBarColor(this, resources.getColor(R.color.HH_BandColor_1), true)
+
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -71,12 +72,24 @@ class HomeScreenActivity : BaseActivity() {
         navController.addOnDestinationChangedListener { _, destination, argument ->
             supportActionBar?.title = destination.label
 
+            // BottomNavigationBar显示情况特判
             binding?.apply {
                 layoutBottomBar.isVisible =
                     (destination.id != R.id.all_forest_fragment && destination.id != R.id.forest_detail_fragment)
+
                 bottomNavigationView.setupWithNavController(navController)
-                bottomAppBar.background = null;
+                bottomAppBar.background = null
             }
+
+            // ActionBar显示情况特判
+            supportActionBar?.let {
+                if (destination.id == R.id.forest_detail_fragment) {
+                    it.hide()
+                } else {
+                    it.show()
+                }
+            }
+
         }
 
     }
@@ -124,7 +137,7 @@ class HomeScreenActivity : BaseActivity() {
     /**
      * 监听点击事件
      */
-    fun onClick(v: View) {
+    fun jumpToPublishHoleByARouter(v: View) {
         val id = v.id
         if (id == R.id.fab_homescreen_publishhole) {
             if (BuildConfig.isRelease) {
