@@ -134,15 +134,13 @@ public class HomePageViewModel extends BaseViewModel {
         if (id == R.id.cl_itemhomepage_thumbup) {//点击点赞
             Boolean isThunbup = dataBean.getIs_thumbup();
             Integer thumbupNum = dataBean.getThumbup_num();
-            mHomePageHoleRepository.thumbupForNetwork(holeId, thumbupNum, isThunbup, dataBean);
+            mHomePageHoleRepository.giveALikeToAHole(holeId, thumbupNum, isThunbup, dataBean);
         } else if (id == R.id.cl_itemhomepage_reply) {//点击回复
             if (BuildConfig.isRelease) {
                 ARouter.getInstance().build("/hole/HoleActivity")
                         .withInt(Constant.HOLE_ID, holeId)
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
                         .navigation();
-            } else {
-                //测试阶段不可跳转
             }
         } else if (id == R.id.cl_itemhomepage_follow) {//点击收藏
             Boolean isFollow = dataBean.getIs_follow();

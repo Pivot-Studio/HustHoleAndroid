@@ -10,6 +10,7 @@ import cn.pivotstudio.modulec.homescreen.model.ForestHeads;
 import cn.pivotstudio.modulec.homescreen.model.ForestHole;
 import cn.pivotstudio.modulec.homescreen.model.ForestTypes;
 import io.reactivex.Observable;
+import kotlinx.coroutines.flow.Flow;
 import retrofit2.Response;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
@@ -99,4 +100,5 @@ public interface HSRequestInterface {
     Observable<ForestCardList> searchDetailForestOverviewByForestId(
             @Path("forest_id") int forestId
     );
+
 }

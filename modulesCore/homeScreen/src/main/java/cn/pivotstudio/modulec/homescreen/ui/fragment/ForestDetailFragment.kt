@@ -10,12 +10,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestDetailBinding
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestDetailAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModelFactory
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
+import com.alibaba.android.arouter.launcher.ARouter
+import com.example.libbase.constant.Constant
 
 class ForestDetailFragment : Fragment() {
 
@@ -47,7 +50,10 @@ class ForestDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
-        val adapter = ForestDetailAdapter()
+        val adapter = ForestDetailAdapter(
+            ::navToSpecificHole,
+            ::navToSpecificHoleWithReply
+        )
         binding.recyclerViewForestDetail.adapter = adapter
         viewModel.holes.observe(viewLifecycleOwner) {
             adapter.submitList(it)
@@ -58,6 +64,26 @@ class ForestDetailFragment : Fragment() {
             }
         }
 
+    }
+
+    // 点击文字内容跳转到树洞
+    private fun navToSpecificHole(holeId: Int) {
+        if (BuildConfig.isRelease) {
+            ARouter.getInstance().build("/hole/HoleActivity")
+                .withInt(Constant.HOLE_ID, holeId)
+                .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                .navigation(requireActivity(), 1)
+        }
+    }
+
+    // 点击恢复图标跳转到树洞后自动打开软键盘
+    private fun navToSpecificHoleWithReply(holeId: Int) {
+        if (BuildConfig.isRelease) {
+            ARouter.getInstance().build("/hole/HoleActivity")
+                .withInt(Constant.HOLE_ID, holeId)
+                .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
+                .navigation()
+        }
     }
 
 }

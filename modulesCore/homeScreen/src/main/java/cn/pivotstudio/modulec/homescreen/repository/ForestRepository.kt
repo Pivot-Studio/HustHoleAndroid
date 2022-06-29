@@ -4,9 +4,15 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
+import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
+import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
+import cn.pivotstudio.modulec.homescreen.network.MsgResponse
+import com.example.libbase.constant.Constant
+import io.reactivex.Observable
+import kotlinx.coroutines.flow.*
 
 const val TAG = "ForestRepositoryDebug"
 
@@ -67,6 +73,33 @@ class ForestRepository {
             }))
     }
 
+    fun giveALikeToTheHole(hole: ForestHole) {
+        hole.let {
+            val observable: Observable<MsgResponse> = if (!it.liked) {
+                retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + it.holeId + "/-1")
+            } else {
+                retrofitService.deleteThumbups(Constant.BASE_URL + "thumbups/" + it.holeId + "/-1")
+            }
+            observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse?>() {
+                override fun onSuccess(msg: MsgResponse?) {
+                    if (it.liked) {
+                        it.likeNum -= 1
+                    } else {
+                        it.likeNum += 1
+                    }
+                    it.liked = !it.liked
+                }
+
+                override fun onFailure(e: Throwable) {
+                    e.printStackTrace()
+                }
+            }))
+        }
+    }
+
+    fun unLikeTheHole(id: Int) {
+
+    }
 
 
     companion object {

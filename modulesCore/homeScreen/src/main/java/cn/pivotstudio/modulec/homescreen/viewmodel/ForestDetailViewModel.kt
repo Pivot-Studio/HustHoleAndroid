@@ -25,7 +25,6 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
     }
 
     fun checkIfJoinedTheForest(forestsJoined: List<ForestHead>) {
-
         overview.value?.let { overview ->
             forestsJoined.forEach {
                 if (it.forestId == overview.forestId)
@@ -38,7 +37,7 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 }
 
 class ForestDetailViewModelFactory(private val forestId: Int) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ForestDetailViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ForestDetailViewModel(forestId) as T

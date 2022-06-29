@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -16,7 +17,10 @@ import cn.pivotstudio.modulec.homescreen.model.ForestHole
  * @author: mhh
  */
 class ForestHoleAdapter(
-    val navToAHoleById: (Int) -> Unit
+    val onContentClick: (Int) -> Unit,
+    val onReplyIconClick: (Int) -> Unit,
+    val onAvatarClick: (Int) -> Unit,
+    val giveALike: (ForestHole) -> Unit
 ) : ListAdapter<ForestHole, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestHoleViewHolder {
         return ForestHoleViewHolder(
@@ -31,15 +35,32 @@ class ForestHoleAdapter(
     override fun onBindViewHolder(holder: ForestHoleViewHolder, position: Int) {
         val forestHole = getItem(position)
         holder.bind(forestHole)
-        holder.itemView.setOnClickListener { navToAHoleById(forestHole.holeId) }
     }
 
     inner class ForestHoleViewHolder(private val binding: ItemForestBinding) :
         RecyclerView.ViewHolder(
             binding.root
         ) {
-        fun bind(forestHole: ForestHole?) {
+
+        fun bind(forestHole: ForestHole) {
             binding.forestHole = forestHole
+            binding.apply {
+                layoutItemForestReply.setOnClickListener {
+                    onReplyIconClick(forestHole.holeId)
+                }
+
+                textItemForestContent.setOnClickListener {
+                    onContentClick(forestHole.holeId)
+                }
+
+                imageItemForestAvatar.setOnClickListener {
+                    onAvatarClick(forestHole.forestId)
+                }
+
+                layoutItemForestThumbsUp.setOnClickListener {
+                    giveALike(forestHole)
+                }
+            }
         }
     }
 
@@ -51,7 +72,9 @@ class ForestHoleAdapter(
                 }
 
                 override fun areContentsTheSame(oldItem: ForestHole, newItem: ForestHole): Boolean {
-                    return oldItem.content == newItem.content
+                    return oldItem.liked == newItem.liked &&
+                            oldItem.followed == newItem.followed &&
+                            oldItem.replyNum == newItem.replyNum
                 }
             }
     }
