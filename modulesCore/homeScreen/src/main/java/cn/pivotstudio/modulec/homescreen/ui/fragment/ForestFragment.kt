@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
+import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
+import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
-import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHeadAdapter
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
@@ -41,14 +41,18 @@ class ForestFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        initRefresh()
+
         binding.viewModel = viewModel
+
         // 初始化两个RecyclerView
         binding.apply {
             val holeAdapter = ForestHoleAdapter(
                 onContentClick = ::navToSpecificHole,
                 onReplyIconClick = ::navToSpecificHoleWithReply,
                 onAvatarClick = ::navToSpecificForest,
-                giveALike = ::giveALikeToAHole
+                giveALike = ::giveALikeToTheHole
             )
 
             recyclerViewForestHoles.adapter = holeAdapter
@@ -67,6 +71,16 @@ class ForestFragment : BaseFragment() {
             }
         }
     }
+
+
+
+
+
+
+
+
+
+
 
     /**
      * 利用 Navigation 导航到 AllForestFragment
@@ -106,7 +120,23 @@ class ForestFragment : BaseFragment() {
     }
 
     // 点赞
-    private fun giveALikeToAHole(hole: ForestHole) {
-        hole.likeNum = hole.likeNum + 1
+    private fun giveALikeToTheHole(holeId: Int) {
+        viewModel.giveALikeToTheHole(holeId)
+    }
+
+    // 基本上从HomePageFragment复制过来的代码，没有深入研究
+    private fun initRefresh() {
+        binding.refreshLayout.setRefreshHeader(StandardRefreshHeader(activity)) //设置自定义刷新头
+        binding.refreshLayout.setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
+        binding.refreshLayout.setOnRefreshListener { refreshlayout ->  //下拉刷新触发
+            viewModel.loadHolesAndHeads()
+        }
+        binding.refreshLayout.setOnLoadMoreListener { refreshlayout ->  //上拉加载触发
+            if (viewModel.forestHoles.value == null || viewModel.forestHeads.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
+                viewModel.loadHolesAndHeads()
+            } else {
+                viewModel.loadMoreForestHoles()
+            }
+        }
     }
 }

@@ -1,6 +1,5 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -20,7 +19,7 @@ class ForestHoleAdapter(
     val onContentClick: (Int) -> Unit,
     val onReplyIconClick: (Int) -> Unit,
     val onAvatarClick: (Int) -> Unit,
-    val giveALike: (ForestHole) -> Unit
+    val giveALike: (Int) -> Unit
 ) : ListAdapter<ForestHole, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestHoleViewHolder {
         return ForestHoleViewHolder(
@@ -58,7 +57,8 @@ class ForestHoleAdapter(
                 }
 
                 layoutItemForestThumbsUp.setOnClickListener {
-                    giveALike(forestHole)
+                    giveALike(forestHole.holeId)
+                    notifyItemChanged(adapterPosition)
                 }
             }
         }

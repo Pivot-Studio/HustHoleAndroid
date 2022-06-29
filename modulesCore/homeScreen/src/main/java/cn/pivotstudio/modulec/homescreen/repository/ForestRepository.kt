@@ -1,6 +1,7 @@
 package cn.pivotstudio.modulec.homescreen.repository
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
@@ -26,6 +27,7 @@ class ForestRepository {
     private var _headState: ForestHeadStatus? = null
     private var _forestHoles = MutableLiveData<List<ForestHole>>()
     private var _forestHeads = MutableLiveData<ForestHeads>()
+    private var lastStartId = STARTING_ID
 
     val forestHeads = _forestHeads
     val forestHoles = _forestHoles
@@ -56,6 +58,24 @@ class ForestRepository {
             }))
     }
 
+    fun loadMoreForestHoles() {
+        retrofitService
+            .searchForestHoles(lastStartId + HOLES_LIST_SIZE, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
+                override fun onSuccess(result: List<ForestHole>) {
+                    val newItems = forestHoles.value!!.toMutableList()
+                    newItems.addAll(result)
+                    forestHoles.value = newItems
+                    lastStartId += HOLES_LIST_SIZE
+                }
+
+                override fun onFailure(e: Throwable?) {
+                    e?.printStackTrace()
+                }
+
+            }))
+    }
+
     fun loadForestHeads() {
         _headState = ForestHeadStatus.LOADING
         HomeScreenNetworkApi.retrofitService
@@ -80,14 +100,9 @@ class ForestRepository {
             } else {
                 retrofitService.deleteThumbups(Constant.BASE_URL + "thumbups/" + it.holeId + "/-1")
             }
-            observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse?>() {
-                override fun onSuccess(msg: MsgResponse?) {
-                    if (it.liked) {
-                        it.likeNum -= 1
-                    } else {
-                        it.likeNum += 1
-                    }
-                    it.liked = !it.liked
+            observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                override fun onSuccess(msg: MsgResponse) {
+                    Log.d(TAG, "onSuccess: ${msg.msg}")
                 }
 
                 override fun onFailure(e: Throwable) {
@@ -96,11 +111,6 @@ class ForestRepository {
             }))
         }
     }
-
-    fun unLikeTheHole(id: Int) {
-
-    }
-
 
     companion object {
         const val STARTING_ID = 0

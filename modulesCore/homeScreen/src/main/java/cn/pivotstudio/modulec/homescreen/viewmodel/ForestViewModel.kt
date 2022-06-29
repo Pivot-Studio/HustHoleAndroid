@@ -39,13 +39,22 @@ class ForestViewModel : ViewModel() {
         }
     }
 
-    fun giveALikeToAHole(hole: ForestHole) {
-        repository.giveALikeToTheHole(hole)
+    fun loadMoreForestHoles() {
+        repository.loadMoreForestHoles()
     }
 
-    fun unLikeTheHole(holeId: Int) {
+    fun giveALikeToTheHole(holeId: Int) {
+        val hole = repository.forestHoles.value?.first {
+            it.holeId == holeId
+        }
 
+        hole?.run {
+            repository.giveALikeToTheHole(this)
+            if (liked)
+                likeNum -= 1
+            else
+                likeNum += 1
+            liked = !liked
+        }
     }
-
-
 }
