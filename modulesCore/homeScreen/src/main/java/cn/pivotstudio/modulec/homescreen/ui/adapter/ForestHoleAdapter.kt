@@ -19,7 +19,8 @@ class ForestHoleAdapter(
     val onContentClick: (Int) -> Unit,
     val onReplyIconClick: (Int) -> Unit,
     val onAvatarClick: (Int) -> Unit,
-    val giveALike: (Int) -> Unit
+    val giveALike: (Int) -> Unit,
+    val follow: (Int) -> Unit
 ) : ListAdapter<ForestHole, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestHoleViewHolder {
         return ForestHoleViewHolder(
@@ -58,6 +59,11 @@ class ForestHoleAdapter(
 
                 layoutItemForestThumbsUp.setOnClickListener {
                     giveALike(forestHole.holeId)
+                    notifyItemChanged(adapterPosition)
+                }
+
+                layoutItemForestFollow.setOnClickListener {
+                    follow(forestHole.holeId)
                     notifyItemChanged(adapterPosition)
                 }
             }

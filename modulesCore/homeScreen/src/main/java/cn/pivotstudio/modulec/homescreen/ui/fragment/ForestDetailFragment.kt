@@ -51,8 +51,10 @@ class ForestDetailFragment : Fragment() {
         binding.viewModel = viewModel
 
         val adapter = ForestDetailAdapter(
-            ::navToSpecificHole,
-            ::navToSpecificHoleWithReply
+            onContentClick = ::navToSpecificHole,
+            onReplyIconClick = ::navToSpecificHoleWithReply,
+            giveALike = ::giveALikeToTheHole,
+            follow = ::followTheHole
         )
         binding.recyclerViewForestDetail.adapter = adapter
         viewModel.holes.observe(viewLifecycleOwner) {
@@ -84,6 +86,16 @@ class ForestDetailFragment : Fragment() {
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
                 .navigation()
         }
+    }
+
+    // 点赞
+    private fun giveALikeToTheHole(holeId: Int) {
+        viewModel.giveALikeToTheHole(holeId)
+    }
+
+    // 关注/收藏
+    private fun followTheHole(holeId: Int) {
+        viewModel.followTheHole(holeId)
     }
 
 }

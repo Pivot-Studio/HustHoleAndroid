@@ -10,7 +10,9 @@ import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
 
 class ForestDetailAdapter(
     val onContentClick: (Int) -> Unit,
-    val onReplyIconClick: (Int) -> Unit
+    val onReplyIconClick: (Int) -> Unit,
+    val giveALike: (Int) -> Unit,
+    val follow: (Int) -> Unit
 ) : ListAdapter<DetailForestHole, ForestDetailAdapter.DetailViewHolder>(
     DIFF_CALLBACK
 ) {
@@ -46,6 +48,16 @@ class ForestDetailAdapter(
 
                 layoutForestDetailReply.setOnClickListener {
                     onReplyIconClick(hole.holeId)
+                }
+
+                layoutForestDetailThumbup.setOnClickListener {
+                    giveALike(hole.holeId)
+                    notifyItemChanged(adapterPosition)
+                }
+
+                layoutForestDetailFollow.setOnClickListener {
+                    follow(hole.holeId)
+                    notifyItemChanged(adapterPosition)
                 }
             }
         }

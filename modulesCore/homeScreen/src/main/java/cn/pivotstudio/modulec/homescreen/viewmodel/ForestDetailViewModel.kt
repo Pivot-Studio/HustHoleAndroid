@@ -34,6 +34,37 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     }
 
+    fun giveALikeToTheHole(holeId: Int) {
+        val hole = repository.holes.value?.first {
+            it.holeId == holeId
+        }
+
+        hole?.run {
+            repository.giveALikeToTheHole(this)
+            if (liked)
+                likeNum -= 1
+            else
+                likeNum += 1
+            liked = !liked
+        }
+    }
+
+    fun followTheHole(holeId: Int) {
+        val hole = repository.holes.value?.first {
+            it.holeId == holeId
+        }
+
+        hole?.run {
+            repository.followTheHole(this)
+            if (followed)
+                followNum -= 1
+            else
+                followNum += 1
+            followed = !followed
+        }
+
+    }
+
 }
 
 class ForestDetailViewModelFactory(private val forestId: Int) : ViewModelProvider.Factory {

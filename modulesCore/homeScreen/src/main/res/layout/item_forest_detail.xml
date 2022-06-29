@@ -50,12 +50,13 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_detail_thumbup"
+                thumbupIcon="@{hole.liked}"
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_20"
                 android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@mipmap/inactive" />
+                tools:srcCompat="@mipmap/inactive" />
 
             <TextView
                 android:id="@+id/text_item_forest_detail_thumbup_num"
@@ -79,6 +80,7 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_detail_reply"
+                replyIcon="@{hole.replied}"
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_16"
                 android:layout_marginBottom="@dimen/dp_12"
@@ -108,6 +110,7 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_detail_follow"
+                followIcon="@{hole.followed}"
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_16"
                 android:layout_marginBottom="@dimen/dp_12"

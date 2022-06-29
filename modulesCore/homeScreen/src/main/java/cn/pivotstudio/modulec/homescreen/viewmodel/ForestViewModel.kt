@@ -57,4 +57,20 @@ class ForestViewModel : ViewModel() {
             liked = !liked
         }
     }
+
+    fun followTheHole(holeId: Int) {
+        val hole = repository.forestHoles.value?.first {
+            it.holeId == holeId
+        }
+
+        hole?.run {
+            repository.followTheHole(this)
+            if (followed)
+                followNum -= 1
+            else
+                followNum += 1
+            followed = !followed
+        }
+
+    }
 }

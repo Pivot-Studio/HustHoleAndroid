@@ -5,7 +5,6 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
-import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
@@ -106,15 +105,35 @@ class ForestRepository {
                 }
 
                 override fun onFailure(e: Throwable) {
-                    e.printStackTrace()
+                    Log.d(TAG, "点赞失败")
                 }
             }))
         }
     }
 
+    fun followTheHole(hole: ForestHole) {
+        hole.let {
+            val observable: Observable<MsgResponse> = if (!it.followed) {
+                retrofitService.follow(Constant.BASE_URL + "follows/" + hole.holeId)
+            } else {
+                retrofitService.deleteFollow(Constant.BASE_URL + "follows/" + hole.holeId)
+            }
+            observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                override fun onSuccess(msg: MsgResponse) {
+                    Log.d(TAG, "onSuccess: ${msg.msg}")
+                }
+
+                override fun onFailure(e: Throwable) {
+                    Log.d(TAG, "关注失败")
+                }
+            }))
+        }
+
+    }
+
     companion object {
         const val STARTING_ID = 0
-        const val HOLES_LIST_SIZE = 10
+        const val HOLES_LIST_SIZE = 20
         const val HEADS_LIST_SIZE = 20
         const val SORT_BY_LATEST_REPLY = true
     }

@@ -52,7 +52,8 @@ class ForestFragment : BaseFragment() {
                 onContentClick = ::navToSpecificHole,
                 onReplyIconClick = ::navToSpecificHoleWithReply,
                 onAvatarClick = ::navToSpecificForest,
-                giveALike = ::giveALikeToTheHole
+                giveALike = ::giveALikeToTheHole,
+                follow = ::followTheHole
             )
 
             recyclerViewForestHoles.adapter = holeAdapter
@@ -122,6 +123,11 @@ class ForestFragment : BaseFragment() {
     // 点赞
     private fun giveALikeToTheHole(holeId: Int) {
         viewModel.giveALikeToTheHole(holeId)
+    }
+
+    // 关注/收藏
+    private fun followTheHole(holeId: Int) {
+        viewModel.followTheHole(holeId)
     }
 
     // 基本上从HomePageFragment复制过来的代码，没有深入研究
