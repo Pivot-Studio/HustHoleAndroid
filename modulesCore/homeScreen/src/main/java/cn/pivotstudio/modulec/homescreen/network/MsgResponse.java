@@ -8,6 +8,7 @@ package cn.pivotstudio.modulec.homescreen.network;
  * @author:
  */
 public class MsgResponse {
+
     String msg;
     
     public String getMsg() {

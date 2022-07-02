@@ -75,7 +75,6 @@ public class HomePageHoleRepository {
                             homepageHoleResponse.setData(requestedDataList);
                             homepageHoleResponse.setModel("REFRESH");
                             pHomePageHoles.setValue(homepageHoleResponse);
-
                         }
                     }
 
