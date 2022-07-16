@@ -32,9 +32,9 @@
 
     <fragment
         android:id="@+id/mine_fragment"
-        android:name="cn.pivotstudio.modulec.homescreen.oldversion.fragment.MineFragment"
+        android:name="cn.pivotstudio.modulec.homescreen.oldversion.fragment.TryMine.MyFragment"
         android:label="@string/mine_zh"
-        tools:layout="@layout/page4fragment" />
+        tools:layout="@layout/fragment_my" />
 
     <fragment
         android:id="@+id/all_forest_fragment"
