@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="arcHeight" format="dimension"/>
+    <declare-styleable name="ArcView">
+        <attr name="arcHeight"/>
+        <attr name="bgColor" format="color"/>
+    </declare-styleable>
+    <declare-styleable name="ArcImageView">
+        <attr name="arcHeight"/>
+    </declare-styleable>
+
+
+    <declare-styleable name="EmojiBoard">
+        <attr name="deleteIcon" format="reference" />
+        <attr name="emojiIndicator" format="reference" />
+        <attr name="emojiIndicatorHover" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="Emojicon">
+        <attr name="emojiSize" format="dimension" />
+        <attr name="emojiAlignment" format="enum">
+            <enum name="bottom" value="0" />
+            <enum name="baseline" value="1" />
+        </attr>
+        <attr name="emojiTextStart" format="integer" />
+        <attr name="emojiTextLength" format="integer" />
+        <attr name="emojiUseSystemDefault" format="boolean" />
+    </declare-styleable>
+</resources>

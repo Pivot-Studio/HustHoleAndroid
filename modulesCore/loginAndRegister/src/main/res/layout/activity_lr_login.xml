@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/Background_GrayScale_100">
+
+    <include
+        android:id="@+id/include_titlebar_white"
+        layout="@layout/titlebar_lr_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <EditText
+        android:id="@+id/et_login_emailhead"
+        android:layout_width="@dimen/dp_311"
+        android:layout_height="@dimen/dp_56"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/dp_41"
+        android:background="@drawable/lr_et_corner"
+        android:textColorHint="@color/GrayScale_50"
+        android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        android:hint="@string/register_2"
+        android:importantForAutofill="no"
+        android:maxLength="14"
+        android:textSize="@dimen/sp_14"
+        android:inputType="none"
+        android:maxLines="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_login_title" />
+
+    <TextView
+        android:id="@+id/tv_login_suffix"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_20"
+        android:layout_marginEnd="20dp"
+        android:text="@string/register_3"
+        android:textColor="@color/Title_GrayScale_20"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toBottomOf="@+id/et_login_emailhead"
+        app:layout_constraintEnd_toEndOf="@+id/et_login_emailhead"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/et_login_emailhead"
+        app:layout_constraintTop_toTopOf="@+id/et_login_emailhead"
+        app:layout_constraintVertical_bias="0.512" />
+
+    <TextView
+        android:id="@+id/tv_login_jumptoforgetpassword"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_30"
+        android:text="@string/register_6"
+        android:onClick="onClick"
+        android:textColor="@color/HH_Reminder_Link"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/et_login_password"
+        app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
+
+    <TextView
+        android:id="@+id/tv_login_warn"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_5"
+        android:text="@string/register_5"
+        android:textColor="@color/HH_Reminder_Warning"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/et_login_password"
+        app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
+
+    <TextView
+        android:id="@+id/tv_login_jumptocheckemail"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_30"
+        android:text="@string/register_7"
+        android:onClick="onClick"
+        android:textColor="@color/HH_Reminder_Link"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/et_login_password"
+        app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
+
+
+    <EditText
+        android:id="@+id/et_login_password"
+        android:layout_width="@dimen/dp_311"
+        android:layout_height="@dimen/dp_56"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/lr_et_corner"
+        android:textColorHint="@color/GrayScale_50"
+        android:maxLines="1"
+        android:hint="@string/register_4"
+        android:textSize="@dimen/sp_14"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_login_emailhead" />
+    <ImageView
+        android:id="@+id/iv_login_visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:onClick="onClick"
+        app:layout_constraintBottom_toBottomOf="@+id/et_login_password"
+        app:layout_constraintEnd_toEndOf="@+id/et_login_password"
+        app:layout_constraintTop_toTopOf="@+id/et_login_password"
+        app:srcCompat="@drawable/checkbox_true"
+        android:contentDescription="TODO" />
+    <TextView
+        android:id="@+id/tv_login_title"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_26"
+        android:text="@string/register_1"
+        android:textColor="@color/Title_GrayScale_20"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.1246" />
+
+    <Button
+        android:id="@+id/btn_login_jumptohomescreen"
+        android:layout_width="@dimen/dp_311"
+        android:layout_height="@dimen/dp_56"
+        android:layout_marginTop="@dimen/dp_70"
+        android:text="@string/register_8"
+        android:background="@drawable/standard_button_gray"
+        android:textColor="@color/Button_GrayScale_100"
+        android:onClick="onClick"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/et_login_password"
+        app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

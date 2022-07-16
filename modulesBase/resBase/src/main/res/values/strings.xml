@@ -1,0 +1,139 @@
+<resources>
+
+    <string name="default_string_en">Hust Hole</string>
+    <string name="default_string_zh_short">1037树洞</string>
+    <string name="default_string_zh_long">1037树洞1037洞1037树洞10371037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞1037树洞</string>
+    <string name="default_string_number_short">1037</string>
+    <string name="default_string_number_long">1037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037103710371037</string>
+
+    <string name="hust_hole_1037_zh">1037树洞</string>
+    <string name="homepage_2">叮~来自1037树洞的悄悄话！</string>
+    <string name="homepage_3">知道啦</string>
+    <string name="forest_zh">小树林</string>
+    <string name="notification_zh">通知</string>
+    <string name="mine_zh">我的</string>
+
+
+
+    <string name="page1fragment_1">搜搜你想倾听的</string>
+    <string name="page1fragment_2">树洞广场</string>
+    <string name="page1fragment_3">关注</string>
+    <string name="page1fragment_4">推荐</string>
+    <string name="page1fragment_5">最新评论</string>
+    <string name="page1fragment_6">最新发布</string>
+
+    <string name="page3fragment_1">系统通知</string>
+    <string name="page3fragment_2">还没有通知噢...</string>
+    
+    <string name="publishmessage_1">发树洞</string>
+    <string name="publishmessage_2">发布</string>
+    <string name="publishmessage_3">来，说点什么吧</string>
+
+    <string name="forum_1">洞主</string>
+    <string name="forum_2">全部评论</string>
+    
+
+    <string name="page2fragment_1">加入的小树林</string>
+    <string name="page2fragment_2">发现更多</string>
+
+
+    <string name="page2_allforests_1">发现小树林</string>
+    <string name="page2_allforests_2">欢迎来到小树林！</string>
+    <string name="page2_allforests_3">小树林是聚集相同类型树洞的兴趣圈子。加入喜欢的小树林来倾诉你的思绪吧！</string>
+
+    <string name="page2_detailforest_1">最新</string>
+
+    <string name="forest_quit_notice_1">退出小树林</string>
+    <string name="forest_quit_notice_2">你确认要退出小树林？</string>
+    <string name="forest_quit_notice_3">取消</string>
+    <string name="forest_quit_notice_4">确认</string>
+
+    <string name="page2_applyforest_1">申请小树林</string>
+    <string name="page2_applyforest_2">没有找到想要加入的小树林？来向1037树洞运营组提交你的灵感吧！在你提交申请之后的七天内，我们会评估小树林是否可以被创建，并将结果通过系统通知告诉你。通过阅读小树林公约可以提高你申请的通过率噢~</string>
+    <string name="page2_applyforest_3">小树林名称</string>
+    <string name="page2_applyforest_4">输入小树林名称</string>
+    <string name="page2_applyforest_5">*字数超过限制，请控制在10个字以内</string>
+    <string name="page2_applyforest_6">小树林简介</string>
+    <string name="page2_applyforest_7">输入小树林简介</string>
+    <string name="page2_applyforest_8">说明：小树林简介用于阐释小树林的定位，引导树洞内容创作方向。请用简练的语言进行描述，不超过40字。</string>
+    <string name="page2_applyforest_9">*字数超过限制，请控制在40个字以内</string>
+    <string name="page2_applyforest_10">小树林图标</string>
+    <string name="page2_applyforest_11">小树林封面</string>
+    <string name="page2_applyforest_12">添加封面图片</string>
+    <string name="page2_applyforest_13">提交</string>
+
+
+    <string name="commment_1">洞主</string>
+    <string name="commment_2">全部评论</string>
+
+    <string name="publishhole_1">发树洞</string>
+    <string name="publishhole_2">未选择小树林</string>
+    <string name="publishhole_3">发布</string>
+    <string name="publishhole_4">让树洞倾听你的声音...</string>
+
+    <string name="publishhole_popupwindow_1">选择小树林</string>
+    <string name="publishhole_popupwindow_2">不选择任何小树林</string>
+    <string name="publishhole_popupwindow_3">选择</string>
+    <string name="publishhole_popupwindow_4">加入的小树林</string>
+    <string name="publishhole_popupwindow_5">热门小树林</string>
+
+
+    <string name="retrieve_password_vcode_1">输入验证码</string>
+    <string name="retrieve_password_vcode_2">验证邮件已经发送至u202054321&#064;hust.edu.cn</string>
+    <string name="retrieve_password_vcode_3">输入验证码</string>
+    <string name="retrieve_password_vcode_4">下一步</string>
+    <string name="retrieve_password_vcode_5">未收到验证码？</string>
+    <string name="retrieve_password_vcode_6">50s</string>
+    <string name="retrieve_password_vcode_7">后重新发送</string>
+
+    <string name="retrieve_password_modify_1">输入新密码</string>
+    <string name="retrieve_password_modify_2">输入密码</string>
+    <string name="retrieve_password_modify_3">完成</string>
+    <string name="retrieve_password_modify_4">密码不合规范，需6-16个字符</string>
+
+
+    <string name="network_thumbupfailure_">点赞失败，请检查网络</string>
+    <string name="network_followfailure_">关注失败，请检查网络</string>
+    <string name="network_searchfailure_">搜索失败，请检查网络</string>
+    <string name="network_notthumbupfailure_">取消点赞失败，请检查网络</string>
+    <string name="network_notfollowfailure_">取消关注失败，请检查网络</string>
+    <string name="network_loadfailure">加载失败，请检查网络</string>
+    <string name="network_loadeverthing">已经到底辣</string>
+    <string name="network_joinfailture">加入失败，请检查网络</string>
+    <string name="network_quitfailture">退出失败，请检查网络</string>
+    <string name="network_sendfailture">发送失败，请检查网络</string>
+    <string name="network_deletefailture">删除失败，请检查网络</string>
+    <string name="network_reportfailture">举报失败，请检查网络</string>
+    <string name="network_unknownfailture">未知错误</string>
+
+    <string name="network_loginfailure">登录失败，请检查网络</string>
+    <string name="network_failure">请检查网络</string>
+
+    <string name="tv_myHoles">我的树洞</string>
+    <string name="tv_myFollows">我的关注</string>
+    <string name="tv_myReply">我的评论</string>
+    <string name="个人设置">个人设置</string>
+    <string name="韵酒蛋包饭">韵酒蛋包饭</string>
+    <string name="分享">分享</string>
+    <string name="分享到">分享到</string>
+    <string name="share_to">分享到</string>
+    <string name="store">保存</string>
+    <string name="校园邮箱">校园邮箱</string>
+    <string name="HUST校园邮箱使用指南">HUST校园邮箱使用指南</string>
+    <string name="tv_1">如果您在注册1037树洞时对HUST校园邮箱的使用方式存疑，请阅读本指南。</string>
+    <string name="tv_2">一、登录华中大校园邮箱</string>
+    <string name="tv_3">方法一： 每位同学在入校注册后，将会自动获得一个以学号为用户名的电子邮箱，密码缺省为考生编号后八位（即校园网密码） ，可直接用于登录华中大校园邮箱： https://mail.hust.edu.cn/</string>
+    <string name="tv_4">方法二： 选择通过华中大统一身份认证登录： https://pass.hust.edu.cn/cas/login?service=https%3A%2F%2Fmail.hust.edu.cn%2Fsso%2Findex.jsp</string>
+
+    <string name="chip_1">1</string>
+    <string name="chip_2">2</string>
+    <string name="chip_3">3</string>
+    <string name="chip_4">4</string>
+    <string name="chip_5">5</string>
+    <string name="chip_6">6</string>
+    <string name="chip_7">7</string>
+    <string name="chip_8">8</string>
+    <string name="chip_9">9</string>
+    <string name="chip_10">10</string>
+    <string name="all_forest_zh">所有小树林</string>
+</resources>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <!--主页面布局-->
+
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navGraph="@navigation/nav_graph" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/layout_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_homescreen_publishhole"
+                android:layout_width="@dimen/dp_49"
+                android:layout_height="@dimen/dp_49"
+                android:layout_marginBottom="27dp"
+                android:backgroundTint="@color/HH_BandColor_1"
+                android:contentDescription="@string/publishhole_1"
+                android:onClick="jumpToPublishHoleByARouter"
+                android:src="@drawable/add"
+                app:layout_anchor="@id/bottom_app_bar" />
+
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/bottom_app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:elevation="@{0.0f}"
+                app:fabCradleMargin="@dimen/dp_10"
+                app:fabCradleRoundedCornerRadius="@dimen/dp_35">
+
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottom_navigation_view"
+                    style="@style/BottomNavigationBarTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_54"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:menu="@menu/bottom_navigation_menu" />
+            </com.google.android.material.bottomappbar.BottomAppBar>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

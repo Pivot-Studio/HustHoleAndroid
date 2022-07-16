@@ -1,0 +1,27 @@
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+        jcenter() // Warning: this repository is going to shut down soon
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+rootProject.name = "HustHole"
+include ':app'
+include ':modulesBase:libBase'
+include ':modulesCore:homeScreen'
+
+
+include ':modulesCore:loginAndRegister'
+include ':modulesBase:networkBase'
+
+include ':modulesBase:resBase'
+include ':modulesBase:dataBase'
+
+
+include ':modulesPublic:hole'
+include ':modulesPublic:publishHole'
+
+include ':modulesPublic:report'

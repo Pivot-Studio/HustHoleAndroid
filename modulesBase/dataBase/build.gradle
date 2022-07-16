@@ -1,0 +1,54 @@
+plugins {
+    id 'com.android.library'
+   // id 'dagger.hilt.android.plugin'
+}
+
+
+android {
+    compileSdkVersion androidID.compileSdkVersion
+    defaultConfig {
+        minSdkVersion androidID.minSdkVersion
+        targetSdkVersion androidID.targetSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        customDebugType {
+        }
+    }
+    dataBinding {
+        enabled = true
+
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+}
+
+dependencies {
+
+    //Room 支持RxJava2
+    implementation "androidx.room:room-rxjava2:$room_version"
+    //rxjava
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
+    //Room数据库
+    api "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    api 'com.tencent:mmkv:1.2.13'//腾讯MMKV
+
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    implementation 'com.google.code.gson:gson:2.9.0'
+
+}

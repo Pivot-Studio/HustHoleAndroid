@@ -1,0 +1,20 @@
+遗留下来的老代码，修改请慎重
+
+小树林重构时可重复利用的layout：
+activity_allforest.xml 所有小树林界面
+activity_applyforest.xml 申请小树林界面
+activity_cropoblongpicture.xml 截屏界面
+activity_croppicture.xml
+activity_detailforest.xml 具体小树林界面
+
+dialog_forestquitnotice.xml 小树林取消收藏的dialog
+
+item_allforesthead.xml 所有小树林的头部item
+item_allforesticon.xml 所有小树林界面中单个小树林的item
+item_detailforest.xml 具体小树林的树洞item
+item_detailforesthead.xml  具体小树林的头部item
+
+item_foresttype.xml
+
+titlebar_centergreen.xml 申请小树林的顶部栏
+titlebar_transparent.xml 具体小树林的透明顶部栏

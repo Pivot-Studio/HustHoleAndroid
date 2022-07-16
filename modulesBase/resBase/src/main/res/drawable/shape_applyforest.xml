@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--分支-->
+<!--正常白色绿框按钮-->
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 内部颜色 -->
+    <solid
+        android:color="@color/GrayScale_100" android:state_pressed="false"/>
+
+    <corners
+        android:topLeftRadius="28dip"
+        android:topRightRadius="28dip"
+       />
+</shape>

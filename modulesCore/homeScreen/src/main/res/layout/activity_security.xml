@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/GrayScale_95">
+    <LinearLayout
+        android:id="@+id/security_bar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@color/HH_BandColor_1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/security_img"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_centerInParent="true"
+            android:scaleType="center"
+            android:background="@drawable/back_green"
+            android:clickable="true"
+            app:srcCompat="@drawable/back_black" />
+        <TextView
+            android:id="@+id/security_title"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:gravity="center"
+            android:text="隐私安全"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="18sp" />
+    </LinearLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/security_bar"
+        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_30"
+            android:paddingStart="@dimen/dp_15"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center_vertical"
+            android:textColor="@color/GrayScale_50"
+            android:background="@color/GrayScale_95"
+            android:text="安全"/>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tv1"
+            android:paddingHorizontal="@dimen/dp_15"
+            android:background="@color/GrayScale_100">
+            <TextView
+                android:id="@+id/tv2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/dp_15"
+                android:textColor="@color/GrayScale_0"
+                android:textSize="@dimen/sp_15"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:text="记录自己的树洞"/>
+            <TextView
+                android:id="@+id/tv3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_15"
+                android:paddingBottom="@dimen/dp_10"
+                app:layout_constraintTop_toBottomOf="@id/tv2"
+                android:textSize="@dimen/sp_12"
+                android:textColor="@color/GrayScale_70"
+                android:text="在此选项关闭期间，新发布的树洞不会显示在“我的树洞”中，并且不会随着再次开启而出现，该树洞被评论时也不会收到通知。" />
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/st_security"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp_16"
+                android:buttonTint="@color/HH_BandColor_3"
+                android:enabled="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+    <!--<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">-->
+    <!--    <PreferenceCategory android:title="安全">-->
+    <!--        <SwitchPreference-->
+    <!--            android:defaultValue="true"-->
+    <!--            android:key="example_switch"-->
+    <!--            android:summary="在此选项关闭期间，新发布的树洞不会显示在“我的树洞”中，并且不会随着再次开启而出现，该树洞被评论时也不会收到通知。"-->
+    <!--            android:title="记录自己的树洞" />-->
+    <!--    </PreferenceCategory>-->
+    <!--</PreferenceScreen>-->

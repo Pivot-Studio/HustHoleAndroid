@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="cn.pivotstudio.modulep.publishhole">
+
+    <application>
+        <activity
+            android:name=".ui.activity.PublishHoleActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:screenOrientation="portrait">
+        </activity>
+    </application>
+
+</manifest>
