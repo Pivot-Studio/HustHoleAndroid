@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.SimpleItemAnimator
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestDetailBinding
@@ -56,7 +57,10 @@ class ForestDetailFragment : Fragment() {
             giveALike = ::giveALikeToTheHole,
             follow = ::followTheHole
         )
-        binding.recyclerViewForestDetail.adapter = adapter
+        binding.apply {
+            recyclerViewForestDetail.adapter = adapter
+            (recyclerViewForestDetail.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+        }
         viewModel.holes.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.libbase.util.data.TimeUtil
+import com.example.libbase.util.ui.GlideBlurTransformation
 
 /**
  * 点赞按钮
@@ -153,6 +154,18 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
         Glide.with(imgView.context)
             .load(it)
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            .error(R.drawable.icon)
+            .into(imgView)
+    }
+}
+
+@BindingAdapter("blurImageUrl")
+fun bindBlurImage(imgView: ImageView, imgUrl: String?) {
+    imgUrl?.let {
+        Glide.with(imgView.context)
+            .load(it)
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            .transform(GlideBlurTransformation(imgView.context))
             .error(R.drawable.icon)
             .into(imgView)
     }

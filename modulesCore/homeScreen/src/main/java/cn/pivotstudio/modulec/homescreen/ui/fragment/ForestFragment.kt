@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation.findNavController
+import androidx.recyclerview.widget.SimpleItemAnimator
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
@@ -45,6 +46,7 @@ class ForestFragment : BaseFragment() {
         initRefresh()
 
         binding.viewModel = viewModel
+        binding.lifecycleOwner = viewLifecycleOwner
 
         // 初始化两个RecyclerView
         binding.apply {
@@ -60,6 +62,8 @@ class ForestFragment : BaseFragment() {
             this@ForestFragment.viewModel.forestHoles.observe(viewLifecycleOwner) {
                 holeAdapter.submitList(it)
             }
+
+            (recyclerViewForestHoles.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
 
             val headAdapter = ForestHeadAdapter(::navToSpecificForest)
             recyclerViewForestHead.adapter = headAdapter
