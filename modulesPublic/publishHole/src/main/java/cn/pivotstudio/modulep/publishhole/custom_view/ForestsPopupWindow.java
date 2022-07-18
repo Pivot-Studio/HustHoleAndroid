@@ -104,7 +104,11 @@ public class ForestsPopupWindow extends PopupWindow {
     private void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_publishholeforests_chooseforest) {
-            PublishHoleViewModel publishHoleViewModel = new ViewModelProvider((PublishHoleActivity) context, new ViewModelProvider.NewInstanceFactory()).get(PublishHoleViewModel.class);
+            PublishHoleViewModel publishHoleViewModel = new ViewModelProvider(
+                    (PublishHoleActivity) context,
+                    new ViewModelProvider.NewInstanceFactory()
+            )
+                    .get(PublishHoleViewModel.class);
             publishHoleViewModel.setForestId(0);
             publishHoleViewModel.pForestName.setValue("未选择任何小树林");
             dismiss();

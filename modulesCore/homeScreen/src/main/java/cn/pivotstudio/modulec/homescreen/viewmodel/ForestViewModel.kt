@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.modulec.homescreen.repository.ForestHoleStatus
 import cn.pivotstudio.modulec.homescreen.repository.ForestRepository
+import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 
 /**
  * @classname ForestViewModel
@@ -18,6 +20,8 @@ class ForestViewModel : ViewModel() {
 
     val forestHoles: LiveData<List<ForestHole>> = repository.forestHoles
     val forestHeads: LiveData<ForestHeads> = repository.forestHeads
+
+    val loadState: LiveData<LoadStatus> = repository.state
 
     init {
         loadHolesAndHeads()

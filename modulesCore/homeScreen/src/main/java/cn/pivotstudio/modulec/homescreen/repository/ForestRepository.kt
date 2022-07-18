@@ -22,42 +22,35 @@ enum class LoadStatus { LOADING, ERROR, DONE }
 
 @SuppressLint("CheckResult")
 class ForestRepository {
-    private var _holeState: ForestHoleStatus? = null
-    private var _headState: ForestHeadStatus? = null
+    private var _holeState = MutableLiveData<LoadStatus>()
     private var _forestHoles = MutableLiveData<List<ForestHole>>()
     private var _forestHeads = MutableLiveData<ForestHeads>()
     private var lastStartId = STARTING_ID
 
     val forestHeads = _forestHeads
     val forestHoles = _forestHoles
-    val state: LoadStatus
-        get() {
-            if (_holeState == ForestHoleStatus.LOADING && _headState == ForestHeadStatus.LOADING)
-                return LoadStatus.DONE
+    val state = _holeState
 
-            if (_holeState == ForestHoleStatus.ERROR || _headState == ForestHeadStatus.ERROR)
-                return LoadStatus.ERROR
-
-            return LoadStatus.LOADING
-        }
 
     fun loadForestHoles() {
-        _holeState = ForestHoleStatus.LOADING
-        HomeScreenNetworkApi.retrofitService
+        _holeState.value = LoadStatus.LOADING
+        retrofitService
             .searchForestHoles(STARTING_ID, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
                 override fun onSuccess(items: List<ForestHole>) {
-                    _holeState = ForestHoleStatus.DONE
                     forestHoles.value = items
+                    lastStartId = STARTING_ID
+                    _holeState.value = LoadStatus.DONE
                 }
 
                 override fun onFailure(e: Throwable?) {
-                    _holeState = ForestHoleStatus.ERROR
+                    _holeState.value = LoadStatus.ERROR
                 }
             }))
     }
 
     fun loadMoreForestHoles() {
+        _holeState.value = LoadStatus.LOADING
         retrofitService
             .searchForestHoles(lastStartId + HOLES_LIST_SIZE, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
@@ -66,27 +59,26 @@ class ForestRepository {
                     newItems.addAll(result)
                     forestHoles.value = newItems
                     lastStartId += HOLES_LIST_SIZE
+                    _holeState.value = LoadStatus.DONE
                 }
 
                 override fun onFailure(e: Throwable?) {
                     e?.printStackTrace()
+                    _holeState.value = LoadStatus.ERROR
                 }
 
             }))
     }
 
     fun loadForestHeads() {
-        _headState = ForestHeadStatus.LOADING
-        HomeScreenNetworkApi.retrofitService
+        retrofitService
             .searchForestHeads(STARTING_ID, HEADS_LIST_SIZE)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<ForestHeads>() {
                 override fun onSuccess(items: ForestHeads?) {
-                    _headState = ForestHeadStatus.DONE
                     forestHeads.value = items
                 }
 
                 override fun onFailure(e: Throwable?) {
-                    _headState = ForestHeadStatus.ERROR
                 }
 
             }))

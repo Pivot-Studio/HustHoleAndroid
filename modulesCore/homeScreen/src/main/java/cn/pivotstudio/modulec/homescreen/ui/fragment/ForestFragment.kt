@@ -13,6 +13,7 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
+import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHeadAdapter
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
@@ -63,7 +64,8 @@ class ForestFragment : BaseFragment() {
                 holeAdapter.submitList(it)
             }
 
-            (recyclerViewForestHoles.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            (recyclerViewForestHoles.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+                false
 
             val headAdapter = ForestHeadAdapter(::navToSpecificForest)
             recyclerViewForestHead.adapter = headAdapter
@@ -74,17 +76,18 @@ class ForestFragment : BaseFragment() {
             if (forestFragment == null) {
                 this.forestFragment = this@ForestFragment
             }
+
+        }
+        viewModel.loadState.observe(viewLifecycleOwner) {
+            when (it) {
+                LoadStatus.DONE ->
+                    finishRefreshAnim()
+                LoadStatus.ERROR ->
+                    finishRefreshAnim()
+                else -> {}
+            }
         }
     }
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -140,13 +143,22 @@ class ForestFragment : BaseFragment() {
         binding.refreshLayout.setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
         binding.refreshLayout.setOnRefreshListener { refreshlayout ->  //下拉刷新触发
             viewModel.loadHolesAndHeads()
+            binding.recyclerViewForestHoles.setOnTouchListener { v, event -> true }
         }
         binding.refreshLayout.setOnLoadMoreListener { refreshlayout ->  //上拉加载触发
             if (viewModel.forestHoles.value == null || viewModel.forestHeads.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
                 viewModel.loadHolesAndHeads()
+                binding.recyclerViewForestHoles.setOnTouchListener { v, event -> true }
             } else {
                 viewModel.loadMoreForestHoles()
+                binding.recyclerViewForestHoles.setOnTouchListener { v, event -> true }
             }
         }
+    }
+
+    private fun finishRefreshAnim() {
+        binding.refreshLayout.finishRefresh() //结束下拉刷新动画
+        binding.refreshLayout.finishLoadMore() //结束上拉加载动画
+        binding.recyclerViewForestHoles.setOnTouchListener { v, event -> false } //加载结束后允许滑动
     }
 }
