@@ -124,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="@{String.valueOf(hole.likeNum), default = @string/default_string_number_short}"
+                android:text="@{String.valueOf(hole.followNum), default = @string/default_string_number_short}"
                 android:textColor="@color/GrayScale_70"
                 android:textSize="@dimen/sp_11"
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_detail_follow"
