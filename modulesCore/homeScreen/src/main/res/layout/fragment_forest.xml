@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="forestFragment"
             type="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment" />
+
         <variable
             name="viewModel"
             type="cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel" />
@@ -80,10 +82,10 @@
                             android:layout_marginEnd="@dimen/dp_12"
                             android:contentDescription="@string/page2fragment_2"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/ic_forward_arrow"
                             app:layout_constraintBottom_toBottomOf="@id/text_forest_head_jump_to_all_forest"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/text_forest_head_jump_to_all_forest" />
+                            app:layout_constraintTop_toTopOf="@id/text_forest_head_jump_to_all_forest"
+                            app:srcCompat="@drawable/ic_forward_arrow" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

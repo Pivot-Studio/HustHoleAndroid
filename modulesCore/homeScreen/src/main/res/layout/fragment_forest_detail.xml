@@ -30,7 +30,7 @@
 
             <ImageView
                 android:id="@+id/forest_detail_upper_background"
-                imageUrl="@{viewModel.overview.coverUrl}"
+                blurImageUrl="@{viewModel.overview.coverUrl}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/default_string_zh_long"
@@ -118,12 +118,13 @@
             tools:listitem="@layout/item_forest_detail" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_publish_hole_from_forest"
             android:layout_width="@dimen/dp_49"
             android:layout_height="@dimen/dp_49"
             android:layout_margin="@dimen/dp_22"
             android:backgroundTint="@color/HH_BandColor_1"
             android:contentDescription="@string/description_publish_hole"
-            android:src="@drawable/add"
+            app:srcCompat="@drawable/add"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 

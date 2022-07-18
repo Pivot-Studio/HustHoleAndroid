@@ -25,7 +25,6 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
     }
 
     fun checkIfJoinedTheForest(forestsJoined: List<ForestHead>) {
-
         overview.value?.let { overview ->
             forestsJoined.forEach {
                 if (it.forestId == overview.forestId)
@@ -35,10 +34,41 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     }
 
+    fun giveALikeToTheHole(holeId: Int) {
+        val hole = repository.holes.value?.first {
+            it.holeId == holeId
+        }
+
+        hole?.run {
+            repository.giveALikeToTheHole(this)
+            if (liked)
+                likeNum -= 1
+            else
+                likeNum += 1
+            liked = !liked
+        }
+    }
+
+    fun followTheHole(holeId: Int) {
+        val hole = repository.holes.value?.first {
+            it.holeId == holeId
+        }
+
+        hole?.run {
+            repository.followTheHole(this)
+            if (followed)
+                followNum -= 1
+            else
+                followNum += 1
+            followed = !followed
+        }
+
+    }
+
 }
 
 class ForestDetailViewModelFactory(private val forestId: Int) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ForestDetailViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return ForestDetailViewModel(forestId) as T

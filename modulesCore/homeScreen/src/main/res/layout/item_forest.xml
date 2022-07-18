@@ -24,11 +24,11 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image_item_forest_avatar"
+            imageUrl="@{forestHole.backgroundImageUrl}"
             android:layout_width="@dimen/dp_32"
             android:layout_height="@dimen/dp_32"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginTop="@dimen/dp_12"
-            imageUrl="@{forestHole.backgroundImageUrl}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:shapeAppearance="@style/AvatarRoundedStyle"
@@ -38,8 +38,8 @@
             android:id="@+id/text_item_forest_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
             android:layout_marginStart="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_10"
             android:text="@{forestHole.forestName}"
             android:textColor="@color/GrayScale_50"
             android:textSize="@dimen/sp_13"
@@ -53,11 +53,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_10"
-            android:text="@{forestHole.createdTimestamp}"
+            time="@{forestHole.createdTimestamp}"
+            timeSign="@{false}"
             android:textColor="@color/GrayScale_80"
             android:textSize="@dimen/sp_11"
             app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_avatar"
-            app:layout_constraintStart_toEndOf="@+id/image_item_forest_avatar" />
+            app:layout_constraintStart_toEndOf="@+id/image_item_forest_avatar"
+            tools:text="@string/default_string_number_short" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -70,19 +72,20 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_thumbs_up"
+                thumbupIcon="@{forestHole.liked}"
                 android:layout_width="@dimen/dp_17"
                 android:layout_height="@dimen/dp_20"
                 android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@mipmap/inactive" />
+                tools:src="@mipmap/inactive" />
 
             <TextView
                 android:id="@+id/text_item_forest_thumbs_up_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="@{String.valueOf(forestHole.likeNum)}"
+                android:text="@{String.valueOf(forestHole.likeNum), default = 0}"
                 android:textColor="@color/GrayScale_70"
                 android:textSize="@dimen/sp_11"
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_thumbs_up"
@@ -112,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="@{String.valueOf(forestHole.replyNum)}"
+                android:text="@{String.valueOf(forestHole.replyNum), default = 0}"
                 android:textColor="@color/GrayScale_70"
                 android:textSize="@dimen/sp_11"
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_reply"
@@ -130,20 +133,20 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_follow"
+                followIcon="@{forestHole.followed}"
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_16"
                 android:layout_marginBottom="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@mipmap/inactive_3" />
+                tools:src="@mipmap/inactive_3" />
 
             <TextView
                 android:id="@+id/text_item_forest_follow_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="@{String.valueOf(forestHole.followNum)}"
+                android:text="@{String.valueOf(forestHole.followNum), default = 0}"
                 android:textColor="@color/GrayScale_70"
                 android:textSize="@dimen/sp_11"
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_follow"
@@ -172,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_12"
-            android:text="@{@string/hole_id(forestHole.holeId)}"
+            android:text="@{@string/hole_id(forestHole.holeId), default = @string/hole_id}"
             android:textColor="@color/GrayScale_0"
             android:textSize="@dimen/sp_13"
             android:textStyle="bold"

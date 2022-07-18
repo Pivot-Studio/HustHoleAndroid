@@ -14,6 +14,7 @@ import cn.pivotstudio.modulec.homescreen.databinding.FragmentAllFrorestBinding
 import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 import com.example.libbase.base.ui.fragment.BaseFragment
+import kotlinx.coroutines.delay
 
 const val TAG = "AllForestFragmentDebug"
 

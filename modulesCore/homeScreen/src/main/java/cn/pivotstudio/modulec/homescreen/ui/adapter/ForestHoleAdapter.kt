@@ -16,7 +16,11 @@ import cn.pivotstudio.modulec.homescreen.model.ForestHole
  * @author: mhh
  */
 class ForestHoleAdapter(
-    val navToAHoleById: (Int) -> Unit
+    val onContentClick: (Int) -> Unit,
+    val onReplyIconClick: (Int) -> Unit,
+    val onAvatarClick: (Int) -> Unit,
+    val giveALike: (Int) -> Unit,
+    val follow: (Int) -> Unit
 ) : ListAdapter<ForestHole, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestHoleViewHolder {
         return ForestHoleViewHolder(
@@ -31,15 +35,38 @@ class ForestHoleAdapter(
     override fun onBindViewHolder(holder: ForestHoleViewHolder, position: Int) {
         val forestHole = getItem(position)
         holder.bind(forestHole)
-        holder.itemView.setOnClickListener { navToAHoleById(forestHole.holeId) }
     }
 
     inner class ForestHoleViewHolder(private val binding: ItemForestBinding) :
         RecyclerView.ViewHolder(
             binding.root
         ) {
-        fun bind(forestHole: ForestHole?) {
+
+        fun bind(forestHole: ForestHole) {
             binding.forestHole = forestHole
+            binding.apply {
+                layoutItemForestReply.setOnClickListener {
+                    onReplyIconClick(forestHole.holeId)
+                }
+
+                textItemForestContent.setOnClickListener {
+                    onContentClick(forestHole.holeId)
+                }
+
+                imageItemForestAvatar.setOnClickListener {
+                    onAvatarClick(forestHole.forestId)
+                }
+
+                layoutItemForestThumbsUp.setOnClickListener {
+                    giveALike(forestHole.holeId)
+                    notifyItemChanged(adapterPosition)
+                }
+
+                layoutItemForestFollow.setOnClickListener {
+                    follow(forestHole.holeId)
+                    notifyItemChanged(adapterPosition)
+                }
+            }
         }
     }
 
@@ -51,7 +78,9 @@ class ForestHoleAdapter(
                 }
 
                 override fun areContentsTheSame(oldItem: ForestHole, newItem: ForestHole): Boolean {
-                    return oldItem.content == newItem.content
+                    return oldItem.liked == newItem.liked &&
+                            oldItem.followed == newItem.followed &&
+                            oldItem.replyNum == newItem.replyNum
                 }
             }
     }

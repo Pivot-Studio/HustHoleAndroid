@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,12 +19,14 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.libbase.base.model.HoleReturnInfo;
 import com.example.libbase.base.ui.fragment.BaseFragment;
 import com.example.libbase.constant.Constant;
 import com.example.libbase.constant.RequestCodeConstant;
 import com.example.libbase.constant.ResultCodeConstant;
 import com.example.libbase.util.ui.EditTextUtil;
+
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter;
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader;
@@ -38,7 +41,11 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel;
  * @version:1.0
  * @author:
  */
+
+
 public class HomePageFragment extends BaseFragment {
+    public static final String TAG = "HomePageFragment";
+
     private FragmentHomepageBinding binding;
     private HomePageViewModel mViewModel;
     private HoleRecyclerViewAdapter holeRecyclerViewAdapter;
@@ -52,7 +59,7 @@ public class HomePageFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_homepage, container, false);
-        mViewModel = new ViewModelProvider(this).get(HomePageViewModel.class);
+        mViewModel = new ViewModelProvider(requireActivity()).get(HomePageViewModel.class);
         //
         mViewModel.refreshHoleList(0);//初次加载
         initView();
@@ -88,7 +95,6 @@ public class HomePageFragment extends BaseFragment {
      * 视图初始化
      */
     private void initView() {
-
         EditTextUtil.EditTextSize(binding.etHomepage, new SpannableString(this.getResources().getString(R.string.page1fragment_1)), 12);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -169,9 +175,7 @@ public class HomePageFragment extends BaseFragment {
             }
             finishRefreshAnim();
         });
-        mViewModel.pClickMsg.observe(context, MsgResponse -> {
-            showMsg(MsgResponse.getMsg());
-        });
+        mViewModel.pClickMsg.observe(getViewLifecycleOwner(), MsgResponse -> showMsg(MsgResponse.getMsg()));
         mViewModel.failed.observe(context, s -> {//监听网络请求错误信息变化
             if (binding.recyclerView.getAdapter() == null)
                 binding.recyclerView.setAdapter(holeRecyclerViewAdapter);

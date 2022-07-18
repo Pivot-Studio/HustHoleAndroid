@@ -159,27 +159,27 @@ public class HomePageHoleRepository {
     /**
      * 点赞
      *
-     * @param hole_id     树洞号
-     * @param thumbup_num 网络请求成功前的点赞数量
-     * @param is_thumbup  网络请求成功前是否被点赞
+     * @param holeId     树洞号
+     * @param likeNum 网络请求成功前的点赞数量
+     * @param liked  网络请求成功前是否被点赞
      * @param dataBean    item的所有数据
      */
-    public void thumbupForNetwork(int hole_id, int thumbup_num, boolean is_thumbup, HomepageHoleResponse.DataBean dataBean) {
+    public void giveALikeToAHole(int holeId, int likeNum, boolean liked, HomepageHoleResponse.DataBean dataBean) {
         Observable<MsgResponse> observable;
-        if (!is_thumbup) {
-            observable = HomeScreenNetworkApi.INSTANCE.getRetrofitService().thumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/-1");
+        if (!liked) {
+            observable = HomeScreenNetworkApi.INSTANCE.getRetrofitService().thumbups(Constant.BASE_URL + "thumbups/" + holeId + "/-1");
         } else {
-            observable = HomeScreenNetworkApi.INSTANCE.getRetrofitService().deleteThumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/-1");
+            observable = HomeScreenNetworkApi.INSTANCE.getRetrofitService().deleteThumbups(Constant.BASE_URL + "thumbups/" + holeId + "/-1");
         }
         observable.compose(NetworkApi.applySchedulers(new BaseObserver<MsgResponse>() {
             @Override
             public void onSuccess(MsgResponse msg) {
-                if (is_thumbup) {
-                    dataBean.setThumbup_num(thumbup_num - 1);
+                if (liked) {
+                    dataBean.setThumbup_num(likeNum - 1);
                 } else {
-                    dataBean.setThumbup_num(thumbup_num + 1);
+                    dataBean.setThumbup_num(likeNum + 1);
                 }
-                dataBean.setIs_thumbup(!is_thumbup);
+                dataBean.setIs_thumbup(!liked);
                 pClickMsg.setValue(msg);
             }
 

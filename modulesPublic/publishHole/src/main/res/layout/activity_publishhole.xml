@@ -1,199 +1,202 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/cl_publishhole"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:focusable="true"
-    android:focusableInTouchMode="true">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/cl_publishhole"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_52"
-        android:id="@+id/include_titlebar"
-        android:background="@color/HH_BandColor_1"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_titlebargreen_back"
-            android:layout_width="@dimen/dp_40"
+            android:id="@+id/include_titlebar"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/dp_52"
-            android:layout_centerInParent="true"
-            android:background="@drawable/back_green"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@color/HH_BandColor_1"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/iv_titlebargreen_back"
-                android:layout_width="10dp"
-                android:layout_height="18dp"
-                android:scaleType="fitXY"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cl_titlebargreen_back"
+                android:layout_width="@dimen/dp_40"
+                android:layout_height="@dimen/dp_52"
+                android:layout_centerInParent="true"
+                android:background="@drawable/back_green"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/triangle_4" />
+                app:layout_constraintVertical_bias="1.0">
+
+                <ImageView
+                    android:id="@+id/iv_titlebargreen_back"
+                    android:layout_width="10dp"
+                    android:layout_height="18dp"
+                    android:scaleType="fitXY"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@mipmap/triangle_4" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/titlebargreen_AVLoadingIndicatorView"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                app:indicatorName="BallClipRotateIndicator"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cl_titlebargreen_back"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_titlebargreen_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="加载中..."
+                android:textColor="@color/GrayScale_100"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/titlebargreen_AVLoadingIndicatorView"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.wang.avi.AVLoadingIndicatorView
-            android:id="@+id/titlebargreen_AVLoadingIndicatorView"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_30"
-            app:indicatorName="BallClipRotateIndicator"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/cl_titlebargreen_back"
-            app:layout_constraintTop_toTopOf="parent" />
+
+        <!--    <include-->
+        <!--        android:id="@+id/include_titlebar"-->
+        <!--        layout="@layout/titlebar_green"-->
+        <!--         />-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_publishhole_frame"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include_titlebar">
+
+            <Button
+                android:id="@+id/btn_publishhole_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+
+                android:background="@color/GrayScale_80"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_publishhole_foresticon"
+                android:layout_width="@dimen/dp_16"
+                android:layout_height="@dimen/dp_16"
+                android:layout_marginStart="@dimen/dp_12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/group218" />
+
+            <Button
+                android:id="@+id/btn_publishhole_send"
+                android:layout_width="68dp"
+                android:layout_height="32dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/standard_button_gray"
+                android:onClick="onClick"
+                android:text="@string/publishhole_3"
+                android:textColor="@color/GrayScale_100"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_publishhole_forestname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:onClick="onClick"
+                android:text="@string/publishhole_2"
+                android:textColor="@color/GrayScale_50"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_publishhole_foresticon"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_publishhole_icon"
+                android:layout_width="@dimen/dp_6"
+                android:layout_height="@dimen/dp_10"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_publishhole_forestname"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/back3" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/tv_titlebargreen_title"
+            android:id="@+id/tv_publishhole_strike"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_600"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_publishhole_frame" />
+
+        <EditText
+            android:id="@+id/et_publishhole"
+            android:layout_width="@dimen/dp_350"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="@null"
+            android:gravity="top|left"
+            android:hint="@string/publishhole_4"
+            android:maxLength="1037"
+            android:textColorHint="@color/GrayScale_70"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cl_publishhole_frame" />
+
+        <TextView
+            android:id="@+id/tv_publishhole_textnumber"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="加载中..."
-            android:textColor="@color/GrayScale_100"
-            android:textSize="18sp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="15dp"
+            android:text="0/1037"
+            android:textColor="@color/HH_Reminder_Link"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/titlebargreen_AVLoadingIndicatorView"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_constraintEnd_toEndOf="parent" />
 
-
-<!--    <include-->
-<!--        android:id="@+id/include_titlebar"-->
-<!--        layout="@layout/titlebar_green"-->
-<!--         />-->
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_publishhole_frame"
-        android:layout_width="match_parent"
-        android:layout_height="44dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include_titlebar">
-
-        <Button
-            android:id="@+id/btn_publishhole_line"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-
-            android:background="@color/GrayScale_80"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_publishhole_foresticon"
-            android:layout_width="@dimen/dp_16"
-            android:layout_height="@dimen/dp_16"
-            android:layout_marginStart="@dimen/dp_12"
+        <TextView
+            android:id="@+id/tv_publishhole_pwlocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/group218" />
-
-        <Button
-            android:id="@+id/btn_publishhole_send"
-            android:layout_width="68dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/standard_button_gray"
-            android:text="@string/publishhole_3"
-            android:textColor="@color/GrayScale_100"
-            android:textSize="14sp"
-            android:onClick="onClick"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/et_publishhole"
+            app:layout_constraintVertical_bias="0.349" />
 
         <TextView
-            android:id="@+id/tv_publishhole_forestname"
+            android:id="@+id/tv_limit_bottom"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="@string/publishhole_2"
-            android:onClick="onClick"
-            android:textColor="@color/GrayScale_50"
-            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_publishhole_foresticon"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/head"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/iv_publishhole_icon"
-            android:layout_width="@dimen/dp_6"
-            android:layout_height="@dimen/dp_10"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_publishhole_forestname"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/back3" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <TextView
-        android:id="@+id/tv_publishhole_strike"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_600"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_publishhole_frame" />
-    <EditText
-        android:id="@+id/et_publishhole"
-        android:layout_width="@dimen/dp_350"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_10"
-        android:background="@null"
-        android:gravity="top|left"
-        android:hint="@string/publishhole_4"
-        android:maxLength="1037"
-        android:textSize="14sp"
-        android:textColorHint="@color/GrayScale_70"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cl_publishhole_frame" />
-
-    <TextView
-        android:id="@+id/tv_publishhole_textnumber"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="15dp"
-        android:text="0/1037"
-        android:textColor="@color/HH_Reminder_Link"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_publishhole_pwlocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/et_publishhole"
-        app:layout_constraintVertical_bias="0.349" />
-
-    <TextView
-        android:id="@+id/tv_limit_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/head"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
