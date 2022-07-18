@@ -13,13 +13,10 @@ import java.util.List;
 import java.util.Set;
 
 
-
-
-
 /**
- * @classname:MMKVUtil
+ * @classname: MMKVUtil
  * @description:
- * @date:2022/4/28 19:40
+ * @date: 2022/4/28 19:40
  * @version:1.0
  * @author:
  */
@@ -29,13 +26,13 @@ public class MMKVUtil {
     private static MMKV mmkv;
     private static MMKVUtil mmkvUtil;
 
-    public static MMKVUtil getMMKVUtils(Context context){
-        if(mmkvUtil == null){
-            synchronized (MMKVUtil.class){
-                if(mmkvUtil == null){
+    public static MMKVUtil getMMKVUtils(Context context) {
+        if (mmkvUtil == null) {
+            synchronized (MMKVUtil.class) {
+                if (mmkvUtil == null) {
                     MMKV.initialize(context);
                     mmkv = MMKV.defaultMMKV();
-                    mmkvUtil=new MMKVUtil();
+                    mmkvUtil = new MMKVUtil();
                 }
             }
         }
@@ -135,11 +132,12 @@ public class MMKVUtil {
 
     /**
      * 存放array
+     *
      * @param name
      * @param list
      * @param <T>
      */
-    public <T> void setArray(String name,List<T> list) {
+    public <T> void setArray(String name, List<T> list) {
 
         if (list == null || list.size() == 0) { //清空
             mmkv.putInt(name + "size", 0);
@@ -165,6 +163,7 @@ public class MMKVUtil {
 
     /**
      * 获取存取的array,主要为近期使用表情包服务
+     *
      * @param name
      * @param bean
      * @param <T>
