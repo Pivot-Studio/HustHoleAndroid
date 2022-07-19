@@ -10,18 +10,23 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     val holes = repository.holes
     val overview = repository.overview
+    val state = repository.state
 
     init {
-        loadHolesByForestId(forestId = forestId)
-        loadOverviewByForestId(forestId = forestId)
+        loadHoles()
+        loadOverview()
     }
 
-    fun loadHolesByForestId(forestId: Int) {
+    fun loadHoles() {
         repository.loadHolesByForestId(forestId)
     }
 
-    fun loadOverviewByForestId(forestId: Int) {
+    fun loadOverview() {
         repository.loadOverviewByForestId(forestId)
+    }
+
+    fun loadMore() {
+        repository.loadMoreHolesByForestId(forestId)
     }
 
     fun checkIfJoinedTheForest(forestsJoined: List<ForestHead>) {

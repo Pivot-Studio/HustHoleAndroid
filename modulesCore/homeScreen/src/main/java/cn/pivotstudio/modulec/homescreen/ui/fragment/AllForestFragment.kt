@@ -44,6 +44,13 @@ class AllForestFragment : BaseFragment() {
         }
     }
 
+
+
+
+
+
+
+
     fun navToForestDetail(forestId: Int) {
         val action = AllForestFragmentDirections
             .actionAllForestFragmentToForestDetailFragment(forestId)
