@@ -7,17 +7,12 @@ import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
-import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import com.example.libbase.constant.Constant
 import io.reactivex.Observable
-import kotlinx.coroutines.flow.*
 
-const val TAG = "ForestRepositoryDebug"
 
-enum class ForestHoleStatus { LOADING, ERROR, DONE }
-enum class ForestHeadStatus { LOADING, ERROR, DONE }
 enum class LoadStatus { LOADING, ERROR, DONE }
 
 @SuppressLint("CheckResult")
@@ -124,6 +119,7 @@ class ForestRepository {
     }
 
     companion object {
+        const val TAG = "ForestRepositoryDebug"
         const val STARTING_ID = 0
         const val HOLES_LIST_SIZE = 20
         const val HEADS_LIST_SIZE = 20

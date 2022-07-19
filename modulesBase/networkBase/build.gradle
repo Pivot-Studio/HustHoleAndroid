@@ -33,6 +33,6 @@ android {
 }
 
 dependencies {
-    networkID.each{k,v->api v}
+    networkID.each { k, v -> api v }
     api project(':modulesBase:dataBase')
 }

@@ -38,6 +38,7 @@ class ForestFragment : BaseFragment() {
     ): View {
         binding = DataBindingUtil
             .inflate(inflater, R.layout.fragment_forest, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -46,46 +47,47 @@ class ForestFragment : BaseFragment() {
 
         initRefresh()
 
-        binding.viewModel = viewModel
-        binding.lifecycleOwner = viewLifecycleOwner
+        val holeAdapter = ForestHoleAdapter(
+            onContentClick = ::navToSpecificHole,
+            onReplyIconClick = ::navToSpecificHoleWithReply,
+            onAvatarClick = ::navToSpecificForest,
+            giveALike = ::giveALikeToTheHole,
+            follow = ::followTheHole
+        )
+
+        val headAdapter = ForestHeadAdapter(onItemClick = ::navToSpecificForest)
 
         // 初始化两个RecyclerView
         binding.apply {
-            val holeAdapter = ForestHoleAdapter(
-                onContentClick = ::navToSpecificHole,
-                onReplyIconClick = ::navToSpecificHoleWithReply,
-                onAvatarClick = ::navToSpecificForest,
-                giveALike = ::giveALikeToTheHole,
-                follow = ::followTheHole
-            )
 
             recyclerViewForestHoles.adapter = holeAdapter
-            this@ForestFragment.viewModel.forestHoles.observe(viewLifecycleOwner) {
-                holeAdapter.submitList(it)
+            recyclerViewForestHead.adapter = headAdapter
+            viewModel = this@ForestFragment.viewModel.apply {
+                forestHoles.observe(viewLifecycleOwner) {
+                    holeAdapter.submitList(it)
+                }
+
+                forestHeads.observe(viewLifecycleOwner) {
+                    headAdapter.submitList(it.forests)
+                }
+
+                loadState.observe(viewLifecycleOwner) {
+                    when (it) {
+                        LoadStatus.DONE,
+                        LoadStatus.ERROR ->
+                            finishRefreshAnim()
+                        else -> {}
+                    }
+                }
             }
 
             (recyclerViewForestHoles.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
                 false
 
-            val headAdapter = ForestHeadAdapter(::navToSpecificForest)
-            recyclerViewForestHead.adapter = headAdapter
-            this@ForestFragment.viewModel.forestHeads.observe(viewLifecycleOwner) {
-                headAdapter.submitList(it.forests)
-            }
-
             if (forestFragment == null) {
                 this.forestFragment = this@ForestFragment
             }
 
-        }
-        viewModel.loadState.observe(viewLifecycleOwner) {
-            when (it) {
-                LoadStatus.DONE ->
-                    finishRefreshAnim()
-                LoadStatus.ERROR ->
-                    finishRefreshAnim()
-                else -> {}
-            }
         }
     }
 
@@ -139,19 +141,20 @@ class ForestFragment : BaseFragment() {
 
     // 基本上从HomePageFragment复制过来的代码，没有深入研究
     private fun initRefresh() {
-        binding.refreshLayout.setRefreshHeader(StandardRefreshHeader(activity)) //设置自定义刷新头
-        binding.refreshLayout.setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
-        binding.refreshLayout.setOnRefreshListener { refreshlayout ->  //下拉刷新触发
-            viewModel.loadHolesAndHeads()
-            binding.recyclerViewForestHoles.setOnTouchListener { v, event -> true }
-        }
-        binding.refreshLayout.setOnLoadMoreListener { refreshlayout ->  //上拉加载触发
-            if (viewModel.forestHoles.value == null || viewModel.forestHeads.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
+        binding.refreshLayout.apply {
+            setRefreshHeader(StandardRefreshHeader(activity)) //设置自定义刷新头
+            setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
+            setOnRefreshListener {    //下拉刷新触发
                 viewModel.loadHolesAndHeads()
-                binding.recyclerViewForestHoles.setOnTouchListener { v, event -> true }
-            } else {
-                viewModel.loadMoreForestHoles()
-                binding.recyclerViewForestHoles.setOnTouchListener { v, event -> true }
+                binding.recyclerViewForestHoles.isEnabled = false
+            }
+            setOnLoadMoreListener { refreshlayout ->  //上拉加载触发
+                if (viewModel.forestHoles.value == null || viewModel.forestHeads.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
+                    viewModel.loadHolesAndHeads()
+                } else {
+                    viewModel.loadMoreForestHoles()
+                }
+                binding.recyclerViewForestHoles.isEnabled = false
             }
         }
     }
@@ -159,6 +162,6 @@ class ForestFragment : BaseFragment() {
     private fun finishRefreshAnim() {
         binding.refreshLayout.finishRefresh() //结束下拉刷新动画
         binding.refreshLayout.finishLoadMore() //结束上拉加载动画
-        binding.recyclerViewForestHoles.setOnTouchListener { v, event -> false } //加载结束后允许滑动
+        binding.recyclerViewForestHoles.isEnabled = true //加载结束后允许滑动
     }
 }

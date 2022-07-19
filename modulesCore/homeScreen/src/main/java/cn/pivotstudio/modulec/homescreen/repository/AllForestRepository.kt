@@ -48,8 +48,8 @@ class AllForestRepository {
             .searchForestByType(type, STARTING_ID, CARD_LIST_SIZE)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<ForestCardList>() {
                 override fun onSuccess(items: ForestCardList) {
+                    _forestCards.add(Pair(type, items))
                     _forestCardWithOneType.value = Pair(type, items)
-                    _forestCards.add(_forestCardWithOneType.value!!)
                     Log.d(TAG, "loadForestCards by $type onSuccess: ${items.forests.size}")
                 }
 
@@ -65,5 +65,6 @@ class AllForestRepository {
         const val STARTING_ID = 0
         const val TYPE_LIST_SIZE = 10
         const val CARD_LIST_SIZE = 10
+        const val TAG = "AllForestRepository"
     }
 }

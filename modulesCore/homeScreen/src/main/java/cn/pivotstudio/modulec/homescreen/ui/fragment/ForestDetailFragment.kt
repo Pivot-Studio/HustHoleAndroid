@@ -13,7 +13,11 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.SimpleItemAnimator
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
+import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
+import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestDetailBinding
+import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
+import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestDetailAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModelFactory
@@ -52,6 +56,8 @@ class ForestDetailFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = viewModel
 
+        initRefresh()
+
         val adapter = ForestDetailAdapter(
             onContentClick = ::navToSpecificHole,
             onReplyIconClick = ::navToSpecificHoleWithReply,
@@ -61,7 +67,8 @@ class ForestDetailFragment : BaseFragment() {
 
         binding.apply {
             recyclerViewForestDetail.adapter = adapter
-            (recyclerViewForestDetail.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            (recyclerViewForestDetail.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
+                false
 
             fabPublishHoleFromForest.setOnClickListener {
                 navToPublishHoleFromDetailForest(_args.forestId)
@@ -77,6 +84,17 @@ class ForestDetailFragment : BaseFragment() {
                 viewModel.checkIfJoinedTheForest(this.forests)
             }
         }
+
+        viewModel.state.observe(viewLifecycleOwner) {
+            when (it) {
+                ForestDetailHolesLoadStatus.DONE,
+                ForestDetailHolesLoadStatus.ERROR ->
+                    finishRefreshAnim()
+                else -> {}
+            }
+        }
+
+
 
     }
 
@@ -122,6 +140,33 @@ class ForestDetailFragment : BaseFragment() {
     // 关注/收藏
     private fun followTheHole(holeId: Int) {
         viewModel.followTheHole(holeId)
+    }
+
+    private fun initRefresh() {
+        binding.refreshLayout.apply {
+            setRefreshHeader(StandardRefreshHeader(activity)) //设置自定义刷新头
+            setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
+            setOnRefreshListener {    //下拉刷新触发
+                viewModel.loadHoles()
+                binding.recyclerViewForestDetail.isEnabled = false
+            }
+            setOnLoadMoreListener { refreshlayout ->  //上拉加载触发
+                if (viewModel.holes.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
+                    viewModel.loadHoles()
+                } else {
+                    viewModel.loadMore()
+                }
+                binding.recyclerViewForestDetail.isEnabled = false
+            }
+        }
+    }
+
+    private fun finishRefreshAnim() {
+        binding.apply {
+            refreshLayout.finishRefresh() //结束下拉刷新动画
+            refreshLayout.finishLoadMore() //结束上拉加载动画
+            recyclerViewForestDetail.isEnabled = true //加载结束后允许滑动
+        }
     }
 
 }
