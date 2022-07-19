@@ -1,6 +1,6 @@
 ext {
     isRelease = true
-    isMac = false
+    isMac = true
 
     androidID = [
             compileSdkVersion: 31,
