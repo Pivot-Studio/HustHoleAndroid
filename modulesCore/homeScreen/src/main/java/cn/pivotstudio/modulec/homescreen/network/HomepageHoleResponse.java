@@ -39,6 +39,7 @@ public class HomepageHoleResponse {
     }
 
     public static class DataBean extends BaseObservable implements Serializable {
+
         String content;
         String created_timestamp;
         Integer follow_num;

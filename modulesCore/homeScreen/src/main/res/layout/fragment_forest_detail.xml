@@ -33,6 +33,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/layout_fragment_forest_detail_top"
+
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_120"
                 android:background="@color/GrayScale_70"
@@ -148,4 +149,5 @@
             android:background="@color/GrayScale_95" />
 
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
 </layout>

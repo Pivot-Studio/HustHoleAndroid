@@ -63,6 +63,7 @@ public class MineFragment extends Fragment {
     Retrofit retrofit;
     RequestInterface request;
     String TAG = "isMine";
+    int flag = 0;
 
     public static MineFragment newInstance() {
         return new MineFragment();
@@ -140,11 +141,13 @@ public class MineFragment extends Fragment {
 
         cancel.setOnClickListener(v -> {
             ppwShare.dismiss();
+            flag = 0;
             // ppwBackground.dismiss();
             cancelDarkBackGround();
         });
         shareCard.setOnClickListener(v -> {
             ppwShare.dismiss();
+            flag = 0;
             cancelDarkBackGround();
             Intent intent = new Intent(getActivity(), ShareCardActivity.class);
             startActivity(intent);
@@ -170,7 +173,7 @@ public class MineFragment extends Fragment {
 
                     try {
                         if (response.errorBody() != null) {
-                            // Log.d(TAG,"in error: " + response.errorBody());
+//                             Log.d(TAG,"in error: " + response.errorBody());
                             // Log.d(TAG,"in error: " + response.errorBody().string());
                         }
                         if (response.body() != null) {
@@ -216,7 +219,10 @@ public class MineFragment extends Fragment {
 
     public void onClick(View view) {
         Intent intent;
-        int id = view.getId();
+        int id = 0;
+        if(flag == 0){
+             id = view.getId();
+        }
         if (id == R.id.my_hole) {
             if (CheckingToken.IfTokenExist()) {
                 intent = new Intent(requireActivity().getApplicationContext(), HoleStarReplyActivity.class);
@@ -258,6 +264,7 @@ public class MineFragment extends Fragment {
             intent = new Intent(getActivity().getApplicationContext(), RulesActivity.class);
             startActivity(intent);
         } else if (id == R.id.share) {
+            flag = 1;
             WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
             lp.alpha = 0.6f; // 0.0~1.0
             getActivity().getWindow().setAttributes(lp);

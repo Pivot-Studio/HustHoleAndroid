@@ -7,6 +7,7 @@ import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import com.example.libbase.constant.Constant

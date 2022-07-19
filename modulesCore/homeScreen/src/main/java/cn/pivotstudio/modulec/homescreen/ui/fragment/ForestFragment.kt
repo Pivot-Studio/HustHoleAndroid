@@ -87,7 +87,6 @@ class ForestFragment : BaseFragment() {
             if (forestFragment == null) {
                 this.forestFragment = this@ForestFragment
             }
-
         }
     }
 
@@ -155,6 +154,7 @@ class ForestFragment : BaseFragment() {
                     viewModel.loadMoreForestHoles()
                 }
                 binding.recyclerViewForestHoles.isEnabled = false
+
             }
         }
     }
