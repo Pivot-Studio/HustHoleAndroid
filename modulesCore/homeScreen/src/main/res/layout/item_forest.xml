@@ -106,6 +106,7 @@
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_16"
                 android:layout_marginBottom="12dp"
+                replyIcon="@{forestHole.replied}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@mipmap/inactive_2" />

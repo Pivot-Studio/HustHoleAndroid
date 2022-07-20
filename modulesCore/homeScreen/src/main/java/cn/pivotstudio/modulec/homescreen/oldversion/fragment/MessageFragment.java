@@ -117,13 +117,6 @@ public class MessageFragment extends Fragment {
                 getLatestSystemNotification();
                 getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +
                         "list_size=" + list_size);
-                /*while (!finishRefresh){
-                    if(finishRefresh){
-                        refreshLayout.finishRefresh();
-                        finishRefresh = false;
-                    }
-                    isRefreshing = false;
-                }*/
 
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -144,9 +137,6 @@ public class MessageFragment extends Fragment {
                 refreshlayout.finishRefresh(1500/*,false*/);//传入false表示刷新失败
             } else {
                 refreshLayout.finishRefresh();
-                //  Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
-                //   startActivity(intent);
-
             }
 
         });
@@ -183,8 +173,7 @@ public class MessageFragment extends Fragment {
 
         constraintLayout = rootView.findViewById(R.id.constraintLayout);
         constraintLayout.setOnClickListener(v -> {
-            //  Intent intent = new Intent(getActivity(), SystemNotification.class);
-            //   startActivity(intent);
+
         });
 
         noNotificationImage = rootView.findViewById(R.id.no_notification_image);
@@ -206,7 +195,6 @@ public class MessageFragment extends Fragment {
             adapter.setOnItemClickListener(position -> {
                 if (position > 0) {
                     startHoleActivity(position);
-                    //Toast.makeText(getActivity(), "click " + position, Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(getActivity(), SystemNotification.class);
                     startActivity(intent);
@@ -307,8 +295,6 @@ public class MessageFragment extends Fragment {
 
     public void startHoleActivity(int mPosition) {
         String data_hole_id = myNotificationList.get(mPosition - 1).getHole_id();//position-1是因为SystemNotification为第一个item
-        String[] data = null;
-
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
                     .withInt(Constant.HOLE_ID, Integer.valueOf(data_hole_id))
@@ -317,49 +303,7 @@ public class MessageFragment extends Fragment {
         } else {
             //测试阶段不可跳转
         }
-
-
-//        Intent intent= CommentListActivity.newIntent(getActivity(),data);
-//        intent.putExtra("data_hole_id",data_hole_id);
-//        Log.d(TAG, "startActivity: get data_hole_id = "+data_hole_id);
-//        startActivity(intent);
     }
-
-    //弃
-    /*private void loadData(final String url){
-        new AsyncTask<Void,Void,String>(){
-
-            @Override
-            protected String doInBackground(Void... params) {
-                String responseData = getStringByOkhttp(url);
-                return responseData;
-            }
-            @Override
-            protected void onPostExecute(String responseData) {
-                if(responseData!=null){
-                    List<NotificationBean> mNotificationList =
-                            parseJson(responseData);
-                    myNotificationList.addAll(mNotificationList);
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        }.execute();
-    }*/
-
-    //test Adapter
-    /*private void getMyNotificationList() {
-        NotificationBean myNotificationBean1 = new NotificationBean("107316", "18:37 2021-06-09", "评论了你的树洞", "balabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabala",
-                    "8857", "西二炸酱面", "0","1");
-        String TAG="tag";
-        NotificationBean myNotificationBean2 = new NotificationBean("107228", "19:11 2021-05-23", "评论了你的树洞", "和山山水水",
-                "8830", "东湖皮卡丘", "0","1");
-        NotificationBean myNotificationBean3 = new NotificationBean("107227", "19:11 2021-05-23", "评论了你的树洞", "你好",
-                "8830", "东湖皮卡丘", "0","1");
-        myNotificationList.add(myNotificationBean1);
-        myNotificationList.add(myNotificationBean2);
-        myNotificationList.add(myNotificationBean3);
-        Log.d(TAG, "getMyNotificationList: get in method");
-    }*/
 
     public static String removeCharAt(String s, int pos) {
         return s.substring(0, pos) + s.substring(pos + 1);
@@ -514,11 +458,6 @@ public class MessageFragment extends Fragment {
         OkOne.enableRequestPriority(true);
         OkHttpClient client = new OkHttpClient();
         Message message = Message.obtain();
-
-
-//        SharedPreferences editor = getContext().getSharedPreferences("Depository", Context.MODE_PRIVATE);//
-//        token = editor.getString("token", "");
-        // Log.d("bala", "getStringByOkhttp: token "+token);
         MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(getContext());
         String token = mmkvUtil.getString("USER_TOKEN");
 

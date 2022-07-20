@@ -6,8 +6,6 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import cn.pivotstudio.modulec.homescreen.R
 import android.widget.TextView
-import androidx.core.net.toUri
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.libbase.util.data.TimeUtil
@@ -17,11 +15,11 @@ import com.example.libbase.util.ui.GlideBlurTransformation
  * 点赞按钮
  *
  * @param view       todo
- * @param is_thumbup todo
+ * @param is_thumbsUp todo
  */
 @BindingAdapter("thumbupIcon")
-fun onClickThumbup(view: ImageView, is_thumbup: Boolean) {
-    view.setImageResource(if (is_thumbup) R.mipmap.active else R.mipmap.inactive)
+fun onClickThumbsUp(view: ImageView, is_thumbsUp: Boolean) {
+    view.setImageResource(if (is_thumbsUp) R.mipmap.active else R.mipmap.inactive)
 }
 
 /**

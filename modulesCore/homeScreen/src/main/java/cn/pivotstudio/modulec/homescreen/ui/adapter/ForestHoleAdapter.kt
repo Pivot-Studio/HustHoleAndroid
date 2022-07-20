@@ -47,6 +47,7 @@ class ForestHoleAdapter(
             binding.apply {
                 layoutItemForestReply.setOnClickListener {
                     onReplyIconClick(forestHole.holeId)
+                    notifyItemChanged(adapterPosition)
                 }
 
                 textItemForestContent.setOnClickListener {
