@@ -11,50 +11,51 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 
-
 ;import cn.pivotstudio.modulec.homescreen.R;
 
-public class UpdateRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class UpdateRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static List<Update> updateList;
     public static final int ITEM_TYPE_Head = 0;
     public static final int ITEM_TYPE_CONTENT = 1;
 
     @Override
     public int getItemViewType(int position) {
-            if (position==0) {
-                return ITEM_TYPE_Head;
-            }else{
-                return ITEM_TYPE_CONTENT;
-            }
+        if (position == 0) {
+            return ITEM_TYPE_Head;
+        } else {
+            return ITEM_TYPE_CONTENT;
+        }
 
     }
 
-    static class HeadHolder extends RecyclerView.ViewHolder{
+    static class HeadHolder extends RecyclerView.ViewHolder {
 
 
-        public HeadHolder(View view){
+        public HeadHolder(View view) {
             super(view);
 
         }
-        public void bind(int position){
+
+        public void bind(int position) {
 
         }
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
+    static class ViewHolder extends RecyclerView.ViewHolder {
         View updateView;
         TextView version;
         TextView date;
         TextView detail;
 
-        public ViewHolder(View view){
+        public ViewHolder(View view) {
             super(view);
             updateView = view;
             version = (TextView) view.findViewById(R.id.version);
             date = (TextView) view.findViewById(R.id.created_timestamp);
-            detail = (TextView)view.findViewById(R.id.detail);
+            detail = (TextView) view.findViewById(R.id.detail);
         }
-        public void bind(int position){
+
+        public void bind(int position) {
             Update update = updateList.get(position);
             version.setText(update.getVersion());
             date.setText(update.getDate());
@@ -62,15 +63,15 @@ public class UpdateRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.
         }
     }
 
-    public UpdateRecycleViewAdapter(List<Update> updates){
+    public UpdateRecycleViewAdapter(List<Update> updates) {
         updateList = updates;
     }
 
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType==ITEM_TYPE_CONTENT) {
+        if (viewType == ITEM_TYPE_CONTENT) {
             return new ViewHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.update_item, parent, false));
-        }else if(viewType==ITEM_TYPE_Head) {
+        } else if (viewType == ITEM_TYPE_Head) {
             return new HeadHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_updatehead, parent, false));
         }
@@ -81,7 +82,7 @@ public class UpdateRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof ViewHolder) {
-            ((ViewHolder)holder).bind(position-1);
+            ((ViewHolder) holder).bind(position - 1);
         } else if (holder instanceof HeadHolder) {
 
             ((HeadHolder) holder).bind(position);
@@ -92,7 +93,7 @@ public class UpdateRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public int getItemCount() {
-        return updateList.size()+1;
+        return updateList.size() + 1;
     }
 }
 

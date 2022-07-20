@@ -1,7 +1,7 @@
 package cn.pivotstudio.husthole.moduleb.network.interceptor;
+
 import android.content.Context;
 import android.content.SharedPreferences;
-
 
 
 import java.io.IOException;
@@ -15,18 +15,20 @@ import okhttp3.Request;
  */
 public class TokenInterceptor implements Interceptor {
     MMKVUtil mmkvUtil;
+
     public TokenInterceptor(Context context) {
-        mmkvUtil=MMKVUtil.getMMKVUtils(context);
+        mmkvUtil = MMKVUtil.getMMKVUtils(context);
     }
+
     @Override
     public okhttp3.Response intercept(Chain chain) throws IOException {
         //用于添加的请求头
 
-        String token =mmkvUtil.getString("USER_TOKEN");
-            Request request = chain.request()
-                    .newBuilder()
-                    .addHeader("Authorization", "Bearer " + token)
-                    .build();
+        String token = mmkvUtil.getString("USER_TOKEN");
+        Request request = chain.request()
+                .newBuilder()
+                .addHeader("Authorization", "Bearer " + token)
+                .build();
         return chain.proceed(request);
     }
 }

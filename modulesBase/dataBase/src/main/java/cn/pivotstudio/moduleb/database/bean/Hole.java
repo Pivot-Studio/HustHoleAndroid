@@ -6,36 +6,36 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 /**
- * @classname:Hole
- * @description:存放树洞书写内容以及选择的回复人的相关信息
- * @date:2022/5/12 11:20
- * @version:1.0
+ * @classname: Hole
+ * @description: 存放树洞书写内容以及选择的回复人的相关信息
+ * @date: 2022/5/12 11:20
+ * @version: 1.0
  * @author:
  */
 @Entity(tableName = "hole")
 public class Hole extends BaseObservable {
-        @PrimaryKey
-        private int uid;
-        private String content;
-        private String alias;
-        private Boolean is_mine;
-        private Integer reply_local_id;
+    @PrimaryKey
+    private int uid;
+    private String content;
+    private String alias;
+    private Boolean is_mine;
+    private Integer reply_local_id;
 
-        public int getUid() {
-            return uid;
-        }
+    public int getUid() {
+        return uid;
+    }
 
-        public void setUid(int uid) {
-            this.uid = uid;
-        }
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
 
-        public String getContent() {
-            return content;
-        }
+    public String getContent() {
+        return content;
+    }
 
-        public void setContent(String content) {
-            this.content = content;
-        }
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     public String getAlias() {
         return alias;
@@ -62,14 +62,15 @@ public class Hole extends BaseObservable {
     }
 
     @Ignore
-        public Hole(int uid, String content,String alias,Boolean is_mine,Integer reply_local_id) {
-            this.uid=uid;
-            this.content = content;
-            this.alias = alias;
-            this.is_mine=is_mine;
-            this.reply_local_id = reply_local_id;
-        }
+    public Hole(int uid, String content, String alias, Boolean is_mine, Integer reply_local_id) {
+        this.uid = uid;
+        this.content = content;
+        this.alias = alias;
+        this.is_mine = is_mine;
+        this.reply_local_id = reply_local_id;
+    }
 
-        public Hole() {}
+    public Hole() {
+    }
 
 }

@@ -30,7 +30,7 @@
         android:layout_marginEnd="25dp"
         android:layout_marginBottom="20dp"
         android:text="立即更新"
-        android:onClick="onClick"
+        android:onClick="jumpToPublishHoleByARouter"
         android:textColor="@color/HH_BandColor_1"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -57,7 +57,7 @@
         android:layout_height="@dimen/dp_30"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:onClick="onClick"
+        android:onClick="jumpToPublishHoleByARouter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 

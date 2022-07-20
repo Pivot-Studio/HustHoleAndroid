@@ -8,33 +8,57 @@
     <fragment
         android:id="@+id/homepage_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment"
-        android:label="homepage_fragment"
+        android:label="@string/default_string_zh_short"
         tools:layout="@layout/fragment_homepage" />
 
-    <!--地图-->
     <fragment
         android:id="@+id/forest_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment"
-        android:label="forest_fragment"
-        tools:layout="@layout/fragment_forest" />
-<!--    <fragment-->
-<!--        android:id="@+id/message_fragment"-->
-<!--        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.MessageFragment"-->
-<!--        android:label="message_fragment"-->
-<!--        tools:layout="@layout/fragment_message" />-->
+        android:label="@string/forest_zh"
+        tools:layout="@layout/fragment_forest">
+        <action
+            android:id="@+id/action_forest_fragment_to_all_forest_fragment"
+            app:destination="@id/all_forest_fragment" />
+        <action
+            android:id="@+id/action_forest_fragment_to_forest_detail_fragment"
+            app:destination="@id/forest_detail_fragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/message_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.oldversion.fragment.MessageFragment"
-        android:label="message_fragment"
+        android:label="@string/notification_zh"
         tools:layout="@layout/page3fragment" />
-<!--    <fragment-->
-<!--        android:id="@+id/mine_fragment"-->
-<!--        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragment"-->
-<!--        android:label="mine_fragment"-->
-<!--        tools:layout="@layout/fragment_mine" />-->
+
     <fragment
         android:id="@+id/mine_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.oldversion.fragment.MineFragment"
-        android:label="mine_fragment"
+        android:label="@string/mine_zh"
         tools:layout="@layout/page4fragment" />
+
+    <fragment
+        android:id="@+id/all_forest_fragment"
+        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.AllForestFragment"
+        android:label="@string/all_forest_zh"
+        tools:layout="@layout/fragment_all_frorest">
+        <action
+            android:id="@+id/action_all_forest_fragment_to_forest_detail_fragment"
+            app:destination="@id/forest_detail_fragment" />
+        <action
+            android:id="@+id/action_all_forest_fragment_to_forest_fragment"
+            app:destination="@id/forest_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forest_detail_fragment"
+        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment"
+        android:label=""
+        tools:layout="@layout/fragment_forest_detail">
+        <action
+            android:id="@+id/action_forest_detail_fragment_to_forest_fragment"
+            app:destination="@id/forest_fragment" />
+        <argument
+            android:name="forestId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

@@ -4,14 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="forestHole"
-            type="cn.pivotstudio.modulec.homescreen.model.ForestHoleResponse.ForestHole" />
+            type="cn.pivotstudio.modulec.homescreen.model.ForestHole" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
         android:background="@drawable/standard_forest_hole"
         android:minHeight="110dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,37 +22,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image_item_forest_avatar"
+            imageUrl="@{forestHole.backgroundImageUrl}"
             android:layout_width="@dimen/dp_32"
             android:layout_height="@dimen/dp_32"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginTop="@dimen/dp_12"
-            android:background="@color/GrayScale_100"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/AvatarRoundedStyle"
+            tools:src="@drawable/icon" />
 
         <TextView
-            android:id="@+id/tv_itemforest_title"
+            android:id="@+id/text_item_forest_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_10"
-            android:text="@string/default_string_zh_short"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="@{forestHole.forestName}"
             android:textColor="@color/GrayScale_50"
             android:textSize="@dimen/sp_13"
+
             app:layout_constraintStart_toEndOf="@+id/image_item_forest_avatar"
-            app:layout_constraintTop_toTopOf="@+id/image_item_forest_avatar" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@string/default_string_zh_short" />
 
         <TextView
             android:id="@+id/tv_itemforest_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_10"
-            android:text="19:20  2020-09-16"
+            time="@{forestHole.createdTimestamp}"
+            timeSign="@{false}"
             android:textColor="@color/GrayScale_80"
             android:textSize="@dimen/sp_11"
             app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_avatar"
-            app:layout_constraintStart_toEndOf="@+id/image_item_forest_avatar" />
+            app:layout_constraintStart_toEndOf="@+id/image_item_forest_avatar"
+            tools:text="@string/default_string_number_short" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -62,19 +72,20 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_thumbs_up"
+                thumbupIcon="@{forestHole.liked}"
                 android:layout_width="@dimen/dp_17"
                 android:layout_height="@dimen/dp_20"
                 android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@mipmap/inactive" />
+                tools:src="@mipmap/inactive" />
 
             <TextView
                 android:id="@+id/text_item_forest_thumbs_up_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="@string/default_string_number_short"
+                android:text="@{String.valueOf(forestHole.likeNum), default = 0}"
                 android:textColor="@color/GrayScale_70"
                 android:textSize="@dimen/sp_11"
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_thumbs_up"
@@ -104,7 +115,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="@string/default_string_number_short"
+                android:text="@{String.valueOf(forestHole.replyNum), default = 0}"
                 android:textColor="@color/GrayScale_70"
                 android:textSize="@dimen/sp_11"
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_reply"
@@ -122,20 +133,20 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_follow"
+                followIcon="@{forestHole.followed}"
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_16"
                 android:layout_marginBottom="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@mipmap/inactive_3" />
+                tools:src="@mipmap/inactive_3" />
 
             <TextView
                 android:id="@+id/text_item_forest_follow_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="@string/default_string_number_short"
+                android:text="@{String.valueOf(forestHole.followNum), default = 0}"
                 android:textColor="@color/GrayScale_70"
                 android:textSize="@dimen/sp_11"
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_follow"
@@ -153,6 +164,7 @@
             android:lineSpacingExtra="@dimen/sp_6"
             android:maxWidth="@dimen/dp_310"
             android:maxLines="5"
+            android:text="@{forestHole.content}"
             android:textColor="@color/GrayScale_20"
             android:textSize="@dimen/sp_13"
             app:layout_constraintTop_toBottomOf="@+id/image_item_forest_avatar"
@@ -163,7 +175,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_12"
-            android:text="#1037"
+            android:text="@{@string/hole_id(forestHole.holeId), default = @string/hole_id}"
             android:textColor="@color/GrayScale_0"
             android:textSize="@dimen/sp_13"
             android:textStyle="bold"
@@ -187,6 +199,7 @@
             android:layout_height="@dimen/dp_48"
             android:background="@drawable/more"
             android:elevation="20dp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
             <!--            加上这个属性使more list隐形-->

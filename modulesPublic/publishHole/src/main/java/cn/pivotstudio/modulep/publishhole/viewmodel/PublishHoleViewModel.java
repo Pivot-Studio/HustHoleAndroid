@@ -17,7 +17,7 @@ import cn.pivotstudio.modulep.publishhole.repository.PublishHoleRepository;
  * @version:1.0
  * @author:
  */
-public class PublishHoleViewModel extends BaseViewModel{
+public class PublishHoleViewModel extends BaseViewModel {
     public MutableLiveData<ForestListsResponse> pTypeForestList;//所有小树林
     public MutableLiveData<DetailTypeForestResponse> pJoinedForest;//加入的小树林
     public MutableLiveData<ForestTypeResponse> pForestType;//小树林类型
@@ -33,16 +33,16 @@ public class PublishHoleViewModel extends BaseViewModel{
      */
     public PublishHoleViewModel() {
         mPublishHoleRepository = new PublishHoleRepository();
-        pForestName=new MutableLiveData<>();
-        pTypeForestList=mPublishHoleRepository.pTypeForestList;
+        pForestName = new MutableLiveData<>();
+        pTypeForestList = mPublishHoleRepository.pTypeForestList;
         pForestType = mPublishHoleRepository.pForestType;
         pJoinedForest = mPublishHoleRepository.pJoinedForest;
-        pOnClickMsg =mPublishHoleRepository.pClickMsg;
-        failed=mPublishHoleRepository.failed;
+        pOnClickMsg = mPublishHoleRepository.pClickMsg;
+        failed = mPublishHoleRepository.failed;
     }
 
     public Integer getForestId() {
-        if(mForestId==null)mForestId=0;
+        if (mForestId == null) mForestId = 0;
         return mForestId;
     }
 
@@ -53,38 +53,40 @@ public class PublishHoleViewModel extends BaseViewModel{
     /**
      * 获取加入的小树林
      */
-    public void getJoinedForests(){
+    public void getJoinedForests() {
         mPublishHoleRepository.getJoinedForestForNetwork();
     }
 
     /**
      * 获取小树林类型
      */
-    public void getForestType(){
+    public void getForestType() {
         mPublishHoleRepository.getForestTypeForNetwork();
     }
 
     /**
      * 获取某一类型的所有小树林
+     *
      * @param forest_type 小树林类型
-     * @param location 对应总列表的位置
+     * @param location    对应总列表的位置
      */
-    public void getTypeForest(String forest_type, int location){
-        mPublishHoleRepository.getTypeForestForNetwork(forest_type,location);
+    public void getTypeForest(String forest_type, int location) {
+        mPublishHoleRepository.getTypeForestForNetwork(forest_type, location);
     }
 
     /**
      * 获取热门小树林
      */
-    public void getHotForest(){
+    public void getHotForest() {
         mPublishHoleRepository.getHotForestForNetwork();
     }
 
     /**
      * 发送树洞
+     *
      * @param content 树洞内容
      */
-    public void postHoleRequest(String content){
-        mPublishHoleRepository.publishHole(content,getForestId());
+    public void postHoleRequest(String content) {
+        mPublishHoleRepository.publishHole(content, getForestId());
     }
 }

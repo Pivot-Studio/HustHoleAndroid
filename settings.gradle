@@ -14,7 +14,6 @@ include ':modulesBase:libBase'
 include ':modulesCore:homeScreen'
 
 
-include ':modulesCore:forest'
 include ':modulesCore:loginAndRegister'
 include ':modulesBase:networkBase'
 

@@ -13,8 +13,9 @@ import cn.pivotstudio.modulec.homescreen.BuildConfig;
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.custom_view.OptionsListener;
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog;
-import cn.pivotstudio.modulec.homescreen.model.HomepageHoleResponse;
-import cn.pivotstudio.modulec.homescreen.model.MsgResponse;
+
+import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse;
+import cn.pivotstudio.modulec.homescreen.network.MsgResponse;
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository;
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
 
@@ -41,24 +42,29 @@ public class HomePageViewModel extends BaseViewModel {
     /**
      * 初始化
      */
-   public HomePageViewModel() {
-       mHomePageHoleRepository = new HomePageHoleRepository();
-       pHomePageHoles=mHomePageHoleRepository.pHomePageHoles;
-       pClickMsg=mHomePageHoleRepository.pClickMsg;
-       failed = mHomePageHoleRepository.failed;
-   }
+    public HomePageViewModel() {
+        mHomePageHoleRepository = new HomePageHoleRepository();
+        pHomePageHoles = mHomePageHoleRepository.pHomePageHoles;
+        pClickMsg = mHomePageHoleRepository.pClickMsg;
+        failed = mHomePageHoleRepository.failed;
+    }
 
     public Boolean getIsSearch() {
-        if(mIsSearch ==null){mIsSearch =false;}
+        if (mIsSearch == null) {
+            mIsSearch = false;
+        }
         return mIsSearch;
     }
+
     public void setIsSearch(Boolean pIsSearch) {
         this.mIsSearch = pIsSearch;
     }
 
 
     public String getSearchKeyword() {
-       if(mSearchKeyword==null){mSearchKeyword="";}
+        if (mSearchKeyword == null) {
+            mSearchKeyword = "";
+        }
         return mSearchKeyword;
     }
 
@@ -67,9 +73,10 @@ public class HomePageViewModel extends BaseViewModel {
     }
 
 
-
     public Boolean getIsDescend() {
-       if(mIsDescend ==null){mIsDescend =true;}
+        if (mIsDescend == null) {
+            mIsDescend = true;
+        }
         return mIsDescend;
     }
 
@@ -79,7 +86,9 @@ public class HomePageViewModel extends BaseViewModel {
 
 
     public Integer getStartLoadId() {
-       if(mStartLoadId ==null){ mStartLoadId =0;}
+        if (mStartLoadId == null) {
+            mStartLoadId = 0;
+        }
         return mStartLoadId;
     }
 
@@ -88,52 +97,50 @@ public class HomePageViewModel extends BaseViewModel {
     }
 
 
-
-
-
     /**
      * 获取正常树洞列表
+     *
      * @param mStartingLoadId 起始id
      */
-    public void refreshHoleList(int mStartingLoadId){
-           mHomePageHoleRepository.getHolesForNetwork(this.getIsDescend(), mStartingLoadId);
-   }
+    public void refreshHoleList(int mStartingLoadId) {
+        mHomePageHoleRepository.getHolesForNetwork(this.getIsDescend(), mStartingLoadId);
+    }
 
     /**
      * 搜索单个树洞
      */
-    public void searchSingleHole(){
+    public void searchSingleHole() {
         mHomePageHoleRepository.searchSingleHoleForNetwork(getSearchKeyword());
     }
 
     /**
      * 搜索相关关键词的所有树洞
+     *
      * @param mStartingLoadId 起始id
      */
-    public void searchHoleList(int mStartingLoadId){
-        mHomePageHoleRepository.searchHolesForNetwork(getSearchKeyword(),mStartingLoadId);
+    public void searchHoleList(int mStartingLoadId) {
+        mHomePageHoleRepository.searchHolesForNetwork(getSearchKeyword(), mStartingLoadId);
     }
 
     /**
      * 涉及到网络请求相关的点击事件
-     * @param v 被点击的view
+     *
+     * @param v        被点击的view
      * @param dataBean item的数据
      */
-    public void itemClick(View v,HomepageHoleResponse.DataBean dataBean) {
-        Integer holeId=dataBean.getHole_id();
+    public void itemClick(View v, HomepageHoleResponse.DataBean dataBean) {
+        Integer holeId = dataBean.getHole_id();
         int id = v.getId();
         if (id == R.id.cl_itemhomepage_thumbup) {//点击点赞
             Boolean isThunbup = dataBean.getIs_thumbup();
             Integer thumbupNum = dataBean.getThumbup_num();
-            mHomePageHoleRepository.thumbupForNetwork(holeId, thumbupNum, isThunbup, dataBean);
+            mHomePageHoleRepository.giveALikeToAHole(holeId, thumbupNum, isThunbup, dataBean);
         } else if (id == R.id.cl_itemhomepage_reply) {//点击回复
-            if(BuildConfig.isRelease) {
+            if (BuildConfig.isRelease) {
                 ARouter.getInstance().build("/hole/HoleActivity")
                         .withInt(Constant.HOLE_ID, holeId)
-                        .withBoolean(Constant.IF_OPEN_KEYBOARD,true)
+                        .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
                         .navigation();
-            }else{
-                //测试阶段不可跳转
             }
         } else if (id == R.id.cl_itemhomepage_follow) {//点击收藏
             Boolean isFollow = dataBean.getIs_follow();
@@ -156,17 +163,17 @@ public class HomePageViewModel extends BaseViewModel {
                 mHomePageHoleRepository.moreActionForNetwork(holeId, isMine);
             }
             v.setVisibility(View.GONE);
-        }else if(id==R.id.cl_itemhomepage_frame){//点击树洞跳转
-            this.pClickDataBean=dataBean;
-            if(BuildConfig.isRelease) {
+        } else if (id == R.id.cl_itemhomepage_frame) {//点击树洞跳转
+            this.pClickDataBean = dataBean;
+            if (BuildConfig.isRelease) {
                 ARouter.getInstance().build("/hole/HoleActivity")
                         .withInt(Constant.HOLE_ID, holeId)
-                        .withBoolean(Constant.IF_OPEN_KEYBOARD,false)
-                        .navigation((HomeScreenActivity)v.getContext(),1);
+                        .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                        .navigation((HomeScreenActivity) v.getContext(), 1);
 //
-            }else{
+            } else {
                 //测试阶段不可跳转
             }
-            }
+        }
     }
 }

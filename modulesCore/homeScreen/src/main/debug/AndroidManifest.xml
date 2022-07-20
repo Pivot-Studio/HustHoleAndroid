@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="cn.pivotstudio.modulec.homescreen">
+
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 8.0安装需要的权限 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- 读写权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -16,8 +17,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Base"
-        >
+        android:theme="@style/Theme.Base">
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="cn.pivotstudio.husthole.fileprovider"
@@ -27,86 +27,16 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-    <activity
-        android:name=".ui.activity.HomeScreenActivity"
-        android:exported="true"
-        android:launchMode="singleTask"
-        android:windowSoftInputMode="adjustPan"
-        android:screenOrientation="portrait">
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-    </activity>
         <activity
-            android:name=".oldversion.message.SystemNotification"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".oldversion.mine.AboutActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.AdviceActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.DetailUpdateActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.EmailActivity"
+            android:name=".ui.activity.HomeScreenActivity"
+            android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-             />
-<!--        android:theme="@style/myBarTheme"-->
-        <activity
-            android:name=".oldversion.mine.EmailHowToActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.EvaluateAndAdviceActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.HoleStarReplyActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.MyHoleAndMyStarActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.RulesActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.ScreenActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.SecurityActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.SetScreenKeyWordActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".oldversion.mine.SettingsActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
-        <activity android:name=".oldversion.mine.ShareCardActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".oldversion.mine.UpdateActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".oldversion.mine.VerifyActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".oldversion.mine.VerifyOkActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:windowSoftInputMode="adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

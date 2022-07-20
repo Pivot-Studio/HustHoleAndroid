@@ -51,18 +51,19 @@ import retrofit2.Retrofit;
 
 public class MineFragment extends Fragment {
 
-    private View rootView,shareCardView,backgroundView;
-    private RelativeLayout settings,shield, rules, share, evaluate, about, update, logout,update2;
-    private LinearLayout   shareCard;
-    private ConstraintLayout myHole, myStar,myReply;
-    private TextView tv_joinDays,tv_myStarNum,tv_myHoleNum,tv_myReplyNum,cancel,location;
+    private View rootView, shareCardView, backgroundView;
+    private RelativeLayout settings, shield, rules, share, evaluate, about, update, logout, update2;
+    private LinearLayout shareCard;
+    private ConstraintLayout myHole, myStar, myReply;
+    private TextView tv_joinDays, tv_myStarNum, tv_myHoleNum, tv_myReplyNum, cancel, location;
     private static String BASE_URL = RetrofitManager.API;
     private org.json.JSONArray jsonArray;
     private PopupWindow ppwBackground, ppwShare;
-    
+
     Retrofit retrofit;
     RequestInterface request;
     String TAG = "isMine";
+    int flag = 0;
 
     public static MineFragment newInstance() {
         return new MineFragment();
@@ -74,7 +75,7 @@ public class MineFragment extends Fragment {
         super.onCreate(savedInstanceState);
         rootView = inflater.inflate(R.layout.page4fragment, container, false);
         settings = rootView.findViewById(R.id.settings);
-        shield=rootView.findViewById(R.id.shield);
+        shield = rootView.findViewById(R.id.shield);
         rules = rootView.findViewById(R.id.rules);
         share = rootView.findViewById(R.id.share);
         evaluate = rootView.findViewById(R.id.evaluateAndAdvice);
@@ -96,18 +97,18 @@ public class MineFragment extends Fragment {
         location = rootView.findViewById(R.id.ppw_share_location);
 
         shareCardView = LayoutInflater.from(getContext()).inflate(R.layout.ppw_share, null);
-       // backgroundView = LayoutInflater.from(getContext()).inflate(R.layout.ppw_share_card_darkscreen, null);
+        // backgroundView = LayoutInflater.from(getContext()).inflate(R.layout.ppw_share_card_darkscreen, null);
         shareCard = shareCardView.findViewById(R.id.share_card);
         cancel = shareCardView.findViewById(R.id.share_cancel_button);
 
-        ppwShare=new PopupWindow(shareCardView);
+        ppwShare = new PopupWindow(shareCardView);
         ppwShare.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         ppwShare.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-       // ppwShare.setAnimationStyle(R.style.Page2Anim);
+        // ppwShare.setAnimationStyle(R.style.Page2Anim);
 
         //ppwBackground=new PopupWindow(backgroundView);
-       // ppwBackground.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-       // ppwBackground.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        // ppwBackground.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        // ppwBackground.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         //ppwBackground.setAnimationStyle(R.style.darkScreenAnim);
 
         RetrofitManager.RetrofitBuilder(BASE_URL);
@@ -124,7 +125,7 @@ public class MineFragment extends Fragment {
         //advice.setOnClickListener(this::onClick);
         about.setOnClickListener(this::onClick);
         update.setOnClickListener(this::onClick);
-      //  update2.setOnClickListener(this::onClick);
+        //  update2.setOnClickListener(this::onClick);
         logout.setOnClickListener(this::onClick);
         myHole.setOnClickListener(this::onClick);
         myStar.setOnClickListener(this::onClick);
@@ -140,11 +141,13 @@ public class MineFragment extends Fragment {
 
         cancel.setOnClickListener(v -> {
             ppwShare.dismiss();
-           // ppwBackground.dismiss();
-           cancelDarkBackGround();
+            flag = 0;
+            // ppwBackground.dismiss();
+            cancelDarkBackGround();
         });
         shareCard.setOnClickListener(v -> {
             ppwShare.dismiss();
+            flag = 0;
             cancelDarkBackGround();
             Intent intent = new Intent(getActivity(), ShareCardActivity.class);
             startActivity(intent);
@@ -154,12 +157,14 @@ public class MineFragment extends Fragment {
 
         return rootView;
     }
-    public void cancelDarkBackGround(){
+
+    public void cancelDarkBackGround() {
         WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
-        lp.alpha =1f; // 0.0~1.0
+        lp.alpha = 1f; // 0.0~1.0
         getActivity().getWindow().setAttributes(lp);
     }
-    private void getMyData(){
+
+    private void getMyData() {
         new Thread(() -> {
             Call<ResponseBody> call = request.myData();//进行封装
             call.enqueue(new Callback<ResponseBody>() {
@@ -167,14 +172,14 @@ public class MineFragment extends Fragment {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
 
                     try {
-                        if(response.errorBody() != null){
-                           // Log.d(TAG,"in error: " + response.errorBody());
-                           // Log.d(TAG,"in error: " + response.errorBody().string());
+                        if (response.errorBody() != null) {
+//                             Log.d(TAG,"in error: " + response.errorBody());
+                            // Log.d(TAG,"in error: " + response.errorBody().string());
                         }
                         if (response.body() != null) {
                             String jsonStr = response.body().string();
-                           // Log.d(TAG,"1: " + response.body());
-                           // Log.d(TAG,"2: " + jsonStr + "--");
+                            // Log.d(TAG,"1: " + response.body());
+                            // Log.d(TAG,"2: " + jsonStr + "--");
 //                                jsonArray=new org.json.JSONArray(jsonStr);
 //                                JSONObject data = jsonArray.getJSONObject(0);
                             JSONObject data = new JSONObject(jsonStr);
@@ -182,45 +187,50 @@ public class MineFragment extends Fragment {
                             int myHoleNum = data.getInt("hole_sum");
                             int myStarNum = data.getInt("follow_num");
                             int myReplyNum = data.getInt("replies_num");
-                          //  Log.d(TAG,joinDays+"");
-                            String days = "我来到树洞已经<font color=\"#02A9F5\">"+joinDays+"</font>天啦。";
-                            if(CheckingToken.IfTokenExist()){
+                            //  Log.d(TAG,joinDays+"");
+                            String days = "我来到树洞已经<font color=\"#02A9F5\">" + joinDays + "</font>天啦。";
+                            if (CheckingToken.IfTokenExist()) {
                                 //Log.d(TAG,"已登陆");
                                 tv_joinDays.setText(Html.fromHtml(days));
-                                tv_myHoleNum.setText( String.valueOf(myHoleNum));
-                                tv_myStarNum.setText( String.valueOf(myStarNum));
+                                tv_myHoleNum.setText(String.valueOf(myHoleNum));
+                                tv_myStarNum.setText(String.valueOf(myStarNum));
                                 tv_myReplyNum.setText(String.valueOf(myReplyNum));
-                            }else {
-                                days = "我来到树洞已经<font color=\"#02A9F5\">"+0+"</font>天啦。";
+                            } else {
+                                days = "我来到树洞已经<font color=\"#02A9F5\">" + 0 + "</font>天啦。";
                                 tv_joinDays.setText(Html.fromHtml(days));
-                                tv_myHoleNum.setText( String.valueOf(0));
-                                tv_myStarNum.setText( String.valueOf(0));
+                                tv_myHoleNum.setText(String.valueOf(0));
+                                tv_myStarNum.setText(String.valueOf(0));
                                 tv_myReplyNum.setText(String.valueOf(0));
                             }
-                        }else{
+                        } else {
                             //Log.d(TAG,"is null");
                         }
-                    }catch (IOException | JSONException e) {
+                    } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable t) { }
+                public void onFailure(Call<ResponseBody> call, Throwable t) {
+                }
             });
         }).start();
     }
 
     public void onClick(View view) {
         Intent intent;
-        int id = view.getId();
+        int id = 0;
+        if(flag == 0){
+             id = view.getId();
+        }
         if (id == R.id.my_hole) {
             if (CheckingToken.IfTokenExist()) {
                 intent = new Intent(requireActivity().getApplicationContext(), HoleStarReplyActivity.class);
                 intent.putExtra("initFragmentId", 0);
                 startActivity(intent);
             } else {
-               // intent = new Intent(getActivity(), EmailVerifyActivity.class);
-               // startActivity(intent);
+                // intent = new Intent(getActivity(), EmailVerifyActivity.class);
+                // startActivity(intent);
             }
         } else if (id == R.id.my_star) {
             if (CheckingToken.IfTokenExist()) {
@@ -254,6 +264,7 @@ public class MineFragment extends Fragment {
             intent = new Intent(getActivity().getApplicationContext(), RulesActivity.class);
             startActivity(intent);
         } else if (id == R.id.share) {
+            flag = 1;
             WindowManager.LayoutParams lp = getActivity().getWindow().getAttributes();
             lp.alpha = 0.6f; // 0.0~1.0
             getActivity().getWindow().setAttributes(lp);
@@ -297,12 +308,12 @@ public class MineFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    MMKVUtil mmkvUtil= MMKVUtil.getMMKVUtils(getContext());
-                   // String token =mmkvUtil.getString("USER_TOKEN");
-                    mmkvUtil.put("USER_TOKEN","");
-                    mmkvUtil.put(Constant.IS_LOGIN,false);
+                    MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(getContext());
+                    // String token =mmkvUtil.getString("USER_TOKEN");
+                    mmkvUtil.put("USER_TOKEN", "");
+                    mmkvUtil.put(Constant.IS_LOGIN, false);
                     ARouter.getInstance().build("/loginAndRegister/WelcomeActivity").navigation();
-                    ((HomeScreenActivity)getContext()).finish();
+                    ((HomeScreenActivity) getContext()).finish();
                 }
             });
             dialog.show();

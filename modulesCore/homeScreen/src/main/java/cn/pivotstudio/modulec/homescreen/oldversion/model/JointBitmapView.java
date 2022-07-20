@@ -8,17 +8,20 @@ import android.view.View;
 
 public class JointBitmapView extends View {
     private static Bitmap bitmap;
-    public  JointBitmapView(Context context, Bitmap bit1, Bitmap bit2) {
+
+    public JointBitmapView(Context context, Bitmap bit1, Bitmap bit2) {
         super(context);
-        bitmap = newBitmap(bit1,bit2);
+        bitmap = newBitmap(bit1, bit2);
     }
+
     /**
      * 拼接图片
+     *
      * @param bit1
      * @param bit2
      * @return 返回拼接后的Bitmap
      */
-    private static Bitmap newBitmap(Bitmap bit1,Bitmap bit2){
+    private static Bitmap newBitmap(Bitmap bit1, Bitmap bit2) {
 
         int width = bit1.getWidth();
         int height = bit1.getHeight() + bit2.getHeight();
@@ -30,6 +33,7 @@ public class JointBitmapView extends View {
         canvas.drawBitmap(bit2, 0, bit1.getHeight(), null);
         return bitmap;
     }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);

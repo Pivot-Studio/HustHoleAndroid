@@ -13,7 +13,7 @@
         android:layout_width="@dimen/dp_52"
         android:layout_height="@dimen/dp_52"
         android:layout_centerInParent="true"
-        android:onClick="onClick"
+        android:onClick="jumpToPublishHoleByARouter"
         android:background="@drawable/back"
         android:scaleType="center"
         app:srcCompat="@drawable/back_black" />

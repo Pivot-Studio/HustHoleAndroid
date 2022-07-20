@@ -21,6 +21,7 @@ import cn.pivotstudio.modulec.homescreen.R;
  */
 public class WelcomeDialog extends Dialog {
     private Context context;
+
     public WelcomeDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
     }
@@ -28,7 +29,8 @@ public class WelcomeDialog extends Dialog {
     public WelcomeDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
-    public WelcomeDialog(Context context){
+
+    public WelcomeDialog(Context context) {
         super(context);
         initView();
     }
@@ -36,7 +38,7 @@ public class WelcomeDialog extends Dialog {
     /**
      * 初始化view
      */
-    private void initView(){
+    private void initView() {
         setContentView(R.layout.dialog_welcome);
         getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         setCanceledOnTouchOutside(false);//触摸灰色部分无响应
@@ -44,7 +46,7 @@ public class WelcomeDialog extends Dialog {
         TextView mTitleTv = (TextView) findViewById(R.id.tv_dialoghomepage_title);
         mTitleTv.setText(R.string.homepage_2);
 
-        TextView mContentTv= (TextView) findViewById(R.id.tv_dialoghomepage_content);
+        TextView mContentTv = (TextView) findViewById(R.id.tv_dialoghomepage_content);
         String welcomeMsg = ("<small><font color=\"#00000000\">你好，这里是1037树洞~</font></small><br>" +
                 " <small><font color=\"#666666\">请先别急着跳过噢，花三十秒听听树洞的悄悄话吧</font></small>" + "<font color=\"#666666\">(●'◡'●)</font><br><br>" +
                 "<strong><font color=\"#00000000\">1037树洞是什么</font></strong><br><br>" +
@@ -64,15 +66,16 @@ public class WelcomeDialog extends Dialog {
                 "<small><font color=\"#00000000\">祝你在1037树洞玩得愉快。</font></small><br>");
         mContentTv.setText(Html.fromHtml(welcomeMsg));
 
-        Button mBtn_ok = (Button)findViewById(R.id.btn_dialoghomepage_sure);
+        Button mBtn_ok = (Button) findViewById(R.id.btn_dialoghomepage_sure);
         mBtn_ok.setOnClickListener(this::onClick);
     }
 
     /**
      * 点击事件
+     *
      * @param v
      */
-    private void onClick(View v){
+    private void onClick(View v) {
         if (v.getId() == R.id.btn_dialoghomepage_sure) {
             dismiss();
         }

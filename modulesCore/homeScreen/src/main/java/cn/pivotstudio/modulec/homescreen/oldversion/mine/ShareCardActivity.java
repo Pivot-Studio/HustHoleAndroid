@@ -49,10 +49,10 @@ public class ShareCardActivity extends AppCompatActivity {
     LinearLayout store;
     Retrofit retrofit;
     RequestInterface request;
-    String TAG ="ShareCard";
+    String TAG = "ShareCard";
     PopupWindow ppwShareTo;
-    Boolean isShow=false;
-    String imgurl="";
+    Boolean isShow = false;
+    String imgurl = "";
 
     protected void onCreate(Bundle savedInstanceState) {
         String BASE_URL = RetrofitManager.API;
@@ -62,8 +62,8 @@ public class ShareCardActivity extends AppCompatActivity {
 
 //        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
 
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
 
@@ -107,7 +107,7 @@ public class ShareCardActivity extends AppCompatActivity {
         store.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"保存成功",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "保存成功", Toast.LENGTH_SHORT).show();
                 ppwShareTo.dismiss();
             }
         });
@@ -117,7 +117,7 @@ public class ShareCardActivity extends AppCompatActivity {
                 new MediaScannerConnection.OnScanCompletedListener() {
                     @Override
                     public void onScanCompleted(String path, Uri uri) {
-                        Log.i(TAG,"onScanCompleted"+path);
+                        Log.i(TAG, "onScanCompleted" + path);
                     }
                 });
 
@@ -125,34 +125,34 @@ public class ShareCardActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 //
-                    if(imgurl.equals("")){
-                        Toast.makeText(ShareCardActivity.this, "最新分享图片加载失败", Toast.LENGTH_SHORT).show();
-                    }else {
-                        Picasso.get()
-                                .load(imgurl)
-                                .into(new Target() {
-                                    @Override
-                                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                        Log.i(TAG, "load from==>" + from);
-                                        boolean hasSaved = SaveImg.saveImg(bitmap, "分享卡片" + ".png", ShareCardActivity.this, ShareCardActivity.this);
-                                        if (hasSaved) {
-                                            Toast.makeText(ShareCardActivity.this, "已保存至相册", Toast.LENGTH_SHORT).show();
-                                        } else {
-                                            Toast.makeText(ShareCardActivity.this, "保存失败", Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                if (imgurl.equals("")) {
+                    Toast.makeText(ShareCardActivity.this, "最新分享图片加载失败", Toast.LENGTH_SHORT).show();
+                } else {
+                    Picasso.get()
+                            .load(imgurl)
+                            .into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    Log.i(TAG, "load from==>" + from);
+                                    boolean hasSaved = SaveImg.saveImg(bitmap, "分享卡片" + ".png", ShareCardActivity.this, ShareCardActivity.this);
+                                    if (hasSaved) {
+                                        Toast.makeText(ShareCardActivity.this, "已保存至相册", Toast.LENGTH_SHORT).show();
+                                    } else {
                                         Toast.makeText(ShareCardActivity.this, "保存失败", Toast.LENGTH_SHORT).show();
                                     }
+                                }
 
-                                    @Override
-                                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+                                @Override
+                                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                    Toast.makeText(ShareCardActivity.this, "保存失败", Toast.LENGTH_SHORT).show();
+                                }
 
-                                    }
-                                });
-                    }
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                }
+                            });
+                }
                 ppwShareTo.dismiss();
             }
         });
@@ -165,7 +165,8 @@ public class ShareCardActivity extends AppCompatActivity {
         });
 
     }
-    public Bitmap convertViewToBitmap(View view){
+
+    public Bitmap convertViewToBitmap(View view) {
         view.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
         view.buildDrawingCache();
@@ -174,20 +175,19 @@ public class ShareCardActivity extends AppCompatActivity {
 
 
     private void onClick(View view) {
-        if(R.id.share_card_img == view.getId())
-            if(!isShow){
+        if (R.id.share_card_img == view.getId())
+            if (!isShow) {
                 ppwShareTo.showAsDropDown(ppwLocation);
 //                ppwShareTo.showAtLocation(getParent().getWindow().getDecorView(), Gravity.BOTTOM,0,0);
                 isShow = true;
-            }else {
+            } else {
                 ppwShareTo.dismiss();
                 isShow = false;
             }
     }
 
 
-
-    private void getImg(){
+    private void getImg() {
         new Thread(() -> {
             Call<ResponseBody> call = request.checkupdate();
             call.enqueue(new Callback<ResponseBody>() {
@@ -195,28 +195,29 @@ public class ShareCardActivity extends AppCompatActivity {
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
-                        Log.d("sadfgdadgffgf",jsonObject+"");
+                        Log.d("sadfgdadgffgf", jsonObject + "");
                         String urlStr = jsonObject.getString("AndroidLatestShareImage");
-                        if(urlStr.equals("")){
+                        if (urlStr.equals("")) {
                             Toast.makeText(ShareCardActivity.this, "获取的图片链接为空", Toast.LENGTH_SHORT).show();
                         }
-                        imgurl=urlStr;
-                        SharedPreferences pref = getSharedPreferences("data",MODE_PRIVATE);
-                        String storedStr = pref.getString("img_url",urlStr);
-                        if(!storedStr.equals(urlStr)){
-                            SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
-                            editor.putString("img_url",urlStr);
+                        imgurl = urlStr;
+                        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+                        String storedStr = pref.getString("img_url", urlStr);
+                        if (!storedStr.equals(urlStr)) {
+                            SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+                            editor.putString("img_url", urlStr);
                             editor.apply();
                         }
-                        URL url=new URL(urlStr);
+                        URL url = new URL(urlStr);
                         Glide.with(getApplicationContext()).load(url).into(cardImg);
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
                 public void onFailure(Call<ResponseBody> call, Throwable t) {
-                    Log.d(TAG,"failure");
+                    Log.d(TAG, "failure");
                     t.printStackTrace();
                 }
             });

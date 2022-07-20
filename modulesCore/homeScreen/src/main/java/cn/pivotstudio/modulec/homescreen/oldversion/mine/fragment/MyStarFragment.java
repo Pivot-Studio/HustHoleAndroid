@@ -49,7 +49,7 @@ import retrofit2.Retrofit;
 public class MyStarFragment extends Fragment {
 
     private static final String BASE_URL = RetrofitManager.API;
-    private ArrayList<String[]> myStarsList=new ArrayList<>();
+    private ArrayList<String[]> myStarsList = new ArrayList<>();
     private Retrofit retrofit;
     private RequestInterface request;
     private JSONArray jsonArray;
@@ -62,10 +62,7 @@ public class MyStarFragment extends Fragment {
     private boolean isOnLoadMore = false;
     private boolean finishOnLoadMore = false;
 
-
-
     String TAG = "myStar";
-
 
     public static MyStarFragment newInstance() {
         return new MyStarFragment();
@@ -76,7 +73,7 @@ public class MyStarFragment extends Fragment {
         View myStarView = inflater.inflate(R.layout.fragment_mystar, container, false);
 
         myRecycleView = myStarView.findViewById(R.id.myStarRecyclerView);
-        Log.d(TAG,"this is my star fragment");
+        Log.d(TAG, "this is my star fragment");
 
         RefreshLayout refreshLayout = myStarView.findViewById(R.id.refreshLayout);
         refreshLayout.setRefreshHeader(new StandardRefreshHeader(getActivity()));
@@ -95,12 +92,11 @@ public class MyStarFragment extends Fragment {
                 /**
                  *要执行的操作
                  */
-                if(finishRefresh){
+                if (finishRefresh) {
                     refreshLayout.finishRefresh();
                     isRefresh = false;
                     finishRefresh = false;
-                }
-                else {
+                } else {
                     refreshLayout.autoRefresh();
                 }
             }, 500);
@@ -109,18 +105,17 @@ public class MyStarFragment extends Fragment {
         refreshLayout.setOnLoadMoreListener(mRefreshLayout -> {
             isOnLoadMore = true;
             start_id += list_size;
-            Log.d(TAG, "onCreateView: start_id = "+start_id);
+            Log.d(TAG, "onCreateView: start_id = " + start_id);
             Handler handler = new Handler();
             handler.postDelayed(() -> {
                 /**
                  *要执行的操作
                  */
-                if(finishOnLoadMore){
+                if (finishOnLoadMore) {
                     refreshLayout.finishLoadMore();
                     isOnLoadMore = false;
                     finishOnLoadMore = false;
-                }
-                else {
+                } else {
                     refreshLayout.autoLoadMore();
                 }
             }, 500);
@@ -129,16 +124,16 @@ public class MyStarFragment extends Fragment {
         });
 
         myRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        if(myStarsList.size()==0) {
+        if (myStarsList.size() == 0) {
             update();
-        }else{
+        } else {
             myRecycleView.setAdapter(new CardsRecycleViewAdapter());
         }
         return myStarView;
     }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-
 
 
         super.onCreate(savedInstanceState);
@@ -154,11 +149,11 @@ public class MyStarFragment extends Fragment {
         //update();
     }
 
-    private void update(){
-        Log.d(TAG,"in update");
+    private void update() {
+        Log.d(TAG, "in update");
         //加载纵向列表标题
         new Thread(() -> {
-            Call<ResponseBody> call = request.myFollow(start_id,list_size);
+            Call<ResponseBody> call = request.myFollow(start_id, list_size);
             call.enqueue(new Callback<ResponseBody>() {
                 @Override
                 public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -167,64 +162,65 @@ public class MyStarFragment extends Fragment {
                     try {
                         if (response.body() != null) {
                             json = response.body().string();
-                            Log.d(TAG ,"this is myStars reply: "+json);
+                            Log.d(TAG, "this is myStars reply: " + json);
                         }
-                        jsonArray=new JSONArray(json);
+                        jsonArray = new JSONArray(json);
 //                            new DownLoadTask().execute();
                         try {
-                            for(int f=0;f<jsonArray.length();f++) {
+                            for (int f = 0; f < jsonArray.length(); f++) {
                                 JSONObject sonObject = jsonArray.getJSONObject(f);
-                                String[] SingleHole =new String[9];
+                                String[] SingleHole = new String[9];
                                 SingleHole[1] = sonObject.getString("content");
                                 SingleHole[2] = sonObject.getString("created_timestamp");
-                                SingleHole[3] = sonObject.getInt("follow_num")+"";
-                                SingleHole[4] = sonObject.getInt("hole_id")+"";
-                                SingleHole[5] = sonObject.getBoolean("is_follow")+"";
-                                SingleHole[6] = sonObject.getBoolean("is_thumbup")+"";
-                                SingleHole[7] = sonObject.getInt("reply_num")+"";
-                                SingleHole[8] = sonObject.getInt("thumbup_num")+"";
+                                SingleHole[3] = sonObject.getInt("follow_num") + "";
+                                SingleHole[4] = sonObject.getInt("hole_id") + "";
+                                SingleHole[5] = sonObject.getBoolean("is_follow") + "";
+                                SingleHole[6] = sonObject.getBoolean("is_thumbup") + "";
+                                SingleHole[7] = sonObject.getInt("reply_num") + "";
+                                SingleHole[8] = sonObject.getInt("thumbup_num") + "";
                                 myStarsList.add(SingleHole);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        if(isRefresh){
+                        if (isRefresh) {
                             finishRefresh = true;
                         }
 
-                        if(isOnLoadMore){
+                        if (isOnLoadMore) {
                             myRecycleView.getAdapter().notifyDataSetChanged();
                             finishOnLoadMore = true;
-                        }
-                        else {
+                        } else {
                             myRecycleView.setAdapter(new CardsRecycleViewAdapter());
                         }
                     } catch (IOException | JSONException e) {
                         e.printStackTrace();
                     }
                 }
+
                 @Override
-                public void onFailure(Call<ResponseBody> call, Throwable tr) { }
+                public void onFailure(Call<ResponseBody> call, Throwable tr) {
+                }
             });
         }).start();
     }
 
-    public class CardsRecycleViewAdapter extends RecyclerView.Adapter<CardsRecycleViewAdapter.ViewHolder>{
+    public class CardsRecycleViewAdapter extends RecyclerView.Adapter<CardsRecycleViewAdapter.ViewHolder> {
 
 
-        public class ViewHolder extends RecyclerView.ViewHolder{
-            Boolean more_condition=false;
+        public class ViewHolder extends RecyclerView.ViewHolder {
+            Boolean more_condition = false;
             int position;
-            TextView ID,date,content,text_up,text_talk,text_star;
-            ImageView img_up,img_talk,img_star,moreWhat;
+            TextView ID, date, content, text_up, text_talk, text_star;
+            ImageView img_up, img_talk, img_star, moreWhat;
             ConstraintLayout myInform;
             View totalView;
 
-            public ViewHolder(View view){
+            public ViewHolder(View view) {
 
                 super(view);
 
-                totalView= view.findViewById(R.id.my_follow_total);
+                totalView = view.findViewById(R.id.my_follow_total);
                 ID = (TextView) view.findViewById(R.id.hole_id);
                 date = (TextView) view.findViewById(R.id.created_timestamp);
                 content = (TextView) view.findViewById(R.id.content);
@@ -242,10 +238,10 @@ public class MyStarFragment extends Fragment {
                 myInform = (ConstraintLayout) view.findViewById(R.id.inform);
                 myInform.setVisibility(View.GONE);
                 moreWhat.setOnClickListener(v -> {
-                    if(!more_condition){
+                    if (!more_condition) {
                         myInform.setVisibility(View.VISIBLE);
                         more_condition = true;
-                    }else{
+                    } else {
                         myInform.setVisibility(View.GONE);
                         more_condition = false;
                     }
@@ -269,14 +265,14 @@ public class MyStarFragment extends Fragment {
                         new Thread(new Runnable() {//加载纵向列表标题
                             @Override
                             public void run() {
-                                Call<ResponseBody> call = request.report_2(RetrofitManager.API+"reports?hole_id=" + myStarsList.get(position)[4] + "&reply_local_id= -1");
+                                Call<ResponseBody> call = request.report_2(RetrofitManager.API + "reports?hole_id=" + myStarsList.get(position)[4] + "&reply_local_id= -1");
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                         dialog.dismiss();
                                         myInform.setVisibility(View.GONE);
                                         more_condition = false;
-                                        if(response.code()==200) {
+                                        if (response.code() == 200) {
                                             String json = "null";
                                             String returncondition = null;
                                             if (response.body() != null) {
@@ -295,8 +291,8 @@ public class MyStarFragment extends Fragment {
 
                                                 Toast.makeText(getContext(), "您已经举报过该树洞,我们会尽快处理，请不要过于频繁的举报", Toast.LENGTH_SHORT).show();
                                             }
-                                        }else{
-                                            ErrorMsg.getErrorMsg(response,getContext());
+                                        } else {
+                                            ErrorMsg.getErrorMsg(response, getContext());
                                         }
                                     }
 
@@ -310,19 +306,15 @@ public class MyStarFragment extends Fragment {
                         }).start();
 
 
-
-
-
-
                     });
                     dialog.show();
                 });
                 img_up.setOnClickListener(v -> {
-                    if(CheckingToken.IfTokenExist()) {
+                    if (CheckingToken.IfTokenExist()) {
                         if (myStarsList.get(position)[6].equals("false")) {
                             new Thread(() -> {
                                 request = retrofit.create(RequestInterface.class);
-                                Call<ResponseBody> call = request.thumbups(RetrofitManager.API+"thumbups/" + myStarsList.get(position)[4] + "/-1");//进行封装
+                                Call<ResponseBody> call = request.thumbups(RetrofitManager.API + "thumbups/" + myStarsList.get(position)[4] + "/-1");//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -331,6 +323,7 @@ public class MyStarFragment extends Fragment {
                                         myStarsList.get(position)[8] = (Integer.parseInt(myStarsList.get(position)[8]) + 1) + "";
                                         text_up.setText(myStarsList.get(position)[8]);
                                     }
+
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                         Toast.makeText(getContext(), "点赞失败", Toast.LENGTH_SHORT).show();
@@ -339,7 +332,7 @@ public class MyStarFragment extends Fragment {
                             }).start();
                         } else {
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API+"thumbups/" + myStarsList.get(position)[4] + "/-1");//进行封装
+                                Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API + "thumbups/" + myStarsList.get(position)[4] + "/-1");//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -349,6 +342,7 @@ public class MyStarFragment extends Fragment {
                                         myStarsList.get(position)[8] = (Integer.parseInt(myStarsList.get(position)[8]) - 1) + "";
                                         text_up.setText(myStarsList.get(position)[8]);
                                     }
+
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                         Toast.makeText(getContext(), "取消点赞失败", Toast.LENGTH_SHORT).show();
@@ -356,27 +350,27 @@ public class MyStarFragment extends Fragment {
                                 });
                             }).start();
                         }
-                    }else{
-                     //   Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
-                     //   startActivity(intent);
+                    } else {
+                        //   Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
+                        //   startActivity(intent);
                     }
                 });
                 img_talk.setOnClickListener(v -> {
                     ARouter.getInstance().build("/hole/HoleActivity")
                             .withInt(Constant.HOLE_ID, Integer.valueOf(myStarsList.get(position)[4]))
-                            .withBoolean(Constant.IF_OPEN_KEYBOARD,true)
-                            .navigation((HoleStarReplyActivity)v.getContext(),2);
+                            .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
+                            .navigation((HoleStarReplyActivity) v.getContext(), 2);
 //                    Intent intent = CommentListActivity.newIntent(getActivity(), null);
 //                    intent.putExtra("reply","key_board");
 //                    intent.putExtra("data_hole_id", myStarsList.get(position)[4]);
 //                    startActivity(intent);
                 });
                 img_star.setOnClickListener(v -> {
-                    if(CheckingToken.IfTokenExist()) {
+                    if (CheckingToken.IfTokenExist()) {
                         if (myStarsList.get(position)[5].equals("false")) {
                             //加载纵向列表标题
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.follow(RetrofitManager.API+"follows/" + myStarsList.get(position)[4]);//进行封装
+                                Call<ResponseBody> call = request.follow(RetrofitManager.API + "follows/" + myStarsList.get(position)[4]);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -385,6 +379,7 @@ public class MyStarFragment extends Fragment {
                                         myStarsList.get(position)[3] = (Integer.parseInt(myStarsList.get(position)[3]) + 1) + "";
                                         text_star.setText(myStarsList.get(position)[3]);
                                     }
+
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                         Toast.makeText(getContext(), "关注失败", Toast.LENGTH_SHORT).show();
@@ -394,7 +389,7 @@ public class MyStarFragment extends Fragment {
                             }).start();
                         } else {
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.deletefollow(RetrofitManager.API+"follows/" + myStarsList.get(position)[4]);//进行封装
+                                Call<ResponseBody> call = request.deletefollow(RetrofitManager.API + "follows/" + myStarsList.get(position)[4]);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
                                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -404,6 +399,7 @@ public class MyStarFragment extends Fragment {
                                         notifyDataSetChanged();
                                         text_star.setText(myStarsList.get(position)[3]);
                                     }
+
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                         Toast.makeText(getContext(), "取消关注失败", Toast.LENGTH_SHORT).show();
@@ -412,16 +408,16 @@ public class MyStarFragment extends Fragment {
                                 });
                             }).start();
                         }
-                    }else{
-                      //  Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
-                      //  startActivity(intent);
+                    } else {
+                        //  Intent intent=new Intent(getContext(), EmailVerifyActivity.class);
+                        //  startActivity(intent);
                     }
                 });
                 totalView.setOnClickListener(v -> {
                     ARouter.getInstance().build("/hole/HoleActivity")
                             .withInt(Constant.HOLE_ID, Integer.valueOf(myStarsList.get(position)[4]))
-                            .withBoolean(Constant.IF_OPEN_KEYBOARD,false)
-                            .navigation((HoleStarReplyActivity)v.getContext(),2);
+                            .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                            .navigation((HoleStarReplyActivity) v.getContext(), 2);
 //                    Log.d("data[2]1", myStarsList.get(position)[2]);
 //                    Intent intent= CommentListActivity.newIntent(getActivity(), null);
 //                    intent.putExtra("data_hole_id",myStarsList.get(position)[4]);
@@ -442,6 +438,7 @@ public class MyStarFragment extends Fragment {
                     }
                 });
             }
+
             public void bind(int position) {
                 this.position = position;
                 content.setText(myStarsList.get(position)[1]);
@@ -455,15 +452,16 @@ public class MyStarFragment extends Fragment {
             }
 
         }
-        public CardsRecycleViewAdapter(){
+
+        public CardsRecycleViewAdapter() {
 
         }
 
         @NonNull
         @Override
-        public ViewHolder onCreateViewHolder( ViewGroup parent, int viewType) {
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new ViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_myfollow,parent,false ));
+                    .inflate(R.layout.card_myfollow, parent, false));
         }
 
         @Override
@@ -472,7 +470,9 @@ public class MyStarFragment extends Fragment {
         }
 
         @Override
-        public int getItemCount() { return myStarsList.size(); }
+        public int getItemCount() {
+            return myStarsList.size();
+        }
 
     }
 }

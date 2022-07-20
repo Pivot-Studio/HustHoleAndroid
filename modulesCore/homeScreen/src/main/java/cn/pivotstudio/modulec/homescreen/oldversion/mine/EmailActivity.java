@@ -16,14 +16,14 @@ import cn.pivotstudio.modulec.homescreen.R;
 
 public class EmailActivity extends AppCompatActivity {
 
-    Button btn1,btn2;
+    Button btn1, btn2;
     ImageView img;
 
     protected void onCreate(Bundle savedInstanceState) {
         View bar;
         TextView tv;
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){//隐藏上方ActionBar
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
 
@@ -32,13 +32,14 @@ public class EmailActivity extends AppCompatActivity {
 
         btn1 = findViewById(R.id.btn_1);
         btn2 = findViewById(R.id.btn_2);
-        img  = findViewById(R.id.email_verify1_img);
+        img = findViewById(R.id.email_verify1_img);
 
         btn1.setOnClickListener(this::onClick);
         btn2.setOnClickListener(this::onClick);
         img.setOnClickListener(this::onClick);
 
     }
+
     public void onClick(View view) {
         Intent intent;
         int id = view.getId();

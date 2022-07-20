@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/GrayScale_95"
+            android:paddingHorizontal="@dimen/dp_10"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/layout_all_forest_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_120"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                    <Button
+                        android:id="@+id/btn_apply_new_forest"
+                        android:layout_width="@dimen/dp_76"
+                        android:layout_height="@dimen/dp_32"
+                        android:layout_marginStart="@dimen/dp_12"
+                        android:background="@drawable/forest_button_white"
+                        android:text="申请新建"
+                        android:visibility="gone"
+                        android:textColor="@color/HH_BandColor_3"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/text_all_forest_head_content" />
+
+
+                    <TextView
+                        android:id="@+id/text_all_forest_head_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_12"
+                        android:layout_marginTop="@dimen/dp_15"
+                        android:text="@string/page2_allforests_2"
+                        android:textColor="@color/GrayScale_20"
+                        android:textSize="@dimen/sp_18"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/text_all_forest_head_content"
+                        android:layout_width="@dimen/dp_245"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_12"
+                        android:layout_marginTop="@dimen/dp_1"
+                        android:text="@string/page2_allforests_3"
+                        android:textColor="@color/GrayScale_50"
+                        android:textSize="@dimen/sp_11"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/text_all_forest_head_title" />
+
+                    <ImageView
+                        android:id="@+id/image_all_forest_head_icon"
+                        android:layout_width="@dimen/dp_112"
+                        android:layout_height="@dimen/dp_0"
+                        android:layout_marginTop="@dimen/dp_12"
+                        android:scaleType="fitXY"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@mipmap/group324" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/all_forest_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_all_forest"
+                    tools:itemCount="2"/>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
