@@ -72,7 +72,6 @@ public class PublishHoleActivity extends BaseActivity {
     private void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_publishhole);
         mViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(PublishHoleViewModel.class);
-        showMsg(forestName + forestId);
         if (args != null) {
             mViewModel.pForestName.setValue(forestName);
             mViewModel.setForestId(forestId);
