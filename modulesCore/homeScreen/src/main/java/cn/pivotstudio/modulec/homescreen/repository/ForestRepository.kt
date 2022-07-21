@@ -116,8 +116,24 @@ class ForestRepository {
                 }
             }))
         }
-
     }
+
+    // 只有自己的树洞可以删除
+    fun deleteTheHole(hole: ForestHole) {
+        if (hole.isMine) {
+            retrofitService.deleteHole(hole.holeId.toString())
+                .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                    override fun onSuccess(t: MsgResponse?) {
+
+                    }
+
+                    override fun onFailure(e: Throwable?) {
+
+                    }
+                }))
+        }
+    }
+
 
     companion object {
         const val TAG = "ForestRepositoryDebug"

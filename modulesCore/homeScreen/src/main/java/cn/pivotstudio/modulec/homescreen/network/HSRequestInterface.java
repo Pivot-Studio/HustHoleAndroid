@@ -53,7 +53,7 @@ public interface HSRequestInterface {
     Observable<MsgResponse> deleteThumbups(@Url String url);
 
     @HTTP(method = "DELETE", path = "holes/{hole_id}", hasBody = false)
-    Observable<MsgResponse> deleteHole(@Path("hole_id") String hole_id);
+    Observable<MsgResponse> deleteHole(@Path("hole_id") String holeId);
 
     @GET
     Observable<HomepageHoleResponse.DataBean> searchSingleHole(@Url String url);

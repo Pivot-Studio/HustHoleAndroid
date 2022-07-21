@@ -27,91 +27,122 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/layout_forest_head"
+                <LinearLayout
+                    android:id="@+id/forest_placeholder"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_37"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent">
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_100"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_forest_head_title"
+                    <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="@dimen/dp_12"
-                        android:text="@string/page2fragment_1"
-                        android:textColor="@color/GrayScale_70"
-                        android:textSize="@dimen/sp_11"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/ic_load_placeholder"
+                        tools:visibility="visible" />
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/layout_jump_to_all_forest"
+                    <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:onClick="@{ () -> forestFragment.navToAllForests() }"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/no_joined_forest"
+                        android:textColor="@color/GrayScale_70"
+                        android:textSize="@dimen/sp_14"
+                        android:textStyle="bold" />
+                </LinearLayout>
 
-                        <TextView
-                            android:id="@+id/text_forest_head_jump_to_all_forest"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/page2fragment_2"
-                            android:textColor="@color/GrayScale_70"
-                            android:textSize="@dimen/sp_11"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toStartOf="@+id/image_forest_head_jump_to_all_forest"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <ImageView
-                            android:id="@+id/image_forest_head_jump_to_all_forest"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginEnd="@dimen/dp_12"
-                            android:contentDescription="@string/page2fragment_2"
-                            android:scaleType="fitCenter"
-                            app:layout_constraintBottom_toBottomOf="@id/text_forest_head_jump_to_all_forest"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@id/text_forest_head_jump_to_all_forest"
-                            app:srcCompat="@drawable/ic_forward_arrow" />
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_forest_head"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_80"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="10"
-                    tools:listitem="@layout/item_forest_head" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_forest_holes"
+                <LinearLayout
+                    android:id="@+id/forest_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="1"
-                    tools:listitem="@layout/item_forest" />
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
-            </LinearLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/layout_forest_head"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_37"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
+                        <TextView
+                            android:id="@+id/tv_forest_head_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="@dimen/dp_12"
+                            android:text="@string/page2fragment_1"
+                            android:textColor="@color/GrayScale_70"
+                            android:textSize="@dimen/sp_11"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_jump_to_all_forest"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:onClick="@{ () -> forestFragment.navToAllForests() }"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/text_forest_head_jump_to_all_forest"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/page2fragment_2"
+                                android:textColor="@color/GrayScale_70"
+                                android:textSize="@dimen/sp_11"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/image_forest_head_jump_to_all_forest"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/image_forest_head_jump_to_all_forest"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginEnd="@dimen/dp_12"
+                                android:contentDescription="@string/page2fragment_2"
+                                android:scaleType="fitCenter"
+                                app:layout_constraintBottom_toBottomOf="@id/text_forest_head_jump_to_all_forest"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@id/text_forest_head_jump_to_all_forest"
+                                app:srcCompat="@drawable/ic_forward_arrow" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_forest_head"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_80"
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="10"
+                        tools:listitem="@layout/item_forest_head" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_view_forest_holes"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="2"
+                        tools:listitem="@layout/item_forest" />
+
+                </LinearLayout>
+            </FrameLayout>
         </androidx.core.widget.NestedScrollView>
 
         <com.scwang.smart.refresh.footer.ClassicsFooter

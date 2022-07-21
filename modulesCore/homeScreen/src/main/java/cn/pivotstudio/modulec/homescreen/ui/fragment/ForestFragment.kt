@@ -3,7 +3,10 @@ package cn.pivotstudio.modulec.homescreen.ui.fragment
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation.findNavController
@@ -13,6 +16,7 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
+import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHeadAdapter
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
@@ -47,12 +51,14 @@ class ForestFragment : BaseFragment() {
 
         initRefresh()
 
+        // TODO: 完全可以抽离出接口
         val holeAdapter = ForestHoleAdapter(
             onContentClick = ::navToSpecificHole,
             onReplyIconClick = ::navToSpecificHoleWithReply,
             onAvatarClick = ::navToSpecificForest,
             giveALike = ::giveALikeToTheHole,
-            follow = ::followTheHole
+            follow = ::followTheHole,
+            reportTheHole = ::reportTheHole
         )
 
         val headAdapter = ForestHeadAdapter(onItemClick = ::navToSpecificForest)
@@ -60,7 +66,10 @@ class ForestFragment : BaseFragment() {
         // 初始化两个RecyclerView
         binding.apply {
 
-            recyclerViewForestHoles.adapter = holeAdapter
+            recyclerViewForestHoles.apply {
+                adapter = holeAdapter
+                (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            }
             recyclerViewForestHead.adapter = headAdapter
             viewModel = this@ForestFragment.viewModel.apply {
                 forestHoles.observe(viewLifecycleOwner) {
@@ -73,16 +82,23 @@ class ForestFragment : BaseFragment() {
 
                 loadState.observe(viewLifecycleOwner) {
                     when (it) {
-                        LoadStatus.DONE,
-                        LoadStatus.ERROR ->
+                        LoadStatus.DONE -> {
+                            forestContent.visibility = VISIBLE
+                            forestPlaceholder.visibility = GONE
                             finishRefreshAnim()
+                        }
+                        LoadStatus.ERROR -> {
+                            forestPlaceholder.visibility = VISIBLE
+                            finishRefreshAnim()
+                        }
+                        LoadStatus.LOADING -> {
+                            forestPlaceholder.visibility =
+                                if (forestContent.isVisible) GONE else VISIBLE
+                        }
                         else -> {}
                     }
                 }
             }
-
-            (recyclerViewForestHoles.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
-                false
 
             if (forestFragment == null) {
                 this.forestFragment = this@ForestFragment
@@ -138,6 +154,15 @@ class ForestFragment : BaseFragment() {
         viewModel.followTheHole(holeId)
     }
 
+    // 举报树洞交给举报界面处理
+    private fun reportTheHole(hole: ForestHole) {
+        ARouter.getInstance().build("/report/ReportActivity")
+            .withInt(Constant.HOLE_ID, hole.holeId)
+            .withInt(Constant.REPLY_LOCAL_ID, -1)
+            .withString(Constant.ALIAS, "洞主")
+            .navigation()
+    }
+
     // 基本上从HomePageFragment复制过来的代码，没有深入研究
     private fun initRefresh() {
         binding.refreshLayout.apply {
@@ -154,7 +179,6 @@ class ForestFragment : BaseFragment() {
                     viewModel.loadMoreForestHoles()
                 }
                 binding.recyclerViewForestHoles.isEnabled = false
-
             }
         }
     }

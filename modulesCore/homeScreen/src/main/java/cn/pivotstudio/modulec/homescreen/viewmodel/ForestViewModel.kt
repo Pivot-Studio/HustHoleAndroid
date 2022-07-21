@@ -65,6 +65,5 @@ class ForestViewModel : ViewModel() {
                 followNum += 1
             followed = !followed
         }
-
     }
 }

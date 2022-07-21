@@ -50,11 +50,11 @@
 
         <TextView
             android:id="@+id/tv_itemforest_time"
+            time="@{forestHole.createdTimestamp}"
+            timeSign="@{false}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_10"
-            time="@{forestHole.createdTimestamp}"
-            timeSign="@{false}"
             android:textColor="@color/GrayScale_80"
             android:textSize="@dimen/sp_11"
             app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_avatar"
@@ -103,10 +103,10 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_reply"
+                replyIcon="@{forestHole.replied}"
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_16"
                 android:layout_marginBottom="12dp"
-                replyIcon="@{forestHole.replied}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@mipmap/inactive_2" />
@@ -208,20 +208,20 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_more_icon"
+                moreListIcon="@{forestHole.mine}"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
                 android:layout_marginStart="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/vector4" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_itemforest_moretext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="举报"
+                android:text="@{forestHole.mine?`删除`:`举报`}"
                 android:textColor="@color/GrayScale_20"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"

@@ -3,6 +3,8 @@ if (isRelease) {
 } else {
     apply plugin: 'com.android.application'
 }
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion androidID.compileSdkVersion
     defaultConfig {
@@ -55,7 +57,7 @@ android {
 dependencies {
     implementation project(':modulesBase:libBase')
 
-    annotationProcessor 'com.alibaba:arouter-compiler:1.5.2'//每个组件都要添加
+    kapt 'com.alibaba:arouter-compiler:1.5.2'//每个组件都要添加
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

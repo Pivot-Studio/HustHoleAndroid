@@ -159,10 +159,10 @@ public class HomePageHoleRepository {
     /**
      * 点赞
      *
-     * @param holeId     树洞号
-     * @param likeNum 网络请求成功前的点赞数量
-     * @param liked  网络请求成功前是否被点赞
-     * @param dataBean    item的所有数据
+     * @param holeId   树洞号
+     * @param likeNum  网络请求成功前的点赞数量
+     * @param liked    网络请求成功前是否被点赞
+     * @param dataBean item的所有数据
      */
     public void giveALikeToAHole(int holeId, int likeNum, boolean liked, HomepageHoleResponse.DataBean dataBean) {
         Observable<MsgResponse> observable;
