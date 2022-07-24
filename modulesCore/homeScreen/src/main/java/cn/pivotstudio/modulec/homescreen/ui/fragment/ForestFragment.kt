@@ -1,6 +1,7 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -10,9 +11,11 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
+import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
@@ -58,7 +61,8 @@ class ForestFragment : BaseFragment() {
             onAvatarClick = ::navToSpecificForest,
             giveALike = ::giveALikeToTheHole,
             follow = ::followTheHole,
-            reportTheHole = ::reportTheHole
+            reportTheHole = ::reportTheHole,
+            deleteTheHole = ::deleteTheHole
         )
 
         val headAdapter = ForestHeadAdapter(onItemClick = ::navToSpecificForest)
@@ -69,6 +73,15 @@ class ForestFragment : BaseFragment() {
             recyclerViewForestHoles.apply {
                 adapter = holeAdapter
                 (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        (adapter as ForestHoleAdapter).lastImageMore?.let {
+                            if (it.isVisible) {
+                                it.visibility = GONE
+                            }
+                        }
+                    }
+                })
             }
             recyclerViewForestHead.adapter = headAdapter
             viewModel = this@ForestFragment.viewModel.apply {
@@ -161,6 +174,14 @@ class ForestFragment : BaseFragment() {
             .withInt(Constant.REPLY_LOCAL_ID, -1)
             .withString(Constant.ALIAS, "洞主")
             .navigation()
+    }
+
+    private fun deleteTheHole(hole: ForestHole) {
+        val dialog = DeleteDialog(context)
+        dialog.show()
+        dialog.setOptionsListener {
+            viewModel.deleteTheHole(hole)
+        }
     }
 
     // 基本上从HomePageFragment复制过来的代码，没有深入研究

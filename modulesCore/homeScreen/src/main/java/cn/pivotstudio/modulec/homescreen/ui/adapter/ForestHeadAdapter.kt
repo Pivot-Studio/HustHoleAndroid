@@ -19,6 +19,7 @@ import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHeadBinding
  */
 class ForestHeadAdapter(val onItemClick: (Int) -> Unit) :
     ListAdapter<ForestHead, ForestHeadAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestHoleViewHolder {
         return ForestHoleViewHolder(
             ItemForestHeadBinding.inflate(

@@ -1,8 +1,10 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -22,8 +24,11 @@ class ForestHoleAdapter(
     val onAvatarClick: (Int) -> Unit,
     val giveALike: (Int) -> Unit,
     val follow: (Int) -> Unit,
-    val reportTheHole: (hole: ForestHole) -> Unit
+    val reportTheHole: (hole: ForestHole) -> Unit,
+    val deleteTheHole: (hole: ForestHole) -> Unit
 ) : ListAdapter<ForestHole, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
+    var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestHoleViewHolder {
         return ForestHoleViewHolder(
             ItemForestBinding.inflate(
@@ -70,19 +75,30 @@ class ForestHoleAdapter(
                     notifyItemChanged(adapterPosition)
                 }
 
+                // 三个点
                 imageItemForestMore.setOnClickListener {
                     layoutItemForestMoreList.visibility = View.VISIBLE
+                    if (lastImageMore != layoutItemForestMoreList ) {
+                        lastImageMore?.visibility = View.GONE
+                    }
+                    lastImageMore = layoutItemForestMoreList
+                    Log.d(TAG, "bind: click")
                 }
 
                 layoutItemForestMoreList.setOnClickListener {
+                    if (forestHole.isMine) {
+                        deleteTheHole(forestHole)
+                    } else {
+                        reportTheHole(forestHole)
+                    }
                     it.visibility = View.GONE
-                    reportTheHole(forestHole)
                 }
             }
         }
     }
 
     companion object {
+        const val TAG = "ForestHoleAdapter"
         val DIFF_CALLBACK: DiffUtil.ItemCallback<ForestHole> =
             object : DiffUtil.ItemCallback<ForestHole>() {
                 override fun areItemsTheSame(oldItem: ForestHole, newItem: ForestHole): Boolean {

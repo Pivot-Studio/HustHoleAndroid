@@ -66,4 +66,9 @@ class ForestViewModel : ViewModel() {
             followed = !followed
         }
     }
+
+    fun deleteTheHole(hole: ForestHole) {
+        repository.deleteTheHole(hole)
+    }
+
 }
