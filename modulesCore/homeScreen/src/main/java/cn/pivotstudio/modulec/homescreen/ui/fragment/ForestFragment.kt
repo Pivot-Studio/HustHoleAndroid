@@ -67,7 +67,7 @@ class ForestFragment : BaseFragment() {
 
         val headAdapter = ForestHeadAdapter(onItemClick = ::navToSpecificForest)
 
-        // 初始化两个RecyclerView
+        // 初始化两个RecyclerView和liveData监听器
         binding.apply {
 
             recyclerViewForestHoles.apply {
@@ -83,6 +83,7 @@ class ForestFragment : BaseFragment() {
                     }
                 })
             }
+
             recyclerViewForestHead.adapter = headAdapter
             viewModel = this@ForestFragment.viewModel.apply {
                 forestHoles.observe(viewLifecycleOwner) {
@@ -176,6 +177,7 @@ class ForestFragment : BaseFragment() {
             .navigation()
     }
 
+    // 删除树洞
     private fun deleteTheHole(hole: ForestHole) {
         val dialog = DeleteDialog(context)
         dialog.show()
@@ -193,7 +195,7 @@ class ForestFragment : BaseFragment() {
                 viewModel.loadHolesAndHeads()
                 binding.recyclerViewForestHoles.isEnabled = false
             }
-            setOnLoadMoreListener { refreshlayout ->  //上拉加载触发
+            setOnLoadMoreListener { refreshlayout -> //上拉加载触发
                 if (viewModel.forestHoles.value == null || viewModel.forestHeads.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
                     viewModel.loadHolesAndHeads()
                 } else {

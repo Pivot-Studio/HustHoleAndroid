@@ -1,8 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.model
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-
 
 data class ForestCard(
     @field:SerializedName("background_image_url") val backgroundImageUrl: String,

@@ -82,7 +82,6 @@ class ForestHoleAdapter(
                         lastImageMore?.visibility = View.GONE
                     }
                     lastImageMore = layoutItemForestMoreList
-                    Log.d(TAG, "bind: click")
                 }
 
                 layoutItemForestMoreList.setOnClickListener {

@@ -359,7 +359,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_all_frorest.xml" value="0.23240469208211142" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_evaluate.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest.xml" value="0.19518585205078126" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest_detail.xml" value="0.1" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest_detail.xml" value="0.2759872436523438" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_homepage.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_message.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_mine.xml" value="0.2572463768115942" />
@@ -405,6 +405,8 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/titlebar_transparent.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/titlebar_white.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/menu/bottom_navigation_menu.xml" value="0.29375" />
+        <entry key="modulesPublic/hole/src/main/res/layout/activity_hole.xml" value="0.2558876811594203" />
+        <entry key="modulesPublic/hole/src/main/res/layout/titlebar_hole_green.xml" value="0.2558876811594203" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/activity_publishhole.xml" value="0.2586050724637681" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlist.xml" value="0.2586050724637681" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlisttitle.xml" value="0.2586050724637681" />

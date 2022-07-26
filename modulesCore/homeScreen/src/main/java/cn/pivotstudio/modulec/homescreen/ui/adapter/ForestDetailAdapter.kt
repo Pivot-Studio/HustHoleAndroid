@@ -1,7 +1,9 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,10 +14,12 @@ class ForestDetailAdapter(
     val onContentClick: (Int) -> Unit,
     val onReplyIconClick: (Int) -> Unit,
     val giveALike: (Int) -> Unit,
-    val follow: (Int) -> Unit
-) : ListAdapter<DetailForestHole, ForestDetailAdapter.DetailViewHolder>(
-    DIFF_CALLBACK
-) {
+    val follow: (Int) -> Unit,
+    val deleteTheHole: (DetailForestHole) -> Unit,
+    val reportTheHole: (DetailForestHole) -> Unit,
+) : ListAdapter<DetailForestHole, ForestDetailAdapter.DetailViewHolder>(DIFF_CALLBACK) {
+    var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
+
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -58,6 +62,24 @@ class ForestDetailAdapter(
                 layoutForestDetailFollow.setOnClickListener {
                     follow(hole.holeId)
                     notifyItemChanged(adapterPosition)
+                }
+
+                // 三个点
+                imageItemForestDetailMore.setOnClickListener {
+                    layoutItemForestDetailMorelist.visibility = View.VISIBLE
+                    if (lastImageMore != layoutItemForestDetailMorelist) {
+                        lastImageMore?.visibility = View.GONE
+                    }
+                    lastImageMore = layoutItemForestDetailMorelist
+                }
+
+                layoutItemForestDetailMorelist.setOnClickListener {
+                    if (hole.isMine) {
+                        deleteTheHole(hole)
+                    } else {
+                        reportTheHole(hole)
+                    }
+                    it.visibility = View.GONE
                 }
             }
         }

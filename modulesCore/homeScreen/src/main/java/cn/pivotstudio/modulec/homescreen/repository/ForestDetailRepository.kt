@@ -5,10 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
-import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
-import cn.pivotstudio.modulec.homescreen.model.ForestCard
-import cn.pivotstudio.modulec.homescreen.model.ForestCardList
-import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.modulec.homescreen.model.*
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import com.example.libbase.constant.Constant
@@ -37,6 +34,7 @@ class ForestDetailRepository {
                     lastStartId = STARTING_ID
                     _state.value = ForestDetailHolesLoadStatus.DONE
                 }
+
                 override fun onFailure(e: Throwable?) {
                     _state.value = ForestDetailHolesLoadStatus.ERROR
                 }
@@ -113,6 +111,21 @@ class ForestDetailRepository {
                     Log.d(TAG, "关注失败")
                 }
             }))
+        }
+    }
+
+    fun deleteTheHole(hole: Hole) {
+        (hole as DetailForestHole).takeIf { it.isMine }?.let {
+            HomeScreenNetworkApi.retrofitService.deleteHole(it.holeId.toString())
+                .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                    override fun onSuccess(t: MsgResponse?) {
+
+                    }
+
+                    override fun onFailure(e: Throwable?) {
+
+                    }
+                }))
         }
 
     }

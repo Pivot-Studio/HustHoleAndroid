@@ -14,5 +14,5 @@ data class DetailForestHole(
     @field:SerializedName("is_thumbup") var liked: Boolean,
     @field:SerializedName("reply_num") var replyNum: Int,
     @field:SerializedName("thumbup_num") var likeNum: Int
-)
+) : Hole()
 

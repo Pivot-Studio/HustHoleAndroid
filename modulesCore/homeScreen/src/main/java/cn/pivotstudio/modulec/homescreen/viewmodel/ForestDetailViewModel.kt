@@ -2,7 +2,9 @@ package cn.pivotstudio.modulec.homescreen.viewmodel;
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
 import cn.pivotstudio.modulec.homescreen.model.ForestHead
+import cn.pivotstudio.modulec.homescreen.model.Hole
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
 
 class ForestDetailViewModel(val forestId: Int) : ViewModel() {
@@ -67,7 +69,10 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
                 followNum += 1
             followed = !followed
         }
+    }
 
+    fun deleteTheHole(hole: Hole) {
+        repository.deleteTheHole(hole as DetailForestHole)
     }
 
 }
