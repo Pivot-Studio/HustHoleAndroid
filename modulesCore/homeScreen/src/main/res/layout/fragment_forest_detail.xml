@@ -112,21 +112,24 @@
                                     app:layout_constraintStart_toStartOf="@+id/text_forest_detail_follow_msg"
                                     app:layout_constraintTop_toBottomOf="@+id/text_forest_detail_follow_msg" />
 
-
-                                <ToggleButton
-                                    android:id="@+id/btn_forest_detail_join"
+                                <FrameLayout
                                     android:layout_width="wrap_content"
-                                    android:layout_height="@dimen/dp_32"
-                                    android:layout_marginEnd="@dimen/dp_20"
-                                    android:layout_marginBottom="@dimen/dp_20"
-                                    android:background="@drawable/detail_forest_join_button"
-                                    android:checked="@{viewModel.overview.joined}"
-                                    android:textColor="@color/white"
-                                    android:textOff="加入"
-                                    android:textOn="已加入"
-                                    android:textSize="@dimen/sp_16"
+                                    android:layout_height="wrap_content"
                                     app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent" />
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    android:layout_marginEnd="@dimen/dp_20"
+                                    android:layout_marginBottom="@dimen/dp_20">
+
+                                    <include
+                                        android:id="@+id/detail_forest_join_btn"
+                                        layout="@layout/tertiary_button_default" />
+
+                                    <include
+                                        android:id="@+id/detail_forest_quit_btn"
+                                        layout="@layout/tertiary_button_secondary"
+                                        android:visibility="gone"/>
+
+                                </FrameLayout>
 
 
                             </androidx.constraintlayout.widget.ConstraintLayout>

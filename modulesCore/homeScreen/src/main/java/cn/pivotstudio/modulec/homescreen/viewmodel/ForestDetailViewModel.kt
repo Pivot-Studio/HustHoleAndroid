@@ -75,6 +75,14 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
         repository.deleteTheHole(hole as DetailForestHole)
     }
 
+    fun joinTheForest() {
+        repository.joinTheForest(forestId)
+    }
+
+    fun quitTheForest() {
+        repository.quitTheForest(forestId)
+    }
+
 }
 
 class ForestDetailViewModelFactory(private val forestId: Int) : ViewModelProvider.Factory {

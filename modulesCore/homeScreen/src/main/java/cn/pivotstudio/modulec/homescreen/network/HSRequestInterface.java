@@ -75,12 +75,12 @@ public interface HSRequestInterface {
 
     @POST("forests/join/{forest_id}")
     Observable<MsgResponse> joinTheForest(
-        @Query("forest_id") int forestId
+        @Path("forest_id") String forestId
     );
 
-    @POST("forests/quit/{forest_id}")
+    @DELETE("forests/quit/{forest_id}")
     Observable<MsgResponse> quitTheForest(
-        @Query("forest_id") int forestId
+        @Path("forest_id") String forestId
     );
 
     @GET("forests/types?")

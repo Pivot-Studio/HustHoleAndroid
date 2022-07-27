@@ -23,6 +23,7 @@ import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.model.Hole
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
+import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestDetailAdapter
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
@@ -91,8 +92,21 @@ class ForestDetailFragment : BaseFragment() {
             fabPublishHoleFromForest.setOnClickListener {
                 navToPublishHoleFromDetailForest(_args.forestId)
             }
+
+            detailForestJoinBtn.setOnClickListener {
+                detailForestQuitBtn.visibility = View.VISIBLE
+                detailForestJoinBtn.visibility = View.GONE
+                joinTheForest()
+            }
+
+            detailForestQuitBtn.setOnClickListener {
+                detailForestQuitBtn.visibility = View.GONE
+                detailForestJoinBtn.visibility = View.VISIBLE
+                quitTheForest()
+            }
         }
 
+        // 配置 LiveData 的监听器
         viewModel.holes.observe(viewLifecycleOwner) {
             adapter.submitList(it.reversed()) //  后端返回了个反的列表回来，有人用小树林才怪
         }
@@ -100,6 +114,14 @@ class ForestDetailFragment : BaseFragment() {
         viewModel.overview.observe(viewLifecycleOwner) {
             sharedViewModel.forestHeads.value?.run {
                 viewModel.checkIfJoinedTheForest(this.forests)
+            }
+
+            if (it.Joined) {
+                binding.detailForestQuitBtn.visibility = View.VISIBLE
+                binding.detailForestJoinBtn.visibility = View.GONE
+            } else {
+                binding.detailForestQuitBtn.visibility = View.GONE
+                binding.detailForestJoinBtn.visibility = View.VISIBLE
             }
         }
 
@@ -113,6 +135,14 @@ class ForestDetailFragment : BaseFragment() {
         }
 
 
+    }
+
+    private fun joinTheForest() {
+        viewModel.joinTheForest()
+    }
+
+    private fun quitTheForest() {
+        viewModel.quitTheForest()
     }
 
     // 点击文字内容跳转到树洞

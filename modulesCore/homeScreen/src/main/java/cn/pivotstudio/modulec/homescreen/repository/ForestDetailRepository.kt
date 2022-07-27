@@ -127,7 +127,33 @@ class ForestDetailRepository {
                     }
                 }))
         }
+    }
 
+    fun joinTheForest(forestId: Int) {
+        HomeScreenNetworkApi.retrofitService.joinTheForest(forestId.toString())
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                override fun onSuccess(t: MsgResponse?) {
+                    _overview.value?.Joined = true
+
+                }
+
+                override fun onFailure(e: Throwable?) {
+
+                }
+            }))
+    }
+
+    fun quitTheForest(forestId: Int) {
+        HomeScreenNetworkApi.retrofitService.quitTheForest(forestId.toString())
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                override fun onSuccess(t: MsgResponse?) {
+                    _overview.value?.Joined = false
+                }
+
+                override fun onFailure(e: Throwable?) {
+
+                }
+            }))
     }
 
     companion object {

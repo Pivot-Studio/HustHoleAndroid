@@ -316,15 +316,23 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/standard_button_gray.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/standard_button_transparent.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/standard_button_white.xml" value="0.1365" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/standard_corner.xml" value="0.146" />
         <entry key="modulesBase/resBase/src/main/res/drawable/standard_cursor.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/standard_forest_1.xml" value="0.1065" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/standard_forest_1_head.xml" value="0.146" />
         <entry key="modulesBase/resBase/src/main/res/drawable/standard_forest_centerphoto.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/standard_forest_hole.xml" value="0.1065" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/tag_gray.xml" value="0.146" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/tag_red.xml" value="0.146" />
         <entry key="modulesBase/resBase/src/main/res/drawable/tag_yellow.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/tertiary_button_bg.xml" value="0.1315" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/tertiary_button_secondary_bg.xml" value="0.146" />
         <entry key="modulesBase/resBase/src/main/res/drawable/test.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/test_background.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/thumbup.xml" value="0.208" />
+        <entry key="modulesBase/resBase/src/main/res/layout/tertiary_button_default.xml" value="0.44852531543676405" />
+        <entry key="modulesBase/resBase/src/main/res/layout/tertiary_button_main.xml" value="0.5630471049875453" />
+        <entry key="modulesBase/resBase/src/main/res/layout/tertiary_button_secondary.xml" value="0.5806038676828578" />
         <entry key="modulesCore/homeScreen/src/main/res/drawable/homepagehole_follow.xml" value="0.1445" />
         <entry key="modulesCore/homeScreen/src/main/res/drawable/homepagehole_follow_false.xml" value="0.1445" />
         <entry key="modulesCore/homeScreen/src/main/res/drawable/homepagehole_reply.xml" value="0.1445" />
@@ -360,7 +368,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_all_frorest.xml" value="0.23240469208211142" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_evaluate.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest.xml" value="0.1" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest_detail.xml" value="0.25" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest_detail.xml" value="0.30307312011718746" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_homepage.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_message.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_mine.xml" value="0.2572463768115942" />
