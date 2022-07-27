@@ -44,9 +44,6 @@ public interface HSRequestInterface {
     Observable<MsgResponse> deleteFollow(@Url String url);
 
     @POST
-    Observable<MsgResponse> report(@Url String url);
-
-    @POST
     Observable<MsgResponse> thumbups(@Url String url);
 
     @DELETE
@@ -74,6 +71,16 @@ public interface HSRequestInterface {
     Observable<ForestHeads> searchForestHeads(
             @Query("start_id") int startId,
             @Query("list_size") int listSize
+    );
+
+    @POST("forests/join/{forest_id}")
+    Observable<MsgResponse> joinTheForest(
+        @Query("forest_id") int forestId
+    );
+
+    @POST("forests/quit/{forest_id}")
+    Observable<MsgResponse> quitTheForest(
+        @Query("forest_id") int forestId
     );
 
     @GET("forests/types?")
