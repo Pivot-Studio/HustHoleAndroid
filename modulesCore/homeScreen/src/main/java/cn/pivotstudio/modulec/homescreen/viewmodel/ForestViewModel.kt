@@ -6,6 +6,7 @@ import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.repository.ForestRepository
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
+import kotlinx.coroutines.flow.asSharedFlow
 
 /**
  * @classname ForestViewModel
@@ -20,8 +21,12 @@ class ForestViewModel : ViewModel() {
     val forestHoles: LiveData<List<ForestHole>> = repository.forestHoles
     val forestHeads: LiveData<ForestHeads> = repository.forestHeads
 
-    val loadState: LiveData<LoadStatus> = repository.state
+    val holesLoadState: LiveData<LoadStatus> = repository.holeState
+    val headerLoadState: LiveData<LoadStatus> = repository.headerLoadState
+    val giveALikeLoadState: LiveData<LoadStatus> = repository.giveALikeLoadState
+    val followLoadState: LiveData<LoadStatus> = repository.followLoadState
 
+    val toastMsg = repository.loadToast.asSharedFlow()
     init {
         loadHolesAndHeads()
     }
@@ -38,6 +43,7 @@ class ForestViewModel : ViewModel() {
     }
 
     fun giveALikeToTheHole(holeId: Int) {
+
         val hole = repository.forestHoles.value?.first {
             it.holeId == holeId
         }

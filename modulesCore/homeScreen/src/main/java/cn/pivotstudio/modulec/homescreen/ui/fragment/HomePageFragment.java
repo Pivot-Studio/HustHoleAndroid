@@ -43,7 +43,7 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel;
  */
 
 
-public class HomePageFragment extends BaseFragment {
+public class  HomePageFragment extends BaseFragment {
     public static final String TAG = "HomePageFragment";
 
     private FragmentHomepageBinding binding;
@@ -175,11 +175,10 @@ public class HomePageFragment extends BaseFragment {
             }
             finishRefreshAnim();
         });
-        mViewModel.pClickMsg.observe(getViewLifecycleOwner(), MsgResponse -> showMsg(MsgResponse.getMsg()));
+
         mViewModel.failed.observe(context, s -> {//监听网络请求错误信息变化
             if (binding.recyclerView.getAdapter() == null)
                 binding.recyclerView.setAdapter(holeRecyclerViewAdapter);
-            showMsg(s);
             finishRefreshAnim();
         });
     }

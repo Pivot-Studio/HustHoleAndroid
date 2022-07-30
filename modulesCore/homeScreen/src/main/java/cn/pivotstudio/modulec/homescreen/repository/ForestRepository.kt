@@ -7,11 +7,16 @@ import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
-import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
+import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.ERROR
+import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.LOADING
 import com.example.libbase.constant.Constant
 import io.reactivex.Observable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 
 
 enum class LoadStatus { LOADING, ERROR, DONE }
@@ -19,19 +24,27 @@ enum class LoadStatus { LOADING, ERROR, DONE }
 @SuppressLint("CheckResult")
 class ForestRepository {
     private var _holeState = MutableLiveData<LoadStatus>()
+    private var _giveALikeLoadState = MutableLiveData<LoadStatus>()
+    private var _followLoadState = MutableLiveData<LoadStatus>()
+    private var _headerLoadState = MutableLiveData<LoadStatus>()
+
     private var _forestHoles = MutableLiveData<List<ForestHole>>()
     private var _forestHeads = MutableLiveData<ForestHeads>()
     private var lastStartId = STARTING_ID
 
     val forestHeads = _forestHeads
     val forestHoles = _forestHoles
-    val state = _holeState
+    val holeState = _holeState
+    val giveALikeLoadState = _giveALikeLoadState
+    val followLoadState = _followLoadState
+    val headerLoadState = _headerLoadState
+
+    val loadToast = MutableSharedFlow<String>()
 
 
     fun loadForestHoles() {
         _holeState.value = LoadStatus.LOADING
-        retrofitService
-            .searchForestHoles(STARTING_ID, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
+        retrofitService.searchForestHoles(STARTING_ID, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
                 override fun onSuccess(items: List<ForestHole>) {
                     forestHoles.value = items
@@ -47,9 +60,11 @@ class ForestRepository {
 
     fun loadMoreForestHoles() {
         _holeState.value = LoadStatus.LOADING
-        retrofitService
-            .searchForestHoles(lastStartId + HOLES_LIST_SIZE, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
-            .compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
+        retrofitService.searchForestHoles(
+                lastStartId + HOLES_LIST_SIZE,
+                HOLES_LIST_SIZE,
+                SORT_BY_LATEST_REPLY
+            ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
                 override fun onSuccess(result: List<ForestHole>) {
                     val newItems = forestHoles.value!!.toMutableList()
                     newItems.addAll(result)
@@ -67,8 +82,7 @@ class ForestRepository {
     }
 
     fun loadForestHeads() {
-        retrofitService
-            .searchForestHeads(STARTING_ID, HEADS_LIST_SIZE)
+        retrofitService.searchForestHeads(STARTING_ID, HEADS_LIST_SIZE)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<ForestHeads>() {
                 override fun onSuccess(items: ForestHeads?) {
                     forestHeads.value = items
@@ -81,6 +95,7 @@ class ForestRepository {
     }
 
     fun giveALikeToTheHole(hole: ForestHole) {
+        giveALikeLoadState.value = LOADING
         hole.let {
             val observable: Observable<MsgResponse> = if (!it.liked) {
                 retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + it.holeId + "/-1")
@@ -89,10 +104,20 @@ class ForestRepository {
             }
             observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(msg: MsgResponse) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        loadToast.emit(
+                            if (!it.liked) "点赞成功" else "取消赞成功"
+                        )
+                    }
+                    giveALikeLoadState.value = LoadStatus.DONE
                     Log.d(TAG, "onSuccess: ${msg.msg}")
                 }
 
                 override fun onFailure(e: Throwable) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        loadToast.emit("❌")
+                    }
+                    giveALikeLoadState.value = ERROR
                     Log.d(TAG, "点赞失败")
                 }
             }))
