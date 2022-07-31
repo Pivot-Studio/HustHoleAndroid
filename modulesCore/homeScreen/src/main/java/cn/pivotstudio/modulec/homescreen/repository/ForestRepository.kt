@@ -16,6 +16,8 @@ import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 
@@ -41,7 +43,6 @@ class ForestRepository {
 
     val loadToast = MutableSharedFlow<String>()
 
-
     fun loadForestHoles() {
         _holeState.value = LoadStatus.LOADING
         retrofitService.searchForestHoles(STARTING_ID, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
@@ -61,24 +62,24 @@ class ForestRepository {
     fun loadMoreForestHoles() {
         _holeState.value = LoadStatus.LOADING
         retrofitService.searchForestHoles(
-                lastStartId + HOLES_LIST_SIZE,
-                HOLES_LIST_SIZE,
-                SORT_BY_LATEST_REPLY
-            ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
-                override fun onSuccess(result: List<ForestHole>) {
-                    val newItems = forestHoles.value!!.toMutableList()
-                    newItems.addAll(result)
-                    forestHoles.value = newItems
-                    lastStartId += HOLES_LIST_SIZE
-                    _holeState.value = LoadStatus.DONE
-                }
+            lastStartId + HOLES_LIST_SIZE,
+            HOLES_LIST_SIZE,
+            SORT_BY_LATEST_REPLY
+        ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
+            override fun onSuccess(result: List<ForestHole>) {
+                val newItems = forestHoles.value!!.toMutableList()
+                newItems.addAll(result)
+                forestHoles.value = newItems
+                lastStartId += HOLES_LIST_SIZE
+                _holeState.value = LoadStatus.DONE
+            }
 
-                override fun onFailure(e: Throwable?) {
-                    e?.printStackTrace()
-                    _holeState.value = LoadStatus.ERROR
-                }
+            override fun onFailure(e: Throwable?) {
+                e?.printStackTrace()
+                _holeState.value = LoadStatus.ERROR
+            }
 
-            }))
+        }))
     }
 
     fun loadForestHeads() {
@@ -125,37 +126,57 @@ class ForestRepository {
     }
 
     fun followTheHole(hole: ForestHole) {
-        hole.let {
-            val observable: Observable<MsgResponse> = if (!it.followed) {
-                retrofitService.follow(Constant.BASE_URL + "follows/" + hole.holeId)
-            } else {
-                retrofitService.deleteFollow(Constant.BASE_URL + "follows/" + hole.holeId)
-            }
-            observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+
+        val observable: Observable<MsgResponse> = if (!hole.followed) {
+            retrofitService.follow(Constant.BASE_URL + "follows/" + hole.holeId)
+        } else {
+            retrofitService.deleteFollow(Constant.BASE_URL + "follows/" + hole.holeId)
+        }
+        observable
+            .compose(NetworkApi.applySchedulers())
+            .subscribe(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(msg: MsgResponse) {
-                    Log.d(TAG, "onSuccess: ${msg.msg}")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        loadToast.emit(
+                            if (!hole.followed) "收藏成功"
+                            else "取消收藏"
+                        )
+                    }
                 }
 
                 override fun onFailure(e: Throwable) {
-                    Log.d(TAG, "关注失败")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        loadToast.emit(
+                            "❌"
+                        )
+                    }
                 }
-            }))
-        }
+            })
+
     }
 
     // 只有自己的树洞可以删除
     fun deleteTheHole(hole: ForestHole) {
         if (hole.isMine) {
             retrofitService.deleteHole(hole.holeId.toString())
-                .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                .compose(NetworkApi.applySchedulers())
+                .subscribe(object : BaseObserver<MsgResponse>() {
                     override fun onSuccess(t: MsgResponse?) {
-
+                        CoroutineScope(Dispatchers.IO).launch {
+                            loadToast.emit(
+                                "删除成功"
+                            )
+                        }
                     }
 
                     override fun onFailure(e: Throwable?) {
-
+                        CoroutineScope(Dispatchers.IO).launch {
+                            loadToast.emit(
+                                "❌"
+                            )
+                        }
                     }
-                }))
+                })
         }
     }
 

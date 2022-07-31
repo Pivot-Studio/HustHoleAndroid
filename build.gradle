@@ -3,25 +3,31 @@ apply from :'husthole.gradle'//
 
 buildscript {
     ext {
-        kotlin_version = '1.6.21'
+        appcompat_version = '1.4.1'
+        kotlin_version = '1.7.0'
         okhttp_version = '4.9.3'
         retrofit_version = '2.9.0'
-        rxjava2_version = '2.2.12'
+        rxjava2_version = '2.2.21'
         navigation_version = '2.4.2'
         room_version = '2.4.2'
         material_version = '1.4.0'
-        coroutines = '1.6.0'
+        coroutines = '1.6.1'
+        constraintlayout_version = '2.1.2'
         paging_version = '3.1.0'
         gson_version = '2.9.0'
         lifecycle_version = '2.4.0'
+        mmkv_version = '1.2.13'
+        markdown_version = '1.0.1'
+        recyclerview_version = '1.2.1'
+        ARouter_version = '1.5.2'
     }
     repositories {
         google()
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.0.2'
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.40.1'
+        classpath 'com.android.tools.build:gradle:7.0.4'
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.42'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
         // NOTE: Do not place your application dependencies here; they belong

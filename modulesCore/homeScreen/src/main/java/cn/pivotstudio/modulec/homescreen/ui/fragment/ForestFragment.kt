@@ -121,8 +121,8 @@ class ForestFragment : BaseFragment() {
             }
 
             lifecycleScope.launchWhenStarted {
-                viewModel?.toastMsg?.collect {
-                    showMsg(it)
+                viewModel?.toastMsg?.collect { value ->
+                    showMsg(value)
                 }
             }
         }

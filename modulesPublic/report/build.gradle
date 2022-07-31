@@ -56,8 +56,13 @@ android {
 
 dependencies {
     implementation project(':modulesBase:libBase')
+    implementation project(':modulesBase:networkBase')
+    implementation project(':modulesBase:resBase')
 
-    kapt 'com.alibaba:arouter-compiler:1.5.2'//每个组件都要添加
+    kapt "com.alibaba:arouter-compiler:$ARouter_version"//每个组件都要添加
+
+    implementation "com.google.android.material:material:$material_version"
+    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

@@ -51,6 +51,7 @@ class HomeScreenActivity : BaseActivity() {
     /**
      * fragment中使用onActivityResult需要在此重写触发，使用navigation后activity的onActivityResult被调用后不会再触发子fragment的onActivityResult，需要手动调用
      */
+    @Deprecated("Deprecated in Java")
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val mMainNavFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
