@@ -44,7 +44,7 @@ class ForestRepository {
     val loadToast = MutableSharedFlow<String>()
 
     fun loadForestHoles() {
-        _holeState.value = LoadStatus.LOADING
+        _holeState.value = LOADING
         retrofitService.searchForestHoles(STARTING_ID, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
                 override fun onSuccess(items: List<ForestHole>) {
@@ -54,7 +54,7 @@ class ForestRepository {
                 }
 
                 override fun onFailure(e: Throwable?) {
-                    _holeState.value = LoadStatus.ERROR
+                    _holeState.value = ERROR
                 }
             }))
     }
@@ -75,8 +75,7 @@ class ForestRepository {
             }
 
             override fun onFailure(e: Throwable?) {
-                e?.printStackTrace()
-                _holeState.value = LoadStatus.ERROR
+                _holeState.value = ERROR
             }
 
         }))
@@ -111,7 +110,6 @@ class ForestRepository {
                         )
                     }
                     giveALikeLoadState.value = LoadStatus.DONE
-                    Log.d(TAG, "onSuccess: ${msg.msg}")
                 }
 
                 override fun onFailure(e: Throwable) {
@@ -119,7 +117,6 @@ class ForestRepository {
                         loadToast.emit("❌")
                     }
                     giveALikeLoadState.value = ERROR
-                    Log.d(TAG, "点赞失败")
                 }
             }))
         }
