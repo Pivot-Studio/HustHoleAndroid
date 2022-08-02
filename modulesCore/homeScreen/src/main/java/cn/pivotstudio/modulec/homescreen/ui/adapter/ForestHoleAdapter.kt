@@ -22,8 +22,8 @@ class ForestHoleAdapter(
     val onContentClick: (Int) -> Unit,
     val onReplyIconClick: (Int) -> Unit,
     val onAvatarClick: (Int) -> Unit,
-    val giveALike: (Int) -> Unit,
-    val follow: (Int) -> Unit,
+    val giveALike: (hole: ForestHole) -> Unit,
+    val follow: (hole: ForestHole) -> Unit,
     val reportTheHole: (hole: ForestHole) -> Unit,
     val deleteTheHole: (hole: ForestHole) -> Unit
 ) : ListAdapter<ForestHole, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
@@ -40,7 +40,7 @@ class ForestHoleAdapter(
     }
 
     override fun onBindViewHolder(holder: ForestHoleViewHolder, position: Int) {
-        val forestHole = getItem(position)
+        val forestHole = currentList[position]
         holder.bind(forestHole)
     }
 
@@ -66,13 +66,11 @@ class ForestHoleAdapter(
                 }
 
                 layoutItemForestThumbsUp.setOnClickListener {
-                    giveALike(forestHole.holeId)
-                    notifyItemChanged(adapterPosition)
+                    giveALike(forestHole)
                 }
 
                 layoutItemForestFollow.setOnClickListener {
-                    follow(forestHole.holeId)
-                    notifyItemChanged(adapterPosition)
+                    follow(forestHole)
                 }
 
                 // 三个点
@@ -105,9 +103,7 @@ class ForestHoleAdapter(
                 }
 
                 override fun areContentsTheSame(oldItem: ForestHole, newItem: ForestHole): Boolean {
-                    return oldItem.liked == newItem.liked &&
-                            oldItem.followed == newItem.followed &&
-                            oldItem.replyNum == newItem.replyNum
+                    return oldItem == newItem
                 }
             }
     }

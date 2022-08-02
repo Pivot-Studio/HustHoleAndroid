@@ -1,12 +1,12 @@
 package cn.pivotstudio.modulec.homescreen.repository
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.modulec.homescreen.model.Hole
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.ERROR
@@ -16,8 +16,6 @@ import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 
@@ -26,8 +24,6 @@ enum class LoadStatus { LOADING, ERROR, DONE }
 @SuppressLint("CheckResult")
 class ForestRepository {
     private var _holeState = MutableLiveData<LoadStatus>()
-    private var _giveALikeLoadState = MutableLiveData<LoadStatus>()
-    private var _followLoadState = MutableLiveData<LoadStatus>()
     private var _headerLoadState = MutableLiveData<LoadStatus>()
 
     private var _forestHoles = MutableLiveData<List<ForestHole>>()
@@ -37,11 +33,10 @@ class ForestRepository {
     val forestHeads = _forestHeads
     val forestHoles = _forestHoles
     val holeState = _holeState
-    val giveALikeLoadState = _giveALikeLoadState
-    val followLoadState = _followLoadState
     val headerLoadState = _headerLoadState
 
     val loadToast = MutableSharedFlow<String>()
+    val changedHoleSharedFlow = MutableSharedFlow<Int>()
 
     fun loadForestHoles() {
         _holeState.value = LOADING
@@ -60,7 +55,7 @@ class ForestRepository {
     }
 
     fun loadMoreForestHoles() {
-        _holeState.value = LoadStatus.LOADING
+        _holeState.value = LOADING
         retrofitService.searchForestHoles(
             lastStartId + HOLES_LIST_SIZE,
             HOLES_LIST_SIZE,
@@ -94,9 +89,8 @@ class ForestRepository {
             }))
     }
 
-    fun giveALikeToTheHole(hole: ForestHole) {
-        giveALikeLoadState.value = LOADING
-        hole.let {
+    fun giveALikeToTheHole(hole: Hole) {
+        (hole as ForestHole).let { it ->
             val observable: Observable<MsgResponse> = if (!it.liked) {
                 retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + it.holeId + "/-1")
             } else {
@@ -104,26 +98,34 @@ class ForestRepository {
             }
             observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(msg: MsgResponse) {
+                    if (!it.liked) it.likeNum ++
+                    else it.likeNum--
+                    it.liked = !it.liked
+
                     CoroutineScope(Dispatchers.Main).launch {
                         loadToast.emit(
-                            if (!it.liked) "点赞成功" else "取消赞成功"
+                            msg.msg
                         )
+                        _forestHoles.value?.indexOfFirst { firstHole ->
+                            it.holeId == firstHole.holeId
+                        }?.let { index ->
+                            changedHoleSharedFlow.emit(
+                                index
+                            )
+                        }
                     }
-                    giveALikeLoadState.value = LoadStatus.DONE
                 }
 
                 override fun onFailure(e: Throwable) {
                     CoroutineScope(Dispatchers.Main).launch {
                         loadToast.emit("❌")
                     }
-                    giveALikeLoadState.value = ERROR
                 }
             }))
         }
     }
 
     fun followTheHole(hole: ForestHole) {
-
         val observable: Observable<MsgResponse> = if (!hole.followed) {
             retrofitService.follow(Constant.BASE_URL + "follows/" + hole.holeId)
         } else {
@@ -134,10 +136,19 @@ class ForestRepository {
             .subscribe(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(msg: MsgResponse) {
                     CoroutineScope(Dispatchers.IO).launch {
+                        if (hole.followed) hole.followNum.dec()
+                        else hole.followNum.inc()
+                        hole.followed = hole.followed.not()
                         loadToast.emit(
-                            if (!hole.followed) "收藏成功"
-                            else "取消收藏"
+                            msg.msg
                         )
+                        _forestHoles.value?.indexOfFirst { firstHole ->
+                            hole.holeId == firstHole.holeId
+                        }?.let { index ->
+                            changedHoleSharedFlow.emit(
+                                index
+                            )
+                        }
                     }
                 }
 
@@ -158,10 +169,10 @@ class ForestRepository {
             retrofitService.deleteHole(hole.holeId.toString())
                 .compose(NetworkApi.applySchedulers())
                 .subscribe(object : BaseObserver<MsgResponse>() {
-                    override fun onSuccess(t: MsgResponse?) {
+                    override fun onSuccess(successMsg: MsgResponse) {
                         CoroutineScope(Dispatchers.IO).launch {
                             loadToast.emit(
-                                "删除成功"
+                                successMsg.msg
                             )
                         }
                     }

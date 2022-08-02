@@ -47,7 +47,7 @@ dependencies {
 
     //Room数据库
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     api "com.alibaba:arouter-api:$ARouter_version" // ARouter基础
 
@@ -69,8 +69,5 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
-
-
-
 
 }

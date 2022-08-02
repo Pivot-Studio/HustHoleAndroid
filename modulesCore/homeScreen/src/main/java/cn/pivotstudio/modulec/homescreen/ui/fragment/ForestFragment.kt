@@ -29,6 +29,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.example.libbase.base.ui.fragment.BaseFragment
 import com.example.libbase.constant.Constant
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
@@ -89,7 +90,7 @@ class ForestFragment : BaseFragment() {
             recyclerViewForestHead.adapter = headAdapter
             viewModel = this@ForestFragment.viewModel.apply {
                 forestHoles.observe(viewLifecycleOwner) {
-                    holeAdapter.submitList(it)
+                    holeAdapter.submitList(it.toList())
                 }
 
                 forestHeads.observe(viewLifecycleOwner) {
@@ -123,6 +124,11 @@ class ForestFragment : BaseFragment() {
             lifecycleScope.launchWhenStarted {
                 viewModel?.toastMsg?.collect { value ->
                     showMsg(value)
+                }
+            }
+            lifecycleScope.launchWhenStarted {
+                viewModel?.changedHoleSharedFlow?.collect {
+                    holeAdapter.notifyItemChanged(it)
                 }
             }
         }
@@ -162,13 +168,13 @@ class ForestFragment : BaseFragment() {
     }
 
     // 点赞
-    private fun giveALikeToTheHole(holeId: Int) {
-        viewModel.giveALikeToTheHole(holeId)
+    private fun giveALikeToTheHole(hole: ForestHole) {
+        viewModel.giveALikeToTheHole(hole)
     }
 
     // 关注/收藏
-    private fun followTheHole(holeId: Int) {
-        viewModel.followTheHole(holeId)
+    private fun followTheHole(hole: ForestHole) {
+        viewModel.followTheHole(hole)
     }
 
     // 举报树洞交给举报界面处理
