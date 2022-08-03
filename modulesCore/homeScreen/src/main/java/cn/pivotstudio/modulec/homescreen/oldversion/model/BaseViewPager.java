@@ -3,11 +3,10 @@ package cn.pivotstudio.modulec.homescreen.oldversion.model;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-
 import androidx.viewpager.widget.ViewPager;
 
 public class BaseViewPager extends ViewPager {//用来禁掉滑动
-    private boolean scrollable = true;
+    private final boolean scrollable = true;
 
     public BaseViewPager(Context context) {
         super(context);
@@ -27,5 +26,4 @@ public class BaseViewPager extends ViewPager {//用来禁掉滑动
     public boolean onInterceptTouchEvent(MotionEvent arg0) {
         return false;
     }
-
 }

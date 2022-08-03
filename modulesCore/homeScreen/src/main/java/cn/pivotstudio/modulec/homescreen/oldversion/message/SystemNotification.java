@@ -1,6 +1,5 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.message;
 
-
 import static cn.pivotstudio.modulec.homescreen.oldversion.fragment.MessageFragment.removeCharAt;
 import static cn.pivotstudio.modulec.homescreen.oldversion.message.ParseNotificationData.parseSysJson;
 
@@ -26,7 +25,6 @@ import com.wang.avi.AVLoadingIndicatorView;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 
 import cn.pivotstudio.moduleb.database.MMKVUtil;
 import cn.pivotstudio.modulec.homescreen.R;
@@ -90,7 +88,6 @@ public class SystemNotification extends AppCompatActivity {
             mAVLoadingIndicatorView.setVisibility(View.GONE);
             mTitle.setText("系统通知");
         }
-
     }
 
     public class onClickBack implements View.OnClickListener {
@@ -105,9 +102,7 @@ public class SystemNotification extends AppCompatActivity {
         public void onClick(View v) {
             finish();
         }
-
     }
-
 
     /*private void initData(){
         Log.d(TAG, "initData: init first");
@@ -137,18 +132,21 @@ public class SystemNotification extends AppCompatActivity {
                     } catch (Exception e) {
 
                     }
-                    Log.d(TAG, "handler: mSystemNotificationList " + mSystemNotificationList.get(0).getSystemContent());
+                    Log.d(TAG, "handler: mSystemNotificationList " + mSystemNotificationList.get(0)
+                        .getSystemContent());
                     adapter = new SystemNotificationAdapter(mSystemNotificationList);
-                    sysNotificationRecyclerView.setLayoutManager(new LinearLayoutManager(getParent(),
-                            LinearLayoutManager.VERTICAL, false));
+                    sysNotificationRecyclerView.setLayoutManager(
+                        new LinearLayoutManager(getParent(), LinearLayoutManager.VERTICAL, false));
                     sysNotificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
                     sysNotificationRecyclerView.setAdapter(adapter);
-                    adapter.setOnItemClickListener(new SystemNotificationAdapter.OnItemClickListener() {
-                        @Override
-                        public void onClick(int position) {
-                            Toast.makeText(SystemNotification.this, "click " + position, Toast.LENGTH_SHORT)/*.show()*/;
-                        }
-                    });
+                    adapter.setOnItemClickListener(
+                        new SystemNotificationAdapter.OnItemClickListener() {
+                            @Override
+                            public void onClick(int position) {
+                                Toast.makeText(SystemNotification.this, "click " + position,
+                                    Toast.LENGTH_SHORT)/*.show()*/;
+                            }
+                        });
                     mAVLoadingIndicatorView.hide();
                     mAVLoadingIndicatorView.setVisibility(View.GONE);
                     mTitle.setText("系统通知");
@@ -166,12 +164,15 @@ public class SystemNotification extends AppCompatActivity {
         OkHttpClient client = new OkHttpClient();
         Message message = Message.obtain();
 
-//        SharedPreferences editor = this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
-//        token = editor.getString("token", "");
+        //        SharedPreferences editor = this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
+        //        token = editor.getString("token", "");
         MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(this);
         String token = mmkvUtil.getString("USER_TOKEN");
 
-        Request request = new Request.Builder().get().addHeader("Authorization", "Bearer " + token).url(path).build();
+        Request request = new Request.Builder().get()
+            .addHeader("Authorization", "Bearer " + token)
+            .url(path)
+            .build();
 
         Log.d(TAG, "getStringByOkhttp: request");
         try {
@@ -211,6 +212,4 @@ public class SystemNotification extends AppCompatActivity {
             Log.d(TAG, "getStringByOkhttp:i am exception, e.toString() " + e.toString());
         }
     }
-
-
 }

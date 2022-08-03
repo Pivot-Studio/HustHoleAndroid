@@ -516,6 +516,9 @@ public class MessageFragment extends Fragment {
         }
         Log.d(TAG, "getStringByOkhttp: getResponseData: null ");
     }
+
+    public void jumpToPublishHoleByARouter(View view) {
+    }
 }
 
 

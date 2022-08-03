@@ -4,14 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
+import cn.pivotstudio.modulec.homescreen.R;
 import com.githang.statusbar.StatusBarCompat;
 import com.google.android.material.chip.Chip;
-
-import cn.pivotstudio.modulec.homescreen.R;
-
 
 public class AdviceActivity extends AppCompatActivity {
 
@@ -22,7 +18,8 @@ public class AdviceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         View bar;
         TextView tv;
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
+            true);
         if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
@@ -39,8 +36,8 @@ public class AdviceActivity extends AppCompatActivity {
     void onClick(View view) {
         Intent intent;
         if (view.getId() == R.id.cp_advice) {//                advice.setText("123");
-//                ColorStateList list1 = new ColorStateList(R.color.HH_BandColor_3,R.color.HH_BandColor_3);
-//                ColorStateList list = new ColorStateList(getResources().getColor(R.color.HH_BandColor_3),getResources().getColor(R.color.HH_BandColor_5));
+            //                ColorStateList list1 = new ColorStateList(R.color.HH_BandColor_3,R.color.HH_BandColor_3);
+            //                ColorStateList list = new ColorStateList(getResources().getColor(R.color.HH_BandColor_3),getResources().getColor(R.color.HH_BandColor_5));
         }
     }
 }
