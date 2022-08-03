@@ -108,7 +108,9 @@ class ForestDetailFragment : BaseFragment() {
 
         // 配置 LiveData 的监听器
         viewModel.holes.observe(viewLifecycleOwner) {
-            adapter.submitList(it.reversed()) //  后端返回了个反的列表回来，有人用小树林才怪
+            it?.let {
+                adapter.submitList(it) //  后端返回了个反的列表回来，有人用小树林才怪
+            }
         }
 
         viewModel.overview.observe(viewLifecycleOwner) {

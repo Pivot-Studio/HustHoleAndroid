@@ -48,11 +48,6 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
         hole?.run {
             repository.giveALikeToTheHole(this)
-            if (liked)
-                likeNum -= 1
-            else
-                likeNum += 1
-            liked = !liked
         }
     }
 

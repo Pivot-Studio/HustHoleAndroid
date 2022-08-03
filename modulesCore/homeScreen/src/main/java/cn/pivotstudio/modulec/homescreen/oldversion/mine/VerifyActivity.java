@@ -14,24 +14,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.githang.statusbar.StatusBarCompat;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.HashMap;
-
-
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.oldversion.model.EditTextReaction;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.OkHttpUtil;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager;
+import com.githang.statusbar.StatusBarCompat;
+import java.io.IOException;
+import java.util.HashMap;
 import okhttp3.ResponseBody;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,6 +33,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class VerifyActivity extends AppCompatActivity {
+    private static final String ACTIVITY_IDENTIFY = "email";
     Button btn_verify;
     Boolean match = false;
     EditText et;
@@ -48,14 +43,20 @@ public class VerifyActivity extends AppCompatActivity {
     Retrofit retrofit;
     Boolean mIfResend = false;
     private RequestInterface request;
-    private static final String ACTIVITY_IDENTIFY = "email";
+
+    public static Intent newIntent(Context context, String useremail) {
+        Intent intent = new Intent(context, VerifyActivity.class);
+        intent.putExtra(ACTIVITY_IDENTIFY, useremail);
+        //intent1.putExtra(ACTIVITY_IDENTIFY2,vertify);
+        return intent;
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
 
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_verify2);
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
+            true);
         if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
@@ -79,43 +80,38 @@ public class VerifyActivity extends AppCompatActivity {
         EditTextReaction.EditTextSize(et, string1, 14);
         btn_verify.setEnabled(false);
         EditTextReaction.ButtonReaction(et, btn_verify);
-
-    }
-
-    public static Intent newIntent(Context context, String useremail) {
-        Intent intent = new Intent(context, VerifyActivity.class);
-        intent.putExtra(ACTIVITY_IDENTIFY, useremail);
-        //intent1.putExtra(ACTIVITY_IDENTIFY2,vertify);
-        return intent;
     }
 
     public void onClick(View view) {
         Intent intent;
         int id = view.getId();
         if (id == R.id.btn_verify) {
-            SharedPreferences editor = VerifyActivity.this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
+            SharedPreferences editor =
+                VerifyActivity.this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
             String emailcode = editor.getString("email", "");
             Log.d("VerifyActivity ", emailcode + "+" + et.getText().toString() + "+");
-//                if(request == null){Log.d("xxx","ttt");}
+            //                if(request == null){Log.d("xxx","ttt");}
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     HashMap map = new HashMap();
-                    retrofit = new Retrofit.Builder()
-                            .baseUrl(RetrofitManager.API + "auth/")
-                            .client(OkHttpUtil.getOkHttpClient())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
+                    retrofit = new Retrofit.Builder().baseUrl(RetrofitManager.API + "auth/")
+                        .client(OkHttpUtil.getOkHttpClient())
+                        .addConverterFactory(GsonConverterFactory.create())
+                        .build();
 
                     request = retrofit.create(RequestInterface.class);//创建接口实例
                     // map.put("email", emailcode);
                     map.put("verify_code", et.getText().toString());
-                    Call<ResponseBody> call = request.verifyCodeMatch(RetrofitManager.API + "auth/activation?verify_code=" + et.getText().toString());
+                    Call<ResponseBody> call = request.verifyCodeMatch(
+                        RetrofitManager.API + "auth/activation?verify_code=" + et.getText()
+                            .toString());
                     //String vertify=et.getText().toString();
                     //Call<ResponseBody> call = request.verifyCodeMatch(RetrofitManager.API+"auth/activation?email="+emailcode+"&verify_code="+ et.getText().toString());//进行封装
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        public void onResponse(Call<ResponseBody> call,
+                                               Response<ResponseBody> response) {
                             if (response.code() == 200) {
                                 String json = "null";
                                 try {
@@ -125,9 +121,10 @@ public class VerifyActivity extends AppCompatActivity {
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
-                                Toast.makeText(VerifyActivity.this, json, Toast.LENGTH_SHORT).show();
-//                                Intent intent = new Intent(VerifyActivity.this, HomeScreenActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                startActivity(intent);
+                                Toast.makeText(VerifyActivity.this, json, Toast.LENGTH_SHORT)
+                                    .show();
+                                //                                Intent intent = new Intent(VerifyActivity.this, HomeScreenActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                //                                startActivity(intent);
                             } else {
                                 String json = "null";
                                 String returncondition = null;
@@ -136,12 +133,15 @@ public class VerifyActivity extends AppCompatActivity {
                                         json = response.errorBody().string();
                                         JSONObject jsonObject = new JSONObject(json);
                                         returncondition = jsonObject.getString("msg");
-                                        Toast.makeText(VerifyActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(VerifyActivity.this, returncondition,
+                                            Toast.LENGTH_SHORT).show();
                                     } catch (IOException | JSONException e) {
                                         e.printStackTrace();
                                     }
                                 } else {
-                                    Toast.makeText(VerifyActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(VerifyActivity.this,
+                                            R.string.network_unknownfailture, Toast.LENGTH_SHORT)
+                                        .show();
                                 }
                                 //ErrorMsg.getErrorMsg(response,VerifyActivity.this);
                             }
@@ -149,9 +149,9 @@ public class VerifyActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                            Toast.makeText(VerifyActivity.this, R.string.network_failure, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerifyActivity.this, R.string.network_failure,
+                                Toast.LENGTH_SHORT).show();
                         }
-
                     });
                 }
             }).start();
@@ -159,23 +159,29 @@ public class VerifyActivity extends AppCompatActivity {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Retrofit retrofit2 = new Retrofit.Builder()
-                            .baseUrl(RetrofitManager.API + "auth/")
+                    Retrofit retrofit2 =
+                        new Retrofit.Builder().baseUrl(RetrofitManager.API + "auth/")
                             .client(OkHttpUtil.getOkHttpClient2())
                             .addConverterFactory(GsonConverterFactory.create())
                             .build();
 
                     RequestInterface request2 = retrofit2.create(RequestInterface.class);
                     HashMap map = new HashMap();
-                    SharedPreferences editor = VerifyActivity.this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
+                    SharedPreferences editor =
+                        VerifyActivity.this.getSharedPreferences("Depository",
+                            Context.MODE_PRIVATE);//
                     String condition = editor.getString("email", "");
                     map.put("email", condition);
                     map.put("isResetPassword", false);
-                    Call<ResponseBody> call = request2.sendVerifyCode(RetrofitManager.API + "auth/sendVerifyCode?email=" + condition + "&isResetPassword=false");
+                    Call<ResponseBody> call = request2.sendVerifyCode(RetrofitManager.API
+                        + "auth/sendVerifyCode?email="
+                        + condition
+                        + "&isResetPassword=false");
                     // Call<ResponseBody> call = request2.sendVerifyCode(map);//进行封装
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        public void onResponse(Call<ResponseBody> call,
+                                               Response<ResponseBody> response) {
                             if (response.code() == 200) {
                                 ll_retry.setVisibility(View.VISIBLE);
                                 tv_again.setVisibility(View.INVISIBLE);
@@ -195,20 +201,18 @@ public class VerifyActivity extends AppCompatActivity {
                                 };
                                 timer.start();
 
-
                                 String json = "null";
                                 try {
                                     if (response.body() != null) {
                                         json = response.body().string();
                                         JSONObject jsonObject = new JSONObject(json);
                                         String returncondition = jsonObject.getString("msg");
-                                        Toast.makeText(VerifyActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(VerifyActivity.this, returncondition,
+                                            Toast.LENGTH_SHORT).show();
                                     }
                                 } catch (IOException | JSONException e) {
                                     e.printStackTrace();
-
                                 }
-
                             } else {
                                 String json = "null";
                                 String returncondition = null;
@@ -217,12 +221,15 @@ public class VerifyActivity extends AppCompatActivity {
                                         json = response.errorBody().string();
                                         //JSONObject jsonObject = new JSONObject(json);
                                         //returncondition = jsonObject.getString("msg");
-                                        Toast.makeText(VerifyActivity.this, json, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(VerifyActivity.this, json,
+                                            Toast.LENGTH_SHORT).show();
                                     } catch (IOException e) {
                                         e.printStackTrace();
                                     }
                                 } else {
-                                    Toast.makeText(VerifyActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(VerifyActivity.this,
+                                            R.string.network_unknownfailture, Toast.LENGTH_SHORT)
+                                        .show();
                                 }
                                 // ErrorMsg.getErrorMsg(response,VerifyActivity.this);
                             }
@@ -230,9 +237,9 @@ public class VerifyActivity extends AppCompatActivity {
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                            Toast.makeText(VerifyActivity.this, R.string.network_loginfailure, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(VerifyActivity.this, R.string.network_loginfailure,
+                                Toast.LENGTH_SHORT).show();
                         }
-
                     });
                 }
             }).start();

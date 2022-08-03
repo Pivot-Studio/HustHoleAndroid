@@ -10,26 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.libbase.constant.Constant;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.oldversion.fragment.MyReplyItem;
 import cn.pivotstudio.modulec.homescreen.oldversion.mine.HoleStarReplyActivity;
@@ -38,8 +24,15 @@ import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshHeader;
 import cn.pivotstudio.modulec.homescreen.oldversion.model.TimeCount;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager;
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.libbase.constant.Constant;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import java.io.IOException;
+import java.util.ArrayList;
 import okhttp3.ResponseBody;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,26 +43,24 @@ public class MyReplyFragment extends Fragment {
     private static final String BASE_URL = RetrofitManager.API;
     //    private final ArrayList<String[]> myList = new ArrayList<>();
     private final ArrayList<MyReplyItem> myList = new ArrayList<>();
+    String TAG = "myReply";
     private Retrofit retrofit;
     private RequestInterface request;
     private JSONArray jsonArray;
     private RecyclerView myRecycleView;
-
     private int start_id = 0;
-    private int list_size = 20;
+    private final int list_size = 20;
     private boolean isRefresh = false;
     private boolean finishRefresh = false;
     private boolean isOnLoadMore = false;
     private boolean finishOnLoadMore = false;
 
-    String TAG = "myReply";
-
     public static MyReplyFragment newInstance() {
         return new MyReplyFragment();
     }
 
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         View myReplyView = inflater.inflate(R.layout.fragment_myhole, container, false);
 
@@ -138,7 +129,6 @@ public class MyReplyFragment extends Fragment {
         RetrofitManager.RetrofitBuilder(BASE_URL);
         retrofit = RetrofitManager.getRetrofit();
         request = retrofit.create(RequestInterface.class);
-
     }
 
     @Override
@@ -163,19 +153,25 @@ public class MyReplyFragment extends Fragment {
                             Log.d(TAG, "this is myReplies reply: " + jsonStr);
                         }
                         jsonArray = new JSONArray(jsonStr);
-//                            new DownLoadTask().execute();
+                        //                            new DownLoadTask().execute();
                         try {
                             for (int f = 0; f < jsonArray.length(); f++) {
                                 JSONObject sonObject = jsonArray.getJSONObject(f);
-                                MyReplyItem singleHole = new MyReplyItem(sonObject.getString("alias"), sonObject.getString("content"),
-                                        sonObject.getString("created_timestamp"), sonObject.getString("hole_content"),
-                                        sonObject.getInt("hole_id"), sonObject.getInt("local_reply_id"));
+                                MyReplyItem singleHole =
+                                    new MyReplyItem(sonObject.getString("alias"),
+                                        sonObject.getString("content"),
+                                        sonObject.getString("created_timestamp"),
+                                        sonObject.getString("hole_content"),
+                                        sonObject.getInt("hole_id"),
+                                        sonObject.getInt("local_reply_id"));
                                 myList.add(singleHole);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        if (isRefresh) finishRefresh = true;
+                        if (isRefresh) {
+                            finishRefresh = true;
+                        }
 
                         if (isOnLoadMore) {
                             myRecycleView.getAdapter().notifyDataSetChanged();
@@ -195,14 +191,41 @@ public class MyReplyFragment extends Fragment {
         }).start();
     }
 
-    public class CardsRecycleViewAdapter extends RecyclerView.Adapter<CardsRecycleViewAdapter.ViewHolder> {
+    public class CardsRecycleViewAdapter
+        extends RecyclerView.Adapter<CardsRecycleViewAdapter.ViewHolder> {
+
+        public CardsRecycleViewAdapter() {
+
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.card_myreply, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            ((ViewHolder) holder).bind(position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return myList.size();
+        }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             private Boolean more_condition = false;
             private int position;
-            private TextView alias, createdTimestamp, content, holeId, holeContent;
-            private ImageView moreWhat;
-            private ConstraintLayout myDelete, myReplyTotal;
+            private final TextView alias;
+            private final TextView createdTimestamp;
+            private final TextView content;
+            private final TextView holeId;
+            private final TextView holeContent;
+            private final ImageView moreWhat;
+            private final ConstraintLayout myDelete;
+            private final ConstraintLayout myReplyTotal;
 
             public ViewHolder(View view) {
 
@@ -247,10 +270,15 @@ public class MyReplyFragment extends Fragment {
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                Call<ResponseBody> call = request.delete_hole_2(RetrofitManager.API + "replies/" + myList.get(position).hole_id + "/" + myList.get(position).local_reply_id);//进行封装
+                                Call<ResponseBody> call = request.delete_hole_2(RetrofitManager.API
+                                    + "replies/"
+                                    + myList.get(position).hole_id
+                                    + "/"
+                                    + myList.get(position).local_reply_id);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    public void onResponse(Call<ResponseBody> call,
+                                                           Response<ResponseBody> response) {
                                         myDelete.setVisibility(View.GONE);
                                         more_condition = false;
                                         dialog.dismiss();
@@ -262,17 +290,17 @@ public class MyReplyFragment extends Fragment {
                                                     json = response.body().string();
                                                     JSONObject jsonObject = new JSONObject(json);
                                                     returncondition = jsonObject.getString("msg");
-                                                    Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getContext(), returncondition,
+                                                        Toast.LENGTH_SHORT).show();
                                                     // Toast.makeText(getContext(), "删除成功", Toast.LENGTH_SHORT).show();
                                                     myList.remove(position);
                                                     notifyDataSetChanged();
-
-
                                                 } catch (IOException | JSONException e) {
                                                     e.printStackTrace();
                                                 }
                                             } else {
-                                                Toast.makeText(getContext(), "删除失败，超过可删除的时间范围", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), "删除失败，超过可删除的时间范围",
+                                                    Toast.LENGTH_SHORT).show();
                                             }
                                         } else {
                                             //followCondition = false;
@@ -283,36 +311,40 @@ public class MyReplyFragment extends Fragment {
                                                     json = response.errorBody().string();
                                                     JSONObject jsonObject = new JSONObject(json);
                                                     returncondition = jsonObject.getString("msg");
-                                                    Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getContext(), returncondition,
+                                                        Toast.LENGTH_SHORT).show();
                                                 } catch (IOException | JSONException e) {
                                                     e.printStackTrace();
                                                 }
                                                 //FailureAction();
                                             } else {
-                                                Toast.makeText(getContext(), R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(),
+                                                    R.string.network_unknownfailture,
+                                                    Toast.LENGTH_SHORT).show();
                                             }
                                         }
                                     }
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        Toast.makeText(getContext(), R.string.network_deletefailture, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(),
+                                                R.string.network_deletefailture, Toast.LENGTH_SHORT)
+                                            .show();
                                         // mDeleteCondition=false;
                                     }
                                 });
                             }
                         }).start();
-
-
                     });
                     dialog.show();
                 });
                 myReplyTotal.setOnClickListener(v -> {
                     Log.d(TAG, "现在跳转到评论界面。");
-                    ARouter.getInstance().build("/hole/HoleActivity")
-                            .withInt(Constant.HOLE_ID, (myList.get(position)).hole_id)
-                            .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                            .navigation((HoleStarReplyActivity) v.getContext(), 2);
+                    ARouter.getInstance()
+                        .build("/hole/HoleActivity")
+                        .withInt(Constant.HOLE_ID, (myList.get(position)).hole_id)
+                        .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                        .navigation((HoleStarReplyActivity) v.getContext(), 2);
 
                     // Intent intent = CommentListActivity.newIntent(getActivity(), null);
                     // intent.putExtra("data_hole_id", (myList.get(position)).hole_id+"");
@@ -339,33 +371,11 @@ public class MyReplyFragment extends Fragment {
                 alias.setText(myList.get(position).alias);
                 content.setText(myList.get(position).content);
 
-                createdTimestamp.setText(TimeCount.replytime(myList.get(position).created_timestamp));
+                createdTimestamp.setText(
+                    TimeCount.replytime(myList.get(position).created_timestamp));
                 holeContent.setText(myList.get(position).hole_content);
                 holeId.setText("# " + myList.get(position).hole_id);
-
             }
         }
-
-        public CardsRecycleViewAdapter() {
-
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_myreply, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            ((ViewHolder) holder).bind(position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return myList.size();
-        }
-
     }
 }

@@ -91,11 +91,17 @@ class ForestDetailRepository {
             }
             observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(msg: MsgResponse) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        loadToast.emit(
-                            if (!it.liked) "点赞成功" else "取消赞成功"
-                        )
+                    val newItems = mutableListOf<DetailForestHole>()
+                    _holes.value?.run {
+                        newItems.addAll(this)
                     }
+
+                    newItems.first { changedHole ->
+                        changedHole.holeId == hole.holeId
+                    }.apply {
+                        this.liked = this.liked.not()
+                    }
+                    _holes.value = newItems
                 }
 
                 override fun onFailure(e: Throwable) {

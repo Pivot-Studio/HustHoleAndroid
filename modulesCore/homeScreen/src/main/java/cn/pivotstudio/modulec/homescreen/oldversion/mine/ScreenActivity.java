@@ -7,24 +7,21 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.githang.statusbar.StatusBarCompat;
-
 import cn.pivotstudio.modulec.homescreen.R;
-
+import com.githang.statusbar.StatusBarCompat;
 
 public class ScreenActivity extends AppCompatActivity {
 
-    private RelativeLayout screen_keyword;
     ImageView screen_img;
     TextView screen_title;
+    private RelativeLayout screen_keyword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
+            true);
         if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
@@ -36,11 +33,10 @@ public class ScreenActivity extends AppCompatActivity {
         screen_img = findViewById(R.id.screen_img);
         //screen_title = findViewById(R.id.screen_title);
 
-//        SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
-//        editor.putBoolean("isVerified",false);
+        //        SharedPreferences.Editor editor = getSharedPreferences("data",MODE_PRIVATE).edit();
+        //        editor.putBoolean("isVerified",false);
 
         SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
-
 
         //screen_keyword .setOnClickListener(this::onClick);
         //screen_img.setOnClickListener(this::onClick);
@@ -52,7 +48,6 @@ public class ScreenActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(ScreenActivity.this, SetScreenKeyWordActivity.class);
                 startActivity(intent);
-
             }
         });
         screen_img.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +78,5 @@ public class ScreenActivity extends AppCompatActivity {
     }
 
      */
-
 }
 

@@ -1,16 +1,12 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.network;
 
-
 import android.content.Context;
 import android.widget.Toast;
-
+import cn.pivotstudio.modulec.homescreen.R;
+import java.io.IOException;
+import okhttp3.ResponseBody;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-
-import cn.pivotstudio.modulec.homescreen.R;
-import okhttp3.ResponseBody;
 import retrofit2.Response;
 
 public class ErrorMsg {

@@ -15,7 +15,6 @@ import java.util.List;
 
 import cn.pivotstudio.modulec.homescreen.R;
 
-
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<NotificationBean> mNotificationList;
     Context context;
@@ -43,7 +42,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         this.context = context;
         mLayoutInflater = LayoutInflater.from(context);
     }
-
 
     //内容长度
     public int getContentItemCount() {
@@ -109,7 +107,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             latestSystemNotification = itemView.findViewById(R.id.latest_system_notification);
         }
-
     }
 
     //底部 ViewHolder
@@ -120,18 +117,17 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE_HEADER) {
-            return new HeaderViewHolder(mLayoutInflater.inflate(R.layout.notification_item_header,
-                    parent, false));
+            return new HeaderViewHolder(
+                mLayoutInflater.inflate(R.layout.notification_item_header, parent, false));
         } else if (viewType == ITEM_TYPE_CONTENT) {
-            return new ContentViewHolder(mLayoutInflater.inflate(R.layout.notification_item,
-                    parent, false));
+            return new ContentViewHolder(
+                mLayoutInflater.inflate(R.layout.notification_item, parent, false));
         } else if (viewType == ITEM_TYPE_BOTTOM) {
-            return new BottomViewHolder(mLayoutInflater.inflate(R.layout.notification_item_footer,
-                    parent, false));
+            return new BottomViewHolder(
+                mLayoutInflater.inflate(R.layout.notification_item_footer, parent, false));
         }
         return null;
     }
@@ -154,7 +150,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
             ((ContentViewHolder) holder).content.setText(notification.getReplyContent());
             ((ContentViewHolder) holder).hole_id.setText("# " + notification.getHole_id());
-
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -167,10 +162,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             }
         });
-
-
     }
-
 
     @Override
     public int getItemCount() {

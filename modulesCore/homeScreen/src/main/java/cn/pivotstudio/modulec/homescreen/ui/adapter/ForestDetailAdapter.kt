@@ -21,14 +21,11 @@ class ForestDetailAdapter(
     var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
     override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
+        parent: ViewGroup, viewType: Int
     ): ForestDetailAdapter.DetailViewHolder {
         return DetailViewHolder(
             ItemForestDetailBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+                LayoutInflater.from(parent.context), parent, false
             )
         )
     }
@@ -56,7 +53,6 @@ class ForestDetailAdapter(
 
                 layoutForestDetailThumbup.setOnClickListener {
                     giveALike(hole.holeId)
-                    notifyItemChanged(adapterPosition)
                 }
 
                 layoutForestDetailFollow.setOnClickListener {
@@ -89,17 +85,15 @@ class ForestDetailAdapter(
         val DIFF_CALLBACK: DiffUtil.ItemCallback<DetailForestHole> =
             object : DiffUtil.ItemCallback<DetailForestHole>() {
                 override fun areItemsTheSame(
-                    oldItem: DetailForestHole,
-                    newItem: DetailForestHole
+                    oldItem: DetailForestHole, newItem: DetailForestHole
                 ): Boolean {
                     return oldItem.holeId == newItem.holeId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: DetailForestHole,
-                    newItem: DetailForestHole
+                    oldItem: DetailForestHole, newItem: DetailForestHole
                 ): Boolean {
-                    return oldItem.content == newItem.content
+                    return oldItem == newItem
                 }
             }
     }

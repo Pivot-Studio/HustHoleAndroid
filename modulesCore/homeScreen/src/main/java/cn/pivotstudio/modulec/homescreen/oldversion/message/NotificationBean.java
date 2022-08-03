@@ -13,9 +13,14 @@ public class NotificationBean {
     public NotificationBean() {
     }
 
-    public NotificationBean(String reply_local_id, String time, String type,
-                            String content, String hole_id, String alias,
-                            String is_read, String id) {
+    public NotificationBean(String reply_local_id,
+                            String time,
+                            String type,
+                            String content,
+                            String hole_id,
+                            String alias,
+                            String is_read,
+                            String id) {
         this.content = content;
         this.created_timestamp = time;
         this.type = type;
@@ -24,7 +29,6 @@ public class NotificationBean {
         this.alias = alias;
         this.is_read = is_read;
         this.id = id;
-
     }
 
     public void setReplyLocalId(String n) {

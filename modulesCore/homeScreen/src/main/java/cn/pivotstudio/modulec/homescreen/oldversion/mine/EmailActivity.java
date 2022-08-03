@@ -6,13 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.githang.statusbar.StatusBarCompat;
-
 import cn.pivotstudio.modulec.homescreen.R;
-
+import com.githang.statusbar.StatusBarCompat;
 
 public class EmailActivity extends AppCompatActivity {
 
@@ -22,7 +18,8 @@ public class EmailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         View bar;
         TextView tv;
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
+            true);
         if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
@@ -37,7 +34,6 @@ public class EmailActivity extends AppCompatActivity {
         btn1.setOnClickListener(this::onClick);
         btn2.setOnClickListener(this::onClick);
         img.setOnClickListener(this::onClick);
-
     }
 
     public void onClick(View view) {
@@ -50,7 +46,5 @@ public class EmailActivity extends AppCompatActivity {
             finish();
         }
     }
-
-
 }
 
