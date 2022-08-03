@@ -7,22 +7,20 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+import cn.pivotstudio.modulec.homescreen.R;
 import com.scwang.smart.refresh.layout.api.RefreshHeader;
 import com.scwang.smart.refresh.layout.api.RefreshKernel;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 import com.scwang.smart.refresh.layout.constant.RefreshState;
 import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
 
-import cn.pivotstudio.modulec.homescreen.R;
-
-
 public class TransparentRefreshHeader extends LinearLayout implements RefreshHeader {
 
-    private ImageView mImage, mImage2, mImage3;
+    private final ImageView mImage;
+    private final ImageView mImage2;
+    private final ImageView mImage3;
     private AnimationDrawable pullDownAnim;
     private AnimationDrawable refreshingAnim, refreshingAnim2, refreshingAnim3;
 
@@ -36,7 +34,9 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
         this(context, attrs, 0);
     }
 
-    public TransparentRefreshHeader(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public TransparentRefreshHeader(Context context,
+                                    @Nullable AttributeSet attrs,
+                                    int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         View view = View.inflate(context, R.layout.refresh_header_transparent, this);
         mImage = (ImageView) view.findViewById(R.id.refresh_header);
@@ -61,9 +61,10 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
 
     }
 
-
     @Override
-    public void onStateChanged(RefreshLayout refreshLayout, RefreshState oldState, RefreshState newState) {
+    public void onStateChanged(RefreshLayout refreshLayout,
+                               RefreshState oldState,
+                               RefreshState newState) {
         switch (newState) {
             case PullDownToRefresh: //下拉刷新开始。正在下拉还没松手时调用
                 //每次重新下拉时，将图片资源重置为小人的大脑袋
@@ -91,14 +92,12 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
         }
     }
 
-
     @Override
     public int onFinish(RefreshLayout layout, boolean success) {
         // 结束动画
         if (pullDownAnim != null && pullDownAnim.isRunning()) {
             pullDownAnim.stop();
             Log.e("刷新：", " pullDownAnim.stop();");
-
         }
         if (refreshingAnim != null && refreshingAnim.isRunning()) {
             refreshingAnim.stop();
@@ -131,9 +130,13 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
     }
 
     @Override
-    public void onMoving(boolean isDragging, float percent, int offset, int height, int maxDragHeight) {
+    public void onMoving(boolean isDragging,
+                         float percent,
+                         int offset,
+                         int height,
+                         int maxDragHeight) {
 
-// 下拉的百分比小于100%时，不断调用 setScale 方法改变图片大小
+        // 下拉的百分比小于100%时，不断调用 setScale 方法改变图片大小
         mImage.setScaleX(1);
         mImage.setScaleY(1);
 
@@ -145,12 +148,10 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
             mImage2.setTranslationX(percent * 45);
             mImage3.setTranslationX(-(percent * 45));
 
-
             if (hasSetPullDownAnim) {
                 hasSetPullDownAnim = false;
             }
         }
-
 
         if (percent >= 1.0) {
             //因为这个方法是不停调用的，防止重复
@@ -169,13 +170,10 @@ public class TransparentRefreshHeader extends LinearLayout implements RefreshHea
                 hasSetPullDownAnim = true;
             }
         }
-
-
     }
 
     @Override
     public void onReleased(@NonNull RefreshLayout refreshLayout, int height, int maxDragHeight) {
-
 
     }
 

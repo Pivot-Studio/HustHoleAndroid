@@ -44,16 +44,13 @@ public interface HSRequestInterface {
     Observable<MsgResponse> deleteFollow(@Url String url);
 
     @POST
-    Observable<MsgResponse> report(@Url String url);
-
-    @POST
     Observable<MsgResponse> thumbups(@Url String url);
 
     @DELETE
     Observable<MsgResponse> deleteThumbups(@Url String url);
 
     @HTTP(method = "DELETE", path = "holes/{hole_id}", hasBody = false)
-    Observable<MsgResponse> deleteHole(@Path("hole_id") String hole_id);
+    Observable<MsgResponse> deleteHole(@Path("hole_id") String holeId);
 
     @GET
     Observable<HomepageHoleResponse.DataBean> searchSingleHole(@Url String url);
@@ -74,6 +71,16 @@ public interface HSRequestInterface {
     Observable<ForestHeads> searchForestHeads(
             @Query("start_id") int startId,
             @Query("list_size") int listSize
+    );
+
+    @POST("forests/join/{forest_id}")
+    Observable<MsgResponse> joinTheForest(
+        @Path("forest_id") String forestId
+    );
+
+    @DELETE("forests/quit/{forest_id}")
+    Observable<MsgResponse> quitTheForest(
+        @Path("forest_id") String forestId
     );
 
     @GET("forests/types?")

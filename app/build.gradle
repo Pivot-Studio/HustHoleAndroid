@@ -13,9 +13,10 @@ android {
         applicationId "cn.pivotstudio.husthole"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("boolean", "isRelease", String.valueOf(isRelease))
-//保证isRelease能在中java代码被读取到
+        //保证isRelease能在中java代码被读取到
 
-        javaCompileOptions {//Arouter提供服务
+        javaCompileOptions {
+            //Arouter提供服务
             annotationProcessorOptions {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
@@ -26,7 +27,8 @@ android {
 
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -40,10 +42,12 @@ android {
     buildFeatures {
         viewBinding true
     }
+    namespace 'cn.pivotstudio.husthole'
 }
 
 dependencies {
     implementation project(':modulesBase:libBase')
+    implementation project(':modulesBase:dataBase')
     implementation project(':modulesCore:loginAndRegister')
     implementation project(':modulesCore:homeScreen')
     implementation project(':modulesPublic:publishHole')
@@ -59,7 +63,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
     //smartrefreshlayout刷新框架
-    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3'//核心必须依赖
+    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3' //核心必须依赖
     implementation 'com.scwang.smart:refresh-header-classics:2.0.3'
 
     // Navigation
@@ -75,5 +79,4 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
     implementation "androidx.room:room-paging:$room_version"
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
-
 }

@@ -12,18 +12,13 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-
 import com.example.libbase.base.app.BaseApplication;
 import com.example.libbase.util.permission.PermissionUtil;
-import androidx.activity.result.ActivityResultLauncher;
-
-import java.util.Objects;
 
 /**
  * @classname:BaseActivity
@@ -35,8 +30,6 @@ import java.util.Objects;
 public class BaseActivity extends AppCompatActivity {
 
     protected AppCompatActivity context;
-
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,16 +47,20 @@ public class BaseActivity extends AppCompatActivity {
     protected void showLongMsg(CharSequence msg) {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
-    protected void openKeyBoard(EditText et){
+
+    protected void openKeyBoard(EditText et) {
         et.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
     }
-    protected void closeKeyBoard(){
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
+    protected void closeKeyBoard() {
+        InputMethodManager imm =
+            (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         // 隐藏软键盘
         imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
     }
+
     /**
      * 跳转页面
      *
@@ -99,9 +96,11 @@ public class BaseActivity extends AppCompatActivity {
     protected void setStatusBar(boolean dark) {
         View decor = getWindow().getDecorView();
         if (dark) {
-            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+            decor.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         } else {
-            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            decor.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
         }
     }
 
@@ -163,7 +162,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected boolean isNight() {
-        UiModeManager uiModeManager = (UiModeManager) context.getSystemService(Context.UI_MODE_SERVICE);
+        UiModeManager uiModeManager =
+            (UiModeManager) context.getSystemService(Context.UI_MODE_SERVICE);
         return uiModeManager.getNightMode() == UiModeManager.MODE_NIGHT_YES;
     }
 }

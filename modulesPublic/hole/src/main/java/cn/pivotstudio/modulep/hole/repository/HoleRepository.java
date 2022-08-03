@@ -332,7 +332,6 @@ public class HoleRepository{
                     .withInt(Constant.REPLY_LOCAL_ID,reply_local_id)
                     .withString(Constant.ALIAS,alias)
                     .navigation();
-            //observable=NetworkApi.createService(HRequestInterface.class, 2).report(Constant.BASE_URL +"reports?hole_id=" + hole_id + "&reply_local_id="+reply_local_id);
         }
 
     }

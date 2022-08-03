@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-        <variable
-            name="type"
-            type="String" />
-    </data>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,4 +28,11 @@
             tools:listitem="@layout/item_forest_card" />
 
     </LinearLayout>
+
+    <data>
+
+        <variable
+            name="type"
+            type="String" />
+    </data>
 </layout>

@@ -59,6 +59,4 @@ public class Constant {
     public static final Integer CONSTANT_STANDARD_LOAD_SIZE = 20;
     //数据库
     public static final String ROOM_DATABASE_NAME = "hust_hole";
-
-
 }

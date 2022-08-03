@@ -21,6 +21,18 @@ public class Hole extends BaseObservable {
     private Boolean is_mine;
     private Integer reply_local_id;
 
+    @Ignore
+    public Hole(int uid, String content, String alias, Boolean is_mine, Integer reply_local_id) {
+        this.uid = uid;
+        this.content = content;
+        this.alias = alias;
+        this.is_mine = is_mine;
+        this.reply_local_id = reply_local_id;
+    }
+
+    public Hole() {
+    }
+
     public int getUid() {
         return uid;
     }
@@ -60,17 +72,4 @@ public class Hole extends BaseObservable {
     public void setReply_local_id(Integer reply_local_id) {
         this.reply_local_id = reply_local_id;
     }
-
-    @Ignore
-    public Hole(int uid, String content, String alias, Boolean is_mine, Integer reply_local_id) {
-        this.uid = uid;
-        this.content = content;
-        this.alias = alias;
-        this.is_mine = is_mine;
-        this.reply_local_id = reply_local_id;
-    }
-
-    public Hole() {
-    }
-
 }

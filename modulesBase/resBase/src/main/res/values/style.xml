@@ -14,27 +14,39 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:forceDarkAllowed">true</item>
-<!--        <item name="colorOnSecondary">@color/white</item>-->
+        <!--        <item name="colorOnSecondary">@color/white</item>-->
     </style>
+
     <style name="TabRadioButton_center">
-        <item name="android:padding">5dp</item>
+        <item name="android:padding">@dimen/dp_5</item>
         <item name="android:gravity">center</item>
         <item name="android:button">@null</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/sp_14</item>
         <item name="android:textColor">@color/GrayScale_100</item>
     </style>
+
     <style name="TabRadioButton_left">
-        <item name="android:padding">5dp</item>
+        <item name="android:padding">@dimen/dp_5</item>
         <item name="android:gravity">left</item>
         <item name="android:button">@null</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">@dimen/sp_14</item>
         <item name="android:textColor">@color/GrayScale_100</item>
     </style>
+
     <declare-styleable name="MaxHeightRecyclerView">
         <attr name="maxHeight" format="dimension" />
     </declare-styleable>
-<!--    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"></style>-->
-<!--    &lt;!&ndash;禁用深色模式&ndash;&gt;-->
+    <!--    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"></style>-->
+    <!--    &lt;!&ndash;禁用深色模式&ndash;&gt;-->
+
+    <style name="collapsingToolbarExpandedTitleColor" parent="@android:style/TextAppearance.Medium">
+        <item name="android:textSize">@dimen/sp_24</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="collapsingToolbarCollapsedTitleColor" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+    </style>
 
 
 </resources>

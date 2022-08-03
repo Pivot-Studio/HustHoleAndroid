@@ -1,0 +1,266 @@
+package cn.pivotstudio.modulec.homescreen.repository
+
+import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
+import android.annotation.SuppressLint
+import androidx.lifecycle.MutableLiveData
+import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse
+import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
+import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
+import cn.pivotstudio.husthole.moduleb.network.NetworkApi
+import cn.pivotstudio.husthole.moduleb.network.BaseObserver
+import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
+import cn.pivotstudio.modulec.homescreen.network.MsgResponse
+import com.alibaba.android.arouter.launcher.ARouter
+import com.example.libbase.constant.Constant
+import io.reactivex.Observable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
+import java.util.ArrayList
+
+/**
+ * @classname: HomePageHoleResponse
+ * @description:
+ * @date: 2022/5/3 22:55
+ * @version:1.0
+ * @author:
+ */
+@SuppressLint("CheckResult")
+class HomePageHoleRepository {
+
+    var pHomePageHoles = MutableLiveData<HomepageHoleResponse>()
+
+    val loadToast = MutableSharedFlow<String>()
+
+    /**
+     * 获取正常状态树洞
+     *
+     * @param mHolesSequenceCondition 是新更新还是新发布
+     * @param mStartingLoadId         起始id
+     */
+    fun getHolesForNetwork(mHolesSequenceCondition: Boolean?, mStartingLoadId: Int) {
+        retrofitService.homepageHoles(
+            true,
+            mHolesSequenceCondition,
+            mStartingLoadId,
+            Constant.CONSTANT_STANDARD_LOAD_SIZE
+        ).compose(NetworkApi.applySchedulers(object :
+            BaseObserver<List<DataBean>>() {
+            override fun onSuccess(requestedDataList: List<DataBean>) {
+                //手动为期添加状态，判断是新更新还是新发布，用于数据绑定，显式在解析的时间后
+                for (item in requestedDataList) {
+                    item.is_last_reply = mHolesSequenceCondition
+                }
+                if (mStartingLoadId != 0) { //上拉加载得到
+
+                    //手动补充为完整response
+                    val lastRequestedData = pHomePageHoles.value
+                    lastRequestedData!!.data.addAll(requestedDataList)
+                    lastRequestedData.model = "LOAD_MORE"
+                    pHomePageHoles.setValue(lastRequestedData)
+                } else { //下拉刷新或者搜索得到
+
+                    //手动补充为完整response
+                    val homepageHoleResponse = HomepageHoleResponse()
+                    homepageHoleResponse.data = requestedDataList
+                    homepageHoleResponse.model = "REFRESH"
+                    pHomePageHoles.setValue(homepageHoleResponse)
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+
+            }
+        }))
+    }
+
+    /**
+     * 关键词搜索树洞
+     *
+     * @param et              关键词内容
+     * @param mStartingLoadId 起始id
+     */
+    fun searchHolesForNetwork(et: String?, mStartingLoadId: Int) {
+        retrofitService.searchHoles(et, mStartingLoadId, Constant.CONSTANT_STANDARD_LOAD_SIZE)
+            .compose(NetworkApi.applySchedulers(object :
+                BaseObserver<List<DataBean>>() {
+                override fun onSuccess(requestedDataList: List<DataBean>) {
+                    //手动为期添加状态，判断是新更新还是新发布，用于数据绑定，显式在解析的时间后
+                    for (item in requestedDataList) {
+                        item.is_last_reply = false
+                    }
+                    if (mStartingLoadId != 0) { //上拉加载得到
+                        //手动补充为完整response
+                        val lastRequestedDataList = pHomePageHoles.value
+                        lastRequestedDataList!!.data.addAll(requestedDataList)
+                        lastRequestedDataList.model = "SEARCH_LOAD_MORE"
+                        pHomePageHoles.setValue(lastRequestedDataList)
+                    } else { //下拉刷新或者搜索得到
+
+                        //手动补充为完整response
+                        val homepageHoleResponse = HomepageHoleResponse()
+                        homepageHoleResponse.data = requestedDataList
+                        homepageHoleResponse.model = "SEARCH_REFRESH"
+                        pHomePageHoles.setValue(homepageHoleResponse)
+                    }
+                }
+
+                override fun onFailure(e: Throwable?) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        loadToast.emit(
+                            (e as ResponseThrowable).message
+                        )
+                    }
+                }
+            }))
+    }
+
+    /**
+     * 搜索单个树洞
+     *
+     * @param et 树洞号
+     */
+    fun searchSingleHoleForNetwork(et: String) {
+        retrofitService.searchSingleHole(Constant.BASE_URL + "holes/" + et)
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<DataBean>() {
+                override fun onSuccess(requestedData: DataBean) {
+                    //手动为期添加状态，判断是新更新还是新发布，用于数据绑定，显式在解析的时间后
+                    requestedData.is_last_reply = false
+                    //封装为list
+                    val requestDataList: MutableList<DataBean> = ArrayList()
+                    requestDataList.add(requestedData)
+
+                    //手动补充为完整response
+                    val homepageHoleResponse = HomepageHoleResponse()
+                    homepageHoleResponse.data = requestDataList
+                    homepageHoleResponse.model = "SEARCH_HOLE"
+                    pHomePageHoles.setValue(homepageHoleResponse)
+                }
+
+                override fun onFailure(e: Throwable) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        loadToast.emit(
+                            (e as ResponseThrowable).message
+                        )
+                    }
+                }
+            }))
+    }
+
+    /**
+     * 点赞
+     *
+     * @param holeId   树洞号
+     * @param likeNum  网络请求成功前的点赞数量
+     * @param liked    网络请求成功前是否被点赞
+     * @param dataBean item的所有数据
+     */
+    fun giveALikeToAHole(holeId: Int, likeNum: Int, liked: Boolean, dataBean: DataBean) {
+        val observable: Observable<MsgResponse>
+        observable = if (!liked) {
+            retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + holeId + "/-1")
+        } else {
+            retrofitService.deleteThumbups(Constant.BASE_URL + "thumbups/" + holeId + "/-1")
+        }
+        observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+            override fun onSuccess(msg: MsgResponse) {
+                if (liked) {
+                    dataBean.thumbup_num = likeNum - 1
+                } else {
+                    dataBean.thumbup_num = likeNum + 1
+                }
+                dataBean.is_thumbup = !liked
+                CoroutineScope(Dispatchers.Main).launch {
+                    loadToast.emit(
+                        msg.msg
+                    )
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    loadToast.emit(
+                        (e as ResponseThrowable).message
+                    )
+                }
+            }
+        }))
+    }
+
+    /**
+     * 收藏
+     *
+     * @param hole_id    树洞号
+     * @param follow_num 网络请求成功前的收藏数量
+     * @param is_follow  网络请求成功前是否被收藏
+     * @param dataBean   item的所有数据
+     */
+    fun followForNetwork(hole_id: Int, follow_num: Int, is_follow: Boolean, dataBean: DataBean) {
+        val observable: Observable<MsgResponse> = if (!is_follow) {
+            retrofitService.follow(Constant.BASE_URL + "follows/" + hole_id)
+        } else {
+            retrofitService.deleteFollow(Constant.BASE_URL + "follows/" + hole_id)
+        }
+        observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+            override fun onSuccess(msg: MsgResponse) {
+                if (is_follow) {
+                    dataBean.follow_num = follow_num - 1
+                } else {
+                    dataBean.follow_num = follow_num + 1
+                }
+                dataBean.is_follow = !is_follow
+                CoroutineScope(Dispatchers.Main).launch {
+                    loadToast.emit(
+                        msg.msg
+                    )
+                }
+            }
+
+            override fun onFailure(e: Throwable) {
+                CoroutineScope(Dispatchers.Main).launch {
+                    loadToast.emit(
+                        (e as ResponseThrowable).message
+                    )
+                }
+            }
+        }))
+    }
+
+    /**
+     * 举报或删除
+     *
+     * @param hole_id 树洞号
+     * @param is_mine 是否是自己发布的树洞
+     */
+    fun moreActionForNetwork(hole_id: Int, is_mine: Boolean) {
+        val observable: Observable<MsgResponse>
+        if (is_mine) {
+            observable = retrofitService.deleteHole(hole_id.toString())
+            observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                override fun onSuccess(msg: MsgResponse) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        loadToast.emit(
+                            msg.msg
+                        )
+                    }
+                }
+
+                override fun onFailure(e: Throwable) {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        loadToast.emit(
+                            (e as ResponseThrowable).message
+                        )
+                    }
+                }
+            }))
+        } else {
+            ARouter.getInstance().build("/report/ReportActivity")
+                .withInt(Constant.HOLE_ID, hole_id)
+                .withInt(Constant.REPLY_LOCAL_ID, -1)
+                .withString(Constant.ALIAS, "洞主")
+                .navigation()
+        }
+    }
+
+}

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.util.ArrayMap;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +16,11 @@ import java.util.List;
  */
 public class EmotionUtil {
 
-    public static final int EMOTION_CLASSIC_TYPE=0x0001;//经典表情
+    public static final int EMOTION_CLASSIC_TYPE = 0x0001;//经典表情
 
     public static ArrayMap<String, Integer> EMPTY_MAP;
     public static ArrayMap<String, Integer> EMOTION_CLASSIC_MAP;
+
     static {
         EMPTY_MAP = new ArrayMap<>();
         EMOTION_CLASSIC_MAP = new ArrayMap<>();
@@ -49,7 +48,8 @@ public class EmotionUtil {
         EMOTION_CLASSIC_MAP.put("[再见]", cn.pivotstudio.moduleb.resbase.R.mipmap.resource_emoji22);
         EMOTION_CLASSIC_MAP.put("[喜欢]", cn.pivotstudio.moduleb.resbase.R.mipmap.resource_emoji23);
         EMOTION_CLASSIC_MAP.put("[奸笑]", cn.pivotstudio.moduleb.resbase.R.mipmap.resource_emoji24);
-        EMOTION_CLASSIC_MAP.put("[打call]", cn.pivotstudio.moduleb.resbase.R.mipmap.resource_emoji25);
+        EMOTION_CLASSIC_MAP.put("[打call]",
+            cn.pivotstudio.moduleb.resbase.R.mipmap.resource_emoji25);
         EMOTION_CLASSIC_MAP.put("[偷看]", cn.pivotstudio.moduleb.resbase.R.mipmap.resource_emoji26);
         EMOTION_CLASSIC_MAP.put("[奋斗]", cn.pivotstudio.moduleb.resbase.R.mipmap.resource_emoji27);
         EMOTION_CLASSIC_MAP.put("[思考]", cn.pivotstudio.moduleb.resbase.R.mipmap.resource_emoji28);
@@ -59,18 +59,19 @@ public class EmotionUtil {
     }
 
     public static Context gContext;
-    private static List<String> emojiNameList=new ArrayList<>();
+    private static List<String> emojiNameList = new ArrayList<>();
     private static List<Integer> emojiResourceList = new ArrayList<>();//资源文件
 
     /**
      * 初始化
-     * @param context
      */
     public static void init(Context context) {
         gContext = context.getApplicationContext();
         Resources resources = gContext.getResources();
-        String[] codes = resources.getStringArray(cn.pivotstudio.moduleb.resbase.R.array.emoji_code_list);
-        TypedArray array = resources.obtainTypedArray(cn.pivotstudio.moduleb.resbase.R.array.emoji_res_list);
+        String[] codes =
+            resources.getStringArray(cn.pivotstudio.moduleb.resbase.R.array.emoji_code_list);
+        TypedArray array =
+            resources.obtainTypedArray(cn.pivotstudio.moduleb.resbase.R.array.emoji_res_list);
         if (codes.length != array.length()) {//数据长度必须一致
             array.recycle();
             throw new IndexOutOfBoundsException("Code and resource are not match in Emoji xml.");
@@ -85,18 +86,20 @@ public class EmotionUtil {
     public static List<Integer> getResourceList() {//得到每页的数据
         return emojiResourceList;
     }
+
     public static List<String> getResourceName() {//得到每页的数据
         return emojiNameList;
     }
+
     /**
      * 根据名称获取当前表情图标R值
+     *
      * @param EmotionType 表情类型标志符
      * @param imgName 名称
-     * @return
      */
-    public static int getImgByName(int EmotionType,String imgName) {
-        Integer integer=null;
-        switch (EmotionType){
+    public static int getImgByName(int EmotionType, String imgName) {
+        Integer integer = null;
+        switch (EmotionType) {
             case EMOTION_CLASSIC_TYPE:
 
                 integer = EMOTION_CLASSIC_MAP.get(imgName);
@@ -107,10 +110,9 @@ public class EmotionUtil {
         }
         return integer == null ? -1 : integer;
     }
+
     /**
      * 根据类型获取表情数据
-     * @param EmotionType
-     * @return
      */
     public static ArrayMap<String, Integer> getEmojiMap(int EmotionType) {
         ArrayMap EmojiMap = null;

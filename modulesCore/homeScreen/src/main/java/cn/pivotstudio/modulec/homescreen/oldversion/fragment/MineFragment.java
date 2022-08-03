@@ -27,7 +27,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Objects;
 
-
 import cn.pivotstudio.moduleb.database.MMKVUtil;
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.oldversion.mine.AboutActivity;
@@ -47,7 +46,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
 
 public class MineFragment extends Fragment {
 
@@ -69,7 +67,8 @@ public class MineFragment extends Fragment {
         return new MineFragment();
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
@@ -173,22 +172,23 @@ public class MineFragment extends Fragment {
 
                     try {
                         if (response.errorBody() != null) {
-//                             Log.d(TAG,"in error: " + response.errorBody());
+                            //                             Log.d(TAG,"in error: " + response.errorBody());
                             // Log.d(TAG,"in error: " + response.errorBody().string());
                         }
                         if (response.body() != null) {
                             String jsonStr = response.body().string();
                             // Log.d(TAG,"1: " + response.body());
                             // Log.d(TAG,"2: " + jsonStr + "--");
-//                                jsonArray=new org.json.JSONArray(jsonStr);
-//                                JSONObject data = jsonArray.getJSONObject(0);
+                            //                                jsonArray=new org.json.JSONArray(jsonStr);
+                            //                                JSONObject data = jsonArray.getJSONObject(0);
                             JSONObject data = new JSONObject(jsonStr);
                             int joinDays = data.getInt("join_days");
                             int myHoleNum = data.getInt("hole_sum");
                             int myStarNum = data.getInt("follow_num");
                             int myReplyNum = data.getInt("replies_num");
                             //  Log.d(TAG,joinDays+"");
-                            String days = "我来到树洞已经<font color=\"#02A9F5\">" + joinDays + "</font>天啦。";
+                            String days =
+                                "我来到树洞已经<font color=\"#02A9F5\">" + joinDays + "</font>天啦。";
                             if (CheckingToken.IfTokenExist()) {
                                 //Log.d(TAG,"已登陆");
                                 tv_joinDays.setText(Html.fromHtml(days));
@@ -220,12 +220,13 @@ public class MineFragment extends Fragment {
     public void onClick(View view) {
         Intent intent;
         int id = 0;
-        if(flag == 0){
-             id = view.getId();
+        if (flag == 0) {
+            id = view.getId();
         }
         if (id == R.id.my_hole) {
             if (CheckingToken.IfTokenExist()) {
-                intent = new Intent(requireActivity().getApplicationContext(), HoleStarReplyActivity.class);
+                intent = new Intent(requireActivity().getApplicationContext(),
+                    HoleStarReplyActivity.class);
                 intent.putExtra("initFragmentId", 0);
                 startActivity(intent);
             } else {
@@ -234,7 +235,8 @@ public class MineFragment extends Fragment {
             }
         } else if (id == R.id.my_star) {
             if (CheckingToken.IfTokenExist()) {
-                intent = new Intent(requireActivity().getApplicationContext(), HoleStarReplyActivity.class);
+                intent = new Intent(requireActivity().getApplicationContext(),
+                    HoleStarReplyActivity.class);
                 intent.putExtra("initFragmentID", 1);
                 startActivity(intent);
             } else {
@@ -242,20 +244,21 @@ public class MineFragment extends Fragment {
             }
         } else if (id == R.id.my_reply) {
             if (CheckingToken.IfTokenExist()) {
-                intent = new Intent(requireActivity().getApplicationContext(), HoleStarReplyActivity.class);
+                intent = new Intent(requireActivity().getApplicationContext(),
+                    HoleStarReplyActivity.class);
                 intent.putExtra("initFragmentID", 2);
                 startActivity(intent);
             } else {
-//                intent = new Intent(getActivity(), EmailVerifyActivity.class);
-//                startActivity(intent);
+                //                intent = new Intent(getActivity(), EmailVerifyActivity.class);
+                //                startActivity(intent);
             }
         } else if (id == R.id.settings) {
             if (CheckingToken.IfTokenExist()) {
                 intent = new Intent(getActivity().getApplicationContext(), SettingsActivity.class);
                 startActivity(intent);
             } else {
-//                intent = new Intent(getActivity(), EmailVerifyActivity.class);
-//                startActivity(intent);
+                //                intent = new Intent(getActivity(), EmailVerifyActivity.class);
+                //                startActivity(intent);
             }
         } else if (id == R.id.shield) {
             intent = new Intent(getActivity().getApplicationContext(), ScreenActivity.class);
@@ -269,15 +272,17 @@ public class MineFragment extends Fragment {
             lp.alpha = 0.6f; // 0.0~1.0
             getActivity().getWindow().setAttributes(lp);
             //  ppwBackground.showAsDropDown(rootView);
-            ppwShare.showAtLocation(requireActivity().getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+            ppwShare.showAtLocation(requireActivity().getWindow().getDecorView(), Gravity.BOTTOM, 0,
+                0);
         } else if (id == R.id.evaluateAndAdvice) {
             if (CheckingToken.IfTokenExist()) {
-                intent = new Intent(requireActivity().getApplicationContext(), EvaluateAndAdviceActivity.class);
+                intent = new Intent(requireActivity().getApplicationContext(),
+                    EvaluateAndAdviceActivity.class);
                 intent.putExtra("initFragmentId", 0);
                 startActivity(intent);
             } else {
-//                intent = new Intent(getActivity(), EmailVerifyActivity.class);
-//                startActivity(intent);
+                //                intent = new Intent(getActivity(), EmailVerifyActivity.class);
+                //                startActivity(intent);
             }
         } else if (id == R.id.about) {
             intent = new Intent(getActivity().getApplicationContext(), AboutActivity.class);
@@ -293,7 +298,8 @@ public class MineFragment extends Fragment {
              */
         } else if (id == R.id.logout) {
             Dialog dialog = new Dialog(getContext());
-            View dialogView = getActivity().getLayoutInflater().inflate(R.layout.dialog_logout, null);
+            View dialogView =
+                getActivity().getLayoutInflater().inflate(R.layout.dialog_logout, null);
             dialog.setContentView(dialogView);
             Button btn_cancel = dialogView.findViewById(R.id.cancel);
             Button btn_logout = dialogView.findViewById(R.id.logout);

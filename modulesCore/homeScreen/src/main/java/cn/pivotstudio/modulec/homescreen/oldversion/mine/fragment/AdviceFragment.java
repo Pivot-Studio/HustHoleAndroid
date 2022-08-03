@@ -1,6 +1,5 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.mine.fragment;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,7 +18,6 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
-
 
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.oldversion.mine.EmailActivity;
@@ -45,7 +43,8 @@ public class AdviceFragment extends Fragment {
         return new AdviceFragment();
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         View AdviceView = inflater.inflate(R.layout.fragment_advice, container, false);
         ChipGroup chipGroup = AdviceView.findViewById(R.id.chip_group2);
@@ -55,23 +54,25 @@ public class AdviceFragment extends Fragment {
         chipBug = AdviceView.findViewById(R.id.chip_bug);
         chipOthers = AdviceView.findViewById(R.id.chip_other);
 
-        requireActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        requireActivity().getWindow()
+            .setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
-        final int[] type = {0};
+        final int[] type = { 0 };
 
-        SoftKeyBoardListener.setListener(getActivity(), new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
-            @Override
-            public void keyBoardShow(int height) {
-                et_advice.setHeight(600);
-                length.setPadding(0, 0, 0, 700);
-            }
+        SoftKeyBoardListener.setListener(getActivity(),
+            new SoftKeyBoardListener.OnSoftKeyBoardChangeListener() {
+                @Override
+                public void keyBoardShow(int height) {
+                    et_advice.setHeight(600);
+                    length.setPadding(0, 0, 0, 700);
+                }
 
-            @Override
-            public void keyBoardHide(int height) {
-                et_advice.setHeight(900);
-                length.setPadding(0, 0, 0, 0);
-            }
-        });
+                @Override
+                public void keyBoardHide(int height) {
+                    et_advice.setHeight(900);
+                    length.setPadding(0, 0, 0, 0);
+                }
+            });
         RetrofitManager.RetrofitBuilder(BASE_URL);
         Retrofit retrofit = RetrofitManager.getRetrofit();
         request = retrofit.create(RequestInterface.class);
@@ -82,7 +83,9 @@ public class AdviceFragment extends Fragment {
             if (s.length() >= 300) {
                 Toast.makeText(getContext(), "输入内容过长！", Toast.LENGTH_SHORT).show();
             }
-            if (s.length() > 0 && (chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked())) {
+            if (s.length() > 0 && (chipAdvice.isChecked()
+                || chipBug.isChecked()
+                || chipOthers.isChecked())) {
                 btn_ok.setBackgroundResource(R.drawable.advice_button_green);
                 btn_ok.setTextColor(getResources().getColor(R.color.GrayScale_100));
             } else {
@@ -99,19 +102,25 @@ public class AdviceFragment extends Fragment {
         });
         btn_ok.setOnClickListener(v -> {
             String content = et_advice.getText().toString().replace("\n", "%0A");
-            if ((chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked()) && content.length() > 0) {
+            if ((chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked())
+                && content.length() > 0) {
                 new Thread(() -> {
-                    Call<ResponseBody> call = request.advice(BASE_URL + "feedback?type=" + type[0] + "&content=" + content);
+                    Call<ResponseBody> call = request.advice(
+                        BASE_URL + "feedback?type=" + type[0] + "&content=" + content);
                     call.enqueue(new Callback<ResponseBody>() {
                         @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        public void onResponse(Call<ResponseBody> call,
+                                               Response<ResponseBody> response) {
                             if (response.code() == 200) {
                                 mSendCondition = false;
                                 Toast.makeText(getContext(), "提交成功！", Toast.LENGTH_SHORT).show();
-                                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                InputMethodManager imm =
+                                    (InputMethodManager) requireActivity().getSystemService(
+                                        Context.INPUT_METHOD_SERVICE);
                                 et_advice.setText("");
                                 // 隐藏软键盘
-                                imm.hideSoftInputFromWindow(getActivity().getWindow().getDecorView().getWindowToken(), 0);
+                                imm.hideSoftInputFromWindow(
+                                    getActivity().getWindow().getDecorView().getWindowToken(), 0);
                                 et_advice.clearFocus();
                                 chipAdvice.setChecked(false);
                                 chipBug.setChecked(false);
@@ -120,8 +129,8 @@ public class AdviceFragment extends Fragment {
                                 mSendCondition = false;
                                 ErrorMsg.getErrorMsg(response, getContext());
                                 if (response.code() == 401) {
-//                                    Intent intent = new Intent(getContext(), EmailActivity.class);
-//                                    startActivity(intent);
+                                    //                                    Intent intent = new Intent(getContext(), EmailActivity.class);
+                                    //                                    startActivity(intent);
                                 }
                             }
                         }
@@ -148,14 +157,17 @@ public class AdviceFragment extends Fragment {
                 if (s.length() >= 300) {
                     Toast.makeText(getContext(), "输入内容过长！", Toast.LENGTH_SHORT).show();
                 }
-                if (s.length() > 0 && (chipAdvice.isChecked() || chipBug.isChecked() || chipOthers.isChecked())) {
+                if (s.length() > 0 && (chipAdvice.isChecked()
+                    || chipBug.isChecked()
+                    || chipOthers.isChecked())) {
                     btn_ok.setBackgroundResource(R.drawable.advice_button_green);
                     btn_ok.setTextColor(getResources().getColor(R.color.GrayScale_100));
                 } else {
                     btn_ok.setBackgroundResource(R.drawable.advice_button);
                     btn_ok.setTextColor(getResources().getColor(R.color.GrayScale_20));
                 }
-                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) requireActivity().getSystemService(
+                    Context.INPUT_METHOD_SERVICE);
                 if (imm.isActive()) {
                     et_advice.setHeight(300);
                 } else {

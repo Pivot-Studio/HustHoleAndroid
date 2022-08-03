@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.View;
 
-
 public class JointBitmapView extends View {
     private static Bitmap bitmap;
 
@@ -17,8 +16,6 @@ public class JointBitmapView extends View {
     /**
      * 拼接图片
      *
-     * @param bit1
-     * @param bit2
      * @return 返回拼接后的Bitmap
      */
     private static Bitmap newBitmap(Bitmap bit1, Bitmap bit2) {
@@ -40,6 +37,5 @@ public class JointBitmapView extends View {
         canvas.drawBitmap(bitmap, 0, 0, null);
         bitmap.recycle();
     }
-
 }
 

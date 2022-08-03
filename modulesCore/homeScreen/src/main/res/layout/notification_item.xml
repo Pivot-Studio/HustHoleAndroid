@@ -23,9 +23,9 @@
             android:layout_marginLeft="@dimen/dp_22"
             android:lineSpacingExtra="1sp"
             android:text="Alice"
-            android:textStyle="bold"
             android:textColor="@color/GrayScale_20"
             android:textSize="13sp"
+            android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></TextView>
 
@@ -47,10 +47,10 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_19"
             android:lineSpacingExtra="1sp"
-            android:textStyle="bold"
             android:text="# 1037"
             android:textColor="@color/GrayScale_20"
-            android:textSize="13sp"></TextView>
+            android:textSize="13sp"
+            android:textStyle="bold"></TextView>
     </RelativeLayout>
 
     <TextView

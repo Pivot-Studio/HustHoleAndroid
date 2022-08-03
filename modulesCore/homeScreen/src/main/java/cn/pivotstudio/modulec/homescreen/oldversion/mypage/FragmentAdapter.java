@@ -1,18 +1,16 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.mypage;
 
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
-
 import java.util.List;
 
 /**
  * Created by zhang on 2016.08.07.
  */
 public class FragmentAdapter extends FragmentStatePagerAdapter {
-    private List<Fragment> mFragments;
-    private List<String> mTitles;
+    private final List<Fragment> mFragments;
+    private final List<String> mTitles;
 
     public FragmentAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles) {
         super(fm);
@@ -34,5 +32,4 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
     public CharSequence getPageTitle(int position) {
         return mTitles.get(position);
     }
-
 }

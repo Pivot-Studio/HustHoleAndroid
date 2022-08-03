@@ -5,20 +5,28 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
+import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestDetailBinding
+import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
+import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.modulec.homescreen.model.Hole
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
+import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestDetailAdapter
+import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModelFactory
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
@@ -62,27 +70,60 @@ class ForestDetailFragment : BaseFragment() {
             onContentClick = ::navToSpecificHole,
             onReplyIconClick = ::navToSpecificHoleWithReply,
             giveALike = ::giveALikeToTheHole,
-            follow = ::followTheHole
+            follow = ::followTheHole,
+            deleteTheHole = ::deleteTheHole,
+            reportTheHole = ::reportTheHole
         )
 
         binding.apply {
             recyclerViewForestDetail.adapter = adapter
-
+            recyclerViewForestDetail.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    adapter.lastImageMore?.let {
+                        if (it.isVisible) {
+                            it.visibility = View.GONE
+                        }
+                    }
+                }
+            })
             (recyclerViewForestDetail.itemAnimator as SimpleItemAnimator).supportsChangeAnimations =
                 false
 
             fabPublishHoleFromForest.setOnClickListener {
                 navToPublishHoleFromDetailForest(_args.forestId)
             }
+
+            detailForestJoinBtn.setOnClickListener {
+                detailForestQuitBtn.visibility = View.VISIBLE
+                detailForestJoinBtn.visibility = View.GONE
+                joinTheForest()
+            }
+
+            detailForestQuitBtn.setOnClickListener {
+                detailForestQuitBtn.visibility = View.GONE
+                detailForestJoinBtn.visibility = View.VISIBLE
+                quitTheForest()
+            }
         }
 
+        // 配置 LiveData 的监听器
         viewModel.holes.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            it?.let {
+                adapter.submitList(it) //  后端返回了个反的列表回来，有人用小树林才怪
+            }
         }
 
         viewModel.overview.observe(viewLifecycleOwner) {
             sharedViewModel.forestHeads.value?.run {
                 viewModel.checkIfJoinedTheForest(this.forests)
+            }
+
+            if (it.Joined) {
+                binding.detailForestQuitBtn.visibility = View.VISIBLE
+                binding.detailForestJoinBtn.visibility = View.GONE
+            } else {
+                binding.detailForestQuitBtn.visibility = View.GONE
+                binding.detailForestJoinBtn.visibility = View.VISIBLE
             }
         }
 
@@ -96,7 +137,14 @@ class ForestDetailFragment : BaseFragment() {
         }
 
 
+    }
 
+    private fun joinTheForest() {
+        viewModel.joinTheForest()
+    }
+
+    private fun quitTheForest() {
+        viewModel.quitTheForest()
     }
 
     // 点击文字内容跳转到树洞
@@ -141,6 +189,26 @@ class ForestDetailFragment : BaseFragment() {
     // 关注/收藏
     private fun followTheHole(holeId: Int) {
         viewModel.followTheHole(holeId)
+    }
+
+    // 举报树洞交给举报界面处理
+    private fun reportTheHole(hole: Hole) {
+        (hole as DetailForestHole).let {
+            ARouter.getInstance().build("/report/ReportActivity")
+                .withInt(Constant.HOLE_ID, it.holeId)
+                .withInt(Constant.REPLY_LOCAL_ID, -1)
+                .withString(Constant.ALIAS, "洞主")
+                .navigation()
+        }
+    }
+
+    // 删除树洞
+    private fun deleteTheHole(hole: Hole) {
+        val dialog = DeleteDialog(context)
+        dialog.show()
+        dialog.setOptionsListener {
+            viewModel.deleteTheHole(hole)
+        }
     }
 
     private fun initRefresh() {

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/email_verify2_bar"
@@ -44,14 +43,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/email_verify2_bar">
 
-        <TextView
-            android:id="@+id/tv_verify"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="您还没有通过校园邮箱验证。1037树洞使用您注册时使用的学号对应的华科校园邮箱验证您的在校学生身份，并已给您的邮箱发送验证邮件。"
+        <Button
+            android:id="@+id/btn_verify"
+            android:layout_width="330dp"
+            android:layout_height="56dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/standard_button_gray"
+            android:clickable="true"
+            android:text="验证"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/et_verify" />
 
         <EditText
             android:id="@+id/et_verify"
@@ -67,33 +71,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_verify" />
-
-        <Button
-            android:id="@+id/btn_verify"
-            android:layout_width="330dp"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/standard_button_gray"
-            android:clickable="true"
-            android:text="验证"
-            android:textColor="@color/GrayScale_100"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_verify" />
-
-        <TextView
-            android:id="@+id/tv_again"
-            android:layout_width="wrap_content"
-            android:layout_height="20dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="20dp"
-            android:clickable="true"
-            android:text="重新发送"
-            android:textColor="@color/HH_Reminder_Link"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_verify" />
 
         <LinearLayout
             android:id="@+id/ll_emailverify2"
@@ -129,6 +106,29 @@
                 android:textSize="14sp" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_again"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="30dp"
+            android:clickable="true"
+            android:text="重新发送"
+            android:textColor="@color/HH_Reminder_Link"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_verify" />
+
+        <TextView
+            android:id="@+id/tv_verify"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="您还没有通过校园邮箱验证。1037树洞使用您注册时使用的学号对应的华科校园邮箱验证您的在校学生身份，并已给您的邮箱发送验证邮件。"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/tv_not"
             android:layout_width="wrap_content"
@@ -139,12 +139,13 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@id/tv_again"
             app:layout_constraintTop_toBottomOf="@+id/btn_verify" />
+
         <TextView
             android:id="@+id/tv_howTo"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
             android:clickable="true"
             android:text="如何使用校园邮箱?"
             android:textColor="@color/HH_Reminder_Link"

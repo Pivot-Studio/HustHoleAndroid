@@ -1,23 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <data>
-
-    </data>
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <!--主页面布局-->
-
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:navGraph="@navigation/nav_graph" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/layout_bottom_bar"
@@ -25,17 +13,6 @@
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             app:layout_constraintBottom_toBottomOf="parent">
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_homescreen_publishhole"
-                android:layout_width="@dimen/dp_49"
-                android:layout_height="@dimen/dp_49"
-                android:layout_marginBottom="27dp"
-                android:backgroundTint="@color/HH_BandColor_1"
-                android:contentDescription="@string/publishhole_1"
-                android:onClick="jumpToPublishHoleByARouter"
-                app:srcCompat="@drawable/add"
-                app:layout_anchor="@id/bottom_app_bar" />
 
             <com.google.android.material.bottomappbar.BottomAppBar
                 android:id="@+id/bottom_app_bar"
@@ -48,13 +25,37 @@
 
                 <com.google.android.material.bottomnavigation.BottomNavigationView
                     android:id="@+id/bottom_navigation_view"
-                    style="@style/BottomNavigationBarTheme"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_54"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:menu="@menu/bottom_navigation_menu" />
+                    app:menu="@menu/bottom_navigation_menu"
+                    style="@style/BottomNavigationBarTheme" />
             </com.google.android.material.bottomappbar.BottomAppBar>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fab_homescreen_publishhole"
+                android:layout_width="@dimen/dp_48"
+                android:layout_height="@dimen/dp_48"
+                android:layout_marginBottom="27dp"
+                android:backgroundTint="@color/HH_BandColor_1"
+                android:contentDescription="@string/publishhole_1"
+                android:onClick="jumpToPublishHoleByARouter"
+                app:fabCustomSize="@dimen/dp_48"
+                app:layout_anchor="@id/bottom_app_bar"
+                app:maxImageSize="@dimen/dp_24"
+                app:srcCompat="@drawable/add" />
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/nav_host_fragment"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:navGraph="@navigation/nav_graph" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+    </data>
 </layout>

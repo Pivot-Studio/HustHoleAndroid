@@ -3,13 +3,9 @@ package cn.pivotstudio.modulec.homescreen.oldversion.mine;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.githang.statusbar.StatusBarCompat;
-
 import cn.pivotstudio.modulec.homescreen.R;
-
+import com.githang.statusbar.StatusBarCompat;
 
 public class EmailHowToActivity extends AppCompatActivity {
     @Override
@@ -18,8 +14,8 @@ public class EmailHowToActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_how_to);
 
-
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
+            true);
         if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }

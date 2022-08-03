@@ -5,34 +5,28 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.githang.statusbar.StatusBarCompat;
-import com.google.android.material.switchmaterial.SwitchMaterial;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.ErrorMsg;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager;
+import com.githang.statusbar.StatusBarCompat;
+import com.google.android.material.switchmaterial.SwitchMaterial;
+import java.io.IOException;
 import okhttp3.ResponseBody;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class SecurityActivity extends AppCompatActivity {
-    SwitchMaterial isUnderSecurity;
-    ImageView back;
     private static final String BASE_URL = RetrofitManager.API;
     private final String TAG = "Security";
+    SwitchMaterial isUnderSecurity;
+    ImageView back;
     Retrofit retrofit;
     RequestInterface request;
 
@@ -47,7 +41,8 @@ public class SecurityActivity extends AppCompatActivity {
         isUnderSecurity.setVisibility(View.INVISIBLE);
         back = findViewById(R.id.security_img);
         back.setOnClickListener(v -> finish());
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
+            true);
         if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
@@ -56,11 +51,10 @@ public class SecurityActivity extends AppCompatActivity {
         isUnderSecurity.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (CheckingToken.IfTokenExist()) {
                 changeSecurityMode(!isChecked);
-            } else
+            } else {
                 Toast.makeText(SecurityActivity.this, "认证信息无效，请先登录。", Toast.LENGTH_SHORT).show();
+            }
         });
-
-
     }
 
     private void setInitMode() {
@@ -93,7 +87,8 @@ public class SecurityActivity extends AppCompatActivity {
     private void changeSecurityMode(Boolean turnOn) {
         new Thread(() -> {
             request = retrofit.create(RequestInterface.class);
-            Call<ResponseBody> call = request.changeSecurityMode(BASE_URL + "auth/update?to_incognito=" + turnOn);
+            Call<ResponseBody> call =
+                request.changeSecurityMode(BASE_URL + "auth/update?to_incognito=" + turnOn);
             call.enqueue(new Callback<ResponseBody>() {
 
                 @Override

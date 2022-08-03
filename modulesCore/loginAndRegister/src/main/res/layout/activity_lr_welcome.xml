@@ -2,22 +2,10 @@
 
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/welcome">
 
-
-    <TextView
-        android:id="@+id/tv_welcome_title2"
-        android:layout_width="wrap_content"
-        android:layout_height="19dp"
-        android:layout_marginTop="10dp"
-        android:text="@string/register_welcome_2"
-        android:textColor="@color/GrayScale_50"
-        android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
     <Button
         android:id="@+id/btn_welcome_jumptologin"
@@ -35,20 +23,41 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.94" />
 
-<!--    <Button-->
-<!--        android:id="@+id/btn_welcome_jumptohomescreen"-->
-<!--        android:layout_width="@dimen/dp_311"-->
-<!--        android:layout_height="@dimen/dp_56"-->
-<!--        android:layout_marginTop="@dimen/dp_20"-->
-<!--        android:background="@drawable/standard_button_white"-->
-<!--        android:text="@string/register_welcome_4"-->
-<!--        android:onClick="onClick"-->
-<!--        android:textColor="@color/HH_BandColor_1"-->
-<!--        android:textSize="16sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/btn_welcome_jumptologin" />-->
+    <TextView
+        android:id="@+id/tv_welcome_title2"
+        android:layout_width="wrap_content"
+        android:layout_height="19dp"
+        android:layout_marginTop="10dp"
+        android:text="@string/register_welcome_2"
+        android:textColor="@color/GrayScale_50"
+        android:textSize="13sp"
+        app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
 
+    <!--    <Button-->
+    <!--        android:id="@+id/btn_welcome_jumptohomescreen"-->
+    <!--        android:layout_width="@dimen/dp_311"-->
+    <!--        android:layout_height="@dimen/dp_56"-->
+    <!--        android:layout_marginTop="@dimen/dp_20"-->
+    <!--        android:background="@drawable/standard_button_white"-->
+    <!--        android:text="@string/register_welcome_4"-->
+    <!--        android:onClick="onClick"-->
+    <!--        android:textColor="@color/HH_BandColor_1"-->
+    <!--        android:textSize="16sp"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/btn_welcome_jumptologin" />-->
+
+
+    <TextView
+        android:id="@+id/tv_welcome_title3"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_45"
+        android:text="欢迎你"
+        android:textColor="@color/Title_GrayScale_20"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
+        app:layout_constraintStart_toEndOf="@+id/constraintLayout2" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
@@ -85,14 +94,4 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/tv_welcome_title3"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_45"
-        android:text="欢迎你"
-        android:textColor="@color/Title_GrayScale_20"
-        android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayout2" />
 </androidx.constraintlayout.widget.ConstraintLayout>

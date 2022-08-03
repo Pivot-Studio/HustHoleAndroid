@@ -2,10 +2,14 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.repository.ForestRepository
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 
 /**
  * @classname ForestViewModel
@@ -20,7 +24,11 @@ class ForestViewModel : ViewModel() {
     val forestHoles: LiveData<List<ForestHole>> = repository.forestHoles
     val forestHeads: LiveData<ForestHeads> = repository.forestHeads
 
-    val loadState: LiveData<LoadStatus> = repository.state
+    val holesLoadState: LiveData<LoadStatus> = repository.holeState
+    val headerLoadState: LiveData<LoadStatus> = repository.headerLoadState
+
+    val toastMsg = repository.loadToast.asSharedFlow()
+    val changedHoleSharedFlow = repository.changedHoleSharedFlow
 
     init {
         loadHolesAndHeads()
@@ -37,34 +45,16 @@ class ForestViewModel : ViewModel() {
         repository.loadMoreForestHoles()
     }
 
-    fun giveALikeToTheHole(holeId: Int) {
-        val hole = repository.forestHoles.value?.first {
-            it.holeId == holeId
-        }
-
-        hole?.run {
-            repository.giveALikeToTheHole(this)
-            if (liked)
-                likeNum -= 1
-            else
-                likeNum += 1
-            liked = !liked
-        }
+    fun giveALikeToTheHole(hole: ForestHole) {
+        repository.giveALikeToTheHole(hole)
     }
 
-    fun followTheHole(holeId: Int) {
-        val hole = repository.forestHoles.value?.first {
-            it.holeId == holeId
-        }
-
-        hole?.run {
-            repository.followTheHole(this)
-            if (followed)
-                followNum -= 1
-            else
-                followNum += 1
-            followed = !followed
-        }
-
+    fun followTheHole(hole: ForestHole) {
+        repository.followTheHole(hole)
     }
+
+    fun deleteTheHole(hole: ForestHole) {
+        repository.deleteTheHole(hole)
+    }
+
 }

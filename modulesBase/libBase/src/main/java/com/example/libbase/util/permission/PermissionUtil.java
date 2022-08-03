@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Build;
-
 import androidx.core.app.ActivityCompat;
 
 /**
@@ -14,7 +13,7 @@ import androidx.core.app.ActivityCompat;
  * @version:1.0
  * @author:
  */
-public class PermissionUtil{
+public class PermissionUtil {
 
     private static PermissionUtil mInstance;
 
@@ -41,6 +40,7 @@ public class PermissionUtil{
 
     /**
      * 检查是有拥有某权限
+     *
      * @param permission 权限名称
      * @return true 有  false 没有
      */
@@ -54,6 +54,7 @@ public class PermissionUtil{
 
     /**
      * 通过权限名称获取请求码
+     *
      * @param permissionName 权限名称
      * @return requestCode 权限请求码
      */
@@ -79,13 +80,12 @@ public class PermissionUtil{
 
     /**
      * 请求权限
+     *
      * @param permission 权限名称
      */
     public static void requestPermission(Activity activity, String permission) {
         int requestCode = getPermissionRequestCode(permission);
         //请求此权限
-        ActivityCompat.requestPermissions(activity, new String[]{permission}, requestCode);
+        ActivityCompat.requestPermissions(activity, new String[] { permission }, requestCode);
     }
-
-
 }

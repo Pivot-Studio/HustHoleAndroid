@@ -12,8 +12,8 @@ import java.util.List;
 
 import cn.pivotstudio.modulec.homescreen.R;
 
-
-public class SystemNotificationAdapter extends RecyclerView.Adapter<SystemNotificationAdapter.MyHolder> {
+public class SystemNotificationAdapter
+    extends RecyclerView.Adapter<SystemNotificationAdapter.MyHolder> {
     private List<SystemNotificationBean> mSystemNotificationList;
     /*private LayoutInflater mInflater;*/
     private OnItemClickListener onItemClickListener;
@@ -46,7 +46,8 @@ public class SystemNotificationAdapter extends RecyclerView.Adapter<SystemNotifi
 
     @Override
     public MyHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = /*mInflater*/LayoutInflater.from(parent.getContext()).inflate(R.layout.system_notification_item, parent, false);
+        View view = /*mInflater*/LayoutInflater.from(parent.getContext())
+            .inflate(R.layout.system_notification_item, parent, false);
         MyHolder holder = new MyHolder(view);
         return holder;
     }

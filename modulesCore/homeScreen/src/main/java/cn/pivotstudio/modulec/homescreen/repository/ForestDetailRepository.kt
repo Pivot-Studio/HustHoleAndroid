@@ -5,14 +5,15 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
-import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
-import cn.pivotstudio.modulec.homescreen.model.ForestCard
-import cn.pivotstudio.modulec.homescreen.model.ForestCardList
-import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.modulec.homescreen.model.*
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import com.example.libbase.constant.Constant
 import io.reactivex.Observable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.launch
 
 enum class ForestDetailHolesLoadStatus { LOADING, ERROR, DONE }
 
@@ -27,6 +28,8 @@ class ForestDetailRepository {
     val state = _state
     val overview = _overview
 
+    val loadToast = MutableSharedFlow<String>()
+
     fun loadHolesByForestId(id: Int) {
         _state.value = ForestDetailHolesLoadStatus.LOADING
         HomeScreenNetworkApi.retrofitService
@@ -37,6 +40,7 @@ class ForestDetailRepository {
                     lastStartId = STARTING_ID
                     _state.value = ForestDetailHolesLoadStatus.DONE
                 }
+
                 override fun onFailure(e: Throwable?) {
                     _state.value = ForestDetailHolesLoadStatus.ERROR
                 }
@@ -87,11 +91,23 @@ class ForestDetailRepository {
             }
             observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(msg: MsgResponse) {
-                    Log.d(TAG, "onSuccess: ${msg.msg}")
+                    val newItems = mutableListOf<DetailForestHole>()
+                    _holes.value?.run {
+                        newItems.addAll(this)
+                    }
+
+                    newItems.first { changedHole ->
+                        changedHole.holeId == hole.holeId
+                    }.apply {
+                        this.liked = this.liked.not()
+                    }
+                    _holes.value = newItems
                 }
 
                 override fun onFailure(e: Throwable) {
-                    Log.d(TAG, "点赞失败")
+                    CoroutineScope(Dispatchers.Main).launch {
+                        loadToast.emit("❌")
+                    }
                 }
             }))
         }
@@ -106,15 +122,74 @@ class ForestDetailRepository {
             }
             observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(msg: MsgResponse) {
-                    Log.d(TAG, "onSuccess: ${msg.msg}")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        loadToast.emit(
+                            if (!hole.followed) "收藏成功"
+                            else "取消收藏"
+                        )
+                    }
                 }
 
                 override fun onFailure(e: Throwable) {
-                    Log.d(TAG, "关注失败")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        loadToast.emit(
+                            if (!hole.followed) "收藏成功"
+                            else "取消收藏"
+                        )
+                    }
                 }
             }))
         }
+    }
 
+    fun deleteTheHole(hole: Hole) {
+        (hole as DetailForestHole).takeIf { it.isMine }?.let {
+            HomeScreenNetworkApi.retrofitService.deleteHole(it.holeId.toString())
+                .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                    override fun onSuccess(t: MsgResponse?) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            loadToast.emit(
+                                "删除成功"
+                            )
+                        }
+                    }
+
+                    override fun onFailure(e: Throwable?) {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            loadToast.emit(
+                                "❌"
+                            )
+                        }
+                    }
+                }))
+        }
+    }
+
+    fun joinTheForest(forestId: Int) {
+        HomeScreenNetworkApi.retrofitService.joinTheForest(forestId.toString())
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                override fun onSuccess(t: MsgResponse?) {
+                    _overview.value?.Joined = true
+
+                }
+
+                override fun onFailure(e: Throwable?) {
+
+                }
+            }))
+    }
+
+    fun quitTheForest(forestId: Int) {
+        HomeScreenNetworkApi.retrofitService.quitTheForest(forestId.toString())
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                override fun onSuccess(t: MsgResponse?) {
+                    _overview.value?.Joined = false
+                }
+
+                override fun onFailure(e: Throwable?) {
+
+                }
+            }))
     }
 
     companion object {

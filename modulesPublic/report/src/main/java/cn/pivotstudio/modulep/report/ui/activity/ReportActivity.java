@@ -26,56 +26,63 @@ import cn.pivotstudio.modulep.report.BuildConfig;
 import cn.pivotstudio.modulep.report.R;
 import cn.pivotstudio.modulep.report.databinding.ActivityReportBinding;
 import cn.pivotstudio.modulep.report.model.MsgResponse;
-import cn.pivotstudio.modulep.report.network.ReportRequestInterface;
+import cn.pivotstudio.modulep.report.network.ReportNetworkApi;
 import cn.pivotstudio.modulep.report.viewmodel.ReportViewModel;
 import io.reactivex.Observable;
 
 /**
- * @classname:ReportActivity
- * @description:
- * @date:2022/5/18 14:50
+ * @classname: ReportActivity
+ * @description: 举报页面
+ * @date: 2022/5/18 14:50
  * @version:1.0
  * @author:
  */
 
-@Route(path="/report/ReportActivity")
+@Route(path = "/report/ReportActivity")
 public class ReportActivity extends BaseActivity {
-    @Autowired(name= Constant.HOLE_ID)
+    @Autowired(name = Constant.HOLE_ID)
     int hole_id;
-    @Autowired(name= Constant.REPLY_LOCAL_ID)
+    @Autowired(name = Constant.REPLY_LOCAL_ID)
     int reply_local_id;
-    @Autowired(name= Constant.ALIAS)
+    @Autowired(name = Constant.ALIAS)
     String alias;
 
     String reportType;
     Button lastClickBtn;
     ReportViewModel mViewModel;
     ActivityReportBinding mBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ARouter.getInstance().inject(this);//初始化@Autowired
         initView();
     }
-    private void initView(){
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
+
+    private void initView() {
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
         mBinding = DataBindingUtil.setContentView(this, R.layout.activity_report);
-        mViewModel=new ViewModelProvider(this,new ViewModelProvider.NewInstanceFactory()).get(ReportViewModel.class);
-        mBinding.tvReportHoleid.setText("#"+hole_id);
+        mViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(ReportViewModel.class);
+        mBinding.tvReportHoleid.setText("#" + hole_id);
         mBinding.tvAlias.setText(alias);
         mBinding.tvTitlebargreenTitle.setText("举报");
         mBinding.titlebargreenAVLoadingIndicatorView.hide();
         mBinding.titlebargreenAVLoadingIndicatorView.setVisibility(View.GONE);
         mBinding.clTitlebargreenBack.setOnClickListener(this::onClick);
 
-        EditTextUtil.ButtonReaction(mBinding.etReport,mBinding.btnReport);
+        EditTextUtil.ButtonReaction(mBinding.etReport, mBinding.btnReport);
     }
-    public void reportForNetwork(){
-        String content="举报类型：\n"+reportType+"\n"+"举报描述：\n"+mBinding.etReport.getText().toString();
+
+    @SuppressLint("CheckResult")
+    public void reportForNetwork() {
+        String content = "举报类型：\n" + reportType + "\n" + "举报描述：\n" + mBinding.etReport.getText().toString();
 
         Observable<MsgResponse> observable;
-            observable=NetworkApi.createService(ReportRequestInterface.class, 2).report(Constant.BASE_URL +"reports?hole_id=" + hole_id + "&reply_local_id="+reply_local_id+ "&content="+content);
+        observable = ReportNetworkApi.INSTANCE.getRetrofitService().report(Constant.BASE_URL + "reports?hole_id=" + hole_id + "&reply_local_id=" + reply_local_id + "&content=" + content);
         observable.compose(NetworkApi.applySchedulers(new BaseObserver<MsgResponse>() {
             @Override
             public void onSuccess(MsgResponse msg) {
@@ -90,32 +97,33 @@ public class ReportActivity extends BaseActivity {
             }
         }));
     }
-    public void onClick(View view) {
-        int id=view.getId();
-        if(id==R.id.et_report){
 
-        }else if(id==R.id.btn_report){
-                if(reportType!=null){
-                    reportForNetwork();
-                }else{
-                    showMsg("您还未选择举报类型");
-                }
-                closeKeyBoard();
-        }else if(id==R.id.cl_titlebargreen_back){
+    public void onClick(View view) {
+        int id = view.getId();
+        if (id == R.id.et_report) {
+
+        } else if (id == R.id.btn_report) {
+            if (reportType != null) {
+                reportForNetwork();
+            } else {
+                showMsg("您还未选择举报类型");
+            }
+            closeKeyBoard();
+        } else if (id == R.id.cl_titlebargreen_back) {
             if (BuildConfig.isRelease) {
                 finish();
                 closeKeyBoard();
             } else {
                 showMsg("当前处于模块测试阶段");
             }
-        }else{
-            if(view instanceof Button){
-                if(lastClickBtn!=null) {
+        } else {
+            if (view instanceof Button) {
+                if (lastClickBtn != null) {
                     lastClickBtn.setBackground(AppCompatResources.getDrawable(this, R.drawable.report_button));
                 }
-                view.setBackground(AppCompatResources.getDrawable(this,R.drawable.report_button_green));
-                lastClickBtn=(Button)view;
-                reportType=((Button)view).getText().toString();
+                view.setBackground(AppCompatResources.getDrawable(this, R.drawable.report_button_green));
+                lastClickBtn = (Button) view;
+                reportType = ((Button) view).getText().toString();
             }
         }
     }

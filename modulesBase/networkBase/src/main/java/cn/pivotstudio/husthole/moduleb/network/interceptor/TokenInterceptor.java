@@ -1,12 +1,8 @@
 package cn.pivotstudio.husthole.moduleb.network.interceptor;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-
-
-import java.io.IOException;
-
 import cn.pivotstudio.moduleb.database.MMKVUtil;
+import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 
@@ -25,10 +21,8 @@ public class TokenInterceptor implements Interceptor {
         //用于添加的请求头
 
         String token = mmkvUtil.getString("USER_TOKEN");
-        Request request = chain.request()
-                .newBuilder()
-                .addHeader("Authorization", "Bearer " + token)
-                .build();
+        Request request =
+            chain.request().newBuilder().addHeader("Authorization", "Bearer " + token).build();
         return chain.proceed(request);
     }
 }

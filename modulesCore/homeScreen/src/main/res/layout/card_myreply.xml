@@ -1,132 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="@dimen/dp_10"
     android:layout_marginHorizontal="@dimen/dp_12"
+    android:layout_marginTop="@dimen/dp_10"
     app:cardCornerRadius="@dimen/dp_20">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/my_reply_total"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginHorizontal="@dimen/dp_12"
-        android:layout_marginVertical="@dimen/dp_16">
-        <TextView
-            android:id="@+id/my_reply_alias"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:textColor="@color/GrayScale_0" />
 
-        <TextView
-            android:id="@+id/my_reply_created_timestamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/my_reply_alias"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/dp_3"
-            android:textSize="@dimen/sp_11"
-            android:textColor="@color/GrayScale_80" />
-
-        <ImageView
-            android:id="@+id/my_reply_moreWhat"
-            android:layout_width="@dimen/dp_25"
-            android:layout_height="@dimen/dp_25"
-            android:layout_marginEnd="3dp"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/my_reply_total"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="@dimen/dp_12"
+            android:layout_marginVertical="@dimen/dp_16"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/threepoint" />
-
-        <TextView
-            android:id="@+id/my_reply_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/my_reply_created_timestamp"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginTop="@dimen/dp_5"
-            android:ellipsize="end"
-            android:lineSpacingExtra="4dp"
-            android:maxLines="2"
-            android:textColor="@color/GrayScale_20"
-            android:textSize="@dimen/sp_14" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.cardview.widget.CardView
-            android:layout_height="@dimen/dp_30"
-            android:layout_width="match_parent"
-            app:layout_constraintTop_toBottomOf="@id/my_reply_content"
-            android:layout_marginTop="@dimen/dp_5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:cardCornerRadius="@dimen/dp_10"
-            app:cardBackgroundColor="#F2F2F2" >
-            <LinearLayout
+            <ImageView
+                android:id="@+id/my_reply_moreWhat"
+                android:layout_width="@dimen/dp_25"
+                android:layout_height="@dimen/dp_25"
+                android:layout_marginEnd="3dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/threepoint" />
+
+            <TextView
+                android:id="@+id/my_reply_created_timestamp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center_vertical">
-                <TextView
-                    android:id="@+id/my_reply_hole_id"
+                android:layout_marginTop="@dimen/dp_3"
+                android:textColor="@color/GrayScale_80"
+                android:textSize="@dimen/sp_11"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/my_reply_alias" />
+
+            <TextView
+                android:id="@+id/my_reply_alias"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/GrayScale_0"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/my_reply_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
+                android:ellipsize="end"
+                android:lineSpacingExtra="4dp"
+                android:maxLines="2"
+                android:textColor="@color/GrayScale_20"
+                android:textSize="@dimen/sp_14"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/my_reply_created_timestamp" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_30"
+                android:layout_marginTop="@dimen/dp_5"
+                app:cardBackgroundColor="#F2F2F2"
+                app:cardCornerRadius="@dimen/dp_10"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/my_reply_content">
+
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp_13"
-                    android:layout_marginStart="@dimen/dp_13"
-                    android:textColor="@color/GrayScale_50" />
-                <TextView
-                    android:id="@+id/my_reply_hole_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp_13"
-                    android:maxLines="1"
-                    android:layout_marginStart="@dimen/dp_8"
-                    android:ellipsize="end"
-                    android:textColor="@color/GrayScale_50" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/my_reply_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/cl_1"
-        app:layout_constraintEnd_toEndOf="@id/cl_1"
-        android:background="@drawable/more"
-        android:elevation="20dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingVertical="@dimen/dp_10"
-        android:paddingEnd="@dimen/dp_80">
-        <ImageView
-            android:id="@+id/iv_itemhomepage_moreicon"
-            android:layout_width="@dimen/dp_24"
-            android:layout_height="@dimen/dp_24"
-            android:layout_marginStart="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/vector6" />
-        <TextView
-            android:id="@+id/tv_itemhomepage_moretext"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/my_reply_hole_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_13"
+                        android:textColor="@color/GrayScale_50"
+                        android:textSize="@dimen/sp_13" />
+
+                    <TextView
+                        android:id="@+id/my_reply_hole_content"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/dp_8"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:textColor="@color/GrayScale_50"
+                        android:textSize="@dimen/sp_13" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/my_reply_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp_12"
-            android:text="删除"
-            android:textColor="@color/GrayScale_20"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_moreicon"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:background="@drawable/more"
+            android:clickable="true"
+            android:elevation="20dp"
+            android:focusable="true"
+            android:paddingEnd="@dimen/dp_80"
+            android:paddingVertical="@dimen/dp_10"
+            app:layout_constraintEnd_toEndOf="@id/cl_1"
+            app:layout_constraintTop_toTopOf="@id/cl_1">
+
+            <ImageView
+                android:id="@+id/iv_itemhomepage_moreicon"
+                android:layout_width="@dimen/dp_24"
+                android:layout_height="@dimen/dp_24"
+                android:layout_marginStart="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/vector6" />
+
+            <TextView
+                android:id="@+id/tv_itemhomepage_moretext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_12"
+                android:text="删除"
+                android:textColor="@color/GrayScale_20"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_moreicon"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -7,18 +7,10 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
 public class ZoomImageView extends AppCompatImageView implements View.OnTouchListener {
-
-    public class ZoomMode {
-        public final static int Ordinary = 0;
-        public final static int ZoomIn = 1;
-        public final static int TowFingerZoom = 2;
-    }
-
 
     private Matrix matrix;
     //imageView的大小
@@ -26,35 +18,33 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
     //图片的大小
     private PointF imageSize;
     //缩放后图片的大小
-    private PointF scaleSize = new PointF();
+    private final PointF scaleSize = new PointF();
     //最初的宽高的缩放比例
-    private PointF originScale = new PointF();
+    private final PointF originScale = new PointF();
     //imageview中bitmap的xy实时坐标
-    private PointF bitmapOriginPoint = new PointF();
+    private final PointF bitmapOriginPoint = new PointF();
     //点击的点
-    private PointF clickPoint = new PointF();
+    private final PointF clickPoint = new PointF();
     //设置的双击检查时间限制
-    private long doubleClickTimeSpan = 250;
+    private final long doubleClickTimeSpan = 250;
     //上次点击的时间
-    private long lastClickTime = 0;
+    private final long lastClickTime = 0;
     //双击放大的倍数
-    private int doubleClickZoom = 2;
+    private final int doubleClickZoom = 2;
     //当前缩放的模式
     private int zoomInMode = ZoomMode.Ordinary;
     //临时坐标比例数据
-    private PointF tempPoint = new PointF();
+    private final PointF tempPoint = new PointF();
     //最大缩放比例
-    private float maxScrole = 4;
+    private final float maxScrole = 4;
     //两点之间的距离
     private float doublePointDistance = 0;
     //双指缩放时候的中心点
-    private PointF doublePointCenter = new PointF();
+    private final PointF doublePointCenter = new PointF();
     //两指缩放的比例
     private float doubleFingerScrole = 0;
     //上次触碰的手指数量
     private int lastFingerNum = 0;
-
-
     public ZoomImageView(Context context) {
         super(context);
         init();
@@ -70,12 +60,20 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
         init();
     }
 
+    /**
+     * 计算零个手指间的距离
+     */
+    public static float getDoubleFingerDistance(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        return (float) Math.sqrt(x * x + y * y);
+    }
+
     private void init() {
         setOnTouchListener(this);
         setScaleType(ScaleType.MATRIX);
         matrix = new Matrix();
     }
-
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -83,7 +81,6 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
         viewSize = new PointF(width, height);
-
 
         Drawable drawable = getDrawable();
         if (drawable != null) {
@@ -100,19 +97,24 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
         float scale = 1.0f;
         // 图片宽度大于控件宽度，图片高度小于控件高度
         if (imageSize.x > viewSize.x && imageSize.y < viewSize.y)
-            //scale = viewSize.x * 1.0f / mDrawableWidth;
+        //scale = viewSize.x * 1.0f / mDrawableWidth;
+        {
             scale = viewSize.y * 1.0f / imageSize.y;
-            // 图片高度度大于控件宽高，图片宽度小于控件宽度
+        }
+        // 图片高度度大于控件宽高，图片宽度小于控件宽度
         else if (imageSize.y > viewSize.y && imageSize.x < viewSize.x)
-            //scale = viewSize.y * 1.0f / imageSize.y;
+        //scale = viewSize.y * 1.0f / imageSize.y;
+        {
             scale = viewSize.x * 1.0f / imageSize.x;
-            // 图片宽度大于控件宽度，图片高度大于控件高度
-        else if (imageSize.y > viewSize.y && imageSize.x > viewSize.x)
+        }
+        // 图片宽度大于控件宽度，图片高度大于控件高度
+        else if (imageSize.y > viewSize.y && imageSize.x > viewSize.x) {
             scale = Math.max(viewSize.y * 1.0f / imageSize.y, viewSize.x * 1.0f / imageSize.x);
-            // 图片宽度小于控件宽度，图片高度小于控件高度
-        else if (imageSize.y < viewSize.y && imageSize.x < viewSize.x)
+        }
+        // 图片宽度小于控件宽度，图片高度小于控件高度
+        else if (imageSize.y < viewSize.y && imageSize.x < viewSize.x) {
             scale = Math.max(viewSize.y * 1.0f / imageSize.y, viewSize.x * 1.0f / imageSize.x);
-
+        }
 
         float scalex = viewSize.x / imageSize.x;
         float scaley = viewSize.y / imageSize.y;
@@ -134,7 +136,6 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
         originScale.set(scale, scale);
         doubleFingerScrole = scale;
     }
-
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -202,9 +203,7 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
                     showCenter();
                 }
 
-
                 break;
-
 
             case MotionEvent.ACTION_MOVE:
                 //手指移动时触发事件
@@ -244,23 +243,22 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
                     clickPoint.set(currentX, currentY);
                 }
 
-
                 /**************************************缩放
                  *******************************************/
                 //判断当前是两个手指接触到屏幕才处理缩放事件
                 if (event.getPointerCount() == 2) {
                     //如果此时缩放后的大小，大于等于了设置的最大缩放的大小，就不处理
                     if ((scaleSize.x / imageSize.x >= originScale.x * maxScrole
-                            || scaleSize.y / imageSize.y >= originScale.y * maxScrole)
-                            && getDoubleFingerDistance(event) - doublePointDistance > 0) {
+                        || scaleSize.y / imageSize.y >= originScale.y * maxScrole)
+                        && getDoubleFingerDistance(event) - doublePointDistance > 0) {
                         break;
                     }
                     //这里设置当双指缩放的的距离变化量大于50，并且当前不是在双指缩放状态下，就计算中心点，等一些操作
                     if (Math.abs(getDoubleFingerDistance(event) - doublePointDistance) > 50
-                            && zoomInMode != ZoomMode.TowFingerZoom) {
+                        && zoomInMode != ZoomMode.TowFingerZoom) {
                         //计算两个手指之间的中心点，当作放大的中心点
                         doublePointCenter.set((event.getX(0) + event.getX(1)) / 2,
-                                (event.getY(0) + event.getY(1)) / 2);
+                            (event.getY(0) + event.getY(1)) / 2);
                         //将双指的中心点就假设为点击的点
                         clickPoint.set(doublePointCenter);
                         //下面就和双击放大基本一样
@@ -268,25 +266,22 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
                         //分别记录被点击的点到图片左上角x,y轴的距离与图片x,y轴边长的比例，
                         //方便在进行缩放后，算出这个点对应的坐标点
                         tempPoint.set((clickPoint.x - bitmapOriginPoint.x) / scaleSize.x,
-                                (clickPoint.y - bitmapOriginPoint.y) / scaleSize.y);
+                            (clickPoint.y - bitmapOriginPoint.y) / scaleSize.y);
                         //设置进入双指缩放状态
                         zoomInMode = ZoomMode.TowFingerZoom;
                     }
 
-
                     //如果已经进入双指缩放状态，就直接计算缩放的比例，并进行位移
                     if (zoomInMode == ZoomMode.TowFingerZoom) {
                         //用当前的缩放比例与此时双指间距离的缩放比例相乘，就得到对应的图片应该缩放的比例
-                        float scrole =
-                                doubleFingerScrole * getDoubleFingerDistance(event) / doublePointDistance;
+                        float scrole = doubleFingerScrole * getDoubleFingerDistance(event)
+                            / doublePointDistance;
                         //这里也是和双击放大时一样的
                         scaleImage(new PointF(scrole, scrole));
                         getBitmapOffset();
-                        translationImage(
-                                new PointF(
-                                        clickPoint.x - (bitmapOriginPoint.x + tempPoint.x * scaleSize.x),
-                                        clickPoint.y - (bitmapOriginPoint.y + tempPoint.y * scaleSize.y))
-                        );
+                        translationImage(new PointF(
+                            clickPoint.x - (bitmapOriginPoint.x + tempPoint.x * scaleSize.x),
+                            clickPoint.y - (bitmapOriginPoint.y + tempPoint.y * scaleSize.y)));
                     }
                 }
                 break;
@@ -299,7 +294,6 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
         return true;
     }
 
-
     public void scaleImage(PointF scaleXY) {
         matrix.setScale(scaleXY.x, scaleXY.y);
         scaleSize.set(scaleXY.x * imageSize.x, scaleXY.y * imageSize.y);
@@ -308,21 +302,14 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
 
     /**
      * 对图片进行x和y轴方向的平移
-     *
-     * @param pointF
      */
     public void translationImage(PointF pointF) {
         matrix.postTranslate(pointF.x, pointF.y);
         setImageMatrix(matrix);
     }
 
-
     /**
      * 防止移动图片超过边界，计算边界情况
-     *
-     * @param moveX
-     * @param moveY
-     * @return
      */
     public float[] moveBorderDistance(float moveX, float moveY) {
         //计算bitmap的左上角坐标
@@ -372,7 +359,7 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
                 }
             }
         }
-        return new float[]{moveX, moveY};
+        return new float[] { moveX, moveY };
     }
 
     /**
@@ -388,16 +375,9 @@ public class ZoomImageView extends AppCompatImageView implements View.OnTouchLis
         bitmapOriginPoint.set(offset[0], offset[1]);
     }
 
-
-    /**
-     * 计算零个手指间的距离
-     *
-     * @param event
-     * @return
-     */
-    public static float getDoubleFingerDistance(MotionEvent event) {
-        float x = event.getX(0) - event.getX(1);
-        float y = event.getY(0) - event.getY(1);
-        return (float) Math.sqrt(x * x + y * y);
+    public class ZoomMode {
+        public final static int Ordinary = 0;
+        public final static int ZoomIn = 1;
+        public final static int TowFingerZoom = 2;
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/GrayScale_95"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/GrayScale_95">
 
     <LinearLayout
         android:id="@+id/screen_bar"
@@ -44,14 +44,6 @@
         android:layout_below="@id/screen_bar"
         android:background="@color/GrayScale_100">
         <!--        android:layout_below="@id/toolbar_setting">-->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="12dp"
-            android:text="关键词屏蔽"
-            android:textColor="@color/GrayScale_20" />
-
-
         <ImageView
             android:id="@+id/view1"
             android:layout_width="@dimen/dp_10"
@@ -61,6 +53,14 @@
             android:layout_marginEnd="@dimen/dp_17"
             android:scaleType="fitXY"
             app:srcCompat="@mipmap/back_black2" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:text="关键词屏蔽"
+            android:textColor="@color/GrayScale_20" />
     </RelativeLayout>
 
 </RelativeLayout>

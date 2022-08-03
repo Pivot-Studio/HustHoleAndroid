@@ -20,27 +20,19 @@ public class CustomDisposable {
 
     /**
      * Flowable
-     * @param flowable
-     * @param consumer
-     * @param <T>
      */
     public static <T> void addDisposable(Flowable<T> flowable, Consumer<T> consumer) {
-        compositeDisposable.add(flowable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(consumer));
+        compositeDisposable.add(flowable.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(consumer));
     }
 
     /**
      * Completable
-     * @param completable
-     * @param action
-     * @param <T>
      */
     public static <T> void addDisposable(Completable completable, Action action) {
-        compositeDisposable.add(completable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(action));
+        compositeDisposable.add(completable.subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(action));
     }
 }

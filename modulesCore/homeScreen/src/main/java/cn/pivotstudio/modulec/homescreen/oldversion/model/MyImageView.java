@@ -11,10 +11,14 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
-
 import androidx.appcompat.widget.AppCompatImageView;
 
-public class MyImageView extends AppCompatImageView implements ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
+public class MyImageView extends AppCompatImageView
+    implements ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
+    // 不同状态的表示：
+    private static final int NONE = 0;
+    private static final int DRAG = 1;
+    private static final int ZOOM = 2;
     /**
      * 控件宽度
      */
@@ -35,41 +39,46 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
      * 图片高度（使用前判断mDrawable是否null）
      */
     private int mDrawableHeight;
-
     /**
      * 初始化缩放值
      */
     private float mScale;
-
     /**
      * 双击图片的缩放值
      */
     private float mDoubleClickScale;
-
     /**
      * 最大的缩放值
      */
     private float mMaxScale;
-
     /**
      * 最小的缩放值
      */
     private float mMinScale;
-
     private ScaleGestureDetector scaleGestureDetector;
     /**
      * 当前有着缩放值、平移值的矩阵。
      */
     private Matrix matrix;
-
+    private float downX;
+    private float downY;
+    private float nowMovingX;
+    private float nowMovingY;
+    private float lastMovedX;
+    private float lastMovedY;
+    private boolean isFirstMoved = false;
+    private final Matrix matrix1 = new Matrix();
+    private final Matrix savedMatrix = new Matrix();
+    private int mode = NONE;
+    private float oriDis = 1f;
+    private final PointF startPoint = new PointF();
+    private PointF midPoint = new PointF();
     public MyImageView(Context context) {
         this(context, null);
     }
-
     public MyImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
-
     public MyImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOnTouchListener(this);
@@ -90,50 +99,59 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
         // 强制设置模式
         setScaleType(ScaleType.MATRIX);
         // 添加观察者
-        getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // 移除观察者
-                getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                // 获取控件大小
-                mWidth = getWidth();
-                mHeight = getHeight();
+        getViewTreeObserver().addOnGlobalLayoutListener(
+            new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    // 移除观察者
+                    getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    // 获取控件大小
+                    mWidth = getWidth();
+                    mHeight = getHeight();
 
-                //通过getDrawable获得Src的图片
-                mDrawable = getDrawable();
-                if (mDrawable == null)
-                    return;
-                mDrawableWidth = mDrawable.getIntrinsicWidth();
-                mDrawableHeight = mDrawable.getIntrinsicHeight();
-                initImageViewSize();
-                moveToCenter();
-            }
-        });
+                    //通过getDrawable获得Src的图片
+                    mDrawable = getDrawable();
+                    if (mDrawable == null) {
+                        return;
+                    }
+                    mDrawableWidth = mDrawable.getIntrinsicWidth();
+                    mDrawableHeight = mDrawable.getIntrinsicHeight();
+                    initImageViewSize();
+                    moveToCenter();
+                }
+            });
     }
 
     /**
      * 初始化资源图片宽高
      */
     private void initImageViewSize() {
-        if (mDrawable == null)
+        if (mDrawable == null) {
             return;
+        }
 
         // 缩放值
         float scale = 1.0f;
         // 图片宽度大于控件宽度，图片高度小于控件高度
         if (mDrawableWidth > mWidth && mDrawableHeight < mHeight)
-            //scale = mWidth * 1.0f / mDrawableWidth;
+        //scale = mWidth * 1.0f / mDrawableWidth;
+        {
             scale = mHeight * 1.0f / mDrawableHeight;
-            // 图片高度度大于控件宽高，图片宽度小于控件宽度
+        }
+        // 图片高度度大于控件宽高，图片宽度小于控件宽度
         else if (mDrawableHeight > mHeight && mDrawableWidth < mWidth)
-            //scale = mHeight * 1.0f / mDrawableHeight;
+        //scale = mHeight * 1.0f / mDrawableHeight;
+        {
             scale = mWidth * 1.0f / mDrawableWidth;
-            // 图片宽度大于控件宽度，图片高度大于控件高度
-        else if (mDrawableHeight > mHeight && mDrawableWidth > mWidth)
+        }
+        // 图片宽度大于控件宽度，图片高度大于控件高度
+        else if (mDrawableHeight > mHeight && mDrawableWidth > mWidth) {
             scale = Math.max(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
-            // 图片宽度小于控件宽度，图片高度小于控件高度
-        else if (mDrawableHeight < mHeight && mDrawableWidth < mWidth)
+        }
+        // 图片宽度小于控件宽度，图片高度小于控件高度
+        else if (mDrawableHeight < mHeight && mDrawableWidth < mWidth) {
             scale = Math.max(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
+        }
         mScale = scale;
         mMaxScale = mScale * 8.0f;
         mMinScale = mScale * 0.5f;
@@ -168,8 +186,9 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
      */
     private RectF getRectf(Matrix matrix) {
         RectF f = new RectF();
-        if (mDrawable == null)
+        if (mDrawable == null) {
             return null;
+        }
         f.set(0, 0, mDrawableWidth, mDrawableHeight);
         matrix.mapRect(f);
         return f;
@@ -185,10 +204,12 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
         // 获取已经缩放的值
         float scale = getmScale();
         float scaleResult = scale * scaleFactor;
-        if (scaleResult >= mMaxScale && scaleFactor > 1.0f)
+        if (scaleResult >= mMaxScale && scaleFactor > 1.0f) {
             scaleFactor = mMaxScale / scale;
-        if (scaleResult <= mMinScale && scaleFactor < 1.0f)
+        }
+        if (scaleResult <= mMinScale && scaleFactor < 1.0f) {
             scaleFactor = mMinScale / scale;
+        }
 
         matrix.postScale(scaleFactor, scaleFactor, detector.getFocusX(), detector.getFocusY());
 
@@ -234,7 +255,6 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
         return true;
     }
 
-
     @Override
     public boolean onScaleBegin(ScaleGestureDetector detector) {
         return true;
@@ -249,28 +269,6 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
         }
     }
 
-
-    private float downX;
-    private float downY;
-    private float nowMovingX;
-    private float nowMovingY;
-    private float lastMovedX;
-    private float lastMovedY;
-    private boolean isFirstMoved = false;
-
-
-    private Matrix matrix1 = new Matrix();
-    private Matrix savedMatrix = new Matrix();
-
-    // 不同状态的表示：
-    private static final int NONE = 0;
-    private static final int DRAG = 1;
-    private static final int ZOOM = 2;
-    private int mode = NONE;
-    private float oriDis = 1f;
-    private PointF startPoint = new PointF();
-    private PointF midPoint = new PointF();
-
     private PointF middle(MotionEvent event) {
         float x = event.getX(0) + event.getX(1);
         float y = event.getY(0) + event.getY(1);
@@ -282,7 +280,6 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
         float y = event.getY(0) - event.getY(1);
         return Float.valueOf(String.valueOf(Math.sqrt(x * x + y * y)));
     }
-
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -347,7 +344,6 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
                     }
                 }
 
-
                 lastMovedX = nowMovingX;
                 lastMovedY = nowMovingY;
                 break;
@@ -360,7 +356,6 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
                 break;
         }
         return scaleGestureDetector.onTouchEvent(event);
-
     }
 
     /**
@@ -370,9 +365,7 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
      */
     private boolean canSmoothX() {
         RectF rectf = getRectf(matrix);
-        if (rectf.left > 0 || rectf.right < getWidth())
-            return false;
-        return true;
+        return !(rectf.left > 0) && !(rectf.right < getWidth());
     }
 
     /**
@@ -382,9 +375,7 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
      */
     private boolean canSmoothY() {
         RectF rectf = getRectf(matrix);
-        if (rectf.top > 0 || rectf.bottom < getHeight())
-            return false;
-        return true;
+        return !(rectf.top > 0) && !(rectf.bottom < getHeight());
     }
 
     /**
@@ -394,10 +385,12 @@ public class MyImageView extends AppCompatImageView implements ScaleGestureDetec
      * @param dy 出街便宜的众线
      */
     private void remedyXAndY(float dx, float dy) {
-        if (!canSmoothX())
+        if (!canSmoothX()) {
             matrix.postTranslate(-dx, 0);
-        if (!canSmoothY())
+        }
+        if (!canSmoothY()) {
             matrix.postTranslate(0, -dy);
+        }
         setImageMatrix(matrix);
     }
 }

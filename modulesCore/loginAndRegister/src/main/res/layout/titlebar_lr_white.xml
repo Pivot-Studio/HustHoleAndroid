@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_52"
-    android:orientation="horizontal"
-    android:background="@color/Background_GrayScale_100">
-    <ImageView
-        android:id="@+id/iv_titlebarwhite_back"
-        android:layout_width="@dimen/dp_52"
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/dp_52"
-        android:layout_centerInParent="true"
-        android:onClick="onClick"
-        android:scaleType="center"
-        android:background="@drawable/lr_back_click"
+        android:background="@color/Background_GrayScale_100"
+        android:orientation="horizontal">
 
-        app:srcCompat="@drawable/lr_back_icon" />
+        <ImageView
+            android:id="@+id/iv_titlebarwhite_back"
+            android:layout_width="@dimen/dp_52"
+            android:layout_height="@dimen/dp_52"
+            android:layout_centerInParent="true"
+            android:background="@drawable/lr_back_click"
+            android:onClick="onClick"
+            android:scaleType="center"
 
-</LinearLayout>
+            app:srcCompat="@drawable/lr_back_icon" />
+
+    </LinearLayout>
 </layout>

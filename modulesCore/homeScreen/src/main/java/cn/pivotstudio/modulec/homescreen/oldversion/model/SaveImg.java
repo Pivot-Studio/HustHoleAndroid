@@ -9,10 +9,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -22,17 +20,16 @@ public class SaveImg {
     public static boolean saveImg(Bitmap bitmap, String name, Context context, Activity activity) {
         try {
             if (ContextCompat.checkSelfPermission(context,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(activity,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 } else {
-                    ActivityCompat.requestPermissions(activity,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                    Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                    ActivityCompat.requestPermissions(activity, new String[] {
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    }, 1);
                 }
             }
-
 
             String sdcardPath = System.getenv("EXTERNAL_STORAGE");      //获得sd卡路径
             String dir = sdcardPath + "/1037树洞/";                    //图片保存的文件夹名
@@ -48,11 +45,12 @@ public class SaveImg {
             }
 
             FileOutputStream outputStream = new FileOutputStream(mFile);     //构建输出流
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);  //compress到输出outputStream
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100,
+                outputStream);  //compress到输出outputStream
             Uri uri = Uri.fromFile(mFile);                                  //获得图片的uri
-            context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri)); //发送广播通知更新图库，这样系统图库可以找到这张图片
+            context.sendBroadcast(
+                new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri)); //发送广播通知更新图库，这样系统图库可以找到这张图片
             return true;
-
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -62,5 +60,4 @@ public class SaveImg {
     public void requestAllPower() {
 
     }
-
 }

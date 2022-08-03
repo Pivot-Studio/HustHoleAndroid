@@ -16,6 +16,5 @@ public class CommonUtils {
         lastClickTime = time;
 
         return false;
-
     }
 }

@@ -4,13 +4,14 @@ import android.app.Application;
 
 /**
  * 网络访问信息
+ *
  * @author llw
  */
 public class NetworkRequiredInfo implements INetworkRequiredInfo {
 
     private final Application application;
 
-    public NetworkRequiredInfo(Application application){
+    public NetworkRequiredInfo(Application application) {
         this.application = application;
     }
 
