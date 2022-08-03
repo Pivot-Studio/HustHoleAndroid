@@ -12,25 +12,29 @@ android {
         targetSdkVersion androidID.targetSdkVersion
         versionCode androidID.versionCode
         versionName androidID.versionName
-        if (!isRelease) {//当为release模式时不需要id
+        if (!isRelease) {
+            //当为release模式时不需要id
             applicationId "cn.pivotstudio.modulep.report"
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("boolean", "isRelease", String.valueOf(isRelease))
-        javaCompileOptions {//ARouter跨组件需要
+        javaCompileOptions {
+            //ARouter跨组件需要
             annotationProcessorOptions {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
-        dataBinding {//
+        dataBinding {
+            //
             enabled = true
         }
     }
     sourceSets {
         if (!isMac) {
             main {
-                if (!isRelease) {//不同状态下使用不同清单文件
+                if (!isRelease) {
+                    //不同状态下使用不同清单文件
                     manifest.srcFile '/src/main/debug/AndroidManifest.xml'
                 } else {
                     manifest.srcFile '/src/main/AndroidManifest.xml'
@@ -45,13 +49,15 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                'proguard-rules.pro'
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'cn.pivotstudio.modulep.report'
 }
 
 dependencies {
@@ -59,7 +65,7 @@ dependencies {
     implementation project(':modulesBase:networkBase')
     implementation project(':modulesBase:resBase')
 
-    kapt "com.alibaba:arouter-compiler:$ARouter_version"//每个组件都要添加
+    kapt "com.alibaba:arouter-compiler:$ARouter_version" //每个组件都要添加
 
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"

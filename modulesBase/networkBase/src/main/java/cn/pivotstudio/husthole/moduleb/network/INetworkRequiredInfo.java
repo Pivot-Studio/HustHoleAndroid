@@ -4,6 +4,7 @@ import android.app.Application;
 
 /**
  * App运行信息接口
+ *
  * @author llw
  */
 public interface INetworkRequiredInfo {

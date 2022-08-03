@@ -3,16 +3,14 @@ package com.example.libbase.base.app;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
-
+import cn.pivotstudio.husthole.moduleb.network.NetworkApi;
+import cn.pivotstudio.husthole.moduleb.network.NetworkRequiredInfo;
+import cn.pivotstudio.moduleb.database.AppDatabase;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.libbase.BuildConfig;
 import com.example.libbase.base.ui.activity.ActivityManager;
 import com.example.libbase.util.emoji.EmotionUtil;
 
-
-import cn.pivotstudio.husthole.moduleb.network.NetworkApi;
-import cn.pivotstudio.husthole.moduleb.network.NetworkRequiredInfo;
-import cn.pivotstudio.moduleb.database.AppDatabase;
 /**
  * @classname:BaseApplication
  * @description:
@@ -38,7 +36,7 @@ public class BaseApplication extends Application {
         //创建本地数据库
         db = AppDatabase.getInstance(this);
 
-        if(!BuildConfig.isRelease) {
+        if (!BuildConfig.isRelease) {
             ARouter.openLog();     // 打印日志
             ARouter.openDebug();
         }
@@ -49,18 +47,15 @@ public class BaseApplication extends Application {
         EmotionUtil.init(this);
     }
 
-
     public static Context getContext() {
         return context;
     }
 
-    public static AppDatabase getDb(){
+    public static AppDatabase getDb() {
         return db;
     }
 
     public static ActivityManager getActivityManager() {
         return ActivityManager.getInstance();
     }
-
-
 }

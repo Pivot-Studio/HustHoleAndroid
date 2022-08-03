@@ -14,12 +14,13 @@ public class SharedPreferenceUtil {
     private static final String FILE_NAME = "SharedPreferenceUtil"; //文件名
     private static SharedPreferenceUtil mInstance;
 
-    private SharedPreferenceUtil(){}
+    private SharedPreferenceUtil() {
+    }
 
-    public static SharedPreferenceUtil getInstance(){
-        if(mInstance == null){
-            synchronized (SharedPreferenceUtil.class){
-                if(mInstance == null){
+    public static SharedPreferenceUtil getInstance() {
+        if (mInstance == null) {
+            synchronized (SharedPreferenceUtil.class) {
+                if (mInstance == null) {
                     mInstance = new SharedPreferenceUtil();
                 }
             }
@@ -28,15 +29,13 @@ public class SharedPreferenceUtil {
     }
 
     /**
-     *向sp中添加元素
-     * @param context
-     * @param key
-     * @param value
+     * 向sp中添加元素
      */
-    public void put(Context context, String key, Object value){
+    public void put(Context context, String key, Object value) {
         //判断类型
         String type = value.getClass().getSimpleName();
-        SharedPreferences sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences =
+            context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         switch (type) {
             case "Integer":
@@ -60,13 +59,12 @@ public class SharedPreferenceUtil {
 
     /**
      * 获取sp中的元素
-     * @param context
-     * @param key
+     *
      * @param defValue 代表数据类型
-     * @return
      */
-    public Object get(Context context, String key, Object defValue){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+    public Object get(Context context, String key, Object defValue) {
+        SharedPreferences sharedPreferences =
+            context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         String type = defValue.getClass().getSimpleName();
         switch (type) {
             case "Integer":

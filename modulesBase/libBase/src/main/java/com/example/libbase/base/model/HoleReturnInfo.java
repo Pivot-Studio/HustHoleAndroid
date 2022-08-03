@@ -11,12 +11,35 @@ import android.os.Parcelable;
  * @author:
  */
 public class HoleReturnInfo implements Parcelable {
+    public static final Creator<HoleReturnInfo> CREATOR = new Creator<HoleReturnInfo>() {
+        @Override
+        public HoleReturnInfo createFromParcel(Parcel source) {
+            return new HoleReturnInfo(source);
+        }
+
+        @Override
+        public HoleReturnInfo[] newArray(int size) {
+            return new HoleReturnInfo[size];
+        }
+    };
     Boolean is_follow;
     Boolean is_reply;
     Boolean is_thumbup;
     Integer reply_num;
     Integer thumbup_num;
     Integer follow_num;
+
+    public HoleReturnInfo() {
+    }
+
+    protected HoleReturnInfo(Parcel in) {
+        this.is_follow = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.is_reply = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.is_thumbup = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.reply_num = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.thumbup_num = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.follow_num = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
 
     public Boolean getIs_follow() {
         return is_follow;
@@ -89,28 +112,4 @@ public class HoleReturnInfo implements Parcelable {
         this.thumbup_num = (Integer) source.readValue(Integer.class.getClassLoader());
         this.follow_num = (Integer) source.readValue(Integer.class.getClassLoader());
     }
-
-    public HoleReturnInfo() {
-    }
-
-    protected HoleReturnInfo(Parcel in) {
-        this.is_follow = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.is_reply = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.is_thumbup = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.reply_num = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.thumbup_num = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.follow_num = (Integer) in.readValue(Integer.class.getClassLoader());
-    }
-
-    public static final Creator<HoleReturnInfo> CREATOR = new Creator<HoleReturnInfo>() {
-        @Override
-        public HoleReturnInfo createFromParcel(Parcel source) {
-            return new HoleReturnInfo(source);
-        }
-
-        @Override
-        public HoleReturnInfo[] newArray(int size) {
-            return new HoleReturnInfo[size];
-        }
-    };
 }

@@ -8,5 +8,5 @@ package com.example.libbase.constant;
  * @author:
  */
 public class RequestCodeConstant {
-    public static final int HOMEPAGE=1;
+    public static final int HOMEPAGE = 1;
 }

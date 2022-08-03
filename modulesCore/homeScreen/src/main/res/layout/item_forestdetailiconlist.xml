@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="256dp">
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_forestdetailiconlist"
-        android:layout_width="match_parent"
-        android:layout_height="210dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView9"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/tv_forestdetailiconlist_title"
@@ -19,9 +10,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:text="类型"
-        android:textStyle="bold"
         android:textColor="@color/GrayScale_20"
         android:textSize="15sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/rv_forestdetailiconlist"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,4 +22,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_10"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_forestdetailiconlist"
+        android:layout_width="match_parent"
+        android:layout_height="210dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

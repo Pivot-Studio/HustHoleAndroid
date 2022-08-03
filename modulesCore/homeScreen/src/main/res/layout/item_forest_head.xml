@@ -3,28 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="forestHead"
-            type="cn.pivotstudio.modulec.homescreen.model.ForestHead" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="@dimen/dp_80"
         android:layout_height="@dimen/dp_80">
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/image_forest_head_avatar"
-            imageUrl="@{forestHead.backgroundImageUrl}"
-            android:layout_width="@dimen/dp_48"
-            android:layout_height="@dimen/dp_48"
-            android:layout_marginTop="@dimen/dp_5"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/ShapeableImageViewCircleStyle"
-            tools:src="@drawable/icon" />
 
         <TextView
             android:id="@+id/text_forest_head_name"
@@ -32,8 +13,8 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_5"
-            android:gravity="center"
             android:ellipsize="end"
+            android:gravity="center"
             android:maxLength="6"
             android:maxLines="1"
             android:text="@{forestHead.name, default=10370101010}"
@@ -43,5 +24,24 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_forest_head_avatar" />
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image_forest_head_avatar"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginTop="@dimen/dp_5"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeableImageViewCircleStyle"
+            imageUrl="@{forestHead.backgroundImageUrl}"
+            tools:src="@drawable/icon" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <data>
+
+        <variable
+            name="forestHead"
+            type="cn.pivotstudio.modulec.homescreen.model.ForestHead" />
+    </data>
 </layout>

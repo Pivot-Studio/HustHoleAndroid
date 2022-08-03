@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-
-import com.example.libbase.base.ui.activity.BaseActivity;
-
 import cn.pivotstudio.modulec.loginandregister.R;
+import com.example.libbase.base.ui.activity.BaseActivity;
 
 /**
  * @classname:PrivacyActivity
@@ -27,14 +25,13 @@ public class PrivacyActivity extends BaseActivity {
     /**
      * View相关初始化
      */
-    private void initView(){
+    private void initView() {
         WebView wv = findViewById(R.id.privacy_wv);
         wv.getSettings().setJavaScriptEnabled(true);
         wv.getSettings().setUseWideViewPort(true);
         wv.setWebChromeClient(new WebChromeClient() {
             @Override
-            public boolean onJsAlert(WebView view, String url, String message,
-                                     JsResult result) {
+            public boolean onJsAlert(WebView view, String url, String message, JsResult result) {
                 return super.onJsAlert(view, url, message, result);
             }
         });

@@ -58,6 +58,7 @@ class HomePageFragment : BaseFragment() {
      * @param resultCode
      * @param data
      */
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode != RequestCodeConstant.HOMEPAGE) { //如果不是由homepage这个fragment跳转过去的，返回的结果不接受
             return

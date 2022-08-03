@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/GrayScale_100"
     android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/img_verified"
+        android:layout_width="@dimen/dp_106"
+        android:layout_height="@dimen/dp_106"
+        android:layout_below="@id/email_ok_bar"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="30dp"
+        app:srcCompat="@mipmap/verified" />
 
     <LinearLayout
         android:id="@+id/email_ok_bar"
@@ -33,25 +42,16 @@
             android:textSize="18sp" />
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/img_verified"
-        android:layout_width="@dimen/dp_106"
-        android:layout_height="@dimen/dp_106"
-        android:layout_below="@id/email_ok_bar"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="30dp"
-        app:srcCompat="@mipmap/verified" />
-
     <TextView
         android:id="@+id/text_verified"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/img_verified"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="@dimen/dp_15"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="10dp"
         android:text="已验证校园邮箱"
         android:textColor="@color/GrayScale_0"
         android:textStyle="bold" />

@@ -1,8 +1,5 @@
 package cn.pivotstudio.husthole.moduleb.network;
 
-import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
-
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler;
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.HttpErrorHandler;
 import cn.pivotstudio.husthole.moduleb.network.interceptor.RequestInterceptor;
@@ -14,6 +11,8 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -29,19 +28,16 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class NetworkApi {
 
+    private static final HashMap<String, Retrofit> retrofitHashMap = new HashMap<>();
     /**
      * 获取APP运行状态及版本信息，用于日志打印
      */
     private static INetworkRequiredInfo iNetworkRequiredInfo;
-
     /**
      * API访问地址
      */
     private static String BASE_URL = null;
-
     private static OkHttpClient okHttpClient;
-
-    private static final HashMap<String, Retrofit> retrofitHashMap = new HashMap<>();
 
     /**
      * 初始化
@@ -103,7 +99,8 @@ public class NetworkApi {
             //添加返回拦截器，可用于查看接口的请求耗时，对于网络优化有帮助
             builder.addInterceptor(new ResponseInterceptor());
 
-            builder.addInterceptor(new TokenInterceptor(iNetworkRequiredInfo.getApplicationContext()));
+            builder.addInterceptor(
+                new TokenInterceptor(iNetworkRequiredInfo.getApplicationContext()));
             //当程序在debug过程中则打印数据日志，方便调试用。
             if (iNetworkRequiredInfo != null && iNetworkRequiredInfo.isDebug()) {
                 //iNetworkRequiredInfo不为空且处于debug状态下则初始化日志拦截器
@@ -160,7 +157,7 @@ public class NetworkApi {
      * 配置RxJava 完成线程的切换
      *
      * @param observer 这个observer要注意不要使用lifecycle中的Observer
-     * @param <T>      泛型
+     * @param <T> 泛型
      * @return Observable
      * @deprecated 不符合RxJava链式调用风格，需要替换成
      * {@link cn.pivotstudio.husthole.moduleb.network.NetworkApi#applySchedulers()}
@@ -168,11 +165,10 @@ public class NetworkApi {
     @Deprecated
     public static <T> ObservableTransformer<T, T> applySchedulers(final Observer<T> observer) {
         return upstream -> {
-            Observable<T> observable = upstream
-                    .subscribeOn(Schedulers.io())//线程订阅
-                    .observeOn(AndroidSchedulers.mainThread())//观察Android主线程
-                    .map(NetworkApi.getAppErrorHandler())//判断有没有500的错误，有则进入getAppErrorHandler
-                    .onErrorResumeNext(new HttpErrorHandler<>());//判断有没有400的错误
+            Observable<T> observable = upstream.subscribeOn(Schedulers.io())//线程订阅
+                .observeOn(AndroidSchedulers.mainThread())//观察Android主线程
+                .map(NetworkApi.getAppErrorHandler())//判断有没有500的错误，有则进入getAppErrorHandler
+                .onErrorResumeNext(new HttpErrorHandler<>());//判断有没有400的错误
             //订阅观察者
             observable.subscribe(observer);
             return observable;
@@ -180,11 +176,10 @@ public class NetworkApi {
     }
 
     public static <T> ObservableTransformer<T, T> applySchedulers() {
-        return upstream -> upstream
-                .subscribeOn(Schedulers.io())//线程订阅
-                .observeOn(AndroidSchedulers.mainThread())//观察Android主线程
-                .map(NetworkApi.getAppErrorHandler())//判断有没有500的错误，有则进入getAppErrorHandler
-                .onErrorResumeNext(new HttpErrorHandler<>());
+        return upstream -> upstream.subscribeOn(Schedulers.io())//线程订阅
+            .observeOn(AndroidSchedulers.mainThread())//观察Android主线程
+            .map(NetworkApi.getAppErrorHandler())//判断有没有500的错误，有则进入getAppErrorHandler
+            .onErrorResumeNext(new HttpErrorHandler<>());
     }
 
     /**
@@ -197,7 +192,8 @@ public class NetworkApi {
                 //通过这个异常处理，得到用户可以知道的原因
                 ExceptionHandler.ServerException exception = new ExceptionHandler.ServerException();
                 exception.code = ((BaseResponse) response).responseCode;
-                exception.message = ((BaseResponse) response).responseError != null ? ((BaseResponse) response).responseError : "";
+                exception.message = ((BaseResponse) response).responseError != null
+                    ? ((BaseResponse) response).responseError : "";
                 throw exception;
             }
             return response;

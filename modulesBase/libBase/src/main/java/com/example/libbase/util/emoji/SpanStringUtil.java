@@ -10,7 +10,6 @@ import android.text.style.ImageSpan;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,13 +23,11 @@ import java.util.regex.Pattern;
 public class SpanStringUtil {
     /**
      * 供标准String解析
-     * @param emotion_map_type
-     * @param context
-     * @param tv
-     * @param source
-     * @return
      */
-    public static SpannableString getEmotionContent(int emotion_map_type, final Context context, final View tv, String source) {
+    public static SpannableString getEmotionContent(int emotion_map_type,
+                                                    final Context context,
+                                                    final View tv,
+                                                    String source) {
         SpannableString spannableString = new SpannableString(source);
         Resources res = context.getResources();
         String regexEmotion = "\\[([\u4e00-\u9fa5\\w])+\\]";
@@ -42,20 +39,21 @@ public class SpanStringUtil {
             // 匹配字符串的开始位置
             int start = matcherEmotion.start();
             // 利⽤表情名字获取到对应的图⽚
-            Integer imgRes = EmotionUtil.getImgByName(emotion_map_type,key);
+            Integer imgRes = EmotionUtil.getImgByName(emotion_map_type, key);
             if (imgRes != -1) {
                 // 压缩表情图⽚
-                int size=0;
-                if(tv instanceof EditText){
-                    size= (int) ((EditText)tv).getTextSize();
-                }else if(tv instanceof TextView){
-                    size= (int) ((TextView)tv).getTextSize();
+                int size = 0;
+                if (tv instanceof EditText) {
+                    size = (int) ((EditText) tv).getTextSize();
+                } else if (tv instanceof TextView) {
+                    size = (int) ((TextView) tv).getTextSize();
                 }
 
                 Bitmap bitmap = BitmapFactory.decodeResource(res, imgRes);
                 Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, size, size, true);
                 ImageSpan span = new ImageSpan(context, scaleBitmap);
-                spannableString.setSpan(span, start, start + key.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableString.setSpan(span, start, start + key.length(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
         return spannableString;
@@ -63,13 +61,11 @@ public class SpanStringUtil {
 
     /**
      * 供markdown解析后的CharSequence使用
-     * @param emotion_map_type
-     * @param context
-     * @param tv
-     * @param source
-     * @return
      */
-    public static SpannableString getEmotionMarkdownContent(int emotion_map_type, final Context context, final View tv, CharSequence source) {
+    public static SpannableString getEmotionMarkdownContent(int emotion_map_type,
+                                                            final Context context,
+                                                            final View tv,
+                                                            CharSequence source) {
         SpannableString spannableString = new SpannableString(source);
         Resources res = context.getResources();
         String regexEmotion = "\\[([\u4e00-\u9fa5\\w])+\\]";
@@ -81,20 +77,22 @@ public class SpanStringUtil {
             // 匹配字符串的开始位置
             int start = matcherEmotion.start();
             // 利⽤表情名字获取到对应的图⽚
-            Integer imgRes = EmotionUtil.getImgByName(emotion_map_type,key);
+            Integer imgRes = EmotionUtil.getImgByName(emotion_map_type, key);
             if (imgRes != -1) {
                 // 压缩表情图⽚
-                int size=0;
-                if(tv instanceof EditText){
-                    size= (int) ((EditText)tv).getTextSize()*13/10;
-                }else if(tv instanceof TextView){
-                    size= (int) ((TextView)tv).getTextSize()*13/10;
+                int size = 0;
+                if (tv instanceof EditText) {
+                    size = (int) ((EditText) tv).getTextSize() * 13 / 10;
+                } else if (tv instanceof TextView) {
+                    size = (int) ((TextView) tv).getTextSize() * 13 / 10;
                 }
 
                 Bitmap bitmap = BitmapFactory.decodeResource(res, imgRes);
-                Bitmap scaleBitmap = Bitmap.createScaledBitmap(bitmap, (12*size/10), size, true);
+                Bitmap scaleBitmap =
+                    Bitmap.createScaledBitmap(bitmap, (12 * size / 10), size, true);
                 ImageSpan span = new ImageSpan(context, scaleBitmap);
-                spannableString.setSpan(span, start, start + key.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannableString.setSpan(span, start, start + key.length(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
         return spannableString;

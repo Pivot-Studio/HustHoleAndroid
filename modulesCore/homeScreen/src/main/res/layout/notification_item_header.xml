@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/notification_item_header"
-    android:layout_height="@dimen/dp_90"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <View
-        android:id="@+id/cut_off"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_10"
-        android:background="@color/GrayScale_95"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="@dimen/dp_90"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_70"
@@ -39,8 +31,8 @@
             android:layout_height="@dimen/dp_50"
             android:layout_alignBottom="@id/system_notification_image"
             android:layout_toRightOf="@id/system_notification_image"
-            android:orientation="vertical"
-            android:gravity="bottom">
+            android:gravity="bottom"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/system_notification_tittle"
@@ -67,6 +59,16 @@
                 app:layout_constraintBottom_toBottomOf="@id/system_notification_image" />
         </LinearLayout>
     </RelativeLayout>
+
+    <View
+        android:id="@+id/cut_off"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/GrayScale_95"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_10"

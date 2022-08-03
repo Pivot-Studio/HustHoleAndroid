@@ -8,5 +8,5 @@ package com.example.libbase.constant;
  * @author:
  */
 public class ResultCodeConstant {
-    public static final int Hole=1;
+    public static final int Hole = 1;
 }

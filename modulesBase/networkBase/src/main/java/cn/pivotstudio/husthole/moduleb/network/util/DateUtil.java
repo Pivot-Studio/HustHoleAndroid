@@ -35,7 +35,8 @@ public class DateUtil {
     public static final String THURSDAY = "星期四";
     public static final String FRIDAY = "星期五";
     public static final String SATURDAY = "星期六";
-    public static final String[] WEEK_DAYS = {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
+    public static final String[] WEEK_DAYS =
+        { SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY };
 
     /**
      * 获取标准时间
@@ -75,11 +76,13 @@ public class DateUtil {
 
     /**
      * 获取年月日
+     *
      * @param delimiter 分隔符
      * @return 例如 2021年07月01号
      */
     public static String getTheYearMonthAndDayDelimiter(CharSequence delimiter) {
-        return new SimpleDateFormat(YEAR + delimiter + MONTH + delimiter + DAY, Locale.CHINESE).format(new Date());
+        return new SimpleDateFormat(YEAR + delimiter + MONTH + delimiter + DAY,
+            Locale.CHINESE).format(new Date());
     }
 
     /**
@@ -102,11 +105,13 @@ public class DateUtil {
 
     /**
      * 获取时分秒
+     *
      * @param delimiter 分隔符
      * @return 例如 2021/07/01
      */
     public static String getHoursMinutesAndSecondsDelimiter(CharSequence delimiter) {
-        return new SimpleDateFormat(HOUR + delimiter + MINUTE + delimiter + SECOND, Locale.CHINESE).format(new Date());
+        return new SimpleDateFormat(HOUR + delimiter + MINUTE + delimiter + SECOND,
+            Locale.CHINESE).format(new Date());
     }
 
     /**
@@ -183,7 +188,6 @@ public class DateUtil {
 
     /**
      * 获取第二天凌晨0点时间戳
-     * @return
      */
     public static long getMillisNextEarlyMorning() {
         Calendar cal = Calendar.getInstance();
@@ -334,7 +338,7 @@ public class DateUtil {
     /**
      * 获得指定月的天数
      *
-     * @param year  例如 2021
+     * @param year 例如 2021
      * @param month 例如 7
      * @return 例如 31
      */

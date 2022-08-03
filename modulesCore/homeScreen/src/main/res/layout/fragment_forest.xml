@@ -3,27 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="forestFragment"
-            type="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment" />
-
-        <variable
-            name="viewModel"
-            type="cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel" />
-    </data>
-
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/GrayScale_95">
-
-        <com.scwang.smart.refresh.header.ClassicsHeader
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/GrayScale_95" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -94,17 +78,6 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
 
-                            <TextView
-                                android:id="@+id/text_forest_head_jump_to_all_forest"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/page2fragment_2"
-                                android:textColor="@color/GrayScale_70"
-                                android:textSize="@dimen/sp_11"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@+id/image_forest_head_jump_to_all_forest"
-                                app:layout_constraintTop_toTopOf="parent" />
-
                             <ImageView
                                 android:id="@+id/image_forest_head_jump_to_all_forest"
                                 android:layout_width="wrap_content"
@@ -117,6 +90,17 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@id/text_forest_head_jump_to_all_forest"
                                 app:srcCompat="@drawable/ic_forward_arrow" />
+
+                            <TextView
+                                android:id="@+id/text_forest_head_jump_to_all_forest"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/page2fragment_2"
+                                android:textColor="@color/GrayScale_70"
+                                android:textSize="@dimen/sp_11"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/image_forest_head_jump_to_all_forest"
+                                app:layout_constraintTop_toTopOf="parent" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -150,5 +134,21 @@
             android:layout_height="wrap_content"
             android:background="@color/GrayScale_95" />
 
+        <com.scwang.smart.refresh.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/GrayScale_95" />
+
     </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+    <data>
+
+        <variable
+            name="forestFragment"
+            type="cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment" />
+
+        <variable
+            name="viewModel"
+            type="cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel" />
+    </data>
 </layout>

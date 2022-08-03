@@ -1,22 +1,15 @@
 package cn.pivotstudio.husthole.moduleb.network.errorhandler;
 
 import android.net.ParseException;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.google.gson.JsonParseException;
-
-import org.apache.http.conn.ConnectTimeoutException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
-
 import javax.net.ssl.SSLHandshakeException;
-
 import okhttp3.ResponseBody;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.HttpException;
 
 /**
@@ -28,7 +21,7 @@ import retrofit2.HttpException;
  */
 public class ExceptionHandler {
     //请求错误
-    private static final int BAD_REQUEST= 400;
+    private static final int BAD_REQUEST = 400;
     //未授权
     private static final int UNAUTHORIZED = 401;
     //禁止的
@@ -48,8 +41,6 @@ public class ExceptionHandler {
 
     /**
      * 处理异常
-     * @param throwable
-     * @return
      */
     public static ResponseThrowable handleException(Throwable throwable) throws IOException {
         //返回时抛出异常
@@ -59,9 +50,9 @@ public class ExceptionHandler {
             responseThrowable = new ResponseThrowable(throwable, ERROR.HTTP_ERROR);
             switch (httpException.code()) {
                 case BAD_REQUEST:
-                    ResponseBody body=((HttpException)throwable).response().errorBody();
+                    ResponseBody body = ((HttpException) throwable).response().errorBody();
                     String returnCondition = null;
-                    String json=null;
+                    String json = null;
                     if (body != null) {
                         try {
                             json = body.string();
@@ -70,9 +61,9 @@ public class ExceptionHandler {
                             responseThrowable.message = returnCondition;
                         } catch (IOException | JSONException e) {
                             e.printStackTrace();
-                            responseThrowable.message =body.string();
+                            responseThrowable.message = body.string();
                         }
-                    }else{
+                    } else {
                         responseThrowable.message = "未知错误";
                     }
                     break;
@@ -104,44 +95,35 @@ public class ExceptionHandler {
                     responseThrowable.message = "网络错误";
                     break;
             }
-
         } else if (throwable instanceof ServerException) {
             //服务器异常
             ServerException resultException = (ServerException) throwable;
             responseThrowable = new ResponseThrowable(resultException, resultException.code);
             responseThrowable.message = resultException.message;
-
         } else if (throwable instanceof JsonParseException
-                || throwable instanceof JSONException
-                || throwable instanceof ParseException) {
+            || throwable instanceof JSONException
+            || throwable instanceof ParseException) {
             responseThrowable = new ResponseThrowable(throwable, ERROR.PARSE_ERROR);
             responseThrowable.message = "解析错误";
-
         } else if (throwable instanceof ConnectException) {
             responseThrowable = new ResponseThrowable(throwable, ERROR.NETWORK_ERROR);
             responseThrowable.message = "连接失败";
-
         } else if (throwable instanceof SSLHandshakeException) {
             responseThrowable = new ResponseThrowable(throwable, ERROR.SSL_ERROR);
             responseThrowable.message = "证书验证失败";
-
-        } else if (throwable instanceof ConnectTimeoutException){
+        } else if (throwable instanceof ConnectTimeoutException) {
             responseThrowable = new ResponseThrowable(throwable, ERROR.TIMEOUT_ERROR);
             responseThrowable.message = "连接超时";
-
         } else if (throwable instanceof SocketTimeoutException) {
             responseThrowable = new ResponseThrowable(throwable, ERROR.TIMEOUT_ERROR);
             responseThrowable.message = "连接超时";
-
         } else {
             responseThrowable = new ResponseThrowable(throwable, ERROR.UNKNOWN);
             responseThrowable.message = "未知错误";
-
         }
 
         return responseThrowable;
     }
-
 
     /**
      * 约定异常

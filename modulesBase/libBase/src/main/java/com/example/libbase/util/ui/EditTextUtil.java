@@ -8,7 +8,6 @@ import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.example.libbase.R;
 
 /**
@@ -18,60 +17,59 @@ import com.example.libbase.R;
  * @description:editText工具类
  * @date :2022/4/26 14:36
  */
-public  class EditTextUtil {
+public class EditTextUtil {
     /**
      * 为edittext设置监听器，未输入内容时按钮为灰，输入后按钮为绿
-     * @param editText
-     * @param button
      */
-    public static void ButtonReaction(EditText editText, Button button){//EditText输入内容后让按钮颜色变化并且可点击
+    public static void ButtonReaction(EditText editText, Button button) {//EditText输入内容后让按钮颜色变化并且可点击
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(editText.getText().toString().trim().length()!=0){
+                if (editText.getText().toString().trim().length() != 0) {
                     button.setBackgroundResource(R.drawable.button);
                     button.setEnabled(true);
-                }else{
+                } else {
                     button.setBackgroundResource(R.drawable.standard_button_gray);
                     button.setEnabled(false);
                 }
-
             }
+
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                if(editText.getText().toString().trim().length()!=0){
+                if (editText.getText().toString().trim().length() != 0) {
                     button.setBackgroundResource(R.drawable.button);
                     button.setEnabled(true);
-                }else{
+                } else {
                     button.setBackgroundResource(R.drawable.standard_button_gray);
                     button.setEnabled(false);
                 }
             }
+
             @Override
             public void afterTextChanged(Editable s) {
-                if(editText.getText().toString().trim().length()!=0){
+                if (editText.getText().toString().trim().length() != 0) {
                     button.setBackgroundResource(R.drawable.button);
                     button.setEnabled(true);
-                }else{
+                } else {
                     button.setBackgroundResource(R.drawable.standard_button_gray);
                     button.setEnabled(false);
                 }
-
             }
         });
     }
+
     /**
      * 设置editText中hint的内容和大小
-     * @param editText
+     *
      * @param string hint内容
      * @param textSize hint大小
      */
-    public static void EditTextSize(EditText editText, SpannableString string, int textSize){//设置EditText中的hint文字大小
-        AbsoluteSizeSpan size = new AbsoluteSizeSpan(textSize,true);
+    public static void EditTextSize(EditText editText,
+                                    SpannableString string,
+                                    int textSize) {//设置EditText中的hint文字大小
+        AbsoluteSizeSpan size = new AbsoluteSizeSpan(textSize, true);
         string.setSpan(size, 0, string.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         editText.setHint(new SpannedString(string));
     }
-
 }

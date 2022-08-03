@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="42dp"
-    android:layout_width="match_parent">
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -11,25 +11,13 @@
         android:background="@color/GrayScale_100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-    >
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/btn_ppwhomepage_line"
-        android:layout_width="match_parent"
-        android:layout_height="0.25dp"
-        android:background="@color/GrayScale_80"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/btn_ppwhomepage_line3"
+        <Button
+            android:id="@+id/btn_ppwhomepage_line"
             android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_marginTop="4dp"
-            android:background="@color/GrayScale_100"
+            android:layout_height="0.25dp"
+            android:background="@color/GrayScale_80"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +50,17 @@
             app:layout_constraintTop_toBottomOf="@+id/btn_ppwhomepage_line3" />
 
         <TextView
+            android:id="@+id/btn_ppwhomepage_line3"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/GrayScale_100"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
             android:id="@+id/btn_ppwhomepage_line2"
             android:layout_width="match_parent"
             android:layout_height="5dp"
@@ -71,8 +70,8 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-   <!-- <TextView
-        android:layout_width="match_parent"
-        android:layout_height="900dp"
-        android:background="#66000000"/>-->
+    <!-- <TextView
+         android:layout_width="match_parent"
+         android:layout_height="900dp"
+         android:background="#66000000"/>-->
 </LinearLayout>
