@@ -6,6 +6,15 @@
     android:layout_height="@dimen/dp_90"
     android:orientation="vertical">
 
+    <View
+        android:id="@+id/cut_off"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_10"
+        android:background="@color/GrayScale_95"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_70"
@@ -61,16 +70,7 @@
     </RelativeLayout>
 
     <View
-        android:id="@+id/cut_off"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_10"
-        android:background="@color/GrayScale_95"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_10"
-        android:background="@color/GrayScale_95"></View>
+        android:background="@color/GrayScale_95" />
 </LinearLayout>

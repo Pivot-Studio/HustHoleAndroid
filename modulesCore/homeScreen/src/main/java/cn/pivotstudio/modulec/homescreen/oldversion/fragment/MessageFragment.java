@@ -63,7 +63,6 @@ public class MessageFragment extends Fragment {
     private int page = 1;
     private final static int list_size = 15;
     private int start_id = 0;
-    private ConstraintLayout constraintLayout;
     private boolean finishRefresh = false;
     private boolean isRefreshing = false;
     private boolean isOnLoadMore = false;
@@ -171,14 +170,8 @@ public class MessageFragment extends Fragment {
         });
 
 
-        constraintLayout = rootView.findViewById(R.id.constraintLayout);
-        constraintLayout.setOnClickListener(v -> {
-
-        });
-
         noNotificationImage = rootView.findViewById(R.id.no_notification_image);
         thereIsNoNotification = rootView.findViewById(R.id.there_is_no_notification);
-        constraintLayout = rootView.findViewById(R.id.constraintLayout);
         notificationRecyclerView = rootView.findViewById(R.id.notification);
         if (!hasInit) {
             getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +
@@ -202,7 +195,6 @@ public class MessageFragment extends Fragment {
         } else { //数据为null
             noNotificationImage.setVisibility(View.VISIBLE);
             thereIsNoNotification.setVisibility(View.VISIBLE);
-            constraintLayout.setVisibility(View.VISIBLE);
         }
 
 
@@ -280,7 +272,6 @@ public class MessageFragment extends Fragment {
                     } catch (Exception e) {
 
                     }
-                    latestSystemNotification.setText(mSystemNotificationList.get(0).getSystemContent());
                     mSystemMessage = mSystemNotificationList.get(0).getSystemContent();
                     getMySystemMessage = true;
                     //  Log.d(TAG, "handleMessage: adapter.content"+mSystemNotificationList.get(0).getSystemContent());
@@ -296,7 +287,7 @@ public class MessageFragment extends Fragment {
         String data_hole_id = myNotificationList.get(mPosition - 1).getHole_id();//position-1是因为SystemNotification为第一个item
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
-                    .withInt(Constant.HOLE_ID, Integer.valueOf(data_hole_id))
+                    .withInt(Constant.HOLE_ID, Integer.parseInt(data_hole_id))
                     .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                     .navigation();
         } else {
@@ -308,7 +299,7 @@ public class MessageFragment extends Fragment {
         return s.substring(0, pos) + s.substring(pos + 1);
     }
 
-    private Handler handler = new Handler() {
+    private final Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -364,7 +355,6 @@ public class MessageFragment extends Fragment {
                     } else {
                         noNotificationImage.setVisibility(View.VISIBLE);
                         thereIsNoNotification.setVisibility(View.VISIBLE);
-                        constraintLayout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onCreateView: visible");
                     }
                     if (isRefreshing) {
@@ -372,7 +362,6 @@ public class MessageFragment extends Fragment {
                     }
                     break;
                 case 1://失败
-                    constraintLayout.setVisibility(View.VISIBLE);
                     thereIsNoNotification.setText("");
                     if (isRefreshing) {
                         finishRefresh = true;
@@ -438,7 +427,6 @@ public class MessageFragment extends Fragment {
                     } else {
                         noNotificationImage.setVisibility(View.VISIBLE);
                         thereIsNoNotification.setVisibility(View.VISIBLE);
-                        constraintLayout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onCreateView: visible");
                     }
                     if (isRefreshing) {
