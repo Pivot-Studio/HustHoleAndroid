@@ -25,12 +25,6 @@
                 android:layout_height="44dp"
                 android:layout_weight="1.0" />
 
-            <TextView
-
-                android:layout_width="0dp"
-                android:layout_height="44dp"
-                android:layout_weight="1.0" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
                 android:layout_height="30dp"
@@ -64,6 +58,12 @@
                     app:layout_constraintTop_toTopOf="@+id/et_homepage"
                     app:srcCompat="@mipmap/search" />
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_height="44dp"
+                android:layout_weight="1.0" />
         </LinearLayout>
 
         <cn.pivotstudio.modulec.homescreen.custom_view.HomePageOptionBox
@@ -83,6 +83,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
+            <com.scwang.smart.refresh.header.ClassicsHeader
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/GrayScale_95" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
@@ -91,11 +96,6 @@
                 tools:listitem="@layout/item_homepagehole" />
 
             <com.scwang.smart.refresh.footer.ClassicsFooter
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/GrayScale_95" />
-
-            <com.scwang.smart.refresh.header.ClassicsHeader
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/GrayScale_95" />

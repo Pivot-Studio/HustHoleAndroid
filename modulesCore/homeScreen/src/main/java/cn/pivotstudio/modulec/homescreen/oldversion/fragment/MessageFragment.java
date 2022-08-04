@@ -186,7 +186,6 @@ public class MessageFragment extends Fragment {
         } else if (myNotificationList != null && hasInit && page > 1) { //已经初始化直接显示,每次回到这个页面时直接显示
             noNotificationImage.setVisibility(View.GONE);
             thereIsNoNotification.setVisibility(View.GONE);
-            constraintLayout.setVisibility(View.GONE);
             adapter = new NotificationAdapter(getActivity(), myNotificationList);
             notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -325,7 +324,6 @@ public class MessageFragment extends Fragment {
                     if (isNotification) { //有通知就不显示
                         noNotificationImage.setVisibility(View.GONE);
                         thereIsNoNotification.setVisibility(View.GONE);
-                        constraintLayout.setVisibility(View.GONE);
                         //Log.d(TAG, "handleMessage: size  " + myNotificationList.size());
                         adapter = new NotificationAdapter(getActivity(), myNotificationList);
                         notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));

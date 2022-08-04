@@ -32,9 +32,11 @@ class ForestDetailRepository {
 
     fun loadHolesByForestId(id: Int) {
         _state.value = ForestDetailHolesLoadStatus.LOADING
-        HomeScreenNetworkApi.retrofitService
-            .searchDetailForestHolesByForestId(id, STARTING_ID, LIST_SIZE)
-            .compose(NetworkApi.applySchedulers(object : BaseObserver<List<DetailForestHole>>() {
+        HomeScreenNetworkApi.retrofitService.searchDetailForestHolesByForestId(
+                id,
+                STARTING_ID,
+                LIST_SIZE
+            ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<DetailForestHole>>() {
                 override fun onSuccess(result: List<DetailForestHole>?) {
                     holes.value = result
                     lastStartId = STARTING_ID
@@ -49,9 +51,11 @@ class ForestDetailRepository {
 
     fun loadMoreHolesByForestId(id: Int) {
         _state.value = ForestDetailHolesLoadStatus.LOADING
-        HomeScreenNetworkApi.retrofitService
-            .searchDetailForestHolesByForestId(id, lastStartId + LIST_SIZE, LIST_SIZE)
-            .compose(NetworkApi.applySchedulers(object : BaseObserver<List<DetailForestHole>>() {
+        HomeScreenNetworkApi.retrofitService.searchDetailForestHolesByForestId(
+                id,
+                lastStartId + LIST_SIZE,
+                LIST_SIZE
+            ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<DetailForestHole>>() {
                 override fun onSuccess(result: List<DetailForestHole>) {
                     val newItems = holes.value!!.toMutableList()
                     newItems.addAll(result)
@@ -67,8 +71,7 @@ class ForestDetailRepository {
     }
 
     fun loadOverviewByForestId(id: Int) {
-        HomeScreenNetworkApi.retrofitService
-            .searchDetailForestOverviewByForestId(id)
+        HomeScreenNetworkApi.retrofitService.searchDetailForestOverviewByForestId(id)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<ForestCardList>() {
                 override fun onSuccess(result: ForestCardList) {
                     overview.value = result.forests[0]
@@ -91,16 +94,13 @@ class ForestDetailRepository {
             }
             observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(msg: MsgResponse) {
-                    val newItems = mutableListOf<DetailForestHole>()
-                    _holes.value?.run {
-                        newItems.addAll(this)
+                    val newItems = holes.value!!.toMutableList()
+
+                    val index = newItems.indexOfFirst { changedHole ->
+                        changedHole.holeId == hole.holeId
                     }
 
-                    newItems.first { changedHole ->
-                        changedHole.holeId == hole.holeId
-                    }.apply {
-                        this.liked = this.liked.not()
-                    }
+                    newItems[index] = newItems[index].copy().apply { liked = liked.not() }
                     _holes.value = newItems
                 }
 

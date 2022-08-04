@@ -1,23 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+
+        <import type="com.example.libbase.util.data.TimeUtil" />
+
+        <variable
+            name="homePageHole"
+            type="cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean" />
+
+        <variable
+            name="onClick"
+            type="cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel" />
+    </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/GrayScale_95"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/GrayScale_95"
             android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="10dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
 
             <TextView
                 android:layout_width="10dp"
@@ -43,8 +56,8 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/dp_24"
-                    android:layout_marginEnd="5dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="5dp"
                     android:background="@drawable/tag_yellow"
                     android:drawableLeft="@mipmap/a218"
                     android:onClick="@{(v)->onClick.itemClick(v,homePageHole)}"
@@ -63,24 +76,14 @@
                     android:id="@+id/iv_itemhomepage_icon"
                     android:layout_width="@dimen/dp_16"
                     android:layout_height="@dimen/dp_16"
-                    android:layout_marginEnd="17dp"
                     android:layout_marginTop="12dp"
+                    android:layout_marginEnd="17dp"
                     android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:psIcon="@{homePageHole.forest_name}"
                     app:role="@{homePageHole.role}"
                     app:srcCompat="@mipmap/pivot" />
-
-                <ImageView
-                    android:id="@+id/iv_itemhomepage_more"
-                    android:layout_width="@dimen/dp_25"
-                    android:layout_height="@dimen/dp_25"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginEnd="14dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:srcCompat="@mipmap/threepoint" />
 
                 <TextView
                     android:id="@+id/tv_itemhomepage_title"
@@ -108,21 +111,6 @@
                     app:time="@{homePageHole.created_timestamp}"
                     app:timeSign="@{homePageHole.is_last_reply}" />
 
-                <TextView
-                    android:id="@+id/tv_itemhomepage_content"
-                    android:layout_width="@dimen/dp_330"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:ellipsize="end"
-                    android:lineSpacingExtra="@dimen/sp_6"
-                    android:maxLines="5"
-                    android:maxWidth="@dimen/dp_310"
-                    android:text="@{homePageHole.content}"
-                    android:textColor="@color/GrayScale_20"
-                    android:textSize="@dimen/sp_13"
-                    app:layout_constraintStart_toStartOf="@+id/tv_itemhomepage_time"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_itemhomepage_time" />
-
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_itemhomepage_thumbup"
                     android:layout_width="wrap_content"
@@ -148,8 +136,8 @@
                         android:id="@+id/tv_itemhomepage_thumbupnumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="13dp"
                         android:layout_marginStart="@dimen/dp_6"
+                        android:layout_marginBottom="13dp"
                         android:text="@{String.valueOf(homePageHole.thumbup_num)}"
                         android:textColor="@color/GrayScale_70"
                         android:textSize="@dimen/sp_11"
@@ -182,8 +170,8 @@
                         android:id="@+id/tv_itemhomepage_replynumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="13dp"
                         android:layout_marginStart="@dimen/dp_6"
+                        android:layout_marginBottom="13dp"
                         android:text="@{String.valueOf(homePageHole.reply_num)}"
                         android:textColor="@color/GrayScale_70"
                         android:textSize="@dimen/sp_11"
@@ -215,14 +203,39 @@
                         android:id="@+id/tv_itemhomepage_follownumber"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="13dp"
                         android:layout_marginStart="@dimen/dp_6"
+                        android:layout_marginBottom="13dp"
                         android:text="@{String.valueOf(homePageHole.follow_num)}"
                         android:textColor="@color/GrayScale_70"
                         android:textSize="@dimen/sp_11"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_follow" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <TextView
+                    android:id="@+id/tv_itemhomepage_content"
+                    android:layout_width="@dimen/dp_330"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:ellipsize="end"
+                    android:lineSpacingExtra="@dimen/sp_6"
+                    android:maxWidth="@dimen/dp_310"
+                    android:maxLines="5"
+                    android:text="@{homePageHole.content}"
+                    android:textColor="@color/GrayScale_20"
+                    android:textSize="@dimen/sp_13"
+                    app:layout_constraintStart_toStartOf="@+id/tv_itemhomepage_time"
+                    app:layout_constraintTop_toBottomOf="@+id/tv_itemhomepage_time" />
+
+                <ImageView
+                    android:id="@+id/iv_itemhomepage_more"
+                    android:layout_width="@dimen/dp_25"
+                    android:layout_height="@dimen/dp_25"
+                    android:layout_marginEnd="14dp"
+                    android:layout_marginBottom="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:srcCompat="@mipmap/threepoint" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cl_itemhomepage_morelist"
@@ -243,6 +256,7 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
+
                         app:moreListIcon="@{homePageHole.is_mine}" />
 
                     <TextView
@@ -260,24 +274,12 @@
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
         </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="10dp" />
-
     </LinearLayout>
-
-    <data>
-
-        <import type="com.example.libbase.util.data.TimeUtil" />
-
-        <variable
-            name="homePageHole"
-            type="cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean" />
-
-        <variable
-            name="onClick"
-            type="cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel" />
-    </data>
 </layout>
