@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestBinding
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
 
 /**
  * @classname:ForestHoleAdapter
@@ -19,13 +20,7 @@ import cn.pivotstudio.modulec.homescreen.model.ForestHole
  * @author: mhh
  */
 class ForestHoleAdapter(
-    val onContentClick: (Int) -> Unit,
-    val onReplyIconClick: (Int) -> Unit,
-    val onAvatarClick: (Int) -> Unit,
-    val giveALike: (hole: ForestHole) -> Unit,
-    val follow: (hole: ForestHole) -> Unit,
-    val reportTheHole: (hole: ForestHole) -> Unit,
-    val deleteTheHole: (hole: ForestHole) -> Unit
+    private val _context: ForestFragment
 ) : ListAdapter<ForestHole, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
     var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
@@ -53,24 +48,23 @@ class ForestHoleAdapter(
             binding.forestHole = forestHole
             binding.apply {
                 layoutItemForestReply.setOnClickListener {
-                    onReplyIconClick(forestHole.holeId)
-                    notifyItemChanged(adapterPosition)
+                    _context.navToSpecificHoleWithReply(forestHole.holeId)
                 }
 
                 textItemForestContent.setOnClickListener {
-                    onContentClick(forestHole.holeId)
+                    _context.navToSpecificHole(forestHole.holeId)
                 }
 
                 imageItemForestAvatar.setOnClickListener {
-                    onAvatarClick(forestHole.forestId)
+                    _context.navToSpecificForest(forestHole.forestId)
                 }
 
                 layoutItemForestThumbsUp.setOnClickListener {
-                    giveALike(forestHole)
+                    _context.giveALikeToTheHole(forestHole)
                 }
 
                 layoutItemForestFollow.setOnClickListener {
-                    follow(forestHole)
+                    _context.followTheHole(forestHole)
                 }
 
                 // 三个点
@@ -84,9 +78,9 @@ class ForestHoleAdapter(
 
                 layoutItemForestMoreList.setOnClickListener {
                     if (forestHole.isMine) {
-                        deleteTheHole(forestHole)
+                        _context.deleteTheHole(forestHole)
                     } else {
-                        reportTheHole(forestHole)
+                        _context.reportTheHole(forestHole)
                     }
                     it.visibility = View.GONE
                 }

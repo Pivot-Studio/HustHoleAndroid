@@ -61,12 +61,7 @@ class ForestDetailFragment : BaseFragment() {
         initRefresh()
 
         val adapter = ForestDetailAdapter(
-            onContentClick = ::navToSpecificHole,
-            onReplyIconClick = ::navToSpecificHoleWithReply,
-            giveALike = ::giveALikeToTheHole,
-            follow = ::followTheHole,
-            deleteTheHole = ::deleteTheHole,
-            reportTheHole = ::reportTheHole
+            this
         )
 
         binding.apply {
@@ -105,6 +100,13 @@ class ForestDetailFragment : BaseFragment() {
             adapter.submitList(it.reversed()) //  后端返回了个反的列表回来，有人用小树林才怪
         }
 
+        viewModel.tip.observe(viewLifecycleOwner) {
+            it?.let {
+                showMsg(it)
+                viewModel.doneShowingTip()
+            }
+        }
+
         viewModel.overview.observe(viewLifecycleOwner) {
             sharedViewModel.forestHeads.value?.run {
                 viewModel.checkIfJoinedTheForest(this.forests)
@@ -140,7 +142,7 @@ class ForestDetailFragment : BaseFragment() {
     }
 
     // 点击文字内容跳转到树洞
-    private fun navToSpecificHole(holeId: Int) {
+    fun navToSpecificHole(holeId: Int) {
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
                 .withInt(Constant.HOLE_ID, holeId)
@@ -150,7 +152,7 @@ class ForestDetailFragment : BaseFragment() {
     }
 
     // 点击具体小树林 FloatingActionButton 跳转到发布树洞并填充小树林信息
-    private fun navToPublishHoleFromDetailForest(forestId: Int) {
+    fun navToPublishHoleFromDetailForest(forestId: Int) {
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/publishHole/PublishHoleActivity")
                 .withBundle(Constant.FROM_DETAIL_FOREST, Bundle().apply {
@@ -164,7 +166,7 @@ class ForestDetailFragment : BaseFragment() {
     }
 
     // 点击回复图标跳转到树洞后自动打开软键盘
-    private fun navToSpecificHoleWithReply(holeId: Int) {
+    fun navToSpecificHoleWithReply(holeId: Int) {
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
                 .withInt(Constant.HOLE_ID, holeId)
@@ -174,17 +176,17 @@ class ForestDetailFragment : BaseFragment() {
     }
 
     // 点赞
-    private fun giveALikeToTheHole(holeId: Int) {
-        viewModel.giveALikeToTheHole(holeId)
+    fun giveALikeToTheHole(hole: Hole) {
+        viewModel.giveALikeToTheHole(hole)
     }
 
     // 关注/收藏
-    private fun followTheHole(holeId: Int) {
-        viewModel.followTheHole(holeId)
+    fun followTheHole(hole: Hole) {
+        viewModel.followTheHole(hole)
     }
 
     // 举报树洞交给举报界面处理
-    private fun reportTheHole(hole: Hole) {
+    fun reportTheHole(hole: Hole) {
         (hole as DetailForestHole).let {
             ARouter.getInstance().build("/report/ReportActivity")
                 .withInt(Constant.HOLE_ID, it.holeId)
@@ -195,7 +197,7 @@ class ForestDetailFragment : BaseFragment() {
     }
 
     // 删除树洞
-    private fun deleteTheHole(hole: Hole) {
+    fun deleteTheHole(hole: Hole) {
         val dialog = DeleteDialog(context)
         dialog.show()
         dialog.setOptionsListener {
