@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
+import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
 
 
 import java.util.ArrayList;

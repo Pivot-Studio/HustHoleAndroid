@@ -12,8 +12,7 @@ android {
         versionCode androidID.versionCode
         versionName androidID.versionName
 
-        if (!isRelease) {
-            //当为release模式时不需要id
+        if (!isRelease) {//当为release模式时不需要id
             applicationId "cn.pivotstudio.modulep.hole"
         }
 
@@ -21,15 +20,13 @@ android {
 
         buildConfigField("boolean", "isRelease", String.valueOf(isRelease))
 
-        javaCompileOptions {
-            //ARouter跨组件需要
+        javaCompileOptions {//ARouter跨组件需要
             annotationProcessorOptions {
                 arguments = [AROUTER_MODULE_NAME: project.getName()]
             }
         }
 
-        dataBinding {
-            //
+        dataBinding {//
             enabled = true
         }
     }
@@ -37,8 +34,7 @@ android {
     sourceSets {
         if (!isMac) {
             main {
-                if (!isRelease) {
-                    //不同状态下使用不同清单文件
+                if (!isRelease) {//不同状态下使用不同清单文件
                     manifest.srcFile '/src/main/debug/AndroidManifest.xml'
                 } else {
                     manifest.srcFile '/src/main/AndroidManifest.xml'
@@ -54,8 +50,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -71,7 +66,7 @@ dependencies {
     implementation project(':modulesBase:dataBase')
     implementation project(':modulesBase:resBase')
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
-    implementation "ru.noties:markwon:$markdown_version" //markdown
+    implementation  "ru.noties:markwon:$markdown_version"//markdown
     implementation "ru.noties:markwon-image-loader:$markdown_version" // optional
     implementation "ru.noties:markwon-view:$markdown_version" // optional
 
@@ -79,7 +74,7 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
 
-    annotationProcessor "com.alibaba:arouter-compiler:$ARouter_version" //每个组件都要添加
+    annotationProcessor "com.alibaba:arouter-compiler:$ARouter_version"//每个组件都要添加
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

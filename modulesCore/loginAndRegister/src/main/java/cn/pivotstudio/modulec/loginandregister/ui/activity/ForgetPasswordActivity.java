@@ -9,8 +9,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import cn.pivotstudio.modulec.loginandregister.R;
 import cn.pivotstudio.modulec.loginandregister.repository.ForgetPasswordRepository;
-import com.example.libbase.base.ui.activity.BaseActivity;
-import com.example.libbase.util.ui.EditTextUtil;
+import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
+import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil;
 
 /**
  * @classname:ForgetPasswordActivity

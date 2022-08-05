@@ -1,6 +1,6 @@
 package cn.pivotstudio.modulep.hole.ui.adapter;
 
-import static com.example.libbase.base.app.BaseApplication.context;
+import static cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.context;
 
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -19,8 +19,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.ObservableField;
 
-import com.example.libbase.util.emoji.SpanStringUtil;
-import com.example.libbase.util.data.TimeUtil;
+import cn.pivotstudio.moduleb.libbase.util.emoji.SpanStringUtil;
+import cn.pivotstudio.moduleb.libbase.util.data.TimeUtil;
 
 import cn.pivotstudio.modulep.hole.R;
 import cn.pivotstudio.modulep.hole.model.ReplyListResponse;

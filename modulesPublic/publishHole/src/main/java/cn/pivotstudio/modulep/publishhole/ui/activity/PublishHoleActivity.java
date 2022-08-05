@@ -15,10 +15,10 @@ import androidx.lifecycle.ViewModelProvider;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.libbase.constant.Constant;
-import com.example.libbase.base.ui.activity.BaseActivity;
-import com.example.libbase.util.ui.EditTextUtil;
-import com.example.libbase.util.ui.SoftKeyBoardUtil;
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
+import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
+import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil;
+import cn.pivotstudio.moduleb.libbase.util.ui.SoftKeyBoardUtil;
 import com.githang.statusbar.StatusBarCompat;
 
 import java.util.ArrayList;

@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import cn.pivotstudio.modulec.loginandregister.R;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.libbase.base.ui.activity.BaseActivity;
+import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
 
 /**
  * @author

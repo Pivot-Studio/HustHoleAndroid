@@ -7,7 +7,7 @@ import cn.pivotstudio.husthole.moduleb.network.NetworkApi;
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler;
 import cn.pivotstudio.modulec.loginandregister.model.MsgResponse;
 import cn.pivotstudio.modulec.loginandregister.network.LRRequestInterface;
-import com.example.libbase.constant.Constant;
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
 
 /**
  * @classname:VerificationCodeRepository

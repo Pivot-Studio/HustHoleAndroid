@@ -10,8 +10,8 @@ import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import com.alibaba.android.arouter.launcher.ARouter
-import com.example.libbase.base.viewmodel.BaseViewModel
-import com.example.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import kotlinx.coroutines.flow.SharedFlow
 
 /**

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/dp_80"
+        android:layout_height="@dimen/dp_80">
+
+        <ImageView
+            android:layout_width="@dimen/dp_20"
+            android:layout_height="@dimen/dp_20"
+            android:background="@drawable/add"
+            android:backgroundTint="@color/GrayScale_80"
+            app:layout_constraintBottom_toBottomOf="@+id/image_forest_head_avatar"
+            app:layout_constraintEnd_toEndOf="@+id/image_forest_head_avatar"
+            app:layout_constraintStart_toStartOf="@+id/image_forest_head_avatar"
+            app:layout_constraintTop_toTopOf="@id/image_forest_head_avatar" />
+
+        <ImageView
+            android:id="@+id/image_forest_head_avatar"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginTop="@dimen/dp_5"
+            android:background="@drawable/ic_ellipse_dot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/text_forest_head_name"
+            android:layout_width="@dimen/dp_72"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_5"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLength="6"
+            android:maxLines="1"
+            android:text="@string/discover_more"
+            android:textColor="@color/GrayScale_50"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_forest_head_avatar" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -5,7 +5,7 @@ import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import cn.pivotstudio.modulec.loginandregister.R;
-import com.example.libbase.base.ui.activity.BaseActivity;
+import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
 
 /**
  * @classname:PrivacyActivity

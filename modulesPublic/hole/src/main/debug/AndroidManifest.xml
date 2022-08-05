@@ -3,7 +3,7 @@
     package="cn.pivotstudio.modulep.hole">
 
     <application
-        android:name="com.example.libbase.base.app.BaseApplication"
+        android:name="cn.pivotstudio.moduleb.libbase.base.app.BaseApplication"
         android:label="树洞模块-测试版"
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"

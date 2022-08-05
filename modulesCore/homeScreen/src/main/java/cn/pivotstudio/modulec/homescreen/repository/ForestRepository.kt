@@ -11,7 +11,7 @@ import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitSe
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.ERROR
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.LOADING
-import com.example.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

@@ -1,13 +1,11 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
@@ -20,19 +18,15 @@ import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFoot
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestDetailBinding
 import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
-import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.model.Hole
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
-import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
-import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestDetailAdapter
-import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModelFactory
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 import com.alibaba.android.arouter.launcher.ARouter
-import com.example.libbase.base.ui.fragment.BaseFragment
-import com.example.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 
 class ForestDetailFragment : BaseFragment() {
 
@@ -108,9 +102,7 @@ class ForestDetailFragment : BaseFragment() {
 
         // 配置 LiveData 的监听器
         viewModel.holes.observe(viewLifecycleOwner) {
-            it?.let {
-                adapter.submitList(it) //  后端返回了个反的列表回来，有人用小树林才怪
-            }
+            adapter.submitList(it.reversed()) //  后端返回了个反的列表回来，有人用小树林才怪
         }
 
         viewModel.overview.observe(viewLifecycleOwner) {

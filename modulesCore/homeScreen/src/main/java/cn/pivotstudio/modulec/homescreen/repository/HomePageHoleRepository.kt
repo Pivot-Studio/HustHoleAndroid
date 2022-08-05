@@ -4,14 +4,13 @@ import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitSe
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse
-import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import com.alibaba.android.arouter.launcher.ARouter
-import com.example.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

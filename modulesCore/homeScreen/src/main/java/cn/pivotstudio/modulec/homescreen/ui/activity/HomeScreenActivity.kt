@@ -3,7 +3,6 @@ package cn.pivotstudio.modulec.homescreen.ui.activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -25,10 +24,9 @@ import cn.pivotstudio.modulec.homescreen.repository.HomeScreenRepository
 import cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.example.libbase.BuildConfig
-import com.example.libbase.base.ui.activity.BaseActivity
-import com.example.libbase.constant.Constant
-import com.githang.statusbar.StatusBarCompat
+import cn.pivotstudio.moduleb.libbase.BuildConfig
+import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 
 /**
  * @classname: HomeScreenActivity

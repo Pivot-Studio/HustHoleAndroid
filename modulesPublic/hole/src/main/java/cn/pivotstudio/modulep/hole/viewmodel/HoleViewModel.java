@@ -5,7 +5,7 @@ import android.view.View;
 import androidx.databinding.ObservableField;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.libbase.base.viewmodel.BaseViewModel;
+import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel;
 
 import java.util.LinkedList;
 

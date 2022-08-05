@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="forestHole"
+            type="cn.pivotstudio.modulec.homescreen.model.ForestHole" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,15 +22,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageView
-            android:id="@+id/image_item_forest_more"
-            android:layout_width="@dimen/dp_25"
-            android:layout_height="@dimen/dp_25"
-            android:layout_marginBottom="10dp"
-            android:layout_marginEnd="14dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@mipmap/threepoint" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image_item_forest_avatar"
+            imageUrl="@{forestHole.backgroundImageUrl}"
+            android:layout_width="@dimen/dp_32"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_12"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/AvatarRoundedStyle"
+            tools:src="@drawable/icon" />
 
         <TextView
             android:id="@+id/text_item_forest_title"
@@ -41,6 +50,8 @@
 
         <TextView
             android:id="@+id/tv_itemforest_time"
+            time="@{forestHole.createdTimestamp}"
+            timeSign="@{false}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_10"
@@ -48,40 +59,8 @@
             android:textSize="@dimen/sp_11"
             app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_avatar"
             app:layout_constraintStart_toEndOf="@+id/image_item_forest_avatar"
-            time="@{forestHole.createdTimestamp}"
-            timeSign="@{false}"
             tools:text="@string/default_string_number_short" />
 
-
-        <TextView
-            android:id="@+id/text_item_forest_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_8"
-            android:layout_marginStart="@dimen/dp_12"
-            android:layout_marginTop="@dimen/dp_4"
-            android:ellipsize="end"
-            android:lineSpacingExtra="@dimen/sp_6"
-            android:maxLines="5"
-            android:maxWidth="@dimen/dp_310"
-            android:text="@{forestHole.content}"
-            android:textColor="@color/GrayScale_20"
-            android:textSize="@dimen/sp_13"
-            app:layout_constraintTop_toBottomOf="@+id/image_item_forest_avatar"
-            tools:text="@string/default_string_zh_long" />
-
-        <TextView
-            android:id="@+id/text_item_forest_hole_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dp_12"
-            android:text="@{@string/hole_id(forestHole.holeId), default = @string/hole_id}"
-            android:textColor="@color/GrayScale_0"
-            android:textSize="@dimen/sp_13"
-            android:textStyle="bold"
-
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_item_forest_thumbs_up"
@@ -93,12 +72,12 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_thumbs_up"
+                thumbupIcon="@{forestHole.liked}"
                 android:layout_width="@dimen/dp_17"
                 android:layout_height="@dimen/dp_20"
                 android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                thumbupIcon="@{forestHole.liked}"
                 tools:src="@mipmap/inactive" />
 
             <TextView
@@ -124,13 +103,13 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_reply"
+                replyIcon="@{forestHole.replied}"
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_16"
                 android:layout_marginBottom="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@mipmap/inactive_2"
-                replyIcon="@{forestHole.replied}" />
+                app:srcCompat="@mipmap/inactive_2" />
 
             <TextView
                 android:id="@+id/text_item_forest_reply_number"
@@ -155,12 +134,12 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_follow"
+                followIcon="@{forestHole.followed}"
                 android:layout_width="@dimen/dp_16"
                 android:layout_height="@dimen/dp_16"
                 android:layout_marginBottom="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                followIcon="@{forestHole.followed}"
                 tools:src="@mipmap/inactive_3" />
 
             <TextView
@@ -174,6 +153,46 @@
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_follow"
                 app:layout_constraintStart_toEndOf="@+id/image_item_forest_follow" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/text_item_forest_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_12"
+            android:layout_marginTop="@dimen/dp_4"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:ellipsize="end"
+            android:lineSpacingExtra="@dimen/sp_6"
+            android:maxWidth="@dimen/dp_310"
+            android:maxLines="5"
+            android:text="@{forestHole.content}"
+            android:textColor="@color/GrayScale_20"
+            android:textSize="@dimen/sp_13"
+            app:layout_constraintTop_toBottomOf="@+id/image_item_forest_avatar"
+            tools:text="@string/default_string_zh_long" />
+
+        <TextView
+            android:id="@+id/text_item_forest_hole_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp_12"
+            android:text="@{@string/hole_id(forestHole.holeId), default = @string/hole_id}"
+            android:textColor="@color/GrayScale_0"
+            android:textSize="@dimen/sp_13"
+            android:textStyle="bold"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/image_item_forest_more"
+            android:layout_width="@dimen/dp_25"
+            android:layout_height="@dimen/dp_25"
+            android:layout_marginEnd="14dp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:srcCompat="@mipmap/threepoint" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_item_forest_more_list"
@@ -189,13 +208,13 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_more_icon"
+                moreListIcon="@{forestHole.mine}"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
                 android:layout_marginStart="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                moreListIcon="@{forestHole.mine}" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tv_itemforest_moretext"
@@ -211,24 +230,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/image_item_forest_avatar"
-            android:layout_width="@dimen/dp_32"
-            android:layout_height="@dimen/dp_32"
-            android:layout_marginStart="@dimen/dp_12"
-            android:layout_marginTop="@dimen/dp_12"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:shapeAppearance="@style/AvatarRoundedStyle"
-            imageUrl="@{forestHole.backgroundImageUrl}"
-            tools:src="@drawable/icon" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <data>
-
-        <variable
-            name="forestHole"
-            type="cn.pivotstudio.modulec.homescreen.model.ForestHole" />
-    </data>
 </layout>

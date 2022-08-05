@@ -8,8 +8,8 @@ import cn.pivotstudio.modulec.homescreen.R
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.libbase.util.data.TimeUtil
-import com.example.libbase.util.ui.GlideBlurTransformation
+import cn.pivotstudio.moduleb.libbase.util.data.TimeUtil
+import cn.pivotstudio.moduleb.libbase.util.ui.GlideBlurTransformation
 
 /**
  * 点赞按钮
@@ -163,7 +163,11 @@ fun bindBlurImage(imgView: ImageView, imgUrl: String?) {
         Glide.with(imgView.context)
             .load(it)
             .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-            .transform(GlideBlurTransformation(imgView.context))
+            .transform(
+                GlideBlurTransformation(
+                    imgView.context
+                )
+            )
             .error(R.drawable.icon)
             .into(imgView)
     }

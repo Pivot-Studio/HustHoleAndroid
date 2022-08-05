@@ -2,7 +2,7 @@ package cn.pivotstudio.modulep.publishhole.viewmodel;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.libbase.base.viewmodel.BaseViewModel;
+import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel;
 
 import cn.pivotstudio.modulep.publishhole.model.DetailTypeForestResponse;
 import cn.pivotstudio.modulep.publishhole.model.ForestListsResponse;

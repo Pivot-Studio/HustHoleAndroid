@@ -1,14 +1,13 @@
 package cn.pivotstudio.modulec.homescreen.repository
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.modulec.homescreen.model.*
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
-import com.example.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -32,11 +31,9 @@ class ForestDetailRepository {
 
     fun loadHolesByForestId(id: Int) {
         _state.value = ForestDetailHolesLoadStatus.LOADING
-        HomeScreenNetworkApi.retrofitService.searchDetailForestHolesByForestId(
-                id,
-                STARTING_ID,
-                LIST_SIZE
-            ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<DetailForestHole>>() {
+        HomeScreenNetworkApi.retrofitService
+            .searchDetailForestHolesByForestId(id, STARTING_ID, LIST_SIZE)
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<List<DetailForestHole>>() {
                 override fun onSuccess(result: List<DetailForestHole>?) {
                     holes.value = result
                     lastStartId = STARTING_ID
@@ -51,11 +48,9 @@ class ForestDetailRepository {
 
     fun loadMoreHolesByForestId(id: Int) {
         _state.value = ForestDetailHolesLoadStatus.LOADING
-        HomeScreenNetworkApi.retrofitService.searchDetailForestHolesByForestId(
-                id,
-                lastStartId + LIST_SIZE,
-                LIST_SIZE
-            ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<DetailForestHole>>() {
+        HomeScreenNetworkApi.retrofitService
+            .searchDetailForestHolesByForestId(id, lastStartId + LIST_SIZE, LIST_SIZE)
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<List<DetailForestHole>>() {
                 override fun onSuccess(result: List<DetailForestHole>) {
                     val newItems = holes.value!!.toMutableList()
                     newItems.addAll(result)
@@ -71,7 +66,8 @@ class ForestDetailRepository {
     }
 
     fun loadOverviewByForestId(id: Int) {
-        HomeScreenNetworkApi.retrofitService.searchDetailForestOverviewByForestId(id)
+        HomeScreenNetworkApi.retrofitService
+            .searchDetailForestOverviewByForestId(id)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<ForestCardList>() {
                 override fun onSuccess(result: ForestCardList) {
                     overview.value = result.forests[0]
@@ -94,14 +90,11 @@ class ForestDetailRepository {
             }
             observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(msg: MsgResponse) {
-                    val newItems = holes.value!!.toMutableList()
-
-                    val index = newItems.indexOfFirst { changedHole ->
-                        changedHole.holeId == hole.holeId
+                    CoroutineScope(Dispatchers.Main).launch {
+                        loadToast.emit(
+                            if (!it.liked) "点赞成功" else "取消赞成功"
+                        )
                     }
-
-                    newItems[index] = newItems[index].copy().apply { liked = liked.not() }
-                    _holes.value = newItems
                 }
 
                 override fun onFailure(e: Throwable) {

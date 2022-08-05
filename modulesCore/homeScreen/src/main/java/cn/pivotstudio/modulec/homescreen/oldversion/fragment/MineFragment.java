@@ -19,13 +19,12 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.libbase.constant.Constant;
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.Objects;
 
 import cn.pivotstudio.moduleb.database.MMKVUtil;
 import cn.pivotstudio.modulec.homescreen.R;

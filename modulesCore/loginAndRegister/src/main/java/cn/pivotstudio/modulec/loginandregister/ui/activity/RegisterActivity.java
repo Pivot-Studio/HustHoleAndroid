@@ -8,8 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import cn.pivotstudio.modulec.loginandregister.R;
-import com.example.libbase.base.ui.activity.BaseActivity;
-import com.example.libbase.util.ui.EditTextUtil;
+import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
+import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil;
 
 /**
  * @author

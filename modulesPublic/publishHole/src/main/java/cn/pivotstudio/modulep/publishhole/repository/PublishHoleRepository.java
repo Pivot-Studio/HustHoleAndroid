@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.libbase.constant.Constant;
-import com.example.libbase.util.data.GetUrlUtil;
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
+import cn.pivotstudio.moduleb.libbase.util.data.GetUrlUtil;
 
 import java.util.ArrayList;
 import java.util.List;

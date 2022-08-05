@@ -4,7 +4,7 @@
 
 
     <application
-        android:name="com.example.libbase.base.app.BaseApplication"
+        android:name="cn.pivotstudio.moduleb.libbase.base.app.BaseApplication"
         android:label="发布树洞模块-测试版"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"

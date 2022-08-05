@@ -1,8 +1,8 @@
 package cn.pivotstudio.modulep.hole.repository;
 
-import static com.example.libbase.constant.Constant.CONSTANT_STANDARD_LOAD_SIZE;
-import static com.example.libbase.base.app.BaseApplication.context;
-import static com.example.libbase.util.data.GetUrlUtil.getURLEncoderString;
+import static cn.pivotstudio.moduleb.libbase.constant.Constant.CONSTANT_STANDARD_LOAD_SIZE;
+import static cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.context;
+import static cn.pivotstudio.moduleb.libbase.util.data.GetUrlUtil.getURLEncoderString;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
@@ -10,8 +10,8 @@ import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.libbase.constant.Constant;
-import com.example.libbase.base.app.BaseApplication;
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
+import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication;
 
 import java.util.LinkedList;
 

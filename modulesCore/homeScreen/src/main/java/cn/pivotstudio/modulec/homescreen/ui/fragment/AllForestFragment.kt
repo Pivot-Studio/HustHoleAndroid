@@ -7,14 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation.findNavController
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentAllFrorestBinding
 import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
-import com.example.libbase.base.ui.fragment.BaseFragment
-import kotlinx.coroutines.delay
+import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 
 const val TAG = "AllForestFragmentDebug"
 

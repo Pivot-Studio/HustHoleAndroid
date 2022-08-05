@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.cdh.okone.OkOne;
-import com.example.libbase.constant.Constant;
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
 import java.io.IOException;
@@ -44,7 +43,6 @@ import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken;
 import cn.pivotstudio.modulec.homescreen.oldversion.model.MessageStandardRefreshFooter;
 import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshHeader;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager;
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -169,7 +167,6 @@ public class MessageFragment extends Fragment {
 
         });
 
-
         noNotificationImage = rootView.findViewById(R.id.no_notification_image);
         thereIsNoNotification = rootView.findViewById(R.id.there_is_no_notification);
         notificationRecyclerView = rootView.findViewById(R.id.notification);
@@ -198,7 +195,6 @@ public class MessageFragment extends Fragment {
         }
 
 
-        latestSystemNotification = rootView.findViewById(R.id.latest_system_notification);
         getLatestSystemNotification();
 
         return rootView;
@@ -287,7 +283,7 @@ public class MessageFragment extends Fragment {
         String data_hole_id = myNotificationList.get(mPosition - 1).getHole_id();//position-1是因为SystemNotification为第一个item
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
-                    .withInt(Constant.HOLE_ID, Integer.parseInt(data_hole_id))
+                    .withInt(Constant.HOLE_ID, Integer.valueOf(data_hole_id))
                     .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                     .navigation();
         } else {
@@ -299,7 +295,7 @@ public class MessageFragment extends Fragment {
         return s.substring(0, pos) + s.substring(pos + 1);
     }
 
-    private final Handler handler = new Handler() {
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
@@ -501,9 +497,6 @@ public class MessageFragment extends Fragment {
             Log.d(TAG, "getStringByOkhttp: e.toString() " + e.toString());
         }
         Log.d(TAG, "getStringByOkhttp: getResponseData: null ");
-    }
-
-    public void jumpToPublishHoleByARouter(View view) {
     }
 }
 

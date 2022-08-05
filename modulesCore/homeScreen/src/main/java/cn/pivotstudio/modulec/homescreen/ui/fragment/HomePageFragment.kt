@@ -8,7 +8,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,13 +18,13 @@ import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomepageBinding
 import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse
 import cn.pivotstudio.modulec.homescreen.ui.adapter.HoleRecyclerViewAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
-import com.example.libbase.base.model.HoleReturnInfo
-import com.example.libbase.base.ui.fragment.BaseFragment
-import com.example.libbase.constant.Constant
-import com.example.libbase.constant.RequestCodeConstant
-import com.example.libbase.constant.ResultCodeConstant
-import com.example.libbase.util.data.CheckStrUtil
-import com.example.libbase.util.ui.EditTextUtil
+import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
+import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.constant.RequestCodeConstant
+import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
+import cn.pivotstudio.moduleb.libbase.util.data.CheckStrUtil
+import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 
 /**
@@ -58,13 +57,13 @@ class HomePageFragment : BaseFragment() {
      * @param resultCode
      * @param data
      */
-    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode != RequestCodeConstant.HOMEPAGE) { //如果不是由homepage这个fragment跳转过去的，返回的结果不接受
             return
         }
         if (resultCode == ResultCodeConstant.Hole) { //如果是由hole返回的数据
-            val returnInfo = data!!.getParcelableExtra<HoleReturnInfo>(Constant.HOLE_RETURN_INFO)
+            val returnInfo = data!!.getParcelableExtra<HoleReturnInfo>(
+                Constant.HOLE_RETURN_INFO)
             mViewModel.pClickDataBean?.is_thumbup = returnInfo!!.is_thumbup
             mViewModel.pClickDataBean?.is_reply = returnInfo.is_reply
             mViewModel.pClickDataBean?.is_follow = returnInfo.is_follow

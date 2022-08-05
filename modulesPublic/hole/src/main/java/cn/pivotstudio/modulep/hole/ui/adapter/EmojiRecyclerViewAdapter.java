@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
-import com.example.libbase.util.emoji.EmotionUtil;
+import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
+import cn.pivotstudio.moduleb.libbase.util.emoji.EmotionUtil;
 
 
 import java.util.LinkedList;

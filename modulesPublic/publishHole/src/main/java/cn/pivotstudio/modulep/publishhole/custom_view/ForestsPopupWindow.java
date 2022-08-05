@@ -17,7 +17,7 @@ import android.widget.PopupWindow;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.libbase.base.custom_view.MaxHeightRecyclerView;
+import cn.pivotstudio.moduleb.libbase.base.custom_view.MaxHeightRecyclerView;
 
 import cn.pivotstudio.modulep.publishhole.R;
 import cn.pivotstudio.modulep.publishhole.ui.activity.PublishHoleActivity;

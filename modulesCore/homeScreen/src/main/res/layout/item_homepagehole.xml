@@ -3,7 +3,7 @@
 
     <data>
 
-        <import type="com.example.libbase.util.data.TimeUtil" />
+        <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
 
         <variable
             name="homePageHole"
@@ -256,7 +256,6 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-
                         app:moreListIcon="@{homePageHole.is_mine}" />
 
                     <TextView

@@ -10,7 +10,6 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -22,16 +21,12 @@ import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHead
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
-import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHeadAdapter
+import cn.pivotstudio.modulec.homescreen.ui.adapter.JoinedForestsAdapter
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 import com.alibaba.android.arouter.launcher.ARouter
-import com.example.libbase.base.ui.fragment.BaseFragment
-import com.example.libbase.constant.Constant
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.launch
+import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 
 /**
  * @classname: ForestFragment
@@ -68,7 +63,10 @@ class ForestFragment : BaseFragment() {
             deleteTheHole = ::deleteTheHole
         )
 
-        val headAdapter = ForestHeadAdapter(onItemClick = ::navToSpecificForest)
+        val headAdapter = JoinedForestsAdapter(
+            onItemClick = ::navToSpecificForest,
+            navToAllForest = ::navToAllForests
+        )
 
         // 初始化两个RecyclerView和liveData监听器
         binding.apply {
@@ -180,7 +178,8 @@ class ForestFragment : BaseFragment() {
     // 举报树洞交给举报界面处理
     private fun reportTheHole(hole: ForestHole) {
         ARouter.getInstance().build("/report/ReportActivity").withInt(Constant.HOLE_ID, hole.holeId)
-            .withInt(Constant.REPLY_LOCAL_ID, -1).withString(Constant.ALIAS, "洞主").navigation()
+            .withInt(Constant.REPLY_LOCAL_ID, -1).withString(
+                Constant.ALIAS, "洞主").navigation()
     }
 
     // 删除树洞

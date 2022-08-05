@@ -279,6 +279,7 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/forest_button_white.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/forest_gray.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/homepage_notice.xml" value="0.1475" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_ellipse_dot.xml" value="0.1" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_active.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_negative.xml" value="0.121" />
@@ -378,6 +379,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/item1.xml" value="0.286231884057971" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_all_forest.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_detailforesthead.xml" value="0.2572463768115942" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_discover_more.xml" value="0.9914529914529915" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest.xml" value="0.34475402832031254" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_card.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.2572463768115942" />
