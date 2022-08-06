@@ -20,14 +20,17 @@ import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHeadBinding
 class JoinedForestsAdapter(
     val onItemClick: (Int) -> Unit,
     val navToAllForest: () -> Unit
-) :
-    ListAdapter<ForestHead, ViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<ForestHead, ViewHolder>(DIFF_CALLBACK) {
 
     override fun getItemViewType(position: Int): Int {
         return when (position) {
-            itemCount -> TYPE_DISCOVER_MORE
+            currentList.size -> TYPE_DISCOVER_MORE
             else -> TYPE_JOINED_FOREST
         }
+    }
+
+    override fun getItemCount(): Int {
+        return super.getItemCount().plus(1)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -39,18 +42,20 @@ class JoinedForestsAdapter(
                 ItemDiscoverMoreBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             )
         }
-
-
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        when (position) {
-            itemCount -> (holder as DiscoverMoreViewHolder).itemView.setOnClickListener { }
-            else -> {
-                val forestHead = getItem(position)
-                (holder as JoinedForestViewHolder).apply {
-                    bind(forestHead)
-                    itemView.setOnClickListener { onItemClick(forestHead.forestId) }
+        when (holder) {
+            is DiscoverMoreViewHolder -> holder.itemView.setOnClickListener {
+                navToAllForest()
+            }
+            is JoinedForestViewHolder -> {
+                if (position < currentList.size) {
+                    val forestHead = getItem(position)
+                    holder.apply {
+                        bind(forestHead)
+                        itemView.setOnClickListener { onItemClick(forestHead.forestId) }
+                    }
                 }
             }
         }

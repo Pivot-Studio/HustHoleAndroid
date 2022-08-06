@@ -29,8 +29,7 @@ import java.util.ArrayList
 class HomePageHoleRepository {
 
     var pHomePageHoles = MutableLiveData<HomepageHoleResponse>()
-
-    val loadToast = MutableSharedFlow<String>()
+    var tip = MutableLiveData<String?>()
 
     /**
      * 获取正常状态树洞
@@ -69,7 +68,7 @@ class HomePageHoleRepository {
             }
 
             override fun onFailure(e: Throwable) {
-
+                tip.value = (e as ResponseThrowable).message
             }
         }))
     }
@@ -106,11 +105,7 @@ class HomePageHoleRepository {
                 }
 
                 override fun onFailure(e: Throwable?) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        loadToast.emit(
-                            (e as ResponseThrowable).message
-                        )
-                    }
+                    tip.value = (e as ResponseThrowable).message
                 }
             }))
     }
@@ -138,11 +133,7 @@ class HomePageHoleRepository {
                 }
 
                 override fun onFailure(e: Throwable) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        loadToast.emit(
-                            (e as ResponseThrowable).message
-                        )
-                    }
+                    tip.value = (e as ResponseThrowable).message
                 }
             }))
     }
@@ -170,19 +161,11 @@ class HomePageHoleRepository {
                     dataBean.thumbup_num = likeNum + 1
                 }
                 dataBean.is_thumbup = !liked
-                CoroutineScope(Dispatchers.Main).launch {
-                    loadToast.emit(
-                        msg.msg
-                    )
-                }
+                tip.value = msg.msg
             }
 
             override fun onFailure(e: Throwable) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    loadToast.emit(
-                        (e as ResponseThrowable).message
-                    )
-                }
+                tip.value = (e as ResponseThrowable).message
             }
         }))
     }
@@ -209,19 +192,11 @@ class HomePageHoleRepository {
                     dataBean.follow_num = follow_num + 1
                 }
                 dataBean.is_follow = !is_follow
-                CoroutineScope(Dispatchers.Main).launch {
-                    loadToast.emit(
-                        msg.msg
-                    )
-                }
+                tip.value = msg.msg
             }
 
             override fun onFailure(e: Throwable) {
-                CoroutineScope(Dispatchers.Main).launch {
-                    loadToast.emit(
-                        (e as ResponseThrowable).message
-                    )
-                }
+                tip.value = (e as ResponseThrowable).message
             }
         }))
     }
@@ -233,26 +208,26 @@ class HomePageHoleRepository {
      * @param is_mine 是否是自己发布的树洞
      */
     fun moreActionForNetwork(hole_id: Int, is_mine: Boolean) {
-        val observable: Observable<MsgResponse>
         if (is_mine) {
-            observable = retrofitService.deleteHole(hole_id.toString())
-            observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(msg: MsgResponse) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        loadToast.emit(
-                            msg.msg
-                        )
+            retrofitService.deleteHole(hole_id.toString())
+                .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                    override fun onSuccess(msg: MsgResponse) {
+                        val newItems = pHomePageHoles.value!!.data.toMutableList()
+                        val model = pHomePageHoles.value!!.model
+                        newItems.removeIf {
+                            it.hole_id == hole_id
+                        }
+                        pHomePageHoles.value = HomepageHoleResponse().apply {
+                            data = newItems
+                            this.model = model
+                        }
+                        tip.value = msg.msg
                     }
-                }
 
-                override fun onFailure(e: Throwable) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        loadToast.emit(
-                            (e as ResponseThrowable).message
-                        )
+                    override fun onFailure(e: Throwable) {
+                        tip.value = (e as ResponseThrowable).message
                     }
-                }
-            }))
+                }))
         } else {
             ARouter.getInstance().build("/report/ReportActivity")
                 .withInt(Constant.HOLE_ID, hole_id)

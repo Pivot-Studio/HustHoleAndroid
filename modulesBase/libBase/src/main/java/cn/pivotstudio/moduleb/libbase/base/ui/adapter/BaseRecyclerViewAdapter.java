@@ -3,12 +3,14 @@ package cn.pivotstudio.moduleb.libbase.base.ui.adapter;
 import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @classname:BaseRecyclerViewAdapter
+ * @classname: BaseRecyclerViewAdapter
  * @description:
  * @date:2022/5/4 1:31
  * @version:1.0
@@ -30,12 +32,12 @@ public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHol
     }
 
     @Override
-    public VH onCreateViewHolder(ViewGroup parent, int viewType) {
+    public VH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return onCreateBaseViewHolder(parent, viewType);
     }
 
     @Override
-    public void onBindViewHolder(VH holder, int position) {
+    public void onBindViewHolder(@NonNull VH holder, int position) {
         onBindBaseViewHolder(holder, position);
     }
 

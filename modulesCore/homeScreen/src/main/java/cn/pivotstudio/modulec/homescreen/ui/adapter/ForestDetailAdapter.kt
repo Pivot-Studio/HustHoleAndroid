@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +10,11 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestDetailBinding
 import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
+import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
+import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel
 
 class ForestDetailAdapter(
-    val onContentClick: (Int) -> Unit,
-    val onReplyIconClick: (Int) -> Unit,
-    val giveALike: (Int) -> Unit,
-    val follow: (Int) -> Unit,
-    val deleteTheHole: (DetailForestHole) -> Unit,
-    val reportTheHole: (DetailForestHole) -> Unit,
+    private val _context: ForestDetailFragment
 ) : ListAdapter<DetailForestHole, ForestDetailAdapter.DetailViewHolder>(DIFF_CALLBACK) {
     var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
@@ -44,20 +42,19 @@ class ForestDetailAdapter(
             binding.hole = hole
             binding.apply {
                 textItemForestDetailContent.setOnClickListener {
-                    onContentClick(hole.holeId)
+                    _context.navToSpecificHole(hole.holeId)
                 }
 
                 layoutForestDetailReply.setOnClickListener {
-                    onReplyIconClick(hole.holeId)
+                    _context.navToSpecificHoleWithReply(hole.holeId)
                 }
 
                 layoutForestDetailThumbup.setOnClickListener {
-                    giveALike(hole.holeId)
+                    _context.giveALikeToTheHole(hole)
                 }
 
                 layoutForestDetailFollow.setOnClickListener {
-                    follow(hole.holeId)
-                    notifyItemChanged(adapterPosition)
+                    _context.followTheHole(hole)
                 }
 
                 // 三个点
@@ -71,9 +68,9 @@ class ForestDetailAdapter(
 
                 layoutItemForestDetailMorelist.setOnClickListener {
                     if (hole.isMine) {
-                        deleteTheHole(hole)
+                        _context.deleteTheHole(hole)
                     } else {
-                        reportTheHole(hole)
+                        _context.reportTheHole(hole)
                     }
                     it.visibility = View.GONE
                 }

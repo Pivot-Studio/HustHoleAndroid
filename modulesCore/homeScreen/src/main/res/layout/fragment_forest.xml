@@ -139,7 +139,7 @@
                         android:orientation="vertical"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:itemCount="2"
-                        tools:listitem="@layout/item_forest" />
+                        tools:listitem="@layout/item_forest_hole" />
 
                 </LinearLayout>
             </FrameLayout>

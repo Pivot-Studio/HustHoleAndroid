@@ -2,6 +2,7 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import android.view.View
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
@@ -12,7 +13,6 @@ import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
 import cn.pivotstudio.moduleb.libbase.constant.Constant
-import kotlinx.coroutines.flow.SharedFlow
 
 /**
  * @classname:HomePageViewModel
@@ -23,17 +23,12 @@ import kotlinx.coroutines.flow.SharedFlow
  */
 class HomePageViewModel : BaseViewModel() {
     @JvmField
-    val pHomePageHoles //数据类型网络请求结果
-            : LiveData<HomepageHoleResponse>
-    val loadToastMsg: SharedFlow<String>
-    private var mIsSearch //是否是搜索状态
-            : Boolean? = null
-    private var mSearchKeyword //搜索关键词
-            : String? = null
-    private var mIsDescend //是新发布树洞还是新更新树洞
-            : Boolean? = null
-    private var mStartLoadId //网络起始id
-            : Int? = null
+    val pHomePageHoles: LiveData<HomepageHoleResponse> //数据类型网络请求结果
+    val tip: MutableLiveData<String?>
+    private var mIsSearch: Boolean? = null //是否是搜索状态
+    private var mSearchKeyword: String? = null //搜索关键词
+    private var mIsDescend: Boolean? = null //是新发布树洞还是新更新树洞
+    private var mStartLoadId: Int? = null //网络起始id
     var pClickDataBean: DataBean? = null
     private val mHomePageHoleRepository = HomePageHoleRepository()
     var isSearch: Boolean?
@@ -112,15 +107,13 @@ class HomePageViewModel : BaseViewModel() {
         val holeId = dataBean.hole_id
         val id = v.id
         if (id == R.id.cl_itemhomepage_thumbup) { //点击点赞
-            val isThunbup = dataBean.is_thumbup
+            val isThumbup = dataBean.is_thumbup
             val thumbupNum = dataBean.thumbup_num
-            mHomePageHoleRepository.giveALikeToAHole(holeId, thumbupNum, isThunbup, dataBean)
+            mHomePageHoleRepository.giveALikeToAHole(holeId, thumbupNum, isThumbup, dataBean)
         } else if (id == R.id.cl_itemhomepage_reply) { //点击回复
             if (BuildConfig.isRelease) {
-                ARouter.getInstance().build("/hole/HoleActivity")
-                    .withInt(Constant.HOLE_ID, holeId)
-                    .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
-                    .navigation()
+                ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
+                    .withBoolean(Constant.IF_OPEN_KEYBOARD, true).navigation()
             }
         } else if (id == R.id.cl_itemhomepage_follow) { //点击收藏
             val isFollow = dataBean.is_follow
@@ -134,8 +127,7 @@ class HomePageViewModel : BaseViewModel() {
                 dialog.show()
                 dialog.setOptionsListener {
                     mHomePageHoleRepository.moreActionForNetwork(
-                        holeId,
-                        isMine
+                        holeId, isMine
                     )
                 }
             } else {
@@ -145,8 +137,7 @@ class HomePageViewModel : BaseViewModel() {
         } else if (id == R.id.cl_itemhomepage_frame) { //点击树洞跳转
             pClickDataBean = dataBean
             if (BuildConfig.isRelease) {
-                ARouter.getInstance().build("/hole/HoleActivity")
-                    .withInt(Constant.HOLE_ID, holeId)
+                ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
                     .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                     .navigation(v.context as HomeScreenActivity, 1)
                 //
@@ -156,11 +147,15 @@ class HomePageViewModel : BaseViewModel() {
         }
     }
 
+    fun doneShowingTip() {
+        tip.value = null
+    }
+
     /**
      * 初始化
      */
     init {
         pHomePageHoles = mHomePageHoleRepository.pHomePageHoles
-        loadToastMsg = mHomePageHoleRepository.loadToast
+        tip = mHomePageHoleRepository.tip
     }
 }

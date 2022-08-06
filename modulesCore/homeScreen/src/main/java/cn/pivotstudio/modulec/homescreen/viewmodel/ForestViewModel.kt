@@ -1,8 +1,8 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.repository.ForestRepository
@@ -21,14 +21,12 @@ import kotlinx.coroutines.flow.*
 class ForestViewModel : ViewModel() {
     private val repository = ForestRepository()
 
-    val forestHoles: LiveData<List<ForestHole>> = repository.forestHoles
-    val forestHeads: LiveData<ForestHeads> = repository.forestHeads
-
+    val forestHoles: LiveData<List<ForestHole>> = repository.holes
+    val forestHeads: LiveData<ForestHeads> = repository.headers
     val holesLoadState: LiveData<LoadStatus> = repository.holeState
     val headerLoadState: LiveData<LoadStatus> = repository.headerLoadState
 
-    val toastMsg = repository.loadToast.asSharedFlow()
-    val changedHoleSharedFlow = repository.changedHoleSharedFlow
+    val tip: MutableLiveData<String?> = repository.tip
 
     init {
         loadHolesAndHeads()
@@ -55,6 +53,10 @@ class ForestViewModel : ViewModel() {
 
     fun deleteTheHole(hole: ForestHole) {
         repository.deleteTheHole(hole)
+    }
+
+    fun doneShowingTip() {
+        tip.value = null
     }
 
 }

@@ -12,6 +12,7 @@ import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.ERROR
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.LOADING
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,27 +24,25 @@ enum class LoadStatus { LOADING, ERROR, DONE }
 
 @SuppressLint("CheckResult")
 class ForestRepository {
-    private var _holeState = MutableLiveData<LoadStatus>()
-    private var _headerLoadState = MutableLiveData<LoadStatus>()
-
-    private var _forestHoles = MutableLiveData<List<ForestHole>>()
-    private var _forestHeads = MutableLiveData<ForestHeads>()
     private var lastStartId = STARTING_ID
 
-    val forestHeads = _forestHeads
-    val forestHoles = _forestHoles
+    private var _holeState = MutableLiveData<LoadStatus>()
+    private var _headerLoadState = MutableLiveData<LoadStatus>()
+    private var _holes = MutableLiveData<List<ForestHole>>()
+    private var _headers = MutableLiveData<ForestHeads>()
+
+    val tip = MutableLiveData<String?>()
+    val headers = _headers
+    val holes = _holes
     val holeState = _holeState
     val headerLoadState = _headerLoadState
-
-    val loadToast = MutableSharedFlow<String>()
-    val changedHoleSharedFlow = MutableSharedFlow<Int>()
 
     fun loadForestHoles() {
         _holeState.value = LOADING
         retrofitService.searchForestHoles(STARTING_ID, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
                 override fun onSuccess(items: List<ForestHole>) {
-                    forestHoles.value = items
+                    holes.value = items
                     lastStartId = STARTING_ID
                     _holeState.value = LoadStatus.DONE
                 }
@@ -57,14 +56,12 @@ class ForestRepository {
     fun loadMoreForestHoles() {
         _holeState.value = LOADING
         retrofitService.searchForestHoles(
-            lastStartId + HOLES_LIST_SIZE,
-            HOLES_LIST_SIZE,
-            SORT_BY_LATEST_REPLY
+            lastStartId + HOLES_LIST_SIZE, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY
         ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
             override fun onSuccess(result: List<ForestHole>) {
-                val newItems = forestHoles.value!!.toMutableList()
+                val newItems = holes.value!!.toMutableList()
                 newItems.addAll(result)
-                forestHoles.value = newItems
+                holes.value = newItems
                 lastStartId += HOLES_LIST_SIZE
                 _holeState.value = LoadStatus.DONE
             }
@@ -80,7 +77,7 @@ class ForestRepository {
         retrofitService.searchForestHeads(STARTING_ID, HEADS_LIST_SIZE)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<ForestHeads>() {
                 override fun onSuccess(items: ForestHeads?) {
-                    forestHeads.value = items
+                    headers.value = items
                 }
 
                 override fun onFailure(e: Throwable?) {
@@ -90,36 +87,27 @@ class ForestRepository {
     }
 
     fun giveALikeToTheHole(hole: Hole) {
-        (hole as ForestHole).let { it ->
+        (hole as ForestHole).let {
             val observable: Observable<MsgResponse> = if (!it.liked) {
                 retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + it.holeId + "/-1")
             } else {
                 retrofitService.deleteThumbups(Constant.BASE_URL + "thumbups/" + it.holeId + "/-1")
             }
             observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(msg: MsgResponse) {
-                    if (!it.liked) it.likeNum ++
-                    else it.likeNum--
-                    it.liked = !it.liked
-
-                    CoroutineScope(Dispatchers.Main).launch {
-                        loadToast.emit(
-                            msg.msg
-                        )
-                        _forestHoles.value?.indexOfFirst { firstHole ->
-                            it.holeId == firstHole.holeId
-                        }?.let { index ->
-                            changedHoleSharedFlow.emit(
-                                index
-                            )
+                override fun onSuccess(response: MsgResponse) {
+                    val newItems = _holes.value!!.toMutableList()
+                    for ((i, newHole) in newItems.withIndex()) {
+                        if (hole.holeId == newHole.holeId) newItems[i] = newHole.copy().apply {
+                            likeNum.inc()
+                            liked = liked.not()
                         }
                     }
+                    _holes.value = newItems
+                    tip.value = response.msg
                 }
 
                 override fun onFailure(e: Throwable) {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        loadToast.emit("❌")
-                    }
+                    tip.value = "❌"
                 }
             }))
         }
@@ -131,33 +119,22 @@ class ForestRepository {
         } else {
             retrofitService.deleteFollow(Constant.BASE_URL + "follows/" + hole.holeId)
         }
-        observable
-            .compose(NetworkApi.applySchedulers())
+        observable.compose(NetworkApi.applySchedulers())
             .subscribe(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(msg: MsgResponse) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        if (hole.followed) hole.followNum.dec()
-                        else hole.followNum.inc()
-                        hole.followed = hole.followed.not()
-                        loadToast.emit(
-                            msg.msg
-                        )
-                        _forestHoles.value?.indexOfFirst { firstHole ->
-                            hole.holeId == firstHole.holeId
-                        }?.let { index ->
-                            changedHoleSharedFlow.emit(
-                                index
-                            )
+                override fun onSuccess(response: MsgResponse) {
+                    val newItems = _holes.value!!.toMutableList()
+                    for ((i, newHole) in newItems.withIndex()) {
+                        if (hole.holeId == newHole.holeId) newItems[i] = newHole.copy().apply {
+                            followNum.inc()
+                            followed = followed.not()
                         }
                     }
+                    _holes.value = newItems
+                    tip.value = response.msg
                 }
 
                 override fun onFailure(e: Throwable) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        loadToast.emit(
-                            "❌"
-                        )
-                    }
+                    tip.value = "❌"
                 }
             })
 
@@ -169,20 +146,15 @@ class ForestRepository {
             retrofitService.deleteHole(hole.holeId.toString())
                 .compose(NetworkApi.applySchedulers())
                 .subscribe(object : BaseObserver<MsgResponse>() {
-                    override fun onSuccess(successMsg: MsgResponse) {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            loadToast.emit(
-                                successMsg.msg
-                            )
-                        }
+                    override fun onSuccess(response: MsgResponse) {
+                        val newItems = _holes.value!!.toMutableList()
+                        newItems.remove(hole)
+                        _holes.value = newItems
+                        tip.value = response.msg
                     }
 
                     override fun onFailure(e: Throwable?) {
-                        CoroutineScope(Dispatchers.IO).launch {
-                            loadToast.emit(
-                                "❌"
-                            )
-                        }
+                        tip.value = "❌"
                     }
                 })
         }
