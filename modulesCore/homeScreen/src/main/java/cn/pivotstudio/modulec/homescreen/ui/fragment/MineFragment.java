@@ -23,9 +23,6 @@ import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineBinding;
  */
 public class MineFragment extends BaseFragment {
     private FragmentMineBinding binding;
-    public static MineFragment newInstance() {
-        return new MineFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

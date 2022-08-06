@@ -24,10 +24,6 @@ import cn.pivotstudio.modulec.homescreen.databinding.FragmentMessageBinding;
 public class MessageFragment extends BaseFragment {
     private FragmentMessageBinding binding;
 
-    public static MessageFragment newInstance() {
-        return new MessageFragment();
-    }
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {

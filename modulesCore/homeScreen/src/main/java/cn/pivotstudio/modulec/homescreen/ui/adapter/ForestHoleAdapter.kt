@@ -1,6 +1,5 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +7,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.modulec.homescreen.databinding.ItemForestBinding
+import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHoleBinding
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
 
@@ -26,7 +25,7 @@ class ForestHoleAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestHoleViewHolder {
         return ForestHoleViewHolder(
-            ItemForestBinding.inflate(
+            ItemForestHoleBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -39,7 +38,7 @@ class ForestHoleAdapter(
         holder.bind(forestHole)
     }
 
-    inner class ForestHoleViewHolder(private val binding: ItemForestBinding) :
+    inner class ForestHoleViewHolder(private val binding: ItemForestHoleBinding) :
         RecyclerView.ViewHolder(
             binding.root
         ) {
