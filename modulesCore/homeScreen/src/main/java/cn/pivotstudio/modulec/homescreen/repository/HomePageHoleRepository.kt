@@ -37,7 +37,7 @@ class HomePageHoleRepository {
      * @param mHolesSequenceCondition 是新更新还是新发布
      * @param mStartingLoadId         起始id
      */
-    fun getHolesForNetwork(mHolesSequenceCondition: Boolean?, mStartingLoadId: Int) {
+    fun getHolesForNetwork(mHolesSequenceCondition: Boolean, mStartingLoadId: Int) {
         retrofitService.homepageHoles(
             true,
             mHolesSequenceCondition,
@@ -80,34 +80,36 @@ class HomePageHoleRepository {
      * @param mStartingLoadId 起始id
      */
     fun searchHolesForNetwork(et: String?, mStartingLoadId: Int) {
-        retrofitService.searchHoles(et, mStartingLoadId, Constant.CONSTANT_STANDARD_LOAD_SIZE)
-            .compose(NetworkApi.applySchedulers(object :
-                BaseObserver<List<DataBean>>() {
-                override fun onSuccess(requestedDataList: List<DataBean>) {
-                    //手动为期添加状态，判断是新更新还是新发布，用于数据绑定，显式在解析的时间后
-                    for (item in requestedDataList) {
-                        item.is_last_reply = false
-                    }
-                    if (mStartingLoadId != 0) { //上拉加载得到
-                        //手动补充为完整response
-                        val lastRequestedDataList = pHomePageHoles.value
-                        lastRequestedDataList!!.data.addAll(requestedDataList)
-                        lastRequestedDataList.model = "SEARCH_LOAD_MORE"
-                        pHomePageHoles.setValue(lastRequestedDataList)
-                    } else { //下拉刷新或者搜索得到
+        if (et != null) {
+            retrofitService.searchHoles(et, mStartingLoadId, Constant.CONSTANT_STANDARD_LOAD_SIZE)
+                .compose(NetworkApi.applySchedulers(object :
+                    BaseObserver<List<DataBean>>() {
+                    override fun onSuccess(requestedDataList: List<DataBean>) {
+                        //手动为期添加状态，判断是新更新还是新发布，用于数据绑定，显式在解析的时间后
+                        for (item in requestedDataList) {
+                            item.is_last_reply = false
+                        }
+                        if (mStartingLoadId != 0) { //上拉加载得到
+                            //手动补充为完整response
+                            val lastRequestedDataList = pHomePageHoles.value
+                            lastRequestedDataList!!.data.addAll(requestedDataList)
+                            lastRequestedDataList.model = "SEARCH_LOAD_MORE"
+                            pHomePageHoles.setValue(lastRequestedDataList)
+                        } else { //下拉刷新或者搜索得到
 
-                        //手动补充为完整response
-                        val homepageHoleResponse = HomepageHoleResponse()
-                        homepageHoleResponse.data = requestedDataList
-                        homepageHoleResponse.model = "SEARCH_REFRESH"
-                        pHomePageHoles.setValue(homepageHoleResponse)
+                            //手动补充为完整response
+                            val homepageHoleResponse = HomepageHoleResponse()
+                            homepageHoleResponse.data = requestedDataList
+                            homepageHoleResponse.model = "SEARCH_REFRESH"
+                            pHomePageHoles.setValue(homepageHoleResponse)
+                        }
                     }
-                }
 
-                override fun onFailure(e: Throwable?) {
-                    tip.value = (e as ResponseThrowable).message
-                }
-            }))
+                    override fun onFailure(e: Throwable?) {
+                        tip.value = (e as ResponseThrowable).message
+                    }
+                }))
+        }
     }
 
     /**

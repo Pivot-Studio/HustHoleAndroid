@@ -77,7 +77,7 @@ class HomePageViewModel : BaseViewModel() {
      * @param mStartingLoadId 起始id
      */
     fun refreshHoleList(mStartingLoadId: Int) {
-        mHomePageHoleRepository.getHolesForNetwork(isDescend, mStartingLoadId)
+        isDescend?.let { mHomePageHoleRepository.getHolesForNetwork(it, mStartingLoadId) }
     }
 
     /**
