@@ -22,15 +22,14 @@ import cn.pivotstudio.moduleb.libbase.constant.Constant
  * @author:
  */
 class HomePageViewModel : BaseViewModel() {
-    @JvmField
-    val pHomePageHoles: LiveData<HomepageHoleResponse> //数据类型网络请求结果
-    val tip: MutableLiveData<String?>
+    private val mHomePageHoleRepository = HomePageHoleRepository()
+    val pHomePageHoles: LiveData<HomepageHoleResponse> = mHomePageHoleRepository.pHomePageHoles //数据类型网络请求结果
+    val tip: MutableLiveData<String?> = mHomePageHoleRepository.tip
     private var mIsSearch: Boolean? = null //是否是搜索状态
     private var mSearchKeyword: String? = null //搜索关键词
     private var mIsDescend: Boolean? = null //是新发布树洞还是新更新树洞
     private var mStartLoadId: Int? = null //网络起始id
     var pClickDataBean: DataBean? = null
-    private val mHomePageHoleRepository = HomePageHoleRepository()
     var isSearch: Boolean?
         get() {
             if (mIsSearch == null) {
@@ -149,13 +148,5 @@ class HomePageViewModel : BaseViewModel() {
 
     fun doneShowingTip() {
         tip.value = null
-    }
-
-    /**
-     * 初始化
-     */
-    init {
-        pHomePageHoles = mHomePageHoleRepository.pHomePageHoles
-        tip = mHomePageHoleRepository.tip
     }
 }
