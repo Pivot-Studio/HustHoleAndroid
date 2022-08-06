@@ -39,7 +39,7 @@ public class DeleteDialog extends Dialog {
     }
     private void initView(){
         setContentView(R.layout.dialog_delete);
-        getWindow().setBackgroundDrawableResource(R.drawable.notice);
+        getWindow().setBackgroundDrawableResource(R.drawable.ic_notice);
         setCanceledOnTouchOutside(false);//触摸灰色部分无响应
 
         TextView no = (TextView)findViewById(R.id.dialog_delete_tv_cancel);

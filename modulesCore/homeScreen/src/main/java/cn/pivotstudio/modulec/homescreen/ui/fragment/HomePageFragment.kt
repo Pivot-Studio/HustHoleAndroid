@@ -75,6 +75,7 @@ class HomePageFragment : BaseFragment() {
                 mViewModel.pClickDataBean?.reply_num = it.reply_num
                 mViewModel.pClickDataBean?.follow_num = it.follow_num
             }
+            binding.recyclerView.adapter?.notifyDataSetChanged()
         }
     }
 

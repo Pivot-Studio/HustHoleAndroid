@@ -1,23 +1,20 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
 import android.content.Context
-import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
-import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter
-import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
-import cn.pivotstudio.modulec.homescreen.ui.adapter.HoleRecyclerViewAdapter
-import androidx.databinding.ViewDataBinding
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
-import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse
-import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ItemHomepageholeBinding
-import cn.pivotstudio.modulec.homescreen.ui.adapter.HoleRecyclerViewAdapter.RequestFailedHolder
-import cn.pivotstudio.modulec.homescreen.ui.adapter.HoleRecyclerViewAdapter.NOSearchHolder
+import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse
+import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
+import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
 
 /**
  * @classname:HomePageHoleAdapter
@@ -118,13 +115,10 @@ class HoleRecyclerViewAdapter(
                 )
             }
             ITEM_TYPE_NO_SEARCH -> {
-                val itemHomepageholeBinding = DataBindingUtil.inflate<ItemHomepageholeBinding>(
-                    LayoutInflater.from(mContext),
-                    R.layout.item_homepagehole,
-                    parent,
-                    false
+                return NOSearchHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_nosearch, parent, false)
                 )
-                HoleViewHolder(itemHomepageholeBinding)
             }
             else -> {
                 RequestFailedHolder(
