@@ -37,7 +37,7 @@ import cn.pivotstudio.moduleb.libbase.constant.Constant
  */
 class ForestFragment : BaseFragment() {
     private lateinit var binding: FragmentForestBinding
-    private val viewModel: ForestViewModel by activityViewModels()
+    private val forestViewModel: ForestViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -77,19 +77,22 @@ class ForestFragment : BaseFragment() {
             }
 
             recyclerViewForestHead.adapter = headAdapter
-            viewModel = this@ForestFragment.viewModel.apply {
+            viewModel = forestViewModel.apply {
                 forestHoles.observe(viewLifecycleOwner) {
                     holeAdapter.submitList(it)
                 }
 
                 forestHeads.observe(viewLifecycleOwner) {
                     headAdapter.submitList(it.forests)
+                    if (it.forests.isEmpty()) {
+                        forestViewModel.showPlaceHolder()
+                    }
                 }
 
                 holesLoadState.observe(viewLifecycleOwner) {
                     when (it) {
                         LoadStatus.DONE -> {
-                            forestContent.visibility = VISIBLE
+                            recyclerViewForestHoles.visibility = VISIBLE
                             forestPlaceholder.visibility = GONE
                             finishRefreshAnim()
                         }
@@ -99,9 +102,13 @@ class ForestFragment : BaseFragment() {
                         }
                         LoadStatus.LOADING -> {
                             forestPlaceholder.visibility =
-                                if (forestContent.isVisible) GONE else VISIBLE
+                                if (recyclerViewForestHoles.isVisible) GONE else VISIBLE
                         }
-                        else -> {}
+                        else -> {
+                            recyclerViewForestHoles.visibility = GONE
+                            forestPlaceholder.visibility = VISIBLE
+                            finishRefreshAnim()
+                        }
                     }
                 }
 
@@ -155,12 +162,12 @@ class ForestFragment : BaseFragment() {
 
     // 点赞
     fun giveALikeToTheHole(hole: ForestHole) {
-        viewModel.giveALikeToTheHole(hole)
+        forestViewModel.giveALikeToTheHole(hole)
     }
 
     // 关注/收藏
     fun followTheHole(hole: ForestHole) {
-        viewModel.followTheHole(hole)
+        forestViewModel.followTheHole(hole)
     }
 
     // 举报树洞交给举报界面处理
@@ -175,7 +182,7 @@ class ForestFragment : BaseFragment() {
         val dialog = DeleteDialog(context)
         dialog.show()
         dialog.setOptionsListener {
-            viewModel.deleteTheHole(hole)
+            forestViewModel.deleteTheHole(hole)
         }
     }
 
@@ -185,14 +192,14 @@ class ForestFragment : BaseFragment() {
             setRefreshHeader(StandardRefreshHeader(activity)) //设置自定义刷新头
             setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
             setOnRefreshListener {    //下拉刷新触发
-                viewModel.loadHolesAndHeads()
+                forestViewModel.loadHolesAndHeads()
                 binding.recyclerViewForestHoles.isEnabled = false
             }
             setOnLoadMoreListener { refreshlayout -> //上拉加载触发
-                if (viewModel.forestHoles.value == null || viewModel.forestHeads.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
-                    viewModel.loadHolesAndHeads()
+                if (forestViewModel.forestHoles.value == null || forestViewModel.forestHeads.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
+                    forestViewModel.loadHolesAndHeads()
                 } else {
-                    viewModel.loadMoreForestHoles()
+                    forestViewModel.loadMoreForestHoles()
                 }
                 binding.recyclerViewForestHoles.isEnabled = false
             }

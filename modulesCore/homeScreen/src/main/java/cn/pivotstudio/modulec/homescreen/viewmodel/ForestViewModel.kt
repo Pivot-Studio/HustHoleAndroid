@@ -23,7 +23,7 @@ class ForestViewModel : ViewModel() {
 
     val forestHoles: LiveData<List<ForestHole>> = repository.holes
     val forestHeads: LiveData<ForestHeads> = repository.headers
-    val holesLoadState: LiveData<LoadStatus> = repository.holeState
+    val holesLoadState: LiveData<LoadStatus?> = repository.holeState
     val headerLoadState: LiveData<LoadStatus> = repository.headerLoadState
 
     val tip: MutableLiveData<String?> = repository.tip
@@ -57,6 +57,10 @@ class ForestViewModel : ViewModel() {
 
     fun doneShowingTip() {
         tip.value = null
+    }
+
+    fun showPlaceHolder() {
+        repository.holeState.value = null
     }
 
 }
