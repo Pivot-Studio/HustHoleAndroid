@@ -27,6 +27,7 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 
 /**
  * @classname: ForestFragment
@@ -125,6 +126,8 @@ class ForestFragment : BaseFragment() {
             }
 
         }
+
+        preloadAllForests()
     }
 
 
@@ -210,5 +213,10 @@ class ForestFragment : BaseFragment() {
         binding.refreshLayout.finishRefresh() //结束下拉刷新动画
         binding.refreshLayout.finishLoadMore() //结束上拉加载动画
         binding.recyclerViewForestHoles.isEnabled = true //加载结束后允许滑动
+    }
+
+    private fun preloadAllForests() {
+        val allForestViewModel: AllForestViewModel by activityViewModels()
+        allForestViewModel.preload()
     }
 }

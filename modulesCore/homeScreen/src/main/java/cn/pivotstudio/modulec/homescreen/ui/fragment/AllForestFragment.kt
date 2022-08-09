@@ -14,9 +14,12 @@ import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 
-const val TAG = "AllForestFragmentDebug"
-
 class AllForestFragment : BaseFragment() {
+
+    companion object {
+        const val TAG = "AllForestFragmentDebug"
+    }
+
     private lateinit var binding: FragmentAllFrorestBinding
     private val viewModel: AllForestViewModel by activityViewModels()
 
