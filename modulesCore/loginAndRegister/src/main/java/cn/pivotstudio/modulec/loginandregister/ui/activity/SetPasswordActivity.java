@@ -48,6 +48,9 @@ public class SetPasswordActivity extends BaseActivity {
     }
 
     private void initView() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         TextView mWarningTv = findViewById(R.id.tv_setpassword_warn);
         Button mSetPasswordBtn = findViewById(R.id.btn_setpassword_jumptohomescreen);
         mSetPasswordEt = findViewById(R.id.et_setpassword);

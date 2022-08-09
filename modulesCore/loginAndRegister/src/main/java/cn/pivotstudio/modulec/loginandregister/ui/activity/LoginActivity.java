@@ -47,6 +47,9 @@ public class LoginActivity extends BaseActivity {
      * 初始化
      */
     private void initView() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         mIdEt = findViewById(R.id.et_login_emailhead);
         mPasswordEt = findViewById(R.id.et_login_password);
         Button mLoginBt = findViewById(R.id.btn_login_jumptohomescreen);

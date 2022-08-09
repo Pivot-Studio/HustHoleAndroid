@@ -26,6 +26,9 @@ public class PrivacyActivity extends BaseActivity {
      * View相关初始化
      */
     private void initView() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         WebView wv = findViewById(R.id.privacy_wv);
         wv.getSettings().setJavaScriptEnabled(true);
         wv.getSettings().setUseWideViewPort(true);

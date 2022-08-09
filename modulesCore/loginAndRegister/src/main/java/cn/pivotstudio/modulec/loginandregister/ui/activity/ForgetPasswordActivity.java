@@ -32,6 +32,9 @@ public class ForgetPasswordActivity extends BaseActivity {
     }
 
     private void initView() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         mWarningTv = findViewById(R.id.tv_forget_warn);
         mForgetPasswordBtn = findViewById(R.id.btn_forget_jumptohomescreen);
         mEmailHeadEt = findViewById(R.id.et_forget_email);
