@@ -1,14 +1,12 @@
-package cn.pivotstudio.modulec.loginandregister.network;
+package cn.pivotstudio.modulec.loginandregister.network
 
-import cn.pivotstudio.modulec.loginandregister.model.LoginResponse;
-import cn.pivotstudio.modulec.loginandregister.model.MsgResponse;
-import io.reactivex.Observable;
-import java.util.HashMap;
-import java.util.Map;
-
-import retrofit2.http.Body;
-import retrofit2.http.POST;
-import retrofit2.http.Url;
+import retrofit2.http.POST
+import cn.pivotstudio.modulec.loginandregister.model.LoginResponse
+import cn.pivotstudio.modulec.loginandregister.model.MsgResponse
+import io.reactivex.Observable
+import retrofit2.http.Body
+import retrofit2.http.Url
+import java.util.HashMap
 
 /**
  * @classname:network
@@ -17,19 +15,19 @@ import retrofit2.http.Url;
  * @version:1.0
  * @author:
  */
-public interface LRRequestInterface {
+interface LRRequestInterface {
     @POST("auth/mobileLogin")
-    Observable<LoginResponse> mobileLogin(@Body HashMap<String, String> map);
+    fun mobileLogin(@Body map: HashMap<String, String>): Observable<LoginResponse>
 
     @POST
-    Observable<MsgResponse> resetPassword(@Url String url);
+    fun resetPassword(@Url url: String): Observable<MsgResponse>
 
     @POST
-    Observable<MsgResponse> verifyCode(@Url String url);
+    fun verifyCode(@Url url: String): Observable<MsgResponse>
 
     @POST("auth/sendVerifyCode")
-    Observable<MsgResponse> verifyCodeMatch(@Body Map<String, String> map);
+    fun verifyCodeMatch(@Body map: Map<String, String>): Observable<MsgResponse>
 
     @POST("auth/mobileRegister")
-    Observable<MsgResponse> register(@Body HashMap<String, String> map);
+    fun register(@Body map: Map<String, String>): Observable<MsgResponse>
 }

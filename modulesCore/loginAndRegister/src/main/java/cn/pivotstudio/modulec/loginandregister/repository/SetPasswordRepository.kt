@@ -1,13 +1,14 @@
-package cn.pivotstudio.modulec.loginandregister.repository;
+package cn.pivotstudio.modulec.loginandregister.repository
 
-import android.annotation.SuppressLint;
-import androidx.lifecycle.MutableLiveData;
-import cn.pivotstudio.husthole.moduleb.network.BaseObserver;
-import cn.pivotstudio.husthole.moduleb.network.NetworkApi;
-import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler;
-import cn.pivotstudio.modulec.loginandregister.model.MsgResponse;
-import cn.pivotstudio.modulec.loginandregister.network.LRRequestInterface;
-import java.util.HashMap;
+import android.annotation.SuppressLint
+import androidx.lifecycle.MutableLiveData
+import cn.pivotstudio.husthole.moduleb.network.NetworkApi
+import cn.pivotstudio.modulec.loginandregister.network.LRRequestInterface
+import cn.pivotstudio.husthole.moduleb.network.BaseObserver
+import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
+import cn.pivotstudio.modulec.loginandregister.model.MsgResponse
+import cn.pivotstudio.modulec.loginandregister.network.LoginAndRegisterNetworkApi
+import java.util.HashMap
 
 /**
  * @classname:SetPasswordRepository
@@ -17,29 +18,27 @@ import java.util.HashMap;
  * @author:
  */
 @SuppressLint("CheckResult")
-public class SetPasswordRepository {
-    public final MutableLiveData<String> failed = new MutableLiveData<>();
-    public MutableLiveData<MsgResponse> mSetPassword = new MutableLiveData<>();
+class SetPasswordRepository {
+    @JvmField
+    val failed = MutableLiveData<String>()
 
-    public SetPasswordRepository() {
-    }
+    @JvmField
+    var mSetPassword = MutableLiveData<MsgResponse>()
 
-    public void createAccountForNetwork(String id, String password) {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("email", id);
-        map.put("password", password);
-        NetworkApi.createService(LRRequestInterface.class, 2)
+    fun createAccountForNetwork(id: String, password: String) {
+        val map = HashMap<String, String>()
+        map["email"] = id
+        map["password"] = password
+        LoginAndRegisterNetworkApi.retrofitService
             .register(map)
-            .compose(NetworkApi.applySchedulers(new BaseObserver<MsgResponse>() {
-                @Override
-                public void onSuccess(MsgResponse setPasswordResponse) {
-                    mSetPassword.setValue(setPasswordResponse);
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                override fun onSuccess(setPasswordResponse: MsgResponse) {
+                    mSetPassword.value = setPasswordResponse
                 }
 
-                @Override
-                public void onFailure(Throwable e) {
-                    failed.postValue(((ExceptionHandler.ResponseThrowable) e).message);
+                override fun onFailure(e: Throwable) {
+                    failed.postValue((e as ResponseThrowable).message)
                 }
-            }));
+            }))
     }
 }

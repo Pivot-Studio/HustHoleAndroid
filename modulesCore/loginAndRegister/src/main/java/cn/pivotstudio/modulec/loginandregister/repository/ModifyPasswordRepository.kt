@@ -1,13 +1,13 @@
-package cn.pivotstudio.modulec.loginandregister.repository;
+package cn.pivotstudio.modulec.loginandregister.repository
 
-import android.annotation.SuppressLint;
-import androidx.lifecycle.MutableLiveData;
-import cn.pivotstudio.husthole.moduleb.network.BaseObserver;
-import cn.pivotstudio.husthole.moduleb.network.NetworkApi;
-import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler;
-import cn.pivotstudio.modulec.loginandregister.model.MsgResponse;
-import cn.pivotstudio.modulec.loginandregister.network.LRRequestInterface;
-import cn.pivotstudio.moduleb.libbase.constant.Constant;
+import android.annotation.SuppressLint
+import androidx.lifecycle.MutableLiveData
+import cn.pivotstudio.husthole.moduleb.network.NetworkApi
+import cn.pivotstudio.modulec.loginandregister.network.LRRequestInterface
+import cn.pivotstudio.husthole.moduleb.network.BaseObserver
+import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
+import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.modulec.loginandregister.model.MsgResponse
 
 /**
  * @classname:ModifyPasswordRepository
@@ -17,32 +17,31 @@ import cn.pivotstudio.moduleb.libbase.constant.Constant;
  * @author:
  */
 @SuppressLint("CheckResult")
-public class ModifyPasswordRepository {
-    public final MutableLiveData<String> failed = new MutableLiveData<>();
-    public MutableLiveData<MsgResponse> mModifyPassword = new MutableLiveData<>();
+class ModifyPasswordRepository {
+    @JvmField
+    val failed = MutableLiveData<String>()
 
-    public ModifyPasswordRepository() {
-    }
-
-    public void modifyPasswordForNetwork(String id, String verify_code, String password) {
-        NetworkApi.createService(LRRequestInterface.class, 2)
-            .resetPassword(Constant.BASE_URL
-                + "auth/mobileChangePassword?email="
-                + id
-                + "&verify_code="
-                + verify_code
-                + "&new_password="
-                + password)
-            .compose(NetworkApi.applySchedulers(new BaseObserver<MsgResponse>() {
-                @Override
-                public void onSuccess(MsgResponse msgResponse) {
-                    mModifyPassword.setValue(msgResponse);
+    @JvmField
+    var mModifyPassword = MutableLiveData<MsgResponse>()
+    fun modifyPasswordForNetwork(id: String, verify_code: String, password: String) {
+        NetworkApi.createService(LRRequestInterface::class.java, 2)
+            .resetPassword(
+                Constant.BASE_URL
+                        + "auth/mobileChangePassword?email="
+                        + id
+                        + "&verify_code="
+                        + verify_code
+                        + "&new_password="
+                        + password
+            )
+            .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+                override fun onSuccess(msgResponse: MsgResponse) {
+                    mModifyPassword.value = msgResponse
                 }
 
-                @Override
-                public void onFailure(Throwable e) {
-                    failed.postValue(((ExceptionHandler.ResponseThrowable) e).message);
+                override fun onFailure(e: Throwable) {
+                    failed.postValue((e as ResponseThrowable).message)
                 }
-            }));
+            }))
     }
 }
