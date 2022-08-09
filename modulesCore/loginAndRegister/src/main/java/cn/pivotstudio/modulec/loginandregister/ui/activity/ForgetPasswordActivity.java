@@ -52,7 +52,7 @@ public class ForgetPasswordActivity extends BaseActivity {
         int id = v.getId();
         if (id == R.id.btn_forget_jumptohomescreen) {//进入验证码验证界面
             ForgetPasswordRepository forgetPasswordRepository = new ForgetPasswordRepository();
-            forgetPasswordRepository.verifyEmailForNetwork(mEmailHeadEt.getText().toString());
+            forgetPasswordRepository.sendVerifyCode(mEmailHeadEt.getText().toString());
             forgetPasswordRepository.mForgetPassword.observe(this, forgetPasswordResponse -> {
                 showMsg(forgetPasswordResponse.getMsg());
                 Intent intent = VerificationCodeActivity.newIntent(ForgetPasswordActivity.this,

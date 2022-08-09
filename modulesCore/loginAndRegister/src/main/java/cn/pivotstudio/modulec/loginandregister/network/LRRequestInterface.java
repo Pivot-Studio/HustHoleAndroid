@@ -4,6 +4,8 @@ import cn.pivotstudio.modulec.loginandregister.model.LoginResponse;
 import cn.pivotstudio.modulec.loginandregister.model.MsgResponse;
 import io.reactivex.Observable;
 import java.util.HashMap;
+import java.util.Map;
+
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.Url;
@@ -26,7 +28,7 @@ public interface LRRequestInterface {
     Observable<MsgResponse> verifyCode(@Url String url);
 
     @POST("auth/sendVerifyCode")
-    Observable<MsgResponse> verifyCodeMatch(@Body HashMap<String, String> map);
+    Observable<MsgResponse> verifyCodeMatch(@Body Map<String, String> map);
 
     @POST("auth/mobileRegister")
     Observable<MsgResponse> register(@Body HashMap<String, String> map);
