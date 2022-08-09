@@ -1,7 +1,9 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.modulec.homescreen.repository.AllForestRepository
+import kotlinx.coroutines.launch
 
 class AllForestViewModel : ViewModel() {
 
@@ -10,13 +12,21 @@ class AllForestViewModel : ViewModel() {
 
     val forestCardsWithOneType = repository.forestCardWithOneType
     val forestCards = repository.forestCards
-
-
-    init {
-        loadAllTypeOfForestCards()
-    }
+    val loadState = repository.loadState
 
     fun loadAllTypeOfForestCards() {
         repository.loadAllTypeOfForestCards()
+    }
+
+    fun doneShowingPlaceHolder() {
+        loadState.value = null
+    }
+
+    fun preload() {
+        if (forestCards.isEmpty()) {
+            viewModelScope.launch {
+                loadAllTypeOfForestCards()
+            }
+        }
     }
 }

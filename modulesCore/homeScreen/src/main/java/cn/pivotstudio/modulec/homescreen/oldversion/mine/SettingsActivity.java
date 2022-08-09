@@ -9,17 +9,24 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.OkHttpUtil;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager;
+
 import com.githang.statusbar.StatusBarCompat;
+
 import java.io.IOException;
 import java.util.HashMap;
+
 import okhttp3.ResponseBody;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,7 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
-            true);
+                true);
         if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
@@ -93,13 +100,13 @@ public class SettingsActivity extends AppCompatActivity {
                                     //JSONObject jsonObject = new JSONObject(json);
                                     // returncondition = jsonObject.getString("msg");
                                     Toast.makeText(SettingsActivity.this, json, Toast.LENGTH_SHORT)
-                                        .show();
+                                            .show();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
                             } else {
                                 Toast.makeText(SettingsActivity.this,
-                                    R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                        R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -108,7 +115,7 @@ public class SettingsActivity extends AppCompatActivity {
                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
                         isVerified.setText("请检查网络");
                         Toast.makeText(SettingsActivity.this, R.string.network_loadfailure,
-                            Toast.LENGTH_SHORT).show();
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -130,20 +137,20 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Retrofit retrofit2 = new Retrofit.Builder().baseUrl(RetrofitManager.API)
-                            .client(OkHttpUtil.getOkHttpClient2())
-                            .addConverterFactory(GsonConverterFactory.create())
-                            .build();
+                                .client(OkHttpUtil.getOkHttpClient2())
+                                .addConverterFactory(GsonConverterFactory.create())
+                                .build();
 
                         RequestInterface request2 = retrofit2.create(RequestInterface.class);
                         HashMap map = new HashMap();
                         SharedPreferences editor =
-                            SettingsActivity.this.getSharedPreferences("Depository",
-                                Context.MODE_PRIVATE);//
+                                SettingsActivity.this.getSharedPreferences("Depository",
+                                        Context.MODE_PRIVATE);//
                         String condition = editor.getString("email", "");
                         Call<ResponseBody> call = request2.sendVerifyCode(RetrofitManager.API
-                            + "auth/sendVerifyCode?email="
-                            + condition
-                            + "&isResetPassword=false");
+                                + "auth/sendVerifyCode?email="
+                                + condition
+                                + "&isResetPassword=false");
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call,
@@ -156,7 +163,7 @@ public class SettingsActivity extends AppCompatActivity {
                                             JSONObject jsonObject = new JSONObject(json);
                                             returncondition = jsonObject.getString("msg");
                                             Toast.makeText(SettingsActivity.this, returncondition,
-                                                Toast.LENGTH_SHORT).show();
+                                                    Toast.LENGTH_SHORT).show();
                                         }
                                     } catch (IOException | JSONException e) {
                                         e.printStackTrace();
@@ -172,14 +179,14 @@ public class SettingsActivity extends AppCompatActivity {
                                         try {
                                             json = response.errorBody().string();
                                             Toast.makeText(SettingsActivity.this, json,
-                                                Toast.LENGTH_SHORT).show();
+                                                    Toast.LENGTH_SHORT).show();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
                                     } else {
                                         Toast.makeText(SettingsActivity.this,
-                                                R.string.network_unknownfailture, Toast.LENGTH_SHORT)
-                                            .show();
+                                                        R.string.network_unknownfailture, Toast.LENGTH_SHORT)
+                                                .show();
                                     }
                                     // ErrorMsg.getErrorMsg(response,SettingsActivity.this);
                                 }
@@ -188,7 +195,7 @@ public class SettingsActivity extends AppCompatActivity {
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable tr) {
                                 Toast.makeText(SettingsActivity.this, R.string.network_loginfailure,
-                                    Toast.LENGTH_SHORT).show();
+                                        Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
