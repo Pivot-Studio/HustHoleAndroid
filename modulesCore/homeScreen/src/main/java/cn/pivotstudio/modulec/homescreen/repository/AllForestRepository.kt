@@ -17,6 +17,7 @@ class AllForestRepository {
     private var _forestTypes = MutableLiveData<ForestTypes>()
     private var _forestCardWithOneType = MutableLiveData<Pair<String, ForestCardList>>()
     private var _forestCards = HashSet<Pair<String, ForestCardList>>()
+    val loadState = MutableLiveData<LoadStatus?>()
 
     val forestTypes = _forestTypes
     val forestCardWithOneType = _forestCardWithOneType
@@ -50,11 +51,13 @@ class AllForestRepository {
                 override fun onSuccess(items: ForestCardList) {
                     _forestCards.add(Pair(type, items))
                     _forestCardWithOneType.value = Pair(type, items)
+                    loadState.value = LoadStatus.DONE
                     Log.d(TAG, "loadForestCards by $type onSuccess: ${items.forests.size}")
                 }
 
                 override fun onFailure(e: Throwable?) {
                     e?.printStackTrace()
+                    loadState.value = LoadStatus.ERROR
                     Log.d(TAG, "loadForestCards by $type onFailure: 请求失败")
                 }
 

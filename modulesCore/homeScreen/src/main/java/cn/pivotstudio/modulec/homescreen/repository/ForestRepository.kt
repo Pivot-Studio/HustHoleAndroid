@@ -26,7 +26,7 @@ enum class LoadStatus { LOADING, ERROR, DONE }
 class ForestRepository {
     private var lastStartId = STARTING_ID
 
-    private var _holeState = MutableLiveData<LoadStatus>()
+    private var _holeState = MutableLiveData<LoadStatus?>()
     private var _headerLoadState = MutableLiveData<LoadStatus>()
     private var _holes = MutableLiveData<List<ForestHole>>()
     private var _headers = MutableLiveData<ForestHeads>()
@@ -44,7 +44,7 @@ class ForestRepository {
                 override fun onSuccess(items: List<ForestHole>) {
                     holes.value = items
                     lastStartId = STARTING_ID
-                    _holeState.value = LoadStatus.DONE
+                    _holeState.value = if (items.isNotEmpty()) LoadStatus.DONE else null
                 }
 
                 override fun onFailure(e: Throwable?) {
@@ -63,7 +63,7 @@ class ForestRepository {
                 newItems.addAll(result)
                 holes.value = newItems
                 lastStartId += HOLES_LIST_SIZE
-                _holeState.value = LoadStatus.DONE
+                _holeState.value = if (newItems.isNotEmpty()) LoadStatus.DONE else null
             }
 
             override fun onFailure(e: Throwable?) {
