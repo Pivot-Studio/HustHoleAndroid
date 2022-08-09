@@ -42,6 +42,9 @@ public class VerificationCodeActivity extends BaseActivity {
     }
 
     private void initView() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         mVCodeEt = findViewById(R.id.et_vcode_email);
         mVCodeBtn = findViewById(R.id.btn_vcode_jumptologin);
         mTimeTv = findViewById(R.id.tv_vcode_time);

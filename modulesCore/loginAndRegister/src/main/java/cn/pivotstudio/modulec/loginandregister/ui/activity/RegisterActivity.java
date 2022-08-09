@@ -11,13 +11,6 @@ import cn.pivotstudio.modulec.loginandregister.R;
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil;
 
-/**
- * @author
- * @version:1.0
- * @classname:RegisterActivity
- * @description:注册输入学号界面
- * @date:2022/4/26 13:16
- */
 public class RegisterActivity extends BaseActivity {
     EditText mRegisterEmailHeadEt;
 
@@ -32,6 +25,9 @@ public class RegisterActivity extends BaseActivity {
      * View相关初始化
      */
     private void initView() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         TextView mRegisterWarnTv = findViewById(R.id.tv_register_warn);
         Button mRegisterJumpToSetPasswordBtn = findViewById(R.id.btn_register_jumptosetpassword);
         mRegisterEmailHeadEt = findViewById(R.id.et_register_emailhead);

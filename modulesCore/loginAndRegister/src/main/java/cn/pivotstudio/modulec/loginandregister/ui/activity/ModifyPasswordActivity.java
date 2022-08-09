@@ -45,6 +45,9 @@ public class ModifyPasswordActivity extends BaseActivity {
     }
 
     private void initView() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         mPasswordEt = findViewById(R.id.et_modify_email);
         mWarningTv = findViewById(R.id.tv_modify_warn);
         mVisibleIv = findViewById(R.id.iv_modify_visible);
