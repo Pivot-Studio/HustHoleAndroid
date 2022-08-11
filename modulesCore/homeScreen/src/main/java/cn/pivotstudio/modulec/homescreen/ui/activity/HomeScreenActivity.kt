@@ -1,11 +1,14 @@
 package cn.pivotstudio.modulec.homescreen.ui.activity
 
+import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.KeyEvent
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -75,10 +78,54 @@ class HomeScreenActivity : BaseActivity() {
                 layoutBottomBar.isVisible =
                     (destination.id != R.id.all_forest_fragment && destination.id != R.id.forest_detail_fragment)
                 bottomNavigationView.setupWithNavController(navController)
+                bottomNavigationView.setOnItemReselectedListener {
+                    when (it.itemId) {
+                        R.id.homepage_fragment -> {
+                            simulatePullDown()
+                        }
+                    }
+                }
                 bottomAppBar.background = null;
             }
         }
 
+    }
+
+    /**
+     * 模拟下拉刷新事件
+     */
+    private fun simulatePullDown() {
+        val inst = Instrumentation();
+        val downTime = SystemClock.uptimeMillis()
+        val mRunnable = Runnable {
+            run {
+            }
+            inst.sendPointerSync(
+                MotionEvent.obtain(
+                    downTime, downTime,
+                    MotionEvent.ACTION_DOWN, 650F, 1150F, 0
+                )
+            )
+            inst.sendPointerSync(
+                MotionEvent.obtain(
+                    downTime, downTime,
+                    MotionEvent.ACTION_MOVE, 650F, 1250F, 0
+                )
+            )
+            inst.sendPointerSync(
+                MotionEvent.obtain(
+                    downTime, downTime + 20,
+                    MotionEvent.ACTION_MOVE, 650F, 1650F, 0
+                )
+            )
+            inst.sendPointerSync(
+                MotionEvent.obtain(
+                    downTime, downTime + 2000,
+                    MotionEvent.ACTION_UP, 650F, 1650F, 0
+                )
+            )
+        }
+        Thread(mRunnable).start()
     }
 
     /**
