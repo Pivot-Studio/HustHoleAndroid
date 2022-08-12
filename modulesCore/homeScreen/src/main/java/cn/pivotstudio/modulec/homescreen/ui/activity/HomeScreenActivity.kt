@@ -1,11 +1,14 @@
 package cn.pivotstudio.modulec.homescreen.ui.activity
 
+import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.KeyEvent
 import android.view.MenuItem
+import android.view.MotionEvent
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -24,9 +27,12 @@ import cn.pivotstudio.modulec.homescreen.repository.HomeScreenRepository
 import cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import cn.pivotstudio.moduleb.libbase.BuildConfig
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.modulec.homescreen.BuildConfig
+
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * @classname: HomeScreenActivity
@@ -77,6 +83,13 @@ class HomeScreenActivity : BaseActivity() {
                     (destination.id != R.id.all_forest_fragment && destination.id != R.id.forest_detail_fragment)
 
                 bottomNavigationView.setupWithNavController(navController)
+                bottomNavigationView.setOnItemReselectedListener {
+                    when (it.itemId) {
+                        R.id.homepage_fragment -> {
+                            simulatePullDown()
+                        }
+                    }
+                }
                 bottomAppBar.background = null
             }
 
@@ -91,6 +104,39 @@ class HomeScreenActivity : BaseActivity() {
 
         }
 
+    }
+    /**
+     * 模拟下拉刷新事件
+     */
+    private fun simulatePullDown() {
+        val inst = Instrumentation();
+        val downTime = SystemClock.uptimeMillis()
+        GlobalScope.launch{
+            inst.sendPointerSync(
+                MotionEvent.obtain(
+                    downTime, downTime,
+                    MotionEvent.ACTION_DOWN, 650F, 1150F, 0
+                )
+            )
+            inst.sendPointerSync(
+                MotionEvent.obtain(
+                    downTime, downTime,
+                    MotionEvent.ACTION_MOVE, 650F, 1250F, 0
+                )
+            )
+            inst.sendPointerSync(
+                MotionEvent.obtain(
+                    downTime, downTime + 20,
+                    MotionEvent.ACTION_MOVE, 650F, 1650F, 0
+                )
+            )
+            inst.sendPointerSync(
+                MotionEvent.obtain(
+                    downTime, downTime + 2000,
+                    MotionEvent.ACTION_UP, 650F, 1650F, 0
+                )
+            )
+        }
     }
 
     /**
