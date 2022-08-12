@@ -4,7 +4,6 @@ import static cn.pivotstudio.modulec.homescreen.oldversion.fragment.MessageFragm
 import static cn.pivotstudio.modulec.homescreen.oldversion.message.ParseNotificationData.parseSysJson;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -166,7 +165,7 @@ public class SystemNotification extends AppCompatActivity {
 
         //        SharedPreferences editor = this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
         //        token = editor.getString("token", "");
-        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(this);
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKV(this);
         String token = mmkvUtil.getString("USER_TOKEN");
 
         Request request = new Request.Builder().get()

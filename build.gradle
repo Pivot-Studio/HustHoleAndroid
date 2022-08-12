@@ -3,19 +3,19 @@ apply from :'husthole.gradle'//
 
 buildscript {
     ext {
-        appcompat_version = '1.4.1'
+        appcompat_version = '1.4.2'
         kotlin_version = '1.7.0'
         okhttp_version = '4.9.3'
         retrofit_version = '2.9.0'
         rxjava2_version = '2.2.21'
-        navigation_version = '2.4.2'
+        navigation_version = '2.5.1'
         room_version = '2.4.2'
-        material_version = '1.4.0'
+        material_version = '1.6.1'
         coroutines = '1.6.1'
         constraintlayout_version = '2.1.2'
         paging_version = '3.1.0'
         gson_version = '2.9.0'
-        lifecycle_version = '2.4.0'
+        lifecycle_version = '2.5.1'
         mmkv_version = '1.2.13'
         markdown_version = '1.0.1'
         recyclerview_version = '1.2.1'

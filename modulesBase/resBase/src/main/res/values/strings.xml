@@ -86,6 +86,8 @@
     <string name="retrieve_password_vcode_5">未收到验证码？</string>
     <string name="retrieve_password_vcode_6">50s</string>
     <string name="retrieve_password_vcode_7">后重新发送</string>
+    <string name="display_password">显示密码</string>
+    <string name="hide_password">隐藏密码</string>
 
     <string name="retrieve_password_modify_1">输入新密码</string>
     <string name="retrieve_password_modify_2">输入密码</string>

@@ -76,7 +76,7 @@ public class HoleRepository{
         });
     }
     public void getUsedEmojiForLocalDB(){
-        MMKVUtil mmkvUtil=MMKVUtil.getMMKVUtils(context);
+        MMKVUtil mmkvUtil=MMKVUtil.getMMKV(context);
         LinkedList<Integer> list=(LinkedList<Integer>)mmkvUtil.getArray(Constant.UsedEmoji, 0);
         if(list==null){
             list= new LinkedList<Integer>();

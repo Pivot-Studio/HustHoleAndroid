@@ -6,7 +6,7 @@
     android:background="@color/Background_GrayScale_100">
 
     <Button
-        android:id="@+id/btn_login_jumptohomescreen"
+        android:id="@+id/btn_login"
         android:layout_width="@dimen/dp_311"
         android:layout_height="@dimen/dp_56"
         android:layout_marginTop="@dimen/dp_70"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
 
     <EditText
-        android:id="@+id/et_login_emailhead"
+        android:id="@+id/et_login_student_code"
         android:layout_width="@dimen/dp_311"
         android:layout_height="@dimen/dp_56"
         android:layout_gravity="center_vertical"
@@ -53,7 +53,7 @@
         android:textSize="@dimen/sp_14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_login_emailhead" />
+        app:layout_constraintTop_toBottomOf="@+id/et_login_student_code" />
 
     <ImageView
         android:id="@+id/iv_login_visible"
@@ -75,15 +75,15 @@
         android:text="@string/register_3"
         android:textColor="@color/Title_GrayScale_20"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/et_login_emailhead"
-        app:layout_constraintEnd_toEndOf="@+id/et_login_emailhead"
+        app:layout_constraintBottom_toBottomOf="@+id/et_login_student_code"
+        app:layout_constraintEnd_toEndOf="@+id/et_login_student_code"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/et_login_emailhead"
-        app:layout_constraintTop_toTopOf="@+id/et_login_emailhead"
+        app:layout_constraintStart_toStartOf="@+id/et_login_student_code"
+        app:layout_constraintTop_toTopOf="@+id/et_login_student_code"
         app:layout_constraintVertical_bias="0.512" />
 
     <TextView
-        android:id="@+id/tv_login_jumptoforgetpassword"
+        android:id="@+id/tv_forget_password"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_30"
@@ -100,14 +100,14 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_5"
-        android:text="@string/register_5"
+        android:text="@string/student_code_error"
         android:textColor="@color/HH_Reminder_Warning"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="@+id/et_login_password"
         app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
 
     <TextView
-        android:id="@+id/tv_login_jumptocheckemail"
+        android:id="@+id/tv_had_not_registered"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_30"

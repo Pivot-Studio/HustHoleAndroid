@@ -39,7 +39,7 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_lr_login);
         mVisibleFlag = false;
         loginRepository = new LoginRepository();
-        mmkvUtil = MMKVUtil.getMMKVUtils(getApplicationContext());
+        mmkvUtil = MMKVUtil.getMMKV(getApplicationContext());
         initView();
     }
 
@@ -50,9 +50,9 @@ public class LoginActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        mIdEt = findViewById(R.id.et_login_emailhead);
+        mIdEt = findViewById(R.id.et_login_student_code);
         mPasswordEt = findViewById(R.id.et_login_password);
-        Button mLoginBt = findViewById(R.id.btn_login_jumptohomescreen);
+        Button mLoginBt = findViewById(R.id.btn_login);
         mWarningTv = findViewById(R.id.tv_login_warn);
         mVisibleIv = findViewById(R.id.iv_login_visible);
 
@@ -60,12 +60,6 @@ public class LoginActivity extends BaseActivity {
         mWarningTv.setVisibility(View.INVISIBLE);//输入错误警告设置为不可见
         mLoginBt.setEnabled(false);//按钮未输入内容设置为不可点击
 
-        //Et与Bt绑定，动态改变button背景
-        EditTextUtil.EditTextSize(mIdEt,
-            new SpannableString(this.getResources().getString(R.string.register_2)), 14);
-        EditTextUtil.EditTextSize(mPasswordEt,
-            new SpannableString(this.getResources().getString(R.string.register_4)), 14);
-        EditTextUtil.ButtonReaction(mIdEt, mLoginBt);
     }
 
     public void onClick(View view) {
@@ -80,15 +74,13 @@ public class LoginActivity extends BaseActivity {
                 mPasswordEt.setTransformationMethod(null);
             }
             mVisibleFlag = !mVisibleFlag;
-        } else if (id == R.id.tv_login_jumptocheckemail) {//注册
+        } else if (id == R.id.tv_had_not_registered) {//注册
             intent = new Intent(LoginActivity.this, RegisterActivity.class);
             startActivity(intent);
-        } else if (id == R.id.tv_login_jumptoforgetpassword) {//忘记密码
+        } else if (id == R.id.tv_forget_password) {//忘记密码
             intent = new Intent(LoginActivity.this, ForgetPasswordActivity.class);
             startActivity(intent);
-        } else if (id == R.id.iv_titlebarwhite_back) {//退回键
-            finish();
-        } else if (id == R.id.btn_login_jumptohomescreen) {//登录
+        } else if (id == R.id.btn_login) {//登录
             loginRepository.getLoginForNetwork(mIdEt.getText().toString(),
                 mPasswordEt.getText().toString());
 

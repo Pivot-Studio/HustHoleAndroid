@@ -7,9 +7,9 @@
 
     <string name="register_1">登录1037树洞</string>
     <string name="register_2">输入学号</string>
-    <string name="register_3">\@hust.edu.cn</string>
+    <string name="register_3">&#064;hust.edu.cn</string>
     <string name="register_4">输入密码</string>
-    <string name="register_5">*学号格式错误，请重新输入</string>
+    <string name="student_code_error">*学号格式错误，请重新输入</string>
     <string name="register_6">忘记密码</string>
     <string name="register_7">还未注册？</string>
     <string name="register_8">登录</string>
@@ -22,7 +22,7 @@
     <string name="login_id_5">*学号格式错误，请重新输入</string>
     <string name="login_id_6">学号被占用？点击申诉</string>
     <string name="login_id_7">已经注册？</string>
-    <string name="login_id_8">1037树洞会向您的华科校园邮箱发送邮件验证校园身份，您可稍后再进行验证。</string>
+    <string name="login_id_8">1037树洞会向您的华科校园邮箱发送邮件验证校园身份。</string>
     <string name="login_id_9">注册账号即表示您同意</string>
     <string name="login_id_10">《使用协议》</string>
     <string name="login_id_11">和</string>
@@ -33,24 +33,25 @@
     <string name="login_password_2">输入密码</string>
     <string name="login_password_3">显示密码</string>
     <string name="login_password_4">加入</string>
-    <string name="login_password_5">*密码不合规范，需6-16个字符</string>
+    <string name="login_password_5">*密码不合规范，需6–16个字符</string>
     <string name="login_password_6">隐藏密码</string>
 
     <string name="retrieve_password_forget_1">忘记密码</string>
     <string name="retrieve_password_forget_2">输入学号</string>
-    <string name="retrieve_password_forget_3">@hust.edu.cn</string>
+    <string name="retrieve_password_forget_3">&#064;hust.edu.cn</string>
     <string name="retrieve_password_forget_4">获取验证码</string>
     <string name="retrieve_password_forget_5">*学号格式错误，请重新输入</string>
     <string name="retrieve_password_forget_6">暂未验证邮箱？点击申诉</string>
     <string name="retrieve_password_forget_7">重置密码要求您已通过校园邮箱验证，若您暂未通过验证，请通过人工申诉重置密码。</string>
 
     <string name="retrieve_password_vcode_1">输入验证码</string>
-    <string name="retrieve_password_vcode_2">验证邮件已经发送至u202054321&#064;hust.edu.cn</string>
+    <string name="retrieve_password_vcode_2">验证邮件已经发送至 %s &#064;hust.edu.cn</string>
     <string name="retrieve_password_vcode_3">输入验证码</string>
     <string name="retrieve_password_vcode_4">下一步</string>
     <string name="retrieve_password_vcode_5">未收到验证码？</string>
-    <string name="retrieve_password_vcode_6">50s</string>
+    <string name="second">%ds</string>
     <string name="retrieve_password_vcode_7">后重新发送</string>
+    <string name="resend_code">重新发送</string>
 
     <string name="retrieve_password_modify_1">输入新密码</string>
     <string name="retrieve_password_modify_2">输入密码</string>

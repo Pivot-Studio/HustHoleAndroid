@@ -6,7 +6,7 @@
     android:background="@color/Background_GrayScale_100">
 
     <Button
-        android:id="@+id/btn_vcode_jumptologin"
+        android:id="@+id/btn_verify_next"
         android:layout_width="311dp"
         android:layout_height="56dp"
         android:layout_marginTop="20dp"
@@ -17,10 +17,10 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_vcode_email" />
+        app:layout_constraintTop_toBottomOf="@+id/et_verify_code" />
 
     <EditText
-        android:id="@+id/et_vcode_email"
+        android:id="@+id/et_verify_code"
         android:layout_width="311dp"
         android:layout_height="56dp"
         android:layout_gravity="center_vertical"
@@ -41,8 +41,8 @@
         android:layout_height="20dp"
         android:layout_marginTop="30dp"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="@+id/btn_vcode_jumptologin"
-        app:layout_constraintTop_toBottomOf="@+id/btn_vcode_jumptologin">
+        app:layout_constraintEnd_toEndOf="@+id/btn_verify_next"
+        app:layout_constraintTop_toBottomOf="@+id/btn_verify_next">
 
         <TextView
             android:id="@+id/tv_text"
@@ -77,7 +77,7 @@
         android:text="@string/retrieve_password_vcode_2"
         android:textColor="@color/GrayScale_80"
         android:textSize="12sp"
-        app:layout_constraintBottom_toTopOf="@+id/et_vcode_email"
+        app:layout_constraintBottom_toTopOf="@+id/et_verify_code"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_vcode_title" />

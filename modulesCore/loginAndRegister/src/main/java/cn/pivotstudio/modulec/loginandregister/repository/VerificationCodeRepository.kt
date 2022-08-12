@@ -45,20 +45,20 @@ class VerificationCodeRepository {
             }))
     }
 
-    fun sendVerifyCode(id: String) {
-        val map = HashMap<String, String>()
-        map["email"] = id
-        map["isResetPassword"] = "true"
-        LoginAndRegisterNetworkApi.retrofitService
-            .verifyCodeMatch(map)
-            .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(msgResponse: MsgResponse) {
-
-                }
-
-                override fun onFailure(e: Throwable) {
-                    failed.postValue((e as ResponseThrowable).message)
-                }
-            }))
-    }
+//    fun sendVerifyCode(id: String) {
+//        val map = HashMap<String, String>()
+//        map["email"] = id
+//        map["isResetPassword"] = "true"
+//        LoginAndRegisterNetworkApi.retrofitService
+//            .sendVerifyCode(map)
+//            .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
+//                override fun onSuccess(msgResponse: MsgResponse) {
+//
+//                }
+//
+//                override fun onFailure(e: Throwable) {
+//                    failed.postValue((e as ResponseThrowable).message)
+//                }
+//            }))
+//    }
 }

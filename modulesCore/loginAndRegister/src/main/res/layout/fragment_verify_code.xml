@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="verifyViewModel"
+            type="cn.pivotstudio.modulec.loginandregister.viewmodel.LARViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/Background_GrayScale_100">
+
+        <Button
+            android:id="@+id/btn_verify_next"
+            android:layout_width="@dimen/dp_331"
+            android:layout_height="@dimen/dp_56"
+            android:layout_marginTop="@dimen/dp_20"
+            android:background="@drawable/standard_button_gray"
+            android:enabled="false"
+            android:text="@string/retrieve_password_vcode_4"
+            android:textColor="@color/Button_GrayScale_100"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_verify_code" />
+
+        <EditText
+            android:id="@+id/et_verify_code"
+            android:layout_width="@dimen/dp_331"
+            android:layout_height="@dimen/dp_56"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/dp_41"
+            android:background="@drawable/lr_et_corner"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:hint="@string/retrieve_password_vcode_3"
+            android:importantForAutofill="no"
+            android:inputType="none"
+            android:textColorHint="@color/GrayScale_50"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_vcode_title" />
+
+        <LinearLayout
+            android:id="@+id/layout_resend_count_down"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_30"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/btn_verify_next"
+            app:layout_constraintTop_toBottomOf="@+id/btn_verify_next">
+
+            <TextView
+                android:id="@+id/tv_text"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_20"
+                android:text="@string/retrieve_password_vcode_5"
+                android:textColor="@color/GrayScale_80"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/tv_count_down_second"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_20"
+                android:text="@string/retrieve_password_vcode_6"
+                android:textColor="@color/HH_Reminder_Link"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/tv_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_20"
+                android:text="@string/retrieve_password_vcode_7"
+                android:textColor="@color/GrayScale_80"
+                android:textSize="@dimen/sp_14" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_resend_code"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_20"
+            android:text="@string/resend_code"
+            android:textColor="@color/HH_Reminder_Link"
+            android:textSize="@dimen/sp_14"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/layout_resend_count_down"
+            app:layout_constraintEnd_toEndOf="@id/layout_resend_count_down"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_vcode_sendtosomebody"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_17"
+            android:text="@{@string/retrieve_password_vcode_2(verifyViewModel.studentCode), default = @string/retrieve_password_vcode_2}"
+            android:textColor="@color/GrayScale_80"
+            android:textSize="@dimen/sp_12"
+            app:layout_constraintBottom_toTopOf="@+id/et_verify_code"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_vcode_title" />
+
+        <TextView
+            android:id="@+id/tv_vcode_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_26"
+            android:text="@string/retrieve_password_vcode_1"
+            android:textColor="@color/Title_GrayScale_20"
+            android:textSize="@dimen/sp_18"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1246" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

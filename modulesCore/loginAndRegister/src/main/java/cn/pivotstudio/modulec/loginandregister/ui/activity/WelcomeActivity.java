@@ -14,7 +14,6 @@ import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
  * @description:欢迎界面
  * @date :2022/4/25 19:43
  */
-@Route(path = "/loginAndRegister/WelcomeActivity")
 public class WelcomeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +28,6 @@ public class WelcomeActivity extends BaseActivity {
      * 点击事件
      */
     public void onClick(View view) {
-        Intent intent;
-        int id = view.getId();
-        if (id == R.id.btn_welcome_jumptologin) {//注册
-            intent = new Intent(WelcomeActivity.this, RegisterActivity.class);
-            startActivity(intent);
-        }
+
     }
 }

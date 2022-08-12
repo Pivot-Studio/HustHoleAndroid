@@ -24,71 +24,69 @@ import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil;
  * @author:
  */
 public class ModifyPasswordActivity extends BaseActivity {
-    EditText mPasswordEt;
-    TextView mWarningTv;
-    ImageView mVisibleIv;
-    Boolean mVisibleFlag;
+//    EditText mPasswordEt;
+//    TextView mWarningTv;
+//    ImageView mVisibleIv;
+//    Boolean mVisibleFlag;
 
-    public static Intent newIntent(Context context, String id1, String vertify) {
-        Intent intent1 = new Intent(context, ModifyPasswordActivity.class);
-        intent1.putExtra(Constant.EMAIL_HEAD, id1);
-        intent1.putExtra(Constant.VERIFY_CODE, vertify);
-        return intent1;
-    }
+//    public static Intent newIntent(Context context, String id1, String vertify) {
+//        Intent intent1 = new Intent(context, ModifyPasswordActivity.class);
+//        intent1.putExtra(Constant.EMAIL_HEAD, id1);
+//        intent1.putExtra(Constant.VERIFY_CODE, vertify);
+//        return intent1;
+//    }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lr_modifypassword);
-        initView();
-        mVisibleFlag = false;
-    }
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_lr_modifypassword);
+//        initView();
+//        mVisibleFlag = false;
+//    }
 
-    private void initView() {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-        mPasswordEt = findViewById(R.id.et_modify_email);
-        mWarningTv = findViewById(R.id.tv_modify_warn);
-        mVisibleIv = findViewById(R.id.iv_modify_visible);
-        Button mModifyPasswordBtn = findViewById(R.id.btn_modify_jumptohomescreen);
+//    private void initView() {
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
+//        mPasswordEt = findViewById(R.id.et_set_new_password);
+//        mWarningTv = findViewById(R.id.tv_modify_warn);
+//        mVisibleIv = findViewById(R.id.iv_hide_password);
+//        Button mModifyPasswordBtn = findViewById(R.id.btn_modify_jumptohomescreen);
+//
+//        mPasswordEt.setTransformationMethod(new PasswordTransformationMethod());
+//        mWarningTv.setVisibility(View.INVISIBLE);
+//
+//        EditTextUtil.EditTextSize(mPasswordEt,
+//            new SpannableString(this.getResources().getString(R.string.retrieve_password_modify_2)),
+//            14);
+//        EditTextUtil.ButtonReaction(mPasswordEt, mModifyPasswordBtn);
+//    }
 
-        mPasswordEt.setTransformationMethod(new PasswordTransformationMethod());
-        mWarningTv.setVisibility(View.INVISIBLE);
-
-        EditTextUtil.EditTextSize(mPasswordEt,
-            new SpannableString(this.getResources().getString(R.string.retrieve_password_modify_2)),
-            14);
-        EditTextUtil.ButtonReaction(mPasswordEt, mModifyPasswordBtn);
-    }
-
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.iv_modify_visible) {//隐藏/显示密码
-            if (mVisibleFlag) {
-                mVisibleIv.setImageResource(R.drawable.checkbox_false);
-                mPasswordEt.setTransformationMethod(new PasswordTransformationMethod());
-            } else {
-                mVisibleIv.setImageResource(R.drawable.checkbox_true);
-                mPasswordEt.setTransformationMethod(null);
-            }
-            mVisibleFlag = !mVisibleFlag;
-        } else if (id == R.id.btn_modify_jumptohomescreen) {//重新设置完密码后进入登录界面，并且将之前的活动清除
-            ModifyPasswordRepository modifyPasswordRepository = new ModifyPasswordRepository();
-            modifyPasswordRepository.modifyPasswordForNetwork(
-                getIntent().getStringExtra(Constant.EMAIL_HEAD),
-                getIntent().getStringExtra(Constant.VERIFY_CODE), mPasswordEt.getText().toString());
-            modifyPasswordRepository.mModifyPassword.observe(this, modifyPasswordResponse -> {
-                showMsg(modifyPasswordResponse.getMsg());
-                Intent intent =
-                    new Intent(ModifyPasswordActivity.this, LoginActivity.class).setFlags(
-                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                //清除前面所有活动
-                startActivity(intent);
-            });
-            modifyPasswordRepository.failed.observe(this, this::showMsg);
-        } else if (id == R.id.iv_titlebarwhite_back) {//退回键
-            finish();
-        }
-    }
+//    public void onClick(View v) {
+//        int id = v.getId();
+//        if (id == R.id.iv_hide_password) {//隐藏/显示密码
+//            if (mVisibleFlag) {
+//                mVisibleIv.setImageResource(R.drawable.checkbox_false);
+//                mPasswordEt.setTransformationMethod(new PasswordTransformationMethod());
+//            } else {
+//                mVisibleIv.setImageResource(R.drawable.checkbox_true);
+//                mPasswordEt.setTransformationMethod(null);
+//            }
+//            mVisibleFlag = !mVisibleFlag;
+//        } else if (id == R.id.btn_modify_jumptohomescreen) {//重新设置完密码后进入登录界面，并且将之前的活动清除
+//            ModifyPasswordRepository modifyPasswordRepository = new ModifyPasswordRepository();
+//            modifyPasswordRepository.modifyPasswordForNetwork(
+//                getIntent().getStringExtra(Constant.EMAIL_HEAD),
+//                getIntent().getStringExtra(Constant.VERIFY_CODE), mPasswordEt.getText().toString());
+//            modifyPasswordRepository.mModifyPassword.observe(this, modifyPasswordResponse -> {
+//                showMsg(modifyPasswordResponse.getMsg());
+//                Intent intent =
+//                    new Intent(ModifyPasswordActivity.this, LoginActivity.class).setFlags(
+//                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                //清除前面所有活动
+//                startActivity(intent);
+//            });
+//            modifyPasswordRepository.failed.observe(this, this::showMsg);
+//        }
+//    }
 }

@@ -208,7 +208,7 @@ public class MessageFragment extends Fragment {
         OkHttpClient client = new OkHttpClient();
         Message message = Message.obtain();
 
-        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(getContext());
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKV(getContext());
         String token = mmkvUtil.getString("USER_TOKEN");
         //  Log.d(TAG, "getStringByOkhttp: token "+token);
         Request request = new Request.Builder().get().addHeader("Authorization", "Bearer " + token).url(mPath).build();
@@ -440,7 +440,7 @@ public class MessageFragment extends Fragment {
         OkOne.enableRequestPriority(true);
         OkHttpClient client = new OkHttpClient();
         Message message = Message.obtain();
-        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(getContext());
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKV(getContext());
         String token = mmkvUtil.getString("USER_TOKEN");
 
         Request request = new Request.Builder().addHeader("Authorization", "Bearer " + token).get().url(path).build();

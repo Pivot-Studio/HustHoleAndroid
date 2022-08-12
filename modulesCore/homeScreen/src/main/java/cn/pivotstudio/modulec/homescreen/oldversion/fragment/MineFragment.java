@@ -313,11 +313,10 @@ public class MineFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     dialog.dismiss();
-                    MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(getContext());
-                    // String token =mmkvUtil.getString("USER_TOKEN");
-                    mmkvUtil.put("USER_TOKEN", "");
+                    MMKVUtil mmkvUtil = MMKVUtil.getMMKV(getContext());
+                    mmkvUtil.put(Constant.USER_TOKEN, "");
                     mmkvUtil.put(Constant.IS_LOGIN, false);
-                    ARouter.getInstance().build("/loginAndRegister/WelcomeActivity").navigation();
+                    ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation();
                     ((HomeScreenActivity) getContext()).finish();
                 }
             });
