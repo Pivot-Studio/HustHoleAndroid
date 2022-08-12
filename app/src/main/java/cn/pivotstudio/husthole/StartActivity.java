@@ -16,7 +16,7 @@ public class StartActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        mvUtil = MMKVUtil.getMMKVUtils(getApplicationContext());
+        mvUtil = MMKVUtil.getMMKV(getApplicationContext());
         super.onCreate(savedInstanceState);
         ARouter.getInstance().inject(this);
         setContentView(R.layout.activity_rl_preparation);
@@ -26,7 +26,7 @@ public class StartActivity extends BaseActivity {
                 if (mvUtil.getBoolean(Constant.IS_LOGIN)) {
                     ARouter.getInstance().build("/homeScreen/HomeScreenActivity").navigation();
                 } else {
-                    ARouter.getInstance().build("/loginAndRegister/WelcomeActivity").navigation();
+                    ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation();
                 }
                 finish();
             }

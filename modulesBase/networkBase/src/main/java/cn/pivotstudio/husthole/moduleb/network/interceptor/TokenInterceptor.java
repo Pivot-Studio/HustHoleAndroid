@@ -13,7 +13,7 @@ public class TokenInterceptor implements Interceptor {
     MMKVUtil mmkvUtil;
 
     public TokenInterceptor(Context context) {
-        mmkvUtil = MMKVUtil.getMMKVUtils(context);
+        mmkvUtil = MMKVUtil.getMMKV(context);
     }
 
     @Override

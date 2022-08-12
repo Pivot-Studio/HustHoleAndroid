@@ -21,7 +21,7 @@ public class TokenInterceptor implements Interceptor {
     @Override
     public okhttp3.Response intercept(Chain chain) throws IOException {
         //从SharePreferences中获取token
-        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(context);
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKV(context);
         String token = mmkvUtil.getString("USER_TOKEN");
         //        SharedPreferences editor = context.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
         //        token = editor.getString("token", "");

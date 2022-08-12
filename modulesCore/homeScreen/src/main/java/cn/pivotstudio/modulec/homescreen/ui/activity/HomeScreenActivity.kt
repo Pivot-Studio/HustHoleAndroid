@@ -123,7 +123,7 @@ class HomeScreenActivity : BaseActivity() {
                     UpdateDialog(this@HomeScreenActivity, oldVersion, lastVersion, downloadUrl)
                 updateDialog.show()
             } else { //是最新版本
-                val mmkvUtil = MMKVUtil.getMMKVUtils(this)
+                val mmkvUtil = MMKVUtil.getMMKV(this)
                 if (!mmkvUtil.getBoolean(Constant.IS_FIRST_USED)) { //是否第一次使用1037树洞,保证welcomeDialog只在第一使用时显式
                     val welcomeDialog = WelcomeDialog(context)
                     welcomeDialog.show()

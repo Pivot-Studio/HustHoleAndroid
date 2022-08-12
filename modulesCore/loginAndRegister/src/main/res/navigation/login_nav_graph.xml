@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_nav_graph"
+    app:startDestination="@id/welcomeFragment">
+
+    <fragment
+        android:id="@+id/welcomeFragment"
+        android:name="cn.pivotstudio.modulec.loginandregister.ui.fragment.WelcomeFragment"
+        android:label="@null"
+        tools:layout="@layout/fragment_welcome">
+        <action
+            android:id="@+id/action_welcomeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="cn.pivotstudio.modulec.loginandregister.ui.fragment.LoginFragment"
+        android:label="@null"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_registerFragment"
+            app:destination="@id/registerFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_forgetPasswordFragment"
+            app:destination="@id/forgetPasswordFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_privacyFragment"
+            app:destination="@id/privacyFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/verifyCodeFragment"
+        android:name="cn.pivotstudio.modulec.loginandregister.ui.fragment.VerifyCodeFragment"
+        android:label="@null"
+        tools:layout="@layout/fragment_verify_code" >
+        <action
+            android:id="@+id/action_verifyCodeFragment_to_setPasswordFragment"
+            app:destination="@id/setPasswordFragment" />
+        <action
+            android:id="@+id/action_verifyCodeFragment_to_setNewPasswordFragment"
+            app:destination="@id/setNewPasswordFragment" />
+        <argument
+            android:name="studentCode"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="cn.pivotstudio.modulec.loginandregister.ui.fragment.RegisterFragment"
+        android:label="@null"
+        tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_registerFragment_to_verifyCodeFragment"
+            app:destination="@id/verifyCodeFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_privacyFragment"
+            app:destination="@id/privacyFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/forgetPasswordFragment"
+        android:name="cn.pivotstudio.modulec.loginandregister.ui.fragment.ForgetPasswordFragment"
+        android:label="@null"
+        tools:layout="@layout/fragment_forget_password">
+        <action
+            android:id="@+id/action_forgetPasswordFragment_to_verifyCodeFragment"
+            app:destination="@id/verifyCodeFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/setPasswordFragment"
+        android:name="cn.pivotstudio.modulec.loginandregister.ui.fragment.SetPasswordFragment"
+        android:label="@null"
+        tools:layout="@layout/fragment_set_password"/>
+
+    <fragment
+        android:id="@+id/setNewPasswordFragment"
+        android:name="cn.pivotstudio.modulec.loginandregister.ui.fragment.SetNewPasswordFragment"
+        android:label="@null"
+        tools:layout="@layout/fragment_set_new_password"/>
+
+    <fragment
+        android:id="@+id/privacyFragment"
+        android:name="cn.pivotstudio.modulec.loginandregister.ui.fragment.PrivacyFragment"
+        android:label="@null"/>
+</navigation>

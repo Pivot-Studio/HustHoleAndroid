@@ -51,10 +51,10 @@ public class SetPasswordActivity extends BaseActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        TextView mWarningTv = findViewById(R.id.tv_setpassword_warn);
-        Button mSetPasswordBtn = findViewById(R.id.btn_setpassword_jumptohomescreen);
-        mSetPasswordEt = findViewById(R.id.et_setpassword);
-        mVisibleCb = findViewById(R.id.ck_setpassword_checkBox);
+        TextView mWarningTv = findViewById(R.id.tv_set_password_warn);
+        Button mSetPasswordBtn = findViewById(R.id.btn_join_in);
+        mSetPasswordEt = findViewById(R.id.et_set_password);
+        mVisibleCb = findViewById(R.id.ck_set_password_checkBox);
         mWarningTv.setVisibility(View.INVISIBLE);//错误警告设置为不可见
         mSetPasswordBtn.setEnabled(false);//button设置为点击无效
         EditTextUtil.EditTextSize(mSetPasswordEt, new SpannableString("输入密码"), 14);
@@ -63,7 +63,7 @@ public class SetPasswordActivity extends BaseActivity {
 
     public void onClick(View view) {
         int id = view.getId();
-        if (id == R.id.ck_setpassword_checkBox) {//隐藏/显示密码
+        if (id == R.id.ck_set_password_checkBox) {//隐藏/显示密码
             if (mVisibleCb.isChecked()) {
                 mVisibleCb.setText(getString(R.string.login_password_6));
                 mSetPasswordEt.setTransformationMethod(null);
@@ -71,7 +71,7 @@ public class SetPasswordActivity extends BaseActivity {
                 mVisibleCb.setText(getString(R.string.login_password_3));
                 mSetPasswordEt.setTransformationMethod(new PasswordTransformationMethod());
             }
-        } else if (id == R.id.btn_setpassword_jumptohomescreen) {//设置密码
+        } else if (id == R.id.btn_join_in) {//设置密码
             SetPasswordRepository setPasswordRepository = new SetPasswordRepository();
             setPasswordRepository.createAccountForNetwork(
                 getIntent().getStringExtra(Constant.EMAIL_HEAD),
@@ -83,8 +83,6 @@ public class SetPasswordActivity extends BaseActivity {
                 startActivity(intent);
             });
             setPasswordRepository.failed.observe(this, this::showMsg);
-        } else if (id == R.id.iv_titlebarwhite_back) {//退回键
-            finish();
         }
     }
 }

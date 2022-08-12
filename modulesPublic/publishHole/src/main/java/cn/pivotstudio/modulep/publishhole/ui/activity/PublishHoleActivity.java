@@ -90,7 +90,7 @@ public class PublishHoleActivity extends BaseActivity {
         EditTextUtil.ButtonReaction(binding.etPublishhole, binding.btnPublishholeSend);
         EditTextUtil.EditTextSize(binding.etPublishhole, new SpannableString(this.getResources().getString(R.string.publishhole_4)), 14);
 
-        mmkvUtil = MMKVUtil.getMMKVUtils(this);
+        mmkvUtil = MMKVUtil.getMMKV(this);
         if (mmkvUtil != null) {
             if (mmkvUtil.getString(Constant.HOLE_TEXT) != null) {
                 String lastText = mmkvUtil.getString(Constant.HOLE_TEXT);

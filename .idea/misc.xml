@@ -259,6 +259,7 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/advice_button.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/advice_button_green.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/back.xml" value="0.1065" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/back_black.xml" value="0.2285" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bg_bottom_bar.xml" value="0.1415" />
         <entry key="modulesBase/resBase/src/main/res/drawable/block_line.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bottombar.xml" value="0.1415" />
@@ -417,9 +418,27 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/titlebar_transparent.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/titlebar_white.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/menu/bottom_navigation_menu.xml" value="0.29375" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/drawable-night/welcome.xml" value="0.1" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/drawable/lr_back_click.xml" value="0.1565" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/drawable/welcome.xml" value="0.1" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lar.xml" value="0.4164077758789062" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_forgetpassword.xml" value="0.32155797101449274" />
         <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_login.xml" value="0.18802083333333333" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_modifypassword.xml" value="0.32155797101449274" />
         <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_privacy.xml" value="0.18802083333333333" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_register.xml" value="0.3453125" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_setpassword.xml" value="0.32155797101449274" />
         <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_verificationcode.xml" value="0.18802083333333333" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_welcome.xml" value="0.1474164133738602" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_forget_password.xml" value="0.32155797101449274" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_login.xml" value="0.34427083333333336" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_privacy.xml" value="0.32155797101449274" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_register.xml" value="0.28944890119027405" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_set_new_password.xml" value="0.2673611111111111" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_set_password.xml" value="0.32592163085937503" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_verify_code.xml" value="0.32155797101449274" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_welcome.xml" value="0.32261505126953127" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/titlebar_lr_white.xml" value="0.32155797101449274" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/activity_publishhole.xml" value="0.2586050724637681" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlist.xml" value="0.2586050724637681" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlisttitle.xml" value="0.2586050724637681" />

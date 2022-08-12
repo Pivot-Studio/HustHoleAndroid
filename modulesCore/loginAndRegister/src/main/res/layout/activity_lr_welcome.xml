@@ -31,8 +31,8 @@
         android:text="@string/register_welcome_2"
         android:textColor="@color/GrayScale_50"
         android:textSize="13sp"
-        app:layout_constraintStart_toStartOf="@+id/constraintLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2" />
+        app:layout_constraintStart_toStartOf="@+id/tv_title_start"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title_start" />
 
     <!--    <Button-->
     <!--        android:id="@+id/btn_welcome_jumptohomescreen"-->
@@ -56,11 +56,11 @@
         android:text="欢迎你"
         android:textColor="@color/Title_GrayScale_20"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="@+id/constraintLayout2"
-        app:layout_constraintStart_toEndOf="@+id/constraintLayout2" />
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title_start"
+        app:layout_constraintStart_toEndOf="@+id/tv_title_start" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/constraintLayout2"
+        android:id="@+id/tv_title_start"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_45"
         app:layout_constraintBottom_toBottomOf="parent"

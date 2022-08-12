@@ -20,48 +20,46 @@ import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil;
  * @author:
  */
 public class ForgetPasswordActivity extends BaseActivity {
-    TextView mWarningTv;
-    Button mForgetPasswordBtn;
-    EditText mEmailHeadEt;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_lr_forgetpassword);
-        initView();
-    }
-
-    private void initView() {
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-        mWarningTv = findViewById(R.id.tv_forget_warn);
-        mForgetPasswordBtn = findViewById(R.id.btn_forget_jumptohomescreen);
-        mEmailHeadEt = findViewById(R.id.et_forget_email);
-
-        mForgetPasswordBtn.setEnabled(false);
-        mWarningTv.setVisibility(View.INVISIBLE);
-        //Et与Bt绑定，动态改变button背景
-        EditTextUtil.EditTextSize(mEmailHeadEt,
-            new SpannableString(this.getResources().getString(R.string.retrieve_password_forget_2)),
-            14);
-        EditTextUtil.ButtonReaction(mEmailHeadEt, mForgetPasswordBtn);
-    }
-
-    public void onClick(View v) {
-        int id = v.getId();
-        if (id == R.id.btn_forget_jumptohomescreen) {//进入验证码验证界面
-            ForgetPasswordRepository forgetPasswordRepository = new ForgetPasswordRepository();
-            forgetPasswordRepository.verifyEmailForNetwork(mEmailHeadEt.getText().toString());
-            forgetPasswordRepository.mForgetPassword.observe(this, forgetPasswordResponse -> {
-                showMsg(forgetPasswordResponse.getMsg());
-                Intent intent = VerificationCodeActivity.newIntent(ForgetPasswordActivity.this,
-                    mEmailHeadEt.getText().toString());
-                startActivity(intent);
-            });
-            forgetPasswordRepository.failed.observe(this, this::showMsg);
-        } else if (id == R.id.iv_titlebarwhite_back) {//退回键
-            finish();
-        }
-    }
+//    TextView mWarningTv;
+//    Button mForgetPasswordBtn;
+//    EditText mEmailHeadEt;
+//
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_lr_forgetpassword);
+//        initView();
+//    }
+//
+//    private void initView() {
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
+//        mWarningTv = findViewById(R.id.tv_forget_warn);
+//        mForgetPasswordBtn = findViewById(R.id.btn_forget_get_code);
+//        mEmailHeadEt = findViewById(R.id.et_forget_email);
+//
+//        mForgetPasswordBtn.setEnabled(false);
+//        mWarningTv.setVisibility(View.INVISIBLE);
+//        //Et与Bt绑定，动态改变button背景
+//        EditTextUtil.EditTextSize(mEmailHeadEt,
+//            new SpannableString(this.getResources().getString(R.string.retrieve_password_forget_2)),
+//            14);
+//        EditTextUtil.ButtonReaction(mEmailHeadEt, mForgetPasswordBtn);
+//    }
+//
+//    public void onClick(View v) {
+//        int id = v.getId();
+//        if (id == R.id.btn_forget_get_code) {//进入验证码验证界面
+//            ForgetPasswordRepository forgetPasswordRepository = new ForgetPasswordRepository();
+//            forgetPasswordRepository.sendVerifyCode(mEmailHeadEt.getText().toString());
+//            forgetPasswordRepository.mForgetPassword.observe(this, forgetPasswordResponse -> {
+//                showMsg(forgetPasswordResponse.getMsg());
+//                Intent intent = VerificationCodeActivity.newIntent(ForgetPasswordActivity.this,
+//                    mEmailHeadEt.getText().toString());
+//                startActivity(intent);
+//            });
+//            forgetPasswordRepository.failed.observe(this, this::showMsg);
+//        }
+//    }
 }

@@ -11,7 +11,7 @@ public class CheckingToken {
     }
 
     public static Boolean IfTokenExist() {
-        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(context);
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKV(context);
         String token = mmkvUtil.getString("USER_TOKEN");
         //        SharedPreferences editor = context.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
         //        String token = editor.getString("token", "");

@@ -22,7 +22,7 @@ public class MMKVUtil {
     private static MMKV mmkv;
     private static MMKVUtil mmkvUtil;
 
-    public static MMKVUtil getMMKVUtils(Context context) {
+    public static MMKVUtil getMMKV(Context context) {
         if (mmkvUtil == null) {
             synchronized (MMKVUtil.class) {
                 if (mmkvUtil == null) {

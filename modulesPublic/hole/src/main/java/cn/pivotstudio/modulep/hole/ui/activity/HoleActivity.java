@@ -327,7 +327,7 @@ public class HoleActivity extends BaseActivity {
         intent.putExtra(Constant.HOLE_RETURN_INFO, holeReturnInfo);
         setResult(ResultCodeConstant.Hole, intent);
 
-        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(context);
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKV(context);
         mmkvUtil.setArray(Constant.UsedEmoji, viewModel.pUsedEmojiList.getValue());
 
         String inputText = binding.etReplyPost.getText().toString();

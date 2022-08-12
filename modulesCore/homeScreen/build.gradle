@@ -82,8 +82,8 @@ dependencies {
     implementation 'com.github.donkingliang:LabelsView:1.6.5' //SetScreenKeyWordActivity使用
 
     // navigation依赖 ui 和 fragment
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.4.2'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.2'
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
     // Lifecycle
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
