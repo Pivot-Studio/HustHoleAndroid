@@ -1,8 +1,7 @@
-package cn.pivotstudio.modulec.loginandregister.ui.activity;
+package cn.pivotstudio.modulec.loginandregister.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.SpannableString;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
@@ -16,7 +15,6 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import cn.pivotstudio.moduleb.libbase.BuildConfig;
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
 import cn.pivotstudio.moduleb.libbase.constant.Constant;
-import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil;
 
 /**
  * @classname:LoginActivity

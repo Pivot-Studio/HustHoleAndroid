@@ -14,49 +14,49 @@
         >
 
         <activity
-            android:name=".ui.activity.ForgetPasswordActivity"
+            android:name=".ui.ForgetPasswordActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ui.activity.LoginActivity"
+            android:name=".ui.LoginActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ui.activity.ModifyPasswordActivity"
+            android:name=".ui.ModifyPasswordActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ui.activity.PrivacyActivity"
+            android:name=".ui.PrivacyActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ui.activity.RegisterActivity"
+            android:name=".ui.RegisterActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ui.activity.SetPasswordActivity"
+            android:name=".ui.SetPasswordActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ui.activity.VerificationCodeActivity"
+            android:name=".ui.VerificationCodeActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".ui.activity.WelcomeActivity"
+            android:name=".ui.WelcomeActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">

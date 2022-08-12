@@ -1,4 +1,4 @@
-package cn.pivotstudio.modulec.loginandregister.ui.activity;
+package cn.pivotstudio.modulec.loginandregister.ui;
 
 import android.os.Bundle;
 import android.webkit.JsResult;

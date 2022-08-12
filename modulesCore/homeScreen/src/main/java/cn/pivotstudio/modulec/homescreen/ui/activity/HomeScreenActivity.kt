@@ -12,7 +12,9 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.modulec.homescreen.R
@@ -67,7 +69,18 @@ class HomeScreenActivity : BaseActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-
+        setupActionBarWithNavController(
+            navController,
+            AppBarConfiguration(
+                setOf(
+                    R.id.homepage_fragment,
+                    R.id.forest_fragment,
+                    R.id.message_fragment,
+                    R.id.mine_fragment,
+                    R.id.forest_detail_fragment
+                )
+            )
+        )
         navController.addOnDestinationChangedListener { _, destination, argument ->
             supportActionBar?.title = destination.label
 
