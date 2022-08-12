@@ -2,24 +2,17 @@ package cn.pivotstudio.moduleb.database;
 
 import android.content.Context;
 import android.os.Parcelable;
-
-
 import com.google.gson.Gson;
 import com.tencent.mmkv.MMKV;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-
-
-
-
 /**
- * @classname:MMKVUtil
+ * @classname: MMKVUtil
  * @description:
- * @date:2022/4/28 19:40
+ * @date: 2022/4/28 19:40
  * @version:1.0
  * @author:
  */
@@ -29,13 +22,13 @@ public class MMKVUtil {
     private static MMKV mmkv;
     private static MMKVUtil mmkvUtil;
 
-    public static MMKVUtil getMMKVUtils(Context context){
-        if(mmkvUtil == null){
-            synchronized (MMKVUtil.class){
-                if(mmkvUtil == null){
+    public static MMKVUtil getMMKVUtils(Context context) {
+        if (mmkvUtil == null) {
+            synchronized (MMKVUtil.class) {
+                if (mmkvUtil == null) {
                     MMKV.initialize(context);
                     mmkv = MMKV.defaultMMKV();
-                    mmkvUtil=new MMKVUtil();
+                    mmkvUtil = new MMKVUtil();
                 }
             }
         }
@@ -45,7 +38,7 @@ public class MMKVUtil {
     /**
      * 写入基本数据类型缓存
      *
-     * @param key    键
+     * @param key 键
      * @param object 值
      */
     public void put(String key, Object object) {
@@ -135,11 +128,8 @@ public class MMKVUtil {
 
     /**
      * 存放array
-     * @param name
-     * @param list
-     * @param <T>
      */
-    public <T> void setArray(String name,List<T> list) {
+    public <T> void setArray(String name, List<T> list) {
 
         if (list == null || list.size() == 0) { //清空
             mmkv.putInt(name + "size", 0);
@@ -162,13 +152,8 @@ public class MMKVUtil {
         }
     }
 
-
     /**
      * 获取存取的array,主要为近期使用表情包服务
-     * @param name
-     * @param bean
-     * @param <T>
-     * @return
      */
     public <T> List<T> getArray(String name, T bean) {
 
@@ -177,18 +162,18 @@ public class MMKVUtil {
         for (int i = 0; i < size; i++) {
             if (mmkv.getString(name + i, null) != null) {
                 try {
-                    list.add((T) new Gson().fromJson(mmkv.getString(name + i, null), bean.getClass()));
+                    list.add(
+                        (T) new Gson().fromJson(mmkv.getString(name + i, null), bean.getClass()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-
         }
         return list;
     }
 
     public Set<String> getStringSet(String key) {
-        return mmkv.decodeStringSet(key, Collections.<String>emptySet());
+        return mmkv.decodeStringSet(key, Collections.emptySet());
     }
 
     public Parcelable getParcelable(String key) {
@@ -197,8 +182,6 @@ public class MMKVUtil {
 
     /**
      * 移除某个key对
-     *
-     * @param key
      */
     public void removeKey(String key) {
         mmkv.removeValueForKey(key);

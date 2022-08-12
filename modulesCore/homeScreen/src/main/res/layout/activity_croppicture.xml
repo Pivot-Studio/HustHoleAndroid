@@ -5,28 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/GrayScale_0">
-    <include
-        android:id="@+id/include_croppicture"
-        layout="@layout/titlebar_green"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="68dp" />
-
-    <ImageView
-        android:id="@+id/iv_croppicture_revolve"
-        android:layout_width="@dimen/dp_24"
-        android:layout_height="@dimen/dp_24"
-        android:layout_marginBottom="40dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@mipmap/vector7" />
 
     <Button
         android:id="@+id/btn_croppicture_yes"
         android:layout_width="@dimen/dp_68"
         android:layout_height="@dimen/dp_32"
-        android:layout_marginEnd="15dp"
         android:layout_marginBottom="35dp"
+        android:layout_marginEnd="15dp"
         android:background="@drawable/standard_button"
         android:text="确定"
         android:textColor="@color/GrayScale_100"
@@ -39,8 +24,8 @@
         android:layout_width="@dimen/dp_68"
         android:layout_height="@dimen/dp_32"
 
-        android:layout_marginStart="15dp"
         android:layout_marginBottom="35dp"
+        android:layout_marginStart="15dp"
         android:background="@drawable/standard_button_dark"
         android:text="取消"
         android:textColor="@color/GrayScale_100"
@@ -49,29 +34,26 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
+        android:id="@+id/iv_croppicture_revolve"
+        android:layout_width="@dimen/dp_24"
+        android:layout_height="@dimen/dp_24"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@mipmap/vector7" />
+
+    <ImageView
         android:id="@+id/iv_croppicture_photo2"
         android:layout_width="@dimen/dp_275"
         android:layout_height="@dimen/dp_275"
-        android:scaleType="matrix"
         android:background="#343434"
-        app:layout_constraintBottom_toTopOf="@+id/iv_croppicture_revolve"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include_croppicture"
-        />
-
-
-
-    <cn.pivotstudio.modulec.homescreen.oldversion.model.MyImageView
-        android:id="@+id/iv_croppicture_photo"
-        android:layout_width="@dimen/dp_275"
-        android:layout_height="@dimen/dp_275"
         android:scaleType="matrix"
         app:layout_constraintBottom_toTopOf="@+id/iv_croppicture_revolve"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include_croppicture"
-        tools:srcCompat="@tools:sample/avatars" />
+        app:layout_constraintTop_toBottomOf="@+id/include_croppicture" />
+
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="wrap_content"
@@ -79,6 +61,7 @@
         app:layout_constraintStart_toStartOf="@+id/iv_croppicture_photo"
         app:layout_constraintTop_toTopOf="@+id/iv_croppicture_photo"
         app:srcCompat="@mipmap/vector94" />
+
 
     <ImageView
         android:id="@+id/imageView4"
@@ -103,4 +86,21 @@
         app:layout_constraintBottom_toBottomOf="@+id/iv_croppicture_photo"
         app:layout_constraintStart_toStartOf="@+id/iv_croppicture_photo"
         app:srcCompat="@mipmap/vector97" />
+
+    <cn.pivotstudio.modulec.homescreen.oldversion.model.MyImageView
+        android:id="@+id/iv_croppicture_photo"
+        android:layout_width="@dimen/dp_275"
+        android:layout_height="@dimen/dp_275"
+        android:scaleType="matrix"
+        app:layout_constraintBottom_toTopOf="@+id/iv_croppicture_revolve"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include_croppicture"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <include
+        layout="@layout/titlebar_green"
+        android:id="@+id/include_croppicture"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="68dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

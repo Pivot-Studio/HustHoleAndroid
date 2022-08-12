@@ -3,13 +3,9 @@ package cn.pivotstudio.modulec.homescreen.oldversion.mine;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.githang.statusbar.StatusBarCompat;
-
 import cn.pivotstudio.modulec.homescreen.R;
-
+import com.githang.statusbar.StatusBarCompat;
 
 public class VerifyOkActivity extends AppCompatActivity {
     private ImageView img;
@@ -18,7 +14,8 @@ public class VerifyOkActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_email_ok);
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
+            true);
         if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
@@ -29,6 +26,5 @@ public class VerifyOkActivity extends AppCompatActivity {
                 finish();
             }
         });
-
     }
 }

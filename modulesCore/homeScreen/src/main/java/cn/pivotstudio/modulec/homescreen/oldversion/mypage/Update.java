@@ -1,9 +1,9 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.mypage;
 
 public class Update {
-    private String version;
-    private String date;
-    private String detail;
+    private final String version;
+    private final String date;
+    private final String detail;
 
     public Update(String version, String date, String detail) {
         this.version = version;
@@ -22,5 +22,4 @@ public class Update {
     public String getDetail() {
         return detail;
     }
-
 }

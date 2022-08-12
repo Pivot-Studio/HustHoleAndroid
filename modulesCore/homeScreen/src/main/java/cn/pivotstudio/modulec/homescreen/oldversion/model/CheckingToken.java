@@ -1,27 +1,24 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.model;
 
 import android.content.Context;
-
 import cn.pivotstudio.moduleb.database.MMKVUtil;
 
 public class CheckingToken {
     private static Context context;
-    public static void getContext(Context contexts){
-        context=contexts;
-    }
-    public static Boolean IfTokenExist(){
-        MMKVUtil mmkvUtil= MMKVUtil.getMMKVUtils(context);
-        String token =mmkvUtil.getString("USER_TOKEN");
-//        SharedPreferences editor = context.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
-//        String token = editor.getString("token", "");
-        if(token.equals("")){
-        return false;
-        }else{
-        return true;
-        }
 
+    public static void getContext(Context contexts) {
+        context = contexts;
     }
-    public static void IfSessionExpired(){
+
+    public static Boolean IfTokenExist() {
+        MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(context);
+        String token = mmkvUtil.getString("USER_TOKEN");
+        //        SharedPreferences editor = context.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
+        //        String token = editor.getString("token", "");
+        return !token.equals("");
+    }
+
+    public static void IfSessionExpired() {
         /*
         new Thread(new Runnable() {//加载纵向列表标题
             @Override

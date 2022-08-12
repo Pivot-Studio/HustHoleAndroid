@@ -1,6 +1,6 @@
 package cn.pivotstudio.modulep.report.viewmodel;
 
-import com.example.libbase.base.viewmodel.BaseViewModel;
+import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel;
 
 /**
  * @classname:ReportViewModel

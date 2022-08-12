@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 
-import com.example.libbase.base.ui.fragment.BaseFragment;
+import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment;
 
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineBinding;
@@ -23,9 +23,6 @@ import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineBinding;
  */
 public class MineFragment extends BaseFragment {
     private FragmentMineBinding binding;
-    public static MineFragment newInstance() {
-        return new MineFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,

@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/dp_316"
     android:layout_height="wrap_content"
-    android:minWidth="@dimen/dp_316"
     android:background="@drawable/notice"
-    >
+    android:minWidth="@dimen/dp_316">
 
     <TextView
         android:id="@+id/textView7"
@@ -26,11 +24,11 @@
         android:id="@+id/dialog_dialoghsupdate_delete_tv_yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="25dp"
         android:layout_marginBottom="20dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="15dp"
+        android:onClick="jumpToPublishHoleByARouter"
         android:text="立即更新"
-        android:onClick="onClick"
         android:textColor="@color/HH_BandColor_1"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -55,9 +53,9 @@
         android:id="@+id/cl_hsupdate"
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="4dp"
-        android:onClick="onClick"
+        android:layout_marginTop="4dp"
+        android:onClick="jumpToPublishHoleByARouter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -65,8 +63,8 @@
             android:id="@+id/iv_backicon"
             android:layout_width="@dimen/dp_10"
             android:layout_height="@dimen/dp_10"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="12dp"
+            android:layout_marginTop="10dp"
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

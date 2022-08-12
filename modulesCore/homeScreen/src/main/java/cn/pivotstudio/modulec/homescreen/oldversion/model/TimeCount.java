@@ -1,8 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.model;
 
-
 import android.util.Log;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -10,7 +8,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class TimeCount {
-
 
     public static void main(String[] args) {
         String created_timestamp = "2021-03-06T19:30:41+08:00";
@@ -21,9 +18,9 @@ public class TimeCount {
         System.out.println(set1);
     }
 
-
     public static String replytime(String created_timestamp) {
-        String myDate = created_timestamp.substring(0, 10) + " " + created_timestamp.substring(11, 19);
+        String myDate =
+            created_timestamp.substring(0, 10) + " " + created_timestamp.substring(11, 19);
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         Date date = calendar.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -39,12 +36,17 @@ public class TimeCount {
             long minute = (seconds - day * 24 * 60 * 60 - hour * 60 * 60) / (60);//相差的分钟数
             long second = (seconds - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60);//相差的秒数
 
-            if (day > 8) return created_timestamp.substring(0, 10);
-            else if (day > 0) return day + "天前";
-            else if (hour > 0) return hour + "小时前";
-            else if (minute > 0) return minute + "分钟前";
-            else return "刚刚";
-
+            if (day > 8) {
+                return created_timestamp.substring(0, 10);
+            } else if (day > 0) {
+                return day + "天前";
+            } else if (hour > 0) {
+                return hour + "小时前";
+            } else if (minute > 0) {
+                return minute + "分钟前";
+            } else {
+                return "刚刚";
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -52,7 +54,8 @@ public class TimeCount {
     }
 
     public static String time(String created_timestamp) {
-        String myDate = created_timestamp.substring(0, 10) + " " + created_timestamp.substring(11, 19);
+        String myDate =
+            created_timestamp.substring(0, 10) + " " + created_timestamp.substring(11, 19);
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         Date date = calendar.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -67,19 +70,22 @@ public class TimeCount {
             long minute = (seconds - day * 24 * 60 * 60 - hour * 60 * 60) / (60);//相差的分钟数
             long second = (seconds - day * 24 * 60 * 60 - hour * 60 * 60 - minute * 60);//相差的秒数
 
-            if (day > 8) return created_timestamp.substring(0, 10);
-            else if (day > 0) return day + "天前";
-            else if (hour > 0) return hour + "小时前";
-            else if (minute > 0) return minute + "分钟前";
-            else return "刚刚";
-
+            if (day > 8) {
+                return created_timestamp.substring(0, 10);
+            } else if (day > 0) {
+                return day + "天前";
+            } else if (hour > 0) {
+                return hour + "小时前";
+            } else if (minute > 0) {
+                return minute + "分钟前";
+            } else {
+                return "刚刚";
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return null;
     }
-
-
 }
 
 /*

@@ -1,6 +1,6 @@
 package cn.pivotstudio.modulep.hole.ui.adapter;
 
-import static com.example.libbase.base.app.BaseApplication.context;
+import static cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.context;
 
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -13,12 +13,11 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
+import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
 
 import cn.pivotstudio.modulep.hole.R;
 import cn.pivotstudio.modulep.hole.databinding.ItemHoleBinding;
 import cn.pivotstudio.modulep.hole.databinding.ItemReplyBinding;
-import cn.pivotstudio.modulep.hole.generated.callback.OnClickListener;
 import cn.pivotstudio.modulep.hole.model.HoleResponse;
 import cn.pivotstudio.modulep.hole.model.ReplyListResponse;
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity;

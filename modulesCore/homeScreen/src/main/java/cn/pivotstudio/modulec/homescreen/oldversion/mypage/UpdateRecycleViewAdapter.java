@@ -4,19 +4,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
+import cn.pivotstudio.modulec.homescreen.R;
 import java.util.List;
 
-
-;import cn.pivotstudio.modulec.homescreen.R;
-
 public class UpdateRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private static List<Update> updateList;
     public static final int ITEM_TYPE_Head = 0;
     public static final int ITEM_TYPE_CONTENT = 1;
+    private static List<Update> updateList;
+
+    public UpdateRecycleViewAdapter(List<Update> updates) {
+        updateList = updates;
+    }
 
     @Override
     public int getItemViewType(int position) {
@@ -25,15 +25,37 @@ public class UpdateRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.
         } else {
             return ITEM_TYPE_CONTENT;
         }
+    }
 
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == ITEM_TYPE_CONTENT) {
+            return new ViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.update_item, parent, false));
+        } else if (viewType == ITEM_TYPE_Head) {
+            return new HeadHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_updatehead, parent, false));
+        }
+        return null;
+    }
+
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+        if (holder instanceof ViewHolder) {
+            ((ViewHolder) holder).bind(position - 1);
+        } else if (holder instanceof HeadHolder) {
+
+            ((HeadHolder) holder).bind(position);
+        }
+    }
+
+    public int getItemCount() {
+        return updateList.size() + 1;
     }
 
     static class HeadHolder extends RecyclerView.ViewHolder {
 
-
         public HeadHolder(View view) {
             super(view);
-
         }
 
         public void bind(int position) {
@@ -61,39 +83,6 @@ public class UpdateRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.
             date.setText(update.getDate());
             detail.setText(update.getDetail());
         }
-    }
-
-    public UpdateRecycleViewAdapter(List<Update> updates) {
-        updateList = updates;
-    }
-
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (viewType == ITEM_TYPE_CONTENT) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.update_item, parent, false));
-        } else if (viewType == ITEM_TYPE_Head) {
-            return new HeadHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_updatehead, parent, false));
-        }
-        return null;
-
-    }
-
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
-        if (holder instanceof ViewHolder) {
-            ((ViewHolder) holder).bind(position - 1);
-        } else if (holder instanceof HeadHolder) {
-
-            ((HeadHolder) holder).bind(position);
-
-        }
-
-
-    }
-
-    public int getItemCount() {
-        return updateList.size() + 1;
     }
 }
 

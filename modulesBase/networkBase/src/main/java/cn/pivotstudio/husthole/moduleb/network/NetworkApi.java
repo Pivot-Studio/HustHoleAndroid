@@ -78,7 +78,7 @@ public class NetworkApi {
                 break;
             case 2:
                 //正式版
-                BASE_URL ="https://husthole.pivotstudio.cn/api/";
+                BASE_URL = "https://husthole.pivotstudio.cn/api/";
             default:
                 break;
         }
@@ -162,7 +162,10 @@ public class NetworkApi {
      * @param observer 这个observer要注意不要使用lifecycle中的Observer
      * @param <T>      泛型
      * @return Observable
+     * @deprecated 不符合RxJava链式调用风格，需要替换成
+     * {@link cn.pivotstudio.husthole.moduleb.network.NetworkApi#applySchedulers()}
      */
+    @Deprecated
     public static <T> ObservableTransformer<T, T> applySchedulers(final Observer<T> observer) {
         return upstream -> {
             Observable<T> observable = upstream
@@ -174,6 +177,14 @@ public class NetworkApi {
             observable.subscribe(observer);
             return observable;
         };
+    }
+
+    public static <T> ObservableTransformer<T, T> applySchedulers() {
+        return upstream -> upstream
+                .subscribeOn(Schedulers.io())//线程订阅
+                .observeOn(AndroidSchedulers.mainThread())//观察Android主线程
+                .map(NetworkApi.getAppErrorHandler())//判断有没有500的错误，有则进入getAppErrorHandler
+                .onErrorResumeNext(new HttpErrorHandler<>());
     }
 
     /**

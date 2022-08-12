@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.cdh.okone.OkOne;
-import com.example.libbase.constant.Constant;
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
 
 import java.io.IOException;
@@ -44,7 +43,6 @@ import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken;
 import cn.pivotstudio.modulec.homescreen.oldversion.model.MessageStandardRefreshFooter;
 import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshHeader;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager;
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.OkHttpClient;
@@ -63,7 +61,6 @@ public class MessageFragment extends Fragment {
     private int page = 1;
     private final static int list_size = 15;
     private int start_id = 0;
-    private ConstraintLayout constraintLayout;
     private boolean finishRefresh = false;
     private boolean isRefreshing = false;
     private boolean isOnLoadMore = false;
@@ -117,13 +114,6 @@ public class MessageFragment extends Fragment {
                 getLatestSystemNotification();
                 getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +
                         "list_size=" + list_size);
-                /*while (!finishRefresh){
-                    if(finishRefresh){
-                        refreshLayout.finishRefresh();
-                        finishRefresh = false;
-                    }
-                    isRefreshing = false;
-                }*/
 
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -144,9 +134,6 @@ public class MessageFragment extends Fragment {
                 refreshlayout.finishRefresh(1500/*,false*/);//传入false表示刷新失败
             } else {
                 refreshLayout.finishRefresh();
-                //  Intent intent = new Intent(getContext(), EmailVerifyActivity.class);
-                //   startActivity(intent);
-
             }
 
         });
@@ -180,16 +167,8 @@ public class MessageFragment extends Fragment {
 
         });
 
-
-        constraintLayout = rootView.findViewById(R.id.constraintLayout);
-        constraintLayout.setOnClickListener(v -> {
-            //  Intent intent = new Intent(getActivity(), SystemNotification.class);
-            //   startActivity(intent);
-        });
-
         noNotificationImage = rootView.findViewById(R.id.no_notification_image);
         thereIsNoNotification = rootView.findViewById(R.id.there_is_no_notification);
-        constraintLayout = rootView.findViewById(R.id.constraintLayout);
         notificationRecyclerView = rootView.findViewById(R.id.notification);
         if (!hasInit) {
             getStringByOkhttp(url + "?" + "start_id=" + start_id + "&" +
@@ -197,7 +176,6 @@ public class MessageFragment extends Fragment {
         } else if (myNotificationList != null && hasInit && page > 1) { //已经初始化直接显示,每次回到这个页面时直接显示
             noNotificationImage.setVisibility(View.GONE);
             thereIsNoNotification.setVisibility(View.GONE);
-            constraintLayout.setVisibility(View.GONE);
             adapter = new NotificationAdapter(getActivity(), myNotificationList);
             notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -206,7 +184,6 @@ public class MessageFragment extends Fragment {
             adapter.setOnItemClickListener(position -> {
                 if (position > 0) {
                     startHoleActivity(position);
-                    //Toast.makeText(getActivity(), "click " + position, Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(getActivity(), SystemNotification.class);
                     startActivity(intent);
@@ -215,11 +192,9 @@ public class MessageFragment extends Fragment {
         } else { //数据为null
             noNotificationImage.setVisibility(View.VISIBLE);
             thereIsNoNotification.setVisibility(View.VISIBLE);
-            constraintLayout.setVisibility(View.VISIBLE);
         }
 
 
-        latestSystemNotification = rootView.findViewById(R.id.latest_system_notification);
         getLatestSystemNotification();
 
         return rootView;
@@ -293,7 +268,6 @@ public class MessageFragment extends Fragment {
                     } catch (Exception e) {
 
                     }
-                    latestSystemNotification.setText(mSystemNotificationList.get(0).getSystemContent());
                     mSystemMessage = mSystemNotificationList.get(0).getSystemContent();
                     getMySystemMessage = true;
                     //  Log.d(TAG, "handleMessage: adapter.content"+mSystemNotificationList.get(0).getSystemContent());
@@ -307,8 +281,6 @@ public class MessageFragment extends Fragment {
 
     public void startHoleActivity(int mPosition) {
         String data_hole_id = myNotificationList.get(mPosition - 1).getHole_id();//position-1是因为SystemNotification为第一个item
-        String[] data = null;
-
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
                     .withInt(Constant.HOLE_ID, Integer.valueOf(data_hole_id))
@@ -317,49 +289,7 @@ public class MessageFragment extends Fragment {
         } else {
             //测试阶段不可跳转
         }
-
-
-//        Intent intent= CommentListActivity.newIntent(getActivity(),data);
-//        intent.putExtra("data_hole_id",data_hole_id);
-//        Log.d(TAG, "startActivity: get data_hole_id = "+data_hole_id);
-//        startActivity(intent);
     }
-
-    //弃
-    /*private void loadData(final String url){
-        new AsyncTask<Void,Void,String>(){
-
-            @Override
-            protected String doInBackground(Void... params) {
-                String responseData = getStringByOkhttp(url);
-                return responseData;
-            }
-            @Override
-            protected void onPostExecute(String responseData) {
-                if(responseData!=null){
-                    List<NotificationBean> mNotificationList =
-                            parseJson(responseData);
-                    myNotificationList.addAll(mNotificationList);
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        }.execute();
-    }*/
-
-    //test Adapter
-    /*private void getMyNotificationList() {
-        NotificationBean myNotificationBean1 = new NotificationBean("107316", "18:37 2021-06-09", "评论了你的树洞", "balabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabalabala",
-                    "8857", "西二炸酱面", "0","1");
-        String TAG="tag";
-        NotificationBean myNotificationBean2 = new NotificationBean("107228", "19:11 2021-05-23", "评论了你的树洞", "和山山水水",
-                "8830", "东湖皮卡丘", "0","1");
-        NotificationBean myNotificationBean3 = new NotificationBean("107227", "19:11 2021-05-23", "评论了你的树洞", "你好",
-                "8830", "东湖皮卡丘", "0","1");
-        myNotificationList.add(myNotificationBean1);
-        myNotificationList.add(myNotificationBean2);
-        myNotificationList.add(myNotificationBean3);
-        Log.d(TAG, "getMyNotificationList: get in method");
-    }*/
 
     public static String removeCharAt(String s, int pos) {
         return s.substring(0, pos) + s.substring(pos + 1);
@@ -381,7 +311,6 @@ public class MessageFragment extends Fragment {
                     if (isNotification) { //有通知就不显示
                         noNotificationImage.setVisibility(View.GONE);
                         thereIsNoNotification.setVisibility(View.GONE);
-                        constraintLayout.setVisibility(View.GONE);
                         //Log.d(TAG, "handleMessage: size  " + myNotificationList.size());
                         adapter = new NotificationAdapter(getActivity(), myNotificationList);
                         notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
@@ -422,7 +351,6 @@ public class MessageFragment extends Fragment {
                     } else {
                         noNotificationImage.setVisibility(View.VISIBLE);
                         thereIsNoNotification.setVisibility(View.VISIBLE);
-                        constraintLayout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onCreateView: visible");
                     }
                     if (isRefreshing) {
@@ -430,7 +358,6 @@ public class MessageFragment extends Fragment {
                     }
                     break;
                 case 1://失败
-                    constraintLayout.setVisibility(View.VISIBLE);
                     thereIsNoNotification.setText("");
                     if (isRefreshing) {
                         finishRefresh = true;
@@ -496,7 +423,6 @@ public class MessageFragment extends Fragment {
                     } else {
                         noNotificationImage.setVisibility(View.VISIBLE);
                         thereIsNoNotification.setVisibility(View.VISIBLE);
-                        constraintLayout.setVisibility(View.VISIBLE);
                         Log.d(TAG, "onCreateView: visible");
                     }
                     if (isRefreshing) {
@@ -514,11 +440,6 @@ public class MessageFragment extends Fragment {
         OkOne.enableRequestPriority(true);
         OkHttpClient client = new OkHttpClient();
         Message message = Message.obtain();
-
-
-//        SharedPreferences editor = getContext().getSharedPreferences("Depository", Context.MODE_PRIVATE);//
-//        token = editor.getString("token", "");
-        // Log.d("bala", "getStringByOkhttp: token "+token);
         MMKVUtil mmkvUtil = MMKVUtil.getMMKVUtils(getContext());
         String token = mmkvUtil.getString("USER_TOKEN");
 

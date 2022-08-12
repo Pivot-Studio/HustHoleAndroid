@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/GrayScale_95"
@@ -38,11 +38,9 @@
                     android:layout_gravity="center_vertical"
                     android:background="@drawable/searchbar"
                     android:imeOptions="actionSearch"
-
                     android:singleLine="true"
                     android:textColor="@color/GrayScale_0"
-                    android:textSize="12sp"
-
+                    android:textSize="@dimen/sp_12"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +90,9 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_5"
                 android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_homepagehole" />
 
             <com.scwang.smart.refresh.footer.ClassicsFooter
@@ -100,7 +100,6 @@
                 android:layout_height="wrap_content"
                 android:background="@color/GrayScale_95" />
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>
-
 
     </RelativeLayout>
 </layout>

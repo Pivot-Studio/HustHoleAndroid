@@ -5,12 +5,19 @@
     android:layout_height="match_parent"
     android:background="@color/Background_GrayScale_100">
 
-    <include
-        android:id="@+id/include_titlebar_white"
-        layout="@layout/titlebar_lr_white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <Button
+        android:id="@+id/btn_login_jumptohomescreen"
+        android:layout_width="@dimen/dp_311"
+        android:layout_height="@dimen/dp_56"
+        android:layout_marginTop="@dimen/dp_70"
+        android:background="@drawable/standard_button_gray"
+        android:onClick="onClick"
+        android:text="@string/register_8"
+        android:textColor="@color/Button_GrayScale_100"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/et_login_password"
+        app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
+
     <EditText
         android:id="@+id/et_login_emailhead"
         android:layout_width="@dimen/dp_311"
@@ -18,18 +25,47 @@
         android:layout_gravity="center_vertical"
         android:layout_marginTop="@dimen/dp_41"
         android:background="@drawable/lr_et_corner"
-        android:textColorHint="@color/GrayScale_50"
         android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:hint="@string/register_2"
         android:importantForAutofill="no"
-        android:maxLength="14"
-        android:textSize="@dimen/sp_14"
         android:inputType="none"
+        android:maxLength="14"
         android:maxLines="1"
+        android:textColorHint="@color/GrayScale_50"
+        android:textSize="@dimen/sp_14"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_login_title" />
+
+    <EditText
+        android:id="@+id/et_login_password"
+        android:layout_width="@dimen/dp_311"
+        android:layout_height="@dimen/dp_56"
+        android:layout_gravity="center_vertical"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@drawable/lr_et_corner"
+        android:hint="@string/register_4"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:maxLines="1"
+        android:textColorHint="@color/GrayScale_50"
+        android:textSize="@dimen/sp_14"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_login_emailhead" />
+
+    <ImageView
+        android:id="@+id/iv_login_visible"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:contentDescription="TODO"
+        android:onClick="onClick"
+        app:layout_constraintBottom_toBottomOf="@+id/et_login_password"
+        app:layout_constraintEnd_toEndOf="@+id/et_login_password"
+        app:layout_constraintTop_toTopOf="@+id/et_login_password"
+        app:srcCompat="@drawable/checkbox_true" />
 
     <TextView
         android:id="@+id/tv_login_suffix"
@@ -51,12 +87,13 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_30"
-        android:text="@string/register_6"
         android:onClick="onClick"
+        android:text="@string/register_6"
         android:textColor="@color/HH_Reminder_Link"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/et_login_password"
         app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
+
 
     <TextView
         android:id="@+id/tv_login_warn"
@@ -74,41 +111,13 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_20"
         android:layout_marginTop="@dimen/dp_30"
-        android:text="@string/register_7"
         android:onClick="onClick"
+        android:text="@string/register_7"
         android:textColor="@color/HH_Reminder_Link"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="@+id/et_login_password"
         app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
 
-
-    <EditText
-        android:id="@+id/et_login_password"
-        android:layout_width="@dimen/dp_311"
-        android:layout_height="@dimen/dp_56"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="@dimen/dp_20"
-        android:background="@drawable/lr_et_corner"
-        android:textColorHint="@color/GrayScale_50"
-        android:maxLines="1"
-        android:hint="@string/register_4"
-        android:textSize="@dimen/sp_14"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_login_emailhead" />
-    <ImageView
-        android:id="@+id/iv_login_visible"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:onClick="onClick"
-        app:layout_constraintBottom_toBottomOf="@+id/et_login_password"
-        app:layout_constraintEnd_toEndOf="@+id/et_login_password"
-        app:layout_constraintTop_toTopOf="@+id/et_login_password"
-        app:srcCompat="@drawable/checkbox_true"
-        android:contentDescription="TODO" />
     <TextView
         android:id="@+id/tv_login_title"
         android:layout_width="wrap_content"
@@ -123,18 +132,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.1246" />
 
-    <Button
-        android:id="@+id/btn_login_jumptohomescreen"
-        android:layout_width="@dimen/dp_311"
-        android:layout_height="@dimen/dp_56"
-        android:layout_marginTop="@dimen/dp_70"
-        android:text="@string/register_8"
-        android:background="@drawable/standard_button_gray"
-        android:textColor="@color/Button_GrayScale_100"
-        android:onClick="onClick"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="@+id/et_login_password"
-        app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
+    <include
+        layout="@layout/titlebar_lr_white"
+        android:id="@+id/include_titlebar_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

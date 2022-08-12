@@ -22,11 +22,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.libbase.constant.Constant;
-import com.example.libbase.base.ui.activity.BaseActivity;
-import com.example.libbase.base.model.HoleReturnInfo;
-import com.example.libbase.constant.ResultCodeConstant;
-import com.example.libbase.util.ui.EditTextUtil;
+
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
+import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
+import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo;
+import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant;
+import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil;
+
 import com.githang.statusbar.StatusBarCompat;
 import com.scwang.smart.refresh.footer.ClassicsFooter;
 

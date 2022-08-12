@@ -17,8 +17,8 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
-import com.example.libbase.util.permission.NotificationSetUtil;
-import com.example.libbase.util.download.UrlDownloadUtil;
+import cn.pivotstudio.moduleb.libbase.util.permission.NotificationSetUtil;
+import cn.pivotstudio.moduleb.libbase.util.download.UrlDownloadUtil;
 
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;

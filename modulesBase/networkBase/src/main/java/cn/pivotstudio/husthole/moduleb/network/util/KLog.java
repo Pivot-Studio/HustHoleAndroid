@@ -2,7 +2,6 @@ package cn.pivotstudio.husthole.moduleb.network.util;
 
 import android.text.TextUtils;
 import android.util.Log;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -102,7 +101,6 @@ public final class KLog {
         printLog(A, tag, msg);
     }
 
-
     public static void json(String jsonFormat) {
         printLog(JSON, null, jsonFormat);
     }
@@ -110,7 +108,6 @@ public final class KLog {
     public static void json(String tag, String jsonFormat) {
         printLog(JSON, tag, jsonFormat);
     }
-
 
     private static void printLog(int type, String tagStr, String msg) {
 
@@ -129,7 +126,13 @@ public final class KLog {
         methodName = methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("[ (").append(className).append(":").append(lineNumber).append(")#").append(methodName).append(" ] ");
+        stringBuilder.append("[ (")
+            .append(className)
+            .append(":")
+            .append(lineNumber)
+            .append(")#")
+            .append(methodName)
+            .append(" ] ");
 
         if (msg != null && type != JSON) {
             stringBuilder.append(msg);
@@ -192,14 +195,15 @@ public final class KLog {
             default:
                 break;
         }
-
     }
 
     private static void printLine(String tag, boolean isTop) {
         if (isTop) {
-            Log.d(tag, "╔═══════════════════════════════════════════════════════════════════════════════════════");
+            Log.d(tag,
+                "╔═══════════════════════════════════════════════════════════════════════════════════════");
         } else {
-            Log.d(tag, "╚═══════════════════════════════════════════════════════════════════════════════════════");
+            Log.d(tag,
+                "╚═══════════════════════════════════════════════════════════════════════════════════════");
         }
     }
 }

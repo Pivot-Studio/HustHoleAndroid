@@ -1,10 +1,7 @@
 package cn.pivotstudio.husthole.moduleb.network.interceptor;
 
-
-
-import java.io.IOException;
-
 import cn.pivotstudio.husthole.moduleb.network.util.KLog;
+import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 

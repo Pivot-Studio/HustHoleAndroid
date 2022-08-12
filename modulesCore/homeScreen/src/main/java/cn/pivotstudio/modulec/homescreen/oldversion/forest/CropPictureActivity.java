@@ -38,13 +38,10 @@ import java.io.File;
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.oldversion.model.MyImageView;
 
-
-public class CropPictureActivity extends AppCompatActivity implements View.OnTouchListener{
+public class CropPictureActivity extends AppCompatActivity implements View.OnTouchListener {
     private static final int REQUEST_CODE_GALLERY = 0x10;// 图库选取图片标识请求码
     private static final int CROP_PHOTO = 0x12;// 裁剪图片标识请求码
     private static final int STORAGE_PERMISSION = 0x20;// 动态申请存储权限标识
-
-
 
     /**
      * 控件宽度
@@ -76,21 +73,15 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
      * 双击图片的缩放值
      */
 
-
-
-
-
     private File imageFile = null;// 声明File对象
     private Uri imageUri = null;// 裁剪后的图片uri
     private String path = "";
-    private Button yes,no;
+    private Button yes, no;
     private TextView titleBarTitle;
     private MyImageView photo;
     private ConstraintLayout titleBarBack;
-    private ImageView mRevolve,mCropPicture;
+    private ImageView mRevolve, mCropPicture;
     private AVLoadingIndicatorView mAVLoadingIndicatorView;
-
-
 
     private Matrix matrix = new Matrix();
     private Matrix savedMatrix = new Matrix();
@@ -107,6 +98,7 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
     private float oriDis = 1f;
     private int number;
     private Bitmap bitmap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,23 +106,25 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
         //ButterKnife.bind(this);// 控件绑定
         // 动态申请存储权限，后面读取文件有用
         requestStoragePermission();
-        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
-        if(getSupportActionBar()!=null){
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
+            true);
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        mAVLoadingIndicatorView=(AVLoadingIndicatorView)findViewById(R.id.titlebargreen_AVLoadingIndicatorView);
+        mAVLoadingIndicatorView =
+            (AVLoadingIndicatorView) findViewById(R.id.titlebargreen_AVLoadingIndicatorView);
         mAVLoadingIndicatorView.hide();
         mAVLoadingIndicatorView.setVisibility(View.GONE);
-        titleBarTitle=(TextView)findViewById(R.id.tv_titlebargreen_title);
+        titleBarTitle = (TextView) findViewById(R.id.tv_titlebargreen_title);
         titleBarTitle.setText("裁剪图片");
-        titleBarBack=(ConstraintLayout) findViewById(R.id.cl_titlebargreen_back);
+        titleBarBack = (ConstraintLayout) findViewById(R.id.cl_titlebargreen_back);
         titleBarBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 finish();
             }
         });
-        yes=(Button)findViewById(R.id.btn_croppicture_yes);
+        yes = (Button) findViewById(R.id.btn_croppicture_yes);
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -139,7 +133,7 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
                 mAVLoadingIndicatorView.show();
                 titleBarTitle.setText("裁剪中...");
                 try {
-                    Bitmap bitmap1=captureView(photo);
+                    Bitmap bitmap1 = captureView(photo);
                     photo.init(CropPictureActivity.this);
                     photo.setImageBitmap(bitmap1);
                     ApplyForestActivity.setIcon(bitmap1);
@@ -153,26 +147,26 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
                 }
             }
         });
-     no=(Button)findViewById(R.id.btn_croppicture_no);
-     no.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-          finish();
-        }
-    });
-     mCropPicture=(ImageView)findViewById(R.id.iv_croppicture_photo2);
-     mRevolve=(ImageView)findViewById(R.id.iv_croppicture_revolve);
-     mRevolve.setOnClickListener(new View.OnClickListener() {
-         @Override
-         public void onClick(View view) {
+        no = (Button) findViewById(R.id.btn_croppicture_no);
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        mCropPicture = (ImageView) findViewById(R.id.iv_croppicture_photo2);
+        mRevolve = (ImageView) findViewById(R.id.iv_croppicture_revolve);
+        mRevolve.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-             if(bitmap!=null) {
-                 bitmap = rotateBmp(bitmap, 90);
-                 photo=null;
-                 photo=(MyImageView) findViewById(R.id.iv_croppicture_photo);
-                 photo.init(CropPictureActivity.this);
-                 photo.setImageBitmap(bitmap);
-             }
+                if (bitmap != null) {
+                    bitmap = rotateBmp(bitmap, 90);
+                    photo = null;
+                    photo = (MyImageView) findViewById(R.id.iv_croppicture_photo);
+                    photo.init(CropPictureActivity.this);
+                    photo.setImageBitmap(bitmap);
+                }
            /*
              RotateAnimation rotate;
 
@@ -186,12 +180,12 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
 
             */
 
-         }
-     });
-     photo=(MyImageView) findViewById(R.id.iv_croppicture_photo);
+            }
+        });
+        photo = (MyImageView) findViewById(R.id.iv_croppicture_photo);
         //photo.setOnTouchListener(this);
         gallery();
-}
+    }
 
     public static Bitmap captureView(View view) throws Throwable {
         Bitmap bm = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
@@ -199,53 +193,50 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
         return bm;
     }
 
-
     public static Bitmap rotateBmp(Bitmap b, int degrees) {
         if (degrees != 0 && b != null) {
             Matrix m = new Matrix();
-            m.setRotate(degrees, (float) b.getWidth() / 2,
-                    (float) b.getHeight() / 2);
+            m.setRotate(degrees, (float) b.getWidth() / 2, (float) b.getHeight() / 2);
             try {
-                Bitmap b2 = Bitmap.createBitmap(b, 0, 0, b.getWidth(),
-                        b.getHeight(), m, true);
+                Bitmap b2 = Bitmap.createBitmap(b, 0, 0, b.getWidth(), b.getHeight(), m, true);
                 if (b != b2) {
                     b.recycle();
                     b = b2;
                 }
             } catch (OutOfMemoryError ex) {
 
-
             }
         }
         return b;
     }
+
     private void gallery() {
-        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        Intent intent =
+            new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         // 以startActivityForResult的方式启动一个activity用来获取返回的结果
         startActivityForResult(intent, REQUEST_CODE_GALLERY);
-
     }
 
     /**
      * 接收#startActivityForResult(Intent, int)调用的结果
+     *
      * @param requestCode 请求码 识别这个结果来自谁
-     * @param resultCode    结果码
-     * @param data
+     * @param resultCode 结果码
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK){// 操作成功了
+        if (resultCode == RESULT_OK) {// 操作成功了
 
-            switch (requestCode){
+            switch (requestCode) {
 
                 case REQUEST_CODE_GALLERY:// 图库选择图片
 
                     Uri uri = data.getData();// 获取图片的uri
 
                     String[] filePathColumn = { MediaStore.Images.Media.DATA };
-                    Cursor cursor = getContentResolver().query(uri,
-                            filePathColumn, null, null, null);// 从系统表中查询指定Uri对应的照片
+                    Cursor cursor = getContentResolver().query(uri, filePathColumn, null, null,
+                        null);// 从系统表中查询指定Uri对应的照片
                     cursor.moveToFirst();
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     String picturePath = cursor.getString(columnIndex); // 获取照片路径
@@ -270,7 +261,6 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
 
  */
 
-
                     break;
 
                /* case CROP_PHOTO:// 裁剪图片
@@ -290,35 +280,39 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
 
                 */
             }
-
         }
     }
 
-
-
     private void initImageViewSize() {
-        if (mDrawable == null)
+        if (mDrawable == null) {
             return;
+        }
 
         // 缩放值
         float scale = 1.0f;
         // 图片宽度大于控件宽度，图片高度小于控件高度
         if (mDrawableWidth > mWidth && mDrawableHeight < mHeight)
-            //scale = mWidth * 1.0f / mDrawableWidth;
-            scale=mHeight*1.0f/mDrawableHeight;
-            // 图片高度度大于控件宽高，图片宽度小于控件宽度
+        //scale = mWidth * 1.0f / mDrawableWidth;
+        {
+            scale = mHeight * 1.0f / mDrawableHeight;
+        }
+        // 图片高度度大于控件宽高，图片宽度小于控件宽度
         else if (mDrawableHeight > mHeight && mDrawableWidth < mWidth)
-            //scale = mHeight * 1.0f / mDrawableHeight;
-            scale=mWidth*1.0f/mDrawableWidth;
-            // 图片宽度大于控件宽度，图片高度大于控件高度
-        else if (mDrawableHeight > mHeight && mDrawableWidth > mWidth)
+        //scale = mHeight * 1.0f / mDrawableHeight;
+        {
+            scale = mWidth * 1.0f / mDrawableWidth;
+        }
+        // 图片宽度大于控件宽度，图片高度大于控件高度
+        else if (mDrawableHeight > mHeight && mDrawableWidth > mWidth) {
             scale = Math.max(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
-            // 图片宽度小于控件宽度，图片高度小于控件高度
-        else if (mDrawableHeight < mHeight && mDrawableWidth < mWidth)
+        }
+        // 图片宽度小于控件宽度，图片高度小于控件高度
+        else if (mDrawableHeight < mHeight && mDrawableWidth < mWidth) {
             scale = Math.max(mHeight * 1.0f / mDrawableHeight, mWidth * 1.0f / mDrawableWidth);
+        }
         mScale = scale;
         //mMaxScale = mScale * 8.0f;
-       // mMinScale = mScale * 0.5f;
+        // mMinScale = mScale * 0.5f;
     }
 
     /**
@@ -335,17 +329,11 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
         photo.setImageMatrix(matrix);
     }
 
-
-
-
-
-
-
     // 计算两个触摸点之间的距离
     private float distance(MotionEvent event) {
         float x = event.getX(0) - event.getX(1);
         float y = event.getY(0) - event.getY(1);
-        return Float.valueOf(String.valueOf(Math.sqrt(x * x + y * y))) ;
+        return Float.valueOf(String.valueOf(Math.sqrt(x * x + y * y)));
     }
 
     // 计算两个触摸点的中点
@@ -354,7 +342,6 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
         float y = event.getY(0) + event.getY(1);
         return new PointF(x / 2, y / 2);
     }
-
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -403,48 +390,45 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
         return true;
     }
 
-
-
     /**
      * Android6.0后需要动态申请危险权限
      * 动态申请存储权限
      */
     private void requestStoragePermission() {
 
-        int hasCameraPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        Log.e("TAG","开始" + hasCameraPermission);
-        if (hasCameraPermission == PackageManager.PERMISSION_GRANTED){
+        int hasCameraPermission =
+            ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        Log.e("TAG", "开始" + hasCameraPermission);
+        if (hasCameraPermission == PackageManager.PERMISSION_GRANTED) {
             // 拥有权限，可以执行涉及到存储权限的操作
             Log.e("TAG", "你已经授权了该组权限");
-        }else {
+        } else {
             // 没有权限，向用户申请该权限
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Log.e("TAG", "向用户申请该组权限");
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_PERMISSION);
+                requestPermissions(new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+                    STORAGE_PERMISSION);
             }
         }
-
     }
 
     /**
      * 动态申请权限的结果回调
-     * @param requestCode
-     * @param permissions
-     * @param grantResults
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        if (requestCode == STORAGE_PERMISSION){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == STORAGE_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // 用户同意，执行相应操作
-                Log.e("TAG","用户已经同意了存储权限");
-            }else {
+                Log.e("TAG", "用户已经同意了存储权限");
+            } else {
                 // 用户不同意，向用户展示该权限作用
             }
         }
-
     }
 
     /**
@@ -452,40 +436,38 @@ public class CropPictureActivity extends AppCompatActivity implements View.OnTou
      */
     private void createImageFile() {
 
-        try{
+        try {
 
-            if (imageFile != null && imageFile.exists()){
+            if (imageFile != null && imageFile.exists()) {
                 imageFile.delete();
             }
             // 新建文件
             imageFile = new File(Environment.getExternalStorageDirectory(),
-                    System.currentTimeMillis() + "galleryDemo.jpg");
-        }catch (Exception e){
+                System.currentTimeMillis() + "galleryDemo.jpg");
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     /**
      * 显示图片
+     *
      * @param imageUri 图片的uri
      */
     private void displayImage(Uri imageUri) {
-        try{
+        try {
             // glide根据图片的uri加载图片
             Glide.with(this)
-                    .load(imageUri)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .placeholder(R.mipmap.ic_launcher)// 占位图设置：加载过程中显示的图片
-                    .error(R.mipmap.ic_launcher)// 异常占位图
-                    .transform(new CenterCrop())
-                    .into(photo);
-        }catch (Exception e){
+                .load(imageUri)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .placeholder(R.mipmap.ic_launcher)// 占位图设置：加载过程中显示的图片
+                .error(R.mipmap.ic_launcher)// 异常占位图
+                .transform(new CenterCrop())
+                .into(photo);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
-
 }
 
 

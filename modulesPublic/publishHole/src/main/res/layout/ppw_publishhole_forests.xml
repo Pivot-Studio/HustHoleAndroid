@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants"
     android:background="@drawable/popupwindow"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:descendantFocusability="blocksDescendants">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout4"
@@ -19,8 +19,10 @@
 
         <ImageView
             android:id="@+id/iv_ppwpublishhole_finish"
-            android:layout_width="@dimen/dp_12"
-            android:layout_height="@dimen/dp_12"
+            android:layout_width="@dimen/dp_36"
+            android:layout_height="@dimen/dp_36"
+            android:paddingVertical="@dimen/dp_12"
+            android:paddingEnd="@dimen/dp_24"
             android:layout_marginStart="25dp"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/tv_ppwpublishhole_title"
@@ -41,7 +43,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.example.libbase.base.custom_view.MaxHeightRecyclerView
+    <cn.pivotstudio.moduleb.libbase.base.custom_view.MaxHeightRecyclerView
         android:id="@+id/rv_ppwpublishhole"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,8 +57,7 @@
         android:background="@color/GrayScale_100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        >
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/iv_publishholeforests_icon"

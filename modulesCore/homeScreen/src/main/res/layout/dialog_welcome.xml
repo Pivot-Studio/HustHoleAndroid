@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#00000000"
-    >
+    android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="270dp"
@@ -21,7 +19,7 @@
             android:layout_height="38dp"
             android:layout_marginTop="20dp"
             android:background="@drawable/button"
-            android:onClick="onClick"
+            android:onClick="jumpToPublishHoleByARouter"
             android:text="@string/homepage_3"
             android:textColor="@color/GrayScale_100"
             android:textSize="14sp"
@@ -29,6 +27,24 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/scrollView1" />
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="220dp"
+            android:layout_height="270dp"
+            android:fastScrollEnabled="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_dialoghomepage_title">
+
+            <TextView
+                android:id="@+id/tv_dialoghomepage_content"
+                android:layout_width="220dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+
+                android:text="TextView" />
+        </ScrollView>
 
         <TextView
             android:id="@+id/tv_dialoghomepage_title"
@@ -44,22 +60,5 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.065" />
-        <ScrollView
-            android:id="@+id/scrollView1"
-            android:fastScrollEnabled="true"
-            android:layout_width="220dp"
-            android:layout_height="270dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_dialoghomepage_title">
-            <TextView
-                android:id="@+id/tv_dialoghomepage_content"
-                android:layout_width="220dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
-
-                android:text="TextView"
-                />
-        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

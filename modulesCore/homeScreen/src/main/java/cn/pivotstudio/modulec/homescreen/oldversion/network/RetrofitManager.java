@@ -2,7 +2,6 @@ package cn.pivotstudio.modulec.homescreen.oldversion.network;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -20,11 +19,10 @@ public class RetrofitManager {
     }
 
     public static void RetrofitBuilder(String URL) {
-        retrofit = new Retrofit.Builder()
-                .baseUrl(URL)
-                .client(OkHttpUtil.getOkHttpClient())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        retrofit = new Retrofit.Builder().baseUrl(URL)
+            .client(OkHttpUtil.getOkHttpClient())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
         request = retrofit.create(RequestInterface.class);
     }
 
@@ -36,5 +34,4 @@ public class RetrofitManager {
             return false;
         }
     }
-
 }

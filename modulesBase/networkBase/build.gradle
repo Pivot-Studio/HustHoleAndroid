@@ -17,22 +17,23 @@ android {
             buildConfigField "String", "VERSION_NAME", "\"1.0\""
             buildConfigField "int", "VERSION_CODE", "1"
         }
-        customDebugType {
-        }
+        customDebugType {}
         release {
             buildConfigField "String", "VERSION_NAME", "\"1.0\""
             buildConfigField "int", "VERSION_CODE", "1"
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                'proguard-rules.pro'
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'cn.pivotstudio.husthole.moduleb.network'
 }
 
 dependencies {
-    networkID.each{k,v->api v}
+    networkID.each { k, v -> api v }
     api project(':modulesBase:dataBase')
 }

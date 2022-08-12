@@ -12,20 +12,21 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.githang.statusbar.StatusBarCompat;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.HashMap;
-
-
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.OkHttpUtil;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager;
+
+import com.githang.statusbar.StatusBarCompat;
+
+import java.io.IOException;
+import java.util.HashMap;
+
 import okhttp3.ResponseBody;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,14 +45,14 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
+                true);
         if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting);
-
 
         RelativeLayout email = findViewById(R.id.email);
         RelativeLayout security = findViewById(R.id.security);
@@ -70,7 +71,8 @@ public class SettingsActivity extends AppCompatActivity {
                 Call<ResponseBody> call = request.isUnderSecurity();
                 call.enqueue(new Callback<ResponseBody>() {
                     @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                    public void onResponse(Call<ResponseBody> call,
+                                           Response<ResponseBody> response) {
                         if (response.code() == 200) {
                             String json = "null";
                             try {
@@ -86,7 +88,6 @@ public class SettingsActivity extends AppCompatActivity {
                                 } else if (returncondition.equals("true")) {
                                     isVerified.setText("已验证");
                                 }
-
                             } catch (IOException | JSONException e) {
                                 e.printStackTrace();
                             }
@@ -98,12 +99,14 @@ public class SettingsActivity extends AppCompatActivity {
                                     json = response.errorBody().string();
                                     //JSONObject jsonObject = new JSONObject(json);
                                     // returncondition = jsonObject.getString("msg");
-                                    Toast.makeText(SettingsActivity.this, json, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(SettingsActivity.this, json, Toast.LENGTH_SHORT)
+                                            .show();
                                 } catch (IOException e) {
                                     e.printStackTrace();
                                 }
                             } else {
-                                Toast.makeText(SettingsActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SettingsActivity.this,
+                                        R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -111,12 +114,12 @@ public class SettingsActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable tr) {
                         isVerified.setText("请检查网络");
-                        Toast.makeText(SettingsActivity.this, R.string.network_loadfailure, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SettingsActivity.this, R.string.network_loadfailure,
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
             }
         }).start();
-
 
         initView();
     }
@@ -133,20 +136,25 @@ public class SettingsActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        Retrofit retrofit2 = new Retrofit.Builder()
-                                .baseUrl(RetrofitManager.API)
+                        Retrofit retrofit2 = new Retrofit.Builder().baseUrl(RetrofitManager.API)
                                 .client(OkHttpUtil.getOkHttpClient2())
                                 .addConverterFactory(GsonConverterFactory.create())
                                 .build();
 
                         RequestInterface request2 = retrofit2.create(RequestInterface.class);
                         HashMap map = new HashMap();
-                        SharedPreferences editor = SettingsActivity.this.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
+                        SharedPreferences editor =
+                                SettingsActivity.this.getSharedPreferences("Depository",
+                                        Context.MODE_PRIVATE);//
                         String condition = editor.getString("email", "");
-                        Call<ResponseBody> call = request2.sendVerifyCode(RetrofitManager.API + "auth/sendVerifyCode?email=" + condition + "&isResetPassword=false");
+                        Call<ResponseBody> call = request2.sendVerifyCode(RetrofitManager.API
+                                + "auth/sendVerifyCode?email="
+                                + condition
+                                + "&isResetPassword=false");
                         call.enqueue(new Callback<ResponseBody>() {
                             @Override
-                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            public void onResponse(Call<ResponseBody> call,
+                                                   Response<ResponseBody> response) {
                                 if (response.code() == 200) {
                                     String json = "null";
                                     try {
@@ -154,14 +162,15 @@ public class SettingsActivity extends AppCompatActivity {
                                             json = response.body().string();
                                             JSONObject jsonObject = new JSONObject(json);
                                             returncondition = jsonObject.getString("msg");
-                                            Toast.makeText(SettingsActivity.this, returncondition, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(SettingsActivity.this, returncondition,
+                                                    Toast.LENGTH_SHORT).show();
                                         }
                                     } catch (IOException | JSONException e) {
                                         e.printStackTrace();
                                     }
-//                                    Intent intent = CheckingToken.IfTokenExist() ? VerifyActivity.newIntent(SettingsActivity.this, emailid)
-//                                            : new Intent(SettingsActivity.this, EmailVerifyActivity.class);
-//                                    startActivity(intent);
+                                    //                                    Intent intent = CheckingToken.IfTokenExist() ? VerifyActivity.newIntent(SettingsActivity.this, emailid)
+                                    //                                            : new Intent(SettingsActivity.this, EmailVerifyActivity.class);
+                                    //                                    startActivity(intent);
                                 } else {
                                     String json = "null";
                                     String returncondition = null;
@@ -169,14 +178,15 @@ public class SettingsActivity extends AppCompatActivity {
 
                                         try {
                                             json = response.errorBody().string();
-                                            Toast.makeText(SettingsActivity.this, json, Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(SettingsActivity.this, json,
+                                                    Toast.LENGTH_SHORT).show();
                                         } catch (IOException e) {
                                             e.printStackTrace();
                                         }
-
-
                                     } else {
-                                        Toast.makeText(SettingsActivity.this, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(SettingsActivity.this,
+                                                        R.string.network_unknownfailture, Toast.LENGTH_SHORT)
+                                                .show();
                                     }
                                     // ErrorMsg.getErrorMsg(response,SettingsActivity.this);
                                 }
@@ -184,16 +194,16 @@ public class SettingsActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable tr) {
-                                Toast.makeText(SettingsActivity.this, R.string.network_loginfailure, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(SettingsActivity.this, R.string.network_loginfailure,
+                                        Toast.LENGTH_SHORT).show();
                             }
-
                         });
                     }
                 }).start();
             } else if (returncondition.equals("true")) {
-//                    intent = CheckingToken.IfTokenExist() ? new Intent(this, VerifyOkActivity.class)
-//                            : new Intent(this, EmailVerifyActivity.class);
-//                    startActivity(intent);
+                //                    intent = CheckingToken.IfTokenExist() ? new Intent(this, VerifyOkActivity.class)
+                //                            : new Intent(this, EmailVerifyActivity.class);
+                //                    startActivity(intent);
 
             }
         } else if (id == R.id.security) {
@@ -203,6 +213,5 @@ public class SettingsActivity extends AppCompatActivity {
             finish();
         }
     }
-
 }
 

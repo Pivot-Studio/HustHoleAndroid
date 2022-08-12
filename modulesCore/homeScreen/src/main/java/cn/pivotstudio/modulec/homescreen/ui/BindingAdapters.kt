@@ -6,19 +6,20 @@ import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import cn.pivotstudio.modulec.homescreen.R
 import android.widget.TextView
-import androidx.core.net.toUri
 import com.bumptech.glide.Glide
-import com.example.libbase.util.data.TimeUtil
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import cn.pivotstudio.moduleb.libbase.util.data.TimeUtil
+import cn.pivotstudio.moduleb.libbase.util.ui.GlideBlurTransformation
 
 /**
  * 点赞按钮
  *
  * @param view       todo
- * @param is_thumbup todo
+ * @param is_thumbsUp todo
  */
 @BindingAdapter("thumbupIcon")
-fun onClickThumbup(view: ImageView, is_thumbup: Boolean) {
-    view.setImageResource(if (is_thumbup) R.mipmap.active else R.mipmap.inactive)
+fun onClickThumbsUp(view: ImageView, is_thumbsUp: Boolean) {
+    view.setImageResource(if (is_thumbsUp) R.mipmap.active else R.mipmap.inactive)
 }
 
 /**
@@ -150,7 +151,25 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     imgUrl?.let {
         Glide.with(imgView.context)
             .load(it)
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
             .error(R.drawable.icon)
             .into(imgView)
     }
 }
+
+@BindingAdapter("blurImageUrl")
+fun bindBlurImage(imgView: ImageView, imgUrl: String?) {
+    imgUrl?.let {
+        Glide.with(imgView.context)
+            .load(it)
+            .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
+            .transform(
+                GlideBlurTransformation(
+                    imgView.context
+                )
+            )
+            .error(R.drawable.icon)
+            .into(imgView)
+    }
+}
+

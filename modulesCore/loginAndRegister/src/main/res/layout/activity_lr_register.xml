@@ -1,186 +1,188 @@
 <layout>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/Background_GrayScale_100">
 
-    <include
-        android:id="@+id/include_titlebar_white"
-        layout="@layout/titlebar_lr_white" />
-    <EditText
-        android:id="@+id/et_register_emailhead"
-        android:layout_width="@dimen/dp_311"
-        android:layout_height="@dimen/dp_56"
-        android:layout_gravity="center_vertical"
-        android:layout_marginTop="41dp"
-        android:background="@drawable/lr_et_corner"
-        android:textColorHint="@color/GrayScale_50"
-        android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        android:hint="@string/login_id_2"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/Background_GrayScale_100">
 
-        android:textSize="@dimen/sp_14"
-        android:importantForAutofill="no"
-        android:inputType="none"
-        android:maxLength="10"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_register_title" />
+        <Button
+            android:id="@+id/btn_register_jumptosetpassword"
+            android:layout_width="@dimen/dp_311"
+            android:layout_height="@dimen/dp_56"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/standard_button_gray"
+            android:onClick="onClick"
+            android:text="@string/login_id_4"
+            android:textColor="@color/Button_GrayScale_100"
 
-    <TextView
-        android:id="@+id/tv_register_suffix"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:text="@string/login_id_3"
-        android:textColor="@color/Title_GrayScale_20"
-        android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/et_register_emailhead"
-        app:layout_constraintEnd_toEndOf="@+id/et_register_emailhead"
-        app:layout_constraintTop_toTopOf="@+id/et_register_emailhead"
-        app:layout_constraintVertical_bias="0.5" />
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/et_register_emailhead" />
 
+        <EditText
+            android:id="@+id/et_register_emailhead"
+            android:layout_width="@dimen/dp_311"
+            android:layout_height="@dimen/dp_56"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="41dp"
+            android:background="@drawable/lr_et_corner"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:hint="@string/login_id_2"
+            android:importantForAutofill="no"
 
-    <TextView
-        android:id="@+id/tv_register_jumptologin"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_20"
-        android:layout_marginTop="30dp"
-        android:text="@string/login_id_7"
-        android:onClick="onClick"
-        android:textColor="@color/HH_Reminder_Link"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/btn_register_jumptosetpassword"
-        app:layout_constraintTop_toBottomOf="@+id/btn_register_jumptosetpassword" />
+            android:inputType="none"
+            android:maxLength="10"
+            android:textColorHint="@color/GrayScale_50"
+            android:textSize="@dimen/sp_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_register_title" />
 
-    <TextView
-        android:id="@+id/tv_register_warn"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_20"
-        android:layout_marginTop="5dp"
-        android:text="@string/register_5"
-        android:textColor="@color/HH_Reminder_Warning"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/btn_register_jumptosetpassword"
-        app:layout_constraintTop_toBottomOf="@+id/btn_register_jumptosetpassword" />
-
-    <TextView
-        android:id="@+id/tv_register_jumptocheckemail"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_20"
-        android:layout_marginTop="30dp"
-        android:text="@string/login_id_6"
-        android:onClick="onClick"
-        android:textColor="@color/HH_Reminder_Link"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@+id/btn_register_jumptosetpassword"
-        app:layout_constraintTop_toBottomOf="@+id/btn_register_jumptosetpassword" />
-
-    <TextView
-        android:id="@+id/tv_register_title"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_26"
-        android:text="@string/login_id_1"
-        android:textColor="@color/Title_GrayScale_20"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1246" />
-
-    <Button
-        android:id="@+id/btn_register_jumptosetpassword"
-        android:layout_width="@dimen/dp_311"
-        android:layout_height="@dimen/dp_56"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/standard_button_gray"
-        android:textColor="@color/Button_GrayScale_100"
-        android:text="@string/login_id_4"
-        android:onClick="onClick"
-
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_register_emailhead" />
-
-    <LinearLayout
-        android:id="@+id/ll_register"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.9305">
-
-        <TextView
-            android:id="@+id/tv_register_text1"
+        <LinearLayout
+            android:id="@+id/ll_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_id_9"
-            android:textSize="14sp"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.7" />
+            app:layout_constraintVertical_bias="0.9305">
+
+            <TextView
+                android:id="@+id/tv_register_text1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_id_9"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.15"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.7" />
+
+            <TextView
+                android:id="@+id/tv_register_jumptoagreement"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_id_10"
+                android:textColor="@color/HH_Reminder_Link"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_register_text1"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.9305" />
+
+            <TextView
+                android:id="@+id/tv_register_text2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/login_id_11"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/tv_register_jumptoagreement"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.9305" />
+
+            <TextView
+                android:id="@+id/tv_register_jumptoprivacy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="@string/login_id_12"
+                android:textColor="@color/HH_Reminder_Link"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@+id/tv_register_text2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.9305" />
+        </LinearLayout>
+
 
         <TextView
-            android:id="@+id/tv_register_jumptoagreement"
+            android:id="@+id/tv_register_suffix"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/login_id_10"
-            android:textColor="@color/HH_Reminder_Link"
+            android:layout_marginEnd="20dp"
+            android:text="@string/login_id_3"
+            android:textColor="@color/Title_GrayScale_20"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_register_text1"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.9305" />
+            app:layout_constraintBottom_toBottomOf="@+id/et_register_emailhead"
+            app:layout_constraintEnd_toEndOf="@+id/et_register_emailhead"
+            app:layout_constraintTop_toTopOf="@+id/et_register_emailhead"
+            app:layout_constraintVertical_bias="0.5" />
 
         <TextView
-            android:id="@+id/tv_register_text2"
+            android:id="@+id/tv_register_jumptologin"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_id_11"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_register_jumptoagreement"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.9305" />
-
-        <TextView
-            android:id="@+id/tv_register_jumptoprivacy"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_id_12"
+            android:layout_height="@dimen/dp_20"
+            android:layout_marginTop="30dp"
             android:onClick="onClick"
+            android:text="@string/login_id_7"
             android:textColor="@color/HH_Reminder_Link"
             android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/btn_register_jumptosetpassword"
+            app:layout_constraintTop_toBottomOf="@+id/btn_register_jumptosetpassword" />
+
+        <TextView
+            android:id="@+id/tv_register_warn"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_20"
+            android:layout_marginTop="5dp"
+            android:text="@string/register_5"
+            android:textColor="@color/HH_Reminder_Warning"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/btn_register_jumptosetpassword"
+            app:layout_constraintTop_toBottomOf="@+id/btn_register_jumptosetpassword" />
+
+        <TextView
+            android:id="@+id/tv_register_jumptocheckemail"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_20"
+            android:layout_marginTop="30dp"
+            android:onClick="onClick"
+            android:text="@string/login_id_6"
+            android:textColor="@color/HH_Reminder_Link"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/btn_register_jumptosetpassword"
+            app:layout_constraintTop_toBottomOf="@+id/btn_register_jumptosetpassword" />
+
+        <TextView
+            android:id="@+id/tv_register_title"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_26"
+            android:text="@string/login_id_1"
+            android:textColor="@color/Title_GrayScale_20"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constraintStart_toEndOf="@+id/tv_register_text2"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.9305" />
-    </LinearLayout>
+            app:layout_constraintVertical_bias="0.1246" />
 
-    <TextView
-        android:id="@+id/tv_register_notice"
-        android:layout_width="@dimen/dp_311"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="@string/login_id_8"
-        android:textColor="@color/GrayScale_80"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="@+id/btn_register_jumptosetpassword"
-        app:layout_constraintStart_toStartOf="@+id/btn_register_jumptosetpassword"
-        app:layout_constraintTop_toBottomOf="@+id/btn_register_jumptosetpassword" />
+        <TextView
+            android:id="@+id/tv_register_notice"
+            android:layout_width="@dimen/dp_311"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="60dp"
+            android:text="@string/login_id_8"
+            android:textColor="@color/GrayScale_80"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/btn_register_jumptosetpassword"
+            app:layout_constraintStart_toStartOf="@+id/btn_register_jumptosetpassword"
+            app:layout_constraintTop_toBottomOf="@+id/btn_register_jumptosetpassword" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            layout="@layout/titlebar_lr_white"
+            android:id="@+id/include_titlebar_white" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

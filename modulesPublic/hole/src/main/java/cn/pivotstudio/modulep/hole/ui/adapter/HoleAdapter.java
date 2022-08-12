@@ -1,6 +1,6 @@
 package cn.pivotstudio.modulep.hole.ui.adapter;
 
-import static com.example.libbase.base.app.BaseApplication.context;
+import static cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.context;
 
 import android.graphics.drawable.Drawable;
 import android.text.Spannable;
@@ -19,8 +19,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.ObservableField;
 
-import com.example.libbase.util.emoji.SpanStringUtil;
-import com.example.libbase.util.data.TimeUtil;
+import cn.pivotstudio.moduleb.libbase.util.emoji.SpanStringUtil;
+import cn.pivotstudio.moduleb.libbase.util.data.TimeUtil;
 
 import cn.pivotstudio.modulep.hole.R;
 import cn.pivotstudio.modulep.hole.model.ReplyListResponse;
@@ -33,40 +33,44 @@ import ru.noties.markwon.Markwon;
  * @version:1.0
  * @author:
  */
-public class HoleAdapter{
+public class HoleAdapter {
 
-    @BindingAdapter({"aliasName","aliasNameOwner"})
-    public static void setAlias(TextView v,String alias,Boolean is_mine){
-        v.setText(is_mine?alias+"(我)":alias);
+    @BindingAdapter({"aliasName", "aliasNameOwner"})
+    public static void setAlias(TextView v, String alias, Boolean is_mine) {
+        v.setText(is_mine ? alias + "(我)" : alias);
     }
 
     @BindingAdapter({"emojiBar"})
     public static void showEmojiBar(ImageView view, Boolean is_emoji_opened) {
-        view.setImageResource(!is_emoji_opened?R.mipmap.group314:R.mipmap.group320);
+        view.setImageResource(!is_emoji_opened ? R.mipmap.group314 : R.mipmap.group320);
     }
 
 
     @BindingAdapter({"hintText"})
-    public static void setHintText(EditText view, ReplyListResponse.ReplyResponse answered){
+    public static void setHintText(EditText view, ReplyListResponse.ReplyResponse answered) {
 
-        SpannableString ss = new SpannableString("回复@"+answered.getAlias()+(answered.getIs_mine()?"(我)":"")+":");
-        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14,true);
+        SpannableString ss = new SpannableString("回复@" + answered.getAlias() + (answered.getIs_mine() ? "(我)" : "") + ":");
+        AbsoluteSizeSpan ass = new AbsoluteSizeSpan(14, true);
         ss.setSpan(ass, 0, ss.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         view.setHint(ss);
     }
-    @BindingAdapter({"markDownContent"})
-    public static void setMDContent(TextView view,String content){
-        CharSequence text =Markwon.markdown(context,content.trim().replace("\n","  \n"));
 
-        SpannableString spannableString = SpanStringUtil.getEmotionMarkdownContent(0x0001,context, view,text);
+    @BindingAdapter({"markDownContent"})
+    public static void setMDContent(TextView view, String content) {
+        CharSequence text = Markwon.markdown(context, content.trim().replace("\n", "  \n"));
+
+        SpannableString spannableString = SpanStringUtil.getEmotionMarkdownContent(0x0001, context, view, text);
         view.setText(spannableString);
     }
+
     @BindingAdapter({"turnIcon"})
-    public static void setTurnIcon(ImageView view,ObservableField<Boolean> is_descend){
-        view.setImageResource(is_descend.get()?R.mipmap.group112:R.mipmap.group111);
+    public static void setTurnIcon(ImageView view, ObservableField<Boolean> is_descend) {
+        view.setImageResource(is_descend.get() ? R.mipmap.group112 : R.mipmap.group111);
     }
+
     /**
      * 修改只看洞主图标
+     *
      * @param view
      * @param is_owner
      */
@@ -87,78 +91,87 @@ public class HoleAdapter{
             view.setTextColor(view.getResources().getColor(R.color.GrayScale_50));
         }
     }
+
     /**
      * 点赞按钮
+     *
      * @param view
      * @param is_thumbup
      */
     @BindingAdapter({"thumbupIcon"})
-    public static void onClickThumbup(ImageView view, Boolean is_thumbup){
-        view.setImageResource(is_thumbup? R.mipmap.active:R.mipmap.inactive);
+    public static void onClickThumbup(ImageView view, Boolean is_thumbup) {
+        view.setImageResource(is_thumbup ? R.mipmap.active : R.mipmap.inactive);
 
     }
 
     /**
      * 回复按钮
+     *
      * @param view
      * @param is_reply
      */
     @BindingAdapter({"replyIcon"})
-    public static void onClickReply(ImageView view, boolean is_reply){
-        view.setImageResource(is_reply? R.mipmap.active_2:R.mipmap.inactive_2);
+    public static void onClickReply(ImageView view, boolean is_reply) {
+        view.setImageResource(is_reply ? R.mipmap.active_2 : R.mipmap.inactive_2);
 
     }
 
     /**
      * 收藏按钮
+     *
      * @param view
      * @param is_follow
      */
     @BindingAdapter({"followIcon"})
-    public static void onClickFollow(ImageView view, boolean is_follow){
-        view.setImageResource(is_follow? R.mipmap.active_3:R.mipmap.inactive_3);
+    public static void onClickFollow(ImageView view, boolean is_follow) {
+        view.setImageResource(is_follow ? R.mipmap.active_3 : R.mipmap.inactive_3);
 
     }
 
     /**
      * 举报，删除
+     *
      * @param view
      * @param is_mine
      */
     @BindingAdapter({"moreListIcon"})
-    public static void onClickMore(ImageView view,boolean is_mine){
-        view.setImageResource(is_mine?R.mipmap.vector6:R.mipmap.vector4);
+    public static void onClickMore(ImageView view, boolean is_mine) {
+        view.setImageResource(is_mine ? R.mipmap.vector6 : R.mipmap.vector4);
     }
 
     /**
      * 时间加载
+     *
      * @param view
      * @param created_timestamp
      */
     @BindingAdapter({"time"})
-    public static void setTime(TextView view, String created_timestamp){
-        String time= TimeUtil.replyTime(created_timestamp)+("发布");
+    public static void setTime(TextView view, String created_timestamp) {
+        String time = TimeUtil.replyTime(created_timestamp) + ("发布");
         view.setText(time);
     }
 
     /**
      * 设置热评icon
+     *
      * @param view
      * @param is_hot 是否是热评
      */
     @BindingAdapter({"hotIcon"})
-    public static void setHotIcon(TextView view,Boolean is_hot) {
-        view.setVisibility(is_hot?View.VISIBLE : View.INVISIBLE);
+    public static void setHotIcon(TextView view, Boolean is_hot) {
+        view.setVisibility(is_hot ? View.VISIBLE : View.INVISIBLE);
     }
+
     @BindingAdapter({"replyContentShow"})
-    public static void setContentVisibility(ConstraintLayout view,Integer reply_to){
-        view.setVisibility(reply_to==-1?View.GONE:View.VISIBLE);
+    public static void setContentVisibility(ConstraintLayout view, Integer reply_to) {
+        view.setVisibility(reply_to == -1 ? View.GONE : View.VISIBLE);
     }
-    @BindingAdapter({"replyToContent","replyToAlias","isMine"})
-    public static void setReplyToContent(TextView view,String reply_to_content,String reply_to_alias,Boolean is_mine) {
-        if(reply_to_content.equals("")){
+
+    @BindingAdapter({"replyToContent", "replyToAlias", "isMine"})
+    public static void setReplyToContent(TextView view, String reply_to_content, String reply_to_alias, Boolean is_mine) {
+        if (reply_to_content.equals("")) {
             view.setText(" 该评论（or回复）已删除 ");
-        }else{
+        } else {
             SpannableStringBuilder builder = new SpannableStringBuilder("" + reply_to_alias + " : " + reply_to_content);
 //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
             ForegroundColorSpan redSpan = new ForegroundColorSpan(view.getResources().getColor(R.color.GrayScale_0));
@@ -166,21 +179,23 @@ public class HoleAdapter{
             view.setText(builder);
         }
     }
+
     /**
      * 右上角小树林icon
+     *
      * @param view
      * @param forestName
      * @param role
      */
-    @BindingAdapter({"forestIcon","role"})
-    public static void setForestIcon(Button view, String forestName, String role){
-        if(role==null){//后端搜索出来的数据没role,麻了
+    @BindingAdapter({"forestIcon", "role"})
+    public static void setForestIcon(Button view, String forestName, String role) {
+        if (role == null) {//后端搜索出来的数据没role,麻了
             view.setVisibility(View.INVISIBLE);
             return;
         }
-        switch(role) {
+        switch (role) {
             case "pivot":
-                if(forestName.equals("")){
+                if (forestName.equals("")) {
                     view.setVisibility(View.VISIBLE);
                     view.setPadding(15, 5, 6, 6);
                     view.setTextColor(view.getContext().getResources().getColor(R.color.GrayScale_50));
@@ -191,15 +206,15 @@ public class HoleAdapter{
                     view.setCompoundDrawables(homepressed, null, null, null);
                     view.setBackgroundResource(R.drawable.tag_gray);
                     view.setOnClickListener(null);
-                }else {
+                } else {
                     view.setVisibility(View.VISIBLE);
-                    view.setText("  " + forestName+ "   ");
+                    view.setText("  " + forestName + "   ");
                 }
                 break;
 
             case "counseling_center":
 
-                if(forestName.equals("")){
+                if (forestName.equals("")) {
                     view.setVisibility(View.VISIBLE);
                     view.setPadding(15, 5, 6, 6);
                     view.setTextColor(view.getContext().getResources().getColor(R.color.red));
@@ -211,9 +226,9 @@ public class HoleAdapter{
                     view.setBackgroundResource(R.drawable.tag_red);
                     view.setOnClickListener(null);
 
-                }else {
+                } else {
                     view.setVisibility(View.VISIBLE);
-                    view.setText("  " + forestName+ "   ");
+                    view.setText("  " + forestName + "   ");
                 }
                 break;
 
@@ -225,22 +240,23 @@ public class HoleAdapter{
 
     /**
      * 右上角圆形icon
+     *
      * @param view
      * @param forestName
      * @param role
      */
-    @BindingAdapter({"psIcon","role"})
-    public static void setCircleIcon(ImageView view, String forestName,String role){
-        if(role==null){
+    @BindingAdapter({"psIcon", "role"})
+    public static void setCircleIcon(ImageView view, String forestName, String role) {
+        if (role == null) {
             view.setVisibility(View.INVISIBLE);
             return;
         }
-        switch(role) {
+        switch (role) {
             case "pivot":
 
-                if(forestName.equals("")){
+                if (forestName.equals("")) {
                     view.setVisibility(View.INVISIBLE);
-                }else{
+                } else {
                     view.setVisibility(View.VISIBLE);
                     view.setImageResource(R.mipmap.pivot);
                 }
@@ -248,9 +264,9 @@ public class HoleAdapter{
 
             case "counseling_center":
 
-                if(forestName.equals("")){
+                if (forestName.equals("")) {
                     view.setVisibility(View.INVISIBLE);
-                }else{
+                } else {
                     view.setVisibility(View.VISIBLE);
                     view.setImageResource(R.mipmap.counselingcenter);
                 }

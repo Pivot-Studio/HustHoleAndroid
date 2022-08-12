@@ -12,11 +12,13 @@ import android.widget.Toast;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.alibaba.android.arouter.facade.annotation.Autowired;
 import com.alibaba.android.arouter.facade.annotation.Route;
-import com.example.libbase.constant.Constant;
-import com.example.libbase.base.ui.activity.BaseActivity;
-import com.example.libbase.util.ui.EditTextUtil;
-import com.example.libbase.util.ui.SoftKeyBoardUtil;
+import com.alibaba.android.arouter.launcher.ARouter;
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
+import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
+import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil;
+import cn.pivotstudio.moduleb.libbase.util.ui.SoftKeyBoardUtil;
 import com.githang.statusbar.StatusBarCompat;
 
 import java.util.ArrayList;
@@ -40,6 +42,12 @@ import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel;
  */
 @Route(path = "/publishHole/PublishHoleActivity")
 public class PublishHoleActivity extends BaseActivity {
+    @Autowired(name = Constant.FROM_DETAIL_FOREST)
+    Bundle args;
+
+    String forestName;
+    int forestId;
+
     private PublishHoleViewModel mViewModel;
     private ActivityPublishholeBinding binding;
     private ForestsPopupWindow mPpw;
@@ -48,6 +56,11 @@ public class PublishHoleActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ARouter.getInstance().inject(this);
+        if (args != null) {
+            forestId = args.getInt(Constant.FOREST_ID);
+            forestName = args.getString(Constant.FOREST_NAME);
+        }
         initView();
         initListener();
         initObserver();
@@ -59,7 +72,12 @@ public class PublishHoleActivity extends BaseActivity {
     private void initView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_publishhole);
         mViewModel = new ViewModelProvider(this, new ViewModelProvider.NewInstanceFactory()).get(PublishHoleViewModel.class);
-        mViewModel.pForestName.setValue("未选择小树林");
+        if (args != null) {
+            mViewModel.pForestName.setValue(forestName);
+            mViewModel.setForestId(forestId);
+        } else {
+            mViewModel.pForestName.setValue("未选择小树林");
+        }
 
         binding.clTitlebargreenBack.setOnClickListener(this::onClick);
         binding.titlebargreenAVLoadingIndicatorView.hide();

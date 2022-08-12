@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="@dimen/dp_316"
-        android:layout_height="wrap_content"
-       android:minWidth="@dimen/dp_316"
-        android:background="@drawable/notice"
-        >
+    android:layout_width="@dimen/dp_316"
+    android:layout_height="wrap_content"
+    android:background="@drawable/notice"
+    android:minWidth="@dimen/dp_316">
 
     <TextView
         android:id="@+id/textView7"
@@ -28,9 +25,9 @@
         android:id="@+id/dialog_delete_tv_yes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="25dp"
         android:layout_marginBottom="20dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="10dp"
         android:text="@string/forest_quit_notice_4"
         android:textColor="@color/HH_BandColor_1"
         android:textSize="16sp"
@@ -42,9 +39,9 @@
         android:id="@+id/dialog_delete_tv_cancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/forest_quit_notice_3"
         android:textColor="@color/HH_BandColor_1"
         android:textSize="16sp"
@@ -65,5 +62,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -10,14 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.example.libbase.base.ui.activity.BaseActivity;
-import com.example.libbase.constant.Constant;
-import com.example.libbase.util.ui.EditTextUtil;
-
 import cn.pivotstudio.modulec.loginandregister.R;
 import cn.pivotstudio.modulec.loginandregister.repository.ModifyPasswordRepository;
-
+import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
+import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil;
 
 /**
  * @classname:ModifyPasswordActivity
@@ -32,28 +29,40 @@ public class ModifyPasswordActivity extends BaseActivity {
     ImageView mVisibleIv;
     Boolean mVisibleFlag;
 
+    public static Intent newIntent(Context context, String id1, String vertify) {
+        Intent intent1 = new Intent(context, ModifyPasswordActivity.class);
+        intent1.putExtra(Constant.EMAIL_HEAD, id1);
+        intent1.putExtra(Constant.VERIFY_CODE, vertify);
+        return intent1;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lr_modifypassword);
         initView();
-        mVisibleFlag=false;
+        mVisibleFlag = false;
     }
-    private void initView(){
-        mPasswordEt=findViewById(R.id.et_modify_email);
-        mWarningTv=findViewById(R.id.tv_modify_warn);
-        mVisibleIv=findViewById(R.id.iv_modify_visible);
-        Button mModifyPasswordBtn=findViewById(R.id.btn_modify_jumptohomescreen);
+
+    private void initView() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+        mPasswordEt = findViewById(R.id.et_modify_email);
+        mWarningTv = findViewById(R.id.tv_modify_warn);
+        mVisibleIv = findViewById(R.id.iv_modify_visible);
+        Button mModifyPasswordBtn = findViewById(R.id.btn_modify_jumptohomescreen);
 
         mPasswordEt.setTransformationMethod(new PasswordTransformationMethod());
         mWarningTv.setVisibility(View.INVISIBLE);
 
-
-        EditTextUtil.EditTextSize(mPasswordEt,new SpannableString(this.getResources().getString(R.string.retrieve_password_modify_2)),14);
-        EditTextUtil.ButtonReaction(mPasswordEt,mModifyPasswordBtn);
-
+        EditTextUtil.EditTextSize(mPasswordEt,
+            new SpannableString(this.getResources().getString(R.string.retrieve_password_modify_2)),
+            14);
+        EditTextUtil.ButtonReaction(mPasswordEt, mModifyPasswordBtn);
     }
-    public void onClick(View v){
+
+    public void onClick(View v) {
         int id = v.getId();
         if (id == R.id.iv_modify_visible) {//隐藏/显示密码
             if (mVisibleFlag) {
@@ -63,13 +72,17 @@ public class ModifyPasswordActivity extends BaseActivity {
                 mVisibleIv.setImageResource(R.drawable.checkbox_true);
                 mPasswordEt.setTransformationMethod(null);
             }
-            mVisibleFlag= !mVisibleFlag;
+            mVisibleFlag = !mVisibleFlag;
         } else if (id == R.id.btn_modify_jumptohomescreen) {//重新设置完密码后进入登录界面，并且将之前的活动清除
-            ModifyPasswordRepository modifyPasswordRepository=new ModifyPasswordRepository();
-            modifyPasswordRepository.modifyPasswordForNetwork(getIntent().getStringExtra(Constant.EMAIL_HEAD),getIntent().getStringExtra(Constant.VERIFY_CODE),mPasswordEt.getText().toString());
-            modifyPasswordRepository.mModifyPassword.observe(this,modifyPasswordResponse -> {
+            ModifyPasswordRepository modifyPasswordRepository = new ModifyPasswordRepository();
+            modifyPasswordRepository.modifyPasswordForNetwork(
+                getIntent().getStringExtra(Constant.EMAIL_HEAD),
+                getIntent().getStringExtra(Constant.VERIFY_CODE), mPasswordEt.getText().toString());
+            modifyPasswordRepository.mModifyPassword.observe(this, modifyPasswordResponse -> {
                 showMsg(modifyPasswordResponse.getMsg());
-                Intent intent = new Intent(ModifyPasswordActivity.this, LoginActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                Intent intent =
+                    new Intent(ModifyPasswordActivity.this, LoginActivity.class).setFlags(
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                 //清除前面所有活动
                 startActivity(intent);
             });
@@ -77,11 +90,5 @@ public class ModifyPasswordActivity extends BaseActivity {
         } else if (id == R.id.iv_titlebarwhite_back) {//退回键
             finish();
         }
-    }
-    public static Intent newIntent(Context context, String id1, String vertify){
-        Intent intent1=new Intent(context,ModifyPasswordActivity.class);
-        intent1.putExtra(Constant.EMAIL_HEAD,id1);
-        intent1.putExtra(Constant.VERIFY_CODE,vertify);
-        return intent1;
     }
 }

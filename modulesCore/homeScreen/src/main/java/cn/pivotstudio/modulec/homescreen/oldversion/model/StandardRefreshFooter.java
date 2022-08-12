@@ -7,10 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
+import cn.pivotstudio.modulec.homescreen.R;
 import com.scwang.smart.refresh.layout.api.RefreshFooter;
 import com.scwang.smart.refresh.layout.api.RefreshKernel;
 import com.scwang.smart.refresh.layout.api.RefreshLayout;
@@ -18,13 +17,10 @@ import com.scwang.smart.refresh.layout.constant.RefreshState;
 import com.scwang.smart.refresh.layout.constant.SpinnerStyle;
 import com.wang.avi.AVLoadingIndicatorView;
 
-import cn.pivotstudio.modulec.homescreen.R;
-
-
 public class StandardRefreshFooter extends LinearLayout implements RefreshFooter {
-    private AVLoadingIndicatorView mLoadmore;
+    private final AVLoadingIndicatorView mLoadmore;
     //private ImageView mImage,mImage2,mImage3;
-    private TextView text;
+    private final TextView text;
     private AnimationDrawable pullDownAnim;
     private AnimationDrawable refreshingAnim, refreshingAnim2, refreshingAnim3;
     private Boolean refreshCondition = false;
@@ -74,7 +70,9 @@ public class StandardRefreshFooter extends LinearLayout implements RefreshFooter
     }
 
     @Override
-    public void onStateChanged(RefreshLayout refreshLayout, RefreshState oldState, RefreshState newState) {
+    public void onStateChanged(RefreshLayout refreshLayout,
+                               RefreshState oldState,
+                               RefreshState newState) {
         switch (newState) {
             case PullDownToRefresh:
                 //下拉刷新开始。正在下拉还没松手时调用
@@ -96,7 +94,6 @@ public class StandardRefreshFooter extends LinearLayout implements RefreshFooter
                 break;
         }
     }
-
 
     @Override
     public int onFinish(RefreshLayout layout, boolean success) {
@@ -144,9 +141,13 @@ public class StandardRefreshFooter extends LinearLayout implements RefreshFooter
     }
 
     @Override
-    public void onMoving(boolean isDragging, float percent, int offset, int height, int maxDragHeight) {
+    public void onMoving(boolean isDragging,
+                         float percent,
+                         int offset,
+                         int height,
+                         int maxDragHeight) {
 
-// 下拉的百分比小于100%时，不断调用 setScale 方法改变图片大小
+        // 下拉的百分比小于100%时，不断调用 setScale 方法改变图片大小
         // mImage.setScaleX(1);
         // mImage.setScaleY(1);
 
@@ -157,23 +158,17 @@ public class StandardRefreshFooter extends LinearLayout implements RefreshFooter
             }
         }
 
-
         if (percent >= 1.0) {
             //因为这个方法是不停调用的，防止重复
             if (!hasSetPullDownAnim) {
                 mLoadmore.show();
                 hasSetPullDownAnim = true;
-
-
             }
         }
-
-
     }
 
     @Override
     public void onReleased(@NonNull RefreshLayout refreshLayout, int height, int maxDragHeight) {
-
 
     }
 

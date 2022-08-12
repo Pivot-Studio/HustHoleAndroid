@@ -3,7 +3,7 @@
     package="cn.pivotstudio.modulec.loginandregister">
 
     <application
-        android:name="com.example.libbase.base.app.BaseApplication"
+        android:name="cn.pivotstudio.moduleb.libbase.base.app.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="登录前模块-测试版"

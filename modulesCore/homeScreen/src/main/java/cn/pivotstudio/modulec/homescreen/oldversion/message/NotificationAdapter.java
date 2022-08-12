@@ -138,30 +138,6 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        /*if(position == mNotificationList.size() *//*||position > mNotificationList.size()*//*){
-           holder.alias.setText("");
-           holder.time.setText("");
-           holder.type.setText("");
-           holder.content.setText("");
-           holder.hole_id.setText("");
-           holder.linearLayout.setBackgroundColor(Color.parseColor("#F3F3F3"));
-           holder.relativeLayout.setBackgroundColor(Color.parseColor("#F3F3F3"));
-
-        }
-        else {
-        NotificationBean notification = mNotificationList.get(position);
-        holder.alias.setText(notification.getAlias());
-        holder.time.setText(notification.getTime());
-        if (notification.getType().equals("0")) {
-            holder.type.setText("评论了你的树洞");
-        } else if (notification.getType().equals("1")) {
-            holder.type.setText("回复了你的评论");
-        }
-        holder.content.setText(notification.getReplyContent());
-        holder.hole_id.setText("# " + notification.getHole_id());
-        }*/
-
-
         if (holder instanceof HeaderViewHolder) {
             if (setMContent) {
                 ((HeaderViewHolder) holder).latestSystemNotification.setText(mContent);
@@ -179,12 +155,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ((ContentViewHolder) holder).content.setText(notification.getReplyContent());
             ((ContentViewHolder) holder).hole_id.setText("# " + notification.getHole_id());
 
-        } else if (holder instanceof BottomViewHolder) {
         }
-        /*if(position == mNotificationList.size()-1){
-            onBindViewHolder(holder,mNotificationList.size());
-            Log.d(TAG, "onBindViewHolder: i am size " );
-        }*/
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

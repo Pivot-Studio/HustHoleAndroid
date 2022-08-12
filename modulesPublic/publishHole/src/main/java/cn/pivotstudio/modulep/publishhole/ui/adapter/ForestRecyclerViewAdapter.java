@@ -11,7 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
+import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
 
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel;
  * @author:
  */
 public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTypeForestResponse, RecyclerView.ViewHolder> {
-    private final int Title=0,JoinedForest=1,Forest=2,Bottom=3;
+    private final int Title = 0, JoinedForest = 1, Forest = 2, Bottom = 3;
     private List<DetailTypeForestResponse.ForestResponse> mJoined;
     private List<String> mType;
     public List<DetailTypeForestResponse> mDetailTypeForest;
@@ -44,49 +44,55 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
 
     @Override
     public int getItemViewType(int position) {
-        if(position==0||position==mJoined.size()+1){
+        if (position == 0 || position == mJoined.size() + 1) {
             return Title;
-        }else if(position>0&&position<(mJoined.size()+1)) {
+        } else if (position > 0 && position < (mJoined.size() + 1)) {
             return JoinedForest;
-        }else if(position==getItemCount()-1||position==getItemCount()-2){
+        } else if (position == getItemCount() - 1 || position == getItemCount() - 2) {
             return Bottom;
-        }else{
+        } else {
             return Forest;
         }
     }
 
-    public ForestRecyclerViewAdapter(Context context, ForestsPopupWindow mPpw){
+    public ForestRecyclerViewAdapter(Context context, ForestsPopupWindow mPpw) {
         super(context);
-        mJoined=new ArrayList<>();
-        mType=new ArrayList<>();
+        mJoined = new ArrayList<>();
+        mType = new ArrayList<>();
         this.mPpw = mPpw;
     }
-    public class BottomViewHolder extends RecyclerView.ViewHolder{
+
+    public class BottomViewHolder extends RecyclerView.ViewHolder {
         public BottomViewHolder(View itemView) {
             super(itemView);
 
         }
     }
-    public class TitleViewHolder extends RecyclerView.ViewHolder{
+
+    public class TitleViewHolder extends RecyclerView.ViewHolder {
         TextView mTitleTv;
+
         public TitleViewHolder(View itemView) {
             super(itemView);
-            mTitleTv=itemView.findViewById(R.id.tv_publishholeforestlisttitle_title);
+            mTitleTv = itemView.findViewById(R.id.tv_publishholeforestlisttitle_title);
         }
+
         public void bind(int position) {
-            mTitleTv.setText(position==0?"加入的小树林":"全部小树林");
+            mTitleTv.setText(position == 0 ? "加入的小树林" : "全部小树林");
         }
     }
-    public class JoinedForestViewHolder extends RecyclerView.ViewHolder{
+
+    public class JoinedForestViewHolder extends RecyclerView.ViewHolder {
         ItemPublishholeForestlistBinding binding;
         int position;
+
         public JoinedForestViewHolder(ItemPublishholeForestlistBinding binding) {
             super(binding.getRoot());
-            this.binding=binding;
+            this.binding = binding;
             binding.btnPublishholeforestlistChooseforest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PublishHoleViewModel publishHoleViewModel=new ViewModelProvider((PublishHoleActivity)mContext,new ViewModelProvider.NewInstanceFactory()).get(PublishHoleViewModel.class);
+                    PublishHoleViewModel publishHoleViewModel = new ViewModelProvider((PublishHoleActivity) mContext, new ViewModelProvider.NewInstanceFactory()).get(PublishHoleViewModel.class);
                     publishHoleViewModel.setForestId(mJoined.get(position).getForest_id());
                     publishHoleViewModel.pForestName.setValue(mJoined.get(position).getName());
                     mPpw.dismiss();
@@ -99,22 +105,26 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
                 }
             });
         }
-        public ItemPublishholeForestlistBinding getBinding(){
+
+        public ItemPublishholeForestlistBinding getBinding() {
             return binding;
         }
-        public void bind(int position){
-            this.position=position;
+
+        public void bind(int position) {
+            this.position = position;
         }
     }
-    public class ForestTypeViewHolder extends RecyclerView.ViewHolder{
+
+    public class ForestTypeViewHolder extends RecyclerView.ViewHolder {
         ForestExpandableListView mElv;
 
         public ForestTypeViewHolder(View itemView) {
             super(itemView);
-            mElv=itemView.findViewById(R.id.elv_ppwpublishhole);
-            if(mElAdapter==null){
-                mElAdapter=new ForestListElAdapter(mContext,mType, mPpw);
-            };
+            mElv = itemView.findViewById(R.id.elv_ppwpublishhole);
+            if (mElAdapter == null) {
+                mElAdapter = new ForestListElAdapter(mContext, mType, mPpw);
+            }
+            ;
             mElv.setAdapter(mElAdapter);
             //默认展开第一个数组
             //mElv.setGroupIndicator(null);
@@ -124,15 +134,15 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
             mElv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
                 @Override
                 public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
-                        if(mDetailTypeForest==null||mDetailTypeForest.get(groupPosition).getForests()==null){
-                            showMsg("加载中...");
-                            return true;
-                        }else if(mDetailTypeForest.get(groupPosition).getForests().size()==0){
-                            showMsg("无此类型小树林");
-                            return true;
-                        }else{
-                            return false;
-                        }
+                    if (mDetailTypeForest == null || mDetailTypeForest.get(groupPosition).getForests() == null) {
+                        showMsg("加载中...");
+                        return true;
+                    } else if (mDetailTypeForest.get(groupPosition).getForests().size() == 0) {
+                        showMsg("无此类型小树林");
+                        return true;
+                    } else {
+                        return false;
+                    }
                 }
             });
             //子视图的点击事件
@@ -160,25 +170,27 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
                 }
             });
         }
+
         public void bind(int position) {
 
         }
     }
+
     @Override
     public RecyclerView.ViewHolder onCreateBaseViewHolder(ViewGroup parent, int viewType) {
-        if (viewType==Title) {
+        if (viewType == Title) {
             return new ForestRecyclerViewAdapter
                     .TitleViewHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_publishhole_forestlisttitle, parent, false));
-        }else if(viewType==JoinedForest) {
-            ItemPublishholeForestlistBinding itemPublishholeForestlistBinding=
-                    DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.item_publishhole_forestlist,parent,false);
+        } else if (viewType == JoinedForest) {
+            ItemPublishholeForestlistBinding itemPublishholeForestlistBinding =
+                    DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.item_publishhole_forestlist, parent, false);
             return new JoinedForestViewHolder(itemPublishholeForestlistBinding);
-        }else if(viewType==Forest){
+        } else if (viewType == Forest) {
             return new ForestRecyclerViewAdapter
                     .ForestTypeViewHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_expandablelistview, parent, false));
-        }else if(viewType==Bottom){
+        } else if (viewType == Bottom) {
             return new ForestRecyclerViewAdapter
                     .BottomViewHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_bottomblock, parent, false));
@@ -189,32 +201,34 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
     @Override
     public void onBindBaseViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ForestRecyclerViewAdapter.JoinedForestViewHolder) {
-            ItemPublishholeForestlistBinding binding=((ForestRecyclerViewAdapter.JoinedForestViewHolder)holder).getBinding();
-                binding.setForest(mJoined.get(position - 1));
-                binding.executePendingBindings();
-                ((ForestRecyclerViewAdapter.JoinedForestViewHolder)holder).bind(position-1);
+            ItemPublishholeForestlistBinding binding = ((ForestRecyclerViewAdapter.JoinedForestViewHolder) holder).getBinding();
+            binding.setForest(mJoined.get(position - 1));
+            binding.executePendingBindings();
+            ((ForestRecyclerViewAdapter.JoinedForestViewHolder) holder).bind(position - 1);
         } else if (holder instanceof ForestRecyclerViewAdapter.ForestTypeViewHolder) {
             ((ForestRecyclerViewAdapter.ForestTypeViewHolder) holder).bind(position);
-        }else if (holder instanceof ForestRecyclerViewAdapter.TitleViewHolder) {
+        } else if (holder instanceof ForestRecyclerViewAdapter.TitleViewHolder) {
             ((ForestRecyclerViewAdapter.TitleViewHolder) holder).bind(position);
         }
     }
 
     /**
      * 两个标题+两个底部支撑bottom防止遮盖+item+elv
+     *
      * @return item数量
      */
     @Override
     public int getItemCount() {
-        return (4+(mJoined.size())+(mType.size()==0?0:1));
+        return (4 + (mJoined.size()) + (mType.size() == 0 ? 0 : 1));
     }
 
     /**
      * 添加加入的小树林
+     *
      * @param mJoined
      */
-    public void changeDataJoinedForest(DetailTypeForestResponse mJoined){
-        if(mJoined.getForests()!=null) {//未加入的话，后端直接返回null
+    public void changeDataJoinedForest(DetailTypeForestResponse mJoined) {
+        if (mJoined.getForests() != null) {//未加入的话，后端直接返回null
             this.mJoined = mJoined.getForests();
 
         }
@@ -223,10 +237,11 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
 
     /**
      * 添加小树林类型
+     *
      * @param Type
      */
-    public void changeDataType(List<String> Type){
-        if(Type!=null) {//防一手为null
+    public void changeDataType(List<String> Type) {
+        if (Type != null) {//防一手为null
             mType = Type;
             notifyDataSetChanged();
         }
@@ -234,10 +249,11 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
 
     /**
      * 改变具体类型的小树林
+     *
      * @param lists
      */
-    public void changeDataDetailTypeForest(ForestListsResponse lists){
-        if(mDetailTypeForest==null) {
+    public void changeDataDetailTypeForest(ForestListsResponse lists) {
+        if (mDetailTypeForest == null) {
             mDetailTypeForest = lists.getLists();
             mElAdapter.changeDataForests(lists.getLists());
         }

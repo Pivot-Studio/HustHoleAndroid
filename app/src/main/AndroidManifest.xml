@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="cn.pivotstudio.husthole" >
+    xmlns:tools="http://schemas.android.com/tools">
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 8.0安装需要的权限 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" /> <!-- 读写权限 -->
@@ -13,19 +12,18 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /> <!-- 修改系统设置权限 -->
 
     <application
-        android:name="com.example.libbase.base.app.BaseApplication"
+        android:name="cn.pivotstudio.moduleb.libbase.base.app.BaseApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        tools:replace="android:label"
         android:label="1037树洞"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Base"
-      >
+        tools:replace="android:label">
         <activity
             android:name=".StartActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

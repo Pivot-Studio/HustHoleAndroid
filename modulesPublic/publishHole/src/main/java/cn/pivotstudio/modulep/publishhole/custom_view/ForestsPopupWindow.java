@@ -17,7 +17,7 @@ import android.widget.PopupWindow;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.libbase.base.custom_view.MaxHeightRecyclerView;
+import cn.pivotstudio.moduleb.libbase.base.custom_view.MaxHeightRecyclerView;
 
 import cn.pivotstudio.modulep.publishhole.R;
 import cn.pivotstudio.modulep.publishhole.ui.activity.PublishHoleActivity;
@@ -34,8 +34,9 @@ import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel;
 public class ForestsPopupWindow extends PopupWindow {
     private Context context;
     public MaxHeightRecyclerView recyclerView;
+
     public ForestsPopupWindow(Context context) {
-        this.context=context;
+        this.context = context;
         initView();
         initListener();
     }
@@ -43,11 +44,11 @@ public class ForestsPopupWindow extends PopupWindow {
     /**
      * 初始化view操作
      */
-    private void initView(){
-        View v=LayoutInflater.from(context).inflate(R.layout.ppw_publishhole_forests,null);
+    private void initView() {
+        View v = LayoutInflater.from(context).inflate(R.layout.ppw_publishhole_forests, null);
         setContentView(v);
 
-        Display display = ((Activity)context).getWindowManager().getDefaultDisplay();
+        Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
         Point outSize = new Point();
         // 通过Display对象获取屏幕宽、高数据并保存到Point对象中
         display.getSize(outSize);
@@ -56,22 +57,21 @@ public class ForestsPopupWindow extends PopupWindow {
         int y = outSize.y;//此为屏幕高度
 
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        setHeight(y-300);//写死高度，不写死，会随着item数量变化，ppw上端上下跳动
+        setHeight(y - 300);//写死高度，不写死，会随着item数量变化，ppw上端上下跳动
         setFocusable(true);
         setBackgroundDrawable(new BitmapDrawable());
         setOutsideTouchable(true);
 
 
-
-        MaxHeightRecyclerView recyclerView=v.findViewById(R.id.rv_ppwpublishhole);
-        this.recyclerView=recyclerView;
+        MaxHeightRecyclerView recyclerView = v.findViewById(R.id.rv_ppwpublishhole);
+        this.recyclerView = recyclerView;
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new ForestRecyclerViewAdapter(context,this));
+        recyclerView.setAdapter(new ForestRecyclerViewAdapter(context, this));
 
-        ImageView backIv=v.findViewById(R.id.iv_ppwpublishhole_finish);
-        Button chooseBtn=v.findViewById(R.id.btn_publishholeforests_chooseforest);
+        ImageView backIv = v.findViewById(R.id.iv_ppwpublishhole_finish);
+        Button chooseBtn = v.findViewById(R.id.btn_publishholeforests_chooseforest);
         backIv.setOnClickListener(this::onClick);
         chooseBtn.setOnClickListener(this::onClick);
 
@@ -80,7 +80,7 @@ public class ForestsPopupWindow extends PopupWindow {
     /**
      * 初始化监听器
      */
-    private void initListener(){
+    private void initListener() {
         setOnDismissListener(new OnDismissListener() {
             @Override
             public void onDismiss() {
@@ -98,12 +98,17 @@ public class ForestsPopupWindow extends PopupWindow {
 
     /**
      * 点击事件
+     *
      * @param v
      */
-    private void onClick(View v){
+    private void onClick(View v) {
         int id = v.getId();
         if (id == R.id.btn_publishholeforests_chooseforest) {
-            PublishHoleViewModel publishHoleViewModel = new ViewModelProvider((PublishHoleActivity) context, new ViewModelProvider.NewInstanceFactory()).get(PublishHoleViewModel.class);
+            PublishHoleViewModel publishHoleViewModel = new ViewModelProvider(
+                    (PublishHoleActivity) context,
+                    new ViewModelProvider.NewInstanceFactory()
+            )
+                    .get(PublishHoleViewModel.class);
             publishHoleViewModel.setForestId(0);
             publishHoleViewModel.pForestName.setValue("未选择任何小树林");
             dismiss();
@@ -111,8 +116,10 @@ public class ForestsPopupWindow extends PopupWindow {
             dismiss();
         }
     }
+
     /**
      * 实际改变背景透明度
+     *
      * @param bgAlpha
      */
     private void setBackgroundAlpha(float bgAlpha) {

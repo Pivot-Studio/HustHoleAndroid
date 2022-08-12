@@ -10,7 +10,6 @@ import java.util.List;
 
 import cn.pivotstudio.modulec.homescreen.oldversion.model.TimeCount;
 
-
 public class ParseNotificationData {
     public static List<NotificationBean> parseJson(String responseDate) {
         List<NotificationBean> mNotificationList = new ArrayList<>();
@@ -111,5 +110,4 @@ public class ParseNotificationData {
         }
         return null;
     }
-
 }

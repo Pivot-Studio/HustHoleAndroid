@@ -57,13 +57,24 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    namespace 'cn.pivotstudio.modulep.hole'
 }
 
 dependencies {
     implementation project(':modulesBase:libBase')
-    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation project(':modulesBase:networkBase')
+    implementation project(':modulesBase:dataBase')
+    implementation project(':modulesBase:resBase')
+    implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+    implementation  "ru.noties:markwon:$markdown_version"//markdown
+    implementation "ru.noties:markwon-image-loader:$markdown_version" // optional
+    implementation "ru.noties:markwon-view:$markdown_version" // optional
 
-    annotationProcessor 'com.alibaba:arouter-compiler:1.5.2'//每个组件都要添加
+    //Room数据库
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+
+    annotationProcessor "com.alibaba:arouter-compiler:$ARouter_version"//每个组件都要添加
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'

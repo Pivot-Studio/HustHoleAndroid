@@ -10,8 +10,11 @@ public class SystemNotificationBean {
     public SystemNotificationBean() {
     }
 
-    public SystemNotificationBean(String id, String title, String content,
-                                  String have_read, String timestamp) {
+    public SystemNotificationBean(String id,
+                                  String title,
+                                  String content,
+                                  String have_read,
+                                  String timestamp) {
         this.id = id;
         this.content = content;
         this.timestamp = timestamp;
@@ -58,7 +61,5 @@ public class SystemNotificationBean {
     public String getTimestamp() {
         return this.timestamp;
     }
-
-
 }
 

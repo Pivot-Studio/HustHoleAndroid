@@ -1,16 +1,11 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.mine;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.githang.statusbar.StatusBarCompat;
-
 import cn.pivotstudio.modulec.homescreen.R;
-
+import com.githang.statusbar.StatusBarCompat;
 
 public class AboutActivity extends AppCompatActivity {
 
@@ -20,9 +15,10 @@ public class AboutActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about);
 
-//        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
+        //        StatusBarCompat.setStatusBarColor(this,getResources().getColor(R.color.HH_BandColor_1) , true);
 
-        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1), true);
+        StatusBarCompat.setStatusBarColor(this, getResources().getColor(R.color.HH_BandColor_1),
+            true);
         if (getSupportActionBar() != null) {//隐藏上方ActionBar
             getSupportActionBar().hide();
         }

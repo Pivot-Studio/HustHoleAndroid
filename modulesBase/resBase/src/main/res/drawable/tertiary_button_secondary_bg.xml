@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 内部颜色透明 -->
+    <solid
+        android:color="@color/transparent" />
+    <!-- 边缘线条颜色 -->
+    <stroke
+        android:width="2dp"
+        android:color="@color/HH_BandColor_3" />
+    <!-- 圆角的幅度 -->
+    <corners
+        android:radius="@dimen/dp_16"/>
+</shape>

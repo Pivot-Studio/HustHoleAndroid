@@ -10,26 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.libbase.constant.Constant;
-import com.scwang.smart.refresh.layout.api.RefreshLayout;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
-
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.oldversion.mine.HoleStarReplyActivity;
 import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken;
@@ -39,8 +25,15 @@ import cn.pivotstudio.modulec.homescreen.oldversion.model.TimeCount;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.ErrorMsg;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface;
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager;
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
+import com.alibaba.android.arouter.launcher.ARouter;
+import cn.pivotstudio.moduleb.libbase.constant.Constant;
+import com.scwang.smart.refresh.layout.api.RefreshLayout;
+import java.io.IOException;
+import java.util.ArrayList;
 import okhttp3.ResponseBody;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,26 +43,24 @@ public class MyHoleFragment extends Fragment {
 
     private static final String BASE_URL = RetrofitManager.API;
     private final ArrayList<String[]> myHolesList = new ArrayList<>();
+    String TAG = "myHole";
     private Retrofit retrofit;
     private RequestInterface request;
     private JSONArray jsonArray;
     private RecyclerView myRecycleView;
-
     private int start_id = 0;
-    private int list_size = 20;
+    private final int list_size = 20;
     private boolean isRefresh = false;
     private boolean finishRefresh = false;
     private boolean isOnLoadMore = false;
     private boolean finishOnLoadMore = false;
 
-    String TAG = "myHole";
-
     public static MyHoleFragment newInstance() {
         return new MyHoleFragment();
     }
 
-
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container,
                              Bundle savedInstanceState) {
         View myHoleView = inflater.inflate(R.layout.fragment_myhole, container, false);
 
@@ -123,7 +114,6 @@ public class MyHoleFragment extends Fragment {
             refreshLayout.finishLoadMore(5000);
         });
 
-
         myRecycleView = myHoleView.findViewById(R.id.myHoleRecyclerView);
         myRecycleView.setLayoutManager(new LinearLayoutManager(getActivity()));
         if (myHolesList.size() == 0) {
@@ -141,7 +131,6 @@ public class MyHoleFragment extends Fragment {
         RetrofitManager.RetrofitBuilder(BASE_URL);
         retrofit = RetrofitManager.getRetrofit();
         request = retrofit.create(RequestInterface.class);
-
     }
 
     @Override
@@ -166,7 +155,7 @@ public class MyHoleFragment extends Fragment {
                             Log.d("myHole", "this is myHoles reply: " + json);
                         }
                         jsonArray = new JSONArray(json);
-//                            new DownLoadTask().execute();
+                        //                            new DownLoadTask().execute();
                         try {
                             for (int f = 0; f < jsonArray.length(); f++) {
                                 JSONObject sonObject = jsonArray.getJSONObject(f);
@@ -184,7 +173,9 @@ public class MyHoleFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        if (isRefresh) finishRefresh = true;
+                        if (isRefresh) {
+                            finishRefresh = true;
+                        }
 
                         if (isOnLoadMore) {
                             myRecycleView.getAdapter().notifyDataSetChanged();
@@ -204,8 +195,29 @@ public class MyHoleFragment extends Fragment {
         }).start();
     }
 
+    public class CardsRecycleViewAdapter
+        extends RecyclerView.Adapter<CardsRecycleViewAdapter.ViewHolder> {
 
-    public class CardsRecycleViewAdapter extends RecyclerView.Adapter<CardsRecycleViewAdapter.ViewHolder> {
+        public CardsRecycleViewAdapter() {
+
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return new ViewHolder(LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.card_myhole, parent, false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            ((ViewHolder) holder).bind(position);
+        }
+
+        @Override
+        public int getItemCount() {
+            return myHolesList.size();
+        }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             Boolean more_condition = false;
@@ -264,10 +276,12 @@ public class MyHoleFragment extends Fragment {
                         new Thread(new Runnable() {//加载纵向列表标题
                             @Override
                             public void run() {
-                                Call<ResponseBody> call = request.delete_hole(myHolesList.get(position)[4]);//进行封装
+                                Call<ResponseBody> call =
+                                    request.delete_hole(myHolesList.get(position)[4]);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    public void onResponse(Call<ResponseBody> call,
+                                                           Response<ResponseBody> response) {
                                         dialog.dismiss();
                                         myDelete.setVisibility(View.GONE);
                                         more_condition = false;
@@ -280,14 +294,16 @@ public class MyHoleFragment extends Fragment {
                                                     json = response.body().string();
                                                     JSONObject jsonObject = new JSONObject(json);
                                                     returncondition = jsonObject.getString("msg");
-                                                    Toast.makeText(getContext(), returncondition, Toast.LENGTH_SHORT).show();
+                                                    Toast.makeText(getContext(), returncondition,
+                                                        Toast.LENGTH_SHORT).show();
                                                     myHolesList.remove(position);
                                                     notifyDataSetChanged();
                                                 } catch (IOException | JSONException e) {
                                                     e.printStackTrace();
                                                 }
                                             } else {
-                                                Toast.makeText(getContext(), "删除失败，超过可删除的时间范围", Toast.LENGTH_SHORT).show();
+                                                Toast.makeText(getContext(), "删除失败，超过可删除的时间范围",
+                                                    Toast.LENGTH_SHORT).show();
                                             }
                                         } else {
                                             ErrorMsg.getErrorMsg(response, getContext());
@@ -297,7 +313,8 @@ public class MyHoleFragment extends Fragment {
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
                                         dialog.dismiss();
-                                        Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "删除失败", Toast.LENGTH_SHORT)
+                                            .show();
                                     }
                                 });
                             }
@@ -365,38 +382,52 @@ public class MyHoleFragment extends Fragment {
                             new Thread(() -> {
                                 request = retrofit.create(RequestInterface.class);
 
-                                Call<ResponseBody> call = request.thumbups(RetrofitManager.API + "thumbups/" + myHolesList.get(position)[4] + "/-1");//进行封装
+                                Call<ResponseBody> call = request.thumbups(RetrofitManager.API
+                                    + "thumbups/"
+                                    + myHolesList.get(position)[4]
+                                    + "/-1");//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    public void onResponse(Call<ResponseBody> call,
+                                                           Response<ResponseBody> response) {
                                         img_up.setImageResource(R.mipmap.active);
                                         myHolesList.get(position)[6] = "true";
-                                        myHolesList.get(position)[8] = (Integer.parseInt(myHolesList.get(position)[8]) + 1) + "";
+                                        myHolesList.get(position)[8] =
+                                            (Integer.parseInt(myHolesList.get(position)[8]) + 1)
+                                                + "";
                                         text_up.setText(myHolesList.get(position)[8]);
                                     }
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        Toast.makeText(getContext(), "点赞失败", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "点赞失败", Toast.LENGTH_SHORT)
+                                            .show();
                                     }
                                 });
                             }).start();
                         } else {
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API + "thumbups/" + myHolesList.get(position)[4] + "/-1");//进行封装
+                                Call<ResponseBody> call = request.deletethumbups(RetrofitManager.API
+                                    + "thumbups/"
+                                    + myHolesList.get(position)[4]
+                                    + "/-1");//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                                                Log.d(TAG,"取消点赞 ： " + response.body());
+                                    public void onResponse(Call<ResponseBody> call,
+                                                           Response<ResponseBody> response) {
+                                        //                                                Log.d(TAG,"取消点赞 ： " + response.body());
                                         img_up.setImageResource(R.mipmap.inactive);
                                         myHolesList.get(position)[6] = "false";
-                                        myHolesList.get(position)[8] = (Integer.parseInt(myHolesList.get(position)[8]) - 1) + "";
+                                        myHolesList.get(position)[8] =
+                                            (Integer.parseInt(myHolesList.get(position)[8]) - 1)
+                                                + "";
                                         text_up.setText(myHolesList.get(position)[8]);
                                     }
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        Toast.makeText(getContext(), "取消点赞失败", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "取消点赞失败", Toast.LENGTH_SHORT)
+                                            .show();
                                     }
                                 });
                             }).start();
@@ -408,10 +439,11 @@ public class MyHoleFragment extends Fragment {
                 });
 
                 img_talk.setOnClickListener(v -> {
-                    ARouter.getInstance().build("/hole/HoleActivity")
-                            .withInt(Constant.HOLE_ID, Integer.valueOf(myHolesList.get(position)[4]))
-                            .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
-                            .navigation((HoleStarReplyActivity) v.getContext(), 2);
+                    ARouter.getInstance()
+                        .build("/hole/HoleActivity")
+                        .withInt(Constant.HOLE_ID, Integer.valueOf(myHolesList.get(position)[4]))
+                        .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
+                        .navigation((HoleStarReplyActivity) v.getContext(), 2);
                     //  Intent intent = CommentListActivity.newIntent(getActivity(), null);
                     //  intent.putExtra("reply","key_board");
                     //  intent.putExtra("data_hole_id", myHolesList.get(position)[4]);
@@ -423,39 +455,51 @@ public class MyHoleFragment extends Fragment {
                         if (myHolesList.get(position)[5].equals("false")) {
                             //加载纵向列表标题
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.follow(RetrofitManager.API + "follows/" + myHolesList.get(position)[4]);//进行封装
+                                Call<ResponseBody> call = request.follow(
+                                    RetrofitManager.API + "follows/" + myHolesList.get(
+                                        position)[4]);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    public void onResponse(Call<ResponseBody> call,
+                                                           Response<ResponseBody> response) {
                                         img_star.setImageResource(R.mipmap.active_3);
                                         myHolesList.get(position)[5] = "true";
-                                        myHolesList.get(position)[3] = (Integer.parseInt(myHolesList.get(position)[3]) + 1) + "";
+                                        myHolesList.get(position)[3] =
+                                            (Integer.parseInt(myHolesList.get(position)[3]) + 1)
+                                                + "";
                                         text_star.setText(myHolesList.get(position)[3]);
                                     }
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        Toast.makeText(getContext(), "关注失败", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "关注失败", Toast.LENGTH_SHORT)
+                                            .show();
                                         Log.d("", "关注失败");
                                     }
                                 });
                             }).start();
                         } else {
                             new Thread(() -> {
-                                Call<ResponseBody> call = request.deletefollow(RetrofitManager.API + "follows/" + myHolesList.get(position)[4]);//进行封装
+                                Call<ResponseBody> call = request.deletefollow(
+                                    RetrofitManager.API + "follows/" + myHolesList.get(
+                                        position)[4]);//进行封装
                                 call.enqueue(new Callback<ResponseBody>() {
                                     @Override
-                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                    public void onResponse(Call<ResponseBody> call,
+                                                           Response<ResponseBody> response) {
                                         img_star.setImageResource(R.mipmap.inactive_3);
                                         myHolesList.get(position)[5] = "false";
-                                        myHolesList.get(position)[3] = (Integer.parseInt(myHolesList.get(position)[3]) - 1) + "";
+                                        myHolesList.get(position)[3] =
+                                            (Integer.parseInt(myHolesList.get(position)[3]) - 1)
+                                                + "";
                                         notifyDataSetChanged();
                                         text_star.setText(myHolesList.get(position)[3]);
                                     }
 
                                     @Override
                                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                        Toast.makeText(getContext(), "取消关注失败", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), "取消关注失败", Toast.LENGTH_SHORT)
+                                            .show();
                                         Log.d("", "取消关注失败");
                                     }
                                 });
@@ -469,10 +513,11 @@ public class MyHoleFragment extends Fragment {
 
                 totalView.setOnClickListener(v -> {
                     Log.d(TAG, "现在跳转到评论界面。");
-                    ARouter.getInstance().build("/hole/HoleActivity")
-                            .withInt(Constant.HOLE_ID, Integer.valueOf(myHolesList.get(position)[4]))
-                            .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                            .navigation((HoleStarReplyActivity) v.getContext(), 2);
+                    ARouter.getInstance()
+                        .build("/hole/HoleActivity")
+                        .withInt(Constant.HOLE_ID, Integer.valueOf(myHolesList.get(position)[4]))
+                        .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                        .navigation((HoleStarReplyActivity) v.getContext(), 2);
                     // Intent intent = CommentListActivity.newIntent(getActivity(), null);
                     // intent.putExtra("data_hole_id", myHolesList.get(position)[4]);
                     // startActivity(intent);
@@ -500,36 +545,15 @@ public class MyHoleFragment extends Fragment {
                 date.setText(TimeCount.time(myHolesList.get(position)[2]));
                 text_star.setText(myHolesList.get(position)[3]);
                 ID.setText("# " + myHolesList.get(position)[4]);
-                img_star.setImageResource(myHolesList.get(position)[5].equals("true") ? R.mipmap.active_3 : R.mipmap.inactive_3);
-                img_up.setImageResource(myHolesList.get(position)[6].equals("true") ? R.mipmap.active : R.mipmap.inactive);
+                img_star.setImageResource(
+                    myHolesList.get(position)[5].equals("true") ? R.mipmap.active_3
+                        : R.mipmap.inactive_3);
+                img_up.setImageResource(
+                    myHolesList.get(position)[6].equals("true") ? R.mipmap.active
+                        : R.mipmap.inactive);
                 text_talk.setText(myHolesList.get(position)[7]);
                 text_up.setText(myHolesList.get(position)[8]);
-
             }
-
-
         }
-
-        public CardsRecycleViewAdapter() {
-
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_myhole, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            ((ViewHolder) holder).bind(position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return myHolesList.size();
-        }
-
     }
 }
