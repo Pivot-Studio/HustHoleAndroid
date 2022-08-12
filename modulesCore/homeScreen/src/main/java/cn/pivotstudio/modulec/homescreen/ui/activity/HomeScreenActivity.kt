@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
@@ -30,8 +31,9 @@ import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.BuildConfig
+import kotlinx.coroutines.Dispatchers
 
-import kotlinx.coroutines.GlobalScope
+
 import kotlinx.coroutines.launch
 
 /**
@@ -111,7 +113,7 @@ class HomeScreenActivity : BaseActivity() {
     private fun simulatePullDown() {
         val inst = Instrumentation();
         val downTime = SystemClock.uptimeMillis()
-        GlobalScope.launch{
+        lifecycleScope.launch(Dispatchers.Default){
             inst.sendPointerSync(
                 MotionEvent.obtain(
                     downTime, downTime,
