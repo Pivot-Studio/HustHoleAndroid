@@ -60,7 +60,10 @@ class ForestRepository {
         ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
             override fun onSuccess(result: List<ForestHole>) {
                 val newItems = holes.value!!.toMutableList()
-                newItems.addAll(result)
+                val offset = result.indexOfFirst {
+                    it.holeId == newItems.last().holeId
+                } // 找第一个相同的index，没有相同的元素会返回 -1
+                newItems.addAll(result.subList(offset + 1, result.lastIndex))
                 holes.value = newItems
                 lastStartId += HOLES_LIST_SIZE
                 _holeState.value = if (newItems.isNotEmpty()) LoadStatus.DONE else null

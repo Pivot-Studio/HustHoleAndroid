@@ -6,6 +6,7 @@
     android:background="@drawable/tertiary_button_bg">
 
     <ImageView
+        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp_5"
@@ -18,14 +19,13 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/sp_14"
-        android:textStyle="bold"
-        android:textColor="@color/GrayScale_100"
-        android:text="加入"
         android:layout_marginEnd="@dimen/dp_10"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:text="加入"
+        android:textColor="@color/white"
+        android:textAppearance="@style/HustHoleTypography.Button2"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/imageView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

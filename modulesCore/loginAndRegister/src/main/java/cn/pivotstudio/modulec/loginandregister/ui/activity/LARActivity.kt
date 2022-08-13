@@ -37,6 +37,19 @@ class LARActivity : AppCompatActivity() {
             )
         }
 
+        navController.addOnDestinationChangedListener { _, destination, argument ->
+            // ActionBar显示情况特判
+            supportActionBar?.let {
+                when (destination.id) {
+                    R.id.welcomeFragment,
+                    R.id.privacyFragment -> {
+                        supportActionBar?.hide()
+                    }
+                    else -> supportActionBar?.show()
+                }
+            }
+        }
+
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
     }

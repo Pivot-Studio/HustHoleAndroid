@@ -46,12 +46,13 @@
                         android:layout_height="@dimen/dp_120">
 
                         <com.google.android.material.appbar.CollapsingToolbarLayout
+                            android:id="@+id/layout_collapse_bar"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            app:collapsedTitleTextAppearance="@style/collapsingToolbarCollapsedTitleColor"
                             app:contentScrim="@color/HH_BandColor_1"
                             app:expandedTitleMarginStart="@dimen/dp_20"
                             app:expandedTitleTextAppearance="@style/collapsingToolbarExpandedTitleColor"
-                            app:collapsedTitleTextAppearance="@style/collapsingToolbarCollapsedTitleColor"
                             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
                             <androidx.constraintlayout.widget.ConstraintLayout
@@ -115,10 +116,10 @@
                                 <FrameLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
                                     android:layout_marginEnd="@dimen/dp_20"
-                                    android:layout_marginBottom="@dimen/dp_20">
+                                    android:layout_marginBottom="@dimen/dp_20"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent">
 
                                     <include
                                         android:id="@+id/detail_forest_join_btn"
@@ -127,7 +128,7 @@
                                     <include
                                         android:id="@+id/detail_forest_quit_btn"
                                         layout="@layout/tertiary_button_secondary"
-                                        android:visibility="gone"/>
+                                        android:visibility="gone" />
 
                                 </FrameLayout>
 
@@ -137,6 +138,7 @@
                             <com.google.android.material.appbar.MaterialToolbar
                                 android:layout_width="match_parent"
                                 android:layout_height="?attr/actionBarSize"
+                                android:theme="@style/myBarTheme"
                                 app:layout_collapseMode="pin"
                                 app:title="@{viewModel.overview.name, default = @string/default_string_zh_short}" />
 

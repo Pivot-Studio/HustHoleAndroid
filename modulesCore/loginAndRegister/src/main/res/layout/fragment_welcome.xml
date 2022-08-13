@@ -34,8 +34,8 @@
             android:layout_height="19dp"
             android:layout_marginTop="10dp"
             android:text="@string/register_welcome_2"
+            android:textAppearance="@style/HustHoleTypography.Headline5"
             android:textColor="@color/GrayScale_50"
-            android:textSize="13sp"
             app:layout_constraintStart_toStartOf="@+id/tv_title_start"
             app:layout_constraintTop_toBottomOf="@+id/tv_title_start" />
 
@@ -44,8 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_45"
             android:text="欢迎你"
-            android:textColor="@color/Title_GrayScale_20"
-            android:textSize="30sp"
+            android:textAppearance="@style/HustHoleTypography.Headline1"
+            android:textSize="@dimen/sp_30"
             app:layout_constraintBottom_toBottomOf="@+id/tv_title_start"
             app:layout_constraintStart_toEndOf="@+id/tv_title_start" />
 
@@ -75,8 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_45"
                 android:text="1037树洞"
-                android:textColor="@color/Title_GrayScale_20"
-                android:textSize="30sp"
+                android:textAppearance="@style/HustHoleTypography.Headline1"
+                android:textSize="@dimen/sp_30"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
