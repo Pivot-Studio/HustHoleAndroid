@@ -176,7 +176,7 @@ public class MessageFragment extends Fragment {
         } else if (myNotificationList != null && hasInit && page > 1) { //已经初始化直接显示,每次回到这个页面时直接显示
             noNotificationImage.setVisibility(View.GONE);
             thereIsNoNotification.setVisibility(View.GONE);
-            adapter = new NotificationAdapter(getActivity(), myNotificationList);
+            adapter = new NotificationAdapter(requireActivity(), myNotificationList);
             notificationRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             notificationRecyclerView.setItemAnimator(new DefaultItemAnimator());
             notificationRecyclerView.setAdapter(adapter);

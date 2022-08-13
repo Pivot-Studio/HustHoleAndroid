@@ -17,7 +17,6 @@
             android:layout_height="match_parent"
             tools:context=".ui.activity.LARActivity">
 
-
             <com.google.android.material.appbar.AppBarLayout
                 android:id="@+id/layout_top_bar"
                 android:layout_width="match_parent"

@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_id_9"
-                android:textSize="@dimen/sp_14"
+                android:textAppearance="@style/HustHoleTypography.Body3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.15"
@@ -74,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/login_id_10"
                 android:textColor="@color/HH_Reminder_Link"
-                android:textSize="@dimen/sp_14"
+                android:textAppearance="@style/HustHoleTypography.Body3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_register_text1"
                 app:layout_constraintTop_toTopOf="parent"
@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_id_11"
-                android:textSize="@dimen/sp_14"
+                android:textAppearance="@style/HustHoleTypography.Body3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/tv_register_user_protocol"
                 app:layout_constraintTop_toTopOf="parent"
@@ -97,7 +97,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/login_id_12"
                 android:textColor="@color/HH_Reminder_Link"
-                android:textSize="@dimen/sp_14"
+                android:textAppearance="@style/HustHoleTypography.Body3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0"
@@ -113,12 +113,10 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_20"
             android:text="@string/login_id_3"
-            android:textColor="@color/Title_GrayScale_20"
-            android:textSize="@dimen/sp_14"
+            android:textAppearance="@style/HustHoleTypography.Body2"
             app:layout_constraintBottom_toBottomOf="@+id/et_register_student_code"
             app:layout_constraintEnd_toEndOf="@+id/et_register_student_code"
-            app:layout_constraintTop_toTopOf="@+id/et_register_student_code"
-            app:layout_constraintVertical_bias="0.5" />
+            app:layout_constraintTop_toTopOf="@+id/et_register_student_code" />
 
         <TextView
             android:id="@+id/tv_register_had_registered"
@@ -127,7 +125,7 @@
             android:layout_marginTop="@dimen/dp_30"
             android:text="@string/login_id_7"
             android:textColor="@color/HH_Reminder_Link"
-            android:textSize="@dimen/sp_14"
+            android:textAppearance="@style/HustHoleTypography.Body3"
             app:layout_constraintEnd_toEndOf="@+id/btn_next"
             app:layout_constraintTop_toBottomOf="@+id/btn_next" />
 
@@ -138,7 +136,7 @@
             android:layout_marginTop="@dimen/dp_5"
             android:text="@string/student_code_error"
             android:textColor="@color/HH_Reminder_Warning"
-            android:textSize="@dimen/sp_12"
+            android:textAppearance="@style/HustHoleTypography.Body3"
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/btn_next"
             app:layout_constraintTop_toBottomOf="@+id/btn_next" />
@@ -150,7 +148,7 @@
             android:layout_marginTop="@dimen/dp_30"
             android:text="@string/login_id_6"
             android:textColor="@color/HH_Reminder_Link"
-            android:textSize="@dimen/sp_14"
+            android:textAppearance="@style/HustHoleTypography.Body3"
             app:layout_constraintStart_toStartOf="@+id/btn_next"
             app:layout_constraintTop_toBottomOf="@+id/btn_next" />
 
@@ -159,11 +157,9 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_26"
             android:text="@string/login_id_1"
-            android:textColor="@color/Title_GrayScale_20"
-            android:textSize="@dimen/sp_18"
+            android:textAppearance="@style/HustHoleTypography.Headline1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.1246" />
@@ -175,7 +171,7 @@
             android:layout_marginTop="@dimen/dp_60"
             android:text="@string/login_id_8"
             android:textColor="@color/GrayScale_80"
-            android:textSize="@dimen/sp_12"
+            android:textAppearance="@style/HustHoleTypography.Body3"
             app:layout_constraintEnd_toEndOf="@+id/btn_next"
             app:layout_constraintStart_toStartOf="@+id/btn_next"
             app:layout_constraintTop_toBottomOf="@+id/btn_next" />

@@ -36,8 +36,6 @@
     <declare-styleable name="MaxHeightRecyclerView">
         <attr name="maxHeight" format="dimension" />
     </declare-styleable>
-    <!--    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar"></style>-->
-    <!--    &lt;!&ndash;禁用深色模式&ndash;&gt;-->
 
     <style name="collapsingToolbarExpandedTitleColor" parent="@android:style/TextAppearance.Medium">
         <item name="android:textSize">@dimen/sp_24</item>
@@ -47,6 +45,135 @@
     <style name="collapsingToolbarCollapsedTitleColor" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textColor">@color/white</item>
     </style>
+    
+    <style name="HustHoleTypography.Headline1" parent="TextAppearance.AppCompat.Headline">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:textFontWeight">700</item>
+    </style>
+
+    <style name="HustHoleTypography.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_15</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Headline3" parent="TextAppearance.MaterialComponents.Headline3">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_13</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Headline4" parent="TextAppearance.MaterialComponents.Headline4">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_11</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Headline5" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/source_sans_pro_bold</item>
+        <item name="android:fontFamily">@font/source_sans_pro_bold</item>
+        <item name="android:textSize">@dimen/sp_13</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:lineSpacingExtra">-6sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+        <item name="fontFamily">@font/source_sans_pro_bold</item>
+        <item name="android:fontFamily">@font/source_sans_pro_bold</item>
+        <item name="android:textSize">@dimen/sp_15</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:lineSpacingExtra">-8sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Headline7" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="fontFamily">@font/source_sans_pro_bold</item>
+        <item name="android:fontFamily">@font/source_sans_pro_bold</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:lineSpacingExtra">-8sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Button1" parent="TextAppearance.AppCompat.Button">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_16</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:lineSpacingExtra">-8sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Button2" parent="TextAppearance.AppCompat.Button">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:lineSpacingExtra">-7sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Button3" parent="TextAppearance.AppCompat.Button">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_11</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:lineSpacingExtra">-5sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Body1" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_18</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:lineSpacingExtra">-9sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Body2" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Body3" parent="HustHoleTypography.Body2">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_12</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Body4" parent="HustHoleTypography.Body2">
+        <item name="fontFamily">@font/source_sans_pro</item>
+        <item name="android:fontFamily">@font/source_sans_pro</item>
+        <item name="android:textSize">@dimen/sp_10</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:lineSpacingExtra">-5sp</item>
+    </style>
+
+    <style name="HustHoleTypography.Body5" parent="HustHoleTypography.Body2">
+        <item name="fontFamily">@font/source_sans_pro_bold</item>
+        <item name="android:fontFamily">@font/source_sans_pro_bold</item>
+        <item name="android:textSize">@dimen/sp_14</item>
+        <item name="android:textFontWeight">700</item>
+        <item name="android:lineSpacingExtra">0sp</item>
+    </style>
+
 
 
 </resources>

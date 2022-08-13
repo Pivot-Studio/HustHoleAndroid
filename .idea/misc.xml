@@ -436,8 +436,8 @@
         <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_register.xml" value="0.28944890119027405" />
         <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_set_new_password.xml" value="0.2673611111111111" />
         <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_set_password.xml" value="0.32592163085937503" />
-        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_verify_code.xml" value="0.32155797101449274" />
-        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_welcome.xml" value="0.32261505126953127" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_verify_code.xml" value="0.5819553098816803" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_welcome.xml" value="0.4163406372070313" />
         <entry key="modulesCore/loginAndRegister/src/main/res/layout/titlebar_lr_white.xml" value="0.32155797101449274" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/activity_publishhole.xml" value="0.2586050724637681" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlist.xml" value="0.2586050724637681" />

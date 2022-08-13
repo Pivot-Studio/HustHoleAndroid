@@ -7,7 +7,7 @@
 
     <string name="register_1">登录1037树洞</string>
     <string name="register_2">输入学号</string>
-    <string name="register_3">&#064;hust.edu.cn</string>
+    <string name="register_3">\&#064;hust.edu.cn</string>
     <string name="register_4">输入密码</string>
     <string name="student_code_error">*学号格式错误，请重新输入</string>
     <string name="register_6">忘记密码</string>
@@ -38,14 +38,14 @@
 
     <string name="retrieve_password_forget_1">忘记密码</string>
     <string name="retrieve_password_forget_2">输入学号</string>
-    <string name="retrieve_password_forget_3">&#064;hust.edu.cn</string>
+    <string name="retrieve_password_forget_3">\&#064;hust.edu.cn</string>
     <string name="retrieve_password_forget_4">获取验证码</string>
     <string name="retrieve_password_forget_5">*学号格式错误，请重新输入</string>
     <string name="retrieve_password_forget_6">暂未验证邮箱？点击申诉</string>
     <string name="retrieve_password_forget_7">重置密码要求您已通过校园邮箱验证，若您暂未通过验证，请通过人工申诉重置密码。</string>
 
     <string name="retrieve_password_vcode_1">输入验证码</string>
-    <string name="retrieve_password_vcode_2">验证邮件已经发送至 %s &#064;hust.edu.cn</string>
+    <string name="retrieve_password_vcode_2">验证邮件已经发送至 %s&#064;hust.edu.cn</string>
     <string name="retrieve_password_vcode_3">输入验证码</string>
     <string name="retrieve_password_vcode_4">下一步</string>
     <string name="retrieve_password_vcode_5">未收到验证码？</string>

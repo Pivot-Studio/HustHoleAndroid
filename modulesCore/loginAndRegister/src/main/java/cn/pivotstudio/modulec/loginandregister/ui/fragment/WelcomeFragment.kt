@@ -21,6 +21,7 @@ class WelcomeFragment : Fragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_welcome, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+
         return binding.root
     }
 
