@@ -94,8 +94,8 @@
                                     android:layout_marginStart="@dimen/dp_10"
                                     android:layout_marginTop="@dimen/dp_2"
                                     android:text="@{@string/follow_msg(viewModel.overview.joinedNumber, viewModel.overview.holeNumber), default = @string/follow_msg}"
+                                    android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
                                     android:textColor="@color/GrayScale_100"
-                                    android:textSize="@dimen/sp_11"
                                     app:layout_constraintStart_toEndOf="@+id/image_forest_detail_avatar"
                                     app:layout_constraintTop_toTopOf="@+id/image_forest_detail_avatar" />
 
@@ -107,8 +107,8 @@
                                     android:ellipsize="end"
                                     android:maxLines="2"
                                     android:text="@{viewModel.overview.description, default = @string/default_string_zh_long}"
+                                    android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
                                     android:textColor="@color/GrayScale_100"
-                                    android:textSize="@dimen/sp_11"
                                     app:layout_constraintBottom_toBottomOf="@+id/image_forest_detail_avatar"
                                     app:layout_constraintStart_toStartOf="@+id/text_forest_detail_follow_msg"
                                     app:layout_constraintTop_toBottomOf="@+id/text_forest_detail_follow_msg" />
@@ -140,7 +140,8 @@
                                 android:layout_height="?attr/actionBarSize"
                                 android:theme="@style/myBarTheme"
                                 app:layout_collapseMode="pin"
-                                app:title="@{viewModel.overview.name, default = @string/default_string_zh_short}" />
+                                app:title="@{viewModel.overview.name, default = @string/default_string_zh_short}"
+                                app:titleTextAppearance="@style/HustHoleTypography.Headline1.Bold" />
 
                         </com.google.android.material.appbar.CollapsingToolbarLayout>
                     </com.google.android.material.appbar.AppBarLayout>

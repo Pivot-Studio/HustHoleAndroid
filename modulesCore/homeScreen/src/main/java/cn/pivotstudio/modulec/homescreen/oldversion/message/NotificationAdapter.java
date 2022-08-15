@@ -96,7 +96,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             time = view.findViewById(R.id.time);
             content = view.findViewById(R.id.content);
             hole_id = view.findViewById(R.id.hole_id);
-            linearLayout = view.findViewById(R.id.outer);
+            linearLayout = view.findViewById(R.id.layout_notice);
             relativeLayout = view.findViewById(R.id.relative_layout);
         }
     }
@@ -124,10 +124,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_TYPE_HEADER) {
-            return new HeaderViewHolder(mLayoutInflater.inflate(R.layout.notification_item_header,
+            return new HeaderViewHolder(mLayoutInflater.inflate(R.layout.item_notice_header,
                     parent, false));
         } else if (viewType == ITEM_TYPE_CONTENT) {
-            return new ContentViewHolder(mLayoutInflater.inflate(R.layout.notification_item,
+            return new ContentViewHolder(mLayoutInflater.inflate(R.layout.item_notice,
                     parent, false));
         } else if (viewType == ITEM_TYPE_BOTTOM) {
             return new BottomViewHolder(mLayoutInflater.inflate(R.layout.notification_item_footer,

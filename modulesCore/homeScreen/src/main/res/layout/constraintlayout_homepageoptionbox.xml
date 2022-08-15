@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cl_mid_block"
     android:layout_width="match_parent"
-    android:layout_height="29dp"
+    android:layout_height="@dimen/dp_34"
     android:background="@color/GrayScale_100">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_homepage_forestsquare"
         android:layout_width="wrap_content"
-        android:layout_height="29dp"
+        android:layout_height="@dimen/dp_34"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
             android:id="@+id/btn_homepage_greenline"
-            android:layout_width="41dp"
-            android:layout_height="2dp"
-            android:background="@color/HH_BandColor_1"
+            android:layout_width="@dimen/dp_41"
+            android:layout_height="@dimen/dp_4"
+            android:background="@drawable/standard_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/tv_homepage_forestsquare"
             app:layout_constraintStart_toStartOf="@+id/tv_homepage_forestsquare" />
@@ -28,7 +28,7 @@
             android:id="@+id/iv_homepage_triangle"
             android:layout_width="@dimen/dp_7"
             android:layout_height="@dimen/dp_4"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="@dimen/dp_4"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/tv_homepage_forestsquare"
             app:layout_constraintStart_toEndOf="@+id/tv_homepage_forestsquare"
@@ -38,11 +38,11 @@
             android:id="@+id/tv_homepage_forestsquare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginStart="@dimen/dp_21"
             android:text="@string/page1fragment_2"
+            android:textAppearance="@style/HustHoleTypography.Headline3"
             android:textColor="@color/GrayScale_20"
-            android:textSize="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHoleBinding
 import cn.pivotstudio.modulec.homescreen.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
+import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 
 /**
  * @classname:ForestHoleAdapter
@@ -19,7 +20,7 @@ import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
  * @author: mhh
  */
 class ForestHoleAdapter(
-    private val _context: ForestFragment
+    private val _context: ForestFragment,
 ) : ListAdapter<ForestHole, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
     var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
@@ -39,9 +40,7 @@ class ForestHoleAdapter(
     }
 
     inner class ForestHoleViewHolder(private val binding: ItemForestHoleBinding) :
-        RecyclerView.ViewHolder(
-            binding.root
-        ) {
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(forestHole: ForestHole) {
             binding.forestHole = forestHole
@@ -50,16 +49,13 @@ class ForestHoleAdapter(
                     _context.navToSpecificHoleWithReply(forestHole.holeId)
                 }
 
-                textItemForestContent.setOnClickListener {
-                    _context.navToSpecificHole(forestHole.holeId)
-                }
-
                 imageItemForestAvatar.setOnClickListener {
                     _context.navToSpecificForest(forestHole.forestId)
                 }
 
                 layoutItemForestThumbsUp.setOnClickListener {
                     _context.giveALikeToTheHole(forestHole)
+
                 }
 
                 layoutItemForestFollow.setOnClickListener {
@@ -73,6 +69,10 @@ class ForestHoleAdapter(
                         lastImageMore?.visibility = View.GONE
                     }
                     lastImageMore = layoutItemForestMoreList
+                }
+
+                layoutItemForestHole.setOnClickListener {
+                    _context.navToSpecificHole(forestHole.holeId)
                 }
 
                 layoutItemForestMoreList.setOnClickListener {

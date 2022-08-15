@@ -42,7 +42,7 @@
             android:maxLines="1"
             android:text="@string/discover_more"
             android:textColor="@color/GrayScale_50"
-            android:textSize="@dimen/sp_12"
+            android:textAppearance="@style/HustHoleTypography.Headline4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_forest_head_avatar" />

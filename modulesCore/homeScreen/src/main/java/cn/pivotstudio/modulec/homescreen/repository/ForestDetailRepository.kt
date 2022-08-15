@@ -90,7 +90,7 @@ class ForestDetailRepository {
                     val newItems = _holes.value!!.toMutableList()
                     for ((i, newHole) in newItems.withIndex()) {
                         if (hole.holeId == newHole.holeId) newItems[i] = newHole.copy().apply {
-                            likeNum.inc()
+                            likeNum = if (!hole.liked) likeNum.inc() else likeNum.dec()
                             liked = liked.not()
                         }
                     }
@@ -99,7 +99,7 @@ class ForestDetailRepository {
                 }
 
                 override fun onFailure(e: Throwable?) {
-                    tip.value = "❌"
+                    tip.value = "点赞失败"
                 }
 
             })
@@ -120,7 +120,7 @@ class ForestDetailRepository {
                     val newItems = _holes.value!!.toMutableList()
                     for ((i, newHole) in newItems.withIndex()) {
                         if (hole.holeId == newHole.holeId) newItems[i] = newHole.copy().apply {
-                            followNum.inc()
+                            followNum = if (!hole.followed) followNum.inc() else followNum.dec()
                             followed = followed.not()
                         }
                     }
@@ -129,7 +129,7 @@ class ForestDetailRepository {
                 }
 
                 override fun onFailure(e: Throwable) {
-                    tip.value = "❌"
+                    tip.value = "收藏失败"
                 }
             })
 

@@ -3,6 +3,7 @@ package cn.pivotstudio.modulec.homescreen.viewmodel;
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
@@ -10,6 +11,7 @@ import cn.pivotstudio.modulec.homescreen.model.ForestHead
 import cn.pivotstudio.modulec.homescreen.model.Hole
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
 import com.alibaba.android.arouter.launcher.ARouter
+import kotlinx.coroutines.launch
 
 class ForestDetailViewModel(val forestId: Int) : ViewModel() {
     val repository = ForestDetailRepository()
@@ -18,6 +20,25 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
     val overview = repository.overview
     val state = repository.state
     val tip: MutableLiveData<String?> = repository.tip
+
+    private var _shouldRefreshHoles = false
+    val shouldRefreshHoles = _shouldRefreshHoles
+
+    fun loadHolesLater() {
+        _shouldRefreshHoles = true
+    }
+
+    /**
+     * 从其他页面回来想要刷新
+     *  1. loadxxxLater()
+     *  2. tryLoadNewxxx() in View
+     */
+    fun tryLoadNewHoles() {
+        if (_shouldRefreshHoles) {
+            viewModelScope.launch { loadHoles() }
+            _shouldRefreshHoles = false
+        }
+    }
 
     init {
         loadHoles()
@@ -47,7 +68,7 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
     }
 
     fun giveALikeToTheHole(hole: Hole) {
-            repository.giveALikeToTheHole(hole as DetailForestHole)
+        repository.giveALikeToTheHole(hole as DetailForestHole)
     }
 
     fun followTheHole(hole: Hole) {

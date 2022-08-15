@@ -7,57 +7,75 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <!--主页面布局-->
 
-        <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/nav_host_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:navGraph="@navigation/nav_graph" />
+            android:layout_height="match_parent">
+            <!--主页面布局-->
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/home_screen_toolbar"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:layout_constraintTop_toTopOf="parent"
+                app:titleTextAppearance="@style/HustHoleTypography.Headline1.Bold"
+                app:titleTextColor="?attr/colorOnPrimary"
+                tools:layout_height="@dimen/dp_60" />
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:id="@+id/layout_bottom_bar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/transparent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/nav_host_fragment"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/home_screen_toolbar"
+                app:navGraph="@navigation/nav_graph" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_homescreen_publishhole"
-                android:layout_width="@dimen/dp_48"
-                android:layout_height="@dimen/dp_48"
-                android:layout_marginBottom="27dp"
-                android:backgroundTint="@color/HH_BandColor_1"
-                android:contentDescription="@string/publishhole_1"
-                android:onClick="jumpToPublishHoleByARouter"
-                app:fabCustomSize="@dimen/dp_48"
-                app:layout_anchor="@id/bottom_app_bar"
-                app:maxImageSize="@dimen/dp_24"
-                app:srcCompat="@drawable/add" />
-
-            <com.google.android.material.bottomappbar.BottomAppBar
-                android:id="@+id/bottom_app_bar"
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
+                android:id="@+id/layout_bottom_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:elevation="@{0.0f}"
-                app:fabCradleMargin="@dimen/dp_10"
-                app:fabCradleRoundedCornerRadius="@dimen/dp_35">
+                android:background="@color/transparent"
+                app:layout_constraintBottom_toBottomOf="parent">
 
-                <com.google.android.material.bottomnavigation.BottomNavigationView
-                    android:id="@+id/bottom_navigation_view"
-                    style="@style/BottomNavigationBarTheme"
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_homescreen_publishhole"
+                    android:layout_width="@dimen/dp_48"
+                    android:layout_height="@dimen/dp_48"
+                    android:layout_marginBottom="27dp"
+                    android:backgroundTint="@color/HH_BandColor_1"
+                    android:contentDescription="@string/publishhole_1"
+                    android:onClick="jumpToPublishHoleByARouter"
+                    app:fabCustomSize="@dimen/dp_48"
+                    app:layout_anchor="@id/bottom_app_bar"
+                    app:maxImageSize="@dimen/dp_24"
+                    app:srcCompat="@drawable/add" />
+
+                <com.google.android.material.bottomappbar.BottomAppBar
+                    android:id="@+id/bottom_app_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_54"
-                    app:labelVisibilityMode="labeled"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:menu="@menu/bottom_navigation_menu" />
-            </com.google.android.material.bottomappbar.BottomAppBar>
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:elevation="@{0.0f}"
+                    app:fabCradleMargin="@dimen/dp_10"
+                    app:fabCradleRoundedCornerRadius="@dimen/dp_35">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.google.android.material.bottomnavigation.BottomNavigationView
+                        android:id="@+id/bottom_navigation_view"
+                        style="@style/HustHoleBottomNavigationBarTheme"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_54"
+                        android:textSize="@dimen/sp_30"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:menu="@menu/bottom_navigation_menu" />
+                </com.google.android.material.bottomappbar.BottomAppBar>
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

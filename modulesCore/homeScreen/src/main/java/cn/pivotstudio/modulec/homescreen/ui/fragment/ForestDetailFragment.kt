@@ -139,6 +139,11 @@ class ForestDetailFragment : BaseFragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.tryLoadNewHoles()
+    }
+
     private fun joinTheForest() {
         viewModel.joinTheForest()
     }
@@ -149,6 +154,7 @@ class ForestDetailFragment : BaseFragment() {
 
     // 点击文字内容跳转到树洞
     fun navToSpecificHole(holeId: Int) {
+        viewModel.loadHolesLater()
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
                 .withInt(Constant.HOLE_ID, holeId)
@@ -159,6 +165,7 @@ class ForestDetailFragment : BaseFragment() {
 
     // 点击具体小树林 FloatingActionButton 跳转到发布树洞并填充小树林信息
     fun navToPublishHoleFromDetailForest(forestId: Int) {
+        viewModel.loadHolesLater()
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/publishHole/PublishHoleActivity")
                 .withBundle(Constant.FROM_DETAIL_FOREST, Bundle().apply {
@@ -173,6 +180,7 @@ class ForestDetailFragment : BaseFragment() {
 
     // 点击回复图标跳转到树洞后自动打开软键盘
     fun navToSpecificHoleWithReply(holeId: Int) {
+        viewModel.loadHolesLater()
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
                 .withInt(Constant.HOLE_ID, holeId)
