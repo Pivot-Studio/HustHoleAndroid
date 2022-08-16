@@ -6,8 +6,8 @@ import io.reactivex.functions.Function;
 /**
  * @author
  * @version:1.0
- * @classname:HttpErrorHandler
- * @description:网络错误处理
+ * @classname: HttpErrorHandler
+ * @description: 网络错误处理
  * @date :2022/4/26 14:36
  */
 public class HttpErrorHandler<T> implements Function<Throwable, Observable<T>> {

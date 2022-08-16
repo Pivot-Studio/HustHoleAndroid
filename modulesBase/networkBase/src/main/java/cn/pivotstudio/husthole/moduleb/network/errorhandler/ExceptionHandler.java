@@ -1,22 +1,28 @@
 package cn.pivotstudio.husthole.moduleb.network.errorhandler;
 
 import android.net.ParseException;
+
 import com.google.gson.JsonParseException;
+
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.SocketTimeoutException;
+
 import javax.net.ssl.SSLHandshakeException;
+
 import okhttp3.ResponseBody;
+
 import org.apache.http.conn.ConnectTimeoutException;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import retrofit2.HttpException;
 
 /**
- * @author
+ * @author lzt
  * @version:1.0
- * @classname:ExceptionHandler
- * @description:exception解析内容
+ * @classname: ExceptionHandler
+ * @description: exception解析内容
  * @date :2022/4/26 14:36
  */
 public class ExceptionHandler {
@@ -101,8 +107,8 @@ public class ExceptionHandler {
             responseThrowable = new ResponseThrowable(resultException, resultException.code);
             responseThrowable.message = resultException.message;
         } else if (throwable instanceof JsonParseException
-            || throwable instanceof JSONException
-            || throwable instanceof ParseException) {
+                || throwable instanceof JSONException
+                || throwable instanceof ParseException) {
             responseThrowable = new ResponseThrowable(throwable, ERROR.PARSE_ERROR);
             responseThrowable.message = "解析错误";
         } else if (throwable instanceof ConnectException) {

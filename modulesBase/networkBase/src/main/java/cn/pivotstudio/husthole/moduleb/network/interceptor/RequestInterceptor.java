@@ -10,8 +10,8 @@ import okhttp3.Response;
 /**
  * @author
  * @version:1.0
- * @classname:RequestInterceptor
- * @description:请求拦截器
+ * @classname: RequestInterceptor
+ * @description: 请求拦截器
  * @date :2022/4/26 14:36
  */
 public class RequestInterceptor implements Interceptor {
