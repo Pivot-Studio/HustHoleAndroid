@@ -14,11 +14,9 @@
         android:color="@color/HH_BandColor_1" />
     <!-- 圆角的幅度 -->
     <corners
-        android:topLeftRadius="8dp"
-        android:topRightRadius="8dp"
-        android:bottomLeftRadius="8dp"
-        android:bottomRightRadius="8dp"/>
-    <padding
-        android:left="24dp"
-        />
+        android:topLeftRadius="16dp"
+        android:topRightRadius="16dp"
+        android:bottomLeftRadius="16dp"
+        android:bottomRightRadius="16dp"/>
+
 </shape>

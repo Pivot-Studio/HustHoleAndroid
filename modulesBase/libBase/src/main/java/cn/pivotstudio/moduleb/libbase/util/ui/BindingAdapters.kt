@@ -1,15 +1,14 @@
-package cn.pivotstudio.modulec.homescreen.ui
+package cn.pivotstudio.moduleb.libbase.util.ui
 
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import androidx.databinding.BindingAdapter
-import cn.pivotstudio.modulec.homescreen.R
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
+import cn.pivotstudio.moduleb.libbase.R
+import cn.pivotstudio.moduleb.libbase.util.data.TimeUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import cn.pivotstudio.moduleb.libbase.util.data.TimeUtil
-import cn.pivotstudio.moduleb.libbase.util.ui.GlideBlurTransformation
 
 /**
  * 点赞按钮
@@ -19,7 +18,7 @@ import cn.pivotstudio.moduleb.libbase.util.ui.GlideBlurTransformation
  */
 @BindingAdapter("thumbupIcon")
 fun onClickThumbsUp(view: ImageView, is_thumbsUp: Boolean) {
-    view.setImageResource(if (is_thumbsUp) R.mipmap.active else R.mipmap.inactive)
+    view.setImageResource(if (is_thumbsUp) R.drawable.ic_thumbs_up_active else R.drawable.ic_thumbs_up_inactive)
 }
 
 /**
@@ -30,7 +29,7 @@ fun onClickThumbsUp(view: ImageView, is_thumbsUp: Boolean) {
  */
 @BindingAdapter("replyIcon")
 fun onClickReply(view: ImageView, is_reply: Boolean) {
-    view.setImageResource(if (is_reply) R.mipmap.active_2 else R.mipmap.inactive_2)
+    view.setImageResource(if (is_reply) R.drawable.ic_comment_active_20dp else R.drawable.ic_comment_inactive_20dp)
 }
 
 /**
@@ -41,7 +40,7 @@ fun onClickReply(view: ImageView, is_reply: Boolean) {
  */
 @BindingAdapter("followIcon")
 fun onClickFollow(view: ImageView, is_follow: Boolean) {
-    view.setImageResource(if (is_follow) R.mipmap.active_3 else R.mipmap.inactive_3)
+    view.setImageResource(if (is_follow) R.drawable.ic_follow_active_20dp else R.drawable.ic_follow_inactive_20dp)
 }
 
 /**
@@ -88,7 +87,7 @@ fun onForestIconShow(view: Button, forestName: String, role: String?) {
             view.setPadding(15, 5, 6, 6)
             view.setTextColor(view.context.resources.getColor(R.color.GrayScale_50))
             view.text = " Pivot Studio团队 "
-            val homepressed = view.context.resources.getDrawable(R.mipmap.pivot, null)
+            val homepressed = view.context.resources.getDrawable(R.drawable.ic_pivot_studio_16dp, null)
             homepressed.setBounds(0, 0, homepressed.minimumWidth, homepressed.minimumHeight)
             view.setCompoundDrawables(homepressed, null, null, null)
             view.setBackgroundResource(R.drawable.tag_gray)
@@ -134,7 +133,7 @@ fun onPsIconShow(view: ImageView, forestName: String, role: String?) {
             view.visibility = View.INVISIBLE
         } else {
             view.visibility = View.VISIBLE
-            view.setImageResource(R.mipmap.pivot)
+            view.setImageResource(R.drawable.ic_pivot_studio_16dp)
         }
         "counseling_center" -> if (forestName == "") {
             view.visibility = View.INVISIBLE
@@ -172,4 +171,18 @@ fun bindBlurImage(imgView: ImageView, imgUrl: String?) {
             .into(imgView)
     }
 }
+
+/**
+ * 时间加载
+ *
+ * @param view
+ * @param created_timestamp
+ */
+@BindingAdapter("time")
+fun setTime(view: TextView, created_timestamp: String?) {
+    val time = TimeUtil.replyTime(created_timestamp) + "发布"
+    view.text = time
+}
+
+
 

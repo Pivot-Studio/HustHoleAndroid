@@ -5,25 +5,29 @@ import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
-import cn.pivotstudio.modulec.homescreen.model.ForestHole
-import cn.pivotstudio.modulec.homescreen.model.Hole
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.ERROR
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.LOADING
 import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import io.reactivex.Observable
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 
 
-enum class LoadStatus { LOADING, ERROR, DONE }
+enum class LoadStatus { LOADING, ERROR, DONE, LATERLOAD }
 
 @SuppressLint("CheckResult")
 class ForestRepository {
+
+    companion object {
+        const val TAG = "ForestRepositoryDebug"
+        const val STARTING_ID = 0
+        const val HOLES_LIST_SIZE = 20
+        const val HEADS_LIST_SIZE = 20
+        const val SORT_BY_LATEST_REPLY = true
+    }
+
     private var lastStartId = STARTING_ID
 
     private var _holeState = MutableLiveData<LoadStatus?>()
@@ -76,7 +80,7 @@ class ForestRepository {
         }))
     }
 
-    fun loadForestHeads() {
+    fun loadForestHeader() {
         retrofitService.searchForestHeads(STARTING_ID, HEADS_LIST_SIZE)
             .compose(NetworkApi.applySchedulers(object : BaseObserver<ForestHeads>() {
                 override fun onSuccess(items: ForestHeads?) {
@@ -101,7 +105,7 @@ class ForestRepository {
                     val newItems = _holes.value!!.toMutableList()
                     for ((i, newHole) in newItems.withIndex()) {
                         if (hole.holeId == newHole.holeId) newItems[i] = newHole.copy().apply {
-                            likeNum.inc()
+                            likeNum = if (!it.liked) likeNum.inc() else likeNum.dec()
                             liked = liked.not()
                         }
                     }
@@ -128,7 +132,7 @@ class ForestRepository {
                     val newItems = _holes.value!!.toMutableList()
                     for ((i, newHole) in newItems.withIndex()) {
                         if (hole.holeId == newHole.holeId) newItems[i] = newHole.copy().apply {
-                            followNum.inc()
+                            followNum = if (!hole.followed) followNum.inc() else followNum.dec()
                             followed = followed.not()
                         }
                     }
@@ -164,12 +168,6 @@ class ForestRepository {
     }
 
 
-    companion object {
-        const val TAG = "ForestRepositoryDebug"
-        const val STARTING_ID = 0
-        const val HOLES_LIST_SIZE = 20
-        const val HEADS_LIST_SIZE = 20
-        const val SORT_BY_LATEST_REPLY = true
-    }
+
 
 }

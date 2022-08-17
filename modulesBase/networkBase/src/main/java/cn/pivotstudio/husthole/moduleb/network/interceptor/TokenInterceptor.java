@@ -1,8 +1,11 @@
 package cn.pivotstudio.husthole.moduleb.network.interceptor;
 
 import android.content.Context;
+
 import cn.pivotstudio.moduleb.database.MMKVUtil;
+
 import java.io.IOException;
+
 import okhttp3.Interceptor;
 import okhttp3.Request;
 
@@ -22,7 +25,7 @@ public class TokenInterceptor implements Interceptor {
 
         String token = mmkvUtil.getString("USER_TOKEN");
         Request request =
-            chain.request().newBuilder().addHeader("Authorization", "Bearer " + token).build();
+                chain.request().newBuilder().addHeader("Authorization", "Bearer " + token).build();
         return chain.proceed(request);
     }
 }

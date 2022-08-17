@@ -3,65 +3,80 @@ package cn.pivotstudio.modulec.homescreen.repository
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
+import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
+import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
+import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2
 import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.modulec.homescreen.model.ForestCard
 import cn.pivotstudio.modulec.homescreen.model.ForestCardList
-import cn.pivotstudio.modulec.homescreen.model.Hole
+import cn.pivotstudio.husthole.moduleb.network.model.Hole
+import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import io.reactivex.Observable
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 
 enum class ForestDetailHolesLoadStatus { LOADING, ERROR, DONE }
 
 @SuppressLint("CheckResult")
-class ForestDetailRepository {
+class ForestDetailRepository(
+    private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private val forestId: Int,
+    private var lastTimeStamp: String = DateUtil.getDateTime()
+) {
     private var _holes = MutableLiveData<List<DetailForestHole>>()
     private var _state = MutableLiveData<ForestDetailHolesLoadStatus>()
     private var _overview = MutableLiveData<ForestCard>()
-    private var lastStartId = STARTING_ID
+    var lastStartId = STARTING_ID
 
     val tip = MutableLiveData<String?>()
     val holes = _holes
-    val state = _state
+    var state = _state
 
     val overview = _overview
 
-    fun loadHolesByForestId(id: Int) {
-        _state.value = ForestDetailHolesLoadStatus.LOADING
-        HomeScreenNetworkApi.retrofitService.searchDetailForestHolesByForestId(
-            id, STARTING_ID, LIST_SIZE
-        ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<DetailForestHole>>() {
-            override fun onSuccess(result: List<DetailForestHole>?) {
-                holes.value = result
-                lastStartId = STARTING_ID
-                _state.value = ForestDetailHolesLoadStatus.DONE
-            }
 
-            override fun onFailure(e: Throwable?) {
-                _state.value = ForestDetailHolesLoadStatus.ERROR
-            }
-        }))
+
+    suspend fun loadHolesByForestId(id: Int): Flow<List<DetailForestHoleV2>> {
+        _state.value = ForestDetailHolesLoadStatus.LOADING
+        return flow {
+            emit(HustHoleApi.retrofitService.getHolesInForest(
+                forestId = id,
+                timestamp = lastTimeStamp
+            ))
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
+            _state.value = ForestDetailHolesLoadStatus.ERROR
+        }.onEach { lastTimeStamp = DateUtil.getDateTime() }
     }
 
-    fun loadMoreHolesByForestId(id: Int) {
+    fun loadMoreHolesByForestId(id: Int): Flow<List<DetailForestHoleV2>> {
         _state.value = ForestDetailHolesLoadStatus.LOADING
-        HomeScreenNetworkApi.retrofitService.searchDetailForestHolesByForestId(
-            id, lastStartId + LIST_SIZE, LIST_SIZE
-        ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<DetailForestHole>>() {
-            override fun onSuccess(result: List<DetailForestHole>) {
-                val newItems = holes.value!!.toMutableList()
-                newItems.addAll(result)
-                holes.value = newItems
-                lastStartId += LIST_SIZE
-                _state.value = ForestDetailHolesLoadStatus.DONE
-            }
+        return flow {
+            emit(
+                HustHoleApi.retrofitService
+                    .getHolesInForest(
+                        forestId = id,
+                        offset = lastStartId,
+                        timestamp = lastTimeStamp
+                    )
+            )
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
+            _state.value = ForestDetailHolesLoadStatus.ERROR
+        }
+    }
 
-            override fun onFailure(e: Throwable?) {
-                _state.value = ForestDetailHolesLoadStatus.ERROR
-            }
-        }))
+    suspend fun loadBriefByForestId(): Flow<ForestBrief> {
+        return flow {
+            emit(hustHoleApiService.getForestOverview(forestId))
+        }
     }
 
     fun loadOverviewByForestId(id: Int) {
@@ -79,7 +94,7 @@ class ForestDetailRepository {
             }))
     }
 
-    fun giveALikeToTheHole(hole: DetailForestHole) {
+    fun giveALikeToTheHole(hole: DetailForestHoleV2) {
         if (!hole.liked) {
             HomeScreenNetworkApi.retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + hole.holeId + "/-1")
         } else {
@@ -89,17 +104,18 @@ class ForestDetailRepository {
                 override fun onSuccess(response: MsgResponse) {
                     val newItems = _holes.value!!.toMutableList()
                     for ((i, newHole) in newItems.withIndex()) {
-                        if (hole.holeId == newHole.holeId) newItems[i] = newHole.copy().apply {
-                            likeNum.inc()
-                            liked = liked.not()
-                        }
+                        if (hole.holeId.toInt() == newHole.holeId) newItems[i] =
+                            newHole.copy().apply {
+                                likeNum = if (!hole.liked) likeNum.inc() else likeNum.dec()
+                                liked = liked.not()
+                            }
                     }
                     _holes.value = newItems
                     tip.value = response.msg
                 }
 
                 override fun onFailure(e: Throwable?) {
-                    tip.value = "❌"
+                    tip.value = "点赞失败"
                 }
 
             })
@@ -108,8 +124,8 @@ class ForestDetailRepository {
 
     }
 
-    fun followTheHole(hole: DetailForestHole) {
-        val observable: Observable<MsgResponse> = if (!hole.followed) {
+    fun followTheHole(hole: DetailForestHoleV2) {
+        val observable: Observable<MsgResponse> = if (!hole.isFollow) {
             HomeScreenNetworkApi.retrofitService.follow(Constant.BASE_URL + "follows/" + hole.holeId)
         } else {
             HomeScreenNetworkApi.retrofitService.deleteFollow(Constant.BASE_URL + "follows/" + hole.holeId)
@@ -119,17 +135,18 @@ class ForestDetailRepository {
                 override fun onSuccess(response: MsgResponse) {
                     val newItems = _holes.value!!.toMutableList()
                     for ((i, newHole) in newItems.withIndex()) {
-                        if (hole.holeId == newHole.holeId) newItems[i] = newHole.copy().apply {
-                            followNum.inc()
-                            followed = followed.not()
-                        }
+                        if (hole.holeId.toInt() == newHole.holeId) newItems[i] =
+                            newHole.copy().apply {
+                                followNum = if (!hole.isFollow) followNum.inc() else followNum.dec()
+                                followed = followed.not()
+                            }
                     }
                     _holes.value = newItems
                     tip.value = response.msg
                 }
 
                 override fun onFailure(e: Throwable) {
-                    tip.value = "❌"
+                    tip.value = "收藏失败"
                 }
             })
 

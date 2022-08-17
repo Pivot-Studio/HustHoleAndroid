@@ -22,6 +22,21 @@ class JoinedForestsAdapter(
     val navToAllForest: () -> Unit
 ) : ListAdapter<ForestHead, ViewHolder>(DIFF_CALLBACK) {
 
+    companion object {
+        const val TYPE_DISCOVER_MORE = 1
+        const val TYPE_JOINED_FOREST = 0
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<ForestHead> =
+            object : DiffUtil.ItemCallback<ForestHead>() {
+                override fun areItemsTheSame(oldItem: ForestHead, newItem: ForestHead): Boolean {
+                    return oldItem.forestId == newItem.forestId
+                }
+
+                override fun areContentsTheSame(oldItem: ForestHead, newItem: ForestHead): Boolean {
+                    return oldItem == newItem
+                }
+            }
+    }
+
     override fun getItemViewType(position: Int): Int {
         return when (position) {
             currentList.size -> TYPE_DISCOVER_MORE
@@ -74,18 +89,5 @@ class JoinedForestsAdapter(
         binding: ItemDiscoverMoreBinding
     ) : RecyclerView.ViewHolder(binding.root)
 
-    companion object {
-        const val TYPE_DISCOVER_MORE = 1
-        const val TYPE_JOINED_FOREST = 0
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<ForestHead> =
-            object : DiffUtil.ItemCallback<ForestHead>() {
-                override fun areItemsTheSame(oldItem: ForestHead, newItem: ForestHead): Boolean {
-                    return oldItem.forestId == newItem.forestId
-                }
 
-                override fun areContentsTheSame(oldItem: ForestHead, newItem: ForestHead): Boolean {
-                    return oldItem == newItem
-                }
-            }
-    }
 }

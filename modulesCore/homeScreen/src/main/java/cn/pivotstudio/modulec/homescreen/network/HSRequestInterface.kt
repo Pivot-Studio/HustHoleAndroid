@@ -1,11 +1,9 @@
 package cn.pivotstudio.modulec.homescreen.network
 
+import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
+import cn.pivotstudio.modulec.homescreen.model.*
 import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
-import cn.pivotstudio.modulec.homescreen.model.ForestHole
-import cn.pivotstudio.modulec.homescreen.model.ForestHeads
-import cn.pivotstudio.modulec.homescreen.model.ForestTypes
-import cn.pivotstudio.modulec.homescreen.model.ForestCardList
-import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -53,6 +51,20 @@ interface HSRequestInterface {
         @Query("list_size") list_size: Int
     ): Observable<List<DataBean>>
 
+    @GET("notices")
+    fun searchNotices(
+        @Query("start_id") startId: Int,
+        @Query("list_size") listSize: Int
+    ): Observable<NoticeResponse>
+
+    @GET("notices")
+    suspend fun searchNoticesFlow(
+        @Query("start_id") startId: Int,
+        @Query("list_size") listSize: Int
+    ): NoticeResponse
+
+
+    /** =========小树林相关的接口========== */
     @GET("forests/holes")
     fun searchForestHoles(
         @Query("start_id") startId: Int,

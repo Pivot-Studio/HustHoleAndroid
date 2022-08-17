@@ -1,5 +1,6 @@
-package cn.pivotstudio.modulec.homescreen.model
+package cn.pivotstudio.husthole.moduleb.network.model
 
+import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import com.google.gson.annotations.SerializedName
 
 data class ForestHole(

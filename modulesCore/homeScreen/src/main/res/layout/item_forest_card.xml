@@ -5,8 +5,9 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="@dimen/dp_154"
-        android:layout_height="@dimen/dp_210"
+        android:layout_height="wrap_content"
         android:layout_margin="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_20"
         android:background="@drawable/standard_forest_1">
 
         <TextView
@@ -16,8 +17,7 @@
             android:layout_marginTop="@dimen/dp_3"
             android:text="@{forestCard.name, default = 1037}"
             android:textColor="@color/GrayScale_20"
-            android:textSize="@dimen/sp_13"
-            android:textStyle="bold"
+            android:textAppearance="@style/HustHoleTypography.Headline5"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_item_all_forest_avatar_frame" />
@@ -29,7 +29,7 @@
             android:layout_marginTop="@dimen/dp_5"
             android:text="@{@string/follow_msg(forestCard.joinedNumber, forestCard.holeNumber), default = @string/follow_msg}"
             android:textColor="@color/GrayScale_70"
-            android:textSize="@dimen/sp_11"
+            android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_item_all_forest_title" />
@@ -43,7 +43,7 @@
             android:maxLines="2"
             android:text="@{forestCard.description, default=@string/default_string_zh_long}"
             android:textColor="@color/GrayScale_50"
-            android:textSize="@dimen/sp_11"
+            android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_item_all_forest_follow_msg" />

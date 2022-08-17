@@ -93,65 +93,6 @@ public class HoleAdapter {
     }
 
     /**
-     * 点赞按钮
-     *
-     * @param view
-     * @param is_thumbup
-     */
-    @BindingAdapter({"thumbupIcon"})
-    public static void onClickThumbup(ImageView view, Boolean is_thumbup) {
-        view.setImageResource(is_thumbup ? R.mipmap.active : R.mipmap.inactive);
-
-    }
-
-    /**
-     * 回复按钮
-     *
-     * @param view
-     * @param is_reply
-     */
-    @BindingAdapter({"replyIcon"})
-    public static void onClickReply(ImageView view, boolean is_reply) {
-        view.setImageResource(is_reply ? R.mipmap.active_2 : R.mipmap.inactive_2);
-
-    }
-
-    /**
-     * 收藏按钮
-     *
-     * @param view
-     * @param is_follow
-     */
-    @BindingAdapter({"followIcon"})
-    public static void onClickFollow(ImageView view, boolean is_follow) {
-        view.setImageResource(is_follow ? R.mipmap.active_3 : R.mipmap.inactive_3);
-
-    }
-
-    /**
-     * 举报，删除
-     *
-     * @param view
-     * @param is_mine
-     */
-    @BindingAdapter({"moreListIcon"})
-    public static void onClickMore(ImageView view, boolean is_mine) {
-        view.setImageResource(is_mine ? R.mipmap.vector6 : R.mipmap.vector4);
-    }
-
-    /**
-     * 时间加载
-     *
-     * @param view
-     * @param created_timestamp
-     */
-    @BindingAdapter({"time"})
-    public static void setTime(TextView view, String created_timestamp) {
-        String time = TimeUtil.replyTime(created_timestamp) + ("发布");
-        view.setText(time);
-    }
-
-    /**
      * 设置热评icon
      *
      * @param view
@@ -258,7 +199,7 @@ public class HoleAdapter {
                     view.setVisibility(View.INVISIBLE);
                 } else {
                     view.setVisibility(View.VISIBLE);
-                    view.setImageResource(R.mipmap.pivot);
+                    view.setImageResource(R.drawable.ic_pivot_studio_16dp);
                 }
                 break;
 

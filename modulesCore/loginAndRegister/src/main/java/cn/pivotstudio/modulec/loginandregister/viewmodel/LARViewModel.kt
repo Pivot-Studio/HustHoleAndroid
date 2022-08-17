@@ -1,17 +1,25 @@
 package cn.pivotstudio.modulec.loginandregister.viewmodel
 
 import android.os.CountDownTimer
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
+import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
+import cn.pivotstudio.husthole.moduleb.network.model.User
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.loginandregister.R
 import cn.pivotstudio.modulec.loginandregister.model.LoginResponse
 import cn.pivotstudio.modulec.loginandregister.model.MsgResponse
 import cn.pivotstudio.modulec.loginandregister.network.LoginAndRegisterNetworkApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import kotlin.collections.HashMap
 
 enum class LARState {
@@ -21,12 +29,17 @@ enum class LARState {
 
 class LARViewModel : ViewModel() {
 
+    companion object {
+        const val TAG = "LARViewModel"
+    }
+
     private var _larState = MutableLiveData<LARState?>()
     private var _tip = MutableLiveData<String?>()
     private var _loginToken = MutableLiveData<String?>()
     private var _verifyCode = MutableLiveData<String?>()
 
     private var _countDownTime = MutableLiveData<Long?>()
+    private var _loginTokenV2 = MutableStateFlow<String>("")
 
     private var countDownTimer = object : CountDownTimer(90000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
@@ -53,7 +66,7 @@ class LARViewModel : ViewModel() {
     val studentCode = MutableLiveData<String?>()
     val countDownTime: LiveData<Long?> = _countDownTime
     val verifyCode: LiveData<String?> = _verifyCode
-
+    val loginTokenV2: StateFlow<String> = _loginTokenV2
 
     fun login(id: String, password: String) {
         val map = HashMap<String, String>()
@@ -72,6 +85,20 @@ class LARViewModel : ViewModel() {
                     _tip.value = (e as ResponseThrowable).message
                 }
             })
+        viewModelScope.launch {
+            flow {
+                val result = HustHoleApi.retrofitService.signIn(
+                    User(email = id + Constant.EMAIL_SUFFIX, password = password)
+                )
+                emit(result)
+            }.flowOn(Dispatchers.IO).catch { e ->
+                e.printStackTrace()
+                Log.e(TAG, "login: v2登录失败")
+            }.collect {
+                _loginTokenV2.emit(it.token)
+                Log.e(TAG, "login: v2成功")
+            }
+        }
     }
 
     fun register(password: String) {
@@ -168,7 +195,6 @@ class LARViewModel : ViewModel() {
     fun doneTokenChange() {
         _loginToken.value = null
     }
-
 
 
     private fun countDown() {

@@ -8,6 +8,7 @@ import cn.pivotstudio.husthole.moduleb.network.errorhandler.HttpErrorHandler;
 import cn.pivotstudio.husthole.moduleb.network.interceptor.RequestInterceptor;
 import cn.pivotstudio.husthole.moduleb.network.interceptor.ResponseInterceptor;
 import cn.pivotstudio.husthole.moduleb.network.interceptor.TokenInterceptor;
+import cn.pivotstudio.husthole.moduleb.network.interceptor.TokenInterceptorV2;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.Observer;
@@ -40,6 +41,7 @@ public class NetworkApi {
     private static String BASE_URL = null;
 
     private static OkHttpClient okHttpClient;
+    private static OkHttpClient okHttpClientV2;
 
     private static final HashMap<String, Retrofit> retrofitHashMap = new HashMap<>();
 
@@ -89,7 +91,7 @@ public class NetworkApi {
      *
      * @return OkHttpClient
      */
-    private static OkHttpClient getOkHttpClient() {
+    public static OkHttpClient getOkHttpClient() {
         //不为空则说明已经配置过了，直接返回即可。
         if (okHttpClient == null) {
             //OkHttp构建器
@@ -117,6 +119,23 @@ public class NetworkApi {
             okHttpClient = builder.build();
         }
         return okHttpClient;
+    }
+
+    public static OkHttpClient getOkHttpClientV2() {
+        if (okHttpClientV2 == null) {
+            OkHttpClient.Builder builder = new OkHttpClient.Builder()
+                    .connectTimeout(6, TimeUnit.SECONDS)
+                    .addInterceptor(new RequestInterceptor(iNetworkRequiredInfo))
+                    .addInterceptor(new ResponseInterceptor())
+                    .addInterceptor(new TokenInterceptorV2(iNetworkRequiredInfo.getApplicationContext()));
+            if (iNetworkRequiredInfo != null && iNetworkRequiredInfo.isDebug()) {
+                HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
+                httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+                builder.addInterceptor(httpLoggingInterceptor);
+            }
+            okHttpClientV2 = builder.build();
+        }
+        return okHttpClientV2;
     }
 
     /**

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.BuildConfig
@@ -17,6 +18,10 @@ import cn.pivotstudio.modulec.loginandregister.R
 import cn.pivotstudio.modulec.loginandregister.databinding.FragmentLoginBinding
 import cn.pivotstudio.modulec.loginandregister.viewmodel.LARViewModel
 import com.alibaba.android.arouter.launcher.ARouter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 class LoginFragment : BaseFragment() {
     private lateinit var binding: FragmentLoginBinding
@@ -78,6 +83,19 @@ class LoginFragment : BaseFragment() {
                         requireActivity().finish()
                     }
                     viewModel.doneTokenChange()
+                }
+            }
+
+            CoroutineScope(Dispatchers.IO).launch {
+                loginTokenV2.collect { token ->
+                    token.let {
+                        mmkvUtil.apply {
+                            if (token.isNotBlank()) {
+                                put(Constant.USER_TOKEN_V2, token)
+                                put(Constant.IS_LOGIN, true)
+                            }
+                        }
+                    }
                 }
             }
 

@@ -1,6 +1,5 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +18,7 @@ import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
-import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.JoinedForestsAdapter
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
@@ -50,10 +49,11 @@ class ForestFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         initRefresh()
 
-        val holeAdapter = ForestHoleAdapter(this)
+        val holeAdapter = ForestHoleAdapter(
+            this
+        )
 
         val headAdapter = JoinedForestsAdapter(
             onItemClick = ::navToSpecificForest,
@@ -130,6 +130,12 @@ class ForestFragment : BaseFragment() {
         preloadAllForests()
     }
 
+    override fun onResume() {
+        super.onResume()
+        forestViewModel.tryLoadNewHoles()
+        forestViewModel.tryLoadNewHeader()
+    }
+
 
     /**
      * 利用 Navigation 导航到 AllForestFragment
@@ -137,18 +143,22 @@ class ForestFragment : BaseFragment() {
      * 相关类 [AllForestFragment],nav_graph.xml
      */
     fun navToAllForests() {
+        forestViewModel.loadHeaderLater()
+        forestViewModel.loadHolesLater()
         findNavController(
             requireActivity(), R.id.nav_host_fragment
         ).navigate(R.id.action_forest_fragment_to_all_forest_fragment)
     }
 
     fun navToSpecificForest(forestId: Int) {
+        forestViewModel.loadHeaderLater()
         val action = ForestFragmentDirections.actionForestFragmentToForestDetailFragment(forestId)
         findNavController(requireActivity(), R.id.nav_host_fragment).navigate(action)
     }
 
     // 点击文字内容跳转到树洞
     fun navToSpecificHole(holeId: Int) {
+        forestViewModel.loadHolesLater()
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, false).navigation(requireActivity(), 1)
@@ -157,6 +167,7 @@ class ForestFragment : BaseFragment() {
 
     // 点击恢复图标跳转到树洞后自动打开软键盘
     fun navToSpecificHoleWithReply(holeId: Int) {
+        forestViewModel.loadHolesLater()
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, true).navigation()

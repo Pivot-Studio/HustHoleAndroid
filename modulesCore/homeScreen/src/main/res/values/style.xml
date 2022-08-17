@@ -36,30 +36,16 @@
         <item name="colorPrimary">@color/HH_BandColor_3</item>
         <item name="colorPrimaryDark">@color/HH_BandColor_1</item>
         <item name="colorAccent">@color/GrayScale_100</item>
+        <item name="titleTextAppearance">@style/HustHoleTypography.Headline1</item>
     </style>
 
-    <!--ShapeableImageView 上半圆角-->
-    <style name="ForestCardUpperRoundedStyle">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSizeTopLeft">@dimen/dp_13</item>
-        <item name="cornerSizeTopRight">@dimen/dp_13</item>
-    </style>
-
-    <!--ShapeableImageView 圆角-->
-    <style name="AvatarRoundedStyle">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">@dimen/dp_8</item>
-    </style>
-
-    <style name="BottomNavigationBarTheme" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+    <style name="HustHoleBottomNavigationBarTheme" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="android:background">@drawable/bg_bottom_bar</item>
         <item name="itemTextColor">@color/navigation_bar_colored_item_tint</item>
         <item name="itemIconTint">@color/navigation_bar_colored_item_tint</item>
-    </style>
-
-    <style name="ShapeableImageViewCircleStyle">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">50%</item>
+        <item name="labelVisibilityMode">labeled</item>
+        <item name="itemTextAppearanceActive">@style/HustHoleTypography.Headline4.Bold</item>
+        <item name="itemTextAppearanceInactive">@style/HustHoleTypography.Headline4.Bold</item>
     </style>
 
 </resources>

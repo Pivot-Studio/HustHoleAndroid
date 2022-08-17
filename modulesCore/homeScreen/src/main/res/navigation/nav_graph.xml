@@ -25,10 +25,10 @@
     </fragment>
 
     <fragment
-        android:id="@+id/message_fragment"
-        android:name="cn.pivotstudio.modulec.homescreen.oldversion.fragment.MessageFragment"
+        android:id="@+id/notice_fragment"
+        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.NoticeFragment"
         android:label="@string/notification_zh"
-        tools:layout="@layout/page3fragment" />
+        tools:layout="@layout/fragment_notice" />
 
     <fragment
         android:id="@+id/mine_fragment"

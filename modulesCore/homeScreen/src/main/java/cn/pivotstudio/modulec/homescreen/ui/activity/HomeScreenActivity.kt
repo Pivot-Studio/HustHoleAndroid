@@ -14,7 +14,6 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
-import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.modulec.homescreen.R
@@ -39,7 +38,7 @@ import cn.pivotstudio.moduleb.libbase.constant.Constant
  */
 @Route(path = "/homeScreen/HomeScreenActivity")
 class HomeScreenActivity : BaseActivity() {
-    private var binding: ActivityHsHomescreenBinding? = null
+    private lateinit var binding: ActivityHsHomescreenBinding
     private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,23 +68,28 @@ class HomeScreenActivity : BaseActivity() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        setupActionBarWithNavController(
-            navController,
-            AppBarConfiguration(
-                setOf(
-                    R.id.homepage_fragment,
-                    R.id.forest_fragment,
-                    R.id.message_fragment,
-                    R.id.mine_fragment,
-                    R.id.forest_detail_fragment
+
+        binding.homeScreenToolbar.let {
+            setSupportActionBar(it)
+            it.setupWithNavController(
+                navController,
+                AppBarConfiguration(
+                    setOf(
+                        R.id.homepage_fragment,
+                        R.id.forest_fragment,
+                        R.id.notice_fragment,
+                        R.id.mine_fragment,
+                        R.id.forest_detail_fragment
+                    )
                 )
             )
-        )
+        }
+
         navController.addOnDestinationChangedListener { _, destination, argument ->
             supportActionBar?.title = destination.label
 
             // BottomNavigationBar显示情况特判
-            binding?.apply {
+            binding.apply {
                 layoutBottomBar.isVisible =
                     (destination.id != R.id.all_forest_fragment && destination.id != R.id.forest_detail_fragment)
 
@@ -186,8 +190,6 @@ class HomeScreenActivity : BaseActivity() {
                 }
             }
         }
-
-
         return super.onKeyUp(keyCode, event)
     }
 

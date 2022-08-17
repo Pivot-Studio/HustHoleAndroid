@@ -52,7 +52,7 @@
                         android:layout_marginHorizontal="@dimen/dp_12"
                         android:text="@string/page2fragment_1"
                         android:textColor="@color/GrayScale_70"
-                        android:textSize="@dimen/sp_11"
+                        android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
