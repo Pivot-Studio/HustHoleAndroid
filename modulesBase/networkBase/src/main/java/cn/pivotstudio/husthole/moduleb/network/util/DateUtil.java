@@ -36,7 +36,7 @@ public class DateUtil {
     public static final String FRIDAY = "星期五";
     public static final String SATURDAY = "星期六";
     public static final String[] WEEK_DAYS =
-        { SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY };
+            {SUNDAY, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY};
 
     /**
      * 获取标准时间
@@ -82,7 +82,7 @@ public class DateUtil {
      */
     public static String getTheYearMonthAndDayDelimiter(CharSequence delimiter) {
         return new SimpleDateFormat(YEAR + delimiter + MONTH + delimiter + DAY,
-            Locale.CHINESE).format(new Date());
+                Locale.CHINESE).format(new Date());
     }
 
     /**
@@ -111,7 +111,7 @@ public class DateUtil {
      */
     public static String getHoursMinutesAndSecondsDelimiter(CharSequence delimiter) {
         return new SimpleDateFormat(HOUR + delimiter + MINUTE + delimiter + SECOND,
-            Locale.CHINESE).format(new Date());
+                Locale.CHINESE).format(new Date());
     }
 
     /**
@@ -338,7 +338,7 @@ public class DateUtil {
     /**
      * 获得指定月的天数
      *
-     * @param year 例如 2021
+     * @param year  例如 2021
      * @param month 例如 7
      * @return 例如 31
      */

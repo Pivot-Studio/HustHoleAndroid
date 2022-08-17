@@ -7,7 +7,7 @@
 
         <variable
             name="forestHole"
-            type="cn.pivotstudio.modulec.homescreen.model.ForestHole" />
+            type="cn.pivotstudio.husthole.moduleb.network.model.ForestHole" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

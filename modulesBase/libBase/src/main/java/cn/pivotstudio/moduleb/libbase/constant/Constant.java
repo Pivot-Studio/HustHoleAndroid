@@ -15,6 +15,7 @@ public class Constant {
     public static final String IS_LOGIN = "isLogin";
     //登录获得的token
     public static final String USER_TOKEN = "USER_TOKEN";
+    public static final String USER_TOKEN_V2 = "USER_TOKEN_V2";
     //是否第一次使用app
     public static final String IS_FIRST_USED = "isFirstUseD";
     //发布数洞的内容
@@ -50,6 +51,8 @@ public class Constant {
     public static final String EMAIL_HEAD = "email_head";
     //验证码内容
     public static final String VERIFY_CODE = "verify_code";
+
+    public static final String EMAIL_SUFFIX = "@hust.edu.cn";
     /**
      * Base
      */

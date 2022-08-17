@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
-import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.repository.ForestRepository
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 

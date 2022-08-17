@@ -4,25 +4,32 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.BuildConfig
-import cn.pivotstudio.modulec.homescreen.model.DetailForestHole
 import cn.pivotstudio.modulec.homescreen.model.ForestHead
-import cn.pivotstudio.modulec.homescreen.model.Hole
+import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
 import com.alibaba.android.arouter.launcher.ARouter
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class ForestDetailViewModel(val forestId: Int) : ViewModel() {
-    val repository = ForestDetailRepository()
+    val repository = ForestDetailRepository(forestId = forestId)
 
-    val holes = repository.holes
-    val overview = repository.overview
+    private var _forestBrief = MutableStateFlow(ForestBrief())
+    val forestBrief = _forestBrief
+    private var _holesV2 = MutableStateFlow<List<DetailForestHoleV2>>(emptyList())
+    val holesV2: StateFlow<List<DetailForestHoleV2>> = _holesV2
+
     val state = repository.state
     val tip: MutableLiveData<String?> = repository.tip
 
     private var _shouldRefreshHoles = false
-    val shouldRefreshHoles = _shouldRefreshHoles
 
     fun loadHolesLater() {
         _shouldRefreshHoles = true
@@ -42,41 +49,53 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     init {
         loadHoles()
-        loadOverview()
+        loadBrief()
     }
 
     fun loadHoles() {
-        repository.loadHolesByForestId(forestId)
+        viewModelScope.launch {
+            repository.loadHolesByForestId(forestId)
+                .collect { newItems ->
+                    repository.state.value = ForestDetailHolesLoadStatus.DONE
+                    _holesV2.emit(newItems)
+                }
+        }
     }
 
-    fun loadOverview() {
-        repository.loadOverviewByForestId(forestId)
+    fun loadBrief() {
+        viewModelScope.launch {
+            repository.loadBriefByForestId()
+                .flowOn(Dispatchers.IO)
+                .catch { it.printStackTrace() }
+                .collect {
+                    _forestBrief.emit(it)
+                }
+        }
     }
 
     fun loadMore() {
-        repository.loadMoreHolesByForestId(forestId)
-    }
-
-    fun checkIfJoinedTheForest(forestsJoined: List<ForestHead>) {
-        overview.value?.let { overview ->
-            forestsJoined.forEach {
-                if (it.forestId == overview.forestId)
-                    overview.Joined = true
+        viewModelScope.launch {
+            repository.loadMoreHolesByForestId(forestId).collect { newItems ->
+                repository.lastStartId += ForestDetailRepository.LIST_SIZE
+                holesV2.value.toMutableList().apply { addAll(newItems) }.let {
+                    _holesV2.emit(it)
+                    repository.state.value = ForestDetailHolesLoadStatus.DONE
+                }
             }
         }
-
     }
 
+
     fun giveALikeToTheHole(hole: Hole) {
-        repository.giveALikeToTheHole(hole as DetailForestHole)
+        repository.giveALikeToTheHole(hole as DetailForestHoleV2)
     }
 
     fun followTheHole(hole: Hole) {
-        repository.followTheHole(hole as DetailForestHole)
+        repository.followTheHole(hole as DetailForestHoleV2)
     }
 
     fun deleteTheHole(hole: Hole) {
-        repository.deleteTheHole(hole as DetailForestHole)
+        repository.deleteTheHole(hole as DetailForestHoleV2)
     }
 
     fun joinTheForest() {
@@ -89,16 +108,6 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     fun doneShowingTip() {
         tip.value = null
-    }
-
-    // 点击文字内容跳转到树洞
-    fun navToSpecificHole(holeId: Int) {
-        if (BuildConfig.isRelease) {
-            ARouter.getInstance().build("/hole/HoleActivity")
-                .withInt(Constant.HOLE_ID, holeId)
-                .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                .navigation()
-        }
     }
 
 }

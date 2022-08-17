@@ -18,7 +18,7 @@ import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
-import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.JoinedForestsAdapter
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter

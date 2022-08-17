@@ -8,9 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHoleBinding
-import cn.pivotstudio.modulec.homescreen.model.ForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
-import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 
 /**
  * @classname:ForestHoleAdapter

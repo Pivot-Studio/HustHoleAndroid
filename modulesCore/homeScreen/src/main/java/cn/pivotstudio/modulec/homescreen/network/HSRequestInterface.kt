@@ -1,5 +1,7 @@
 package cn.pivotstudio.modulec.homescreen.network
 
+import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
 import cn.pivotstudio.modulec.homescreen.model.*
 import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
 import io.reactivex.Observable
