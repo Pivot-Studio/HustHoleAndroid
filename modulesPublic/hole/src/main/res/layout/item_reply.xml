@@ -87,7 +87,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <RelativeLayout
-            android:id="@+id/constraintLayout5"
+            android:id="@+id/cl_reply_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -99,8 +99,7 @@
                 android:id="@+id/tv_reply_content"
                 android:layout_width="@dimen/dp_327"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="27dp"
-                android:lineSpacingExtra="3sp"
+                android:layout_marginStart="@dimen/dp_30"
                 android:maxWidth="@dimen/dp_320"
                 android:onClick="@{(v)->onClick.replyItemClick(v,reply)}"
                 android:text="@string/default_string_zh_long"
@@ -118,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="21dp"
                 android:background="@color/GrayScale_80"
-                android:minHeight="10dp" />
+                android:minHeight="@dimen/dp_10" />
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -161,7 +160,7 @@
 
             android:layout_marginEnd="15dp"
             android:layout_marginBottom="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/constraintLayout5"
+            app:layout_constraintBottom_toBottomOf="@+id/cl_reply_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@mipmap/threepoint" />
 
