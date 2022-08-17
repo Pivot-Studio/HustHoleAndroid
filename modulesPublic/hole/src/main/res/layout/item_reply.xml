@@ -223,7 +223,7 @@
             android:gravity="center"
             android:text="@string/hot_tag"
             android:textColor="@color/HH_BandColor_7"
-            android:textAppearance="@style/HustHoleTypography.Headline4"
+            android:textAppearance="@style/HustHoleTypography.Button3"
             app:hotIcon="@{reply.is_hot}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
