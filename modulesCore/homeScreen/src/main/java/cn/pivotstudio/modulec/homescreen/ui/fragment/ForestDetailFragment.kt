@@ -30,6 +30,7 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModelFactory
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 import com.alibaba.android.arouter.launcher.ARouter
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ForestDetailFragment : BaseFragment() {

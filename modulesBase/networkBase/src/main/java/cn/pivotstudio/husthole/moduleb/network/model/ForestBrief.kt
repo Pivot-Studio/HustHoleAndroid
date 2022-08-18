@@ -34,7 +34,7 @@ data class ForestBrief(
     /**
      * 是否加入
      */
-    val joined: Boolean? = null,
+    val joined: Boolean,
 
     /**
      * 小树林类型

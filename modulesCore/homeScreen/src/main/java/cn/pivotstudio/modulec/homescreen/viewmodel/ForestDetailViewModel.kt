@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 class ForestDetailViewModel(val forestId: Int) : ViewModel() {
     val repository = ForestDetailRepository(forestId = forestId)
 
-    private var _forestBrief = MutableStateFlow(ForestBrief())
+    private var _forestBrief = MutableStateFlow(ForestBrief(joined = false))
     val forestBrief = _forestBrief
 
     val overview: LiveData<ForestCard> = repository.overview

@@ -2,7 +2,6 @@ package cn.pivotstudio.modulec.loginandregister.viewmodel
 
 import android.os.CountDownTimer
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -13,14 +12,12 @@ import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.husthole.moduleb.network.model.User
 import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.modulec.loginandregister.R
 import cn.pivotstudio.modulec.loginandregister.model.LoginResponse
 import cn.pivotstudio.modulec.loginandregister.model.MsgResponse
 import cn.pivotstudio.modulec.loginandregister.network.LoginAndRegisterNetworkApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import kotlin.collections.HashMap
 
 enum class LARState {
     LOGIN, REGISTERED,

@@ -17,7 +17,7 @@ import cn.pivotstudio.moduleb.database.dao.HoleDao;
  * @author:
  */
 @Database(entities = { Hole.class }, version = 2, exportSchema = false)
-public abstract class AppDatabase extends RoomDatabase {
+public abstract class HustHoleRoomDatabase extends RoomDatabase {
 
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -32,17 +32,17 @@ public abstract class AppDatabase extends RoomDatabase {
         }
     };
     private static final String DATABASE_NAME = "hust_hole";
-    private static volatile AppDatabase mInstance;
+    private static volatile HustHoleRoomDatabase mInstance;
 
     /**
      * 单例模式
      */
-    public static AppDatabase getInstance(Context context) {
+    public static HustHoleRoomDatabase getInstance(Context context) {
         if (mInstance == null) {
-            synchronized (AppDatabase.class) {
+            synchronized (HustHoleRoomDatabase.class) {
                 if (mInstance == null) {
                     mInstance =
-                        Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class,
+                        Room.databaseBuilder(context.getApplicationContext(), HustHoleRoomDatabase.class,
                             DATABASE_NAME).addMigrations(MIGRATION_1_2).build();
                 }
             }
