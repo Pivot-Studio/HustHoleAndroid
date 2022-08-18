@@ -64,7 +64,7 @@
 
                                 <ImageView
                                     android:id="@+id/forest_detail_upper_background"
-                                    blurImageUrl="@{viewModel.forestBrief.iconUrl}"
+                                    blurImageUrl="@{viewModel.overview.coverUrl}"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:contentDescription="@string/default_string_zh_long"
@@ -74,7 +74,7 @@
 
                                 <com.google.android.material.imageview.ShapeableImageView
                                     android:id="@+id/image_forest_detail_avatar"
-                                    imageUrl="@{viewModel.forestBrief.backUrl}"
+                                    imageUrl="@{viewModel.overview.backgroundImageUrl}"
                                     android:layout_width="@dimen/dp_48"
                                     android:layout_height="@dimen/dp_48"
                                     android:layout_marginStart="@dimen/dp_20"
@@ -93,7 +93,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="@dimen/dp_10"
                                     android:layout_marginTop="@dimen/dp_2"
-                                    android:text="@{@string/follow_msg(viewModel.forestBrief.userNum, viewModel.forestBrief.holeNum), default = @string/follow_msg}"
+                                    android:text="@{@string/follow_msg(viewModel.overview.joinedNumber, viewModel.overview.holeNumber), default = @string/follow_msg}"
                                     android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
                                     android:textColor="@color/GrayScale_100"
                                     app:layout_constraintStart_toEndOf="@+id/image_forest_detail_avatar"
@@ -106,7 +106,7 @@
                                     android:layout_marginTop="3dp"
                                     android:ellipsize="end"
                                     android:maxLines="2"
-                                    android:text="@{viewModel.forestBrief.brief, default = @string/default_string_zh_long}"
+                                    android:text="@{viewModel.overview.description, default = @string/default_string_zh_long}"
                                     android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
                                     android:textColor="@color/GrayScale_100"
                                     app:layout_constraintBottom_toBottomOf="@+id/image_forest_detail_avatar"
@@ -123,13 +123,11 @@
 
                                     <include
                                         android:id="@+id/detail_forest_join_btn"
-                                        layout="@layout/tertiary_button_default"
-                                        android:visibility="@{viewModel.forestBrief.joined ? View.GONE : View.VISIBLE}" />
+                                        layout="@layout/tertiary_button_default" />
 
                                     <include
                                         android:id="@+id/detail_forest_quit_btn"
-                                        layout="@layout/tertiary_button_secondary"
-                                        android:visibility="@{viewModel.forestBrief.joined ? View.VISIBLE : View.GONE}" />
+                                        layout="@layout/tertiary_button_secondary" />
 
                                 </FrameLayout>
 

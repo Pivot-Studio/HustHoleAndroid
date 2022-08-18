@@ -106,6 +106,20 @@ class ForestDetailFragment : BaseFragment() {
             }
         }
 
+        viewModel.overview.observe(viewLifecycleOwner) {
+            sharedViewModel.forestHeads.value?.run {
+                viewModel.checkIfJoinedTheForest(this.forests)
+            }
+
+            if (it.Joined) {
+                binding.detailForestQuitBtn.visibility = View.VISIBLE
+                binding.detailForestJoinBtn.visibility = View.GONE
+            } else {
+                binding.detailForestQuitBtn.visibility = View.GONE
+                binding.detailForestJoinBtn.visibility = View.VISIBLE
+            }
+        }
+
         viewModel.tip.observe(viewLifecycleOwner) {
             it?.let {
                 showMsg(it)
@@ -156,7 +170,7 @@ class ForestDetailFragment : BaseFragment() {
             ARouter.getInstance().build("/publishHole/PublishHoleActivity")
                 .withBundle(Constant.FROM_DETAIL_FOREST, Bundle().apply {
                     putInt(Constant.FOREST_ID, forestId)
-                    putString(Constant.FOREST_NAME, viewModel.forestBrief.value.forestName)
+                    putString(Constant.FOREST_NAME, viewModel.overview.value!!.name)
                 })
                 .navigation()
         } else {

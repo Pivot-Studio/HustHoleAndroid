@@ -1,15 +1,13 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel;
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
 import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.BuildConfig
+import cn.pivotstudio.modulec.homescreen.model.ForestCard
 import cn.pivotstudio.modulec.homescreen.model.ForestHead
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
@@ -23,6 +21,9 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     private var _forestBrief = MutableStateFlow(ForestBrief())
     val forestBrief = _forestBrief
+
+    val overview: LiveData<ForestCard> = repository.overview
+
     private var _holesV2 = MutableStateFlow<List<DetailForestHoleV2>>(emptyList())
     val holesV2: StateFlow<List<DetailForestHoleV2>> = _holesV2
 
@@ -49,7 +50,7 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     init {
         loadHoles()
-        loadBrief()
+        loadOverview()
     }
 
     fun loadHoles() {
@@ -60,6 +61,10 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
                     _holesV2.emit(newItems)
                 }
         }
+    }
+
+    fun loadOverview() {
+        repository.loadOverviewByForestId(id = forestId)
     }
 
     fun loadBrief() {
@@ -85,6 +90,14 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
         }
     }
 
+    fun checkIfJoinedTheForest(forestsJoined: List<ForestHead>) {
+        overview.value?.let { overview ->
+            forestsJoined.forEach {
+                if (it.forestId == overview.forestId)
+                    overview.Joined = true
+            }
+        }
+    }
 
     fun giveALikeToTheHole(hole: Hole) {
         repository.giveALikeToTheHole(hole as DetailForestHoleV2)
