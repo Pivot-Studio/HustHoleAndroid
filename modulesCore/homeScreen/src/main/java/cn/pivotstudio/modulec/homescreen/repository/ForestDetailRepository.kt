@@ -102,15 +102,15 @@ class ForestDetailRepository(
         }.apply {
             compose(NetworkApi.applySchedulers()).subscribe(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(response: MsgResponse) {
-                    val newItems = _holes.value!!.toMutableList()
-                    for ((i, newHole) in newItems.withIndex()) {
-                        if (hole.holeId.toInt() == newHole.holeId) newItems[i] =
-                            newHole.copy().apply {
-                                likeNum = if (!hole.liked) likeNum.inc() else likeNum.dec()
-                                liked = liked.not()
-                            }
-                    }
-                    _holes.value = newItems
+//                    val newItems = _holes.value!!.toMutableList()
+//                    for ((i, newHole) in newItems.withIndex()) {
+//                        if (hole.holeId.toInt() == newHole.holeId) newItems[i] =
+//                            newHole.copy().apply {
+//                                likeNum = if (!hole.liked) likeNum.inc() else likeNum.dec()
+//                                liked = liked.not()
+//                            }
+//                    }
+//                    _holes.value = newItems
                     tip.value = response.msg
                 }
 
@@ -133,15 +133,15 @@ class ForestDetailRepository(
         observable.compose(NetworkApi.applySchedulers())
             .subscribe(object : BaseObserver<MsgResponse>() {
                 override fun onSuccess(response: MsgResponse) {
-                    val newItems = _holes.value!!.toMutableList()
-                    for ((i, newHole) in newItems.withIndex()) {
-                        if (hole.holeId.toInt() == newHole.holeId) newItems[i] =
-                            newHole.copy().apply {
-                                followNum = if (!hole.isFollow) followNum.inc() else followNum.dec()
-                                followed = followed.not()
-                            }
-                    }
-                    _holes.value = newItems
+//                    val newItems = _holes.value!!.toMutableList()
+//                    for ((i, newHole) in newItems.withIndex()) {
+//                        if (hole.holeId.toInt() == newHole.holeId) newItems[i] =
+//                            newHole.copy().apply {
+//                                followNum = if (!hole.isFollow) followNum.inc() else followNum.dec()
+//                                followed = followed.not()
+//                            }
+//                    }
+//                    _holes.value = newItems
                     tip.value = response.msg
                 }
 
@@ -160,10 +160,10 @@ class ForestDetailRepository(
                 .compose(NetworkApi.applySchedulers())
                 .subscribe(object : BaseObserver<MsgResponse>() {
                     override fun onSuccess(response: MsgResponse) {
-                        val newItems = _holes.value!!.toMutableList()
-                        newItems.remove(it)
-                        _holes.value = newItems
-                        tip.value = response.msg
+//                        val newItems = _holes.value!!.toMutableList()
+//                        newItems.remove(it)
+//                        _holes.value = newItems
+//                        tip.value = response.msg
                     }
 
                     override fun onFailure(e: Throwable?) {

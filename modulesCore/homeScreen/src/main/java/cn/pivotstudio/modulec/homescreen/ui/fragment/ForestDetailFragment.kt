@@ -153,7 +153,7 @@ class ForestDetailFragment : BaseFragment() {
         viewModel.quitTheForest()
     }
 
-    // 点击文字内容跳转到树洞
+    // 点击item跳转到树洞
     fun navToSpecificHole(holeId: Int) {
         viewModel.loadHolesLater()
         if (BuildConfig.isRelease) {

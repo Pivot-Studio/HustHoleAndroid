@@ -105,6 +105,7 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     fun followTheHole(hole: Hole) {
         repository.followTheHole(hole as DetailForestHoleV2)
+        loadHoles()
     }
 
     fun deleteTheHole(hole: Hole) {
