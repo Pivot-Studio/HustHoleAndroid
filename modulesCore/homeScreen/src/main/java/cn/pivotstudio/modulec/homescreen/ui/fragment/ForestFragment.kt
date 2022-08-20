@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +13,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
+import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
@@ -19,6 +22,7 @@ import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFoot
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
 import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
+import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.JoinedForestsAdapter
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
@@ -26,6 +30,8 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.constant.RequestCodeConstant
+import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 
 /**
@@ -62,7 +68,6 @@ class ForestFragment : BaseFragment() {
 
         // 初始化两个RecyclerView和liveData监听器
         binding.apply {
-
             recyclerViewForestHoles.apply {
                 adapter = holeAdapter
                 (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false

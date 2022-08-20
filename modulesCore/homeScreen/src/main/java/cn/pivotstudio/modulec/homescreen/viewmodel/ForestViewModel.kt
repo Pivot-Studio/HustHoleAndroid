@@ -24,10 +24,8 @@ class ForestViewModel : ViewModel() {
     val headerLoadState: LiveData<LoadStatus> = repository.headerLoadState
 
     private var _shouldRefreshHoles = false
-    val shouldRefreshHoles = _shouldRefreshHoles
 
     private var _shouldRefreshHeader = false
-    val shouldRefreshHeader = _shouldRefreshHeader
 
     val tip: MutableLiveData<String?> = repository.tip
 

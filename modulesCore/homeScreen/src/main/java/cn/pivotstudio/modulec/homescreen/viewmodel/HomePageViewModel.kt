@@ -13,6 +13,7 @@ import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
 
 /**
  * @classname:HomePageViewModel
@@ -138,7 +139,7 @@ class HomePageViewModel : BaseViewModel() {
             if (BuildConfig.isRelease) {
                 ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
                     .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                    .navigation(v.context as HomeScreenActivity, 1)
+                    .navigation(v.context as HomeScreenActivity, ResultCodeConstant.Hole)
                 //
             } else {
                 //测试阶段不可跳转
