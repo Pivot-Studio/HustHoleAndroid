@@ -33,7 +33,7 @@ class LARActivity : AppCompatActivity() {
             setSupportActionBar(it)
             it.setupWithNavController(
                 navController,
-                AppBarConfiguration(setOf(R.id.welcomeFragment, R.id.verifyCodeFragment))
+                AppBarConfiguration(setOf(R.id.welcomeFragment))
             )
         }
 

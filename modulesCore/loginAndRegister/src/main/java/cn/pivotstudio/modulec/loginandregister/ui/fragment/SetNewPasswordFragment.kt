@@ -72,6 +72,13 @@ class SetNewPasswordFragment : Fragment() {
                     doneStateChanged()
                 }
             }
+
+            showPasswordWarning.observe(viewLifecycleOwner) {
+                it?.let {
+                    if(it) binding.tvModifyWarn.visibility = View.GONE
+                    else binding.tvModifyWarn.visibility = View.VISIBLE
+                }
+            }
         }
 
     }

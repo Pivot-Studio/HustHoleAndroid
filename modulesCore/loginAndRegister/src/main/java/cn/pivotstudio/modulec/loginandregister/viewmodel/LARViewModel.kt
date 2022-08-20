@@ -12,6 +12,7 @@ import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.husthole.moduleb.network.model.User
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.util.data.CheckStudentCodeUtil
 import cn.pivotstudio.modulec.loginandregister.model.LoginResponse
 import cn.pivotstudio.modulec.loginandregister.model.MsgResponse
 import cn.pivotstudio.modulec.loginandregister.network.LoginAndRegisterNetworkApi
@@ -34,9 +35,11 @@ class LARViewModel : ViewModel() {
     private var _tip = MutableLiveData<String?>()
     private var _loginToken = MutableLiveData<String?>()
     private var _verifyCode = MutableLiveData<String?>()
+    private var _showStudentCodeWarning = MutableLiveData<Boolean?>()
+    private var _showPasswordWarning = MutableLiveData<Boolean?>()
 
     private var _countDownTime = MutableLiveData<Long?>()
-    private var _loginTokenV2 = MutableStateFlow<String>("")
+    private var _loginTokenV2 = MutableStateFlow("")
 
     private var countDownTimer = object : CountDownTimer(90000, 1000) {
         override fun onTick(millisUntilFinished: Long) {
@@ -55,6 +58,8 @@ class LARViewModel : ViewModel() {
         _countDownTime.value = null
         studentCode.value = null
         _verifyCode.value = null
+        _showStudentCodeWarning.value = null
+        _showPasswordWarning.value = null
     }
 
     val larState: LiveData<LARState?> = _larState
@@ -62,10 +67,16 @@ class LARViewModel : ViewModel() {
     val loginToken: LiveData<String?> = _loginToken
     val studentCode = MutableLiveData<String?>()
     val countDownTime: LiveData<Long?> = _countDownTime
-    val verifyCode: LiveData<String?> = _verifyCode
     val loginTokenV2: StateFlow<String> = _loginTokenV2
+    val showStudentCodeWarning: LiveData<Boolean?> = _showStudentCodeWarning
+    val showPasswordWarning: LiveData<Boolean?> = _showPasswordWarning
 
     fun login(id: String, password: String) {
+        if (!CheckStudentCodeUtil.isStudentCode(id)) {
+            _showStudentCodeWarning.value = true
+            return
+        }
+        _showStudentCodeWarning.value = false
         val map = HashMap<String, String>()
         map["email"] = id
         map["password"] = password
@@ -82,6 +93,7 @@ class LARViewModel : ViewModel() {
                     _tip.value = (e as ResponseThrowable).message
                 }
             })
+
         viewModelScope.launch {
             flow {
                 val result = HustHoleApi.retrofitService.signIn(
@@ -99,6 +111,10 @@ class LARViewModel : ViewModel() {
     }
 
     fun register(password: String) {
+        if (!CheckStudentCodeUtil.isLegalPassword(password)) {
+            _showPasswordWarning.value = true
+            return
+        }
         studentCode.value?.let {
             LoginAndRegisterNetworkApi.retrofitService
                 .register(it, password)
@@ -118,8 +134,12 @@ class LARViewModel : ViewModel() {
     }
 
     fun setNewPassword(newPassword: String) {
+        if (!CheckStudentCodeUtil.isLegalPassword(newPassword)) {
+            _showPasswordWarning.value = true
+            return
+        }
         studentCode.value?.also { studentCode ->
-            verifyCode.value?.let { verifyCode ->
+            _verifyCode.value?.let { verifyCode ->
                 LoginAndRegisterNetworkApi.retrofitService
                     .setNewPassword(studentCode, verifyCode, newPassword)
                     .compose(NetworkApi.applySchedulers())
@@ -163,6 +183,11 @@ class LARViewModel : ViewModel() {
     var isResetPassword = false
 
     fun sendVerifyCodeToStudentEmail() {
+        if (!CheckStudentCodeUtil.isStudentCode(studentCode.value)) {
+            _showStudentCodeWarning.value = true
+            return
+        }
+        _showStudentCodeWarning.value = false
         countDown()
         studentCode.value?.let {
             LoginAndRegisterNetworkApi.retrofitService

@@ -53,6 +53,13 @@ class ForgetPasswordFragment : BaseFragment() {
                     viewModel.doneShowingTip()
                 }
             }
+
+            showStudentCodeWarning.observe(viewLifecycleOwner) {
+                it?.let {
+                    if (it) binding.tvForgetWarn.visibility = View.VISIBLE
+                    else binding.tvForgetWarn.visibility = View.GONE
+                }
+            }
         }
 
 

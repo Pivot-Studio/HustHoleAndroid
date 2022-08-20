@@ -1,5 +1,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -140,7 +141,8 @@
             android:textAppearance="@style/HustHoleTypography.Body3"
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/btn_next"
-            app:layout_constraintTop_toBottomOf="@+id/btn_next" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_next"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/tv_register_appeal"

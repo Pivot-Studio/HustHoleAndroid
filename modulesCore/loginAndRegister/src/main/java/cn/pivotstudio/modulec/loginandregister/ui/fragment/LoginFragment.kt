@@ -65,7 +65,6 @@ class LoginFragment : BaseFragment() {
             )
             EditTextUtil.ButtonReaction(etLoginStudentCode, btnLogin)
 
-
         }
 
         viewModel.apply {
@@ -96,6 +95,13 @@ class LoginFragment : BaseFragment() {
                             }
                         }
                     }
+                }
+            }
+
+            showStudentCodeWarning.observe(viewLifecycleOwner) {
+                it?.let {
+                    if (it) binding.tvLoginWarn.visibility = View.VISIBLE
+                    else binding.tvLoginWarn.visibility = View.GONE
                 }
             }
 

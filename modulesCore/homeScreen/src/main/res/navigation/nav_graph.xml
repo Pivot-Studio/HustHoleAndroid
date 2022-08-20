@@ -34,7 +34,7 @@
         android:id="@+id/mine_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.oldversion.fragment.MineFragment"
         android:label="@string/mine_zh"
-        tools:layout="@layout/page4fragment" />
+        tools:layout="@layout/fragment_mine" />
 
     <fragment
         android:id="@+id/all_forest_fragment"

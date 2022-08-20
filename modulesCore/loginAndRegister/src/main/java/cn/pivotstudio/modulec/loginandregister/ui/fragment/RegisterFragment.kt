@@ -50,11 +50,20 @@ class RegisterFragment : BaseFragment() {
                 viewModel.studentCode.value = etRegisterStudentCode.text.toString()
                 viewModel.isResetPassword = false
                 viewModel.sendVerifyCodeToStudentEmail()
-                navController.navigate(R.id.action_registerFragment_to_verifyCodeFragment)
             }
         }
 
         viewModel.apply {
+            showStudentCodeWarning.observe(viewLifecycleOwner) {
+                it?.let {
+                    if (it) binding.tvRegisterWarn.visibility = View.VISIBLE
+                    else {
+                        binding.tvRegisterWarn.visibility = View.GONE
+                        navController.navigate(R.id.action_registerFragment_to_verifyCodeFragment)
+                    }
+                }
+            }
+
             tip.observe(viewLifecycleOwner) {
                 it?.let {
                     showMsg(it)

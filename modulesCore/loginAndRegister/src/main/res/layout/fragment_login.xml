@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -91,10 +92,11 @@
             android:layout_marginTop="@dimen/dp_5"
             android:text="@string/student_code_error"
             android:textColor="@color/HH_Reminder_Warning"
-            android:textSize="@dimen/sp_12"
+            android:textAppearance="@style/HustHoleTypography.Body3"
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/et_login_password"
-            app:layout_constraintTop_toBottomOf="@+id/et_login_password" />
+            app:layout_constraintTop_toBottomOf="@+id/et_login_password"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/tv_had_not_registered"

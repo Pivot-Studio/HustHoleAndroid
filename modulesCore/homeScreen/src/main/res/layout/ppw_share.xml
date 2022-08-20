@@ -60,7 +60,7 @@
                 android:layout_height="@dimen/dp_36"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitXY"
-                app:srcCompat="@mipmap/share_card_img" />
+                app:srcCompat="@drawable/ic_share_36dp" />
 
             <TextView
                 android:layout_width="wrap_content"
