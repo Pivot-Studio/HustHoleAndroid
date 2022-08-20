@@ -154,32 +154,6 @@ public interface RequestInterface {//接口
     @GET("auth")
     Call<ResponseBody> isUnderSecurity();
 
-    /*
-        @Multipart
-        @POST("forests/apply")
-        Call<ResponseBody> applyForest(@Body HashMap map
-                                       @Part);
-
-<<<<<<< HEAD
-@GET("replies/hot?")
-Call<ResponseBody> hotReply(@Query("hole_id") String hole_id,
-                            @Query("start_id") int start_id,
-                            @Query("list_size") int list_size);
-
-@GET("replies/owner?")
-Call<ResponseBody> owner(@Query("hole_id") String hole_id,
-                         @Query("start_id") int start_id,
-                         @Query("list_size") int list_size,
-                         @Query("is_descend") String is_descend);
-
-
-   // @GET("safety")
-   // Call<ResponseBody> isUnderSecurity();
-
-   // @POST("safety")
-   // Call<ResponseBody> changeSecurityMode(@Body Boolean turnOn);
-=======
-     */
     @POST("forests/apply")
     Call<ResponseBody> applyForest(@Body RequestBody body);
 

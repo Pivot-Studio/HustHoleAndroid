@@ -48,12 +48,13 @@ import retrofit2.Retrofit;
 
 public class MineFragment extends Fragment {
 
-    private View rootView, shareCardView, backgroundView;
-    private RelativeLayout settings, shield, rules, share, evaluate, about, update, logout, update2;
-    private LinearLayout shareCard;
-    private ConstraintLayout myHole, myStar, myReply;
-    private TextView tv_joinDays, tv_myStarNum, tv_myHoleNum, tv_myReplyNum, cancel, location;
-    private static String BASE_URL = RetrofitManager.API;
+    private View backgroundView;
+    private RelativeLayout update2;
+    private TextView tv_joinDays;
+    private TextView tv_myStarNum;
+    private TextView tv_myHoleNum;
+    private TextView tv_myReplyNum;
+    private static final String BASE_URL = RetrofitManager.API;
     private org.json.JSONArray jsonArray;
     private PopupWindow ppwBackground, ppwShare;
 
@@ -62,42 +63,38 @@ public class MineFragment extends Fragment {
     String TAG = "isMine";
     int flag = 0;
 
-    public static MineFragment newInstance() {
-        return new MineFragment();
-    }
-
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        rootView = inflater.inflate(R.layout.page4fragment, container, false);
-        settings = rootView.findViewById(R.id.settings);
-        shield = rootView.findViewById(R.id.shield);
-        rules = rootView.findViewById(R.id.rules);
-        share = rootView.findViewById(R.id.share);
-        evaluate = rootView.findViewById(R.id.evaluateAndAdvice);
+        View rootView = inflater.inflate(R.layout.page4fragment, container, false);
+        RelativeLayout settings = rootView.findViewById(R.id.settings);
+        RelativeLayout shield = rootView.findViewById(R.id.shield);
+        RelativeLayout rules = rootView.findViewById(R.id.rules);
+        RelativeLayout share = rootView.findViewById(R.id.share);
+        RelativeLayout evaluate = rootView.findViewById(R.id.evaluateAndAdvice);
         //advice = rootView.findViewById(R.id.advice);
-        about = rootView.findViewById(R.id.about);
-        update = rootView.findViewById(R.id.update);
+        RelativeLayout about = rootView.findViewById(R.id.about);
+        RelativeLayout update = rootView.findViewById(R.id.update);
         //update2=rootView.findViewById(R.id.update2);
-        logout = rootView.findViewById(R.id.logout);
+        RelativeLayout logout = rootView.findViewById(R.id.logout);
 
-        myHole = rootView.findViewById(R.id.my_hole);
-        myStar = rootView.findViewById(R.id.my_star);
-        myReply = rootView.findViewById(R.id.my_reply);
+        ConstraintLayout myHole = rootView.findViewById(R.id.my_hole);
+        ConstraintLayout myStar = rootView.findViewById(R.id.my_star);
+        ConstraintLayout myReply = rootView.findViewById(R.id.my_reply);
 
         tv_joinDays = rootView.findViewById(R.id.my_date);
         tv_myHoleNum = rootView.findViewById(R.id.my_hole_num);
         tv_myStarNum = rootView.findViewById(R.id.my_star_num);
         tv_myReplyNum = rootView.findViewById(R.id.my_reply_num);
 
-        location = rootView.findViewById(R.id.ppw_share_location);
+        TextView location = rootView.findViewById(R.id.ppw_share_location);
 
-        shareCardView = LayoutInflater.from(getContext()).inflate(R.layout.ppw_share, null);
+        View shareCardView = LayoutInflater.from(getContext()).inflate(R.layout.ppw_share, null);
         // backgroundView = LayoutInflater.from(getContext()).inflate(R.layout.ppw_share_card_darkscreen, null);
-        shareCard = shareCardView.findViewById(R.id.share_card);
-        cancel = shareCardView.findViewById(R.id.share_cancel_button);
+        LinearLayout shareCard = shareCardView.findViewById(R.id.share_card);
+        TextView cancel = shareCardView.findViewById(R.id.share_cancel_button);
 
         ppwShare = new PopupWindow(shareCardView);
         ppwShare.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);

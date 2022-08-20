@@ -163,21 +163,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/dp_20"
                     android:paddingVertical="@dimen/dp_14"
+                    android:paddingStart="@dimen/dp_20"
                     android:text="@string/个人设置"
                     android:textColor="@color/GrayScale_20"
                     android:textSize="@dimen/sp_14" />
             </RelativeLayout>
 
-            <!--        <View-->
-            <!--            android:id="@+id/my_view"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="1dp"-->
-            <!--            android:layout_marginTop="10dp"-->
-            <!--            android:background="#F3F3F3"-->
-            <!--            app:layout_constraintTop_toBottomOf="@id/date"-->
-            <!--            />-->
             <RelativeLayout
                 android:id="@+id/shield"
                 android:layout_width="match_parent"

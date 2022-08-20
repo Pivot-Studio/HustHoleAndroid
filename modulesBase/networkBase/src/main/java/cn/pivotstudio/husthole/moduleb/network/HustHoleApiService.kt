@@ -25,23 +25,27 @@ object HustHoleApi {
     lateinit var retrofitService: HustHoleApiService
     fun init(context: Context) {
 
+        val requestInterceptor = Interceptor { chain ->
+            chain.request().newBuilder()
+                .addHeader("os", "android")
+                .addHeader("dateTime", DateUtil.getDateTime()).build()
+                .let { chain.proceed(it) }
+        }
+
+        val tokenInterceptor = Interceptor { chain ->
+            chain.request().newBuilder()
+                .addHeader(
+                    "Authorization",
+                    MMKVUtil.getMMKV(context).getString("USER_TOKEN_V2")
+                )
+                .build()
+                .let { chain.proceed(it) }
+        }
+
         val okhttpClient = OkHttpClient.Builder()
             .connectTimeout(6, TimeUnit.SECONDS)
-            .addInterceptor(Interceptor { chain ->
-                chain.request().newBuilder()
-                    .addHeader("os", "android")
-                    .addHeader("dateTime", DateUtil.getDateTime()).build()
-                    .let { chain.proceed(it) }
-            })
-            .addInterceptor(Interceptor { chain ->
-                chain.request().newBuilder()
-                    .addHeader(
-                        "Authorization",
-                        MMKVUtil.getMMKV(context).getString("USER_TOKEN_V2")
-                    )
-                    .build()
-                    .let { chain.proceed(it) }
-            })
+            .addInterceptor(requestInterceptor)
+            .addInterceptor(tokenInterceptor)
             .build()
 
         val moshi =
@@ -81,5 +85,6 @@ interface HustHoleApiService {
     suspend fun getForestOverview(
         @Query("forestId") forestId: Int
     ): ForestBrief
+
 }
 

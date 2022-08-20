@@ -139,7 +139,7 @@
                                 android:layout_height="?attr/actionBarSize"
                                 android:theme="@style/myBarTheme"
                                 app:layout_collapseMode="pin"
-                                app:title="@{viewModel.forestBrief.forestName, default = @string/default_string_zh_short}"
+                                app:title="@{viewModel.overview.name, default = @string/default_string_zh_short}"
                                 app:titleTextAppearance="@style/HustHoleTypography.Headline1.Bold" />
 
                         </com.google.android.material.appbar.CollapsingToolbarLayout>

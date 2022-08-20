@@ -121,23 +121,6 @@ public class NetworkApi {
         return okHttpClient;
     }
 
-    public static OkHttpClient getOkHttpClientV2() {
-        if (okHttpClientV2 == null) {
-            OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                    .connectTimeout(6, TimeUnit.SECONDS)
-                    .addInterceptor(new RequestInterceptor(iNetworkRequiredInfo))
-                    .addInterceptor(new ResponseInterceptor())
-                    .addInterceptor(new TokenInterceptorV2(iNetworkRequiredInfo.getApplicationContext()));
-            if (iNetworkRequiredInfo != null && iNetworkRequiredInfo.isDebug()) {
-                HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
-                httpLoggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-                builder.addInterceptor(httpLoggingInterceptor);
-            }
-            okHttpClientV2 = builder.build();
-        }
-        return okHttpClientV2;
-    }
-
     /**
      * 配置Retrofit
      *

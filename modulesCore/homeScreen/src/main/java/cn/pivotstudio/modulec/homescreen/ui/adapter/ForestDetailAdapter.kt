@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,11 +50,13 @@ class ForestDetailAdapter(
                 }
 
                 layoutForestDetailThumbup.setOnClickListener {
-                    _context.giveALikeToTheHole(hole)
+                    Log.e(TAG, "bind: v2接口暂时不支持点赞")
+//                    _context.giveALikeToTheHole(hole)
                 }
 
                 layoutForestDetailFollow.setOnClickListener {
-                    _context.followTheHole(hole)
+                    Log.e(TAG, "bind: v2接口暂时不支持收藏")
+//                    _context.followTheHole(hole)
                 }
 
                 // 三个点

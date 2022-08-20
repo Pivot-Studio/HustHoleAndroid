@@ -46,7 +46,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_3"
             android:ellipsize="end"
-            android:lineSpacingExtra="@dimen/sp_6"
             android:maxWidth="@dimen/dp_310"
             android:maxLines="5"
             android:text="@{hole.content, default = @string/default_string_zh_long}"
@@ -108,8 +107,8 @@
             <ImageView
                 android:id="@+id/image_item_forest_detail_thumbup"
                 thumbupIcon="@{hole.liked}"
-                android:layout_width="@dimen/dp_16"
-                android:layout_height="@dimen/dp_20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
