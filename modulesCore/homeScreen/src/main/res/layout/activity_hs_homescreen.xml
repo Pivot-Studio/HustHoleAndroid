@@ -69,6 +69,7 @@
                     <com.google.android.material.bottomnavigation.BottomNavigationView
                         android:id="@+id/bottom_navigation_view"
                         style="@style/HustHoleBottomNavigationBarTheme"
+                        android:background="@null"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dp_54"
                         android:paddingEnd="@dimen/dp_15"
