@@ -40,7 +40,6 @@
     </style>
 
     <style name="HustHoleBottomNavigationBarTheme" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
-        <item name="android:background">@drawable/bg_bottom_bar</item>
         <item name="itemTextColor">@color/navigation_bar_colored_item_tint</item>
         <item name="itemIconTint">@color/navigation_bar_colored_item_tint</item>
         <item name="labelVisibilityMode">labeled</item>

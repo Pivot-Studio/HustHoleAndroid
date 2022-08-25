@@ -94,7 +94,7 @@ class HomeScreenActivity : BaseActivity() {
                     (destination.id != R.id.all_forest_fragment && destination.id != R.id.forest_detail_fragment)
 
                 bottomNavigationView.setupWithNavController(navController)
-                bottomAppBar.background = null
+                bottomNavigationView.background = null
             }
 
             // ActionBar显示情况特判
