@@ -101,7 +101,10 @@ class LoginFragment : BaseFragment() {
             showStudentCodeWarning.observe(viewLifecycleOwner) {
                 it?.let {
                     if (it) binding.tvLoginWarn.visibility = View.VISIBLE
-                    else binding.tvLoginWarn.visibility = View.GONE
+                    else {
+                        binding.tvLoginWarn.visibility = View.GONE
+                        doneShowingWarning()
+                    }
                 }
             }
 
