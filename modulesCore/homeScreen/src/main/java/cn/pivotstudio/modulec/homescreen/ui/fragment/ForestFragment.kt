@@ -185,7 +185,7 @@ class ForestFragment : BaseFragment() {
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                .navigation(requireActivity() as HomeScreenActivity, ResultCodeConstant.Hole)
+                .navigation(requireActivity(), ResultCodeConstant.Hole)
         }
     }
 
@@ -193,7 +193,8 @@ class ForestFragment : BaseFragment() {
     fun navToSpecificHoleWithReply(holeId: Int) {
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
-                .withBoolean(Constant.IF_OPEN_KEYBOARD, true).navigation()
+                .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
+                .navigation(requireActivity(), ResultCodeConstant.Hole)
         }
     }
 
@@ -233,7 +234,7 @@ class ForestFragment : BaseFragment() {
                 forestViewModel.loadHolesAndHeads()
                 binding.recyclerViewForestHoles.isEnabled = false
             }
-            setOnLoadMoreListener { refreshlayout -> //上拉加载触发
+            setOnLoadMoreListener {   //上拉加载触发
                 if (forestViewModel.forestHoles.value == null || forestViewModel.forestHeads.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
                     forestViewModel.loadHolesAndHeads()
                 } else {
