@@ -12,7 +12,9 @@
         tools:layout="@layout/fragment_welcome">
         <action
             android:id="@+id/action_welcomeFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@android:anim/slide_in_left" />
     </fragment>
 
     <fragment
@@ -22,10 +24,14 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@android:anim/slide_in_left" />
         <action
             android:id="@+id/action_loginFragment_to_forgetPasswordFragment"
-            app:destination="@id/forgetPasswordFragment" />
+            app:destination="@id/forgetPasswordFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@android:anim/slide_in_left" />
         <action
             android:id="@+id/action_loginFragment_to_privacyFragment"
             app:destination="@id/privacyFragment" />
@@ -38,10 +44,13 @@
         tools:layout="@layout/fragment_verify_code" >
         <action
             android:id="@+id/action_verifyCodeFragment_to_setPasswordFragment"
-            app:destination="@id/setPasswordFragment" />
+            app:destination="@id/setPasswordFragment"
+            app:enterAnim="@anim/nav_default_enter_anim" />
         <action
             android:id="@+id/action_verifyCodeFragment_to_setNewPasswordFragment"
-            app:destination="@id/setNewPasswordFragment" />
+            app:destination="@id/setNewPasswordFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@android:anim/slide_in_left" />
         <argument
             android:name="studentCode"
             app:argType="string" />
@@ -54,7 +63,10 @@
         tools:layout="@layout/fragment_register">
         <action
             android:id="@+id/action_registerFragment_to_verifyCodeFragment"
-            app:destination="@id/verifyCodeFragment" />
+            app:destination="@id/verifyCodeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popUpTo="@id/registerFragment" />
         <action
             android:id="@+id/action_registerFragment_to_privacyFragment"
             app:destination="@id/privacyFragment" />
@@ -67,7 +79,10 @@
         tools:layout="@layout/fragment_forget_password">
         <action
             android:id="@+id/action_forgetPasswordFragment_to_verifyCodeFragment"
-            app:destination="@id/verifyCodeFragment" />
+            app:destination="@id/verifyCodeFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popUpTo="@id/forgetPasswordFragment" />
     </fragment>
 
     <fragment
