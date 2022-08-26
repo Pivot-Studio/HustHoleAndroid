@@ -23,9 +23,9 @@ class ForestViewModel : ViewModel() {
     val holesLoadState: LiveData<LoadStatus?> = repository.holeState
     val headerLoadState: LiveData<LoadStatus> = repository.headerLoadState
 
-    private var _shouldRefreshHoles = false
-
     private var _shouldRefreshHeader = false
+
+    private var _loadLaterHoleId = -1
 
     val tip: MutableLiveData<String?> = repository.tip
 
@@ -33,24 +33,8 @@ class ForestViewModel : ViewModel() {
         loadHolesAndHeads()
     }
 
-    fun loadHolesLater() {
-        _shouldRefreshHoles = true
-    }
-
     fun loadHeaderLater() {
         _shouldRefreshHeader = true
-    }
-
-    /**
-     * 从其他页面回来想要刷新
-     *  1. loadxxxLater()
-     *  2. tryLoadNewxxx() in View
-     */
-    fun tryLoadNewHoles() {
-        if (_shouldRefreshHoles) {
-            loadHoles()
-            _shouldRefreshHoles = false
-        }
     }
 
     fun tryLoadNewHeader() {
@@ -92,6 +76,29 @@ class ForestViewModel : ViewModel() {
 
     fun showPlaceHolder() {
         repository.holeState.value = null
+    }
+
+    fun loadHoleLater(holeId: Int) {
+        _loadLaterHoleId = holeId
+    }
+
+    fun refreshLoadLaterHole(
+        isThumb: Boolean,
+        replied: Boolean,
+        followed: Boolean,
+        thumbNum: Int,
+        replyNum: Int,
+        followNum: Int
+    ) {
+        repository.refreshLoadLaterHole(
+            _loadLaterHoleId,
+            isThumb,
+            replied,
+            followed,
+            thumbNum,
+            replyNum,
+            followNum
+        )
     }
 
 }

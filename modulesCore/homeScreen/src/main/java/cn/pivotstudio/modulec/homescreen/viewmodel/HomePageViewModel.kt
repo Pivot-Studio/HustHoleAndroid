@@ -24,7 +24,8 @@ import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
  */
 class HomePageViewModel : BaseViewModel() {
     private val mHomePageHoleRepository = HomePageHoleRepository()
-    val pHomePageHoles: LiveData<HomepageHoleResponse> = mHomePageHoleRepository.pHomePageHoles //数据类型网络请求结果
+    val pHomePageHoles: LiveData<HomepageHoleResponse> =
+        mHomePageHoleRepository.pHomePageHoles //数据类型网络请求结果
     val tip: MutableLiveData<String?> = mHomePageHoleRepository.tip
     private var mIsSearch: Boolean? = null //是否是搜索状态
     private var mSearchKeyword: String? = null //搜索关键词
@@ -137,7 +138,8 @@ class HomePageViewModel : BaseViewModel() {
         } else if (id == R.id.cl_itemhomepage_frame) { //点击树洞跳转
             pClickDataBean = dataBean
             if (BuildConfig.isRelease) {
-                ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
+                ARouter.getInstance().build("/hole/HoleActivity")
+                    .withInt(Constant.HOLE_ID, holeId)
                     .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                     .navigation(v.context as HomeScreenActivity, ResultCodeConstant.Hole)
                 //

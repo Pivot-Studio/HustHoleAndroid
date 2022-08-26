@@ -167,7 +167,28 @@ class ForestRepository {
         }
     }
 
-
-
-
+    fun refreshLoadLaterHole(
+        holeId: Int,
+        isThumb: Boolean,
+        replied: Boolean,
+        followed: Boolean,
+        thumbNum: Int,
+        replyNum: Int,
+        followNum: Int
+    ) {
+        if (holeId < 0) return
+        val newItems = _holes.value!!.toMutableList()
+        for ((i, newHole) in newItems.withIndex()) {
+            if (holeId == newHole.holeId)
+                newItems[i] = newHole.copy().apply {
+                    likeNum = thumbNum
+                    liked = isThumb
+                    this.replied = replied
+                    this.followed = followed
+                    this.replyNum = replyNum
+                    this.followNum = followNum
+                }
+        }
+        _holes.value = newItems
+    }
 }

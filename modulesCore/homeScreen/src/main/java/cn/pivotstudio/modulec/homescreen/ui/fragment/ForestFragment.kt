@@ -32,6 +32,7 @@ import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.constant.RequestCodeConstant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 
 /**
@@ -51,6 +52,25 @@ class ForestFragment : BaseFragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_forest, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == ResultCodeConstant.Hole) {
+            val returnInfo = data!!.getParcelableExtra<HoleReturnInfo>(
+                Constant.HOLE_RETURN_INFO
+            )
+            returnInfo?.let {
+                forestViewModel.refreshLoadLaterHole(
+                    it.is_thumbup,
+                    it.is_reply,
+                    it.is_follow,
+                    it.thumbup_num,
+                    it.reply_num,
+                    it.follow_num
+                )
+            }
+
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -137,7 +157,6 @@ class ForestFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        forestViewModel.tryLoadNewHoles()
         forestViewModel.tryLoadNewHeader()
     }
 
@@ -149,7 +168,6 @@ class ForestFragment : BaseFragment() {
      */
     fun navToAllForests() {
         forestViewModel.loadHeaderLater()
-        forestViewModel.loadHolesLater()
         findNavController(
             requireActivity(), R.id.nav_host_fragment
         ).navigate(R.id.action_forest_fragment_to_all_forest_fragment)
@@ -163,16 +181,16 @@ class ForestFragment : BaseFragment() {
 
     // 点击文字内容跳转到树洞
     fun navToSpecificHole(holeId: Int) {
-        forestViewModel.loadHolesLater()
+        forestViewModel.loadHoleLater(holeId)
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
-                .withBoolean(Constant.IF_OPEN_KEYBOARD, false).navigation(requireActivity(), 1)
+                .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                .navigation(requireActivity() as HomeScreenActivity, ResultCodeConstant.Hole)
         }
     }
 
     // 点击恢复图标跳转到树洞后自动打开软键盘
     fun navToSpecificHoleWithReply(holeId: Int) {
-        forestViewModel.loadHolesLater()
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, true).navigation()
@@ -193,7 +211,8 @@ class ForestFragment : BaseFragment() {
     fun reportTheHole(hole: ForestHole) {
         ARouter.getInstance().build("/report/ReportActivity").withInt(Constant.HOLE_ID, hole.holeId)
             .withInt(Constant.REPLY_LOCAL_ID, -1).withString(
-                Constant.ALIAS, "洞主").navigation()
+                Constant.ALIAS, "洞主"
+            ).navigation()
     }
 
     // 删除树洞
