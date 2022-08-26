@@ -218,6 +218,11 @@ class LARViewModel : ViewModel() {
         _loginToken.value = null
     }
 
+    fun doneShowingWarning() {
+        _showStudentCodeWarning.value = null
+        _showPasswordWarning.value = null
+    }
+
 
     private fun countDown() {
         _larState.value = LARState.COUNT_DOWN_START

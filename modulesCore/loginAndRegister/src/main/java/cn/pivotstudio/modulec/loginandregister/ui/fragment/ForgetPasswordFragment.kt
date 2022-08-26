@@ -42,7 +42,6 @@ class ForgetPasswordFragment : BaseFragment() {
                 viewModel.studentCode.value = etForgetEmail.text.toString()
                 viewModel.isResetPassword = true
                 viewModel.sendVerifyCodeToStudentEmail()
-                navController.navigate(R.id.action_forgetPasswordFragment_to_verifyCodeFragment)
             }
         }
 
@@ -57,7 +56,11 @@ class ForgetPasswordFragment : BaseFragment() {
             showStudentCodeWarning.observe(viewLifecycleOwner) {
                 it?.let {
                     if (it) binding.tvForgetWarn.visibility = View.VISIBLE
-                    else binding.tvForgetWarn.visibility = View.GONE
+                    else {
+                        binding.tvForgetWarn.visibility = View.GONE
+                        navController.navigate(R.id.action_forgetPasswordFragment_to_verifyCodeFragment)
+                        doneShowingWarning()
+                    }
                 }
             }
         }

@@ -59,7 +59,8 @@ class RegisterFragment : BaseFragment() {
                     if (it) binding.tvRegisterWarn.visibility = View.VISIBLE
                     else {
                         binding.tvRegisterWarn.visibility = View.GONE
-                        navController.navigate(R.id.action_registerFragment_to_verifyCodeFragment)
+                        doneShowingWarning()
+                        navToVerifyCode()
                     }
                 }
             }
@@ -71,5 +72,9 @@ class RegisterFragment : BaseFragment() {
                 }
             }
         }
+    }
+
+    private fun navToVerifyCode() {
+        navController.navigate(R.id.action_registerFragment_to_verifyCodeFragment)
     }
 }
