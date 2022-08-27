@@ -42,14 +42,15 @@ class ForestDetailRepository(
     val overview = _overview
 
 
-
     suspend fun loadHolesByForestId(id: Int): Flow<List<DetailForestHoleV2>> {
         _state.value = ForestDetailHolesLoadStatus.LOADING
         return flow {
-            emit(HustHoleApi.retrofitService.getHolesInForest(
-                forestId = id,
-                timestamp = lastTimeStamp
-            ))
+            emit(
+                HustHoleApi.retrofitService.getHolesInForest(
+                    forestId = id,
+                    timestamp = lastTimeStamp
+                )
+            )
         }.flowOn(dispatcher).catch { e ->
             e.printStackTrace()
             _state.value = ForestDetailHolesLoadStatus.ERROR
@@ -200,6 +201,8 @@ class ForestDetailRepository(
                 }
             }))
     }
+
+
 
     companion object {
         const val STARTING_ID = 0

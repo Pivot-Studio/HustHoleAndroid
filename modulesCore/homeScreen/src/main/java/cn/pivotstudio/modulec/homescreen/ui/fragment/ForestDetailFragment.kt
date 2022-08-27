@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,8 +17,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
 import cn.pivotstudio.husthole.moduleb.network.model.Hole
+import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
@@ -46,6 +49,25 @@ class ForestDetailFragment : BaseFragment() {
     // 所以需要从这里拿到这个列表进行状态判断
     // 决定小树林"是否加入" 的显示状态
     private val sharedViewModel: ForestViewModel by activityViewModels()
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (resultCode == ResultCodeConstant.Hole) {
+            val returnInfo = data!!.getParcelableExtra<HoleReturnInfo>(
+                Constant.HOLE_RETURN_INFO
+            )
+            returnInfo?.let {
+                viewModel.refreshLoadLaterHole(
+                    it.is_thumbup,
+                    it.is_reply,
+                    it.is_follow,
+                    it.thumbup_num,
+                    it.reply_num,
+                    it.follow_num
+                )
+            }
+
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -140,11 +162,6 @@ class ForestDetailFragment : BaseFragment() {
 
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.tryLoadNewHoles()
-    }
-
     private fun joinTheForest() {
         viewModel.joinTheForest()
     }
@@ -155,18 +172,16 @@ class ForestDetailFragment : BaseFragment() {
 
     // 点击item跳转到树洞
     fun navToSpecificHole(holeId: Int) {
-        viewModel.loadHolesLater()
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
                 .withInt(Constant.HOLE_ID, holeId)
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                .navigation(requireActivity(), 1)
+                .navigation(requireActivity(), ResultCodeConstant.Hole)
         }
     }
 
     // 点击具体小树林 FloatingActionButton 跳转到发布树洞并填充小树林信息
     fun navToPublishHoleFromDetailForest(forestId: Int) {
-        viewModel.loadHolesLater()
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/publishHole/PublishHoleActivity")
                 .withBundle(Constant.FROM_DETAIL_FOREST, Bundle().apply {
@@ -181,12 +196,11 @@ class ForestDetailFragment : BaseFragment() {
 
     // 点击回复图标跳转到树洞后自动打开软键盘
     fun navToSpecificHoleWithReply(holeId: Int) {
-        viewModel.loadHolesLater()
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
                 .withInt(Constant.HOLE_ID, holeId)
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
-                .navigation()
+                .navigation(requireActivity(), ResultCodeConstant.Hole)
         }
     }
 
@@ -226,6 +240,7 @@ class ForestDetailFragment : BaseFragment() {
             setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
             setOnRefreshListener {    //下拉刷新触发
                 viewModel.loadHoles()
+                viewModel.loadOverview()
                 binding.recyclerViewForestDetail.isEnabled = false
             }
             setOnLoadMoreListener { refreshlayout ->  //上拉加载触发

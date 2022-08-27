@@ -127,7 +127,8 @@
 
                                     <include
                                         android:id="@+id/detail_forest_quit_btn"
-                                        layout="@layout/tertiary_button_secondary" />
+                                        layout="@layout/tertiary_button_secondary"
+                                        android:visibility="gone"/>
 
                                 </FrameLayout>
 

@@ -30,23 +30,7 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
     val state = repository.state
     val tip: MutableLiveData<String?> = repository.tip
 
-    private var _shouldRefreshHoles = false
-
-    fun loadHolesLater() {
-        _shouldRefreshHoles = true
-    }
-
-    /**
-     * 从其他页面回来想要刷新
-     *  1. loadxxxLater()
-     *  2. tryLoadNewxxx() in View
-     */
-    fun tryLoadNewHoles() {
-        if (_shouldRefreshHoles) {
-            viewModelScope.launch { loadHoles() }
-            _shouldRefreshHoles = false
-        }
-    }
+    private var _loadLaterHoleId = -1
 
     init {
         loadHoles()
@@ -122,6 +106,31 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     fun doneShowingTip() {
         tip.value = null
+    }
+
+    fun refreshLoadLaterHole(
+        isThumb: Boolean,
+        replied: Boolean,
+        followed: Boolean,
+        thumbNum: Int,
+        replyNum: Int,
+        followNum: Int
+    ) {
+        if (_loadLaterHoleId < 0) return
+        val newItems = _holesV2.value.toMutableList()
+        for ((i, newHole) in newItems.withIndex()) {
+            if (_loadLaterHoleId == newHole.holeId.toInt())
+                newItems[i] = newHole.copy().apply {
+                    this.likeCount = thumbNum.toLong()
+                    liked = isThumb
+                    this.isReply = replied
+                    this.isFollow = followed
+                    this.replyCount = replyNum.toLong()
+                    this.followCount = followNum.toLong()
+                }
+        }
+        _holesV2.value = newItems
+
     }
 
 }

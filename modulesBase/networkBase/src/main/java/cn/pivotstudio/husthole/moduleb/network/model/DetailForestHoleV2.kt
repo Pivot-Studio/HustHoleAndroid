@@ -20,7 +20,7 @@ data class DetailForestHoleV2(
      * 收藏数
      */
     @Json(name = "follow")
-    val followCount: Long,
+    var followCount: Long,
 
     /**
      * 小树林id
@@ -44,7 +44,7 @@ data class DetailForestHoleV2(
      * 是否收藏
      */
     @Json(name = "isFollow")
-    val isFollow: Boolean,
+    var isFollow: Boolean,
 
     /**
      * 是否属于自己
@@ -56,13 +56,13 @@ data class DetailForestHoleV2(
      * 是否评论
      */
     @Json(name = "isReply")
-    val isReply: Boolean,
+    var isReply: Boolean,
 
     /**
      * 是否点赞
      */
     @Json(name = "isThumb")
-    val liked: Boolean,
+    var liked: Boolean,
 
     /**
      * 最新评论时间
@@ -73,13 +73,13 @@ data class DetailForestHoleV2(
      * 评论数
      */
     @Json(name = "reply")
-    val replyCount: Long,
+    var replyCount: Long,
 
     /**
      * 点赞数
      */
     @Json(name = "thumb")
-    val likeCount: Long
+    var likeCount: Long
 ): Hole()
 
 data class TokenResponse(

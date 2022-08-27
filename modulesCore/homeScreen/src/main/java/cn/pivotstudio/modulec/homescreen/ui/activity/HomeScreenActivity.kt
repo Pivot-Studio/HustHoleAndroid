@@ -28,6 +28,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.BuildConfig
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
 
 /**
@@ -58,6 +59,7 @@ class HomeScreenActivity : BaseActivity() {
         val fragment = mMainNavFragment!!.childFragmentManager.primaryNavigationFragment
         when (fragment) {
             is HomePageFragment,
+            is ForestDetailFragment,
             is ForestFragment -> {
                 fragment.onActivityResult(requestCode, resultCode, data)
             }
