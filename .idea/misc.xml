@@ -383,6 +383,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/constraintlayout_homepageoptionbox.xml" value="0.3630996704101563" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_delete.xml" value="0.31657608695652173" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_inform.xml" value="0.28229166666666666" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_logout.xml" value="0.27219202898550726" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_screen.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_update.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_welcome.xml" value="0.28229166666666666" />

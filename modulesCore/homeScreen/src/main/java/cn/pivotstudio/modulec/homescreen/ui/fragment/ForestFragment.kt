@@ -115,7 +115,7 @@ class ForestFragment : BaseFragment() {
                     }
                 }
 
-                holesLoadState.observe(viewLifecycleOwner) {
+                holesLoadState.observe(viewLifecycleOwner) { it ->
                     when (it) {
                         LoadStatus.DONE -> {
                             recyclerViewForestHoles.visibility = VISIBLE
@@ -123,7 +123,11 @@ class ForestFragment : BaseFragment() {
                             finishRefreshAnim()
                         }
                         LoadStatus.ERROR -> {
-                            forestPlaceholder.visibility = VISIBLE
+                            forestHoles.value?.takeIf { holes ->
+                                holes.isEmpty()
+                            }?.let {
+                                forestPlaceholder.visibility = VISIBLE
+                            }
                             finishRefreshAnim()
                         }
                         LoadStatus.LOADING -> {
