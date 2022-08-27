@@ -49,8 +49,8 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:text="加载中..."
+            android:textAppearance="@style/HustHoleTypography.Headline1.Bold"
             android:textColor="@color/GrayScale_100"
-            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/titlebar_AVLoadingIndicatorView"
             app:layout_constraintTop_toTopOf="parent" />
