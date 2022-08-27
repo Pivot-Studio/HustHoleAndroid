@@ -14,7 +14,7 @@
         android:id="@+id/layout_detail_forest_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/dp_10"
+
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/white">
 
@@ -23,7 +23,7 @@
             android:layout_width="@dimen/dp_25"
             android:layout_height="@dimen/dp_25"
             android:layout_marginEnd="@dimen/dp_14"
-            android:layout_marginBottom="@dimen/dp_12"
+            android:layout_marginBottom="@dimen/dp_8"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@mipmap/threepoint" />
@@ -49,6 +49,7 @@
             android:ellipsize="end"
             android:maxWidth="@dimen/dp_310"
             android:maxLines="5"
+            android:paddingBottom="@dimen/dp_10"
             android:text="@{hole.content, default = @string/default_string_zh_long}"
             android:textAppearance="@style/HustHoleTypography.Body2"
             android:textColor="@color/GrayScale_20"
