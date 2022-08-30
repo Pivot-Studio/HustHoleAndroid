@@ -43,7 +43,6 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="@{forestHole.forestName}"
             android:textAppearance="@style/HustHoleTypography.Headline5"
-            android:textColor="@color/GrayScale_50"
             app:layout_constraintStart_toEndOf="@+id/image_item_forest_avatar"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/default_string_zh_short" />
@@ -167,7 +166,6 @@
             android:maxLines="5"
             android:text="@{forestHole.content}"
             android:textAppearance="@style/HustHoleTypography.Body2"
-            android:textColor="@color/GrayScale_20"
             app:layout_constraintTop_toBottomOf="@+id/image_item_forest_avatar"
             tools:text="@string/default_string_zh_long" />
 

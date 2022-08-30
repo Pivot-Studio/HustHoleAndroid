@@ -3,9 +3,9 @@
     <item android:state_pressed="false">
       <shape>
          <solid
-           android:color="@color/GrayScale_100"/>
+           android:color="@color/HH_Surface"/>
          <stroke
-           android:color="@color/GrayScale_100"/>
+           android:color="@color/HH_Surface"/>
          <corners
            android:radius="20dp"/>
       </shape>
@@ -13,9 +13,9 @@
     <item android:state_pressed="true">
         <shape>
             <solid
-                android:color="@color/GrayScale_95"/>
+                android:color="@color/HH_Background"/>
             <stroke
-                android:color="@color/GrayScale_95"/>
+                android:color="@color/HH_Background"/>
             <corners
                 android:radius="20dp"/>
         </shape>

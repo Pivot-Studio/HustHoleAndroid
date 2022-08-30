@@ -7,77 +7,70 @@
 
     </data>
 
-    <LinearLayout
-        android:id="@+id/notification_item_header"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_90"
-        android:background="@color/GrayScale_95"
-        android:orientation="vertical">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_80"
-            android:background="@color/GrayScale_100"
-            android:layout_marginTop="@dimen/dp_5"
-            android:visibility="visible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="@dimen/dp_80"
+        android:layout_marginVertical="@dimen/dp_5"
+        android:background="@color/HH_Surface"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/system_notification_image"
-                android:layout_width="@dimen/dp_50"
-                android:layout_height="@dimen/dp_50"
-                android:layout_marginStart="@dimen/dp_20"
-                android:background="@color/HH_BandColor_3"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearance="@style/ShapeableImageViewCircleStyle" />
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/system_notification_image"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
+            android:layout_marginStart="@dimen/dp_20"
+            android:background="@color/HH_BandColor_3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ShapeableImageViewCircleStyle" />
 
-            <ImageView
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/system_notification_image"
+            app:layout_constraintEnd_toEndOf="@+id/system_notification_image"
+            app:layout_constraintStart_toStartOf="@+id/system_notification_image"
+            app:layout_constraintTop_toTopOf="@+id/system_notification_image"
+            app:srcCompat="@drawable/ic_notice" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_50"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/system_notification_image"
+            app:layout_constraintStart_toEndOf="@+id/system_notification_image">
+
+            <TextView
+                android:id="@+id/system_notification_tittle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintBottom_toBottomOf="@+id/system_notification_image"
-                app:layout_constraintEnd_toEndOf="@+id/system_notification_image"
-                app:layout_constraintStart_toStartOf="@+id/system_notification_image"
-                app:layout_constraintTop_toTopOf="@+id/system_notification_image"
-                app:srcCompat="@drawable/ic_notice" />
+                android:layout_marginStart="@dimen/dp_18"
+                android:text="@string/page3fragment_1"
+                android:textAppearance="@style/HustHoleTypography.Headline2.Bold"
+                android:textColor="@color/GrayScale_20"
+                app:layout_constraintStart_toEndOf="@id/system_notification_image" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_50"
-                android:gravity="bottom"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="@+id/system_notification_image"
-                app:layout_constraintStart_toEndOf="@+id/system_notification_image">
+            <TextView
+                android:id="@+id/latest_system_notification"
+                android:layout_width="@dimen/dp_264"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_7"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/HustHoleTypography.Body4.Bold"
+                android:textColor="@color/GrayScale_50"
+                app:layout_constraintBottom_toBottomOf="@id/system_notification_image"
+                tools:text="@string/default_string_zh_long" />
 
-                <TextView
-                    android:id="@+id/system_notification_tittle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_18"
-                    android:text="@string/page3fragment_1"
-                    android:textAppearance="@style/HustHoleTypography.Headline2.Bold"
-                    android:textColor="@color/GrayScale_20"
-                    app:layout_constraintStart_toEndOf="@id/system_notification_image" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/latest_system_notification"
-                    android:layout_width="@dimen/dp_264"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
-                    android:layout_marginStart="@dimen/dp_20"
-                    android:layout_marginTop="@dimen/dp_7"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:textAppearance="@style/HustHoleTypography.Body4.Bold"
-                    android:textColor="@color/GrayScale_50"
-                    app:layout_constraintBottom_toBottomOf="@id/system_notification_image"
-                    tools:text="@string/default_string_zh_long" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </LinearLayout>
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </LinearLayout>
 </layout>

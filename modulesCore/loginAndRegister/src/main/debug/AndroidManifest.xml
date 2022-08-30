@@ -10,8 +10,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HustHole"
-        >
+        android:theme="@style/Theme.HustHole">
 
         <activity
             android:name=".ui.activity.LARActivity"

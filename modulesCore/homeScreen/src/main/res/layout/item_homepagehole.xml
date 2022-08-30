@@ -71,7 +71,6 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="@{@string/hole_id(String.valueOf(homePageHole.hole_id)), default = @string/hole_id}"
             android:textAppearance="@style/HustHoleTypography.Headline5"
-            android:textColor="@color/GrayScale_0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -98,7 +97,6 @@
             android:maxLines="5"
             android:text="@{homePageHole.content}"
             android:textAppearance="@style/HustHoleTypography.Body2"
-            android:textColor="@color/GrayScale_20"
             app:layout_constraintStart_toStartOf="@+id/tv_itemhomepage_time"
             app:layout_constraintTop_toBottomOf="@+id/tv_itemhomepage_time"
             tools:text="@string/default_string_zh_long" />

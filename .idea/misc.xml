@@ -373,7 +373,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_email_verify1.xml" value="0.27853260869565216" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_email_verify2.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_hole_star.xml" value="0.28229166666666666" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/activity_hs_homescreen.xml" value="0.3157894736842105" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/activity_hs_homescreen.xml" value="0.23910032573499174" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_rules.xml" value="0.286231884057971" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_screen.xml" value="0.286231884057971" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_hole.xml" value="0.28229166666666666" />
@@ -392,7 +392,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_evaluate.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest.xml" value="0.1863739013671875" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest_detail.xml" value="0.30307312011718746" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_homepage.xml" value="0.5625" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_homepage.xml" value="0.27746276855468754" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_message.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_mine.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_myhole.xml" value="0.2572463768115942" />
@@ -406,13 +406,14 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_card.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.5041320579639379" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_head.xml" value="0.2572463768115942" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_hole.xml" value="0.5094339622641509" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_hole.xml" value="0.47928994082840237" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forestdetailiconlist.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_foresttype.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_homepagebottomblock.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.48746367372358435" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_label.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_nosearch.xml" value="0.28229166666666666" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_notice_header.xml" value="0.17477203647416414" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_requestfailed.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_updatehead.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/linearlayout_bottomnavigationbar.xml" value="0.27853260869565216" />

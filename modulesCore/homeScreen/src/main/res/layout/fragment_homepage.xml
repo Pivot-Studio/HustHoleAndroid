@@ -6,16 +6,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/GrayScale_95"
+        android:background="@color/HH_Background"
         android:fitsSystemWindows="true">
 
         <LinearLayout
             android:id="@+id/linearLayout_et"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:paddingHorizontal="@dimen/dp_16"
-            android:background="@color/GrayScale_100"
+            android:layout_height="@dimen/dp_44"
             android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/dp_16"
+            android:background="@color/HH_OnBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -44,11 +44,11 @@
                     android:background="@null"
                     android:imeOptions="actionSearch"
                     android:singleLine="true"
-                    android:textColor="@color/GrayScale_0"
                     android:textAppearance="@style/HustHoleTypography.Body4"
-                    app:layout_constraintStart_toEndOf="@+id/iv_homepage_searchicon"
+                    android:textColor="@color/GrayScale_0"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_homepage_searchicon"
                     app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -61,22 +61,20 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linearLayout_et"
-            android:background="@color/GrayScale_100" />
+            android:background="@color/HH_OnBackground"/>
 
         <com.scwang.smart.refresh.layout.SmartRefreshLayout
             android:id="@+id/refreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/cl_mid_block"
-            android:background="@color/GrayScale_95"
             android:minHeight="@dimen/dp_400"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
             <com.scwang.smart.refresh.header.ClassicsHeader
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/GrayScale_95" />
+                android:layout_height="wrap_content" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -89,8 +87,7 @@
 
             <com.scwang.smart.refresh.footer.ClassicsFooter
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/GrayScale_95" />
+                android:layout_height="wrap_content" />
         </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
     </RelativeLayout>

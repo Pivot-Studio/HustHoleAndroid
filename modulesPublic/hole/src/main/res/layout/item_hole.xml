@@ -19,7 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/GrayScale_100">
+        android:background="@color/HH_Surface">
 
 
         <TextView
@@ -206,7 +206,7 @@
             android:id="@+id/tv_hole_frame"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_34"
-            android:background="@color/GrayScale_95"
+            android:background="@color/HH_Background"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cl_hole_thumbup" />
 

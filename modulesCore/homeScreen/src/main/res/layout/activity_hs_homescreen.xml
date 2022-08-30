@@ -63,6 +63,7 @@
                     android:layout_gravity="bottom"
                     android:elevation="@{0.0f}"
                     android:background="@drawable/bg_bottom_bar"
+                    android:backgroundTint="@color/HH_Surface"
                     app:fabCradleMargin="@dimen/dp_10"
                     app:fabCradleRoundedCornerRadius="@dimen/dp_35">
 

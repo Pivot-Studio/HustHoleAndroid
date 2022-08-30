@@ -20,6 +20,8 @@
     <color name="GrayScale_98">#F9F9F9</color>
     <color name="GrayScale_100">#DEFFFFFF</color>
     <color name="Grayscale_200">#00FFFFFF</color>
+    <color name="BlackScale_1">#121212</color>
+    <color name="BlackScale_2">#DE343434</color>
 
 
     <color name="HH_BandColor_1">#4B9F79</color>
@@ -29,6 +31,11 @@
     <color name="HH_BandColor_7">#FFB459</color>
     <color name="HH_Reminder_Warning">#FF6767</color>
     <color name="HH_Reminder_Link">#02A9F5</color>
+
+    <color name="HH_Background">@color/GrayScale_95</color>
+    <color name="HH_OnBackground">@color/GrayScale_100</color>
+    <color name="HH_Surface">@color/GrayScale_100</color>
+    <color name="HH_OnSurface">@color/GrayScale_20</color>
 
     <color name="darkscreen">#66000000</color>
     <color name="red">#FB9782</color>
