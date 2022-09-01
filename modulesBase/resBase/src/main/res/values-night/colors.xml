@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="HH_BandColor_1">#4B9F79</color>
     <color name="HH_BandColor_3">#67C098</color>
-    <color name="HH_BandColor_5">#2D895F</color>
-    <color name="HH_BandColor_6">#D2E7DD</color>
-    <color name="HH_BandColor_7">#FFB459</color>
-    <color name="HH_Reminder_Warning">#FF6767</color>
-    <color name="HH_Reminder_Link">#02A9F5</color>
-
     <color name="HH_Background">@color/BlackScale_1</color>
     <color name="HH_OnBackground">@color/BlackScale_2</color>
     <color name="HH_Surface">@color/BlackScale_2</color>

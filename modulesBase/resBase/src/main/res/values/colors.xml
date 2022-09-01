@@ -32,6 +32,10 @@
     <color name="HH_Reminder_Warning">#FF6767</color>
     <color name="HH_Reminder_Link">#02A9F5</color>
 
+    <color name="Title_GrayScale_20">#343434</color>
+    <color name="Background_GrayScale_100">#FFFFFF</color>
+    <color name="Button_GrayScale_100">#FFFFFF</color>
+
     <color name="HH_Background">@color/GrayScale_95</color>
     <color name="HH_OnBackground">@color/GrayScale_100</color>
     <color name="HH_Surface">@color/GrayScale_100</color>

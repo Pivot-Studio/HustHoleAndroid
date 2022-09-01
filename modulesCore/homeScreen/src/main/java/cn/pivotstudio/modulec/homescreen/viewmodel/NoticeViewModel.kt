@@ -14,8 +14,10 @@ class NoticeViewModel : ViewModel() {
     private val dataSource = NoticeRepo()
 
     private val _replies = MutableStateFlow<List<Notice>>(emptyList())
+    private val _showPlaceholder = MutableStateFlow(false)
 
     val replies: StateFlow<List<Notice>> = _replies
+    val showPlaceholder: StateFlow<Boolean> = _showPlaceholder
     val state = dataSource.state
 
     init {
@@ -39,6 +41,7 @@ class NoticeViewModel : ViewModel() {
                 e.printStackTrace()
             }.collect {
                 _replies.value = it.notices!!
+                _showPlaceholder.value = _replies.value.isEmpty()
             }
         }
     }

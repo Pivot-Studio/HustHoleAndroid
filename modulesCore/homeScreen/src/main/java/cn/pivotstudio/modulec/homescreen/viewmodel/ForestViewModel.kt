@@ -83,13 +83,20 @@ class ForestViewModel : ViewModel() {
     }
 
     fun refreshLoadLaterHole(
-        isThumb: Boolean,
-        replied: Boolean,
-        followed: Boolean,
-        thumbNum: Int,
-        replyNum: Int,
-        followNum: Int
+        isThumb: Boolean?,
+        replied: Boolean?,
+        followed: Boolean?,
+        thumbNum: Int?,
+        replyNum: Int?,
+        followNum: Int?
     ) {
+        if (isThumb == null) return
+        if (replied == null) return
+        if (followed == null) return
+        if (thumbNum == null) return
+        if (replyNum == null) return
+        if (followNum == null) return
+
         repository.refreshLoadLaterHole(
             _loadLaterHoleId,
             isThumb,

@@ -296,6 +296,7 @@
             android:id="@+id/btn_report"
             android:layout_width="@dimen/dp_256"
             android:layout_height="@dimen/dp_50"
+            android:layout_marginTop="@dimen/dp_20"
             android:background="@drawable/button"
             android:onClick="onClick"
             android:text="确认举报"

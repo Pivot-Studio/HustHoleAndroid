@@ -14,9 +14,8 @@
         android:id="@+id/layout_detail_forest_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="@dimen/dp_10"
-        android:background="@color/white">
+        android:background="@color/HH_Surface">
 
         <ImageView
             android:id="@+id/image_item_forest_detail_more"
@@ -167,7 +166,7 @@
             android:layout_height="@dimen/dp_48"
             android:background="@drawable/more"
             android:elevation="@dimen/dp_20"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -188,7 +187,7 @@
                 android:layout_marginStart="15dp"
                 android:text="举报"
                 android:textColor="@color/GrayScale_20"
-                android:textSize="@dimen/sp_14"
+                android:textAppearance="@style/HustHoleTypography.Button2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_item_forest_detail_more_icon"
                 app:layout_constraintTop_toTopOf="parent" />

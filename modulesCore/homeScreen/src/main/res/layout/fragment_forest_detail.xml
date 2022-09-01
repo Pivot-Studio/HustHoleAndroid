@@ -18,12 +18,11 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/GrayScale_95">
+        android:background="@color/HH_Background">
 
         <com.scwang.smart.refresh.header.ClassicsHeader
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/GrayScale_95" />
+            android:layout_height="wrap_content" />
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
@@ -31,9 +30,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/GrayScale_95"
-                android:fitsSystemWindows="true">
+                android:layout_height="match_parent">
 
                 <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:id="@+id/detail_forest_appbar"

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
@@ -15,13 +14,10 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentNoticeBinding
-import cn.pivotstudio.modulec.homescreen.model.Notice
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.NoticeAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.NoticeViewModel
 import com.alibaba.android.arouter.launcher.ARouter
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class NoticeFragment : BaseFragment() {
 
@@ -53,6 +49,16 @@ class NoticeFragment : BaseFragment() {
             lifecycleScope.launchWhenStarted {
                 replies.collect {
                     noticeAdapter.submitList(it)
+                }
+            }
+
+            lifecycleScope.launchWhenStarted {
+                showPlaceholder.collect {
+                    if (it) {
+                        binding.noticePlaceholder.visibility = View.VISIBLE
+                    } else {
+                        binding.noticePlaceholder.visibility = View.GONE
+                    }
                 }
             }
 
