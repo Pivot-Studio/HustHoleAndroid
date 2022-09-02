@@ -263,6 +263,7 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/back_green.xml" value="0.211" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bg_bottom_bar.xml" value="0.1415" />
         <entry key="modulesBase/resBase/src/main/res/drawable/block_line.xml" value="0.1475" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/block_line_2.xml" value="0.198" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bottombar.xml" value="0.1415" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bottombar_button1.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bottombar_button2.xml" value="0.1475" />
@@ -291,7 +292,7 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_active.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_negative.xml" value="0.121" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_tag_16dp.xml" value="0.8488509521484375" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_tag_16dp.xml" value="0.1" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forward_arrow.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_home.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_home_active.xml" value="0.1365" />
@@ -304,12 +305,15 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_load_placeholder.xml" value="0.198" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_mine.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_mine_active.xml" value="0.1365" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_mine_negative.xml" value="0.198" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_msg.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_msg_active.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_msg_negative.xml" value="0.148" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_notice.xml" value="0.196" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_notice_placeholder.xml" value="0.198" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_notify.xml" value="0.148" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_onlylookmaster.xml" value="0.1065" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_pivot_studio_16dp.xml" value="0.198" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_round_star_border_24.xml" value="0.211" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_thumbs_up_active.xml" value="0.211" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_thumbs_up_inactive.xml" value="0.211" />

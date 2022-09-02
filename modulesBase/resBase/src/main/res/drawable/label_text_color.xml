@@ -1,4 +1,0 @@
-<!-- 标签的文字颜色 label_text_color -->
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:color="#2D895F" />
-</selector>
