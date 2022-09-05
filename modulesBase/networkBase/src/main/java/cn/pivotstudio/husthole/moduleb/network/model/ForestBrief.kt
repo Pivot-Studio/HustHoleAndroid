@@ -14,7 +14,7 @@ data class ForestBrief(
      * 小树林id
      */
     @Json(name = "forestId")
-    val forestId: String? = null,
+    val forestId: String,
 
     /**
      * 小树林名字

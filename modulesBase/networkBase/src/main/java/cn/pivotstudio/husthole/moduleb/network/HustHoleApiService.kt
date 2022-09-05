@@ -1,7 +1,7 @@
 package cn.pivotstudio.husthole.moduleb.network
 
 import android.content.Context
-import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.husthole.moduleb.network.model.TokenResponse
 import cn.pivotstudio.husthole.moduleb.network.model.User
@@ -74,7 +74,7 @@ interface HustHoleApiService {
         @Query("mode") mode: String = "LATEST",
         @Query("offset") offset: Int = 0,
         @Query("timestamp") timestamp: String
-    ): List<DetailForestHoleV2>
+    ): List<ForestHoleV2>
 
     @POST("user/signIn")
     suspend fun signIn(
@@ -85,6 +85,41 @@ interface HustHoleApiService {
     suspend fun getForestOverview(
         @Query("forestId") forestId: Int
     ): ForestBrief
+
+    @POST("user/expired")
+    suspend fun checkIfLogin(): String?
+
+    /** 用户加入的小树林树洞列表 */
+    @GET("forest/listJoinHole")
+    suspend fun getAJoinedForestHoles(
+        @Query("limit") limit: Int = 20,
+        @Query("mode") mode: String = "LATEST_REPLY",
+        @Query("offset") offset: Int = 0,
+        @Query("timestamp") timestamp: String
+    ): List<ForestHoleV2>
+
+    /** 小树林列表 */
+    @GET("forest/list")
+    suspend fun getAllForests(
+        @Query("descend") descend: Boolean,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int
+    ): List<ForestBrief>
+
+    /** 我加入的小树林 */
+    @GET("user/forest")
+    suspend fun getJoinedForests(
+        @Query("descend") descend: Boolean,
+        @Query("limit") limit: Int,
+        @Query("offset") offset: Int,
+        @Query("timestamp") timestamp: String
+    ): List<ForestBrief>
+
+    @POST("forest/join")
+    suspend fun joinTheForestBy(
+        @Query("forestId") forestId: String
+    )
+
 
 }
 

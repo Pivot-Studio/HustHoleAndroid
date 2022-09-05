@@ -10,11 +10,10 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
-import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
@@ -30,10 +29,9 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.constant.RequestCodeConstant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * @classname: ForestFragment
@@ -104,14 +102,15 @@ class ForestFragment : BaseFragment() {
 
             recyclerViewForestHead.adapter = headAdapter
             viewModel = forestViewModel.apply {
-                forestHoles.observe(viewLifecycleOwner) {
-                    holeAdapter.submitList(it)
+                lifecycleScope.launchWhenStarted {
+                    holesV2.collectLatest {
+                        holeAdapter.submitList(it)
+                    }
                 }
 
-                forestHeads.observe(viewLifecycleOwner) {
-                    headAdapter.submitList(it.forests)
-                    if (it.forests.isEmpty()) {
-                        forestViewModel.showPlaceHolder()
+                lifecycleScope.launchWhenStarted {
+                    forestsV2.collectLatest {
+                        headAdapter.submitList(it)
                     }
                 }
 
@@ -123,7 +122,7 @@ class ForestFragment : BaseFragment() {
                             finishRefreshAnim()
                         }
                         LoadStatus.ERROR -> {
-                            forestHoles.value?.takeIf { holes ->
+                            holesV2.value.takeIf { holes ->
                                 holes.isEmpty()
                             }?.let {
                                 forestPlaceholder.visibility = VISIBLE
@@ -239,7 +238,7 @@ class ForestFragment : BaseFragment() {
                 binding.recyclerViewForestHoles.isEnabled = false
             }
             setOnLoadMoreListener {   //上拉加载触发
-                if (forestViewModel.forestHoles.value == null || forestViewModel.forestHeads.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
+                if (forestViewModel.holesV2.value.isEmpty() || forestViewModel.holesV2.value.isEmpty()) { //特殊情况，首次加载没加载出来又选择上拉加载
                     forestViewModel.loadHolesAndHeads()
                 } else {
                     forestViewModel.loadMoreForestHoles()

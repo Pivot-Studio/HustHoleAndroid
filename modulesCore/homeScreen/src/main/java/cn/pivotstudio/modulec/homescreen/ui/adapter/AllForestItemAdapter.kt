@@ -6,18 +6,18 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.modulec.homescreen.databinding.ItemForestCardBinding
-import cn.pivotstudio.modulec.homescreen.model.ForestCard
+import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.modulec.homescreen.databinding.ItemForestBriefBinding
 
 const val TAG = "AllForestItemAdapter"
 
 class AllForestItemAdapter(
     val onItemClick: (Int) -> Unit
-) : ListAdapter<ForestCard, AllForestItemAdapter.ForestCardViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<ForestBrief, AllForestItemAdapter.ForestBriefViewHolder>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestCardViewHolder {
-        return ForestCardViewHolder(
-            ItemForestCardBinding.inflate(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestBriefViewHolder {
+        return ForestBriefViewHolder(
+            ItemForestBriefBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
@@ -25,21 +25,21 @@ class AllForestItemAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: ForestCardViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ForestBriefViewHolder, position: Int) {
         val card = getItem(position)
         holder.itemView.setOnClickListener {
-            onItemClick(card.forestId)
+            onItemClick(card.forestId.toInt())
         }
         holder.bind(card)
     }
 
-    inner class ForestCardViewHolder(private val binding: ItemForestCardBinding) :
+    inner class ForestBriefViewHolder(private val binding: ItemForestBriefBinding) :
         RecyclerView.ViewHolder(
             binding.root
         ) {
 
-        fun bind(forestCard: ForestCard) {
-            binding.forestCard = forestCard
+        fun bind(brief: ForestBrief) {
+            binding.forestBrief = brief
             binding.btnJoinForest.setOnClickListener {
                 Log.d(TAG, "bind: Join Forest Btn tapped")
             }
@@ -47,14 +47,14 @@ class AllForestItemAdapter(
     }
 
     companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<ForestCard> =
-            object : DiffUtil.ItemCallback<ForestCard>() {
-                override fun areItemsTheSame(oldItem: ForestCard, newItem: ForestCard): Boolean {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<ForestBrief> =
+            object : DiffUtil.ItemCallback<ForestBrief>() {
+                override fun areItemsTheSame(oldItem: ForestBrief, newItem: ForestBrief): Boolean {
                     return oldItem.forestId == newItem.forestId
                 }
 
-                override fun areContentsTheSame(oldItem: ForestCard, newItem: ForestCard): Boolean {
-                    return oldItem.name == newItem.name
+                override fun areContentsTheSame(oldItem: ForestBrief, newItem: ForestBrief): Boolean {
+                    return oldItem == newItem
                 }
             }
     }

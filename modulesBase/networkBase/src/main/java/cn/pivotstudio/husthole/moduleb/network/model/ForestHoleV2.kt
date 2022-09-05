@@ -3,7 +3,7 @@ package cn.pivotstudio.husthole.moduleb.network.model
 import com.squareup.moshi.Json
 import retrofit2.http.Query
 
-data class DetailForestHoleV2(
+data class ForestHoleV2(
     /**
      * 内容
      */

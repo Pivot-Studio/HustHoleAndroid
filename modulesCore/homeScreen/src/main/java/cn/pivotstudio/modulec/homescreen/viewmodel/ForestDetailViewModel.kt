@@ -1,17 +1,13 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel;
 
 import androidx.lifecycle.*
-import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
-import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.husthole.moduleb.network.model.Hole
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.model.ForestCard
 import cn.pivotstudio.modulec.homescreen.model.ForestHead
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
-import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -19,13 +15,10 @@ import kotlinx.coroutines.launch
 class ForestDetailViewModel(val forestId: Int) : ViewModel() {
     val repository = ForestDetailRepository(forestId = forestId)
 
-    private var _forestBrief = MutableStateFlow(ForestBrief(joined = false))
-    val forestBrief = _forestBrief
-
     val overview: LiveData<ForestCard> = repository.overview
 
-    private var _holesV2 = MutableStateFlow<List<DetailForestHoleV2>>(emptyList())
-    val holesV2: StateFlow<List<DetailForestHoleV2>> = _holesV2
+    private var _holesV2 = MutableStateFlow<List<ForestHoleV2>>(emptyList())
+    val holesV2: StateFlow<List<ForestHoleV2>> = _holesV2
 
     val state = repository.state
     val tip: MutableLiveData<String?> = repository.tip
@@ -51,16 +44,16 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
         repository.loadOverviewByForestId(id = forestId)
     }
 
-    fun loadBrief() {
-        viewModelScope.launch {
-            repository.loadBriefByForestId()
-                .flowOn(Dispatchers.IO)
-                .catch { it.printStackTrace() }
-                .collect {
-                    _forestBrief.emit(it)
-                }
-        }
-    }
+//    fun loadBrief() {
+//        viewModelScope.launch {
+//            repository.loadBriefByForestId()
+//                .flowOn(Dispatchers.IO)
+//                .catch { it.printStackTrace() }
+//                .collect {
+//                    _forestBrief.emit(it)
+//                }
+//        }
+//    }
 
     fun loadMore() {
         viewModelScope.launch {
@@ -74,26 +67,26 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
         }
     }
 
-    fun checkIfJoinedTheForest(forestsJoined: List<ForestHead>) {
+    fun checkIfJoinedTheForest(forestsJoined: List<ForestBrief>) {
         overview.value?.let { overview ->
             forestsJoined.forEach {
-                if (it.forestId == overview.forestId)
+                if (it.forestId.toInt() == overview.forestId)
                     overview.Joined = true
             }
         }
     }
 
     fun giveALikeToTheHole(hole: Hole) {
-        repository.giveALikeToTheHole(hole as DetailForestHoleV2)
+        repository.giveALikeToTheHole(hole as ForestHoleV2)
     }
 
     fun followTheHole(hole: Hole) {
-        repository.followTheHole(hole as DetailForestHoleV2)
+        repository.followTheHole(hole as ForestHoleV2)
         loadHoles()
     }
 
     fun deleteTheHole(hole: Hole) {
-        repository.deleteTheHole(hole as DetailForestHoleV2)
+        repository.deleteTheHole(hole as ForestHoleV2)
     }
 
     fun joinTheForest() {

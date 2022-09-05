@@ -6,7 +6,7 @@ import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
-import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
@@ -42,13 +42,13 @@ class ForestDetailRepository(
     val overview = _overview
 
 
-    suspend fun loadHolesByForestId(id: Int): Flow<List<DetailForestHoleV2>> {
+    suspend fun loadHolesByForestId(id: Int): Flow<List<ForestHoleV2>> {
         _state.value = ForestDetailHolesLoadStatus.LOADING
         return flow {
             emit(
                 HustHoleApi.retrofitService.getHolesInForest(
                     forestId = id,
-                    timestamp = lastTimeStamp
+                    timestamp = lastTimeStamp,
                 )
             )
         }.flowOn(dispatcher).catch { e ->
@@ -57,7 +57,7 @@ class ForestDetailRepository(
         }.onEach { lastTimeStamp = DateUtil.getDateTime() }
     }
 
-    fun loadMoreHolesByForestId(id: Int): Flow<List<DetailForestHoleV2>> {
+    fun loadMoreHolesByForestId(id: Int): Flow<List<ForestHoleV2>> {
         _state.value = ForestDetailHolesLoadStatus.LOADING
         return flow {
             emit(
@@ -95,7 +95,7 @@ class ForestDetailRepository(
             }))
     }
 
-    fun giveALikeToTheHole(hole: DetailForestHoleV2) {
+    fun giveALikeToTheHole(hole: ForestHoleV2) {
         if (!hole.liked) {
             HomeScreenNetworkApi.retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + hole.holeId + "/-1")
         } else {
@@ -125,7 +125,7 @@ class ForestDetailRepository(
 
     }
 
-    fun followTheHole(hole: DetailForestHoleV2) {
+    fun followTheHole(hole: ForestHoleV2) {
         val observable: Observable<MsgResponse> = if (!hole.isFollow) {
             HomeScreenNetworkApi.retrofitService.follow(Constant.BASE_URL + "follows/" + hole.holeId)
         } else {

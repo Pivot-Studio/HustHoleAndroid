@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.modulec.homescreen.databinding.ItemDiscoverMoreBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHeadBinding
 
@@ -20,18 +21,21 @@ import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHeadBinding
 class JoinedForestsAdapter(
     val onItemClick: (Int) -> Unit,
     val navToAllForest: () -> Unit
-) : ListAdapter<ForestHead, ViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<ForestBrief, ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         const val TYPE_DISCOVER_MORE = 1
         const val TYPE_JOINED_FOREST = 0
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<ForestHead> =
-            object : DiffUtil.ItemCallback<ForestHead>() {
-                override fun areItemsTheSame(oldItem: ForestHead, newItem: ForestHead): Boolean {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<ForestBrief> =
+            object : DiffUtil.ItemCallback<ForestBrief>() {
+                override fun areItemsTheSame(oldItem: ForestBrief, newItem: ForestBrief): Boolean {
                     return oldItem.forestId == newItem.forestId
                 }
 
-                override fun areContentsTheSame(oldItem: ForestHead, newItem: ForestHead): Boolean {
+                override fun areContentsTheSame(
+                    oldItem: ForestBrief,
+                    newItem: ForestBrief
+                ): Boolean {
                     return oldItem == newItem
                 }
             }
@@ -69,7 +73,7 @@ class JoinedForestsAdapter(
                     val forestHead = getItem(position)
                     holder.apply {
                         bind(forestHead)
-                        itemView.setOnClickListener { onItemClick(forestHead.forestId) }
+                        itemView.setOnClickListener { onItemClick(forestHead.forestId.toInt()) }
                     }
                 }
             }
@@ -80,8 +84,8 @@ class JoinedForestsAdapter(
     inner class JoinedForestViewHolder(
         private val binding: ItemForestHeadBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(forestHead: ForestHead?) {
-            binding.forestHead = forestHead
+        fun bind(brief: ForestBrief) {
+            binding.forestBrief = brief
         }
     }
 
