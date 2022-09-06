@@ -21,6 +21,7 @@ import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFoot
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
 import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
 import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.JoinedForestsAdapter
@@ -176,9 +177,11 @@ class ForestFragment : BaseFragment() {
         ).navigate(R.id.action_forest_fragment_to_all_forest_fragment)
     }
 
-    fun navToSpecificForest(forestId: Int) {
+    fun navToSpecificForest(forestId: String) {
         forestViewModel.loadHeaderLater()
-        val action = ForestFragmentDirections.actionForestFragmentToForestDetailFragment(forestId)
+        val action = ForestFragmentDirections.actionForestFragmentToForestDetailFragment(
+            forestViewModel.getForestById(forestId)
+        )
         findNavController(requireActivity(), R.id.nav_host_fragment).navigate(action)
     }
 
@@ -207,7 +210,7 @@ class ForestFragment : BaseFragment() {
     }
 
     // 关注/收藏
-    fun followTheHole(hole: ForestHole) {
+    fun followTheHole(hole: ForestHoleV2) {
         forestViewModel.followTheHole(hole)
     }
 

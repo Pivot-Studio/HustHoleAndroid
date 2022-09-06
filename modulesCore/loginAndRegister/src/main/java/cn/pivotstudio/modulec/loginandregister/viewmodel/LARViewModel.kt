@@ -10,7 +10,7 @@ import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
-import cn.pivotstudio.husthole.moduleb.network.model.User
+import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.data.CheckStudentCodeUtil
 import cn.pivotstudio.modulec.loginandregister.model.LoginResponse
@@ -97,7 +97,7 @@ class LARViewModel : ViewModel() {
         viewModelScope.launch {
             flow {
                 val result = HustHoleApi.retrofitService.signIn(
-                    User(email = id + Constant.EMAIL_SUFFIX, password = password)
+                    RequestBody.User(email = id + Constant.EMAIL_SUFFIX, password = password)
                 )
                 emit(result)
             }.flowOn(Dispatchers.IO).catch { e ->

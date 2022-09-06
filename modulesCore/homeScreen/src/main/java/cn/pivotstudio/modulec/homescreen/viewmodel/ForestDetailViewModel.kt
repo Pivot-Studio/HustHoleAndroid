@@ -5,20 +5,23 @@ import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.modulec.homescreen.model.ForestCard
-import cn.pivotstudio.modulec.homescreen.model.ForestHead
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class ForestDetailViewModel(val forestId: Int) : ViewModel() {
-    val repository = ForestDetailRepository(forestId = forestId)
+class ForestDetailViewModel(
+    val forestBrief: ForestBrief,
+) : ViewModel() {
 
-    val overview: LiveData<ForestCard> = repository.overview
+    val forestId: String = forestBrief.forestId
+    val repository = ForestDetailRepository(forestId = forestId)
 
     private var _holesV2 = MutableStateFlow<List<ForestHoleV2>>(emptyList())
     val holesV2: StateFlow<List<ForestHoleV2>> = _holesV2
+
+    private var _joined = MutableStateFlow(forestBrief.joined)
+    val joined: StateFlow<Boolean> = _joined
 
     val state = repository.state
     val tip: MutableLiveData<String?> = repository.tip
@@ -27,7 +30,6 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
     init {
         loadHoles()
-        loadOverview()
     }
 
     fun loadHoles() {
@@ -40,21 +42,6 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
         }
     }
 
-    fun loadOverview() {
-        repository.loadOverviewByForestId(id = forestId)
-    }
-
-//    fun loadBrief() {
-//        viewModelScope.launch {
-//            repository.loadBriefByForestId()
-//                .flowOn(Dispatchers.IO)
-//                .catch { it.printStackTrace() }
-//                .collect {
-//                    _forestBrief.emit(it)
-//                }
-//        }
-//    }
-
     fun loadMore() {
         viewModelScope.launch {
             repository.loadMoreHolesByForestId(forestId).collect { newItems ->
@@ -63,15 +50,6 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
                     _holesV2.emit(it)
                     repository.state.value = ForestDetailHolesLoadStatus.DONE
                 }
-            }
-        }
-    }
-
-    fun checkIfJoinedTheForest(forestsJoined: List<ForestBrief>) {
-        overview.value?.let { overview ->
-            forestsJoined.forEach {
-                if (it.forestId.toInt() == overview.forestId)
-                    overview.Joined = true
             }
         }
     }
@@ -90,11 +68,21 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
     }
 
     fun joinTheForest() {
-        repository.joinTheForest(forestId)
+        viewModelScope.launch {
+            repository.joinTheForestV2()
+                .collectLatest {
+                    _joined.emit(it)
+                }
+        }
     }
 
     fun quitTheForest() {
-        repository.quitTheForest(forestId)
+        viewModelScope.launch {
+            repository.quitTheForestV2()
+                .collectLatest {
+                    _joined.emit(it)
+                }
+        }
     }
 
     fun doneShowingTip() {
@@ -128,11 +116,12 @@ class ForestDetailViewModel(val forestId: Int) : ViewModel() {
 
 }
 
-class ForestDetailViewModelFactory(private val forestId: Int) : ViewModelProvider.Factory {
+class ForestDetailViewModelFactory(private val forestBrief: ForestBrief) :
+    ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ForestDetailViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return ForestDetailViewModel(forestId) as T
+            return ForestDetailViewModel(forestBrief) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class")
     }

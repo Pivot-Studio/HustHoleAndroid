@@ -9,7 +9,7 @@ import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.modulec.homescreen.databinding.ItemAllForestBinding
 
 class AllForestAdapter(
-    val onItemClick: (Int) -> Unit
+    val onItemClick: (String) -> Unit
 ) : ListAdapter<Pair<String, List<ForestBrief>>, AllForestAdapter.AllForestViewHolder>(DiffCallback) {
 
     inner class AllForestViewHolder(

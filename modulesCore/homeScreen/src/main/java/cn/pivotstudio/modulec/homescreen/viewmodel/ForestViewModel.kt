@@ -1,11 +1,10 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
-import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
 import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
 import cn.pivotstudio.modulec.homescreen.repository.ForestRepository
@@ -48,7 +47,7 @@ class ForestViewModel : ViewModel() {
 
     fun tryLoadNewHeader() {
         if (_shouldRefreshHeader) {
-            loadHeader()
+            loadJoinedForestsV2()
             _shouldRefreshHeader = false
         }
     }
@@ -57,10 +56,6 @@ class ForestViewModel : ViewModel() {
         loadHolesV2()
         loadJoinedForestsV2()
     }
-
-    fun loadHeader() = repository.loadForestHeader()
-
-    fun loadHoles() = repository.loadForestHoles()
 
     fun loadMoreForestHoles() {
         holesLoadState.value = LoadStatus.LOADING
@@ -74,11 +69,38 @@ class ForestViewModel : ViewModel() {
         }
     }
 
+    fun getForestById(forestId: String): ForestBrief = _forestsV2.value.first {
+        it.forestId == forestId
+    }
+
     fun giveALikeToTheHole(hole: ForestHole) =
         repository.giveALikeToTheHole(hole)
 
-    fun followTheHole(hole: ForestHole) {
-        repository.followTheHole(hole)
+    fun followTheHole(hole: ForestHoleV2) {
+        viewModelScope.launch {
+            repository.followTheHole(hole.holeId)
+                .collectLatest {
+                    when (it) {
+                        is ApiResult.Success -> {
+                            refreshTheHole(hole)
+                        }
+                        else -> {}
+                    }
+                }
+        }
+    }
+
+    fun refreshTheHole(hole: ForestHoleV2) {
+        viewModelScope.launch {
+            repository.loadTheHole(hole)
+                .collectLatest {
+                    val newItems = _holesV2.value.toMutableList()
+                    for ((i, newHole) in newItems.withIndex()) {
+                        if (hole.holeId == newHole.holeId) newItems[i] = newItems[i].copy(followCount = 100)
+                    }
+                    _holesV2.emit(newItems)
+                }
+        }
     }
 
     fun deleteTheHole(hole: ForestHole) {
@@ -141,4 +163,5 @@ class ForestViewModel : ViewModel() {
                 }
         }
     }
+
 }

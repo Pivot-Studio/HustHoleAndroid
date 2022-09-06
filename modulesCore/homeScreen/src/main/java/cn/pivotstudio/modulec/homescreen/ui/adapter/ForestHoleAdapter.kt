@@ -50,7 +50,7 @@ class ForestHoleAdapter(
                 }
 
                 imageItemForestAvatar.setOnClickListener {
-                    _context.navToSpecificForest(forestHole.forestId.toInt())
+                    _context.navToSpecificForest(forestHole.forestId)
                 }
 
                 layoutItemForestThumbsUp.setOnClickListener {
@@ -58,7 +58,7 @@ class ForestHoleAdapter(
                 }
 
                 layoutItemForestFollow.setOnClickListener {
-//                    _context.followTheHole(forestHole)
+                    _context.followTheHole(forestHole)
                 }
 
                 // 三个点

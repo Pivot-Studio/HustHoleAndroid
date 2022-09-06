@@ -2,15 +2,9 @@ package cn.pivotstudio.modulec.homescreen.repository
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
-import cn.pivotstudio.husthole.moduleb.network.BaseObserver
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
-import cn.pivotstudio.husthole.moduleb.network.NetworkApi
-import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.husthole.moduleb.network.*
+import cn.pivotstudio.husthole.moduleb.network.model.*
 import cn.pivotstudio.modulec.homescreen.model.ForestHeads
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
-import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
@@ -88,30 +82,6 @@ class ForestRepository(
         }
     }
 
-
-    fun loadMoreForestHoles() {
-        _holeState.value = LOADING
-        retrofitService.searchForestHoles(
-            lastStartId + HOLES_LIST_SIZE, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY
-        ).compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
-            override fun onSuccess(result: List<ForestHole>) {
-                val newItems = holes.value!!.toMutableList()
-                val offset = result.indexOfFirst {
-                    it.holeId == newItems.last().holeId
-                } // 找第一个相同的index，没有相同的元素会返回 -1
-                newItems.addAll(result.subList(offset + 1, result.lastIndex))
-                holes.value = newItems
-                lastStartId += HOLES_LIST_SIZE
-                _holeState.value = if (newItems.isNotEmpty()) LoadStatus.DONE else null
-            }
-
-            override fun onFailure(e: Throwable?) {
-                _holeState.value = ERROR
-            }
-
-        }))
-    }
-
     fun loadMoreForestHolesV2(): Flow<List<ForestHoleV2>> = flow {
         emit(
             hustHoleApiService.getAJoinedForestHoles(
@@ -126,19 +96,6 @@ class ForestRepository(
     }.onEach {
         lastOffset += HOLES_LIST_SIZE
         _holeState.value = LOADING
-    }
-
-    fun loadForestHeader() {
-        retrofitService.searchForestHeads(STARTING_ID, HEADS_LIST_SIZE)
-            .compose(NetworkApi.applySchedulers(object : BaseObserver<ForestHeads>() {
-                override fun onSuccess(items: ForestHeads?) {
-                    headers.value = items
-                }
-
-                override fun onFailure(e: Throwable?) {
-                }
-
-            }))
     }
 
     fun loadJoinedForestsV2(): Flow<List<ForestBrief>> {
@@ -208,6 +165,30 @@ class ForestRepository(
                 }
             })
 
+    }
+
+    fun followTheHole(holeId: String): Flow<ApiResult> {
+        return flow {
+            emit(ApiResult.Loading(true))
+            val response = hustHoleApiService.followTheHole(
+                holeId = RequestBody.HoleId(holeId)
+            )
+            if (response.isSuccessful) {
+                emit(ApiResult.Success)
+            } else {
+                val errorCode = response.code()
+                response.errorBody()?.close()
+                emit(ApiResult.Error(code = errorCode))
+            }
+        }
+    }
+
+    fun loadTheHole(hole: ForestHoleV2): Flow<ForestHoleV2> {
+        return flow {
+           emit(hustHoleApiService.loadTheHole(hole.holeId))
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
+        }
     }
 
     // 只有自己的树洞可以删除

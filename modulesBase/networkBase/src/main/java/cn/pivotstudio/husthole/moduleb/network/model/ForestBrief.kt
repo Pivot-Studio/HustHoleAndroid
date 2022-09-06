@@ -1,6 +1,7 @@
 package cn.pivotstudio.husthole.moduleb.network.model
 
 import com.squareup.moshi.Json
+import java.io.Serializable
 
 data class ForestBrief(
     val backUrl: String? = null,
@@ -45,4 +46,4 @@ data class ForestBrief(
      * 加入小树林的用户数
      */
     val userNum: String? = null
-)
+) : Serializable

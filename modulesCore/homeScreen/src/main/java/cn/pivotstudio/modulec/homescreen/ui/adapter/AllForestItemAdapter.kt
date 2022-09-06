@@ -12,7 +12,7 @@ import cn.pivotstudio.modulec.homescreen.databinding.ItemForestBriefBinding
 const val TAG = "AllForestItemAdapter"
 
 class AllForestItemAdapter(
-    val onItemClick: (Int) -> Unit
+    val onItemClick: (String) -> Unit
 ) : ListAdapter<ForestBrief, AllForestItemAdapter.ForestBriefViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestBriefViewHolder {
@@ -28,7 +28,7 @@ class AllForestItemAdapter(
     override fun onBindViewHolder(holder: ForestBriefViewHolder, position: Int) {
         val card = getItem(position)
         holder.itemView.setOnClickListener {
-            onItemClick(card.forestId.toInt())
+            onItemClick(card.forestId)
         }
         holder.bind(card)
     }

@@ -15,6 +15,7 @@ class AllForestViewModel : ViewModel() {
     val forestCards = repository.forestCards
     val loadState = repository.loadState
 
+    private var _forestsMeta = listOf<ForestBrief>()
     private var _forests = MutableStateFlow<List<Pair<String, List<ForestBrief>>>>(mutableListOf())
     val forests: StateFlow<List<Pair<String, List<ForestBrief>>>> = _forests
 
@@ -26,6 +27,7 @@ class AllForestViewModel : ViewModel() {
         viewModelScope.launch {
             repository.loadAllForests()
                 .map {
+                    _forestsMeta = it
                     transToAllForestsWithType(it)
                 }.collectLatest {
                     _forests.emit(it)
@@ -41,13 +43,9 @@ class AllForestViewModel : ViewModel() {
         }
     }
 
-
-
-
-
-
-
-
+    fun getForestById(forestId: String): ForestBrief? = _forestsMeta.find {
+        it.forestId == forestId
+    }
 
 
     private fun transToAllForestsWithType(forestList: List<ForestBrief>): List<Pair<String, List<ForestBrief>>> {

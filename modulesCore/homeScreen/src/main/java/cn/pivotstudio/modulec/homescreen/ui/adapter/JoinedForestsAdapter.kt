@@ -19,7 +19,7 @@ import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHeadBinding
  * @author: mhh
  */
 class JoinedForestsAdapter(
-    val onItemClick: (Int) -> Unit,
+    val onItemClick: (String) -> Unit,
     val navToAllForest: () -> Unit
 ) : ListAdapter<ForestBrief, ViewHolder>(DIFF_CALLBACK) {
 
@@ -73,7 +73,7 @@ class JoinedForestsAdapter(
                     val forestHead = getItem(position)
                     holder.apply {
                         bind(forestHead)
-                        itemView.setOnClickListener { onItemClick(forestHead.forestId.toInt()) }
+                        itemView.setOnClickListener { onItemClick(forestHead.forestId) }
                     }
                 }
             }

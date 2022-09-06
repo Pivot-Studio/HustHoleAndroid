@@ -55,17 +55,13 @@ class AllForestFragment : BaseFragment() {
     }
 
 
-
-
-
-
-
-
-    fun navToForestDetail(forestId: Int) {
-        val action = AllForestFragmentDirections
-            .actionAllForestFragmentToForestDetailFragment(forestId)
-        Log.d(TAG, "navToForestDetail: forest id : $forestId")
-        findNavController(requireActivity(), R.id.nav_host_fragment)
-            .navigate(action)
+    fun navToForestDetail(forestId: String) {
+        viewModel.getForestById(forestId)?.let {
+            val action = AllForestFragmentDirections
+                .actionAllForestFragmentToForestDetailFragment(it)
+            Log.d(TAG, "navToForestDetail: forest id : $forestId")
+            findNavController(requireActivity(), R.id.nav_host_fragment)
+                .navigate(action)
+        }
     }
 }
