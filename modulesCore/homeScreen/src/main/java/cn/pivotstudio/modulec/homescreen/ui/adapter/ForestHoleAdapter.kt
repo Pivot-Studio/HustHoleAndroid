@@ -54,7 +54,7 @@ class ForestHoleAdapter(
                 }
 
                 layoutItemForestThumbsUp.setOnClickListener {
-//                    _context.giveALikeToTheHole(forestHole)
+                    _context.giveALikeToTheHole(forestHole)
                 }
 
                 layoutItemForestFollow.setOnClickListener {

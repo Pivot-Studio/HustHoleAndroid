@@ -73,16 +73,30 @@ class ForestViewModel : ViewModel() {
         it.forestId == forestId
     }
 
-    fun giveALikeToTheHole(hole: ForestHole) =
-        repository.giveALikeToTheHole(hole)
+    fun giveALikeToTheHole(hole: ForestHoleV2) {
+        viewModelScope.launch {
+            repository.giveALikeToTheHole(hole)
+                .collectLatest {
+                    when (it) {
+                        is ApiResult.Success<*> -> {
+                            refreshTheHole(hole)
+                        }
+                        else -> {}
+                    }
+                }
+        }
+    }
 
     fun followTheHole(hole: ForestHoleV2) {
         viewModelScope.launch {
-            repository.followTheHole(hole.holeId)
+            repository.followTheHole(hole)
                 .collectLatest {
                     when (it) {
-                        is ApiResult.Success -> {
+                        is ApiResult.Success<*> -> {
                             refreshTheHole(hole)
+                        }
+                        is ApiResult.Error -> {
+                            tip.value = it.code.toString() + it.errorMessage
                         }
                         else -> {}
                     }
@@ -96,7 +110,7 @@ class ForestViewModel : ViewModel() {
                 .collectLatest {
                     val newItems = _holesV2.value.toMutableList()
                     for ((i, newHole) in newItems.withIndex()) {
-                        if (hole.holeId == newHole.holeId) newItems[i] = newItems[i].copy(followCount = 100)
+                        if (hole.holeId == newHole.holeId) newItems[i] = newItems[i].copy(followCount = 100, isFollow = true)
                     }
                     _holesV2.emit(newItems)
                 }

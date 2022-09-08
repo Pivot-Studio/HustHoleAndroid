@@ -142,6 +142,16 @@ interface HustHoleApiService {
         @Body holeId: RequestBody.HoleId
     ): Response<Unit>
 
+    @POST("interact/like")
+    suspend fun giveALikeToTheHole(
+        @Body holeId: RequestBody.HoleId
+    ): Response<Unit>
+
+    @POST("interact/unlike")
+    suspend fun unLikeTheHole(
+        @Body holeId: RequestBody.HoleId
+    )
+
     //========================================================================================================
     @GET("hole/one")
     suspend fun loadTheHole(
@@ -151,12 +161,26 @@ interface HustHoleApiService {
 
 }
 
+enum class ApiStatus {
+    SUCCESSFUL,
+    LOADING,
+    ERROR
+}
+
 sealed class ApiResult {
 
-    object Success : ApiResult()
+    data class Success<T>(
+        val status: ApiStatus = ApiStatus.SUCCESSFUL, var data: T? = null
+    ) : ApiResult()
 
-    data class Error(val code: Int, val errorMessage: String? = null) : ApiResult()
+    data class Error(
+        val status: ApiStatus = ApiStatus.ERROR,
+        val code: Int,
+        val errorMessage: String? = null
+    ) : ApiResult()
 
-    data class Loading(val isLoading: Boolean) : ApiResult()
+    data class Loading(
+        val status: ApiStatus = ApiStatus.LOADING
+    ) : ApiResult()
 }
 

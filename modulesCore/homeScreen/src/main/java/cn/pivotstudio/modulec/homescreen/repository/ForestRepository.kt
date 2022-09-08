@@ -33,39 +33,17 @@ class ForestRepository(
         const val INITIAL_OFFSET = 0
         const val HOLES_LIST_SIZE = 20
         const val HEADS_LIST_SIZE = 30
-        const val SORT_BY_LATEST_REPLY = true
     }
-
-    private var lastStartId = STARTING_ID
 
     private var lastOffset = INITIAL_OFFSET
 
     private var _holeState = MutableLiveData<LoadStatus?>()
     private var _headerLoadState = MutableLiveData<LoadStatus>()
     private var _holes = MutableLiveData<List<ForestHole>>()
-    private var _headers = MutableLiveData<ForestHeads>()
 
     val tip = MutableLiveData<String?>()
-    val headers = _headers
-    val holes = _holes
     val holeState = _holeState
     val headerLoadState = _headerLoadState
-
-    fun loadForestHoles() {
-        _holeState.value = LOADING
-        retrofitService.searchForestHoles(STARTING_ID, HOLES_LIST_SIZE, SORT_BY_LATEST_REPLY)
-            .compose(NetworkApi.applySchedulers(object : BaseObserver<List<ForestHole>>() {
-                override fun onSuccess(items: List<ForestHole>) {
-                    holes.value = items
-                    lastStartId = STARTING_ID
-                    _holeState.value = if (items.isNotEmpty()) LoadStatus.DONE else null
-                }
-
-                override fun onFailure(e: Throwable?) {
-                    _holeState.value = ERROR
-                }
-            }))
-    }
 
     fun loadForestHolesV2(): Flow<List<ForestHoleV2>> {
         return flow {
@@ -113,68 +91,13 @@ class ForestRepository(
         }.onEach { refreshTimestamp() }
     }
 
-    fun giveALikeToTheHole(hole: Hole) {
-        (hole as ForestHole).let {
-            val observable: Observable<MsgResponse> = if (!it.liked) {
-                retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + it.holeId + "/-1")
-            } else {
-                retrofitService.deleteThumbups(Constant.BASE_URL + "thumbups/" + it.holeId + "/-1")
-            }
-            observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(response: MsgResponse) {
-                    val newItems = _holes.value!!.toMutableList()
-                    for ((i, newHole) in newItems.withIndex()) {
-                        if (hole.holeId == newHole.holeId) newItems[i] = newHole.copy().apply {
-                            likeNum = if (!it.liked) likeNum.inc() else likeNum.dec()
-                            liked = liked.not()
-                        }
-                    }
-                    _holes.value = newItems
-                    tip.value = response.msg
-                }
-
-                override fun onFailure(e: Throwable) {
-                    tip.value = "❌"
-                }
-            }))
-        }
-    }
-
-    fun followTheHole(hole: ForestHole) {
-        val observable: Observable<MsgResponse> = if (!hole.followed) {
-            retrofitService.follow(Constant.BASE_URL + "follows/" + hole.holeId)
-        } else {
-            retrofitService.deleteFollow(Constant.BASE_URL + "follows/" + hole.holeId)
-        }
-        observable.compose(NetworkApi.applySchedulers())
-            .subscribe(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(response: MsgResponse) {
-                    val newItems = _holes.value!!.toMutableList()
-                    for ((i, newHole) in newItems.withIndex()) {
-                        if (hole.holeId == newHole.holeId) newItems[i] = newHole.copy().apply {
-                            followNum = if (!hole.followed) followNum.inc() else followNum.dec()
-                            followed = followed.not()
-                        }
-                    }
-                    _holes.value = newItems
-                    tip.value = response.msg
-                }
-
-                override fun onFailure(e: Throwable) {
-                    tip.value = "❌"
-                }
-            })
-
-    }
-
-    fun followTheHole(holeId: String): Flow<ApiResult> {
+    fun giveALikeToTheHole(hole: ForestHoleV2): Flow<ApiResult> {
         return flow {
-            emit(ApiResult.Loading(true))
-            val response = hustHoleApiService.followTheHole(
-                holeId = RequestBody.HoleId(holeId)
-            )
+            emit(ApiResult.Loading())
+            val response =
+                hustHoleApiService.giveALikeToTheHole(holeId = RequestBody.HoleId(hole.holeId))
             if (response.isSuccessful) {
-                emit(ApiResult.Success)
+                emit(ApiResult.Success(data = Unit))
             } else {
                 val errorCode = response.code()
                 response.errorBody()?.close()
@@ -183,9 +106,33 @@ class ForestRepository(
         }
     }
 
+    fun followTheHole(hole: ForestHoleV2): Flow<ApiResult> {
+        return flow {
+            emit(ApiResult.Loading())
+            val response = if (hole.isFollow) {
+                hustHoleApiService
+                    .unFollowTheHole(RequestBody.HoleId(hole.holeId))
+            } else {
+                hustHoleApiService
+                    .followTheHole(RequestBody.HoleId(hole.holeId))
+            }
+            if (response.isSuccessful) {
+                emit(ApiResult.Success(data = Unit))
+            } else {
+                emit(
+                    ApiResult.Error(
+                        code = response.code(),
+                        errorMessage = response.errorBody()?.string()
+                    )
+                )
+                response.errorBody()?.close()
+            }
+        }
+    }
+
     fun loadTheHole(hole: ForestHoleV2): Flow<ForestHoleV2> {
         return flow {
-           emit(hustHoleApiService.loadTheHole(hole.holeId))
+            emit(hustHoleApiService.loadTheHole(hole.holeId))
         }.flowOn(dispatcher).catch { e ->
             e.printStackTrace()
         }

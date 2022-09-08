@@ -205,7 +205,7 @@ class ForestFragment : BaseFragment() {
     }
 
     // 点赞
-    fun giveALikeToTheHole(hole: ForestHole) {
+    fun giveALikeToTheHole(hole: ForestHoleV2) {
         forestViewModel.giveALikeToTheHole(hole)
     }
 
