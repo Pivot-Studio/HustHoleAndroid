@@ -84,7 +84,9 @@ class MyHoleFragmentViewModel : ViewModel() {
                                 SingleHole[8] = sonObject.getInt("thumbup_num").toString() + ""
 //                                SingleHole[9] = sonObject.getString("forest_name").toString() + ""
 //                                SingleHole[10] = sonObject.getString("role").toString() + ""
-                                _myHolesList.value!!.add(SingleHole)
+                                val newList = _myHolesList.value!!.toMutableList()
+                                newList.add(SingleHole)
+                                _myHolesList.value = newList as ArrayList<Array<String?>>
                             }
                         } catch (e: JSONException) {
                             e.printStackTrace()

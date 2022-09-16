@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -10,6 +11,7 @@ import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.moduleb.libbase.constant.Constant.BASE_URL
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
@@ -59,7 +61,7 @@ class MyHoleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.myHoleRecyclerView.adapter = MineRecycleViewAdapter()
-
+        binding.myHoleRecyclerView.addItemDecoration(SpaceItemDecoration(0, 20))
         initRefresh()
     }
 
@@ -87,6 +89,41 @@ class MyHoleFragment : Fragment() {
         @JvmStatic
         fun newInstance(): MyHoleFragment {
             return MyHoleFragment()
+        }
+    }
+}
+
+/**
+ * @description:自定义设置item间距
+ */
+class SpaceItemDecoration(
+    private val leftRight: Int,
+    private val topBottom: Int
+) : RecyclerView.ItemDecoration() {
+
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        val layoutManager: LinearLayoutManager = parent.layoutManager as LinearLayoutManager
+        if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
+            //最后一项需要 bottom
+            if (parent.getChildAdapterPosition(view) == layoutManager.itemCount - 1) {
+                outRect.bottom = topBottom;
+            }
+            outRect.top = topBottom;
+            outRect.left = leftRight;
+            outRect.right = leftRight;
+        } else {
+            //最后一项需要right
+            if (parent.getChildAdapterPosition(view) == layoutManager.itemCount - 1) {
+                outRect.right = leftRight;
+            }
+            outRect.top = topBottom;
+            outRect.left = leftRight;
+            outRect.bottom = topBottom;
         }
     }
 }

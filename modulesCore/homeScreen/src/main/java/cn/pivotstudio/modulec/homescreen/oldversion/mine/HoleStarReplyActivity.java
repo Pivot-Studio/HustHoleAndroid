@@ -68,7 +68,7 @@ public class HoleStarReplyActivity extends AppCompatActivity {
         imgMy = findViewById(R.id.my_img);
         imgMy.setOnClickListener(v -> finish());
 
-        fragments.add(MyHoleFragment.newInstance());
+        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFragment.newInstance());
         fragments.add(MyStarFragment.newInstance());
         fragments.add(MyReplyFragment.newInstance());
 

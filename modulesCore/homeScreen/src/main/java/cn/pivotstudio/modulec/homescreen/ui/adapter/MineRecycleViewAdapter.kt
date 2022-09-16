@@ -5,7 +5,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineHoleFollowBinding
+import cn.pivotstudio.modulec.homescreen.oldversion.mine.HoleStarReplyActivity
+import com.alibaba.android.arouter.launcher.ARouter
 
 
 /**
@@ -24,6 +27,16 @@ class MineRecycleViewAdapter :
         fun bind(hole: Array<String?>) {
             binding.apply {
                 binding.hole = hole
+                binding.totalView.setOnClickListener {
+                    ARouter.getInstance()
+                        .build("/hole/HoleActivity")
+                        .withInt(
+                            Constant.HOLE_ID,
+                            Integer.valueOf(hole[4].toString())
+                        )
+                        .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                        .navigation(it.context as HoleStarReplyActivity, 2)
+                }
                 executePendingBindings()
             }
         }
