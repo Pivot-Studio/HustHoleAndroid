@@ -3,7 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../../layout/custom_preview.xml" value="0.11911231884057971" />
+        <entry key="../../../../../layout/custom_preview.xml" value="0.3105361938476562" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.303" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/add.xml" value="0.25" />
         <entry key="..\:/DataCenter/PersonProject/AndroidStudioProjects/HustHoleAndroid/modulesBase/resBase/src/main/res/drawable/add_photo_gray.xml" value="0.281" />
@@ -96,57 +96,7 @@
         <entry key="..\:/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/fragment_myhole.xml" value="0.20214477211796247" />
         <entry key="..\:/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.75" />
         <entry key="..\:/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/item_mine_hole_follow.xml" value="0.5" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/add.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/advice_button.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/back_black.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/standard_button.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/standard_button_transparent.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/standard_corner.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/standard_cursor.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/standard_forest_hole.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/standard_mine.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/standard_reply.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesBase/resBase/src/main/res/drawable/tag_gray.xml" value="0.1" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_about.xml" value="0.67" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_detailupdate.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_email_how_to.xml" value="0.5" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_email_ok.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_email_verify1.xml" value="0.33" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_email_verify2.xml" value="0.33" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_hole_star.xml" value="0.45580808080808083" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_rules.xml" value="0.25" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_screen.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_security.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_setscreenkeyword.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_setting.xml" value="0.33" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_share_card.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_update.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/card_myreply.xml" value="0.33" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/dialog_delete.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/dialog_screen.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/fragment_advice.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/fragment_all_frorest.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/fragment_evaluate.xml" value="0.33" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/fragment_forest.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/fragment_homepage.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/fragment_mine.xml" value="0.25" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/fragment_mine_recycleview.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/fragment_myhole.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_advice_chip.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_chip.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.25" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_label.xml" value="0.33" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_mine_hole_follow.xml" value="0.33" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_mine_others.xml" value="0.33" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_mine_reply.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_mine_setting.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_updatehead.xml" value="0.5" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/ppw_share.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/ppw_share_to.xml" value="0.25" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/update_item.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesPublic/hole/src/main/res/layout/activity_hole.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesPublic/hole/src/main/res/layout/item_reply.xml" value="0.18802083333333333" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/app/src/main/res/layout/activity_rl_preparation.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/app/src/main/res/layout/activity_rl_welcome.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
@@ -313,13 +263,17 @@
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesPublic/report/src/main/res/layout/activity_report.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/modulesPublic/report/src/main/res/layout/titlebar_green.xml" value="0.1" />
         <entry key="..\:/code/HustHole/HustHoleAndroid/modulesCore/homeScreen/src/main/res/layout/activity_hs_homescreen.xml" value="0.4" />
+        <entry key="app/src/main/res/layout/activity_rl_preparation.xml" value="0.13125" />
         <entry key="modulesBase/resBase/src/main/res/drawable/add.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/add_photo_gray.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/advice_button.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/advice_button_green.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/back.xml" value="0.1065" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/back_black.xml" value="0.2285" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/back_green.xml" value="0.211" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bg_bottom_bar.xml" value="0.1415" />
         <entry key="modulesBase/resBase/src/main/res/drawable/block_line.xml" value="0.1475" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/block_line_2.xml" value="0.198" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bottombar.xml" value="0.1415" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bottombar_button1.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/bottombar_button2.xml" value="0.1475" />
@@ -334,37 +288,45 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/click_button.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/click_standard_button_white.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/detail_forest_join_button.xml" value="0.1365" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/fiter_owner_selector.xml" value="0.1" />
         <entry key="modulesBase/resBase/src/main/res/drawable/forest_button.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/forest_button_white.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/forest_gray.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/homepage_notice.xml" value="0.1475" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_emoji_28dp.xml" value="0.177" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_emotion_38dp.xml" value="0.13" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_filter_owner_6dp.xml" value="0.1" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_comment_active_20dp.xml" value="0.211" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_comment_inactive_20dp.xml" value="0.211" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_ellipse_dot.xml" value="0.1" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_follow_active_20dp.xml" value="0.211" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_follow_inactive.xml" value="0.29517211914062536" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_follow_inactive_20dp.xml" value="0.211" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_follow_inactivedd.xml" value="0.211" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_active.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_negative.xml" value="0.121" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_tag_16dp.xml" value="0.13" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_tag_16dp.xml" value="0.1" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forward_arrow.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_home.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_home_active.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_home_negative.xml" value="0.1095" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_hot_40dp.xml" value="0.13" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_keyboard_28dp.xml" value="0.1425" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_inactive.xml" value="1.1186111450195317" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_launcher_background.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_like.xml" value="0.148" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_like_active.xml" value="0.211" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_like_inactive.xml" value="0.211" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_load_placeholder.xml" value="0.198" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_mine.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_mine_active.xml" value="0.1365" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_mine_negative.xml" value="0.198" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_msg.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_msg_active.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_msg_negative.xml" value="0.148" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_network_error_placeholder_80dp.xml" value="0.18536370849609363" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_notice.xml" value="0.196" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_notice_placeholder.xml" value="0.198" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_notify.xml" value="0.148" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_onlylookmaster.xml" value="0.1065" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_pivot_studio_16dp.xml" value="0.13" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_search_20dp.xml" value="0.13" />
-        <entry key="modulesBase/resBase/src/main/res/drawable/ic_specified_48dp.xml" value="0.13" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_pivot_studio_16dp.xml" value="0.198" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_round_star_border_24.xml" value="0.211" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_thumbs_up_active.xml" value="0.211" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_thumbs_up_inactive.xml" value="0.211" />
         <entry key="modulesBase/resBase/src/main/res/drawable/icon.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/icon_home_page.xml" value="0.1415" />
         <entry key="modulesBase/resBase/src/main/res/drawable/item.xml" value="0.1065" />
@@ -401,8 +363,7 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/test.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/test_background.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/thumbup.xml" value="0.208" />
-        <entry key="modulesBase/resBase/src/main/res/layout/network_error_placeholder.xml" value="0.28229166666666666" />
-        <entry key="modulesBase/resBase/src/main/res/layout/no_search_result_placeholder.xml" value="0.28125" />
+        <entry key="modulesBase/resBase/src/main/res/font/noto_sans_bold.xml" value="0.3907407407407407" />
         <entry key="modulesBase/resBase/src/main/res/layout/tertiary_button_default.xml" value="0.44852531543676405" />
         <entry key="modulesBase/resBase/src/main/res/layout/tertiary_button_main.xml" value="0.5630471049875453" />
         <entry key="modulesBase/resBase/src/main/res/layout/tertiary_button_secondary.xml" value="0.5806038676828578" />
@@ -412,6 +373,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/drawable/homepagehole_reply_false.xml" value="0.1445" />
         <entry key="modulesCore/homeScreen/src/main/res/drawable/homepagehole_thumbup.xml" value="0.1445" />
         <entry key="modulesCore/homeScreen/src/main/res/drawable/homepagehole_thumbup_false.xml" value="0.1445" />
+        <entry key="modulesCore/homeScreen/src/main/res/drawable/ic_forest_tag_24dp.xml" value="0.211" />
         <entry key="modulesCore/homeScreen/src/main/res/drawable/thumbup.xml" value="0.1445" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_about.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_advice.xml" value="0.286231884057971" />
@@ -426,51 +388,55 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_email_verify1.xml" value="0.27853260869565216" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_email_verify2.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_hole_star.xml" value="0.28229166666666666" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/activity_hs_homescreen.xml" value="0.165" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/activity_hs_homescreen.xml" value="0.23910032573499174" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_rules.xml" value="0.286231884057971" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/activity_screen.xml" value="0.286231884057971" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_hole.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_myfollow.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_myhole.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_myreply.xml" value="0.28229166666666666" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/constraintlayout_homepageoptionbox.xml" value="0.3630996704101563" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_delete.xml" value="0.31657608695652173" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_inform.xml" value="0.28229166666666666" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_logout.xml" value="0.27219202898550726" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_screen.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_update.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_welcome.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_advice.xml" value="0.103125" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_all_frorest.xml" value="0.23240469208211142" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_all_frorest.xml" value="0.22799032440633016" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_evaluate.xml" value="0.28229166666666666" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest.xml" value="0.22340087890625" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest.xml" value="0.13392857142857142" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_forest_detail.xml" value="0.30307312011718746" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_homepage.xml" value="0.2572463768115942" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_homepage.xml" value="0.27746276855468754" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_message.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_mine.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_myhole.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_mystar.xml" value="0.28229166666666666" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_notice.xml" value="0.13728470111448834" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_notice.xml" value="0.31657608695652173" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item1.xml" value="0.286231884057971" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_all_forest.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_detailforesthead.xml" value="0.2572463768115942" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_discover_more.xml" value="0.5667001838358039" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest.xml" value="0.34475402832031254" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_card.xml" value="0.28229166666666666" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.2572463768115942" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.5041320579639379" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_head.xml" value="0.2572463768115942" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_hole.xml" value="0.2802164713541667" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_hole.xml" value="0.47928994082840237" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forestdetailiconlist.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_foresttype.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_homepagebottomblock.xml" value="0.28229166666666666" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.28229166666666666" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.48746367372358435" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_label.xml" value="0.28229166666666666" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/item_mine_hole_follow.xml" value="0.1171875" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_nosearch.xml" value="0.28229166666666666" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/item_notice.xml" value="0.32038269042968753" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_notice.xml" value="0.36115107913669064" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_notice_header.xml" value="0.3217948717948718" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_requestfailed.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_updatehead.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/linearlayout_bottomnavigationbar.xml" value="0.27853260869565216" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/message_refresh_footer.xml" value="0.2595108695652174" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/notification_item.xml" value="0.2595108695652174" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/notification_item.xml" value="0.5112137504245924" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/notification_item_footer.xml" value="0.2595108695652174" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/notification_item_header.xml" value="0.2595108695652174" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/notification_item_header.xml" value="0.45422980267068613" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/page3fragment.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/page4fragment.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/ppw_applyforest.xml" value="0.2595108695652174" />
@@ -491,35 +457,47 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/titlebar_transparent.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/titlebar_white.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/menu/bottom_navigation_menu.xml" value="0.29375" />
-        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lar.xml" value="0.26721014492753625" />
-        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_login.xml" value="0.10104166666666667" />
-        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_register.xml" value="0.26721014492753625" />
-        <entry key="modulesPublic/hole/src/main/res/layout/activity_hole.xml" value="0.1107086181640625" />
-        <entry key="modulesPublic/hole/src/main/res/layout/cl_emoji.xml" value="0.29483695652173914" />
-        <entry key="modulesPublic/hole/src/main/res/layout/dialog_delete.xml" value="0.29483695652173914" />
-        <entry key="modulesPublic/hole/src/main/res/layout/fragment_1st_level_reply.xml" value="0.13728470111448834" />
-        <entry key="modulesPublic/hole/src/main/res/layout/fragment_1st_level_repylt.xml" value="0.21863403320312494" />
-        <entry key="modulesPublic/hole/src/main/res/layout/fragment_2nd_level_reply.xml" value="0.2519758251975825" />
-        <entry key="modulesPublic/hole/src/main/res/layout/fragment_inner_reply.xml" value="0.26555609995100443" />
-        <entry key="modulesPublic/hole/src/main/res/layout/fragment_specific_hole.xml" value="0.24379860735122738" />
-        <entry key="modulesPublic/hole/src/main/res/layout/item_emoji.xml" value="0.29483695652173914" />
-        <entry key="modulesPublic/hole/src/main/res/layout/item_emoji_title.xml" value="0.26856884057971014" />
-        <entry key="modulesPublic/hole/src/main/res/layout/item_first_level_reply.xml" value="0.4159061475731861" />
-        <entry key="modulesPublic/hole/src/main/res/layout/item_hole.xml" value="0.29483695652173914" />
-        <entry key="modulesPublic/hole/src/main/res/layout/item_noreply.xml" value="0.26856884057971014" />
-        <entry key="modulesPublic/hole/src/main/res/layout/item_reply.xml" value="0.29483695652173914" />
-        <entry key="modulesPublic/hole/src/main/res/layout/item_replyloading.xml" value="0.26856884057971014" />
-        <entry key="modulesPublic/hole/src/main/res/layout/titlebar_hole_green.xml" value="0.13229166666666667" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/drawable-night/welcome.xml" value="0.1" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/drawable/lr_back_click.xml" value="0.1565" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/drawable/welcome.xml" value="0.1" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lar.xml" value="0.4164077758789062" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_forgetpassword.xml" value="0.32155797101449274" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_login.xml" value="0.18802083333333333" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_modifypassword.xml" value="0.32155797101449274" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_privacy.xml" value="0.18802083333333333" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_register.xml" value="0.3453125" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_setpassword.xml" value="0.32155797101449274" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_verificationcode.xml" value="0.18802083333333333" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lr_welcome.xml" value="0.1474164133738602" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_forget_password.xml" value="0.32155797101449274" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_login.xml" value="0.34427083333333336" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_privacy.xml" value="0.32155797101449274" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_register.xml" value="0.42315521240234377" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_set_new_password.xml" value="0.2673611111111111" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_set_password.xml" value="0.32592163085937503" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_verify_code.xml" value="0.5819553098816803" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_welcome.xml" value="0.4163406372070313" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/titlebar_lr_white.xml" value="0.32155797101449274" />
+        <entry key="modulesPublic/hole/src/main/res/layout/activity_hole.xml" value="0.31657608695652173" />
+        <entry key="modulesPublic/hole/src/main/res/layout/cl_emoji.xml" value="0.31657608695652173" />
+        <entry key="modulesPublic/hole/src/main/res/layout/dialog_delete.xml" value="0.31657608695652173" />
+        <entry key="modulesPublic/hole/src/main/res/layout/item_emoji.xml" value="0.37963460286458334" />
+        <entry key="modulesPublic/hole/src/main/res/layout/item_emoji_title.xml" value="0.31657608695652173" />
+        <entry key="modulesPublic/hole/src/main/res/layout/item_hole.xml" value="0.4780952380952381" />
+        <entry key="modulesPublic/hole/src/main/res/layout/item_holeloading.xml" value="0.31657608695652173" />
+        <entry key="modulesPublic/hole/src/main/res/layout/item_noreply.xml" value="0.31657608695652173" />
+        <entry key="modulesPublic/hole/src/main/res/layout/item_reply.xml" value="0.44812680115273773" />
+        <entry key="modulesPublic/hole/src/main/res/layout/item_replyloading.xml" value="0.31657608695652173" />
+        <entry key="modulesPublic/hole/src/main/res/layout/refresh_footer.xml" value="0.31657608695652173" />
+        <entry key="modulesPublic/hole/src/main/res/layout/refresh_footer_homepage.xml" value="0.31657608695652173" />
+        <entry key="modulesPublic/hole/src/main/res/layout/refresh_header.xml" value="0.31657608695652173" />
+        <entry key="modulesPublic/hole/src/main/res/layout/titlebar_hole_green.xml" value="0.31657608695652173" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/activity_publishhole.xml" value="0.2586050724637681" />
-        <entry key="modulesPublic/publishHole/src/main/res/layout/item_bottomblock.xml" value="0.1" />
-        <entry key="modulesPublic/publishHole/src/main/res/layout/item_expandablelistview.xml" value="0.4990942028985507" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlist.xml" value="0.2586050724637681" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlisttitle.xml" value="0.2586050724637681" />
-        <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_foresttype.xml" value="0.1" />
-        <entry key="modulesPublic/publishHole/src/main/res/layout/ppw_homepage_darkscreen.xml" value="0.19519927536231885" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/ppw_publishhole_forests.xml" value="0.3710093412106948" />
-        <entry key="modulesPublic/publishHole/src/main/res/layout/titlebar_green.xml" value="0.1" />
-        <entry key="modulesPublic/report/src/main/res/layout/activity_report.xml" value="0.21042633056640625" />
+        <entry key="modulesPublic/report/src/main/res/drawable/report_button.xml" value="0.211" />
+        <entry key="modulesPublic/report/src/main/res/layout/activity_report.xml" value="0.335" />
       </map>
     </option>
   </component>
