@@ -2,26 +2,19 @@ package cn.pivotstudio.modulec.homescreen.ui.fragment
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.moduleb.libbase.constant.Constant.BASE_URL
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshHeader
-import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface
-import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineRecycleViewAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel
-import retrofit2.Retrofit
 
 
 /**
@@ -39,7 +32,8 @@ fun setListData(view: RecyclerView, data: ArrayList<Array<String?>>) {
     adapter.submitList(data)
 }
 
-class MyHoleFragment : Fragment() {
+
+class MyHoleFragment(val type: Int) : Fragment() {
     private val viewModel: MyHoleFragmentViewModel by viewModels()
     private lateinit var binding: FragmentMyholeBinding
 
@@ -60,7 +54,12 @@ class MyHoleFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.myHoleRecyclerView.adapter = MineRecycleViewAdapter()
+        val adapter = MineRecycleViewAdapter(type)
+        if(type == 1)
+            viewModel.myHolesList.observe(viewLifecycleOwner) { list -> adapter.submitList(list) }
+        else if(type == 2)
+            viewModel.myFollowList.observe(viewLifecycleOwner) { list -> adapter.submitList(list) }
+        binding.myHoleRecyclerView.adapter = adapter
         binding.myHoleRecyclerView.addItemDecoration(SpaceItemDecoration(0, 20))
         initRefresh()
     }
@@ -72,12 +71,20 @@ class MyHoleFragment : Fragment() {
             setEnableLoadMore(true)
             setEnableRefresh(true)
             setOnRefreshListener {
-                viewModel.initRefresh()
-                viewModel.getMyHoleList()
+                if(type == 1) {
+                    viewModel.initMyHoleRefresh()
+                    viewModel.getMyHoleList()
+                } else if(type == 2) {
+                    viewModel.initMyFollowRefresh()
+                    viewModel.getMyFollowList()
+                }
                 finishRefresh()
             }
             setOnLoadMoreListener {
-                viewModel.getMyHoleList()
+                if(type == 1)
+                    viewModel.getMyHoleList()
+                else if(type == 2)
+                    viewModel.getMyFollowList()
                 finishLoadMore()
             }
         }
@@ -87,8 +94,8 @@ class MyHoleFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(): MyHoleFragment {
-            return MyHoleFragment()
+        fun newInstance(type: Int): MyHoleFragment {
+            return MyHoleFragment(type)
         }
     }
 }

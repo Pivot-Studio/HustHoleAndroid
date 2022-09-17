@@ -68,8 +68,8 @@ public class HoleStarReplyActivity extends AppCompatActivity {
         imgMy = findViewById(R.id.my_img);
         imgMy.setOnClickListener(v -> finish());
 
-        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFragment.newInstance());
-        fragments.add(MyStarFragment.newInstance());
+        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFragment.newInstance(1));
+        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFragment.newInstance(2));
         fragments.add(MyReplyFragment.newInstance());
 
         //      注意这里TabLayout的写法。

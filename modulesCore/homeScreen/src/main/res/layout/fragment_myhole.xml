@@ -34,7 +34,6 @@
                 android:clipToPadding="false"
                 android:padding="@dimen/dp_10"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:listData="@{viewModel.myHolesList}"
                 tools:listitem="@layout/item_mine_hole_follow" />
         </androidx.core.widget.NestedScrollView>
 

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineHoleFollowBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.mine.HoleStarReplyActivity
 import com.alibaba.android.arouter.launcher.ARouter
@@ -18,7 +19,7 @@ import com.alibaba.android.arouter.launcher.ARouter
  * @version :1.0
  * @author
  */
-class MineRecycleViewAdapter :
+class MineRecycleViewAdapter(val type: Int) :
     ListAdapter<Array<String?>, RecyclerView.ViewHolder>(DiffCallback) {
 
     inner class HoleAndFollowViewHolder(
@@ -37,6 +38,10 @@ class MineRecycleViewAdapter :
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                         .navigation(it.context as HoleStarReplyActivity, 2)
                 }
+                if(type == 1)
+                    binding.textView.text = R.string.thumb_follow.toString().format(hole[8],hole[7])
+                if(type == 2)
+                    binding.textView.text = R.string.reply_follow.toString().format(hole[7],hole[3])
                 executePendingBindings()
             }
         }
@@ -57,11 +62,11 @@ class MineRecycleViewAdapter :
 
     companion object DiffCallback : DiffUtil.ItemCallback<Array<String?>>() {
         override fun areItemsTheSame(oldItem: Array<String?>, newItem: Array<String?>): Boolean {
-            return false
+            return oldItem[1] == newItem[1]
         }
 
         override fun areContentsTheSame(oldItem: Array<String?>, newItem: Array<String?>): Boolean {
-            return false
+            return oldItem[3] == newItem[3] || oldItem[7] == newItem[7] || oldItem[8] == newItem[8]
         }
     }
 }
