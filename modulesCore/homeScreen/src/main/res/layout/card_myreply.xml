@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/dp_12"
-    android:layout_marginTop="@dimen/dp_10"
-    app:cardCornerRadius="@dimen/dp_20">
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@drawable/standard_forest_hole">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/my_reply_total"
@@ -47,8 +49,7 @@
                 android:id="@+id/my_reply_alias"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/GrayScale_0"
-                android:textStyle="bold"
+                android:textAppearance="@style/HustHoleTypography.Headline5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,40 +66,37 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/my_reply_created_timestamp" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
+
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_30"
+                android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/dp_5"
-                app:cardBackgroundColor="#F2F2F2"
-                app:cardCornerRadius="@dimen/dp_10"
+                android:orientation="horizontal"
+                android:radius="@dimen/dp_10"
+                android:background="#F2F2F2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/my_reply_content">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/my_reply_hole_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="@dimen/dp_13"
+                    android:textColor="@color/GrayScale_50"
+                    android:textSize="@dimen/sp_13" />
 
-                    <TextView
-                        android:id="@+id/my_reply_hole_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_13"
-                        android:textColor="@color/GrayScale_50"
-                        android:textSize="@dimen/sp_13" />
+                <TextView
+                    android:id="@+id/my_reply_hole_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_8"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/GrayScale_50"
+                    android:textSize="@dimen/sp_13" />
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/my_reply_hole_content"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_8"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textColor="@color/GrayScale_50"
-                        android:textSize="@dimen/sp_13" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -109,8 +107,8 @@
             android:clickable="true"
             android:elevation="20dp"
             android:focusable="true"
-            android:paddingEnd="@dimen/dp_80"
             android:paddingVertical="@dimen/dp_10"
+            android:paddingEnd="@dimen/dp_80"
             app:layout_constraintEnd_toEndOf="@id/cl_1"
             app:layout_constraintTop_toTopOf="@id/cl_1">
 
@@ -137,4 +135,4 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+</layout>

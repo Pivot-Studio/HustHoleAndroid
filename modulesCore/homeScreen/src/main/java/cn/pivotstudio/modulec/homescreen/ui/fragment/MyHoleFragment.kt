@@ -14,6 +14,8 @@ import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineRecycleViewAdapter
+import cn.pivotstudio.modulec.homescreen.viewmodel.GET_FOLLOW
+import cn.pivotstudio.modulec.homescreen.viewmodel.GET_HOLE
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel
 
 
@@ -55,9 +57,9 @@ class MyHoleFragment(val type: Int) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val adapter = MineRecycleViewAdapter(type)
-        if(type == 1)
+        if(type == GET_HOLE)
             viewModel.myHolesList.observe(viewLifecycleOwner) { list -> adapter.submitList(list) }
-        else if(type == 2)
+        else if(type == GET_FOLLOW)
             viewModel.myFollowList.observe(viewLifecycleOwner) { list -> adapter.submitList(list) }
         binding.myHoleRecyclerView.adapter = adapter
         binding.myHoleRecyclerView.addItemDecoration(SpaceItemDecoration(0, 20))
@@ -71,19 +73,19 @@ class MyHoleFragment(val type: Int) : Fragment() {
             setEnableLoadMore(true)
             setEnableRefresh(true)
             setOnRefreshListener {
-                if(type == 1) {
+                if(type == GET_HOLE) {
                     viewModel.initMyHoleRefresh()
                     viewModel.getMyHoleList()
-                } else if(type == 2) {
+                } else if(type == GET_FOLLOW) {
                     viewModel.initMyFollowRefresh()
                     viewModel.getMyFollowList()
                 }
                 finishRefresh()
             }
             setOnLoadMoreListener {
-                if(type == 1)
+                if(type == GET_HOLE)
                     viewModel.getMyHoleList()
-                else if(type == 2)
+                else if(type == GET_FOLLOW)
                     viewModel.getMyFollowList()
                 finishLoadMore()
             }

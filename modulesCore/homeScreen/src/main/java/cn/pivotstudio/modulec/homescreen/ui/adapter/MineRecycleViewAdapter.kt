@@ -9,6 +9,8 @@ import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineHoleFollowBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.mine.HoleStarReplyActivity
+import cn.pivotstudio.modulec.homescreen.viewmodel.GET_FOLLOW
+import cn.pivotstudio.modulec.homescreen.viewmodel.GET_HOLE
 import com.alibaba.android.arouter.launcher.ARouter
 
 
@@ -38,9 +40,9 @@ class MineRecycleViewAdapter(val type: Int) :
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                         .navigation(it.context as HoleStarReplyActivity, 2)
                 }
-                if(type == 1)
+                if(type == GET_HOLE)
                     binding.textView.text = R.string.thumb_follow.toString().format(hole[8],hole[7])
-                if(type == 2)
+                if(type == GET_FOLLOW)
                     binding.textView.text = R.string.reply_follow.toString().format(hole[7],hole[3])
                 executePendingBindings()
             }
