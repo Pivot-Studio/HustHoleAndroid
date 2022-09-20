@@ -2,6 +2,7 @@ package cn.pivotstudio.modulec.homescreen.ui.adapter
 
 import android.app.Dialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,7 +65,9 @@ class MineRecycleViewAdapter(
     inner class ReplyViewHolder(
         private val binding: ItemMineReplyBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
+
         private var moreCondition: Boolean = false
+
         fun bind(hole: Array<String?>) {
             binding.apply {
                 this.hole = hole
@@ -90,6 +93,7 @@ class MineRecycleViewAdapter(
                 myReplyDelete.setOnClickListener{
                     val mView = View.inflate(content, R.layout.dialog_delete, null)
                     val dialog = Dialog(content!!)
+                    dialog.setContentView(mView)
                     dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
                     val no = mView.findViewById<View>(R.id.dialog_delete_tv_cancel) as TextView
                     val yes = mView.findViewById<View>(R.id.dialog_delete_tv_yes) as TextView
@@ -108,8 +112,8 @@ class MineRecycleViewAdapter(
                 executePendingBindings()
             }
             fragBinding.myHoleRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
                     binding.myReplyDelete.visibility = View.GONE
                     moreCondition = false
                 }

@@ -72,9 +72,9 @@ public class HoleStarReplyActivity extends AppCompatActivity {
         imgMy = findViewById(R.id.my_img);
         imgMy.setOnClickListener(v -> finish());
 
-        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFragment.newInstance(GET_HOLE));
-        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFragment.newInstance(GET_FOLLOW));
-        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFragment.newInstance(GET_REPLY));
+        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment.newInstance(GET_HOLE));
+        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment.newInstance(GET_FOLLOW));
+        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment.newInstance(GET_REPLY));
 
         //      注意这里TabLayout的写法。
         titles.add("我的树洞");

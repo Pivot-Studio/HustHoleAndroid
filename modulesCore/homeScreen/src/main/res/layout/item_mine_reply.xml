@@ -95,7 +95,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_8"
-                    android:layout_marginEnd="@dimen/dp_4"
+                    android:layout_marginEnd="@dimen/dp_6"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:textColor="@color/GrayScale_50"
@@ -116,7 +116,8 @@
             android:paddingVertical="@dimen/dp_10"
             android:paddingEnd="@dimen/dp_80"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true">
+            android:layout_alignParentTop="true"
+            android:visibility="invisible">
 
             <ImageView
                 android:id="@+id/iv_itemhomepage_moreicon"

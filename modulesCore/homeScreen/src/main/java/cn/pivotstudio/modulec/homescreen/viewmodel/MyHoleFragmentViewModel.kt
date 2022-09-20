@@ -28,7 +28,7 @@ import retrofit2.Retrofit
 import java.io.IOException
 
 /**
- *@classname MyHoleFragment.kt
+ *@classname MyHoleFollowReplyFragment
  * @description:
  * @date :2022/9/12 17:44
  * @version :1.0
@@ -62,13 +62,11 @@ class MyHoleFragmentViewModel : ViewModel() {
     private var jsonArray: JSONArray? = null
 
     init {
-        _myHoleStartId.value = 0
-        _myFollowStartId.value = 0
-        _myReplyStartId.value = 0
+        initMyHoleRefresh()
+        initMyFollowRefresh()
+        initMyReplyRefresh()
+
         _listSize.value = CONSTANT_STANDARD_LOAD_SIZE
-        _myHolesList.value = ArrayList()
-        _myFollowList.value = ArrayList()
-        _myReplyList.value = ArrayList()
 
         RetrofitManager.RetrofitBuilder(BASE_URL)
         retrofit = RetrofitManager.getRetrofit()
@@ -80,18 +78,20 @@ class MyHoleFragmentViewModel : ViewModel() {
     }
 
     fun initMyHoleRefresh() {
-        _myHolesList.value?.clear()
+//        _myHolesList.value?.clear()
         _myHolesList.value = ArrayList()
         _myHoleStartId.value = 0
     }
 
     fun initMyFollowRefresh() {
-        _myFollowList.value?.clear()
+//        _myFollowList.value?.clear()
+        _myFollowList.value = ArrayList()
         _myFollowStartId.value = 0
     }
 
     fun initMyReplyRefresh() {
-        _myReplyList.value?.clear()
+//        _myReplyList.value?.clear()
+        _myReplyList.value = ArrayList()
         _myReplyStartId.value = 0
     }
 
