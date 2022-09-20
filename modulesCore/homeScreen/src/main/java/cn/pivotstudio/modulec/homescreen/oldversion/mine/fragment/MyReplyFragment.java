@@ -202,7 +202,7 @@ public class MyReplyFragment extends Fragment {
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             return new ViewHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.card_myreply, parent, false));
+                .inflate(R.layout.item_mine_reply, parent, false));
         }
 
         @Override
