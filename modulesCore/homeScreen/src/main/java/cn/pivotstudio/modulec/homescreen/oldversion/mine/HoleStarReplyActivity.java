@@ -2,6 +2,7 @@ package cn.pivotstudio.modulec.homescreen.oldversion.mine;
 
 import static cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModelKt.GET_FOLLOW;
 import static cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModelKt.GET_HOLE;
+import static cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModelKt.GET_REPLY;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -73,7 +74,7 @@ public class HoleStarReplyActivity extends AppCompatActivity {
 
         fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFragment.newInstance(GET_HOLE));
         fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFragment.newInstance(GET_FOLLOW));
-        fragments.add(MyReplyFragment.newInstance());
+        fragments.add(cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFragment.newInstance(GET_REPLY));
 
         //      注意这里TabLayout的写法。
         titles.add("我的树洞");
