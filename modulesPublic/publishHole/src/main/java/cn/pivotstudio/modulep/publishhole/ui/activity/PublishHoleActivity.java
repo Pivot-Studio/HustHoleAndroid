@@ -58,7 +58,7 @@ public class PublishHoleActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         ARouter.getInstance().inject(this);
         if (args != null) {
-            forestId = args.getInt(Constant.FOREST_ID);
+            forestId = Integer.parseInt(args.getString(Constant.FOREST_ID));
             forestName = args.getString(Constant.FOREST_NAME);
         }
         initView();

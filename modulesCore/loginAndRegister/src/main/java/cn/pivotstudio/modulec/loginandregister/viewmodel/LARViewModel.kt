@@ -10,10 +10,9 @@ import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
-import cn.pivotstudio.husthole.moduleb.network.model.User
+import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.data.CheckStudentCodeUtil
-import cn.pivotstudio.modulec.loginandregister.model.LoginResponse
 import cn.pivotstudio.modulec.loginandregister.model.MsgResponse
 import cn.pivotstudio.modulec.loginandregister.network.LoginAndRegisterNetworkApi
 import kotlinx.coroutines.Dispatchers
@@ -77,27 +76,11 @@ class LARViewModel : ViewModel() {
             return
         }
         _showStudentCodeWarning.value = false
-        val map = HashMap<String, String>()
-        map["email"] = id
-        map["password"] = password
-        LoginAndRegisterNetworkApi.retrofitService
-            .mobileLogin(map)
-            .compose(NetworkApi.applySchedulers())
-            .subscribe(object : BaseObserver<LoginResponse>() {
-                override fun onSuccess(loginResponse: LoginResponse) {
-                    _loginToken.value = loginResponse.token
-                    _tip.value = loginResponse.msg
-                }
-
-                override fun onFailure(e: Throwable) {
-                    _tip.value = (e as ResponseThrowable).message
-                }
-            })
 
         viewModelScope.launch {
             flow {
                 val result = HustHoleApi.retrofitService.signIn(
-                    User(email = id + Constant.EMAIL_SUFFIX, password = password)
+                    RequestBody.User(email = id + Constant.EMAIL_SUFFIX, password = password)
                 )
                 emit(result)
             }.flowOn(Dispatchers.IO).catch { e ->

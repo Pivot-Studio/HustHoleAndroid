@@ -1,9 +1,8 @@
 package cn.pivotstudio.husthole.moduleb.network.model
 
 import com.squareup.moshi.Json
-import retrofit2.http.Query
 
-data class DetailForestHoleV2(
+data class HoleV2(
     /**
      * 内容
      */
@@ -32,7 +31,7 @@ data class DetailForestHoleV2(
      * 小树林名字
      */
     @Json(name = "forestName")
-    val forestName: String,
+    var forestName: String? = null,
 
     /**
      * 树洞id
@@ -67,6 +66,7 @@ data class DetailForestHoleV2(
     /**
      * 最新评论时间
      */
+    @Json(name = "lastReplyAt")
     val lastReplyAt: String,
 
     /**
@@ -79,9 +79,11 @@ data class DetailForestHoleV2(
      * 点赞数
      */
     @Json(name = "thumb")
-    var likeCount: Long
+    var likeCount: Long,
+
+    var forestAvatarUrl: String? = null
 ): Hole()
 
 data class TokenResponse(
-    @Query("token") val token: String
+    @Json(name = "token") val token: String
 )

@@ -1,12 +1,16 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import cn.pivotstudio.modulec.homescreen.model.ForestHeads
+import androidx.lifecycle.viewModelScope
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
+import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.repository.ForestRepository
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
 /**
  * @classname ForestViewModel
@@ -18,10 +22,14 @@ import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 class ForestViewModel : ViewModel() {
     private val repository = ForestRepository()
 
-    val forestHoles: LiveData<List<ForestHole>> = repository.holes
-    val forestHeads: LiveData<ForestHeads> = repository.headers
-    val holesLoadState: LiveData<LoadStatus?> = repository.holeState
-    val headerLoadState: LiveData<LoadStatus> = repository.headerLoadState
+    val holesLoadState: MutableLiveData<LoadStatus?> = repository.holeState
+    val headerLoadState: MutableLiveData<LoadStatus> = repository.headerLoadState
+
+    private var _holesV2 = MutableStateFlow<List<HoleV2>>(mutableListOf())
+    val holesV2: StateFlow<List<HoleV2>> = _holesV2
+
+    private var _forestsV2 = MutableStateFlow<List<ForestBrief>>(mutableListOf())
+    val forestsV2: StateFlow<List<ForestBrief>> = _forestsV2
 
     private var _shouldRefreshHeader = false
 
@@ -39,31 +47,74 @@ class ForestViewModel : ViewModel() {
 
     fun tryLoadNewHeader() {
         if (_shouldRefreshHeader) {
-            loadHeader()
+            loadJoinedForestsV2()
             _shouldRefreshHeader = false
         }
     }
 
     fun loadHolesAndHeads() {
-        repository.run {
-            loadForestHoles()
-            loadForestHeader()
+        loadHolesV2()
+        loadJoinedForestsV2()
+    }
+
+    fun loadMoreForestHoles() {
+        holesLoadState.value = LoadStatus.LOADING
+        viewModelScope.launch {
+            repository.loadMoreForestHolesV2()
+                .collectLatest {
+                    val newHoles = _holesV2.value.toMutableList() + it
+                    _holesV2.emit(newHoles)
+                    holesLoadState.value = LoadStatus.DONE
+                }
         }
     }
 
-    fun loadHeader() = repository.loadForestHeader()
-
-    fun loadHoles() = repository.loadForestHoles()
-
-    fun loadMoreForestHoles() {
-        repository.loadMoreForestHoles()
+    fun getForestById(forestId: String): ForestBrief = _forestsV2.value.first {
+        it.forestId == forestId
     }
 
-    fun giveALikeToTheHole(hole: ForestHole) =
-        repository.giveALikeToTheHole(hole)
+    fun giveALikeToTheHole(hole: HoleV2) {
+        viewModelScope.launch {
+            repository.giveALikeToTheHole(hole)
+                .collectLatest {
+                    when (it) {
+                        is ApiResult.Success<*> -> {
+                            refreshTheHole(hole)
+                        }
+                        else -> {}
+                    }
+                }
+        }
+    }
 
-    fun followTheHole(hole: ForestHole) {
-        repository.followTheHole(hole)
+    fun followTheHole(hole: HoleV2) {
+        viewModelScope.launch {
+            repository.followTheHole(hole)
+                .collectLatest {
+                    when (it) {
+                        is ApiResult.Success<*> -> {
+                            refreshTheHole(hole)
+                        }
+                        is ApiResult.Error -> {
+                            tip.value = it.code.toString() + it.errorMessage
+                        }
+                        else -> {}
+                    }
+                }
+        }
+    }
+
+    fun refreshTheHole(hole: HoleV2) {
+        viewModelScope.launch {
+            repository.loadTheHole(hole)
+                .collectLatest {
+                    val newItems = _holesV2.value.toMutableList()
+                    for ((i, newHole) in newItems.withIndex()) {
+                        if (hole.holeId == newHole.holeId) newItems[i] = newItems[i].copy(followCount = 100, isFollow = true)
+                    }
+                    _holesV2.emit(newItems)
+                }
+        }
     }
 
     fun deleteTheHole(hole: ForestHole) {
@@ -106,6 +157,25 @@ class ForestViewModel : ViewModel() {
             replyNum,
             followNum
         )
+    }
+
+    fun loadHolesV2() {
+        viewModelScope.launch {
+            repository.loadForestHolesV2()
+                .collectLatest {
+                    holesLoadState.value = LoadStatus.DONE
+                    _holesV2.emit(it)
+                }
+        }
+    }
+
+    fun loadJoinedForestsV2() {
+        viewModelScope.launch {
+            repository.loadJoinedForestsV2()
+                .collectLatest {
+                    _forestsV2.emit(it)
+                }
+        }
     }
 
 }

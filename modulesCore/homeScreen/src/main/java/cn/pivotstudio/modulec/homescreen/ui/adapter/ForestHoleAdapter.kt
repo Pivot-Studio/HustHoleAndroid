@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHoleBinding
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
 
 /**
@@ -20,7 +20,7 @@ import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
  */
 class ForestHoleAdapter(
     private val _context: ForestFragment,
-) : ListAdapter<ForestHole, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<HoleV2, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
     var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestHoleViewHolder {
@@ -41,11 +41,11 @@ class ForestHoleAdapter(
     inner class ForestHoleViewHolder(private val binding: ItemForestHoleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(forestHole: ForestHole) {
+        fun bind(forestHole: HoleV2) {
             binding.forestHole = forestHole
             binding.apply {
                 layoutItemForestReply.setOnClickListener {
-                    _context.navToSpecificHoleWithReply(forestHole.holeId)
+                    _context.navToSpecificHoleWithReply(forestHole.holeId.toInt())
                 }
 
                 imageItemForestAvatar.setOnClickListener {
@@ -63,21 +63,21 @@ class ForestHoleAdapter(
                 // 三个点
                 imageItemForestMore.setOnClickListener {
                     layoutItemForestMoreList.visibility = View.VISIBLE
-                    if (lastImageMore != layoutItemForestMoreList ) {
+                    if (lastImageMore != layoutItemForestMoreList) {
                         lastImageMore?.visibility = View.GONE
                     }
                     lastImageMore = layoutItemForestMoreList
                 }
 
                 layoutItemForestHole.setOnClickListener {
-                    _context.navToSpecificHole(forestHole.holeId)
+                    _context.navToSpecificHole(forestHole.holeId.toInt())
                 }
 
                 layoutItemForestMoreList.setOnClickListener {
-                    if (forestHole.isMine) {
-                        _context.deleteTheHole(forestHole)
+                    if (forestHole.isMyHole) {
+//                        _context.deleteTheHole(forestHole)
                     } else {
-                        _context.reportTheHole(forestHole)
+//                        _context.reportTheHole(forestHole)
                     }
                     it.visibility = View.GONE
                 }
@@ -87,13 +87,19 @@ class ForestHoleAdapter(
 
     companion object {
         const val TAG = "ForestHoleAdapter"
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<ForestHole> =
-            object : DiffUtil.ItemCallback<ForestHole>() {
-                override fun areItemsTheSame(oldItem: ForestHole, newItem: ForestHole): Boolean {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<HoleV2> =
+            object : DiffUtil.ItemCallback<HoleV2>() {
+                override fun areItemsTheSame(
+                    oldItem: HoleV2,
+                    newItem: HoleV2
+                ): Boolean {
                     return oldItem.holeId == newItem.holeId
                 }
 
-                override fun areContentsTheSame(oldItem: ForestHole, newItem: ForestHole): Boolean {
+                override fun areContentsTheSame(
+                    oldItem: HoleV2,
+                    newItem: HoleV2
+                ): Boolean {
                     return oldItem == newItem
                 }
             }

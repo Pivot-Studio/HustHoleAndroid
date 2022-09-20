@@ -23,9 +23,9 @@ public class TokenInterceptor implements Interceptor {
     public okhttp3.Response intercept(Chain chain) throws IOException {
         //用于添加的请求头
 
-        String token = mmkvUtil.getString("USER_TOKEN");
+        String token = "";
         Request request =
-                chain.request().newBuilder().addHeader("Authorization", "Bearer " + token).build();
+                chain.request().newBuilder().build();
         return chain.proceed(request);
     }
 }

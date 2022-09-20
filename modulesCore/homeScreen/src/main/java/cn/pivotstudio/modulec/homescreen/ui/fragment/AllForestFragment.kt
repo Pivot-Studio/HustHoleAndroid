@@ -7,12 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentAllFrorestBinding
 import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import kotlinx.coroutines.flow.collectLatest
 
 class AllForestFragment : BaseFragment() {
 
@@ -40,23 +42,26 @@ class AllForestFragment : BaseFragment() {
 
         val adapter = AllForestAdapter(::navToForestDetail)
         binding.allForestRecyclerView.adapter = adapter
-        viewModel.forestCardsWithOneType.observe(viewLifecycleOwner) {
-            adapter.submitList(viewModel.forestCards.toList())
+//        viewModel.forestCardsWithOneType.observe(viewLifecycleOwner) {
+//            adapter.submitList(viewModel.forestCards.toList())
+//        }
+        viewModel.apply {
+            lifecycleScope.launchWhenStarted {
+                forests.collectLatest {
+                    adapter.submitList(it)
+                }
+            }
         }
     }
 
 
-
-
-
-
-
-
-    fun navToForestDetail(forestId: Int) {
-        val action = AllForestFragmentDirections
-            .actionAllForestFragmentToForestDetailFragment(forestId)
-        Log.d(TAG, "navToForestDetail: forest id : $forestId")
-        findNavController(requireActivity(), R.id.nav_host_fragment)
-            .navigate(action)
+    fun navToForestDetail(forestId: String) {
+        viewModel.getForestById(forestId)?.let {
+            val action = AllForestFragmentDirections
+                .actionAllForestFragmentToForestDetailFragment(it)
+            Log.d(TAG, "navToForestDetail: forest id : $forestId")
+            findNavController(requireActivity(), R.id.nav_host_fragment)
+                .navigate(action)
+        }
     }
 }

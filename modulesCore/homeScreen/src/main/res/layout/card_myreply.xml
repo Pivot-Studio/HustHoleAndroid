@@ -115,7 +115,7 @@
             app:layout_constraintTop_toTopOf="@id/cl_1">
 
             <ImageView
-                android:id="@+id/iv_itemhomepage_moreicon"
+                android:id="@+id/iv_item_homepage_more_icon"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
                 android:layout_marginStart="12dp"
@@ -125,7 +125,7 @@
                 app:srcCompat="@mipmap/vector6" />
 
             <TextView
-                android:id="@+id/tv_itemhomepage_moretext"
+                android:id="@+id/tv_item_homepage_more_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_12"
@@ -133,7 +133,7 @@
                 android:textColor="@color/GrayScale_20"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_moreicon"
+                app:layout_constraintStart_toEndOf="@+id/iv_item_homepage_more_icon"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
