@@ -15,7 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
@@ -195,7 +195,7 @@ class ForestDetailFragment : BaseFragment() {
 
     // 举报树洞交给举报界面处理
     fun reportTheHole(hole: Hole) {
-        (hole as ForestHoleV2).let {
+        (hole as HoleV2).let {
             ARouter.getInstance().build("/report/ReportActivity")
                 .withInt(Constant.HOLE_ID, it.holeId.toInt())
                 .withInt(Constant.REPLY_LOCAL_ID, -1)

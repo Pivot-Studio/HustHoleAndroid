@@ -8,8 +8,6 @@ import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.husthole.moduleb.network.model.*
 import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.modulec.homescreen.model.ForestCard
-import cn.pivotstudio.modulec.homescreen.model.ForestCardList
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
@@ -33,7 +31,7 @@ class ForestDetailRepository(
     val tip = MutableLiveData<String?>()
     var state = _state
 
-    suspend fun loadHolesByForestId(id: String): Flow<List<ForestHoleV2>> {
+    suspend fun loadHolesByForestId(id: String): Flow<List<HoleV2>> {
         _state.value = ForestDetailHolesLoadStatus.LOADING
         return flow {
             emit(
@@ -48,7 +46,7 @@ class ForestDetailRepository(
         }.onEach { lastTimeStamp = DateUtil.getDateTime() }
     }
 
-    fun loadMoreHolesByForestId(id: String): Flow<List<ForestHoleV2>> {
+    fun loadMoreHolesByForestId(id: String): Flow<List<HoleV2>> {
         _state.value = ForestDetailHolesLoadStatus.LOADING
         return flow {
             emit(
@@ -65,7 +63,7 @@ class ForestDetailRepository(
         }
     }
 
-    fun giveALikeToTheHole(hole: ForestHoleV2) {
+    fun giveALikeToTheHole(hole: HoleV2) {
         if (!hole.liked) {
             HomeScreenNetworkApi.retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + hole.holeId + "/-1")
         } else {
@@ -86,7 +84,7 @@ class ForestDetailRepository(
 
     }
 
-    fun followTheHole(hole: ForestHoleV2) {
+    fun followTheHole(hole: HoleV2) {
         val observable: Observable<MsgResponse> = if (!hole.isFollow) {
             HomeScreenNetworkApi.retrofitService.follow(Constant.BASE_URL + "follows/" + hole.holeId)
         } else {

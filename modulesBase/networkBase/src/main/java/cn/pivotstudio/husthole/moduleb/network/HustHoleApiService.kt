@@ -8,6 +8,7 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -22,6 +23,8 @@ private const val BASE_URL = "https://hustholev2.pivotstudio.cn/api/"
 object HustHoleApi {
     lateinit var retrofitService: HustHoleApiService
     fun init(context: Context) {
+
+        val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
 
         val requestInterceptor = Interceptor { chain ->
             chain.request().newBuilder()
@@ -44,6 +47,7 @@ object HustHoleApi {
             .connectTimeout(6, TimeUnit.SECONDS)
             .addInterceptor(requestInterceptor)
             .addInterceptor(tokenInterceptor)
+            .addInterceptor(httpLoggingInterceptor)
             .build()
 
         val moshi =
@@ -65,6 +69,14 @@ object HustHoleApi {
 
 
 interface HustHoleApiService {
+
+    @GET("hole/list")
+    suspend fun getHoles(
+        @Query("limit") limit: Int = 20,
+        @Query("mode") mode: String = "LATEST_REPLY",
+        @Query("offset") offset: Int = 0,
+        @Query("timestamp") timestamp: String
+    ): List<HoleV2>
 
     /** 我加入的小树林 */
     @GET("user/forest")
@@ -94,7 +106,7 @@ interface HustHoleApiService {
         @Query("mode") mode: String = "LATEST",
         @Query("offset") offset: Int = 0,
         @Query("timestamp") timestamp: String
-    ): List<ForestHoleV2>
+    ): List<HoleV2>
 
     /** 单个树洞 */
     @GET("forest/findOne")
@@ -109,7 +121,7 @@ interface HustHoleApiService {
         @Query("mode") mode: String = "LATEST_REPLY",
         @Query("offset") offset: Int = 0,
         @Query("timestamp") timestamp: String
-    ): List<ForestHoleV2>
+    ): List<HoleV2>
 
     /** 小树林列表 */
     @GET("forest/list")
@@ -156,7 +168,7 @@ interface HustHoleApiService {
     @GET("hole/one")
     suspend fun loadTheHole(
         @Query("holeId") holeId: String
-    ): ForestHoleV2
+    ): HoleV2
 
 
 }

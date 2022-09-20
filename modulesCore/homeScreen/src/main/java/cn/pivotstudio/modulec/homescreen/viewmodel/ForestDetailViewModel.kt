@@ -1,10 +1,9 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel;
 
 import androidx.lifecycle.*
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.husthole.moduleb.network.model.Hole
-import cn.pivotstudio.modulec.homescreen.model.ForestCard
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
 import kotlinx.coroutines.flow.*
@@ -17,8 +16,8 @@ class ForestDetailViewModel(
     val forestId: String = forestBrief.forestId
     val repository = ForestDetailRepository(forestId = forestId)
 
-    private var _holesV2 = MutableStateFlow<List<ForestHoleV2>>(emptyList())
-    val holesV2: StateFlow<List<ForestHoleV2>> = _holesV2
+    private var _holesV2 = MutableStateFlow<List<HoleV2>>(emptyList())
+    val holesV2: StateFlow<List<HoleV2>> = _holesV2
 
     private var _joined = MutableStateFlow(forestBrief.joined)
     val joined: StateFlow<Boolean> = _joined
@@ -55,16 +54,16 @@ class ForestDetailViewModel(
     }
 
     fun giveALikeToTheHole(hole: Hole) {
-        repository.giveALikeToTheHole(hole as ForestHoleV2)
+        repository.giveALikeToTheHole(hole as HoleV2)
     }
 
     fun followTheHole(hole: Hole) {
-        repository.followTheHole(hole as ForestHoleV2)
+        repository.followTheHole(hole as HoleV2)
         loadHoles()
     }
 
     fun deleteTheHole(hole: Hole) {
-        repository.deleteTheHole(hole as ForestHoleV2)
+        repository.deleteTheHole(hole as HoleV2)
     }
 
     fun joinTheForest() {

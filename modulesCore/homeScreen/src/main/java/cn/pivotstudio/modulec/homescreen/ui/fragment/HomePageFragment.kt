@@ -14,7 +14,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
@@ -23,15 +23,17 @@ import cn.pivotstudio.moduleb.libbase.constant.RequestCodeConstant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
 import cn.pivotstudio.moduleb.libbase.util.data.CheckStrUtil
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
+import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomepageBinding
 import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse
-import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
-import cn.pivotstudio.modulec.homescreen.ui.adapter.HoleRecyclerViewAdapter
+import cn.pivotstudio.modulec.homescreen.ui.adapter.HomeHoleAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
+import com.alibaba.android.arouter.launcher.ARouter
 import com.scwang.smart.refresh.layout.api.RefreshLayout
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * @classname:HomePageFragment
@@ -41,13 +43,19 @@ import com.scwang.smart.refresh.layout.api.RefreshLayout
  * @author:
  */
 class HomePageFragment : BaseFragment() {
+
+    companion object {
+        const val TAG = "HomePageFragment"
+    }
+    
     private lateinit var binding: FragmentHomepageBinding
-    private val mViewModel: HomePageViewModel by viewModels()
+    private val viewModel: HomePageViewModel by viewModels()
+
+    private val homeHoleAdapter = HomeHoleAdapter(this)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_homepage, container, false) //
-        mViewModel.refreshHoleList(0) //初次加载
         initView()
         initRefresh()
         initObserver()
@@ -68,12 +76,12 @@ class HomePageFragment : BaseFragment() {
                 Constant.HOLE_RETURN_INFO
             )
             returnInfo?.let {
-                mViewModel.pClickDataBean?.is_thumbup = it.is_thumbup
-                mViewModel.pClickDataBean?.is_reply = it.is_reply
-                mViewModel.pClickDataBean?.is_follow = it.is_follow
-                mViewModel.pClickDataBean?.thumbup_num = it.thumbup_num
-                mViewModel.pClickDataBean?.reply_num = it.reply_num
-                mViewModel.pClickDataBean?.follow_num = it.follow_num
+                viewModel.pClickDataBean?.is_thumbup = it.is_thumbup
+                viewModel.pClickDataBean?.is_reply = it.is_reply
+                viewModel.pClickDataBean?.is_follow = it.is_follow
+                viewModel.pClickDataBean?.thumbup_num = it.thumbup_num
+                viewModel.pClickDataBean?.reply_num = it.reply_num
+                viewModel.pClickDataBean?.follow_num = it.follow_num
             }
             binding.recyclerView.adapter?.notifyDataSetChanged()
         }
@@ -88,14 +96,13 @@ class HomePageFragment : BaseFragment() {
             SpannableString(this.resources.getString(R.string.page1fragment_1)),
             12
         )
-        val holeRecyclerViewAdapter = HoleRecyclerViewAdapter(mViewModel, context)
 
         binding.apply {
-            recyclerView.adapter = holeRecyclerViewAdapter
+            recyclerView.adapter = homeHoleAdapter
 
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(view: RecyclerView, newState: Int) {
-                    (recyclerView.adapter as HoleRecyclerViewAdapter).lastMoreListCl?.let {
+                    (recyclerView.adapter as HomeHoleAdapter).lastImageMore?.let {
                         if (it.isVisible) {
                             it.visibility = View.GONE
                         }
@@ -110,10 +117,6 @@ class HomePageFragment : BaseFragment() {
                     v, actionId, event
                 )
             }
-        }
-
-        mViewModel.pHomePageHoles.observe(viewLifecycleOwner) {
-            holeRecyclerViewAdapter.notifyDataSetChanged()
         }
 
     }
@@ -132,21 +135,18 @@ class HomePageFragment : BaseFragment() {
                 activity
             )
         ) //设置自定义刷新底
+
         binding.refreshLayout.setOnRefreshListener { refreshlayout: RefreshLayout? ->  //下拉刷新触发
-            mViewModel.refreshHoleList(0)
+            viewModel.loadHolesV2()
             binding.recyclerView.setOnTouchListener { v: View?, event: MotionEvent? -> true }
         }
+
         binding.refreshLayout.setOnLoadMoreListener { refreshlayout: RefreshLayout? ->  //上拉加载触发
-            if (mViewModel.pHomePageHoles.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
-                mViewModel.refreshHoleList(0)
+            if (viewModel.pHomePageHoles.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
+                viewModel.loadHolesV2()
                 binding.recyclerView.setOnTouchListener { v: View?, event: MotionEvent? -> true }
             } else {
-                binding.recyclerView.setOnTouchListener { v: View?, event: MotionEvent? -> true }
-                if (mViewModel.isSearch == true) { //如果当前是搜索状态
-                    mViewModel.searchHoleList(mViewModel.startLoadId?.plus(20) ?: 0)
-                } else {
-                    mViewModel.refreshHoleList(mViewModel.startLoadId?.plus(20) ?: 0)
-                }
+                viewModel.loadHolesV2()
             }
         }
     }
@@ -155,23 +155,31 @@ class HomePageFragment : BaseFragment() {
      * 初始化ViewModel数据观察者
      */
     private fun initObserver() {
-        mViewModel.pHomePageHoles.observe(viewLifecycleOwner) { homepageHoleResponse: HomepageHoleResponse ->  //监听列表信息变化
-            val length = homepageHoleResponse.data.size
-            when (homepageHoleResponse.model) {
-                "REFRESH" -> finishRefresh(true)
-                "SEARCH_REFRESH" -> finishRefresh(false)
-                "LOAD_MORE" -> finishLoadMore(length)
-                "SEARCH_LOAD_MORE" -> finishLoadMore(length)
-                "SEARCH_HOLE" -> finishRefresh(false)
-                "BASE" -> {}
+        viewModel.apply {
+            pHomePageHoles.observe(viewLifecycleOwner) { homepageHoleResponse: HomepageHoleResponse ->  //监听列表信息变化
+                val length = homepageHoleResponse.data.size
+                when (homepageHoleResponse.model) {
+                    "REFRESH" -> finishRefresh(true)
+                    "SEARCH_REFRESH" -> finishRefresh(false)
+                    "LOAD_MORE" -> finishLoadMore(length)
+                    "SEARCH_LOAD_MORE" -> finishLoadMore(length)
+                    "SEARCH_HOLE" -> finishRefresh(false)
+                    "BASE" -> {}
+                }
+
+                finishRefreshAnim()
+            }
+            tip.observe(viewLifecycleOwner) {
+                it?.let {
+                    showMsg(it)
+                    viewModel.doneShowingTip()
+                }
             }
 
-            finishRefreshAnim()
-        }
-        mViewModel.tip.observe(viewLifecycleOwner) {
-            it?.let {
-                showMsg(it)
-                mViewModel.doneShowingTip()
+            lifecycleScope.launchWhenStarted {
+                holesV2.collectLatest {
+                    homeHoleAdapter.submitList(it)
+                }
             }
         }
     }
@@ -184,14 +192,14 @@ class HomePageFragment : BaseFragment() {
     private fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_ppwhomepage_newpublish) {
-            if (!mViewModel.isDescend!!) {
-                mViewModel.isDescend = true
-                mViewModel.refreshHoleList(0)
+            if (!viewModel.isDescend!!) {
+                viewModel.isDescend = true
+                viewModel.refreshHoleList(0)
             }
         } else if (id == R.id.btn_ppwhomepage_newcomment) {
-            if (mViewModel.isDescend == true) {
-                mViewModel.isDescend = false
-                mViewModel.refreshHoleList(0)
+            if (viewModel.isDescend == true) {
+                viewModel.isDescend = false
+                viewModel.refreshHoleList(0)
             }
         }
     }
@@ -207,12 +215,12 @@ class HomePageFragment : BaseFragment() {
     private fun onEditorListener(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
         if ((binding.etHomepage.text != null && binding.etHomepage.text.toString() != "") && (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE || event != null && KeyEvent.KEYCODE_ENTER == event.keyCode && KeyEvent.ACTION_DOWN == event.action)) {
             val et = binding.etHomepage.text.toString()
-            mViewModel.searchKeyword = et
-            mViewModel.isSearch = true
+            viewModel.searchKeyword = et
+            viewModel.isSearch = true
             if (CheckStrUtil.checkStrIsNum(et) || et[0] == '#') {
-                mViewModel.searchSingleHole()
+                viewModel.searchSingleHole()
             } else {
-                mViewModel.searchHoleList(0)
+                viewModel.searchHoleList(0)
             }
         }
         return false
@@ -224,17 +232,17 @@ class HomePageFragment : BaseFragment() {
      * @param isSearch 决定是否是搜索状态下，非搜索状态下下拉加载需要将状态切换
      */
     private fun finishRefresh(isSearch: Boolean) {
-        if (isSearch) mViewModel.isSearch = false
-        mViewModel.startLoadId = 0
+        if (isSearch) viewModel.isSearch = false
+        viewModel.startLoadId = 0
     }
 
     /**
      * 上拉加载的数据更新
      */
     private fun finishLoadMore(length: Int) {
-        val lastStartId = mViewModel.startLoadId
+        val lastStartId = viewModel.startLoadId
         if (lastStartId != null) {
-            mViewModel.startLoadId = lastStartId + length
+            viewModel.startLoadId = lastStartId + length
         }
     }
 
@@ -248,7 +256,33 @@ class HomePageFragment : BaseFragment() {
         binding.recyclerView.setOnTouchListener { v: View?, event: MotionEvent? -> false } //加载结束后允许滑动
     }
 
-    companion object {
-        const val TAG = "HomePageFragment"
+    /**
+     * 利用 Navigation 导航到 AllForestFragment
+     *
+     * 相关类 [AllForestFragment],nav_graph.xml
+     */
+    fun navToAllForests() {
+        Navigation.findNavController(
+            requireActivity(), R.id.nav_host_fragment
+        ).navigate(R.id.action_forest_fragment_to_all_forest_fragment)
+    }
+
+    // 点击文字内容跳转到树洞
+    fun navToSpecificHole(holeId: Int) {
+        viewModel.loadHoleLater(holeId)
+        if (BuildConfig.isRelease) {
+            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
+                .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                .navigation(requireActivity(), ResultCodeConstant.Hole)
+        }
+    }
+
+    // 点击恢复图标跳转到树洞后自动打开软键盘
+    fun navToSpecificHoleWithReply(holeId: Int) {
+        if (BuildConfig.isRelease) {
+            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
+                .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
+                .navigation(requireActivity(), ResultCodeConstant.Hole)
+        }
     }
 }

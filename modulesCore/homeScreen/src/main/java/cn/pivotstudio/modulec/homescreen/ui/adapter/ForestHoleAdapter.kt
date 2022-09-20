@@ -8,8 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHoleBinding
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
 
 /**
@@ -21,7 +20,7 @@ import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
  */
 class ForestHoleAdapter(
     private val _context: ForestFragment,
-) : ListAdapter<ForestHoleV2, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<HoleV2, ForestHoleAdapter.ForestHoleViewHolder>(DIFF_CALLBACK) {
     var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForestHoleViewHolder {
@@ -42,7 +41,7 @@ class ForestHoleAdapter(
     inner class ForestHoleViewHolder(private val binding: ItemForestHoleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(forestHole: ForestHoleV2) {
+        fun bind(forestHole: HoleV2) {
             binding.forestHole = forestHole
             binding.apply {
                 layoutItemForestReply.setOnClickListener {
@@ -88,18 +87,18 @@ class ForestHoleAdapter(
 
     companion object {
         const val TAG = "ForestHoleAdapter"
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<ForestHoleV2> =
-            object : DiffUtil.ItemCallback<ForestHoleV2>() {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<HoleV2> =
+            object : DiffUtil.ItemCallback<HoleV2>() {
                 override fun areItemsTheSame(
-                    oldItem: ForestHoleV2,
-                    newItem: ForestHoleV2
+                    oldItem: HoleV2,
+                    newItem: HoleV2
                 ): Boolean {
                     return oldItem.holeId == newItem.holeId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: ForestHoleV2,
-                    newItem: ForestHoleV2
+                    oldItem: HoleV2,
+                    newItem: HoleV2
                 ): Boolean {
                     return oldItem == newItem
                 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.repository.ForestRepository
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import kotlinx.coroutines.flow.*
@@ -25,8 +25,8 @@ class ForestViewModel : ViewModel() {
     val holesLoadState: MutableLiveData<LoadStatus?> = repository.holeState
     val headerLoadState: MutableLiveData<LoadStatus> = repository.headerLoadState
 
-    private var _holesV2 = MutableStateFlow<List<ForestHoleV2>>(mutableListOf())
-    val holesV2: StateFlow<List<ForestHoleV2>> = _holesV2
+    private var _holesV2 = MutableStateFlow<List<HoleV2>>(mutableListOf())
+    val holesV2: StateFlow<List<HoleV2>> = _holesV2
 
     private var _forestsV2 = MutableStateFlow<List<ForestBrief>>(mutableListOf())
     val forestsV2: StateFlow<List<ForestBrief>> = _forestsV2
@@ -73,7 +73,7 @@ class ForestViewModel : ViewModel() {
         it.forestId == forestId
     }
 
-    fun giveALikeToTheHole(hole: ForestHoleV2) {
+    fun giveALikeToTheHole(hole: HoleV2) {
         viewModelScope.launch {
             repository.giveALikeToTheHole(hole)
                 .collectLatest {
@@ -87,7 +87,7 @@ class ForestViewModel : ViewModel() {
         }
     }
 
-    fun followTheHole(hole: ForestHoleV2) {
+    fun followTheHole(hole: HoleV2) {
         viewModelScope.launch {
             repository.followTheHole(hole)
                 .collectLatest {
@@ -104,7 +104,7 @@ class ForestViewModel : ViewModel() {
         }
     }
 
-    fun refreshTheHole(hole: ForestHoleV2) {
+    fun refreshTheHole(hole: HoleV2) {
         viewModelScope.launch {
             repository.loadTheHole(hole)
                 .collectLatest {

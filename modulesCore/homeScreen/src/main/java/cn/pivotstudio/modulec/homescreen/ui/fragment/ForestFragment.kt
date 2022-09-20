@@ -21,7 +21,7 @@ import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFoot
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
 import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.JoinedForestsAdapter
@@ -205,12 +205,12 @@ class ForestFragment : BaseFragment() {
     }
 
     // 点赞
-    fun giveALikeToTheHole(hole: ForestHoleV2) {
+    fun giveALikeToTheHole(hole: HoleV2) {
         forestViewModel.giveALikeToTheHole(hole)
     }
 
     // 关注/收藏
-    fun followTheHole(hole: ForestHoleV2) {
+    fun followTheHole(hole: HoleV2) {
         forestViewModel.followTheHole(hole)
     }
 

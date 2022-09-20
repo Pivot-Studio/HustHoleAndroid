@@ -4,15 +4,11 @@ import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.*
 import cn.pivotstudio.husthole.moduleb.network.model.*
-import cn.pivotstudio.modulec.homescreen.model.ForestHeads
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
-import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.ERROR
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.LOADING
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -45,7 +41,7 @@ class ForestRepository(
     val holeState = _holeState
     val headerLoadState = _headerLoadState
 
-    fun loadForestHolesV2(): Flow<List<ForestHoleV2>> {
+    fun loadForestHolesV2(): Flow<List<HoleV2>> {
         return flow {
             emit(
                 hustHoleApiService.getAJoinedForestHoles(
@@ -60,7 +56,7 @@ class ForestRepository(
         }
     }
 
-    fun loadMoreForestHolesV2(): Flow<List<ForestHoleV2>> = flow {
+    fun loadMoreForestHolesV2(): Flow<List<HoleV2>> = flow {
         emit(
             hustHoleApiService.getAJoinedForestHoles(
                 limit = HOLES_LIST_SIZE,
@@ -91,7 +87,7 @@ class ForestRepository(
         }.onEach { refreshTimestamp() }
     }
 
-    fun giveALikeToTheHole(hole: ForestHoleV2): Flow<ApiResult> {
+    fun giveALikeToTheHole(hole: HoleV2): Flow<ApiResult> {
         return flow {
             emit(ApiResult.Loading())
             val response =
@@ -106,7 +102,7 @@ class ForestRepository(
         }
     }
 
-    fun followTheHole(hole: ForestHoleV2): Flow<ApiResult> {
+    fun followTheHole(hole: HoleV2): Flow<ApiResult> {
         return flow {
             emit(ApiResult.Loading())
             val response = if (hole.isFollow) {
@@ -130,7 +126,7 @@ class ForestRepository(
         }
     }
 
-    fun loadTheHole(hole: ForestHoleV2): Flow<ForestHoleV2> {
+    fun loadTheHole(hole: HoleV2): Flow<HoleV2> {
         return flow {
             emit(hustHoleApiService.loadTheHole(hole.holeId))
         }.flowOn(dispatcher).catch { e ->

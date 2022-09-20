@@ -8,13 +8,13 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestDetailBinding
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 
 class ForestDetailAdapter(
     private val _context: ForestDetailFragment
-) : ListAdapter<ForestHoleV2, ForestDetailAdapter.DetailViewHolder>(DIFF_CALLBACK) {
+) : ListAdapter<HoleV2, ForestDetailAdapter.DetailViewHolder>(DIFF_CALLBACK) {
     var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
     override fun onCreateViewHolder(
@@ -37,7 +37,7 @@ class ForestDetailAdapter(
             binding.root
         ) {
 
-        fun bind(hole: ForestHoleV2) {
+        fun bind(hole: HoleV2) {
             binding.hole = hole
             binding.apply {
 
@@ -81,16 +81,16 @@ class ForestDetailAdapter(
     }
 
     companion object {
-        val DIFF_CALLBACK: DiffUtil.ItemCallback<ForestHoleV2> =
-            object : DiffUtil.ItemCallback<ForestHoleV2>() {
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<HoleV2> =
+            object : DiffUtil.ItemCallback<HoleV2>() {
                 override fun areItemsTheSame(
-                    oldItem: ForestHoleV2, newItem: ForestHoleV2
+                    oldItem: HoleV2, newItem: HoleV2
                 ): Boolean {
                     return oldItem.holeId == newItem.holeId
                 }
 
                 override fun areContentsTheSame(
-                    oldItem: ForestHoleV2, newItem: ForestHoleV2
+                    oldItem: HoleV2, newItem: HoleV2
                 ): Boolean {
                     return oldItem == newItem
                 }

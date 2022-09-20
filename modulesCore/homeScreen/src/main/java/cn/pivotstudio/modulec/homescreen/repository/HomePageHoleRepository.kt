@@ -7,15 +7,18 @@ import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse
 import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
+import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
+import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import io.reactivex.Observable
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 import java.util.ArrayList
 
 /**
@@ -26,7 +29,18 @@ import java.util.ArrayList
  * @author:
  */
 @SuppressLint("CheckResult")
-class HomePageHoleRepository {
+class HomePageHoleRepository(
+    private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private var lastTimeStamp: String = DateUtil.getDateTime()
+) {
+
+    companion object {
+        const val TAG = "HomePageHoleRepository"
+        const val STARTING_ID = 0
+        const val INITIAL_OFFSET = 0
+        const val HOLES_LIST_SIZE = 20
+    }
 
     var pHomePageHoles = MutableLiveData<HomepageHoleResponse>()
     var tip = MutableLiveData<String?>()
@@ -71,6 +85,19 @@ class HomePageHoleRepository {
                 tip.value = (e as ResponseThrowable).message
             }
         }))
+    }
+
+    fun loadHoles(): Flow<List<HoleV2>> = flow {
+        emit(
+            hustHoleApiService.getHoles(
+                limit = HOLES_LIST_SIZE,
+                timestamp = lastTimeStamp
+            )
+        )
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
+    }.onEach {
+        refreshTimestamp()
     }
 
     /**
@@ -237,6 +264,10 @@ class HomePageHoleRepository {
                 .withString(Constant.ALIAS, "洞主")
                 .navigation()
         }
+    }
+
+    private fun refreshTimestamp() {
+        lastTimeStamp = DateUtil.getDateTime()
     }
 
 }
