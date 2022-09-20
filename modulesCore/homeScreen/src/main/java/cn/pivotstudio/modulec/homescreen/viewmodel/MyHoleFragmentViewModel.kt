@@ -34,9 +34,6 @@ import java.io.IOException
  * @version :1.0
  * @author
  */
-const val GET_HOLE = 1
-const val GET_FOLLOW = 2
-const val GET_REPLY = 3
 
 class MyHoleFragmentViewModel : ViewModel() {
     private val BASE_URL = RetrofitManager.API
@@ -254,5 +251,11 @@ class MyHoleFragmentViewModel : ViewModel() {
                 }
             })
         }
+    }
+
+    companion object {
+        const val GET_HOLE = 1
+        const val GET_FOLLOW = 2
+        const val GET_REPLY = 3
     }
 }
