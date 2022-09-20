@@ -16,10 +16,10 @@ import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineHoleFollowBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineReplyBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.mine.HoleStarReplyActivity
-import cn.pivotstudio.modulec.homescreen.viewmodel.GET_FOLLOW
-import cn.pivotstudio.modulec.homescreen.viewmodel.GET_HOLE
-import cn.pivotstudio.modulec.homescreen.viewmodel.GET_REPLY
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel
+import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW
+import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_HOLE
+import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_REPLY
 import com.alibaba.android.arouter.launcher.ARouter
 
 
