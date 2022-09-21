@@ -32,12 +32,12 @@ import java.util.ArrayList
 class HomePageHoleRepository(
     private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private var lastTimeStamp: String = DateUtil.getDateTime()
+    private var lastTimeStamp: String = DateUtil.getDateTime(),
+    private var lastOffset: Int = INITIAL_OFFSET
 ) {
 
     companion object {
         const val TAG = "HomePageHoleRepository"
-        const val STARTING_ID = 0
         const val INITIAL_OFFSET = 0
         const val HOLES_LIST_SIZE = 20
     }
@@ -45,52 +45,11 @@ class HomePageHoleRepository(
     var pHomePageHoles = MutableLiveData<HomepageHoleResponse>()
     var tip = MutableLiveData<String?>()
 
-    /**
-     * 获取正常状态树洞
-     *
-     * @param mHolesSequenceCondition 是新更新还是新发布
-     * @param mStartingLoadId         起始id
-     */
-    fun getHolesForNetwork(mHolesSequenceCondition: Boolean, mStartingLoadId: Int) {
-        retrofitService.homepageHoles(
-            true,
-            mHolesSequenceCondition,
-            mStartingLoadId,
-            Constant.CONSTANT_STANDARD_LOAD_SIZE
-        ).compose(NetworkApi.applySchedulers(object :
-            BaseObserver<List<DataBean>>() {
-            override fun onSuccess(requestedDataList: List<DataBean>) {
-                //手动为期添加状态，判断是新更新还是新发布，用于数据绑定，显式在解析的时间后
-                for (item in requestedDataList) {
-                    item.is_last_reply = mHolesSequenceCondition
-                }
-                if (mStartingLoadId != 0) { //上拉加载得到
-
-                    //手动补充为完整response
-                    val lastRequestedData = pHomePageHoles.value
-                    lastRequestedData!!.data.addAll(requestedDataList)
-                    lastRequestedData.model = "LOAD_MORE"
-                    pHomePageHoles.setValue(lastRequestedData)
-                } else { //下拉刷新或者搜索得到
-
-                    //手动补充为完整response
-                    val homepageHoleResponse = HomepageHoleResponse()
-                    homepageHoleResponse.data = requestedDataList
-                    homepageHoleResponse.model = "REFRESH"
-                    pHomePageHoles.setValue(homepageHoleResponse)
-                }
-            }
-
-            override fun onFailure(e: Throwable) {
-                tip.value = (e as ResponseThrowable).message
-            }
-        }))
-    }
-
-    fun loadHoles(): Flow<List<HoleV2>> = flow {
+    fun loadHoles(sortMode: String): Flow<List<HoleV2>> = flow {
         emit(
             hustHoleApiService.getHoles(
                 limit = HOLES_LIST_SIZE,
+                mode = sortMode,
                 timestamp = lastTimeStamp
             )
         )
@@ -98,45 +57,45 @@ class HomePageHoleRepository(
         e.printStackTrace()
     }.onEach {
         refreshTimestamp()
+        lastOffset = 0
     }
 
-    /**
-     * 关键词搜索树洞
-     *
-     * @param et              关键词内容
-     * @param mStartingLoadId 起始id
-     */
-    fun searchHolesForNetwork(et: String?, mStartingLoadId: Int) {
-        if (et != null) {
-            retrofitService.searchHoles(et, mStartingLoadId, Constant.CONSTANT_STANDARD_LOAD_SIZE)
-                .compose(NetworkApi.applySchedulers(object :
-                    BaseObserver<List<DataBean>>() {
-                    override fun onSuccess(requestedDataList: List<DataBean>) {
-                        //手动为期添加状态，判断是新更新还是新发布，用于数据绑定，显式在解析的时间后
-                        for (item in requestedDataList) {
-                            item.is_last_reply = false
-                        }
-                        if (mStartingLoadId != 0) { //上拉加载得到
-                            //手动补充为完整response
-                            val lastRequestedDataList = pHomePageHoles.value
-                            lastRequestedDataList!!.data.addAll(requestedDataList)
-                            lastRequestedDataList.model = "SEARCH_LOAD_MORE"
-                            pHomePageHoles.setValue(lastRequestedDataList)
-                        } else { //下拉刷新或者搜索得到
+    fun loadMoreHoles(sortMode: String): Flow<List<HoleV2>> = flow {
+        lastOffset += HOLES_LIST_SIZE
+        emit(
+            hustHoleApiService.getHoles(
+                limit = HOLES_LIST_SIZE,
+                timestamp = lastTimeStamp,
+                offset = lastOffset,
+                mode = sortMode
+            )
+        )
+    }.flowOn(dispatcher).catch { e ->
+        tip.value = e.message
+        e.printStackTrace()
+    }
 
-                            //手动补充为完整response
-                            val homepageHoleResponse = HomepageHoleResponse()
-                            homepageHoleResponse.data = requestedDataList
-                            homepageHoleResponse.model = "SEARCH_REFRESH"
-                            pHomePageHoles.setValue(homepageHoleResponse)
-                        }
-                    }
+    fun searchHolesBy(queryKey: String) = flow {
+        emit(hustHoleApiService.searchHolesByKey(
+            key = queryKey,
+        ))
+    }.onEach {
+        lastOffset = 0
+    }.flowOn(dispatcher).catch { e ->
+        tip.value = e.message
+        e.printStackTrace()
+    }
 
-                    override fun onFailure(e: Throwable?) {
-                        tip.value = (e as ResponseThrowable).message
-                    }
-                }))
-        }
+    fun loadMoreSearchHoles(queryKey: String) = flow {
+        emit(hustHoleApiService.searchHolesByKey(
+            key = queryKey,
+            offset = lastOffset
+        ))
+    }.onEach {
+        lastOffset += HOLES_LIST_SIZE
+    }.flowOn(dispatcher).catch { e ->
+        tip.value = e.message
+        e.printStackTrace()
     }
 
     /**

@@ -110,7 +110,8 @@ class ForestViewModel : ViewModel() {
                 .collectLatest {
                     val newItems = _holesV2.value.toMutableList()
                     for ((i, newHole) in newItems.withIndex()) {
-                        if (hole.holeId == newHole.holeId) newItems[i] = newItems[i].copy(followCount = 100, isFollow = true)
+                        if (hole.holeId == newHole.holeId) newItems[i] =
+                            newItems[i].copy(followCount = 100, isFollow = true)
                     }
                     _holesV2.emit(newItems)
                 }
@@ -162,6 +163,14 @@ class ForestViewModel : ViewModel() {
     fun loadHolesV2() {
         viewModelScope.launch {
             repository.loadForestHolesV2()
+                .map { holes ->
+                    holes.forEach { hole ->
+                        hole.forestAvatarUrl = _forestsV2.value.find {
+                            it.forestId == hole.forestId
+                        }?.backUrl
+                    }
+                    holes
+                }
                 .collectLatest {
                     holesLoadState.value = LoadStatus.DONE
                     _holesV2.emit(it)

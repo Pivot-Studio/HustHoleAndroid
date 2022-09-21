@@ -2,19 +2,34 @@ package cn.pivotstudio.modulec.homescreen.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.modulec.homescreen.databinding.ItemNoticeBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemNoticeHeaderBinding
-import cn.pivotstudio.modulec.homescreen.model.Notice
 import cn.pivotstudio.modulec.homescreen.ui.fragment.NoticeFragment
 
 class NoticeAdapter(private val context: NoticeFragment) :
-    ListAdapter<Notice, RecyclerView.ViewHolder>(Notice.DIFF_CALLBACK) {
+    ListAdapter<Reply, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         const val TYPE_NOTICE_HEADER = 0
         const val TYPE_NOTICE_CONTENT = 1
+        val DIFF_CALLBACK: DiffUtil.ItemCallback<Reply> =
+            object : DiffUtil.ItemCallback<Reply>() {
+                override fun areItemsTheSame(
+                    oldItem: Reply, newItem: Reply
+                ): Boolean {
+                    return oldItem.replyId == newItem.replyId
+                }
+
+                override fun areContentsTheSame(
+                    oldItem: Reply, newItem: Reply
+                ): Boolean {
+                    return false
+                }
+            }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -52,14 +67,14 @@ class NoticeAdapter(private val context: NoticeFragment) :
     //内容 ViewHolder
     inner class ContentViewHolder(private val binding: ItemNoticeBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(notice: Notice) {
-            binding.notice = notice
-            binding.layoutNotice.setOnClickListener { context.navToSpecificHole(notice.holeId.toInt()) }
+        fun bind(reply: Reply) {
+            binding.reply = reply
+            binding.layoutReply.setOnClickListener { context.navToSpecificHole(reply.holeId.toInt()) }
         }
     }
 
     inner class HeaderViewHolder(private val binding: ItemNoticeHeaderBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
     }
+
 }

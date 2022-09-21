@@ -383,6 +383,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_mine.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_myhole.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_mystar.xml" value="0.28229166666666666" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/fragment_notice.xml" value="0.13728470111448834" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item1.xml" value="0.286231884057971" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_all_forest.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_detailforesthead.xml" value="0.2572463768115942" />
@@ -390,13 +391,14 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_card.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_head.xml" value="0.2572463768115942" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_hole.xml" value="0.5635416666666667" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_hole.xml" value="0.2802164713541667" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forestdetailiconlist.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_foresttype.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_homepagebottomblock.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_label.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_nosearch.xml" value="0.28229166666666666" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_notice.xml" value="0.32038269042968753" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_requestfailed.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_updatehead.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/linearlayout_bottomnavigationbar.xml" value="0.27853260869565216" />

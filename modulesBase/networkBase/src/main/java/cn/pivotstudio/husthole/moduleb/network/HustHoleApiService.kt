@@ -3,6 +3,7 @@ package cn.pivotstudio.husthole.moduleb.network
 import android.content.Context
 import cn.pivotstudio.husthole.moduleb.network.model.*
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
+import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -69,14 +70,6 @@ object HustHoleApi {
 
 
 interface HustHoleApiService {
-
-    @GET("hole/list")
-    suspend fun getHoles(
-        @Query("limit") limit: Int = 20,
-        @Query("mode") mode: String = "LATEST_REPLY",
-        @Query("offset") offset: Int = 0,
-        @Query("timestamp") timestamp: String
-    ): List<HoleV2>
 
     /** 我加入的小树林 */
     @GET("user/forest")
@@ -165,11 +158,35 @@ interface HustHoleApiService {
     )
 
     //========================================================================================================
+
+    /** 搜索单个洞 */
     @GET("hole/one")
     suspend fun loadTheHole(
         @Query("holeId") holeId: String
     ): HoleV2
 
+    /** 搜索树洞 */
+    @GET("hole/search")
+    suspend fun searchHolesByKey(
+        @Query("key") key: String,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0
+    ): List<HoleV2>
+
+    /** 树洞列表 */
+    @GET("hole/list")
+    suspend fun getHoles(
+        @Query("limit") limit: Int = 20,
+        @Query("mode") mode: String = NetworkConstant.SortMode.LATEST_REPLY,
+        @Query("offset") offset: Int = 0,
+        @Query("timestamp") timestamp: String
+    ): List<HoleV2>
+
+    @GET("msg/reply")
+    suspend fun getReplies(
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0
+    ): List<Reply>
 
 }
 

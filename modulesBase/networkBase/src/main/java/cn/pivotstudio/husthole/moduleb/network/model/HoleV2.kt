@@ -87,3 +87,29 @@ data class HoleV2(
 data class TokenResponse(
     @Json(name = "token") val token: String
 )
+
+data class Reply (
+    val checked: Boolean? = null,
+
+    val content: String? = null,
+
+    @Json(name = "creatAt")
+    val createAt: String,
+
+    val holeId: String,
+
+    val nickname: String? = null,
+
+    val replyDeleted: Boolean? = null,
+
+    val replyId: String? = null,
+
+    val replyMsgId: String? = null,
+
+    val type: ReplyType? = null
+)
+
+enum class ReplyType {
+    REPLY_TO_HOLE,
+    REPLY_TO_REPLY
+}

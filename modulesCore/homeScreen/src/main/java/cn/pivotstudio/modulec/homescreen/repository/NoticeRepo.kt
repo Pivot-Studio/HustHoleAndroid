@@ -1,19 +1,25 @@
 package cn.pivotstudio.modulec.homescreen.repository
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
+import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
+import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
+import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.modulec.homescreen.model.Notice
 import cn.pivotstudio.modulec.homescreen.model.NoticeResponse
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class NoticeRepo {
+class NoticeRepo(
+    private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
+    private var lastOffset: Int = 0
+) {
 
     companion object {
         const val TAG = "NoticeRepo"
@@ -44,6 +50,33 @@ class NoticeRepo {
                 }
 
             })
+    }
+
+    fun loadRepliesV2(): Flow<List<Reply>> = flow {
+        emit(hustHoleApiService.getReplies())
+    }.flowOn(dispatcher).catch { e ->
+        state.value = LoadStatus.ERROR
+        e.printStackTrace()
+    }.onEach {
+        state.value = LoadStatus.LOADING
+    }.onCompletion {
+        state.value = LoadStatus.DONE
+    }
+
+    fun loadMoreV2(): Flow<List<Reply>> = flow {
+        emit(
+            hustHoleApiService.getReplies(
+                offset = lastOffset
+            )
+        )
+    }.onEach {
+        lastOffset += LIST_SIZE
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
+    }.onEach {
+        state.value = LoadStatus.LOADING
+    }.onCompletion {
+        state.value = LoadStatus.DONE
     }
 
     fun loadMore(stateFlow: MutableStateFlow<List<Notice>>) {

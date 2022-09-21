@@ -115,7 +115,7 @@ class ForestFragment : BaseFragment() {
                     }
                 }
 
-                holesLoadState.observe(viewLifecycleOwner) { it ->
+                holesLoadState.observe(viewLifecycleOwner) {
                     when (it) {
                         LoadStatus.DONE -> {
                             recyclerViewForestHoles.visibility = VISIBLE

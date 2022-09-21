@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
@@ -16,9 +17,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 /**
@@ -39,17 +38,63 @@ class HomePageViewModel : BaseViewModel() {
     private var _isLatestReply = MutableStateFlow(false)
     val isLatestReply: StateFlow<Boolean> = _isLatestReply
 
+    private var _loading = MutableStateFlow(false)
+    val loading: StateFlow<Boolean> = _loading
+
+    private var _sortMode: String = NetworkConstant.SortMode.LATEST_REPLY
+
     private var _loadLaterHoleId = -1
 
     init {
         loadHolesV2()
     }
 
-    fun loadHolesV2() {
+    fun loadHolesV2(sortMode: String = _sortMode) {
+        isSearch = false
         viewModelScope.launch {
-            repository.loadHoles()
+            _loading.emit(true)
+            repository.loadHoles(sortMode)
+                .onEach {
+                    _loading.emit(false)
+                    _sortMode = sortMode
+                }
                 .collectLatest {
                     _holesV2.emit(it)
+                }
+        }
+    }
+
+    fun loadMoreHoles(sortMode: String = _sortMode) {
+        if (isSearch) {
+            loadMoreSearchHoles()
+            return
+        }
+        viewModelScope.launch {
+            repository.loadMoreHoles(sortMode)
+                .collectLatest {
+                    _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it) })
+                }
+        }
+    }
+
+    fun searchHolesV2(queryKey: String) {
+        queryKey.takeIf { it.isNotBlank() }?.let {
+            viewModelScope.launch {
+                _loading.emit(true)
+                repository.searchHolesBy(it)
+                    .onEach { _loading.emit(false) }
+                    .collectLatest { holes ->
+                        _holesV2.emit(holes)
+                    }
+            }
+        }
+    }
+
+    private fun loadMoreSearchHoles() {
+        viewModelScope.launch {
+            repository.loadMoreSearchHoles(searchKeyword)
+                .collectLatest {
+                    _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it) })
                 }
         }
     }
@@ -60,31 +105,28 @@ class HomePageViewModel : BaseViewModel() {
 
 
     val tip: MutableLiveData<String?> = repository.tip
-    private var mIsSearch: Boolean? = null //是否是搜索状态
-    private var mSearchKeyword: String? = null //搜索关键词
+    private var mIsSearch: Boolean = false //是否是搜索状态
+    private var mSearchKeyword: String = "" //搜索关键词
     private var mIsDescend: Boolean? = null //是新发布树洞还是新更新树洞
     private var mStartLoadId: Int? = null //网络起始id
     var pClickDataBean: DataBean? = null
-    var isSearch: Boolean?
+    var isSearch: Boolean
         get() {
-            if (mIsSearch == null) {
-                mIsSearch = false
-            }
             return mIsSearch
         }
         set(pIsSearch) {
             mIsSearch = pIsSearch
         }
-    var searchKeyword: String?
+
+
+    var searchKeyword: String
         get() {
-            if (mSearchKeyword == null) {
-                mSearchKeyword = ""
-            }
             return mSearchKeyword
         }
         set(pSearchKeyword) {
             mSearchKeyword = pSearchKeyword
         }
+
     var isDescend: Boolean?
         get() {
             if (mIsDescend == null) {
@@ -105,31 +147,6 @@ class HomePageViewModel : BaseViewModel() {
         set(pStartLoadId) {
             mStartLoadId = pStartLoadId
         }
-
-    /**
-     * 获取正常树洞列表
-     *
-     * @param mStartingLoadId 起始id
-     */
-    fun refreshHoleList(mStartingLoadId: Int) {
-        isDescend?.let { repository.getHolesForNetwork(it, mStartingLoadId) }
-    }
-
-    /**
-     * 搜索单个树洞
-     */
-    fun searchSingleHole() {
-        repository.searchSingleHoleForNetwork(searchKeyword!!)
-    }
-
-    /**
-     * 搜索相关关键词的所有树洞
-     *
-     * @param mStartingLoadId 起始id
-     */
-    fun searchHoleList(mStartingLoadId: Int) {
-        repository.searchHolesForNetwork(searchKeyword, mStartingLoadId)
-    }
 
     /**
      * 涉及到网络请求相关的点击事件
