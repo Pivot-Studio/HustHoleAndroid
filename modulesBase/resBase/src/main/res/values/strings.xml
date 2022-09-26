@@ -14,7 +14,7 @@
     <string name="notification_zh">通知</string>
     <string name="mine_zh">我的</string>
 
-    <string name="reply_count">共 %s 条回复 ></string>
+
 
     <string name="page1fragment_1">搜搜你想倾听的</string>
     <string name="page1fragment_2">树洞广场</string>
@@ -63,8 +63,7 @@
     <string name="page2_applyforest_12">添加封面图片</string>
     <string name="page2_applyforest_13">提交</string>
     <string name="no_joined_forest">还没有加入小树林噢～</string>
-    <string name="no_notice">还没有通知噢…</string>
-    <string name="no_reply">还没有评论噢…</string>
+    <string name="no_notice">还没有通知噢...</string>
 
 
     <string name="commment_1">洞主</string>
@@ -135,20 +134,6 @@
     <string name="check_update">检查更新</string>
     <string name="verify_email">验证校园邮箱</string>
     <string name="hang_around">我再逛逛</string>
-    <string name="norm_1037">1037树洞社区规范</string>
-    <string name="update_date">更新日期：2021年3月11日</string>
-    <string name="add_shield">添加屏蔽关键词</string>
-    <string name="word_shielded">已屏蔽的关键词</string>
-    <string name="add">添加</string>
-    <string name="commit">提交</string>
-    <string name="rec_hole">🙂你在多大程度上愿意向他人推荐1037树洞？</string>
-    <string name="eval">评价一下</string>
-    <string name="adv">给点建议</string>
-    <string name="advice">建议</string>
-    <string name="error">故障</string>
-    <string name="others">其他</string>
-    <string name="contact_way">联系我们：husthole@pivotstudio.cn</string>
-    <string name="pivot_purpose">1037 树洞是面向华科学生群体， 主打情感倾诉、校园互动、兴趣交流等功能的校园产品。我们期待为华科学子打造一个自由而友善、坦率而正直的社交平台。</string>
     <string name="韵酒蛋包饭">韵酒蛋包饭</string>
     <string name="分享">分享</string>
     <string name="分享到">分享到</string>
@@ -177,6 +162,4 @@
     <string name="discover_more">发现更多</string>
     <string name="hot_tag">热评</string>
 
-    <string name="res_network_error">糟糕！网络出问题了，请检查网络连接</string>
-    <string name="res_no_search_result">暂无搜索内容</string>
 </resources>

@@ -142,7 +142,7 @@ class MyHoleFollowReplyFragment(val type: Int) : Fragment() {
     }
 
     companion object {
-        private const val TAG = "MyHoleFollowReplyFragment"
+        const val TAG = "MyHoleFollowReplyFragment"
         @JvmStatic
         fun newInstance(type: Int): MyHoleFollowReplyFragment {
             return MyHoleFollowReplyFragment(type)

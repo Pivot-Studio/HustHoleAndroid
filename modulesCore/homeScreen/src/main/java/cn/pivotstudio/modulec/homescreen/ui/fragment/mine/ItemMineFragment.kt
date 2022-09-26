@@ -30,10 +30,10 @@ class ItemMineFragment : Fragment() {
     private var type: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if ((activity as HomeScreenActivity).supportActionBar != null) {
             (activity as HomeScreenActivity).supportActionBar!!.hide()
         }
-        super.onCreate(savedInstanceState)
         arguments?.let {
             type = it.getInt("optionType")
         }
@@ -55,7 +55,7 @@ class ItemMineFragment : Fragment() {
         }
         binding.myTitle.text = context?.getString(viewModel.myNameList.value!![type])
         if (type == PERSONAL_SETTING || type == SHIELD_SETTING || type == UPDATE) {
-            val adapter = MineOthersAdapter(MineFragmentViewModel.DETAIL, viewModel, this)
+            val adapter = MineOthersAdapter(MineFragmentViewModel.DETAIL, viewModel)
             when (type) {
                 PERSONAL_SETTING -> viewModel.mySettingList.observe(viewLifecycleOwner) { list ->
                     adapter.submitList(list)
@@ -73,13 +73,6 @@ class ItemMineFragment : Fragment() {
             }
         } else {
             binding.rvTitle.visibility = GONE
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if((activity as HomeScreenActivity).supportActionBar != null){
-            (activity as HomeScreenActivity).supportActionBar!!.hide()
         }
     }
 }
