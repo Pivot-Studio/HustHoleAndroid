@@ -36,8 +36,7 @@
             android:paddingVertical="@dimen/dp_14"
             android:paddingStart="@dimen/dp_20"
             android:text="@{context.getResources().getString(name)}"
-            android:textSize="@dimen/sp_14"
-            android:textColor="@{context.getResources().getString(name) == @string/login_out ? @color/HH_Reminder_Warning : @color/GrayScale_20}" />
+            android:textAppearance="@style/HustHoleTypography.Body2" />
 
         <TextView
             android:id="@+id/tv_verify"

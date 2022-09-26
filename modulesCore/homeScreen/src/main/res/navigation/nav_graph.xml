@@ -68,8 +68,8 @@
             android:id="@+id/action_forest_detail_fragment_to_forest_fragment"
             app:destination="@id/forest_fragment" />
         <argument
-            android:name="forestBrief"
-            app:argType="cn.pivotstudio.husthole.moduleb.network.model.ForestBrief" />
+            android:name="forestId"
+            app:argType="integer" />
     </fragment>
     <fragment
         android:id="@+id/holeFollowReplyFragment"
@@ -100,20 +100,5 @@
         <argument
             android:name="isVerified"
             app:argType="boolean" />
-        <action
-            android:id="@+id/action_itemDetailFragment2_to_verifyFragment"
-            app:destination="@id/verifyFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/verifyFragment"
-        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.mine.VerifyFragment"
-        android:label="VerifyFragment" >
-        <action
-            android:id="@+id/action_verifyFragment_to_howToVerifyFragment"
-            app:destination="@id/howToVerifyFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/howToVerifyFragment"
-        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.mine.HowToVerifyFragment"
-        android:label="HowToVerifyFragment" />
 </navigation>

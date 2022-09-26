@@ -30,7 +30,6 @@ import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
-import com.google.android.material.navigation.NavigationBarView
 
 /**
  * @classname: HomeScreenActivity
@@ -43,17 +42,6 @@ import com.google.android.material.navigation.NavigationBarView
 class HomeScreenActivity : BaseActivity() {
     private lateinit var binding: ActivityHsHomescreenBinding
     private lateinit var navController: NavController
-
-    private val fragmentList = listOf(
-        R.id.all_forest_fragment,
-        R.id.forest_detail_fragment,
-        R.id.holeFollowReplyFragment,
-        R.id.itemMineFragment,
-        R.id.itemDetailFragment2,
-        R.id.verifyFragment,
-        R.id.howToVerifyFragment
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hs_homescreen)
@@ -68,7 +56,8 @@ class HomeScreenActivity : BaseActivity() {
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val mMainNavFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        when (val fragment = mMainNavFragment!!.childFragmentManager.primaryNavigationFragment) {
+        val fragment = mMainNavFragment!!.childFragmentManager.primaryNavigationFragment
+        when (fragment) {
             is HomePageFragment,
             is ForestDetailFragment,
             is ForestFragment -> {
@@ -102,14 +91,13 @@ class HomeScreenActivity : BaseActivity() {
             )
         }
 
-
         navController.addOnDestinationChangedListener { _, destination, argument ->
             supportActionBar?.title = destination.label
 
             // BottomNavigationBar显示情况特判
             binding.apply {
                 layoutBottomBar.isVisible =
-                    !fragmentList.any { it == destination.id }
+                    (destination.id != R.id.all_forest_fragment && destination.id != R.id.forest_detail_fragment && destination.id != R.id.holeFollowReplyFragment)
 
                 bottomNavigationView.setupWithNavController(navController)
                 bottomNavigationView.background = null
@@ -125,8 +113,6 @@ class HomeScreenActivity : BaseActivity() {
             }
 
         }
-
-
 
     }
 
@@ -194,12 +180,10 @@ class HomeScreenActivity : BaseActivity() {
      * @return
      */
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        navController.currentDestination?.let { navDestination ->
-            if (fragmentList.any { it == navDestination.id })
+        navController.currentDestination?.let {
+            if (it.id == R.id.all_forest_fragment || it.id == R.id.forest_detail_fragment || it.id == R.id.holeFollowReplyFragment) {
                 return navController.popBackStack()
-//            if (it.id == R.id.all_forest_fragment || it.id == R.id.forest_detail_fragment || it.id == R.id.holeFollowReplyFragment) {
-//                return navController.popBackStack()
-//            }
+            }
 
             if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
                 val secondTime = System.currentTimeMillis()
@@ -213,10 +197,6 @@ class HomeScreenActivity : BaseActivity() {
             }
         }
         return super.onKeyUp(keyCode, event)
-    }
-
-    fun setOnBottomBarItemReselectedListener(listener: NavigationBarView.OnItemReselectedListener) {
-        binding.bottomNavigationView.setOnItemReselectedListener(listener)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

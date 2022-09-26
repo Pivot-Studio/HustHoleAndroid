@@ -26,10 +26,10 @@ class HoleFollowReplyFragment : Fragment() {
     private var type = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         if((activity as HomeScreenActivity).supportActionBar != null){
             (activity as HomeScreenActivity).supportActionBar!!.hide()
         }
-        super.onCreate(savedInstanceState)
         arguments?.let {
             type = it.getInt("fragType")
         }
