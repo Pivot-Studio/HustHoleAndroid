@@ -5,7 +5,7 @@ import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
-import cn.pivotstudio.husthole.moduleb.network.model.Reply
+import cn.pivotstudio.husthole.moduleb.network.model.Replied
 import cn.pivotstudio.modulec.homescreen.model.Notice
 import cn.pivotstudio.modulec.homescreen.model.NoticeResponse
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
@@ -52,18 +52,20 @@ class NoticeRepo(
             })
     }
 
-    fun loadRepliesV2(): Flow<List<Reply>> = flow {
+    fun loadRepliesV2(): Flow<List<Replied>> = flow {
         emit(hustHoleApiService.getReplies())
     }.flowOn(dispatcher).catch { e ->
         state.value = LoadStatus.ERROR
         e.printStackTrace()
     }.onEach {
+        lastOffset = 0
         state.value = LoadStatus.LOADING
     }.onCompletion {
+        lastOffset += LIST_SIZE
         state.value = LoadStatus.DONE
     }
 
-    fun loadMoreV2(): Flow<List<Reply>> = flow {
+    fun loadMoreV2(): Flow<List<Replied>> = flow {
         emit(
             hustHoleApiService.getReplies(
                 offset = lastOffset

@@ -178,15 +178,9 @@ class HomePageFragment : BaseFragment() {
     private fun onClick(v: View) {
         val id = v.id
         if (id == R.id.btn_ppwhomepage_latest_reply) {
-            if (!viewModel.isDescend!!) {
-                viewModel.isDescend = true
-                viewModel.loadHolesV2(sortMode = NetworkConstant.SortMode.LATEST_REPLY)
-            }
+            viewModel.loadHolesV2(sortMode = NetworkConstant.SortMode.LATEST_REPLY)
         } else if (id == R.id.btn_ppwhomepage_latest_publish) {
-            if (viewModel.isDescend == true) {
-                viewModel.isDescend = false
-                viewModel.loadHolesV2(sortMode = NetworkConstant.SortMode.LATEST)
-            }
+            viewModel.loadHolesV2(sortMode = NetworkConstant.SortMode.LATEST)
         }
     }
 

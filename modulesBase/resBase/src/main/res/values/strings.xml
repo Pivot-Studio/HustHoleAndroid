@@ -14,7 +14,7 @@
     <string name="notification_zh">通知</string>
     <string name="mine_zh">我的</string>
 
-
+    <string name="reply_count">共 %s 条回复 ></string>
 
     <string name="page1fragment_1">搜搜你想倾听的</string>
     <string name="page1fragment_2">树洞广场</string>

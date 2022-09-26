@@ -13,10 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://hustholev2.pivotstudio.cn/api/"
@@ -142,9 +139,19 @@ interface HustHoleApiService {
         @Body holeId: RequestBody.HoleId
     ): Response<Unit>
 
+    @POST("interact/follow")
+    suspend fun followTheReply(
+        @Body reply: RequestBody.Reply
+    ): Response<Unit>
+
     @POST("interact/unfollow")
     suspend fun unFollowTheHole(
         @Body holeId: RequestBody.HoleId
+    ): Response<Unit>
+
+    @POST("interact/unfollow")
+    suspend fun unFollowTheReply(
+        @Body reply: RequestBody.Reply
     ): Response<Unit>
 
     @POST("interact/like")
@@ -158,6 +165,18 @@ interface HustHoleApiService {
     )
 
     //========================================================================================================
+
+    /** 添加树洞 */
+    @GET("hole/add")
+    suspend fun publishAHole(
+        @Body holeRequest: RequestBody.HoleRequest
+    )
+
+    /** 删除树洞 */
+    @GET("hole/{holeId}")
+    suspend fun deleteTheHole(
+        @Path("holeId") holeId: String
+    )
 
     /** 搜索单个洞 */
     @GET("hole/one")
@@ -186,6 +205,27 @@ interface HustHoleApiService {
     suspend fun getReplies(
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0
+    ): List<Replied>
+
+    //========================================================================================================
+    /** 用户浏览评论 */
+    @GET("reply/list")
+    suspend fun getHoleReplies(
+        @Query("descend") descend: Boolean = true,
+        @Query("holeId") holeId: String,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0,
+        @Query("timestamp") timestamp: String
+    ): List<ReplyWrapper>
+
+    /** 楼中楼评论列表 */
+    @GET("reply/innerList")
+    suspend fun getInnerReplies(
+        @Query("descend") descend: Boolean = true,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0,
+        @Query("replyId") replyId: String,
+        @Query("timestamp") timestamp: String
     ): List<Reply>
 
 }

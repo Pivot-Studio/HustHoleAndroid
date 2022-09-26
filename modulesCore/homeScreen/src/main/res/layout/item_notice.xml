@@ -7,7 +7,7 @@
 
         <variable
             name="reply"
-            type="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
+            type="cn.pivotstudio.husthole.moduleb.network.model.Replied" />
     </data>
 
     <LinearLayout

@@ -19,9 +19,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import cn.pivotstudio.modulep.hole.R;
-import cn.pivotstudio.modulep.hole.databinding.ActivityHoleBinding;
+import cn.pivotstudio.modulep.hole.databinding.Fragment1stLevelReplyBinding;
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity;
-import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel;
+import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel;
 
 /**
  * @classname:EmojiRecyclerViewAdapter
@@ -30,13 +30,13 @@ import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel;
  * @version:1.0
  * @author:
  */
-public class EmojiRecyclerViewAdapter extends BaseRecyclerViewAdapter {
+public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
     private final static Integer Title = 0, Used_Emoji = 1, Emoji = 2;
     private LinkedList<Integer> mUsedEmoji;
     private LinkedList<Integer> mUsedEmojiCopy;
     private List<Integer> mEmoji;
     private List<String> mEmojiName;
-    private ActivityHoleBinding mActivityBinding;
+    private Fragment1stLevelReplyBinding binding;
 
     @Override
     public int getItemViewType(int position) {
@@ -83,9 +83,9 @@ public class EmojiRecyclerViewAdapter extends BaseRecyclerViewAdapter {
             super(itemView);
             img = itemView.findViewById(R.id.iv_emoji);
             itemView.setOnClickListener(v -> {
-                mActivityBinding.etReplyPost.
+                binding.etReplyPost.
                         getText().
-                        insert(mActivityBinding.etReplyPost.getSelectionStart(), mEmojiName.get(position));
+                        insert(binding.etReplyPost.getSelectionStart(), mEmojiName.get(position));
                 changeData(position);
             });
 
@@ -106,9 +106,9 @@ public class EmojiRecyclerViewAdapter extends BaseRecyclerViewAdapter {
             super(itemView);
             img = itemView.findViewById(R.id.iv_emoji);
             itemView.setOnClickListener(v -> {
-                mActivityBinding.etReplyPost.
+                binding.etReplyPost.
                         getText().
-                        insert(mActivityBinding.etReplyPost.getSelectionStart(), mEmojiName.get(mUsedEmoji.get(position)));
+                        insert(binding.etReplyPost.getSelectionStart(), mEmojiName.get(mUsedEmoji.get(position)));
                 changeData(mUsedEmoji.get(position));
 
             });
@@ -135,9 +135,9 @@ public class EmojiRecyclerViewAdapter extends BaseRecyclerViewAdapter {
 
     }
 
-    public EmojiRecyclerViewAdapter(Context context, ActivityHoleBinding mActivityBinding, HoleViewModel mViewModel) {
+    public EmojiRvAdapter(Context context, Fragment1stLevelReplyBinding binding, SpecificHoleViewModel mViewModel) {
         super(context);
-        this.mActivityBinding = mActivityBinding;
+        this.binding = binding;
         mEmoji = EmotionUtil.getResourceList();
         mEmojiName = EmotionUtil.getResourceName();
         mUsedEmoji = new LinkedList<>();
@@ -174,13 +174,13 @@ public class EmojiRecyclerViewAdapter extends BaseRecyclerViewAdapter {
     @Override
     public RecyclerView.ViewHolder onCreateBaseViewHolder(ViewGroup parent, int viewType) {
         if (viewType == Title) {
-            return new EmojiRecyclerViewAdapter.TitleHolder(LayoutInflater.from(parent.getContext())
+            return new EmojiRvAdapter.TitleHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_emoji_title, parent, false));
         } else if (viewType == Used_Emoji) {
-            return new EmojiRecyclerViewAdapter.UsedEmojiHolder(LayoutInflater.from(parent.getContext())
+            return new EmojiRvAdapter.UsedEmojiHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_emoji, parent, false));
         } else if (viewType == Emoji) {
-            return new EmojiRecyclerViewAdapter.EmojiHolder(LayoutInflater.from(parent.getContext())
+            return new EmojiRvAdapter.EmojiHolder(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.item_emoji, parent, false));
         }
         return null;
@@ -189,11 +189,11 @@ public class EmojiRecyclerViewAdapter extends BaseRecyclerViewAdapter {
     @Override
     public void onBindBaseViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof EmojiHolder) {
-            ((EmojiRecyclerViewAdapter.EmojiHolder) holder).bind(position - 2 - mUsedEmoji.size());
+            ((EmojiRvAdapter.EmojiHolder) holder).bind(position - 2 - mUsedEmoji.size());
         } else if (holder instanceof TitleHolder) {
-            ((EmojiRecyclerViewAdapter.TitleHolder) holder).bind(position);
+            ((EmojiRvAdapter.TitleHolder) holder).bind(position);
         } else if (holder instanceof UsedEmojiHolder) {
-            ((EmojiRecyclerViewAdapter.UsedEmojiHolder) holder).bind(position - 1);
+            ((EmojiRvAdapter.UsedEmojiHolder) holder).bind(position - 1);
         }
     }
 

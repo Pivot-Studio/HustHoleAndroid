@@ -18,9 +18,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import cn.pivotstudio.modulec.homescreen.R;
 
 /**
- * @classname:HomePageOptionBox
- * @description:选项栏
- * @date:2022/5/5 2:19
+ * @classname: HomePageOptionBox
+ * @description: 选项栏
+ * @date: 2022/5/5 2:19
  * @version:1.0
  * @author:
  */

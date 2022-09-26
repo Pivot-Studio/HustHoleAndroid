@@ -48,13 +48,13 @@ public class BaseActivity extends AppCompatActivity {
         Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
     }
 
-    protected void openKeyBoard(EditText et) {
+    public void openKeyBoard(EditText et) {
         et.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
     }
 
-    protected void closeKeyBoard() {
+    public void closeKeyBoard() {
         InputMethodManager imm =
             (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         // 隐藏软键盘

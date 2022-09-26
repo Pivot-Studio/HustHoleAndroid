@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10000"
+            android:background="@color/GrayScale_95"
+            android:minHeight="@dimen/dp_720"
+            android:orientation="vertical">
+
+            <com.scwang.smart.refresh.layout.SmartRefreshLayout
+                android:id="@+id/layout_refresh"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp_720"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.scwang.smart.refresh.header.ClassicsHeader
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <androidx.core.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_replies"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_first_level_reply" />
+
+                </androidx.core.widget.NestedScrollView>
+
+            </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+            <Button
+                android:id="@+id/btn_replylist_owner"
+                android:layout_width="@dimen/dp_64"
+                android:layout_height="@dimen/dp_28"
+                android:layout_marginEnd="@dimen/dp_22"
+                android:layout_marginBottom="@dimen/dp_20"
+                android:background="@drawable/ic_onlylookmaster"
+                android:onClick="onClick"
+                android:text="只看洞主"
+                android:textAppearance="@style/HustHoleTypography.Button3"
+                android:textColor="@color/GrayScale_50"
+                app:layout_constraintBottom_toBottomOf="@+id/layout_refresh"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:ownerText="@{viewModel.is_owner}" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout_send_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/GrayScale_100"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext
+                android:id="@+id/et_reply_post"
+                android:layout_width="@dimen/dp_223"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/dp_12"
+                android:layout_marginStart="@dimen/dp_20"
+                android:background="@drawable/searchbar"
+                android:inputType="textMultiLine"
+                android:maxLength="500"
+                android:maxLines="5"
+                android:minHeight="@dimen/dp_32"
+                android:onClick="onClick"
+                android:paddingLeft="@dimen/dp_10"
+                android:textColor="@color/GrayScale_0"
+                android:textColorHint="@color/GrayScale_70"
+                android:textSize="@dimen/sp_14"
+                app:hintText="@{viewModel.answered}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_open_emoji"
+                android:layout_width="@dimen/dp_28"
+                android:layout_height="@dimen/dp_28"
+                android:layout_marginEnd="@dimen/dp_12"
+                app:emojiBar="@{viewModel.is_emoji}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_send"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_emoji_28dp" />
+
+            <Button
+                android:id="@+id/btn_send"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_32"
+                android:layout_gravity="center"
+                android:layout_marginEnd="@dimen/dp_10"
+                android:background="@drawable/standard_button_gray"
+                android:minWidth="@dimen/dp_60"
+                android:text="发送"
+                android:textAppearance="@style/HustHoleTypography.Button2"
+                android:textColor="@color/GrayScale_100"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_emoji"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_286"
+            android:visibility="gone"
+
+
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:layout_height="@dimen/dp_50"
+            tools:listitem="@layout/item_emoji"
+            tools:orientation="horizontal"
+            tools:visibility="visible" />
+
+    </LinearLayout>
+</layout>

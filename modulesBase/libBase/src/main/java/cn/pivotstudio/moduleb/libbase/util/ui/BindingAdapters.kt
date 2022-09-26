@@ -58,13 +58,12 @@ fun onClickMore(view: ImageView, is_mine: Boolean) {
  * 时间加载
  *
  * @param view              todo
- * @param is_last_reply     todo
+ * @param isLatestReply     todo
  * @param created_timestamp todo
  */
 @BindingAdapter("timeSign", "time")
-fun onTime(view: TextView, is_last_reply: Boolean, created_timestamp: String?) {
-    //后端搜索给的时间慢半个小时，麻
-    val time = TimeUtil.time(created_timestamp) + if (is_last_reply) "更新" else "发布"
+fun onTime(view: TextView, isLatestReply: Boolean, created_timestamp: String?) {
+    val time = TimeUtil.time(created_timestamp) + if (isLatestReply) "更新" else "发布"
     view.text = time
 }
 
@@ -87,7 +86,8 @@ fun onForestIconShow(view: Button, forestName: String, role: String?) {
             view.setPadding(15, 5, 6, 6)
             view.setTextColor(view.context.resources.getColor(R.color.GrayScale_50))
             view.text = " Pivot Studio团队 "
-            val homepressed = view.context.resources.getDrawable(R.drawable.ic_pivot_studio_16dp, null)
+            val homepressed =
+                view.context.resources.getDrawable(R.drawable.ic_pivot_studio_16dp, null)
             homepressed.setBounds(0, 0, homepressed.minimumWidth, homepressed.minimumHeight)
             view.setCompoundDrawables(homepressed, null, null, null)
             view.setBackgroundResource(R.drawable.tag_gray)
@@ -170,18 +170,6 @@ fun bindBlurImage(imgView: ImageView, imgUrl: String?) {
             .error(R.drawable.icon)
             .into(imgView)
     }
-}
-
-/**
- * 时间加载
- *
- * @param view
- * @param created_timestamp
- */
-@BindingAdapter("time")
-fun setTime(view: TextView, created_timestamp: String?) {
-    val time = TimeUtil.replyTime(created_timestamp) + "发布"
-    view.text = time
 }
 
 

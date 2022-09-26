@@ -34,8 +34,8 @@ class HomeHoleAdapter(
     }
 
     override fun onBindViewHolder(holder: HoleViewHolder, position: Int) {
-        val forestHole = currentList[position]
-        holder.bind(forestHole)
+        val hole = currentList[position]
+        holder.bind(hole)
     }
 
     inner class HoleViewHolder(private val binding: ItemHomepageholeBinding) :

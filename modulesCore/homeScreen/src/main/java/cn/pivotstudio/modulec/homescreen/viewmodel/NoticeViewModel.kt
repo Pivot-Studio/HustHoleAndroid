@@ -2,7 +2,7 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.model.Reply
+import cn.pivotstudio.husthole.moduleb.network.model.Replied
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.repository.NoticeRepo
 import kotlinx.coroutines.Dispatchers
@@ -13,10 +13,10 @@ class NoticeViewModel : ViewModel() {
 
     private val repository = NoticeRepo()
 
-    private val _replies = MutableStateFlow<List<Reply>>(mutableListOf())
+    private val _replies = MutableStateFlow<List<Replied>>(mutableListOf())
     private val _showPlaceholder = MutableStateFlow(false)
 
-    val replies: StateFlow<List<Reply>> = _replies
+    val replies: StateFlow<List<Replied>> = _replies
     val showPlaceholder: StateFlow<Boolean> = _showPlaceholder
     val state = repository.state
 

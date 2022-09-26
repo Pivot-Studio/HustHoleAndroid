@@ -30,6 +30,7 @@
             android:layout_marginStart="@dimen/dp_24"
             android:background="@drawable/standard_button"
             android:text="@string/page1fragment_5"
+            android:textColor="@color/white"
             android:textAppearance="@style/HustHoleTypography.Button3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

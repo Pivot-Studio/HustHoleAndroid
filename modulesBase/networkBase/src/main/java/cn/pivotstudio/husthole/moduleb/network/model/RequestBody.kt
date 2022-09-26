@@ -12,4 +12,14 @@ sealed interface RequestBody {
     ) : RequestBody
 
     data class HoleId(var holeId: String) : RequestBody
+
+    data class HoleRequest(
+        var content: String,
+        var forestId: String
+    ) : RequestBody
+
+    data class Reply(
+        var holeId: String,
+        var replyId: String
+    )
 }

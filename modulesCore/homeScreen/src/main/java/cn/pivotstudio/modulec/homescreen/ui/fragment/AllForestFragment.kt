@@ -42,9 +42,6 @@ class AllForestFragment : BaseFragment() {
 
         val adapter = AllForestAdapter(::navToForestDetail)
         binding.allForestRecyclerView.adapter = adapter
-//        viewModel.forestCardsWithOneType.observe(viewLifecycleOwner) {
-//            adapter.submitList(viewModel.forestCards.toList())
-//        }
         viewModel.apply {
             lifecycleScope.launchWhenStarted {
                 forests.collectLatest {
@@ -55,7 +52,7 @@ class AllForestFragment : BaseFragment() {
     }
 
 
-    fun navToForestDetail(forestId: String) {
+    private fun navToForestDetail(forestId: String) {
         viewModel.getForestById(forestId)?.let {
             val action = AllForestFragmentDirections
                 .actionAllForestFragmentToForestDetailFragment(it)
