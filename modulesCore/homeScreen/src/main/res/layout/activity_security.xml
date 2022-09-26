@@ -1,102 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/GrayScale_95">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/security_bar"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="@color/HH_BandColor_1"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+    <data>
 
-        <ImageView
-            android:id="@+id/security_img"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/back_green"
-            android:clickable="true"
-            android:scaleType="center"
-            app:srcCompat="@drawable/back_black" />
-
-        <TextView
-            android:id="@+id/security_title"
-            android:layout_width="wrap_content"
-            android:layout_height="52dp"
-            android:gravity="center"
-            android:text="隐私安全"
-            android:textColor="@color/GrayScale_100"
-            android:textSize="18sp" />
-    </LinearLayout>
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/layout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/security_bar">
+        android:layout_height="match_parent"
+        android:background="@color/GrayScale_95">
 
-        <TextView
-            android:id="@+id/tv1"
+        <LinearLayout
+            android:id="@+id/security_bar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_30"
-            android:background="@color/GrayScale_95"
-            android:gravity="center_vertical"
-            android:paddingStart="@dimen/dp_15"
-            android:text="安全"
-            android:textColor="@color/GrayScale_50"
+            android:layout_height="52dp"
+            android:background="@color/HH_BandColor_1"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/GrayScale_100"
-            android:paddingHorizontal="@dimen/dp_15"
-            app:layout_constraintTop_toBottomOf="@id/tv1">
+            <ImageView
+                android:id="@+id/security_img"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/back_green"
+                android:clickable="true"
+                android:scaleType="center"
+                app:srcCompat="@drawable/back_black" />
 
             <TextView
-                android:id="@+id/tv2"
+                android:id="@+id/security_title"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/dp_15"
-                android:text="记录自己的树洞"
-                android:textColor="@color/GrayScale_0"
-                android:textSize="@dimen/sp_15"
+                android:layout_height="52dp"
+                android:gravity="center"
+                android:text="@string/privacy_security"
+                android:textColor="@color/GrayScale_100"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/layout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/security_bar">
+
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_30"
+                android:background="@color/GrayScale_95"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp_15"
+                android:text="安全"
+                android:textColor="@color/GrayScale_50"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv3"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_15"
-                android:paddingBottom="@dimen/dp_10"
-                android:text="在此选项关闭期间，新发布的树洞不会显示在“我的树洞”中，并且不会随着再次开启而出现，该树洞被评论时也不会收到通知。"
-                android:textColor="@color/GrayScale_70"
-                android:textSize="@dimen/sp_12"
-                app:layout_constraintTop_toBottomOf="@id/tv2" />
+                android:background="@color/GrayScale_100"
+                android:paddingHorizontal="@dimen/dp_15"
+                app:layout_constraintTop_toBottomOf="@id/tv1">
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/st_security"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp_16"
-                android:buttonTint="@color/HH_BandColor_3"
-                android:enabled="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/dp_15"
+                    android:text="记录自己的树洞"
+                    android:textColor="@color/GrayScale_0"
+                    android:textSize="@dimen/sp_15"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/tv3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:paddingBottom="@dimen/dp_10"
+                    android:text="在此选项关闭期间，新发布的树洞不会显示在“我的树洞”中，并且不会随着再次开启而出现，该树洞被评论时也不会收到通知。"
+                    android:textColor="@color/GrayScale_70"
+                    android:textSize="@dimen/sp_12"
+                    app:layout_constraintTop_toBottomOf="@id/tv2" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/st_security"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:buttonTint="@color/HH_BandColor_3"
+                    android:enabled="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout><!--<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">-->
+</layout>
+    <!--<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">-->
     <!--    <PreferenceCategory android:title="安全">-->
     <!--        <SwitchPreference-->
     <!--            android:defaultValue="true"-->

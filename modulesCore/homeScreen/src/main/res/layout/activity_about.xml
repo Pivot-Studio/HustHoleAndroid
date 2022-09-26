@@ -1,103 +1,110 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/GrayScale_95">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/about_bar"
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:background="@color/HH_BandColor_1"
-        android:orientation="horizontal">
+    <data>
 
-        <ImageView
-            android:id="@+id/about_img"
-            android:layout_width="52dp"
-            android:layout_height="52dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/back_green"
-            android:clickable="true"
-            android:scaleType="center"
-            app:srcCompat="@drawable/back_black" />
+    </data>
 
-        <TextView
-            android:id="@+id/about_title"
-            android:layout_width="wrap_content"
-            android:layout_height="52dp"
-            android:gravity="center"
-            android:text="关于1037树洞"
-            android:textColor="@color/GrayScale_100"
-            android:textSize="18sp" />
-    </LinearLayout>
-    <!--    <androidx.appcompat.widget.Toolbar-->
-    <!--        android:id="@+id/about_bar"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:background="@color/HH_BandColor_1"-->
-    <!--        app:titleTextColor="@color/GrayScale_100"-->
-    <!--        app:title="关于1037树洞"/>-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentEnd="true"
+        android:background="@color/GrayScale_95">
 
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/about_bar"
-        android:layout_marginBottom="40dp"
-        android:layout_marginEnd="40dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="40dp"
-        android:orientation="vertical">
-        <!--        android:layout_below="@id/about_bar"-->
+        <LinearLayout
+            android:id="@+id/about_bar"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@color/HH_BandColor_1"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/icon_about"
-            android:layout_width="106dp"
-            android:layout_height="107dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            app:srcCompat="@mipmap/icon" />
+            <ImageView
+                android:id="@+id/about_img"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/back_green"
+                android:clickable="true"
+                android:scaleType="center"
+                app:srcCompat="@drawable/back_black" />
 
-        <ImageView
-            android:layout_width="146dp"
-            android:layout_height="50dp"
-            android:layout_above="@id/contact"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="5dp"
-            app:srcCompat="@mipmap/ps_icon" />
+            <TextView
+                android:id="@+id/about_title"
+                android:layout_width="wrap_content"
+                android:layout_height="52dp"
+                android:gravity="center"
+                android:text="关于1037树洞"
+                android:textColor="@color/GrayScale_100"
+                android:textSize="18sp" />
+        </LinearLayout>
+        <!--    <androidx.appcompat.widget.Toolbar-->
+        <!--        android:id="@+id/about_bar"-->
+        <!--        android:layout_width="match_parent"-->
+        <!--        android:layout_height="wrap_content"-->
+        <!--        android:background="@color/HH_BandColor_1"-->
+        <!--        app:titleTextColor="@color/GrayScale_100"-->
+        <!--        app:title="关于1037树洞"/>-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_below="@id/beta"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="20dp"
-            android:text="1037 树洞是面向华科学生群体， 主打情感倾诉、校园互动、兴趣交流等功能的校园产品。我们期待为华科学子打造一个自由而友善、坦率而正直的社交平台。"
-            android:textSize="13sp" />
+            android:layout_below="@id/about_bar"
+            android:layout_marginBottom="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="40dp"
+            android:orientation="vertical">
+            <!--        android:layout_below="@id/about_bar"-->
 
-        <TextView
-            android:id="@+id/beta"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/icon_about"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:text="1037树洞 Beta"
-            android:textSize="12sp" />
+            <ImageView
+                android:id="@+id/icon_about"
+                android:layout_width="106dp"
+                android:layout_height="107dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                app:srcCompat="@mipmap/icon" />
 
-        <TextView
-            android:id="@+id/contact"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="10dp"
-            android:text="联系我们：husthole@pivotstudio.cn"
-            android:textSize="12sp" />
+            <ImageView
+                android:layout_width="146dp"
+                android:layout_height="50dp"
+                android:layout_above="@id/contact"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="5dp"
+                app:srcCompat="@mipmap/ps_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/beta"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="20dp"
+                android:text="1037 树洞是面向华科学生群体， 主打情感倾诉、校园互动、兴趣交流等功能的校园产品。我们期待为华科学子打造一个自由而友善、坦率而正直的社交平台。"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/beta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/icon_about"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:text="1037树洞 Beta"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/contact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:text="联系我们：husthole@pivotstudio.cn"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
+
     </RelativeLayout>
-
-
-</RelativeLayout>
+</layout>

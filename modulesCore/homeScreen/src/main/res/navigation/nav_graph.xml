@@ -32,9 +32,19 @@
 
     <fragment
         android:id="@+id/mine_fragment"
-        android:name="cn.pivotstudio.modulec.homescreen.oldversion.fragment.MineFragment"
+        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragment"
         android:label="@string/mine_zh"
-        tools:layout="@layout/fragment_mine" />
+        tools:layout="@layout/fragment_mine" >
+        <action
+            android:id="@+id/action_mine_fragment_to_holeFollowReplyFragment"
+            app:destination="@id/holeFollowReplyFragment" />
+        <action
+            android:id="@+id/action_mine_fragment_to_itemMineFragment"
+            app:destination="@id/itemMineFragment" />
+        <action
+            android:id="@+id/action_mine_fragment_to_itemDetailFragment2"
+            app:destination="@id/itemDetailFragment2" />
+    </fragment>
 
     <fragment
         android:id="@+id/all_forest_fragment"
@@ -60,5 +70,35 @@
         <argument
             android:name="forestId"
             app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/holeFollowReplyFragment"
+        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.HoleFollowReplyFragment"
+        android:label="HoleFollowReplyFragment" >
+        <argument
+            android:name="fragType"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemMineFragment"
+        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragment"
+        android:label="ItemMineFragment" >
+        <argument
+            android:name="optionType"
+            app:argType="integer" />
+        <action
+            android:id="@+id/action_itemMineFragment_to_itemDetailFragment2"
+            app:destination="@id/itemDetailFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemDetailFragment2"
+        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemDetailFragment"
+        android:label="ItemDetailFragment" >
+        <argument
+            android:name="fragType"
+            app:argType="integer" />
+        <argument
+            android:name="isVerified"
+            app:argType="boolean" />
     </fragment>
 </navigation>

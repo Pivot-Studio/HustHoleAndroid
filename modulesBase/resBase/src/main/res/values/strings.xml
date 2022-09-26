@@ -114,10 +114,26 @@
     <string name="network_loginfailure">登录失败，请检查网络</string>
     <string name="network_failure">请检查网络</string>
 
+    //我的
+    <string name="mine">我的</string>
     <string name="tv_myHoles">我的树洞</string>
     <string name="tv_myFollows">我的关注</string>
     <string name="tv_myReply">我的评论</string>
-    <string name="个人设置">个人设置</string>
+    <string name="personal_setting">个人设置</string>
+    <string name="shield_setting">屏蔽设置</string>
+    <string name="community_norm">社区规范</string>
+    <string name="share_hole">把树洞分享给同学</string>
+    <string name="evaluation_and_suggestions">评价与建议</string>
+    <string name="about_1037">关于1037树洞</string>
+    <string name="update">更新</string>
+    <string name="login_out">退出登录</string>
+    <string name="campus_email">校园邮箱</string>
+    <string name="privacy_security">隐私安全</string>
+    <string name="keyword_shielding">关键词屏蔽</string>
+    <string name="update_log">更新日志</string>
+    <string name="check_update">检查更新</string>
+    <string name="verify_email">验证校园邮箱</string>
+    <string name="hang_around">我再逛逛</string>
     <string name="韵酒蛋包饭">韵酒蛋包饭</string>
     <string name="分享">分享</string>
     <string name="分享到">分享到</string>
@@ -129,6 +145,8 @@
     <string name="tv_2">一、登录华中大校园邮箱</string>
     <string name="tv_3">方法一： 每位同学在入校注册后，将会自动获得一个以学号为用户名的电子邮箱，密码缺省为考生编号后八位（即校园网密码） ，可直接用于登录华中大校园邮箱： https://mail.hust.edu.cn/</string>
     <string name="tv_4">方法二： 选择通过华中大统一身份认证登录： https://pass.hust.edu.cn/cas/login?service=https%3A%2F%2Fmail.hust.edu.cn%2Fsso%2Findex.jsp</string>
+    <string name="des_mine_img">Logo of hust hole 1037</string>
+    <string name="back">icon of return</string>
 
     <string name="chip_1">1</string>
     <string name="chip_2">2</string>
@@ -143,4 +161,5 @@
     <string name="all_forest_zh">所有小树林</string>
     <string name="discover_more">发现更多</string>
     <string name="hot_tag">热评</string>
+
 </resources>

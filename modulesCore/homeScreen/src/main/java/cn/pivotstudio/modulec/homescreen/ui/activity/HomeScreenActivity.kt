@@ -97,7 +97,7 @@ class HomeScreenActivity : BaseActivity() {
             // BottomNavigationBar显示情况特判
             binding.apply {
                 layoutBottomBar.isVisible =
-                    (destination.id != R.id.all_forest_fragment && destination.id != R.id.forest_detail_fragment)
+                    (destination.id != R.id.all_forest_fragment && destination.id != R.id.forest_detail_fragment && destination.id != R.id.holeFollowReplyFragment)
 
                 bottomNavigationView.setupWithNavController(navController)
                 bottomNavigationView.background = null
@@ -181,7 +181,7 @@ class HomeScreenActivity : BaseActivity() {
      */
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         navController.currentDestination?.let {
-            if (it.id == R.id.all_forest_fragment || it.id == R.id.forest_detail_fragment) {
+            if (it.id == R.id.all_forest_fragment || it.id == R.id.forest_detail_fragment || it.id == R.id.holeFollowReplyFragment) {
                 return navController.popBackStack()
             }
 
