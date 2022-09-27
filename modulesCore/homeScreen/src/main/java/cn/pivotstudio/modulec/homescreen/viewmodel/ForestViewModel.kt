@@ -53,8 +53,21 @@ class ForestViewModel : ViewModel() {
     }
 
     fun loadHolesAndHeads() {
-        loadHolesV2()
-        loadJoinedForestsV2()
+        viewModelScope.launch {
+            repository.apply {
+                loadJoinedForestsV2().zip(loadForestHolesV2()) { forests, holes ->
+                    holes.forEach { hole ->
+                        hole.forestAvatarUrl = forests.find {
+                            it.forestId == hole.forestId
+                        }?.backUrl
+                    }
+                    forests to holes
+                }.collectLatest {
+                    _forestsV2.emit(it.first)
+                    _holesV2.emit(it.second)
+                }
+            }
+        }
     }
 
     fun loadMoreForestHoles() {
