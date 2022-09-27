@@ -19,7 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import cn.pivotstudio.modulep.hole.R;
-import cn.pivotstudio.modulep.hole.databinding.Fragment1stLevelReplyBinding;
+import cn.pivotstudio.modulep.hole.databinding.FragmentSpecificHoleBinding;
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity;
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel;
 
@@ -36,7 +36,7 @@ public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
     private LinkedList<Integer> mUsedEmojiCopy;
     private List<Integer> mEmoji;
     private List<String> mEmojiName;
-    private Fragment1stLevelReplyBinding binding;
+    private FragmentSpecificHoleBinding binding;
 
     @Override
     public int getItemViewType(int position) {
@@ -135,7 +135,7 @@ public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
 
     }
 
-    public EmojiRvAdapter(Context context, Fragment1stLevelReplyBinding binding, SpecificHoleViewModel mViewModel) {
+    public EmojiRvAdapter(Context context, FragmentSpecificHoleBinding binding, SpecificHoleViewModel mViewModel) {
         super(context);
         this.binding = binding;
         mEmoji = EmotionUtil.getResourceList();

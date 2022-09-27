@@ -18,7 +18,9 @@ import cn.pivotstudio.modulep.hole.R
 import cn.pivotstudio.modulep.hole.databinding.ItemFirstLevelReplyBinding
 import cn.pivotstudio.modulep.hole.databinding.ItemHoleBinding
 
-class RepliesAdapter : ListAdapter<ReplyWrapper, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
+class RepliesAdapter(
+    val onItemClick: (ReplyWrapper) -> Unit
+) : ListAdapter<ReplyWrapper, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
 
     companion object {
         private const val ITEM_TYPE_HOLE = 0
@@ -64,6 +66,9 @@ class RepliesAdapter : ListAdapter<ReplyWrapper, RecyclerView.ViewHolder>(DIFF_C
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(replyWrapper: ReplyWrapper) {
             binding.replyWrapper = replyWrapper
+            binding.layoutInnerReply.setOnClickListener {
+                onItemClick(replyWrapper)
+            }
         }
     }
 
@@ -154,7 +159,8 @@ class RepliesAdapter : ListAdapter<ReplyWrapper, RecyclerView.ViewHolder>(DIFF_C
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is FirstLevelReplyViewHolder) {
-            holder.bind(currentList[position - 1])
+            val reply = currentList[position - 1]
+            holder.bind(reply)
         } else if (holder is HoleViewHolder) {
             _hole?.let {
                 holder.bind(it)

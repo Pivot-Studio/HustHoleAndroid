@@ -65,7 +65,7 @@ class HoleActivity : BaseActivity() {
             supportActionBar?.title = destination.label
 
             when (destination.id) {
-                R.id.firstLevelReplyFragment -> supportActionBar?.title = argument?.getString(KEY_HOLE_ID)
+                R.id.specificHoleFragment -> supportActionBar?.title = argument?.getString(KEY_HOLE_ID)
             }
         }
 

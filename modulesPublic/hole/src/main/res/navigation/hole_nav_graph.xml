@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/hole_nav_graph"
-    app:startDestination="@id/firstLevelReplyFragment">
+    app:startDestination="@id/specificHoleFragment">
 
     <fragment
-        android:id="@+id/firstLevelReplyFragment"
-        android:name="cn.pivotstudio.modulep.hole.ui.fragment.FirstLevelReplyFragment"
-        tools:layout="@layout/fragment_1st_level_reply">
+        android:id="@+id/specificHoleFragment"
+        android:name="cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment"
+        tools:layout="@layout/fragment_specific_hole">
         <argument
             android:name="holeId"
             app:argType="string" />
         <action
-            android:id="@+id/action_firstLevelReplyFragment_to_secondLevelReplyFragment"
-            app:destination="@id/secondLevelReplyFragment" />
+            android:id="@+id/action_specificHoleFragment_to_innerReplyFragment"
+            app:destination="@id/innerReplyFragment" />
+
     </fragment>
     <fragment
-        android:id="@+id/secondLevelReplyFragment"
+        android:id="@+id/innerReplyFragment"
         android:name="cn.pivotstudio.modulep.hole.ui.fragment.InnerReplyFragment"
-        android:label="SecondLevelReplyFragment"
         tools:layout="@layout/fragment_inner_reply">
         <argument
             android:name="reply"

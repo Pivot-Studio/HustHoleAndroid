@@ -14,12 +14,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulep.hole.BuildConfig
 import cn.pivotstudio.modulep.hole.R
 import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshHeader
-import cn.pivotstudio.modulep.hole.databinding.Fragment1stLevelReplyBinding
+import cn.pivotstudio.modulep.hole.databinding.FragmentSpecificHoleBinding
 import cn.pivotstudio.modulep.hole.model.MsgResponse
 import cn.pivotstudio.modulep.hole.model.ReplyListResponse
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
@@ -29,13 +30,19 @@ import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import kotlinx.coroutines.flow.collectLatest
 
-class FirstLevelReplyFragment : BaseFragment() {
+class SpecificHoleFragment : BaseFragment() {
 
-    private val args by navArgs<FirstLevelReplyFragmentArgs>()
+    private val args by navArgs<SpecificHoleFragmentArgs>()
 
-    private lateinit var binding: Fragment1stLevelReplyBinding
+    private lateinit var binding: FragmentSpecificHoleBinding
     private val replyViewModel: SpecificHoleViewModel by viewModels {
         SpecificHoleViewModelFactory(args.holeId)
+    }
+
+    private val navToInnerReply: (ReplyWrapper) -> Unit = {
+        val action =
+            SpecificHoleFragmentDirections.actionSpecificHoleFragmentToInnerReplyFragment(it.self)
+        findNavController().navigate(action)
     }
 
     override fun onCreateView(
@@ -44,7 +51,7 @@ class FirstLevelReplyFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View {
         binding =
-            DataBindingUtil.inflate(inflater, R.layout.fragment_1st_level_reply, container, false)
+            DataBindingUtil.inflate(inflater, R.layout.fragment_specific_hole, container, false)
         findNavController().currentDestination?.label = args.holeId
         return binding.root
     }
@@ -54,7 +61,7 @@ class FirstLevelReplyFragment : BaseFragment() {
         initObserver()
         initRefresh()
         initEmojiRv()
-        val repliesAdapter = RepliesAdapter()
+        val repliesAdapter = RepliesAdapter(navToInnerReply)
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = replyViewModel
@@ -245,6 +252,7 @@ class FirstLevelReplyFragment : BaseFragment() {
             isOpened.set(false)
         }
     }
+
 }
 
 class SpecificHoleViewModelFactory(private val holeId: String) :

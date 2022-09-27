@@ -10,11 +10,11 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class InnerReplyViewModel(reply: Reply) : ViewModel() {
+class InnerReplyViewModel(baseReply: Reply) : ViewModel() {
 
     private val repo = InnerReplyRepo()
 
-    private var _reply = MutableStateFlow(reply)
+    private var _reply = MutableStateFlow(baseReply)
     val reply: StateFlow<Reply> = _reply
 
     private var _innerReplies = MutableStateFlow(listOf<Reply>())

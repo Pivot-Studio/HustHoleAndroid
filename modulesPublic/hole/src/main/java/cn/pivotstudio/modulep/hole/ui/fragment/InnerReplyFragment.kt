@@ -13,16 +13,15 @@ import androidx.navigation.fragment.navArgs
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.modulep.hole.R
-import cn.pivotstudio.modulep.hole.databinding.Fragment2ndLevelReplyBinding
+import cn.pivotstudio.modulep.hole.databinding.FragmentInnerReplyBinding
 import cn.pivotstudio.modulep.hole.ui.adapter.InnerReplyAdapter
 import cn.pivotstudio.modulep.hole.viewmodel.InnerReplyViewModel
-import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
 import kotlinx.coroutines.flow.collectLatest
 
 class InnerReplyFragment : BaseFragment() {
 
     private val args by navArgs<InnerReplyFragmentArgs>()
-    private lateinit var binding: Fragment2ndLevelReplyBinding
+    private lateinit var binding: FragmentInnerReplyBinding
     private val viewModel: InnerReplyViewModel by viewModels {
         InnerReplyViewModelFactory(args.reply)
     }
@@ -62,7 +61,7 @@ class InnerReplyFragment : BaseFragment() {
 class InnerReplyViewModelFactory(private val reply: Reply) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SpecificHoleViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(InnerReplyViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return InnerReplyViewModel(reply) as T
         }
