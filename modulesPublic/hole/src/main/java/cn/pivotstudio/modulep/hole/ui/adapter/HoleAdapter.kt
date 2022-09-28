@@ -37,9 +37,9 @@ fun setAlias(v: TextView, alias: String, is_mine: Boolean) {
 
 
 @BindingAdapter("emojiBar")
-fun showEmojiBar(view: ImageView, is_emoji_opened: Boolean?) {
-    if (is_emoji_opened != null) {
-        view.setImageResource(if (!is_emoji_opened) R.drawable.ic_emoji_28dp else R.drawable.ic_keyboard_28dp)
+fun showEmojiBar(view: ImageView, showingEmojiPad: Boolean?) {
+    if (showingEmojiPad != null) {
+        view.setImageResource(if (!showingEmojiPad) R.drawable.ic_emoji_28dp else R.drawable.ic_keyboard_28dp)
     }
 }
 

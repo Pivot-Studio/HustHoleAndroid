@@ -22,7 +22,8 @@ object HustHoleApi {
     lateinit var retrofitService: HustHoleApiService
     fun init(context: Context) {
 
-        val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
+        val httpLoggingInterceptor =
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
 
         val requestInterceptor = Interceptor { chain ->
             chain.request().newBuilder()
@@ -107,7 +108,7 @@ interface HustHoleApiService {
     /** 用户加入的小树林树洞列表 */
     @GET("forest/listJoinHole")
     suspend fun getAJoinedForestHoles(
-        @Query("limit") limit: Int = 20,
+        @Query("limit") limit: Int,
         @Query("mode") mode: String = "LATEST_REPLY",
         @Query("offset") offset: Int = 0,
         @Query("timestamp") timestamp: String
@@ -227,6 +228,12 @@ interface HustHoleApiService {
         @Query("replyId") replyId: String,
         @Query("timestamp") timestamp: String
     ): List<Reply>
+
+    /** 发送评论 */
+    @POST("reply/add")
+    suspend fun sendAComment(
+        @Body comment: RequestBody.Comment
+    ): Response<Unit>
 
 }
 

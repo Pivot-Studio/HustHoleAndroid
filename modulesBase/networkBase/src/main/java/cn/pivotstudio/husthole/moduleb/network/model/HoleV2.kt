@@ -70,7 +70,7 @@ data class ReplyWrapper (
     val count: String? = null,
 
     /** 子评论 */
-    val innerList: List<Reply>? = null,
+    val innerList: List<Reply>,
 
     val self: Reply
 )

@@ -5,6 +5,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
@@ -14,11 +15,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
+import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
-import cn.pivotstudio.modulep.hole.BuildConfig
 import cn.pivotstudio.modulep.hole.R
+import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulep.hole.databinding.FragmentSpecificHoleBinding
 import cn.pivotstudio.modulep.hole.model.MsgResponse
@@ -27,7 +30,6 @@ import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
 import cn.pivotstudio.modulep.hole.ui.adapter.EmojiRvAdapter
 import cn.pivotstudio.modulep.hole.ui.adapter.RepliesAdapter
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
-import com.scwang.smart.refresh.footer.ClassicsFooter
 import kotlinx.coroutines.flow.collectLatest
 
 class SpecificHoleFragment : BaseFragment() {
@@ -61,37 +63,66 @@ class SpecificHoleFragment : BaseFragment() {
         initObserver()
         initRefresh()
         initEmojiRv()
+        initListener()
         val repliesAdapter = RepliesAdapter(navToInnerReply)
+
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = replyViewModel
             rvReplies.adapter = repliesAdapter
             rvReplies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    var lastMoreListCl =
-                        (binding.rvReplies.adapter as RepliesAdapter?)!!.lastMoreListCl
-                    if (lastMoreListCl != null) lastMoreListCl.visibility = View.GONE
-                    lastMoreListCl = null
+                    repliesAdapter.lastMoreListCl?.let {
+                        if (it.isVisible) {
+                            it.visibility = View.GONE
+                        }
+                    }
                 }
             })
 
             ivOpenEmoji.setOnClickListener {
                 replyViewModel.triggerEmojiPad()
             }
+
+            btnSend.setOnClickListener {
+                replyViewModel.sendAComment("${binding.etReplyPost.text}")
+            }
+
+            etReplyPost.setOnClickListener {
+                activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+                binding.rvEmoji.visibility = View.VISIBLE
+                (requireActivity() as HoleActivity).openKeyBoard(binding.etReplyPost)
+                replyViewModel.doneShowingEmojiPad()
+            }
+
+            btnFilterOwnerReply.setOnClickListener {
+                replyViewModel.filterReplyOfHoleOwner()
+            }
+
         }
 
         replyViewModel.apply {
             lifecycleScope.launchWhenStarted {
                 hole.collectLatest {
                     it?.let { hole ->
-                        repliesAdapter.notifyHoleChanged(hole)
+                        binding.layoutHole.holeV2 = hole
                     }
                 }
             }
 
             lifecycleScope.launchWhenStarted {
-                replies.collectLatest {
+                replies.collect {
                     repliesAdapter.submitList(it)
+                }
+            }
+
+            lifecycleScope.launchWhenStarted {
+                loadingState.collectLatest { state ->
+                    when (state) {
+                        ApiStatus.SUCCESSFUL,
+                        ApiStatus.ERROR -> finishRefreshAnim()
+                        ApiStatus.LOADING -> {}
+                    }
                 }
             }
 
@@ -108,10 +139,26 @@ class SpecificHoleFragment : BaseFragment() {
                     }
                 }
             }
+
+            lifecycleScope.launchWhenStarted {
+                sendingState.collectLatest { state ->
+                    when (state) {
+                        is ApiResult.Loading -> {
+                            binding.btnSend.isClickable = false
+                        }
+                        is ApiResult.Error -> {
+                            showMsg(state.errorMessage)
+                        }
+                        is ApiResult.Success<*> -> {
+                            clearSendingState()
+                        }
+                    }
+                }
+            }
         }
 
-        replyViewModel.inputText
-        replyViewModel.usedEmojiList
+        replyViewModel.inputText()
+        replyViewModel.usedEmojiList()
 
         EditTextUtil.ButtonReaction(
             binding.etReplyPost,
@@ -121,15 +168,17 @@ class SpecificHoleFragment : BaseFragment() {
     }
 
     private fun initRefresh() {
-        binding.layoutRefresh.setRefreshHeader(StandardRefreshHeader(requireActivity())) //设置自定义刷新头
-        binding.layoutRefresh.setRefreshFooter(ClassicsFooter(requireActivity())) //设置自定义刷新底
-        binding.layoutRefresh.setOnRefreshListener {    //下拉刷新触发
-            replyViewModel.loadHole()
-            binding.rvReplies.isEnabled = false //加载时静止滑动
-        }
-        binding.layoutRefresh.setOnLoadMoreListener {    //上拉加载触发
-            replyViewModel.loadMoreReplies()
-            binding.rvReplies.isEnabled = true
+        binding.layoutRefresh.apply {
+            setRefreshHeader(StandardRefreshHeader(activity))
+            setRefreshFooter(StandardRefreshFooter(activity))
+            setOnRefreshListener {
+                replyViewModel.loadHole()
+                binding.rvReplies.isEnabled = false
+            }
+            setOnLoadMoreListener {    //上拉加载触发
+                replyViewModel.loadMoreReplies()
+                binding.rvReplies.isEnabled = true
+            }
         }
     }
 
@@ -138,29 +187,15 @@ class SpecificHoleFragment : BaseFragment() {
             binding.etReplyPost.setText(replyResponse.content)
             replyViewModel.answered.set(replyResponse)
         }
-        replyViewModel.pSendReply.observe((context as HoleActivity)) { msgResponse: MsgResponse ->
-            binding.btnSend.isClickable = true //发送成功运行点击，以免重复发送
-            showMsg(msgResponse.msg)
-            binding.etReplyPost.setText("") //将输入框内容清空
 
-            //将表情包栏关掉
-            binding.rvEmoji.visibility = View.GONE
-            // setVisibility(View.GONE);
-            val isOpened = replyViewModel.is_emoji
-            isOpened.set(false)
-            replyViewModel.getListData(false) //重新刷新数据
-        }
         replyViewModel.pClickMsg.observe(viewLifecycleOwner) { msgResponse: MsgResponse ->
             showMsg(msgResponse.msg)
             when (msgResponse.model) {
                 "DELETE_HOLE" -> requireActivity().finish()
-                "DELETE_REPLY" -> replyViewModel.getListData(false)
+//                "DELETE_REPLY" -> replyViewModel.getListData(false)
             }
         }
-        replyViewModel.failed.observe(viewLifecycleOwner) { s: String? ->
-            binding.btnSend.isClickable = true
-            showMsg(s)
-        }
+
     }
 
     private fun initEmojiRv() {
@@ -190,8 +225,14 @@ class SpecificHoleFragment : BaseFragment() {
 
     private fun initListener() {
         binding.etReplyPost.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+
+            }
+
             override fun afterTextChanged(s: Editable) {
                 if (s.length >= 500) {
                     Toast.makeText(context, "评论不得超过500个字噢~", Toast.LENGTH_SHORT).show()
@@ -217,40 +258,28 @@ class SpecificHoleFragment : BaseFragment() {
     fun onClick(view: View) {
         if (view.id == R.id.btn_send) {
             binding.btnSend.isClickable = false //避免重复发送
-            replyViewModel.sendReply(binding.etReplyPost.text.toString())
+//            replyViewModel.sendReply(binding.etReplyPost.text.toString())
             (requireActivity() as HoleActivity).closeKeyBoard()
-        } else if (view.id == R.id.btn_replylist_owner) {
+        } else if (view.id == R.id.btn_filter_owner_reply) {
             val observableField = replyViewModel.is_owner
             observableField.set(!observableField.get()!!)
-            replyViewModel.getListData(false)
-        } else if (view.id == R.id.cl_titlebargreen_back) {
-            if (BuildConfig.isRelease) {
-                requireActivity().finish() //关闭活动
-                (requireActivity() as HoleActivity).closeKeyBoard() //关闭键盘
-            } else {
-                showMsg("当前处于模块测试阶段")
-            }
-        } else if (view.id == R.id.iv_open_emoji) {
-            val isOpened = replyViewModel.is_emoji
-            if (!isOpened.get()!!) {
-                (requireActivity() as HoleActivity).closeKeyBoard()
-                activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-                (binding.rvEmoji.adapter as EmojiRvAdapter).refreshData()
-                binding.rvEmoji.visibility = View.VISIBLE
-                isOpened.set(true)
-            } else {
-                activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-                binding.rvEmoji.visibility = View.GONE
-                // setVisibility(View.GONE);
-                isOpened.set(false)
-            }
-        } else if (view.id == R.id.et_reply_post) {
-            val isOpened = replyViewModel.is_emoji
-            activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-            binding.rvEmoji.visibility = View.VISIBLE
-            (requireActivity() as HoleActivity).openKeyBoard(binding.etReplyPost)
-            isOpened.set(false)
+//            replyViewModel.getListData(false)
         }
+    }
+
+    private fun clearSendingState() {
+        binding.apply {
+            btnSend.isClickable = true
+            etReplyPost.text?.clear()
+            rvEmoji.visibility = View.GONE
+            replyViewModel.doneShowingEmojiPad()
+            lifecycleScope.launchWhenStarted {
+                replyViewModel.delayLoadReplies()
+            }
+
+        }
+
+
     }
 
 }

@@ -40,19 +40,28 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/rv_replies"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/item_first_level_reply" />
+                        android:orientation="vertical">
 
+                        <include
+                            android:id="@+id/layout_hole"
+                            layout="@layout/item_hole" />
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_replies"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            tools:listitem="@layout/item_first_level_reply" />
+                    </LinearLayout>
                 </androidx.core.widget.NestedScrollView>
 
             </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
             <Button
-                android:id="@+id/btn_replylist_owner"
+                android:id="@+id/btn_filter_owner_reply"
                 android:layout_width="@dimen/dp_64"
                 android:layout_height="@dimen/dp_28"
                 android:layout_marginEnd="@dimen/dp_22"
@@ -106,7 +115,7 @@
                 android:layout_width="@dimen/dp_28"
                 android:layout_height="@dimen/dp_28"
                 android:layout_marginEnd="@dimen/dp_12"
-                app:emojiBar="@{viewModel.is_emoji}"
+                app:emojiBar="@{viewModel.showEmojiPad}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/btn_send"
                 app:layout_constraintTop_toTopOf="parent"

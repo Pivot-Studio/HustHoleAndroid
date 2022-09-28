@@ -4,26 +4,21 @@ import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.DB
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import cn.pivotstudio.husthole.moduleb.network.*
 import cn.pivotstudio.modulep.hole.model.HoleResponse
-import cn.pivotstudio.modulep.hole.model.ReplyListResponse
 import cn.pivotstudio.modulep.hole.model.ReplyListResponse.ReplyResponse
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.moduleb.database.repository.CustomDisposable
 import cn.pivotstudio.moduleb.database.MMKVUtil
-import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.modulep.hole.network.HRequestInterface
-import io.reactivex.schedulers.Schedulers
-import cn.pivotstudio.husthole.moduleb.network.BaseObserver
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
+import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.moduleb.database.bean.Hole
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import com.alibaba.android.arouter.launcher.ARouter
-import cn.pivotstudio.moduleb.libbase.util.data.GetUrlUtil
 import cn.pivotstudio.modulep.hole.model.MsgResponse
 import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineDispatcher
@@ -51,17 +46,13 @@ class HoleRepository(
         const val LIST_SIZE = 20
     }
 
-    var pHole: MutableLiveData<HoleResponse> = MutableLiveData()
-    var pReplyList: MutableLiveData<ReplyListResponse> = MutableLiveData()
     var pInputText: MutableLiveData<ReplyResponse> = MutableLiveData()
     var pUsedEmojiList: MutableLiveData<LinkedList<Int>> = MutableLiveData()
     var pClickMsg: MutableLiveData<MsgResponse> = MutableLiveData()
-    var pSendReply: MutableLiveData<MsgResponse> = MutableLiveData()
     val failed: MutableLiveData<String> = MutableLiveData()
     private var hole: Hole? = null
     fun getInputTextForLocalDB(hole_id: Int?) {
-        val flowable = DB!!.holeDao().findById(
-            hole_id!!
+        val flowable = DB!!.holeDao().findById(hole_id!!
         )
         CustomDisposable.addDisposable(flowable) { holeEt: Hole? ->
             if (holeEt != null) {
@@ -79,14 +70,8 @@ class HoleRepository(
     val usedEmojiForLocalDB: Unit
         get() {
             val mmkvUtil = MMKVUtil.getMMKV(BaseApplication.context)
-            var list = mmkvUtil.getArray(Constant.UsedEmoji, 0) as LinkedList<Int>
-            if (list == null) {
-                list = LinkedList()
-                mmkvUtil.put(Constant.UsedEmoji, list)
-                // pUsedEmojiList.postValue(new LinkedList<Integer>());
-            } else {
-                pUsedEmojiList.postValue(list)
-            }
+            val list = mmkvUtil.getArray(Constant.UsedEmoji, 0) as LinkedList<Int>
+            pUsedEmojiList.postValue(list)
         }
 
     fun saveInputTextForLocalDB(
@@ -137,137 +122,6 @@ class HoleRepository(
         }
     }
 
-    fun getListForNetwork(hole_id: Int, is_descend: Boolean, start_id: Int, isOwner: Boolean) {
-        val hotReplyObservable = NetworkApi.createService(
-            HRequestInterface::class.java, 2
-        ).getHotReply(hole_id, 0, 3)
-
-        val repliesObservable: Observable<ReplyListResponse> = if (!isOwner) {
-            NetworkApi.createService(HRequestInterface::class.java, 2)
-                .getReplies(Constant.BASE_URL + "replies?hole_id=" + hole_id + "&is_descend=" + is_descend + "&start_id=" + start_id + "&list_size=" + Constant.CONSTANT_STANDARD_LOAD_SIZE)
-        } else {
-            NetworkApi.createService(HRequestInterface::class.java, 2)
-                .getOwnerReply(hole_id, start_id, Constant.CONSTANT_STANDARD_LOAD_SIZE, is_descend)
-        }
-        val holeObservable = NetworkApi.createService(
-            HRequestInterface::class.java, 2
-        ).getHole(Constant.BASE_URL + "holes/" + hole_id)
-        val result = Observable.zip(
-            hotReplyObservable.subscribeOn(Schedulers.io()), repliesObservable.subscribeOn(
-                Schedulers
-                    .io()
-            ), holeObservable.subscribeOn(Schedulers.io())
-        ) { hotReplyResponse, repliesResponse, holeResponse ->
-            pHole.postValue(holeResponse)
-            //依据是否是只看洞主，加载热评内容
-            if (isOwner || start_id != 0) {
-                //设置热评标识
-                for (requestedData in repliesResponse.msg) {
-                    requestedData.is_hot = false
-                }
-                repliesResponse
-            } else {
-                //设置热评标识
-                for (requestedData in repliesResponse.msg) {
-                    requestedData.is_hot = false
-                }
-                for (requestedData in hotReplyResponse.msg) {
-                    requestedData.is_hot = true
-                }
-                hotReplyResponse.msg.addAll(repliesResponse.msg)
-                hotReplyResponse
-            }
-            //单独将树洞的信息发送出去
-        }
-        result.compose(NetworkApi.applySchedulers(object : BaseObserver<ReplyListResponse>() {
-            override fun onSuccess(requestedDataList: ReplyListResponse) {
-
-                // if(requestedDataList.getMsg().size()==0){//加载数据为空时
-                if (start_id != 0) { //说明初始数据就是空的
-                    val lastRequestedDataList = pReplyList.value
-                    lastRequestedDataList!!.msg.addAll(requestedDataList.msg)
-                    if (requestedDataList.msg.size == 0) { //加载数据为空时
-                        lastRequestedDataList.mode = "LOAD_ALL"
-                    } else {
-                        lastRequestedDataList.mode = "LOAD_MORE"
-                    }
-                    pReplyList.setValue(lastRequestedDataList)
-                } else { //下拉刷新得到的数据是空的
-                    if (requestedDataList.msg.size == 0) { //加载数据为空时
-                        requestedDataList.mode = "NO_REPLY"
-                    } else {
-                        requestedDataList.mode = "REFRESH"
-                    }
-                    pReplyList.setValue(requestedDataList)
-                }
-            }
-
-            override fun onFailure(e: Throwable) {
-                failed.postValue((e as ResponseThrowable).message)
-            }
-        }))
-    }
-
-    /**
-     * 点赞单个评论
-     *
-     * @param hole_id     树洞号
-     * @param thumbup_num 网络请求成功前的点赞数量
-     * @param is_thumbup  网络请求成功前是否被点赞
-     * @param dataBean    item的所有数据
-     */
-    fun thumbupReplyForNetwork(
-        hole_id: Int,
-        reply_local_id: Int,
-        thumbup_num: Int,
-        is_thumbup: Boolean,
-        dataBean: ReplyResponse
-    ) {
-        val observable: Observable<MsgResponse>
-        observable = if (!is_thumbup) {
-            NetworkApi.createService(HRequestInterface::class.java, 2)
-                .thumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/" + reply_local_id)
-        } else {
-            NetworkApi.createService(HRequestInterface::class.java, 2)
-                .deleteThumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/" + reply_local_id)
-        }
-        observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-            override fun onSuccess(msg: MsgResponse) {
-                if (is_thumbup) {
-                    dataBean.thumbup_num = thumbup_num - 1
-                } else {
-                    dataBean.thumbup_num = thumbup_num + 1
-                }
-                dataBean.is_thumbup = !is_thumbup
-                val isHot = dataBean.is_hot //获取当前data是否是热门的
-                //从总数据中遍历
-                var traversal = 0
-                for (reply in pReplyList.value!!.msg) {
-                    //如果当前数据的id和点赞的id相同并且不是他自己，另一个需要同步的数据的ishot一定与此相反
-                    if (reply.reply_local_id == reply_local_id && reply.is_hot == !isHot) {
-                        if (is_thumbup) {
-                            reply.thumbup_num = thumbup_num - 1
-                        } else {
-                            reply.thumbup_num = thumbup_num + 1
-                        }
-                        reply.is_thumbup = !is_thumbup
-                        break //只需要同步一种数据
-                    }
-                    //如果被点赞的是热评序列，就要一直从数据中查找到最后一项，直到查找到需要的值
-                    //如果被点赞的不是热评序列，查询完热评后仍然没有所要的结果就说明点赞的不是热评，不需要继续查询了
-                    if (traversal > 2 && !isHot) {
-                        break
-                    }
-                    traversal++
-                }
-                pClickMsg.setValue(msg)
-            }
-
-            override fun onFailure(e: Throwable) {
-                failed.postValue((e as ResponseThrowable).message)
-            }
-        }))
-    }
 
     fun thumbupForNetwork(
         hole_id: Int,
@@ -275,8 +129,7 @@ class HoleRepository(
         is_thumbup: Boolean,
         dataBean: HoleResponse
     ) {
-        val observable: Observable<MsgResponse>
-        observable = if (!is_thumbup) {
+        val observable: Observable<MsgResponse> = if (!is_thumbup) {
             NetworkApi.createService(HRequestInterface::class.java, 2)
                 .thumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/-1")
         } else {
@@ -314,8 +167,7 @@ class HoleRepository(
         is_follow: Boolean,
         dataBean: HoleResponse
     ) {
-        val observable: Observable<MsgResponse>
-        observable = if (!is_follow) {
+        val observable: Observable<MsgResponse> = if (!is_follow) {
             NetworkApi.createService(HRequestInterface::class.java, 2)
                 .follow(Constant.BASE_URL + "follows/" + hole_id)
         } else {
@@ -374,41 +226,42 @@ class HoleRepository(
         }
     }
 
-    fun sendReplyForNetwork(content: String?, hole_id: Int, user_id: Int) {
-        NetworkApi.createService(HRequestInterface::class.java, 2)
-            .sendReply(
-                Constant.BASE_URL + "replies?hole_id=" + hole_id + "&content=" + GetUrlUtil.getURLEncoderString(
-                    content
-                ) + "&wanted_local_reply_id=" + user_id
-            )
-            .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(msg: MsgResponse) {
-                    pSendReply.value = msg
-                }
-
-                override fun onFailure(e: Throwable) {
-                    failed.postValue((e as ResponseThrowable).message)
-                }
-            }))
-    }
+    fun sendAComment(content: String, replyId: String?): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response =
+            hustHoleApiService.sendAComment(comment = RequestBody.Comment(
+                holeId = holeId,
+                replyId = replyId,
+                content = content
+            ))
+        if (response.isSuccessful) {
+            emit(ApiResult.Success(data = Unit))
+        } else {
+            val errorCode = response.code()
+            response.errorBody()?.close()
+            emit(ApiResult.Error(code = errorCode))
+        }
+    }.flowOn(dispatcher)
 
     fun loadHole(): Flow<HoleV2> = flow {
         emit(hustHoleApiService.loadTheHole(holeId))
     }.flowOn(dispatcher).catch { e ->
         e.printStackTrace()
+    }.onEach {
+        lastTimeStamp = DateUtil.getDateTime()
     }
 
     fun loadReplies(): Flow<List<ReplyWrapper>> = flow {
+        lastTimeStamp = DateUtil.getDateTime()
         emit(
             hustHoleApiService.getHoleReplies(
                 holeId = holeId,
                 timestamp = lastTimeStamp,
+                limit = LIST_SIZE
             )
         )
-    }.flowOn(dispatcher).catch { e ->
-        e.printStackTrace()
-    }.onCompletion {
-        lastOffset = LIST_SIZE
+    }.flowOn(dispatcher).onEach {
+        lastOffset = 0
     }
 
     fun loadMoreReplies(): Flow<List<ReplyWrapper>> = flow {
@@ -416,14 +269,11 @@ class HoleRepository(
             hustHoleApiService.getHoleReplies(
                 holeId = holeId,
                 timestamp = lastTimeStamp,
-                offset = lastOffset
+                offset = lastOffset + LIST_SIZE,
+                limit = LIST_SIZE
             )
         )
     }.onEach {
         lastOffset += LIST_SIZE
-    }.catch { e ->
-        e.printStackTrace()
     }.flowOn(dispatcher)
-
-
 }

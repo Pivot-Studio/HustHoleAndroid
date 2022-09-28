@@ -8,18 +8,26 @@ sealed interface RequestBody {
     ) : RequestBody
 
     data class ForestId(
-        var forestId: String
+        val forestId: String
     ) : RequestBody
 
-    data class HoleId(var holeId: String) : RequestBody
+    data class HoleId(
+        var holeId: String
+    ) : RequestBody
 
     data class HoleRequest(
         var content: String,
-        var forestId: String
+        val forestId: String
     ) : RequestBody
 
     data class Reply(
-        var holeId: String,
-        var replyId: String
-    )
+        val holeId: String,
+        val replyId: String
+    ) : RequestBody
+
+    data class Comment(
+        val holeId: String,
+        val replyId: String?,
+        var content: String
+    ) : RequestBody
 }

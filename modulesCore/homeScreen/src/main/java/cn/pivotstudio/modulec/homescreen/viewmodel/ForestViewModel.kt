@@ -56,13 +56,10 @@ class ForestViewModel : ViewModel() {
         viewModelScope.launch {
             repository.apply {
                 loadJoinedForestsV2().zip(loadForestHolesV2()) { forests, holes ->
-                    holes.forEach { hole ->
-                        hole.forestAvatarUrl = forests.find {
-                            it.forestId == hole.forestId
-                        }?.backUrl
-                    }
+                    packForestAvatarUrlToHoles(forests, holes)
                     forests to holes
                 }.collectLatest {
+                    holesLoadState.value = LoadStatus.DONE
                     _forestsV2.emit(it.first)
                     _holesV2.emit(it.second)
                 }
@@ -76,6 +73,9 @@ class ForestViewModel : ViewModel() {
             repository.loadMoreForestHolesV2()
                 .collectLatest {
                     val newHoles = _holesV2.value.toMutableList() + it
+                    packForestAvatarUrlToHoles(
+                        holes = newHoles
+                    )
                     _holesV2.emit(newHoles)
                     holesLoadState.value = LoadStatus.DONE
                 }
@@ -197,6 +197,20 @@ class ForestViewModel : ViewModel() {
                 .collectLatest {
                     _forestsV2.emit(it)
                 }
+        }
+    }
+
+    /**
+     * 将小树林的图标装载到树洞列表上
+     * Reason：后端返回的树洞列表不带图标Url
+     * @param forests 带图标url的树林列表，默认为当前树林列表，也可以自己配置
+     * @param holes 需要装载图标的树洞列表
+     */
+    private fun packForestAvatarUrlToHoles(forests: List<ForestBrief> = forestsV2.value, holes: List<HoleV2>) {
+        holes.forEach { hole ->
+            hole.forestAvatarUrl = forests.find { forest ->
+                forest.forestId == hole.forestId
+            }?.backUrl
         }
     }
 

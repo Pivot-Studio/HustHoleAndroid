@@ -8,16 +8,13 @@
         <variable
             name="reply"
             type="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
-
-        <variable
-            name="onClick"
-            type="cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_reply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_16"
         android:background="@color/HH_Surface">
 
         <TextView

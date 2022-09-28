@@ -2,11 +2,15 @@ package cn.pivotstudio.modulep.hole.ui.activity
 
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.WindowManager
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.onNavDestinationSelected
+import androidx.navigation.ui.setupWithNavController
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulep.hole.R
@@ -65,32 +69,36 @@ class HoleActivity : BaseActivity() {
             supportActionBar?.title = destination.label
 
             when (destination.id) {
-                R.id.specificHoleFragment -> supportActionBar?.title = argument?.getString(KEY_HOLE_ID)
+                R.id.innerReplyFragment,
+                R.id.specificHoleFragment -> supportActionBar?.title = holeId.toString()
             }
         }
+
+        binding.topAppbar.setupWithNavController(
+            navController,
+            AppBarConfiguration(setOf())
+        )
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
 
     }
 
-    /**
-     * 监听手机回退键
-     *
-     * @param keyCode
-     * @param event
-     * @return
-     */
-    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) { //按下的如果是BACK，同时没有重复
-            saveData()
+    override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
+        navController.currentDestination?.let {
+            if (it.id == R.id.innerReplyFragment) {
+                return navController.popBackStack()
+            }
         }
-        return super.onKeyDown(keyCode, event)
+        return super.onKeyUp(keyCode, event)
     }
 
-    /**
-     * 保存输入内容以及选择回复的人
-     */
-    private fun saveData() {
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)
     }
+
+    override fun onNavigateUp(): Boolean {
+        return navController.navigateUp() || super.onNavigateUp()
+    }
+
 }

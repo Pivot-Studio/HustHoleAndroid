@@ -52,6 +52,7 @@ class ForestRepository(
         }.flowOn(dispatcher).catch { e ->
             e.printStackTrace()
         }.onEach {
+            lastOffset = INITIAL_OFFSET
             refreshTimestamp()
         }
     }
@@ -99,7 +100,7 @@ class ForestRepository(
                 response.errorBody()?.close()
                 emit(ApiResult.Error(code = errorCode))
             }
-        }
+        }.flowOn(dispatcher)
     }
 
     fun followTheHole(hole: HoleV2): Flow<ApiResult> {
@@ -123,7 +124,7 @@ class ForestRepository(
                 )
                 response.errorBody()?.close()
             }
-        }
+        }.flowOn(dispatcher)
     }
 
     fun loadTheHole(hole: HoleV2): Flow<HoleV2> {

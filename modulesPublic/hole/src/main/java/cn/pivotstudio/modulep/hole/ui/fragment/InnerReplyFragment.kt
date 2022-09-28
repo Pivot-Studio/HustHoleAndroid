@@ -6,9 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.*
 import androidx.navigation.fragment.navArgs
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
@@ -17,6 +15,7 @@ import cn.pivotstudio.modulep.hole.databinding.FragmentInnerReplyBinding
 import cn.pivotstudio.modulep.hole.ui.adapter.InnerReplyAdapter
 import cn.pivotstudio.modulep.hole.viewmodel.InnerReplyViewModel
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class InnerReplyFragment : BaseFragment() {
 
@@ -39,6 +38,7 @@ class InnerReplyFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModel
 
         val adapter = InnerReplyAdapter()
         binding.apply {
@@ -46,12 +46,13 @@ class InnerReplyFragment : BaseFragment() {
         }
 
         viewModel.apply {
-            lifecycleScope.launchWhenStarted {
-                innerReplies.collectLatest {
-                    adapter.submitList(it)
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    innerReplies.collectLatest {
+                        adapter.submitList(it)
+                    }
                 }
             }
-
         }
 
     }
