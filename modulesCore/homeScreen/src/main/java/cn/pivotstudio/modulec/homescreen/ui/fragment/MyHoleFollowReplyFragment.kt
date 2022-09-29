@@ -47,7 +47,7 @@ class MyHoleFollowReplyFragment(val type: Int) : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val adapter = MineRecycleViewAdapter(type, viewModel, context, binding)
+        val adapter = MineRecycleViewAdapter(type, viewModel, this, binding)
         when (type) {
             GET_HOLE -> viewModel.myHolesList.observe(viewLifecycleOwner) { list ->
                 adapter.submitList(

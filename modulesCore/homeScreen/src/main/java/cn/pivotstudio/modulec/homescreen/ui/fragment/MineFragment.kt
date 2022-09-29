@@ -337,7 +337,7 @@ class MineFragment : BaseFragment() {
             }
         }
 
-        val adapter = MineOthersAdapter(OTHER_OPTION, viewModel)
+        val adapter = MineOthersAdapter(OTHER_OPTION, viewModel, this)
         viewModel.myNameList.observe(viewLifecycleOwner) { list -> adapter.submitList(list) }
         binding.rvOptions.apply {
             this.adapter = adapter
