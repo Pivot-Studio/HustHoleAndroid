@@ -1,23 +1,35 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment.mine
 
+import android.app.Dialog
+import android.content.Context
 import android.os.Bundle
+import android.text.Editable
+import android.text.Html
+import android.text.SpannableString
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.viewpager2.adapter.FragmentStateAdapter
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.*
 import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken
+import cn.pivotstudio.modulec.homescreen.oldversion.model.EditTextReaction
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.ABOUT
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.COMMUNITY_NORM
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.EVALUATION_AND_SUGGESTIONS
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHARE
+import com.google.android.material.tabs.TabLayoutMediator
 
 /**
  *@classname ItemDetailFragment
@@ -29,12 +41,12 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Compani
 class ItemDetailFragment : Fragment() {
     private lateinit var binding: ViewDataBinding
     private val viewModel: MineFragmentViewModel by viewModels()
-    private var option:Int = 0
-    private var isVerifiedEmail:Boolean = false
+    private var option: Int = 0
+    private var isVerifiedEmail: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if((activity as HomeScreenActivity).supportActionBar != null){
+        if ((activity as HomeScreenActivity).supportActionBar != null) {
             (activity as HomeScreenActivity).supportActionBar!!.hide()
         }
         arguments?.let {
@@ -48,20 +60,8 @@ class ItemDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        when(option) {
-            R.string.campus_email -> {
-                if(isVerifiedEmail) {
-                    binding = ActivityEmailOkBinding.inflate(inflater,container, false)
-                } else if(!isVerifiedEmail) {
-                    binding = ActivityEmailVerify1Binding.inflate(inflater, container, false)
-                }
-            }
-            R.string.privacy_security -> {
-                binding = ActivitySecurityBinding.inflate(inflater, container, false)
-            }
-            R.string.keyword_shielding -> {
-                binding = ItemLabelBinding.inflate(inflater, container, false)
-            }
+        //依据内容绑定不同的视图
+        when (option) {
             COMMUNITY_NORM -> {
                 binding = ActivityRulesBinding.inflate(inflater, container, false)
             }
@@ -76,6 +76,19 @@ class ItemDetailFragment : Fragment() {
             }
             R.string.update_log -> {
                 binding = ActivityUpdateBinding.inflate(inflater, container, false)
+            }
+            R.string.campus_email -> {
+                if (isVerifiedEmail) {
+                    binding = ActivityEmailOkBinding.inflate(inflater, container, false)
+                } else if (!isVerifiedEmail) {
+                    binding = ActivityEmailVerify1Binding.inflate(inflater, container, false)
+                }
+            }
+            R.string.privacy_security -> {
+                binding = ActivitySecurityBinding.inflate(inflater, container, false)
+            }
+            R.string.keyword_shielding -> {
+                binding = ItemLabelBinding.inflate(inflater, container, false)
             }
         }
         binding.lifecycleOwner = this
@@ -100,7 +113,7 @@ class ItemDetailFragment : Fragment() {
             is ActivitySecurityBinding -> {
                 viewModel.checkPrivacyState(binding as ActivitySecurityBinding)
                 (binding as ActivitySecurityBinding).apply {
-                    stSecurity.setOnCheckedChangeListener { _,isChecked ->
+                    stSecurity.setOnCheckedChangeListener { _, isChecked ->
                         if (CheckingToken.IfTokenExist()) {
                             viewModel.changePrivacyState(!isChecked)
                         } else {
@@ -110,8 +123,163 @@ class ItemDetailFragment : Fragment() {
                 }
             }
             is ItemLabelBinding -> {
+                (binding as ItemLabelBinding).apply {
+                    viewModel.getShieldList(this)
+                    constraintLayout2Label.visibility = View.INVISIBLE
+                    screenKeywordImg.setOnClickListener {
+                        view.findNavController().popBackStack()
+                    }
+                    val hint1 = SpannableString("请尽可能简单地输入您想屏蔽的关键词")
+                    EditTextReaction.EditTextSize(etLabel, hint1, R.dimen.sp_14)
+                    constraintLayout1Label.setOnClickListener {
+                        constraintLayout1Label.visibility = View.INVISIBLE
+                        constraintLayout2Label.visibility = View.VISIBLE
+                    }
+                    tvAddButton.setOnClickListener {
+                        viewModel.postShieldWord(this)
+                    }
+                    labels.setOnLabelClickListener { _, _, pos ->
+                        //label是被点击的标签，data是标签所对应的数据，position是标签的位置。
+                        onLabelClick(pos)
+                    }
+                    etLabel.addTextChangedListener(object : TextWatcher {
+                            override fun beforeTextChanged(
+                                p0: CharSequence?,
+                                p1: Int,
+                                p2: Int,
+                                p3: Int
+                            ) {
+                            }
 
+                            override fun onTextChanged(
+                                p0: CharSequence?,
+                                p1: Int,
+                                p2: Int,
+                                p3: Int
+                            ) {
+                                if (etLabel.text.toString().length >= 7) {
+                                    val mView = View.inflate(
+                                        requireContext(), R.layout.dialog_screen, null
+                                    )
+                                    val dialog = Dialog(context!!)
+                                    dialog.setContentView(mView)
+                                    dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
+                                    val no =
+                                        mView.findViewById<View>(R.id.tv_dialog_screen_notquit) as TextView
+                                    no.visibility = View.INVISIBLE
+                                    val yes =
+                                        mView.findViewById<View>(R.id.tv_dialog_screen_quit) as TextView
+                                    val content =
+                                        mView.findViewById<View>(R.id.tv_dialog_screen_content) as TextView
+                                    content.text = "关键词长度不得超过7个字符，请重新添加！"
+                                    yes.setOnClickListener { dialog.dismiss() }
+                                    dialog.show()
+                                }
+                            }
+
+                            override fun afterTextChanged(p0: Editable?) {}
+                        })
+                }
+            }
+            is ActivityRulesBinding -> {
+                viewModel.initNorm()
+                (binding as ActivityRulesBinding).apply {
+                    lawContent.text =
+                        Html.fromHtml(viewModel.communityNorm.value, Html.FROM_HTML_MODE_LEGACY)
+                    rulesImg.setOnClickListener {
+                        view.findNavController().popBackStack()
+                    }
+                }
+            }
+            is ActivityShareCardBinding -> {
+                (binding as ActivityShareCardBinding).apply {
+                    shareCardBack.setOnClickListener {
+                        view.findNavController().popBackStack()
+                    }
+                }
+            }
+            is ActivityHoleStarBinding -> {
+                val frag = this
+                (binding as ActivityHoleStarBinding).apply {
+                    myImg.setOnClickListener {
+                        hideSoftKeyboard(requireContext() , vpHoleStar)
+                        view.findNavController().popBackStack()
+                    }
+                    vpHoleStar.adapter = object : FragmentStateAdapter(frag) {
+                        override fun getItemCount(): Int = viewModel.evalAndAdvFragmentList.value!!.size
+
+                        override fun createFragment(position: Int): Fragment {
+                            return viewModel.evalAndAdvFragmentList.value!![position]
+                        }
+                    }
+                    TabLayoutMediator(tlHoleStar, vpHoleStar) { tab, position ->
+                        tab.text = context?.getString(viewModel.evalAndAdvNameList.value!![position])
+                    }.attach()
+                }
             }
         }
     }
+
+//    private fun initPopUpView(
+////        binding: ActivityShareCardBinding
+//    ) {
+//        var isShow = false
+//        val shareToView= LayoutInflater.from(context).inflate(R.layout.ppw_share_to, null)
+//        val store: LinearLayout = shareToView.findViewById(R.id.store)
+//        val ppwShareTo= PopupWindow(shareToView)
+//        ppwShareTo.width = ViewGroup.LayoutParams.MATCH_PARENT
+//        ppwShareTo.height = ViewGroup.LayoutParams.WRAP_CONTENT
+//        ppwShareTo.animationStyle = R.style.Page2Anim
+//        ppwShareTo.isOutsideTouchable = true
+//
+////        binding.shareCardImg.setOnClickListener {
+////            isShow = if (!isShow) {
+////                ppwShareTo.showAsDropDown(binding.ppwLocation)
+////                true
+////            } else {
+////                ppwShareTo.dismiss()
+////                false
+////            }
+////        }
+//        store.setOnClickListener {
+//            Toast.makeText(context, "保存成功", Toast.LENGTH_SHORT).show()
+//            ppwShareTo.dismiss()
+//        }
+//        MediaScannerConnection.scanFile(context, arrayOf("path"), arrayOf("image/jpeg")) { path, _ ->
+//            Log.i("shareCard", "onScanCompleted$path") }
+//
+//    }
+
+    private fun onLabelClick(
+        pos: Int
+    ) {
+        val mView =
+            View.inflate(context, R.layout.dialog_screen, null)
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(mView)
+        dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
+        val no = mView.findViewById<View>(R.id.tv_dialog_screen_notquit) as TextView
+        val yes = mView.findViewById<View>(R.id.tv_dialog_screen_quit) as TextView
+        val content = mView.findViewById<View>(R.id.tv_dialog_screen_content) as TextView
+        val text = viewModel.shieldWordList.value!![pos]
+        content.text = getString(R.string.dialog_shield_delete).format(
+            text.substring(0, text.length - 3)
+        )
+        no.setOnClickListener {
+            dialog.dismiss()
+        }
+        yes.setOnClickListener {
+            viewModel.deleteShieldWord(text, dialog, binding as ItemLabelBinding)
+        }
+        dialog.show()
+    }
+
+    private fun hideSoftKeyboard(
+        context: Context,
+        view: View
+    ) {
+        val inputMethodManager =  context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputMethodManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
 }

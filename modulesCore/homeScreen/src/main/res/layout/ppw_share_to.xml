@@ -1,50 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@color/GrayScale_0">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <LinearLayout
-        android:id="@+id/store"
-        android:layout_width="@dimen/dp_54"
-        android:layout_height="@dimen/dp_54"
-        android:layout_marginBottom="@dimen/dp_15"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="@dimen/dp_15"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_share_title">
+    <data>
 
-        <ImageView
-            android:layout_width="@dimen/dp_36"
-            android:layout_height="@dimen/dp_36"
-            android:layout_gravity="center_horizontal"
-            android:scaleType="fitXY"
-            app:srcCompat="@mipmap/store" />
+    </data>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_5"
-            android:text="@string/store"
-            android:textColor="@color/GrayScale_100"
-            android:textSize="@dimen/sp_10" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_share_title"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_15"
-        android:gravity="center_horizontal"
-        android:text="@string/share_to"
-        android:textColor="@color/GrayScale_100"
-        android:textSize="@dimen/sp_16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:background="@color/GrayScale_0">
+
+        <LinearLayout
+            android:id="@+id/store"
+            android:layout_width="@dimen/dp_54"
+            android:layout_height="@dimen/dp_54"
+            android:layout_marginBottom="@dimen/dp_15"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="@dimen/dp_15"
+            android:clickable="true"
+            android:focusable="true"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_share_title">
+
+            <ImageView
+                android:id="@+id/img_share"
+                android:layout_width="@dimen/dp_36"
+                android:layout_height="@dimen/dp_36"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="fitXY"
+                app:srcCompat="@mipmap/store" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/dp_5"
+                android:text="@string/store"
+                android:textColor="@color/GrayScale_100"
+                android:textSize="@dimen/sp_10" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_share_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_15"
+            android:gravity="center_horizontal"
+            android:text="@string/share_to"
+            android:textColor="@color/GrayScale_100"
+            android:textSize="@dimen/sp_16"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

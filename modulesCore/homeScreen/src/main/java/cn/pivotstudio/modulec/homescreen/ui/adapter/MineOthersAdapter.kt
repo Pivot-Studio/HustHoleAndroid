@@ -1,21 +1,39 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
+import android.media.MediaScannerConnection
+import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.PopupWindow
+import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineOthersBinding
+import cn.pivotstudio.modulec.homescreen.oldversion.mine.ShareCardActivity
+import cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragmentDirections
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragmentDirections
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.DETAIL
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.OTHER_OPTION
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.PERSONAL_SETTING
+import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHARE
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHIELD_SETTING
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.UPDATE
+import kotlinx.coroutines.NonDisposableHandle.parent
 
 /**
  *@classname MineSettingAdapter
@@ -26,7 +44,8 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Compani
  */
 class MineOthersAdapter(
     private val type: Int,
-    private val viewModel: MineFragmentViewModel
+    private val viewModel: MineFragmentViewModel,
+    private val fragment: Fragment
 ) : ListAdapter<Int, MineOthersAdapter.MyOthersViewHolder>(DiffCallback) {
 
     inner class MyOthersViewHolder(
@@ -37,32 +56,75 @@ class MineOthersAdapter(
                 this.name = name
                 if (type == OTHER_OPTION) {
                     binding.rlOthers.setOnClickListener {
-                        if(layoutPosition == PERSONAL_SETTING || layoutPosition == SHIELD_SETTING || layoutPosition == UPDATE) {
-                            val action = MineFragmentDirections.actionMineFragmentToItemMineFragment(
-                                layoutPosition
-                            )
+                        if (layoutPosition == PERSONAL_SETTING || layoutPosition == SHIELD_SETTING || layoutPosition == UPDATE) {
+                            val action =
+                                MineFragmentDirections.actionMineFragmentToItemMineFragment(
+                                    layoutPosition
+                                )
                             it.findNavController().navigate(action)
+                        } else if (layoutPosition == SHARE) {
+                            initShareCardView()
                         } else {
-                            val action = MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
-                                layoutPosition, true
-                            )
+                            val action =
+                                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
+                                    layoutPosition, true
+                                )
                             it.findNavController().navigate(action)
                         }
                     }
                 } else if (type == DETAIL) {
-                    if(name == R.string.campus_email) {
+                    if (name == R.string.campus_email) {
                         viewModel.checkEmailVerifyState(binding)
                     }
                     binding.rlOthers.setOnClickListener {
-                        val action = ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
-                            name, viewModel.isVerifiedEmail.value!!
-                        )
+                        val action =
+                            ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
+                                name, viewModel.isVerifiedEmail.value!!
+                            )
                         it.findNavController().navigate(action)
                     }
                 }
                 executePendingBindings()
             }
         }
+        @SuppressLint("InflateParams")
+        private fun initShareCardView() {
+            val shareCardView = LayoutInflater.from((fragment as MineFragment).context).inflate(R.layout.ppw_share, null)
+            val shareCard = shareCardView.findViewById<LinearLayout>(R.id.share_card)
+            val cancel = shareCardView.findViewById<TextView>(R.id.share_cancel_button)
+            val ppwShare = PopupWindow(shareCardView)
+            ppwShare.isOutsideTouchable = true  //点击卡片外部退出
+            ppwShare.isFocusable = true     //按返回键允许退出
+            ppwShare.width = ViewGroup.LayoutParams.MATCH_PARENT
+            ppwShare.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            val lp = fragment.requireActivity().window.attributes
+            lp.alpha = 0.6f // 0.0~1.0   减弱背景亮度
+            fragment.requireActivity().window.attributes = lp
+            ppwShare.showAtLocation(
+                fragment.requireActivity().window.decorView, Gravity.BOTTOM, 0,
+                0
+            )    //设置显示位置
+            ppwShare.setOnDismissListener {
+                cancelDarkBackGround()
+            }
+            cancel.setOnClickListener {
+                ppwShare.dismiss()
+            }
+            shareCard.setOnClickListener {
+                ppwShare.dismiss()
+                val action =
+                    MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
+                        SHARE, true
+                    )
+                fragment.findNavController().navigate(action)
+            }
+        }
+
+        private fun cancelDarkBackGround() {
+            val lp = (fragment as MineFragment).requireActivity().window.attributes
+            lp.alpha = 1f // 0.0~1.0
+            fragment.requireActivity().window.attributes = lp
+        }   //取消暗背景
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyOthersViewHolder {

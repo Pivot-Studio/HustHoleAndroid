@@ -16,6 +16,7 @@ import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineHoleFollowBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineReplyBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.mine.HoleStarReplyActivity
+import cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_HOLE
@@ -33,7 +34,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 class MineRecycleViewAdapter(
     val type: Int,
     val viewModel: MyHoleFragmentViewModel,
-    val content: Context?,
+    val frag: MyHoleFollowReplyFragment,
     val fragBinding: FragmentMyholeBinding
     ) : ListAdapter<Array<String?>, RecyclerView.ViewHolder>(DiffCallback) {
 
@@ -51,7 +52,7 @@ class MineRecycleViewAdapter(
                             Integer.valueOf(hole[3].toString())
                         )
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                        .navigation(it.context as HoleStarReplyActivity, 2)
+                        .navigation(frag.requireActivity(), 2)
                 }
                 if(type == GET_HOLE)
                     textView.text = R.string.thumb_follow.toString().format(hole[6],hole[5])
@@ -79,7 +80,7 @@ class MineRecycleViewAdapter(
                             Integer.valueOf(hole[3].toString())
                         )
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                        .navigation(it.context as HoleStarReplyActivity, 2)
+                        .navigation(frag.requireActivity(), 2)
                 }
                 myReplyMoreWhat.setOnClickListener{
                     if (!moreCondition) {
@@ -91,8 +92,8 @@ class MineRecycleViewAdapter(
                     }
                 }
                 myReplyDelete.setOnClickListener{
-                    val mView = View.inflate(content, R.layout.dialog_delete, null)
-                    val dialog = Dialog(content!!)
+                    val mView = View.inflate(frag.context, R.layout.dialog_delete, null)
+                    val dialog = Dialog(frag.requireContext())
                     dialog.setContentView(mView)
                     dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
                     val no = mView.findViewById<View>(R.id.dialog_delete_tv_cancel) as TextView
@@ -103,7 +104,7 @@ class MineRecycleViewAdapter(
                         dialog.dismiss()
                     }
                     yes.setOnClickListener{
-                        viewModel.deleteHole(dialog, binding, content, layoutPosition)
+                        viewModel.deleteHole(dialog, binding, frag.context, layoutPosition)
                         moreCondition = false
                         notifyDataSetChanged()
                     }
