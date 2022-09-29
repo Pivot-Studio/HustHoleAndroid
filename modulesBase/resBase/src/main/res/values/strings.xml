@@ -134,6 +134,15 @@
     <string name="check_update">检查更新</string>
     <string name="verify_email">验证校园邮箱</string>
     <string name="hang_around">我再逛逛</string>
+    <string name="norm_1037">1037树洞社区规范</string>
+    <string name="update_date">更新日期：2021年3月11日</string>
+    <string name="add_shield">添加屏蔽关键词</string>
+    <string name="word_shielded">已屏蔽的关键词</string>
+    <string name="add">添加</string>
+    <string name="commit">提交</string>
+    <string name="rec_hole">🙂你在多大程度上愿意向他人推荐1037树洞？</string>
+    <string name="eval">评价一下</string>
+    <string name="adv">给点建议</string>
     <string name="韵酒蛋包饭">韵酒蛋包饭</string>
     <string name="分享">分享</string>
     <string name="分享到">分享到</string>

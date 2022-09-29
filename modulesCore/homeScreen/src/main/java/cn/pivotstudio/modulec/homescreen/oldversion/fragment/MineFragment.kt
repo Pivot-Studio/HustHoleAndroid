@@ -1,43 +1,43 @@
-package cn.pivotstudio.modulec.homescreen.oldversion.fragment
-
-import android.app.Dialog
-import android.content.Intent
-import android.os.Bundle
-import android.text.Html
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
-import cn.pivotstudio.moduleb.database.MMKVUtil
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.modulec.homescreen.R
-import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineBinding
-import cn.pivotstudio.modulec.homescreen.oldversion.mine.*
-import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken
-import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface
-import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
-import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW
-import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_HOLE
-import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_REPLY
-import com.alibaba.android.arouter.launcher.ARouter
-import okhttp3.ResponseBody
-import org.json.JSONException
-import org.json.JSONObject
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import java.io.IOException
-
-class MineFragment : Fragment() {
-
+//package cn.pivotstudio.modulec.homescreen.oldversion.fragment
+//
+//import android.app.Dialog
+//import android.content.Intent
+//import android.os.Bundle
+//import android.text.Html
+//import android.view.Gravity
+//import android.view.LayoutInflater
+//import android.view.View
+//import android.view.ViewGroup
+//import android.widget.*
+//import androidx.constraintlayout.widget.ConstraintLayout
+//import androidx.databinding.DataBindingUtil
+//import androidx.fragment.app.Fragment
+//import androidx.navigation.NavDirections
+//import androidx.navigation.findNavController
+//import cn.pivotstudio.moduleb.database.MMKVUtil
+//import cn.pivotstudio.moduleb.libbase.constant.Constant
+//import cn.pivotstudio.modulec.homescreen.R
+//import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineBinding
+//import cn.pivotstudio.modulec.homescreen.oldversion.mine.*
+//import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken
+//import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface
+//import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager
+//import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
+//import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW
+//import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_HOLE
+//import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_REPLY
+//import com.alibaba.android.arouter.launcher.ARouter
+//import okhttp3.ResponseBody
+//import org.json.JSONException
+//import org.json.JSONObject
+//import retrofit2.Call
+//import retrofit2.Callback
+//import retrofit2.Response
+//import retrofit2.Retrofit
+//import java.io.IOException
+//
+//class MineFragment : Fragment() {
+//
 //    private lateinit var binding: FragmentMineBinding
 //
 //    private var tv_joinDays: TextView? = null
@@ -260,4 +260,4 @@ class MineFragment : Fragment() {
 //    companion object {
 //        private val BASE_URL = RetrofitManager.API
 //    }
-}
+//}

@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import cn.pivotstudio.modulec.homescreen.R
@@ -36,42 +35,37 @@ class EvaluateFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        for (i in 1..10) {
+        for(i in 1 .. 10) {
             binding.chipGroup.addView(createSingleChip(i))
         }
         binding.ok.isClickable = false
-        binding.chipGroup.setOnCheckedStateChangeListener { _, _ ->
-            if (binding.chipGroup.checkedChipId == View.NO_ID) {
-                binding.ok.setBackgroundResource(R.drawable.standard_button_gray)
-                binding.ok.setTextColor(resources.getColor(R.color.GrayScale_20, null))
-                binding.ok.isClickable = false
-            } else {
+        binding.chipGroup.setOnCheckedStateChangeListener { _, checkedIds ->
+            if(binding.chipGroup.checkedChipId in checkedIds) {
                 binding.ok.setBackgroundResource(R.drawable.button)
                 binding.ok.setTextColor(resources.getColor(R.color.GrayScale_100, null))
                 binding.ok.isClickable = true
+            } else if (binding.chipGroup.checkedChipId == View.NO_ID) {
+                binding.ok.setBackgroundResource(R.drawable.standard_button_gray)
+                binding.ok.setTextColor(resources.getColor(R.color.GrayScale_20 , null))
+                binding.ok.isClickable = false
             }
         }
         binding.ok.setOnClickListener {
-            viewModel.sendEvaluation(
-                binding.chipGroup[binding.chipGroup.checkedChipId - 1].id,
-                binding
-            )
+            viewModel.sendEvaluation(binding.chipGroup.checkedChipId - 2, binding)
 //            Log.d("HAHA",binding.chipGroup.checkedChipId.toString()) //checkedChipId比实际多出两个数字
         }
     }
 
     private fun createSingleChip(
         score: Int
-    ): Chip {
+    ): Chip{
         val chip = layoutInflater.inflate(R.layout.item_chip, binding.chipGroup, false) as Chip
-        chip.id = score
         chip.text = score.toString()
         return chip
     }
 
     companion object {
         const val TAG = "EvaluateFragment"
-
         @JvmStatic
         fun newInstance(): EvaluateFragment {
             return EvaluateFragment()

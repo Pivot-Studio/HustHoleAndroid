@@ -6,4 +6,6 @@
     <string name="reply_follow">%s 评论 · %s 关注</string>
     <string name="description_publish_hole">发布树洞</string>
     <string name="join_days">我来到树洞已经%s天啦(*^▽^*)</string>
+    <string name="shield_num">( %d / %d )</string>
+    <string name="dialog_shield_delete">你确认要删除对关键词 \"%s\" 的屏蔽吗？</string>
 </resources>
