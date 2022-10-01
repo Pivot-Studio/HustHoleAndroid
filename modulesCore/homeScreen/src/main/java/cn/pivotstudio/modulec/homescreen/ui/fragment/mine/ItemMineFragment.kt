@@ -30,10 +30,10 @@ class ItemMineFragment : Fragment() {
     private var type: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         if ((activity as HomeScreenActivity).supportActionBar != null) {
             (activity as HomeScreenActivity).supportActionBar!!.hide()
         }
+        super.onCreate(savedInstanceState)
         arguments?.let {
             type = it.getInt("optionType")
         }

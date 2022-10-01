@@ -1,12 +1,26 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
-import android.app.Dialog
+import android.Manifest
+import android.app.*
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Build
+import android.os.CountDownTimer
+import android.os.Environment
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
 import android.widget.Toast
-import androidx.core.view.children
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -14,18 +28,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.modulec.homescreen.R
-import cn.pivotstudio.modulec.homescreen.databinding.ActivitySecurityBinding
-import cn.pivotstudio.modulec.homescreen.databinding.FragmentEvaluateBinding
-import cn.pivotstudio.modulec.homescreen.databinding.ItemLabelBinding
-import cn.pivotstudio.modulec.homescreen.databinding.ItemMineOthersBinding
-import cn.pivotstudio.modulec.homescreen.oldversion.mine.fragment.AdviceFragment
+import cn.pivotstudio.modulec.homescreen.databinding.*
+import cn.pivotstudio.modulec.homescreen.oldversion.model.CommonUtils
+import cn.pivotstudio.modulec.homescreen.oldversion.model.NotificationSetUtil
 import cn.pivotstudio.modulec.homescreen.oldversion.network.ErrorMsg
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager.API
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment
+import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemDetailFragment
+import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragment
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONException
@@ -34,6 +51,9 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
 import java.io.IOException
 
 /**
@@ -62,6 +82,8 @@ class MineFragmentViewModel : ViewModel() {
     private val _shieldWordList = MutableLiveData<MutableList<String>>()
     private val _evalAndAdvNameList = MutableLiveData<List<Int>>()
     private val _evalAndAdvFragmentList = MutableLiveData<List<Fragment>>()
+    private val _chipTitleList = MutableLiveData<List<Int>>()
+    private val _updateLogList = MutableLiveData<List<ItemDetailFragment.Update>>()
 
     val joinDay: LiveData<Int> = _joinDay
     val myHoleNum: LiveData<Int> = _myHoleNum
@@ -79,6 +101,8 @@ class MineFragmentViewModel : ViewModel() {
     val shieldWordList: LiveData<MutableList<String>> = _shieldWordList
     val evalAndAdvNameList: LiveData<List<Int>> = _evalAndAdvNameList
     val evalAndAdvFragmentList: LiveData<List<Fragment>> = _evalAndAdvFragmentList
+    val chipTitleList: LiveData<List<Int>> = _chipTitleList
+    val updateLogList: LiveData<List<ItemDetailFragment.Update>> = _updateLogList
 
     var retrofit: Retrofit? = null
     var request: RequestInterface? = null
@@ -158,6 +182,444 @@ class MineFragmentViewModel : ViewModel() {
         }
     }
 
+    private fun getVersionName(): String {
+        val manager = context!!.packageManager
+        var name: String? = null
+        try {
+            val info = manager.getPackageInfo(context!!.packageName, 0)
+            name = info.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+
+        return name!!
+    }
+
+    private var notificationManager: NotificationManager? = null
+    private var builder: NotificationCompat.Builder? = null
+
+    /*
+     * 方法名：initialNotification()
+     * 功    能：初始化通知管理器,创建Notification
+     * 参    数：无
+     * 返回值：无
+     */
+    private fun initialNotification(
+        frag: ItemMineFragment
+    ) {
+        //Notification跳转页面
+        notificationManager = frag.requireContext()
+            .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+        val notificationIntent = Intent(frag.context, HomeScreenActivity::class.java)
+        val contentIntent = PendingIntent.getActivity(frag.context, 0, notificationIntent, 0)
+        val PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID"
+        val PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME"
+        /*
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(PUSH_CHANNEL_ID, PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
+            Log.d("ssss","1");
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
+            Log.d("ssss","2");
+        }
+        //初始化通知管理器
+
+        //NotificationChannel channel =notificationManager.getNotificationChannel(PUSH_CHANNEL_ID);
+        notificationManager.deleteNotificationChannel(PUSH_CHANNEL_ID);
+        //8.0及以上需要设置好“channelId”（没有特殊要求、唯一即可）、“channelName”（用户看得到的信息）、“importance”（重要等级）这三个重要参数，然后创建到NotificationManager。
+
+
+        */
+
+        //创建Notification
+        builder = NotificationCompat.Builder(frag.requireContext(), "sss")
+        builder!!.setContentTitle("正在更新...") //设置通知标题
+            .setContentIntent(contentIntent)
+            .setSmallIcon(R.drawable.icon) //设置通知的小图标(有些手机设置Icon图标不管用，默认图标就是Manifest.xml里的图标)
+            .setLargeIcon(
+                BitmapFactory.decodeResource(
+                    frag.requireContext().resources,
+                    R.drawable.icon
+                )
+            ) //设置通知的大图标
+            .setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE) //设置通知的提醒方式： 呼吸灯
+            .setPriority(NotificationCompat.PRIORITY_MAX) //设置通知的优先级：最大
+            .setAutoCancel(false) //设置通知被点击一次是否自动取消
+            .setContentText("下载进度:0%")
+            .setChannelId(PUSH_CHANNEL_ID)
+            .setProgress(100, 0, false)
+        //进度最大100，默认是从0开始
+        lateinit var notify: Notification
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel("to-do", "待办消息", NotificationManager.IMPORTANCE_LOW)
+            channel.enableVibration(true)
+            channel.vibrationPattern = longArrayOf(500)
+            notificationManager!!.createNotificationChannel(channel)
+            builder!!.setChannelId("to-do")
+            notify = builder!!.build()
+        } else {
+            notify = builder!!.build()
+        }
+        notify.flags = notify.flags or Notification.FLAG_AUTO_CANCEL // 但用户点击消息后，消息自动在通知栏自动消失
+        notificationManager!!.notify(1, notify) // 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
+    }
+
+    /*
+     * 方法名：localStorage(final Response response, final File file)
+     * 功    能：保存文件到本地
+     * 参    数：Response response, File file
+     * 返回值：无
+     */
+    @Throws(FileNotFoundException::class)
+    private fun localStorage(
+        response: okhttp3.Response,
+        file: File,
+        frag: ItemMineFragment
+    ) {
+        //拿到字节流
+        val `is` = response.body!!.byteStream()
+        var len = 0
+        val fos = FileOutputStream(file)
+        val buf = ByteArray(2048)
+        try {
+            while (`is`.read(buf).also { len = it } != -1) {
+                fos.write(buf, 0, len)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val channel = NotificationChannel(
+                        "to-do2", "待办消息",
+                        NotificationManager.IMPORTANCE_LOW
+                    )
+                    channel.enableVibration(false)
+                    channel.setSound(null, null)
+                    // channel.setVibrationPattern(new long[]{500});
+                    notificationManager!!.createNotificationChannel(channel)
+                    builder!!.setChannelId("to-do2")
+                } else {
+                }
+                //Log.e("TAG每次写入到文件大小", "onResponse: "+len);
+                Log.e(
+                    "TAG保存到文件进度：",
+                    file.length().toString() + "/" + response.body!!.contentLength()
+                )
+
+                //notification进度条和显示内容不断变化，并刷新。
+                builder!!.setProgress(
+                    100,
+                    (file.length() * 100 / response.body!!.contentLength()).toInt(), false
+                )
+                builder!!.setContentText(
+                    "下载进度:" + (file.length() * 100 / response.body!!.contentLength()).toInt() + "%"
+                )
+                builder!!.setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE)
+                val notification: Notification = builder!!.build()
+                notificationManager!!.notify(1, notification)
+            }
+            fos.flush()
+            fos.close()
+            `is`.close()
+
+            //下载完成，点击通知，安装
+            installingAPK(file)
+        } catch (e: IOException) {
+            viewModelScope.launch {
+                Toast.makeText(context, "下载失败", Toast.LENGTH_SHORT).show()
+                notificationManager!!.cancel(1)
+                notificationManager = frag.requireContext()
+                    .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+                val notificationIntent = Intent(
+                    frag.context,
+                    frag.activity!!::class.java
+                )
+                val contentIntent = PendingIntent.getActivity(
+                    frag.context, 0, notificationIntent,
+                    0
+                )
+                val PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID"
+                val PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME"
+
+                //创建Notification
+                builder = NotificationCompat.Builder(frag.requireContext(), "sss2")
+                builder!!.setContentTitle("下载失败") //设置通知标题
+                    .setContentIntent(contentIntent)
+                    .setSmallIcon(
+                        R.mipmap.icon
+                    ) //设置通知的小图标(有些手机设置Icon图标不管用，默认图标就是Manifest.xml里的图标)
+                    .setLargeIcon(
+                        BitmapFactory.decodeResource(
+                            frag.requireContext().resources,
+                            R.mipmap.icon
+                        )
+                    ) //设置通知的大图标
+                    .setDefaults(Notification.DEFAULT_LIGHTS) //设置通知的提醒方式： 呼吸灯
+                    .setPriority(NotificationCompat.PRIORITY_MAX) //设置通知的优先级：最大
+                    .setAutoCancel(true) //设置通知被点击一次是否自动取消
+                    .setContentText("请重试")
+                    .setOnlyAlertOnce(true)
+                    .setChannelId(PUSH_CHANNEL_ID)
+                    .setProgress(100, 0, false)
+                //进度最大100，默认是从0开始
+                var notify: Notification? = null
+                notify = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val channel = NotificationChannel(
+                        "to-do", "待办消息",
+                        NotificationManager.IMPORTANCE_HIGH
+                    )
+                    channel.enableVibration(false)
+                    channel.setSound(null, null)
+                    // channel.setVibrationPattern(new long[]{500});
+                    notificationManager!!.createNotificationChannel(channel)
+                    builder!!.setChannelId("to-do")
+                    builder!!.build()
+                } else {
+                    builder!!.build()
+                }
+                //使用默认的声音
+                //  notify.defaults |= Notification.DEFAULT_SOUND;
+                //notify.sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.doorbell);
+                //   notify.defaults |= Notification.DEFAULT_VIBRATE;
+                notify.flags =
+                    notify.flags or Notification.FLAG_AUTO_CANCEL // 但用户点击消息后，消息自动在通知栏自动消失
+                notificationManager!!.notify(
+                    1,
+                    notify
+                ) // 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
+
+                //构建通知对象
+                val notification: Notification = builder!!.build()
+                notificationManager!!.notify(1, notification)
+
+
+                /*
+
+                    //    builder.setContentTitle("下载失败");
+                                builder.setContentText("请重试");
+                      //          builder.setAutoCancel(true);//设置通知被点击一次是否自动取消
+
+
+                        Notification notification = builder.build();
+                        notificationManager.notify(1, notification);
+                        Log.d("hahahahaha","hahahahahaha");
+
+                         */
+                e.printStackTrace()
+            }
+        }
+    }
+
+    private fun download(
+        androidUpdateUrl: String,
+        frag: ItemMineFragment
+    ) {
+        val client = OkHttpClient()
+        val request: Request = Request.Builder().url(androidUpdateUrl).build()
+        val call = client.newCall(request)
+        call.enqueue(object : okhttp3.Callback {
+            @Throws(FileNotFoundException::class)
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                Log.e("TAG-下载成功", response.code.toString() + "---" + response.body.toString())
+                //设置apk存储路径和名称
+                val file = File(
+                    Environment.getExternalStorageDirectory().absolutePath + "/1037树洞.apk"
+                )
+                //保存文件到本地
+                localStorage(response, file, frag)
+            }
+
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                Log.e("TAG-失败", e.toString())
+                Looper.prepare()
+                Toast.makeText(context, "网络请求失败！", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    /*
+     * 方法名：installingAPK(File file)
+     * 功    能：下载完成，点击通知，安装apk,适配安卓6.0,7.0,8.0
+     * 参    数：File file
+     * 返回值：无
+     */
+    private fun installingAPK(file: File) {
+        /*
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        //安卓7.0以上需要在在Manifest.xml里的application里，设置provider路径
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            Uri contentUri = FileProvider.getUriForFile(this, "cn.pivotstudio.husthole.fileprovider", new File(file.getPath()));
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+        Log.d("sss","4");
+        } else {
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+            Log.d("sss","5");
+        }
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
+
+        //下载完成后，设置notification为点击一次就关闭，并设置完成标题内容。并设置跳转到安装页面。
+        builder.setContentTitle("下载完成")
+                .setContentText("点击安装")
+                .setAutoCancel(true)//设置通知被点击一次是否自动取消
+                .setContentIntent(contentIntent);
+
+        Notification notification = builder.build();
+        notificationManager.notify(1, notification);
+*/
+        if (NotificationManagerCompat.from(context!!).areNotificationsEnabled()) {
+            val intent = Intent(Intent.ACTION_VIEW)
+            //安卓7.0以上需要在在Manifest.xml里的application里，设置provider路径
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                val contentUri = FileProvider.getUriForFile(
+                    context!!, "cn.pivotstudio.husthole.fileprovider",
+                    File(file.path)
+                )
+                intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
+            } else {
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                intent.setDataAndType(
+                    Uri.fromFile(file),
+                    "application/vnd.android.package-archive"
+                )
+            }
+            val contentIntent = PendingIntent.getActivity(context!!, 0, intent, 0)
+            //下载完成后，设置notification为点击一次就关闭，并设置完成标题内容。并设置跳转到安装页面。
+            builder!!.setContentTitle("下载完成")
+                .setContentText("点击安装")
+                .setAutoCancel(true) //设置通知被点击一次是否自动取消
+                .setContentIntent(contentIntent)
+            val notification = builder!!.build()
+            notificationManager!!.notify(1, notification)
+        } else {
+            val var2 = Intent()
+            var2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            var2.action = Intent.ACTION_VIEW
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                var2.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                val contentUri = FileProvider.getUriForFile(
+                    context!!, "cn.pivotstudio.husthole.fileprovider",
+                    File(file.path)
+                )
+                var2.setDataAndType(contentUri, "application/vnd.android.package-archive")
+            } else {
+                var2.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive")
+            }
+            try {
+                context!!.startActivity(var2)
+            } catch (var5: Exception) {
+                var5.printStackTrace()
+                Toast.makeText(context, "没有找到打开此类文件的程序", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+    fun checkVersion(
+        frag: ItemMineFragment
+    ) {
+        val versionName = getVersionName()
+        val call = request!!.checkupdate2()
+        viewModelScope.launch {
+            call.enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>
+                ) {
+                    try {
+                        val mode = JSONObject(response.body()!!.string())
+                        val androidVersion = mode.getString("Androidversion")
+                        val androidUpdateUrl = mode.getString("AndroidUpdateUrl")
+                        if (androidVersion == versionName) {
+                            Toast.makeText(
+                                context, "您的应用为最新版本",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        } else {
+                            val mView = View.inflate(
+                                frag.context, R.layout.dialog_update,
+                                null
+                            )
+                            val dialog = Dialog(frag.requireContext())
+                            dialog.setContentView(mView)
+                            dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
+                            val no =
+                                mView.findViewById<View>(R.id.dialog_delete_tv_cancel) as TextView
+                            val yes =
+                                mView.findViewById<View>(R.id.dialog_delete_tv_yes) as TextView
+                            val textView =
+                                mView.findViewById<View>(R.id.tv_dialogupdaate_content) as TextView
+                            textView.text = context!!.getString(R.string.newVersionTip)
+                                .format(versionName, androidVersion).trimIndent()
+                            no.setOnClickListener { dialog.dismiss() }
+                            yes.setOnClickListener {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    if (ContextCompat.checkSelfPermission(
+                                            frag.requireContext(),
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                        )
+                                        != PackageManager.PERMISSION_GRANTED
+                                    ) {
+                                        //没有权限则申请权限
+                                        ActivityCompat.requestPermissions(
+                                            frag.requireActivity(),
+                                            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                                            1
+                                        )
+                                    } else {
+                                        //有权限直接执行,docode()不用做处理
+                                        if (androidUpdateUrl == "") {
+                                            Toast.makeText(
+                                                context,
+                                                "获取的下载链接为空", Toast.LENGTH_SHORT
+                                            ).show()
+                                            dialog.dismiss()
+                                        } else {
+                                            NotificationSetUtil.OpenNotificationSetting(
+                                                frag.context
+                                            ) {
+                                                initialNotification(frag)
+                                                download(androidUpdateUrl, frag)
+                                                dialog.dismiss()
+                                                //Toast.makeText(HomeScreenActivity,"已开启通知权限",Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    }
+                                } else { //小于6.0，不用申请权限，直接执行
+                                    if (androidUpdateUrl == "") {
+                                        Toast.makeText(
+                                            context, "获取的下载链接为空",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                        dialog.dismiss()
+                                    } else {
+                                        initialNotification(frag)
+                                        download(androidUpdateUrl, frag)
+                                        // updateCondition = true;
+                                        dialog.dismiss()
+                                    }
+                                }
+                            }
+                            if (CommonUtils.isFastDoubleClick()) {
+                                return
+                            } else {
+                                dialog.show()
+                            }
+                        }
+                    } catch (e: IOException) {
+                        e.printStackTrace()
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(context, "请检查网络", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+        }
+    }
+
     fun checkPrivacyState(
         binding: ActivitySecurityBinding
     ) {
@@ -197,7 +659,7 @@ class MineFragmentViewModel : ViewModel() {
         state: Boolean
     ) {
         val call =
-            request!!.changeSecurityMode(RetrofitManager.API + "auth/update?to_incognito=" + state)
+            request!!.changeSecurityMode(API + "auth/update?to_incognito=" + state)
         viewModelScope.launch {
             call.enqueue(object : Callback<ResponseBody?> {
                 override fun onResponse(
@@ -334,13 +796,28 @@ class MineFragmentViewModel : ViewModel() {
                 )
     }
 
+    fun initUpdateLog() {
+        _updateLogList.value = listOf(
+            ItemDetailFragment.Update(
+                "v 1.0", "2021-09-21", " 1037树洞是一个华科校内匿名社区，您不用担心被熟悉的人发现身份.\n"
+                        + " -身份验证：允许在注册后通过华科校内邮箱来验证在校学生身份；\n"
+                        + "-树洞发布：可匿名发布文字内容到所有人都能看到的树洞广场\n"
+                        + "-树洞搜索：支持洞号、关键词搜索，方便您找到有趣的树洞；\n"
+                        + "-树洞交流：您可以对感兴趣的树洞进行点赞、评论、关注的操作，您的树洞在被评论后会收到通知；\n"
+                        + "-小树林：聚合同类型树洞，方便您浏览感兴趣话题；\n"
+                        + "-关键词屏蔽：对您不感兴趣的树洞内容，支持自定义设置关键词进行屏蔽；\n"
+                        + "-只看洞主：浏览树洞内容时，您可以选择只看洞主发布的评论；\n"
+                        + "-热门评论：浏览树洞内容时，您可以查看树洞下的最热评论；\n"
+                        + "-我的：支持对我的树洞、我的关注、我的评论进行统一管理，您可以保存图片分享树洞给好友。"
+            )
+        )
+    }
+
     fun postShieldWord(
         binding: ItemLabelBinding
     ) {
         val call =
-            request!!.addblockword(RetrofitManager.API + "blockwords?word=" + binding.etLabel.text.toString())
-        //            val map = HashMap<String, String>()
-//            map["word"] = binding.etLabel.text.toString()
+            request!!.addblockword(API + "blockwords?word=" + binding.etLabel.text.toString())
         viewModelScope.launch {
             call.enqueue(object : Callback<ResponseBody?> {
                 override fun onResponse(
@@ -360,15 +837,20 @@ class MineFragmentViewModel : ViewModel() {
                             _shieldWordList.value!!.add(binding.etLabel.text.toString() + "  ×")
                             binding.apply {
                                 labels.setLabels(_shieldWordList.value)
-                                tvLabelSheildnumber.text = context!!.getString(R.string.shield_num).format(_shieldWordList.value!!.size, 5)
+                                tvLabelSheildnumber.text = context!!.getString(R.string.shield_num)
+                                    .format(_shieldWordList.value!!.size, 5)
                                 etLabel.setText("")
                                 constraintLayout1Label.visibility = View.VISIBLE
                                 constraintLayout2Label.visibility = View.INVISIBLE
                                 etLabel.isFocusable = true
                                 etLabel.isFocusableInTouchMode = true
                                 etLabel.requestFocus()
-                                val imm = etLabel.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_NOT_ALWAYS)
+                                val imm =
+                                    etLabel.context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                                imm.toggleSoftInput(
+                                    InputMethodManager.SHOW_FORCED,
+                                    InputMethodManager.HIDE_NOT_ALWAYS
+                                )
                             }
                         } catch (e: IOException) {
                             e.printStackTrace()
@@ -390,7 +872,11 @@ class MineFragmentViewModel : ViewModel() {
                                 e.printStackTrace()
                             }
                         } else {
-                            Toast.makeText(context, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                R.string.network_unknownfailture,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -410,7 +896,12 @@ class MineFragmentViewModel : ViewModel() {
         dialog: Dialog,
         binding: ItemLabelBinding
     ) {
-        val call = request!!.deleteblockword(RetrofitManager.API + "blockwords?word=" + text.substring(0, text.length - 3))
+        val call = request!!.deleteblockword(
+            API + "blockwords?word=" + text.substring(
+                0,
+                text.length - 3
+            )
+        )
         viewModelScope.launch {
             call.enqueue(object : Callback<ResponseBody?> {
                 override fun onResponse(
@@ -430,7 +921,9 @@ class MineFragmentViewModel : ViewModel() {
                             Toast.makeText(context, returncondition, Toast.LENGTH_SHORT).show()
                             _shieldWordList.value!!.remove(text)
                             binding.labels.setLabels(_shieldWordList.value)
-                            binding.tvLabelSheildnumber.text = context!!.getString(R.string.shield_num).format(_shieldWordList.value!!.size, 5)
+                            binding.tvLabelSheildnumber.text =
+                                context!!.getString(R.string.shield_num)
+                                    .format(_shieldWordList.value!!.size, 5)
                         } catch (e: IOException) {
                             e.printStackTrace()
                         } catch (e: JSONException) {
@@ -452,7 +945,11 @@ class MineFragmentViewModel : ViewModel() {
                                 e.printStackTrace()
                             }
                         } else {
-                            Toast.makeText(context, R.string.network_unknownfailture, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                R.string.network_unknownfailture,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
@@ -467,7 +964,7 @@ class MineFragmentViewModel : ViewModel() {
     fun getShieldList(
         binding: ItemLabelBinding
     ) {
-        val call = request!!.blockwords(RetrofitManager.API + "blockwords")
+        val call = request!!.blockwords(API + "blockwords")
         viewModelScope.launch {
             call.enqueue(object : Callback<ResponseBody?> {
                 override fun onResponse(
@@ -486,8 +983,9 @@ class MineFragmentViewModel : ViewModel() {
                                 _shieldWordList.value!!.add(sonObject2.getString("word") + "  ×")
                             }
                             binding.labels.setLabels(_shieldWordList.value)
-                            binding.tvLabelSheildnumber.text = context!!.getString(R.string.shield_num)
-                                .format(_shieldWordList.value!!.size, 5)
+                            binding.tvLabelSheildnumber.text =
+                                context!!.getString(R.string.shield_num)
+                                    .format(_shieldWordList.value!!.size, 5)
                         } catch (e: IOException) {
                             e.printStackTrace()
                         } catch (e: JSONException) {
@@ -533,7 +1031,7 @@ class MineFragmentViewModel : ViewModel() {
         score: Int,
         binding: FragmentEvaluateBinding
     ) {
-        val call = request!!.evaluate(API + "feedback/score?score=" + score.toString())
+        val call = request!!.evaluate(API + "feedback/score?score=" + (score + 1).toString())
         viewModelScope.launch {
             call.enqueue(object : Callback<ResponseBody?> {
                 override fun onResponse(
@@ -542,11 +1040,206 @@ class MineFragmentViewModel : ViewModel() {
                 ) {
                     Toast.makeText(context, "感谢亲的评分(づ￣3￣)づ╭❤～", Toast.LENGTH_SHORT).show()
                     val chip = (binding.chipGroup.getChildAt(score - 1) as Chip)
-//                    Log.d("em",chip.text.toString())
+                    Log.d("em", chip.text.toString())
                     chip.isChecked = false
                 }
+
                 override fun onFailure(call: Call<ResponseBody?>, tr: Throwable) {
-                    Toast.makeText(context, R.string.network_loadfailure, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, R.string.network_sendfailture, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+        }
+    }
+
+    fun sendAdvice(
+        type: Int,
+        content: String,
+        binding: FragmentAdviceBinding
+    ) {
+        val call =
+            request!!.advice(API + "feedback?type=" + type.toString() + "&content=" + content)
+        viewModelScope.launch {
+            call.enqueue(object : Callback<ResponseBody?> {
+                override fun onResponse(
+                    call: Call<ResponseBody?>,
+                    response: Response<ResponseBody?>
+                ) {
+                    if (response.code() == 200) {
+                        Toast.makeText(context, "感谢亲的反馈(づ￣3￣)づ╭❤～", Toast.LENGTH_SHORT).show()
+                        binding.etAdvice1.setText("")
+                        val inputMethodManager =
+                            context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        inputMethodManager.hideSoftInputFromWindow(
+                            binding.root.windowToken,
+                            InputMethodManager.HIDE_NOT_ALWAYS
+                        )
+                        binding.etAdvice1.clearFocus()
+                        val chip = (binding.chipGroup2.getChildAt(type) as Chip)
+                        chip.isChecked = false
+                    } else {
+                        ErrorMsg.getErrorMsg(response, context)
+//                        if (response.code() == 401) {
+//                            //                                    Intent intent = new Intent(getContext(), EmailActivity.class);
+//                            //                                    startActivity(intent);
+//                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody?>, tr: Throwable) {
+                    Toast.makeText(context, R.string.network_sendfailture, Toast.LENGTH_SHORT)
+                        .show()
+                }
+            })
+        }
+    }
+
+    fun sendEmailVerify(
+        binding: ActivityEmailVerify2Binding
+    ) {
+//        val editor = context!!.getSharedPreferences("Depository", Context.MODE_PRIVATE) //
+//        val emailCode = editor.getString("email", "")
+//        Log.d("VerifyActivity ", emailcode + "+" + et.getText().toString() + "+")
+        val call = request!!.verifyCodeMatch(
+            API + "auth/activation?verify_code=" + binding.etVerify.text.toString()
+        )
+        viewModelScope.launch {
+            call.enqueue(object : Callback<ResponseBody?> {
+                override fun onResponse(
+                    call: Call<ResponseBody?>,
+                    response: Response<ResponseBody?>
+                ) {
+                    if (response.code() == 200) {
+                        var json = "null"
+                        try {
+                            if (response.body() != null) {
+                                json = response.body()!!.string()
+                            }
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+                        Toast.makeText(context, json, Toast.LENGTH_SHORT)
+                            .show()
+                        //                                Intent intent = new Intent(VerifyActivity.this, HomeScreenActivity.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //                                startActivity(intent);
+                    } else {
+                        var json = "null"
+                        var returncondition: String? = null
+                        if (response.errorBody() != null) {
+                            try {
+                                json = response.errorBody()!!.string()
+                                val jsonObject = JSONObject(json)
+                                returncondition = jsonObject.getString("msg")
+                                Toast.makeText(
+                                    context, returncondition,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            } catch (e: JSONException) {
+                                e.printStackTrace()
+                            }
+                        } else {
+                            Toast.makeText(
+                                context,
+                                R.string.network_unknownfailture, Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                        //ErrorMsg.getErrorMsg(response,VerifyActivity.this);
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody?>, tr: Throwable) {
+                    Toast.makeText(
+                        context, R.string.network_failure,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            })
+        }
+    }
+
+    fun sendEmailVerifyAgain(
+        binding: ActivityEmailVerify2Binding
+    ) {
+        val editor = context!!.getSharedPreferences("Depository", Context.MODE_PRIVATE)
+        val condition = editor.getString("email", "")
+        val call = request!!.sendVerifyCode(API
+                    + "auth/sendVerifyCode?email="
+                    + condition
+                    + "&isResetPassword=false"
+        )
+        viewModelScope.launch {
+            call.enqueue(object : Callback<ResponseBody?> {
+                override fun onResponse(
+                    call: Call<ResponseBody?>,
+                    response: Response<ResponseBody?>
+                ) {
+                    if (response.code() == 200) {
+                        binding.llEmailverify2.visibility = View.VISIBLE
+                        binding.tvAgain.visibility = View.INVISIBLE
+                        binding.tvNot.visibility = View.INVISIBLE
+                        val timer: CountDownTimer = object : CountDownTimer(60000, 1000) {
+                            //倒计时
+                            override fun onTick(millisUntilFinished: Long) {
+                                binding.tvEmailverifyTime.text = (millisUntilFinished / 1000).toString() + "s"
+                            }
+
+                            override fun onFinish() {
+                                binding.llEmailverify2.visibility = View.INVISIBLE
+                                binding.tvAgain.visibility = View.VISIBLE
+                                binding.tvNot.visibility = View.VISIBLE
+                            }
+                        }
+                        timer.start()
+                        var json = "null"
+                        try {
+                            if (response.body() != null) {
+                                json = response.body()!!.string()
+                                val jsonObject = JSONObject(json)
+                                val returncondition = jsonObject.getString("msg")
+                                Toast.makeText(
+                                    context, returncondition,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    } else {
+                        var json = "null"
+                        val returncondition: String? = null
+                        if (response.errorBody() != null) {
+                            try {
+                                json = response.errorBody()!!.string()
+                                //JSONObject jsonObject = new JSONObject(json);
+                                //returncondition = jsonObject.getString("msg");
+                                Toast.makeText(
+                                    context, json,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } catch (e: IOException) {
+                                e.printStackTrace()
+                            }
+                        } else {
+                            Toast.makeText(
+                                context,
+                                R.string.network_unknownfailture, Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
+                        // ErrorMsg.getErrorMsg(response,VerifyActivity.this);
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody?>, tr: Throwable) {
+                    Toast.makeText(
+                        context, R.string.network_loginfailure,
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
         }
@@ -595,6 +1288,11 @@ class MineFragmentViewModel : ViewModel() {
             R.string.update,
             R.string.login_out
         )
+        _chipTitleList.value = listOf(
+            R.string.advice,
+            R.string.error,
+            R.string.others
+        )
     }
 
     private fun initViewPager() {
@@ -610,7 +1308,7 @@ class MineFragmentViewModel : ViewModel() {
         )
         _evalAndAdvFragmentList.value = listOf(
             cn.pivotstudio.modulec.homescreen.ui.fragment.mine.EvaluateFragment.newInstance(),
-            AdviceFragment.newInstance()
+            cn.pivotstudio.modulec.homescreen.ui.fragment.mine.AdviceFragment.newInstance()
         )
         _evalAndAdvNameList.value = listOf(
             R.string.eval,
