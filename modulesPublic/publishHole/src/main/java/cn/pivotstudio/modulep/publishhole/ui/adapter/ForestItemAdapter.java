@@ -12,9 +12,9 @@ import com.bumptech.glide.request.RequestOptions;
 import cn.pivotstudio.modulep.publishhole.R;
 
 /**
- * @classname:ForestItemAdapter
- * @description:小树林列表item适配器
- * @date:2022/5/6 21:01
+ * @classname: ForestItemAdapter
+ * @description: 小树林列表item适配器
+ * @date: 2022/5/6 21:01
  * @version:1.0
  * @author:
  */

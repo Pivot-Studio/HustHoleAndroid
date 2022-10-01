@@ -66,11 +66,9 @@ class HoleActivity : BaseActivity() {
         )
 
         navController.addOnDestinationChangedListener { _, destination, argument ->
-            supportActionBar?.title = destination.label
-
             when (destination.id) {
                 R.id.innerReplyFragment,
-                R.id.specificHoleFragment -> supportActionBar?.title = holeId.toString()
+                R.id.specificHoleFragment -> supportActionBar?.title = getString(R.string.hole_id, holeId.toString())
             }
         }
 

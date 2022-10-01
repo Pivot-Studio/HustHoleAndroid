@@ -25,10 +25,10 @@ import cn.pivotstudio.modulep.publishhole.ui.adapter.ForestRecyclerViewAdapter;
 import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel;
 
 /**
- * @classname:ForestsPopupWindow
- * @description:选择小树林的ppw
- * @date:2022/5/6 14:55
- * @version:1.0
+ * @classname: ForestsPopupWindow
+ * @description: 选择小树林的ppw
+ * @date: 2022/5/6 14:55
+ * @version: 1.0
  * @author:
  */
 public class ForestsPopupWindow extends PopupWindow {
@@ -105,12 +105,11 @@ public class ForestsPopupWindow extends PopupWindow {
         int id = v.getId();
         if (id == R.id.btn_publishholeforests_chooseforest) {
             PublishHoleViewModel publishHoleViewModel = new ViewModelProvider(
-                    (PublishHoleActivity) context,
-                    new ViewModelProvider.NewInstanceFactory()
+                    (PublishHoleActivity) context
             )
                     .get(PublishHoleViewModel.class);
             publishHoleViewModel.setForestId(0);
-            publishHoleViewModel.pForestName.setValue("未选择任何小树林");
+            publishHoleViewModel.forestName.setValue("未选择任何小树林");
             dismiss();
         } else if (id == R.id.iv_ppwpublishhole_finish) {
             dismiss();

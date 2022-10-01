@@ -65,16 +65,10 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <!--    <include-->
-        <!--        android:id="@+id/include_titlebar"-->
-        <!--        layout="@layout/titlebar_green"-->
-        <!--         />-->
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_publishhole_frame"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="@dimen/dp_44"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/include_titlebar">
@@ -97,7 +91,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/group218" />
+                app:srcCompat="@drawable/ic_forest_tag_16dp" />
 
             <Button
                 android:id="@+id/btn_publishhole_send"

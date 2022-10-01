@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief;
 import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
 
 
@@ -26,11 +27,12 @@ import cn.pivotstudio.modulep.publishhole.model.DetailTypeForestResponse;
 import cn.pivotstudio.modulep.publishhole.model.ForestListsResponse;
 import cn.pivotstudio.modulep.publishhole.ui.activity.PublishHoleActivity;
 import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel;
+import kotlin.Pair;
 
 /**
- * @classname:ForestAdapter
- * @description:recyclerview的适配器
- * @date:2022/5/6 0:54
+ * @classname: ForestAdapter
+ * @description: recyclerview的适配器
+ * @date: 2022/5/6 0:54
  * @version:1.0
  * @author:
  */
@@ -92,9 +94,9 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
             binding.btnPublishholeforestlistChooseforest.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PublishHoleViewModel publishHoleViewModel = new ViewModelProvider((PublishHoleActivity) mContext, new ViewModelProvider.NewInstanceFactory()).get(PublishHoleViewModel.class);
+                    PublishHoleViewModel publishHoleViewModel = new ViewModelProvider((PublishHoleActivity) mContext).get(PublishHoleViewModel.class);
                     publishHoleViewModel.setForestId(mJoined.get(position).getForest_id());
-                    publishHoleViewModel.pForestName.setValue(mJoined.get(position).getName());
+                    publishHoleViewModel.forestName.setValue(mJoined.get(position).getName());
                     mPpw.dismiss();
                 }
             });
@@ -124,7 +126,6 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
             if (mElAdapter == null) {
                 mElAdapter = new ForestListElAdapter(mContext, mType, mPpw);
             }
-            ;
             mElv.setAdapter(mElAdapter);
             //默认展开第一个数组
             //mElv.setGroupIndicator(null);
@@ -252,7 +253,7 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
      *
      * @param lists
      */
-    public void changeDataDetailTypeForest(ForestListsResponse lists) {
+    public void changeDataDetailTypeForest(List<Pair<String, List<ForestBrief>>> lists) {
         if (mDetailTypeForest == null) {
             mDetailTypeForest = lists.getLists();
             mElAdapter.changeDataForests(lists.getLists());

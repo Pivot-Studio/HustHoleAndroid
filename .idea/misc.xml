@@ -291,6 +291,7 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest.xml" value="0.1475" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_active.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_negative.xml" value="0.121" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_forest_tag_16dp.xml" value="0.13" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_forward_arrow.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_home.xml" value="0.1365" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_home_active.xml" value="0.1365" />
@@ -305,6 +306,8 @@
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_msg_negative.xml" value="0.148" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_notify.xml" value="0.148" />
         <entry key="modulesBase/resBase/src/main/res/drawable/ic_onlylookmaster.xml" value="0.1065" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_pivot_studio_16dp.xml" value="0.13" />
+        <entry key="modulesBase/resBase/src/main/res/drawable/ic_search_20dp.xml" value="0.13" />
         <entry key="modulesBase/resBase/src/main/res/drawable/icon.xml" value="0.1065" />
         <entry key="modulesBase/resBase/src/main/res/drawable/icon_home_page.xml" value="0.1415" />
         <entry key="modulesBase/resBase/src/main/res/drawable/item.xml" value="0.1065" />
@@ -451,6 +454,7 @@
         <entry key="modulesPublic/publishHole/src/main/res/layout/activity_publishhole.xml" value="0.2586050724637681" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlist.xml" value="0.2586050724637681" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlisttitle.xml" value="0.2586050724637681" />
+        <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_foresttype.xml" value="0.25181159420289856" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/ppw_publishhole_forests.xml" value="0.3710093412106948" />
       </map>
     </option>

@@ -12,7 +12,6 @@ class AllForestViewModel : ViewModel() {
     // model
     private val repository = AllForestRepository()
 
-    val forestCards = repository.forestCards
     val loadState = repository.loadState
 
     private var _forestsMeta = listOf<ForestBrief>()
@@ -36,7 +35,7 @@ class AllForestViewModel : ViewModel() {
     }
 
     fun preload() {
-        if (forestCards.isEmpty()) {
+        if (_forests.value.isEmpty()) {
             viewModelScope.launch {
                 loadAllForests()
             }
