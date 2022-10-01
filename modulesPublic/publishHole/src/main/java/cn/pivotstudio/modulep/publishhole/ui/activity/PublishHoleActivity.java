@@ -166,8 +166,7 @@ public class PublishHoleActivity extends BaseActivity {
 
 
         viewModel.typeForestList.observe(this, forestsWithType -> {
-            if (forestsWithType.getItemNumber() != -1)
-                ((ForestRecyclerViewAdapter) (mPpw.recyclerView.getAdapter())).changeDataDetailTypeForest(forestsWithType);
+            ((ForestRecyclerViewAdapter) (mPpw.recyclerView.getAdapter())).changeDataDetailTypeForest(forestsWithType);
         });
 
         viewModel.forestName.observe(this, s -> binding.tvPublishholeForestname.setText(s));

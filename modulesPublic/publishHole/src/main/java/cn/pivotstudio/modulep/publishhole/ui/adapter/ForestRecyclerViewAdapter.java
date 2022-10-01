@@ -39,8 +39,9 @@ import kotlin.Pair;
 public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTypeForestResponse, RecyclerView.ViewHolder> {
     private final int Title = 0, JoinedForest = 1, Forest = 2, Bottom = 3;
     private List<DetailTypeForestResponse.ForestResponse> mJoined;
+    private List<Pair<String, List<ForestBrief>>> forestWithType = new ArrayList<>();
     private List<String> mType;
-    public List<DetailTypeForestResponse> mDetailTypeForest;
+    public List<List<ForestBrief>> mDetailTypeForest;
     private ForestListElAdapter mElAdapter;//elv的适配器
     private ForestsPopupWindow mPpw;//外层ppw
 
@@ -135,10 +136,10 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
             mElv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
                 @Override
                 public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
-                    if (mDetailTypeForest == null || mDetailTypeForest.get(groupPosition).getForests() == null) {
+                    if (mDetailTypeForest == null || mDetailTypeForest.get(groupPosition) == null) {
                         showMsg("加载中...");
                         return true;
-                    } else if (mDetailTypeForest.get(groupPosition).getForests().size() == 0) {
+                    } else if (mDetailTypeForest.get(groupPosition).size() == 0) {
                         showMsg("无此类型小树林");
                         return true;
                     } else {
@@ -254,9 +255,6 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
      * @param lists
      */
     public void changeDataDetailTypeForest(List<Pair<String, List<ForestBrief>>> lists) {
-        if (mDetailTypeForest == null) {
-            mDetailTypeForest = lists.getLists();
-            mElAdapter.changeDataForests(lists.getLists());
-        }
+        forestWithType = lists;
     }
 }

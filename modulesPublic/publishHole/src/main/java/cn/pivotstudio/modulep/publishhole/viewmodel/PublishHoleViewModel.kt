@@ -6,7 +6,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
-import cn.pivotstudio.modulep.publishhole.model.ForestListsResponse
 import cn.pivotstudio.modulep.publishhole.model.DetailTypeForestResponse
 import cn.pivotstudio.modulep.publishhole.model.ForestTypeResponse
 import cn.pivotstudio.modulep.publishhole.model.MsgResponse

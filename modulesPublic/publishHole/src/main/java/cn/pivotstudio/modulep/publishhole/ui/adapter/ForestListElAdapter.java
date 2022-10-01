@@ -156,9 +156,9 @@ public class ForestListElAdapter extends BaseExpandableListAdapter {
         }
         childViewHolder.binding.setForest(mForestLists.get(groupPosition).getForests().get(childPosition));
         childViewHolder.binding.btnPublishholeforestlistChooseforest.setOnClickListener(v -> {
-            PublishHoleViewModel publishHoleViewModel = new ViewModelProvider((PublishHoleActivity) context, new ViewModelProvider.NewInstanceFactory()).get(PublishHoleViewModel.class);
+            PublishHoleViewModel publishHoleViewModel = new ViewModelProvider((PublishHoleActivity) context).get(PublishHoleViewModel.class);
             publishHoleViewModel.setForestId(mForestLists.get(groupPosition).getForests().get(childPosition).getForest_id());
-            publishHoleViewModel.pForestName.setValue(mForestLists.get(groupPosition).getForests().get(childPosition).getName());
+            publishHoleViewModel.forestName.setValue(mForestLists.get(groupPosition).getForests().get(childPosition).getName());
             mPpw.dismiss();
         });
         childViewHolder.binding.ivPublishholeforestlistIcon.setOnClickListener(v -> {
