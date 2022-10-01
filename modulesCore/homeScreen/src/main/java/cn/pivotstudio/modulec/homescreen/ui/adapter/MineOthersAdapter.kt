@@ -1,39 +1,40 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
-import android.media.MediaScannerConnection
-import android.util.Log
+import android.app.Dialog
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineOthersBinding
-import cn.pivotstudio.modulec.homescreen.oldversion.mine.ShareCardActivity
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragmentDirections
+import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemDetailFragment
+import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragmentDirections
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.DETAIL
+import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.LOGOUT
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.OTHER_OPTION
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.PERSONAL_SETTING
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHARE
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHIELD_SETTING
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.UPDATE
-import kotlinx.coroutines.NonDisposableHandle.parent
+import com.alibaba.android.arouter.launcher.ARouter
 
 /**
  *@classname MineSettingAdapter
@@ -64,6 +65,8 @@ class MineOthersAdapter(
                             it.findNavController().navigate(action)
                         } else if (layoutPosition == SHARE) {
                             initShareCardView()
+                        } else if (layoutPosition == LOGOUT) {
+                            initLogOutDialog()
                         } else {
                             val action =
                                 MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
@@ -75,21 +78,29 @@ class MineOthersAdapter(
                 } else if (type == DETAIL) {
                     if (name == R.string.campus_email) {
                         viewModel.checkEmailVerifyState(binding)
+                    } else if (name == R.string.check_update) {
+                        binding.rlOthers.setOnClickListener {
+                            viewModel.checkVersion(fragment as ItemMineFragment)
+                        }
                     }
-                    binding.rlOthers.setOnClickListener {
-                        val action =
-                            ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
-                                name, viewModel.isVerifiedEmail.value!!
-                            )
-                        it.findNavController().navigate(action)
+                    if (name != R.string.check_update) {
+                        binding.rlOthers.setOnClickListener {
+                            val action =
+                                ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
+                                    name, viewModel.isVerifiedEmail.value!!
+                                )
+                            it.findNavController().navigate(action)
+                        }
                     }
                 }
                 executePendingBindings()
             }
         }
+
         @SuppressLint("InflateParams")
         private fun initShareCardView() {
-            val shareCardView = LayoutInflater.from((fragment as MineFragment).context).inflate(R.layout.ppw_share, null)
+            val shareCardView = LayoutInflater.from((fragment as MineFragment).context)
+                .inflate(R.layout.ppw_share, null)
             val shareCard = shareCardView.findViewById<LinearLayout>(R.id.share_card)
             val cancel = shareCardView.findViewById<TextView>(R.id.share_cancel_button)
             val ppwShare = PopupWindow(shareCardView)
@@ -118,6 +129,26 @@ class MineOthersAdapter(
                     )
                 fragment.findNavController().navigate(action)
             }
+        }
+
+        private fun initLogOutDialog() {
+            val dialog = Dialog(fragment.requireContext())
+            val dialogView = fragment.requireActivity().layoutInflater.inflate(R.layout.dialog_logout, null)
+            dialog.setContentView(dialogView)
+            val btnCancel = dialogView.findViewById<Button>(R.id.cancel)
+            val btnLogout = dialogView.findViewById<Button>(R.id.logout)
+            dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            btnCancel.setOnClickListener { dialog.dismiss() }
+            btnLogout.setOnClickListener {
+                dialog.dismiss()
+                val mmkvUtil = MMKVUtil.getMMKV(fragment.context)
+                mmkvUtil.put(Constant.USER_TOKEN, "")
+                mmkvUtil.put(Constant.USER_TOKEN_V2, "")
+                mmkvUtil.put(Constant.IS_LOGIN, false)
+                ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation()
+                (context as HomeScreenActivity?)!!.finish()
+            }
+            dialog.show()
         }
 
         private fun cancelDarkBackGround() {

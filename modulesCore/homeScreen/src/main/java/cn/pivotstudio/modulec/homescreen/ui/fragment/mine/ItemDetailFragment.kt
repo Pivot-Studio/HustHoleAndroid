@@ -13,16 +13,19 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.*
 import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken
 import cn.pivotstudio.modulec.homescreen.oldversion.model.EditTextReaction
+import cn.pivotstudio.modulec.homescreen.oldversion.mypage.UpdateRecycleViewAdapter
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.ABOUT
@@ -45,13 +48,20 @@ class ItemDetailFragment : Fragment() {
     private var isVerifiedEmail: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         if ((activity as HomeScreenActivity).supportActionBar != null) {
             (activity as HomeScreenActivity).supportActionBar!!.hide()
         }
+        super.onCreate(savedInstanceState)
         arguments?.let {
             option = it.getInt("fragType")
             isVerifiedEmail = it.getBoolean("isVerified")
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if ((activity as HomeScreenActivity).supportActionBar != null) {
+            (activity as HomeScreenActivity).supportActionBar!!.hide()
         }
     }
 
@@ -97,10 +107,16 @@ class ItemDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         when (binding) {
+            is ActivityEmailOkBinding -> {
+                (binding as ActivityEmailOkBinding).emailOkImg.setOnClickListener {
+                    view.findNavController().popBackStack()
+                }
+            }
             is ActivityEmailVerify1Binding -> {
                 (binding as ActivityEmailVerify1Binding).apply {
                     btn1.setOnClickListener {
-
+                        val action = ItemDetailFragmentDirections.actionItemDetailFragment2ToVerifyFragment()
+                        view.findNavController().navigate(action)
                     }
                     btn2.setOnClickListener {
                         view.findNavController().popBackStack()
@@ -113,6 +129,9 @@ class ItemDetailFragment : Fragment() {
             is ActivitySecurityBinding -> {
                 viewModel.checkPrivacyState(binding as ActivitySecurityBinding)
                 (binding as ActivitySecurityBinding).apply {
+                    securityImg.setOnClickListener {
+                        view.findNavController().popBackStack()
+                    }
                     stSecurity.setOnCheckedChangeListener { _, isChecked ->
                         if (CheckingToken.IfTokenExist()) {
                             viewModel.changePrivacyState(!isChecked)
@@ -143,42 +162,42 @@ class ItemDetailFragment : Fragment() {
                         onLabelClick(pos)
                     }
                     etLabel.addTextChangedListener(object : TextWatcher {
-                            override fun beforeTextChanged(
-                                p0: CharSequence?,
-                                p1: Int,
-                                p2: Int,
-                                p3: Int
-                            ) {
-                            }
+                        override fun beforeTextChanged(
+                            p0: CharSequence?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Int
+                        ) {
+                        }
 
-                            override fun onTextChanged(
-                                p0: CharSequence?,
-                                p1: Int,
-                                p2: Int,
-                                p3: Int
-                            ) {
-                                if (etLabel.text.toString().length >= 7) {
-                                    val mView = View.inflate(
-                                        requireContext(), R.layout.dialog_screen, null
-                                    )
-                                    val dialog = Dialog(context!!)
-                                    dialog.setContentView(mView)
-                                    dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
-                                    val no =
-                                        mView.findViewById<View>(R.id.tv_dialog_screen_notquit) as TextView
-                                    no.visibility = View.INVISIBLE
-                                    val yes =
-                                        mView.findViewById<View>(R.id.tv_dialog_screen_quit) as TextView
-                                    val content =
-                                        mView.findViewById<View>(R.id.tv_dialog_screen_content) as TextView
-                                    content.text = "关键词长度不得超过7个字符，请重新添加！"
-                                    yes.setOnClickListener { dialog.dismiss() }
-                                    dialog.show()
-                                }
+                        override fun onTextChanged(
+                            p0: CharSequence?,
+                            p1: Int,
+                            p2: Int,
+                            p3: Int
+                        ) {
+                            if (etLabel.text.toString().length >= 7) {
+                                val mView = View.inflate(
+                                    requireContext(), R.layout.dialog_screen, null
+                                )
+                                val dialog = Dialog(context!!)
+                                dialog.setContentView(mView)
+                                dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
+                                val no =
+                                    mView.findViewById<View>(R.id.tv_dialog_screen_notquit) as TextView
+                                no.visibility = View.INVISIBLE
+                                val yes =
+                                    mView.findViewById<View>(R.id.tv_dialog_screen_quit) as TextView
+                                val content =
+                                    mView.findViewById<View>(R.id.tv_dialog_screen_content) as TextView
+                                content.text = "关键词长度不得超过7个字符，请重新添加！"
+                                yes.setOnClickListener { dialog.dismiss() }
+                                dialog.show()
                             }
+                        }
 
-                            override fun afterTextChanged(p0: Editable?) {}
-                        })
+                        override fun afterTextChanged(p0: Editable?) {}
+                    })
                 }
             }
             is ActivityRulesBinding -> {
@@ -202,19 +221,37 @@ class ItemDetailFragment : Fragment() {
                 val frag = this
                 (binding as ActivityHoleStarBinding).apply {
                     myImg.setOnClickListener {
-                        hideSoftKeyboard(requireContext() , vpHoleStar)
+                        hideSoftKeyboard(requireContext(), vpHoleStar)
                         view.findNavController().popBackStack()
                     }
                     vpHoleStar.adapter = object : FragmentStateAdapter(frag) {
-                        override fun getItemCount(): Int = viewModel.evalAndAdvFragmentList.value!!.size
+                        override fun getItemCount(): Int =
+                            viewModel.evalAndAdvFragmentList.value!!.size
 
                         override fun createFragment(position: Int): Fragment {
                             return viewModel.evalAndAdvFragmentList.value!![position]
                         }
                     }
                     TabLayoutMediator(tlHoleStar, vpHoleStar) { tab, position ->
-                        tab.text = context?.getString(viewModel.evalAndAdvNameList.value!![position])
+                        tab.text =
+                            context?.getString(viewModel.evalAndAdvNameList.value!![position])
                     }.attach()
+                }
+            }
+            is ActivityAboutBinding -> {
+                (binding as ActivityAboutBinding).aboutImg.setOnClickListener {
+                    view.findNavController().popBackStack()
+                }
+            }
+            is ActivityUpdateBinding -> {
+                viewModel.initUpdateLog()
+                (binding as ActivityUpdateBinding).apply {
+                    updateImg.setOnClickListener {
+                        view.findNavController().popBackStack()
+                    }
+                    val adapter = UpdateRecycleViewAdapter()
+                    viewModel.updateLogList.observe(viewLifecycleOwner) {list ->  adapter.submitList(list)}
+                    updateRecyclerview.adapter = adapter
                 }
             }
         }
@@ -278,8 +315,71 @@ class ItemDetailFragment : Fragment() {
         context: Context,
         view: View
     ) {
-        val inputMethodManager =  context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            inputMethodManager.hideSoftInputFromWindow(view.windowToken, InputMethodManager.HIDE_NOT_ALWAYS);
+        val inputMethodManager =
+            context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(
+            view.windowToken,
+            InputMethodManager.HIDE_NOT_ALWAYS
+        )
     }
 
+    class UpdateRecycleViewAdapter : ListAdapter<Update,
+            RecyclerView.ViewHolder>(DiffCallback) {
+        private val ITEM_TYPE_HEAD = 0
+        private val ITEM_TYPE_CONTENT = 1
+
+        inner class UpdateContentViewHolder(
+            val binding: UpdateItemBinding
+        ) : RecyclerView.ViewHolder(binding.root) {
+            fun bind(log: Update) {
+                binding.apply {
+                    update = log
+                    executePendingBindings()
+                }
+            }
+        }
+        inner class UpdateHeadViewHolder(
+            val binding: ItemUpdateheadBinding
+        ) : RecyclerView.ViewHolder(binding.root) {}
+
+        override fun getItemViewType(position: Int): Int {
+            return if (position == 0)
+                ITEM_TYPE_HEAD
+            else
+                ITEM_TYPE_CONTENT
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+            return if(viewType == ITEM_TYPE_HEAD)
+                UpdateHeadViewHolder(ItemUpdateheadBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            else
+                UpdateContentViewHolder(UpdateItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        }
+
+        override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+            if(position > 0) {
+                val item = getItem(position - 1)
+                (holder as UpdateContentViewHolder).bind(item)
+            }
+        }
+
+        override fun getItemCount(): Int {
+            return super.getItemCount() + 1
+        }
+        companion object DiffCallback : DiffUtil.ItemCallback<Update>() {
+            override fun areItemsTheSame(oldItem: Update, newItem: Update): Boolean {
+                return false
+            }
+
+            override fun areContentsTheSame(oldItem: Update, newItem: Update): Boolean {
+                return true
+            }
+        }
+    }
+
+    data class Update(
+        val version: String,
+        val date: String,
+        val detail: String
+    ){}
 }

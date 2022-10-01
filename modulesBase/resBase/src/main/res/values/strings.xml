@@ -143,6 +143,11 @@
     <string name="rec_hole">🙂你在多大程度上愿意向他人推荐1037树洞？</string>
     <string name="eval">评价一下</string>
     <string name="adv">给点建议</string>
+    <string name="advice">建议</string>
+    <string name="error">故障</string>
+    <string name="others">其他</string>
+    <string name="contact_way">联系我们：husthole@pivotstudio.cn</string>
+    <string name="pivot_purpose">1037 树洞是面向华科学生群体， 主打情感倾诉、校园互动、兴趣交流等功能的校园产品。我们期待为华科学子打造一个自由而友善、坦率而正直的社交平台。</string>
     <string name="韵酒蛋包饭">韵酒蛋包饭</string>
     <string name="分享">分享</string>
     <string name="分享到">分享到</string>
