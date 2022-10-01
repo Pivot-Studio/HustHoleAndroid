@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#F3F3F3">
+        android:background="@color/HH_Background">
 
         <LinearLayout
             android:id="@+id/update_bar"
@@ -25,7 +25,6 @@
                 android:id="@+id/update_img"
                 android:layout_width="@dimen/dp_52"
                 android:layout_height="@dimen/dp_52"
-                android:layout_centerInParent="true"
                 android:background="@drawable/back_green"
                 android:clickable="true"
                 android:scaleType="center"
@@ -36,18 +35,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_52"
                 android:gravity="center"
-                android:text="更新日志"
+                android:text="@string/update_log"
                 android:textColor="@color/GrayScale_100"
-                android:textSize="18sp" />
+                android:textSize="@dimen/sp_18" />
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/update_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/dp_52"
-            app:layout_constraintTop_toBottomOf="@+id/update_bar"
-            tools:layout_editor_absoluteX="-16dp"></androidx.recyclerview.widget.RecyclerView>
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_16"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/update_bar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

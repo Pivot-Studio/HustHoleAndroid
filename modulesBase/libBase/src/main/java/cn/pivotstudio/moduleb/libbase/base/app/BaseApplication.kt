@@ -1,14 +1,17 @@
 package cn.pivotstudio.moduleb.libbase.base.app
 
-import cn.pivotstudio.moduleb.database.HustHoleRoomDatabase
-import com.alibaba.android.arouter.launcher.ARouter
-import cn.pivotstudio.moduleb.libbase.util.emoji.EmotionUtil
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
 import android.content.Context
+import android.content.ContextWrapper
 import cn.pivotstudio.husthole.moduleb.network.*
+import cn.pivotstudio.moduleb.database.HustHoleRoomDatabase
 import cn.pivotstudio.moduleb.libbase.BuildConfig
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.ActivityManager
+import cn.pivotstudio.moduleb.libbase.util.emoji.EmotionUtil
+import com.alibaba.android.arouter.launcher.ARouter
+
 
 /**
  * @classname:BaseApplication
@@ -42,6 +45,7 @@ class BaseApplication : Application() {
         //表情包资源初始化
         EmotionUtil.init(this)
     }
+
 
     companion object {
         @JvmField

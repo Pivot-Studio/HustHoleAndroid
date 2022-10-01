@@ -1,39 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/dp_30"
-    android:layout_marginTop="@dimen/dp_10"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:id="@+id/version"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/GrayScale_20"
-        android:textSize="@dimen/sp_15"
-        android:textStyle="bold" />
+    <data>
+        <variable
+            name="update"
+            type="cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemDetailFragment.Update" />
+    </data>
 
-    <TextView
-        android:id="@+id/created_timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_3"
-        android:textColor="@color/GrayScale_20"
-        android:textSize="@dimen/sp_12" />
-
-    <TextView
-        android:id="@+id/detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_4"
-        android:textColor="@color/GrayScale_50"
-        android:textSize="@dimen/sp_12" />
-
-    <View
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="1dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_10"
-        android:background="#CBCBCB" />
+        android:orientation="vertical">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{update.version}"
+            android:textColor="@color/GrayScale_20"
+            android:textSize="@dimen/sp_15"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/created_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_3"
+            android:text="@{update.date}"
+            android:textColor="@color/GrayScale_20"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_4"
+            android:text="@{update.detail}"
+            android:textColor="@color/GrayScale_50"
+            android:textSize="@dimen/sp_12" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_marginTop="@dimen/dp_10"
+            android:background="#CBCBCB" />
+
+    </LinearLayout>
+</layout>
