@@ -1,34 +1,23 @@
-package cn.pivotstudio.modulep.publishhole.ui.adapter;
+package cn.pivotstudio.modulep.publishhole.ui.adapter
 
-import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.core.content.ContextCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.pivotstudio.modulep.publishhole.BuildConfig;
-import cn.pivotstudio.modulep.publishhole.R;
-import cn.pivotstudio.modulep.publishhole.custom_view.ForestExpandableListView;
-import cn.pivotstudio.modulep.publishhole.custom_view.ForestsPopupWindow;
-import cn.pivotstudio.modulep.publishhole.databinding.ItemPublishholeForestlistBinding;
-import cn.pivotstudio.modulep.publishhole.databinding.ItemPublishholeForesttypeBinding;
-import cn.pivotstudio.modulep.publishhole.model.DetailTypeForestResponse;
-import cn.pivotstudio.modulep.publishhole.model.TypeResponse;
-import cn.pivotstudio.modulep.publishhole.ui.activity.PublishHoleActivity;
-import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel;
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseExpandableListAdapter
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.modulep.publishhole.BuildConfig
+import cn.pivotstudio.modulep.publishhole.R
+import cn.pivotstudio.modulep.publishhole.custom_view.ForestsPopupWindow
+import cn.pivotstudio.modulep.publishhole.databinding.ItemPublishholeForestlistBinding
+import cn.pivotstudio.modulep.publishhole.databinding.ItemPublishholeForesttypeBinding
+import cn.pivotstudio.modulep.publishhole.ui.activity.PublishHoleActivity
+import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel
 
 /**
  * @classname: ForestListElAdapter
@@ -37,12 +26,7 @@ import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel;
  * @version: 1.0
  * @author:
  */
-public class ForestListElAdapter extends BaseExpandableListAdapter {
-    private Context context;
-    private List<String> mForestType;
-    private List<DetailTypeForestResponse> mForestLists;
-    private ForestsPopupWindow mPpw;//用来在点击后将ppw关闭，起始通过dataBinding方式设置点击事件，也得通过setPPw方式绑定方法位置，所以这里没有在xml中进行点击事件绑定
-
+class ForestListElAdapter(
     /**
      * 构造函数
      *
@@ -50,57 +34,50 @@ public class ForestListElAdapter extends BaseExpandableListAdapter {
      * @param mForestType 小树林类型
      * @param mPpw        外层ppw
      */
-    public ForestListElAdapter(Context context, List<String> mForestType, ForestsPopupWindow mPpw) {
-        this.context = context;
-        this.mForestType = mForestType;
-        this.mPpw = mPpw;
-    }
+    private val context: Context,
+    private val mForestType: List<String>, //用来在点击后将ppw关闭，起始通过dataBinding方式设置点击事件，也得通过setPPw方式绑定方法位置，所以这里没有在xml中进行点击事件绑定
+    private val forestsPopupWindow: ForestsPopupWindow
+) : BaseExpandableListAdapter() {
+
+    private var mForestLists: List<Pair<String, List<ForestBrief>>> = mutableListOf()
 
     /**
      * 更新数据
      *
      * @param mForests
      */
-    public void changeDataForests(List<DetailTypeForestResponse> mForests) {
-        mForestLists = mForests;
+    fun changeDataForests(forests: List<Pair<String, List<ForestBrief>>>) {
+        mForestLists = forests
     }
 
-    @Override
-    public int getGroupCount() {
-        return mForestType.size();
+    override fun getGroupCount(): Int {
+        return mForestLists.size
     }
 
-    @Override
-    public int getChildrenCount(int i) {
-        return mForestLists.get(i).getForests().size();
+    override fun getChildrenCount(i: Int): Int {
+        return mForestLists[i].second.size
     }
 
-    @Override
-    public Object getGroup(int i) {
-        return mForestType.get(i);
+    override fun getGroup(i: Int): Any {
+        return mForestLists[i].first
     }
 
-    @Override
-    public Object getChild(int i, int i1) {
-        return mForestLists.get(i).getForests().get(i1);
+    override fun getChild(i: Int, i1: Int): Any {
+        return mForestLists[i].second[i1]
     }
 
-    @Override
-    public long getGroupId(int i) {
-        return i;
+    override fun getGroupId(i: Int): Long {
+        return i.toLong()
     }
 
-    @Override
-    public long getChildId(int i, int i1) {
-        return i1;
+    override fun getChildId(i: Int, i1: Int): Long {
+        return i1.toLong()
     }
 
-    @Override
     //分组和子选项是否持有稳定的ID, 就是说底层数据的改变会不会影响到它们
-    public boolean hasStableIds() {
-        return true;
+    override fun hasStableIds(): Boolean {
+        return true
     }
-
 
     /**
      * 获取显示指定组的视图对象
@@ -110,82 +87,90 @@ public class ForestListElAdapter extends BaseExpandableListAdapter {
      * @param convertView   重用已有的视图对象
      * @param parent        返回的视图对象始终依附于的视图组
      */
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
-        GroupTitleViewHolder groupViewHolder;
-        if (convertView == null) {
+    override fun getGroupView(
+        groupPosition: Int,
+        isExpanded: Boolean,
+        convertView: View?,
+        parent: ViewGroup
+    ): View {
 
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_publishhole_foresttype, parent, false);
-            groupViewHolder = new GroupTitleViewHolder();
-
-            //未知原因绑定数据绑不上，用的原生方式
-            groupViewHolder.parent_image = convertView.findViewById(R.id.iv_publishholetype_choosetype);
-            groupViewHolder.titleTv = convertView.findViewById(R.id.tv_publishholeforesttype_name);
-            groupViewHolder.image = convertView.findViewById(R.id.iv_publishholeforestype_icon);
-
-
-            convertView.setTag(groupViewHolder);
-
+        var view = convertView
+        val groupViewHolder: GroupTitleViewHolder
+        if (view == null) {
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item_publishhole_foresttype, parent, false)
+            groupViewHolder = GroupTitleViewHolder()
+            groupViewHolder.parentImage = view.findViewById(R.id.iv_publishholetype_choosetype)
+            groupViewHolder.titleTv = view.findViewById(R.id.tv_publishholeforesttype_name)
+            groupViewHolder.image = view.findViewById(R.id.iv_publishholeforestype_icon)
+            view.tag = groupViewHolder
         } else {
-            groupViewHolder = (GroupTitleViewHolder) convertView.getTag();
+            groupViewHolder = view.tag as GroupTitleViewHolder
         }
-        groupViewHolder.titleTv.setText(mForestType.get(groupPosition));
-        ForestItemAdapter.getUrlFormLocal(groupViewHolder.image, mForestType.get(groupPosition));
 
+        groupViewHolder.titleTv!!.text = mForestType[groupPosition]
+        ForestItemAdapter.getUrlFormLocal(groupViewHolder.image, mForestType[groupPosition])
         if (isExpanded) {
-            groupViewHolder.parent_image.setImageResource(R.mipmap.triangle_5);
+            groupViewHolder.parentImage!!.setImageResource(R.mipmap.triangle_5)
         } else {
-            groupViewHolder.parent_image.setImageResource(R.mipmap.triangle_3);
+            groupViewHolder.parentImage!!.setImageResource(R.mipmap.triangle_3)
         }
-        return convertView;
+        return view!!
     }
 
-    @Override
-    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-        ChildViewHolder childViewHolder;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_publishhole_forestlist, parent, false);
-            childViewHolder = new ChildViewHolder();
+    override fun getChildView(
+        groupPosition: Int,
+        childPosition: Int,
+        isLastChild: Boolean,
+        convertView: View?,
+        parent: ViewGroup
+    ): View {
+        var view = convertView
+        val childViewHolder: ChildViewHolder
+        if (view == null) {
+            view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_publishhole_forestlist, parent, false)
+            childViewHolder = ChildViewHolder()
             //数据绑定
-            convertView.setTag(R.id.tag_first, childViewHolder);//id必须保证唯一，所以需要自定义
-            convertView.setTag("layout/item_publishhole_forestlist_0");//自定义view必须的加，具体字符串在build文件里面找
-            childViewHolder.binding = DataBindingUtil.bind(convertView);//自定义view必须的使用bind方式
-
+            view.setTag(R.id.tag_first, childViewHolder) //id必须保证唯一，所以需要自定义
+            view.setTag("layout/item_publishhole_forestlist_0") //自定义view必须的加，具体字符串在build文件里面找
+            childViewHolder.binding = DataBindingUtil.bind(view) //自定义view必须的使用bind方式
         } else {
-            childViewHolder = (ChildViewHolder) convertView.getTag(R.id.tag_first);
+            childViewHolder = view.getTag(R.id.tag_first) as ChildViewHolder
         }
-        childViewHolder.binding.setForest(mForestLists.get(groupPosition).getForests().get(childPosition));
-        childViewHolder.binding.btnPublishholeforestlistChooseforest.setOnClickListener(v -> {
-            PublishHoleViewModel publishHoleViewModel = new ViewModelProvider((PublishHoleActivity) context).get(PublishHoleViewModel.class);
-            publishHoleViewModel.setForestId(mForestLists.get(groupPosition).getForests().get(childPosition).getForest_id());
-            publishHoleViewModel.forestName.setValue(mForestLists.get(groupPosition).getForests().get(childPosition).getName());
-            mPpw.dismiss();
-        });
-        childViewHolder.binding.ivPublishholeforestlistIcon.setOnClickListener(v -> {
-            if (!BuildConfig.isRelease) {
-                Toast.makeText(context, "当前为模块测试阶段", Toast.LENGTH_SHORT).show();
-            } else {
+        childViewHolder.binding!!.forest = mForestLists[groupPosition].second[childPosition]
+        childViewHolder.binding!!.btnPublishholeforestlistChooseforest.setOnClickListener { v: View? ->
+            val publishHoleViewModel = ViewModelProvider(
+                (context as PublishHoleActivity)
+            )[PublishHoleViewModel::class.java]
 
+            publishHoleViewModel.forestId =
+                mForestLists[groupPosition].second[childPosition].forestId
+
+            publishHoleViewModel.forestName.value =
+                mForestLists[groupPosition].second[childPosition].forestName
+            forestsPopupWindow.dismiss()
+        }
+        childViewHolder.binding!!.ivPublishholeforestlistIcon.setOnClickListener { v: View? ->
+            if (!BuildConfig.isRelease) {
+                Toast.makeText(context, "当前为模块测试阶段", Toast.LENGTH_SHORT).show()
             }
-        });
-        return convertView;
+        }
+        return view!!
     }
 
     //指定位置上的子元素是否可选中
-    @Override
-    public boolean isChildSelectable(int i, int i1) {
-
-        return true;
+    override fun isChildSelectable(i: Int, i1: Int): Boolean {
+        return true
     }
 
-    static class GroupTitleViewHolder {
-        ItemPublishholeForesttypeBinding binding;
-        TextView titleTv;
-        ImageView parent_image, image;
+    internal class GroupTitleViewHolder {
+        var binding: ItemPublishholeForesttypeBinding? = null
+        var titleTv: TextView? = null
+        var parentImage: ImageView? = null
+        var image: ImageView? = null
     }
 
-    static class ChildViewHolder {
-        ItemPublishholeForestlistBinding binding;
+    internal class ChildViewHolder {
+        var binding: ItemPublishholeForestlistBinding? = null
     }
 }
-

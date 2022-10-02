@@ -1,33 +1,21 @@
-package cn.pivotstudio.modulep.publishhole.ui.adapter;
+package cn.pivotstudio.modulep.publishhole.ui.adapter
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ExpandableListView;
-import android.widget.TextView;
-
-import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.RecyclerView;
-
-import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief;
-import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
-
-
-import java.util.ArrayList;
-import java.util.List;
-
-import cn.pivotstudio.modulep.publishhole.R;
-import cn.pivotstudio.modulep.publishhole.custom_view.ForestExpandableListView;
-import cn.pivotstudio.modulep.publishhole.custom_view.ForestsPopupWindow;
-
-import cn.pivotstudio.modulep.publishhole.databinding.ItemPublishholeForestlistBinding;
-import cn.pivotstudio.modulep.publishhole.model.DetailTypeForestResponse;
-import cn.pivotstudio.modulep.publishhole.model.ForestListsResponse;
-import cn.pivotstudio.modulep.publishhole.ui.activity.PublishHoleActivity;
-import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel;
-import kotlin.Pair;
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter
+import cn.pivotstudio.modulep.publishhole.R
+import cn.pivotstudio.modulep.publishhole.custom_view.ForestExpandableListView
+import cn.pivotstudio.modulep.publishhole.custom_view.ForestsPopupWindow
+import cn.pivotstudio.modulep.publishhole.databinding.ItemPublishholeForestlistBinding
+import cn.pivotstudio.modulep.publishhole.ui.activity.PublishHoleActivity
+import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel
 
 /**
  * @classname: ForestAdapter
@@ -36,181 +24,158 @@ import kotlin.Pair;
  * @version:1.0
  * @author:
  */
-public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTypeForestResponse, RecyclerView.ViewHolder> {
-    private final int Title = 0, JoinedForest = 1, Forest = 2, Bottom = 3;
-    private List<DetailTypeForestResponse.ForestResponse> mJoined;
-    private List<Pair<String, List<ForestBrief>>> forestWithType = new ArrayList<>();
-    private List<String> mType;
-    public List<List<ForestBrief>> mDetailTypeForest;
-    private ForestListElAdapter mElAdapter;//elv的适配器
-    private ForestsPopupWindow mPpw;//外层ppw
+class ForestRecyclerViewAdapter(
+    context: Context?,
+    private val forestsPopupWindow: ForestsPopupWindow
+) : BaseRecyclerViewAdapter<ForestBrief, RecyclerView.ViewHolder>(context) {
 
-    @Override
-    public int getItemViewType(int position) {
-        if (position == 0 || position == mJoined.size() + 1) {
-            return Title;
-        } else if (position > 0 && position < (mJoined.size() + 1)) {
-            return JoinedForest;
-        } else if (position == getItemCount() - 1 || position == getItemCount() - 2) {
-            return Bottom;
+    companion object {
+        private const val TITLE = 0
+        private const val JOINED_FORESTS = 1
+        private const val FOREST = 2
+        private const val BOTTOM = 3
+    }
+
+    private var mJoined: List<ForestBrief> = mutableListOf()
+    private var forestWithType: List<Pair<String, List<ForestBrief>>> = mutableListOf()
+    private var mElAdapter: ForestListElAdapter? = null
+
+    override fun getItemViewType(position: Int): Int {
+        return if (position == 0 || position == mJoined.size + 1) {
+            TITLE
+        } else if (position > 0 && position < mJoined.size + 1) {
+            JOINED_FORESTS
+        } else if (position == itemCount - 1 || position == itemCount - 2) {
+            BOTTOM
         } else {
-            return Forest;
+            FOREST
         }
     }
 
-    public ForestRecyclerViewAdapter(Context context, ForestsPopupWindow mPpw) {
-        super(context);
-        mJoined = new ArrayList<>();
-        mType = new ArrayList<>();
-        this.mPpw = mPpw;
-    }
+    inner class BottomViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    public class BottomViewHolder extends RecyclerView.ViewHolder {
-        public BottomViewHolder(View itemView) {
-            super(itemView);
+    inner class TitleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var mTitleTv: TextView
+        fun bind(position: Int) {
+            mTitleTv.text = if (position == 0) "加入的小树林" else "全部小树林"
+        }
 
+        init {
+            mTitleTv = itemView.findViewById(R.id.tv_publishholeforestlisttitle_title)
         }
     }
 
-    public class TitleViewHolder extends RecyclerView.ViewHolder {
-        TextView mTitleTv;
-
-        public TitleViewHolder(View itemView) {
-            super(itemView);
-            mTitleTv = itemView.findViewById(R.id.tv_publishholeforestlisttitle_title);
+    inner class JoinedForestViewHolder(var binding: ItemPublishholeForestlistBinding) :
+        RecyclerView.ViewHolder(
+            binding.root
+        ) {
+        var currentPosition = 0
+        fun bind(position: Int) {
+            this.currentPosition = position
         }
 
-        public void bind(int position) {
-            mTitleTv.setText(position == 0 ? "加入的小树林" : "全部小树林");
-        }
-    }
+        init {
+            binding.btnPublishholeforestlistChooseforest.setOnClickListener {
+                val publishHoleViewModel = ViewModelProvider(
+                    (mContext as PublishHoleActivity)
+                )[PublishHoleViewModel::class.java]
 
-    public class JoinedForestViewHolder extends RecyclerView.ViewHolder {
-        ItemPublishholeForestlistBinding binding;
-        int position;
-
-        public JoinedForestViewHolder(ItemPublishholeForestlistBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-            binding.btnPublishholeforestlistChooseforest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    PublishHoleViewModel publishHoleViewModel = new ViewModelProvider((PublishHoleActivity) mContext).get(PublishHoleViewModel.class);
-                    publishHoleViewModel.setForestId(mJoined.get(position).getForest_id());
-                    publishHoleViewModel.forestName.setValue(mJoined.get(position).getName());
-                    mPpw.dismiss();
-                }
-            });
-            binding.ivPublishholeforestlistIcon.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                }
-            });
-        }
-
-        public ItemPublishholeForestlistBinding getBinding() {
-            return binding;
-        }
-
-        public void bind(int position) {
-            this.position = position;
-        }
-    }
-
-    public class ForestTypeViewHolder extends RecyclerView.ViewHolder {
-        ForestExpandableListView mElv;
-
-        public ForestTypeViewHolder(View itemView) {
-            super(itemView);
-            mElv = itemView.findViewById(R.id.elv_ppwpublishhole);
-            if (mElAdapter == null) {
-                mElAdapter = new ForestListElAdapter(mContext, mType, mPpw);
+                publishHoleViewModel.forestId = mJoined[currentPosition].forestId
+                publishHoleViewModel.forestName.value = mJoined[currentPosition].forestName
+                forestsPopupWindow.dismiss()
             }
-            mElv.setAdapter(mElAdapter);
+            binding.ivPublishholeforestlistIcon.setOnClickListener { }
+        }
+    }
+
+    inner class ForestTypeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        var mElv: ForestExpandableListView
+        fun bind(position: Int) {}
+
+        init {
+            mElv = itemView.findViewById(R.id.elv_ppwpublishhole)
+            if (mElAdapter == null) {
+                mElAdapter = ForestListElAdapter(
+                    mContext,
+                    forestWithType.map { it.first },
+                    forestsPopupWindow
+                )
+            }
+            mElv.setAdapter(mElAdapter)
+            mElAdapter?.changeDataForests(forestWithType)
             //默认展开第一个数组
             //mElv.setGroupIndicator(null);
             //mElv.expandGroup(0);
             //关闭数组某个数组，可以通过该属性来实现全部展开和只展开一个列表功能
             //expand_list_id.collapseGroup(0);
-            mElv.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
-                @Override
-                public boolean onGroupClick(ExpandableListView expandableListView, View view, int groupPosition, long l) {
-                    if (mDetailTypeForest == null || mDetailTypeForest.get(groupPosition) == null) {
-                        showMsg("加载中...");
-                        return true;
-                    } else if (mDetailTypeForest.get(groupPosition).size() == 0) {
-                        showMsg("无此类型小树林");
-                        return true;
-                    } else {
-                        return false;
-                    }
+            mElv.setOnGroupClickListener { expandableListView, view, groupPosition, l ->
+                if (forestWithType.isEmpty() || forestWithType[groupPosition].second.isEmpty()) {
+                    showMsg("加载中...")
+                    true
+                } else if (forestWithType[groupPosition].second.isEmpty()) {
+                    showMsg("无此类型小树林")
+                    true
+                } else {
+                    false
                 }
-            });
+            }
             //子视图的点击事件
-            mElv.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-                @Override
-                public boolean onChildClick(ExpandableListView expandableListView, View view, int groupPosition, int childPosition, long l) {
-
-
-                    return false;
-                }
-            });
+            mElv.setOnChildClickListener { expandableListView, view, groupPosition, childPosition, l -> false }
             //用于当组项折叠时的通知。
-            mElv.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-                @Override
-                public void onGroupCollapse(int groupPosition) {
-
-                }
-            });
+            mElv.setOnGroupCollapseListener { }
             //
             //用于当组项折叠时的通知。
-            mElv.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-                @Override
-                public void onGroupExpand(int groupPosition) {
-
-                }
-            });
-        }
-
-        public void bind(int position) {
-
+            mElv.setOnGroupExpandListener { }
         }
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateBaseViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == Title) {
-            return new ForestRecyclerViewAdapter
-                    .TitleViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_publishhole_forestlisttitle, parent, false));
-        } else if (viewType == JoinedForest) {
-            ItemPublishholeForestlistBinding itemPublishholeForestlistBinding =
-                    DataBindingUtil.inflate(LayoutInflater.from(mContext), R.layout.item_publishhole_forestlist, parent, false);
-            return new JoinedForestViewHolder(itemPublishholeForestlistBinding);
-        } else if (viewType == Forest) {
-            return new ForestRecyclerViewAdapter
-                    .ForestTypeViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_expandablelistview, parent, false));
-        } else if (viewType == Bottom) {
-            return new ForestRecyclerViewAdapter
-                    .BottomViewHolder(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.item_bottomblock, parent, false));
+    override fun onCreateBaseViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        when (viewType) {
+            TITLE -> {
+                return TitleViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_publishhole_forestlisttitle, parent, false)
+                )
+            }
+            JOINED_FORESTS -> {
+                val itemPublishholeForestlistBinding =
+                    DataBindingUtil.inflate<ItemPublishholeForestlistBinding>(
+                        LayoutInflater.from(mContext),
+                        R.layout.item_publishhole_forestlist,
+                        parent,
+                        false
+                    )
+                return JoinedForestViewHolder(itemPublishholeForestlistBinding)
+            }
+            FOREST -> {
+                return ForestTypeViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_expandablelistview, parent, false)
+                )
+            }
+            else -> {
+                return BottomViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.item_bottomblock, parent, false)
+                )
+            }
         }
-        return null;
     }
 
-    @Override
-    public void onBindBaseViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ForestRecyclerViewAdapter.JoinedForestViewHolder) {
-            ItemPublishholeForestlistBinding binding = ((ForestRecyclerViewAdapter.JoinedForestViewHolder) holder).getBinding();
-            binding.setForest(mJoined.get(position - 1));
-            binding.executePendingBindings();
-            ((ForestRecyclerViewAdapter.JoinedForestViewHolder) holder).bind(position - 1);
-        } else if (holder instanceof ForestRecyclerViewAdapter.ForestTypeViewHolder) {
-            ((ForestRecyclerViewAdapter.ForestTypeViewHolder) holder).bind(position);
-        } else if (holder instanceof ForestRecyclerViewAdapter.TitleViewHolder) {
-            ((ForestRecyclerViewAdapter.TitleViewHolder) holder).bind(position);
+    override fun onBindBaseViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (holder) {
+            is JoinedForestViewHolder -> {
+                val binding = holder.binding
+                binding.forest = mJoined[position - 1]
+                binding.executePendingBindings()
+                holder.bind(position - 1)
+            }
+            is ForestTypeViewHolder -> {
+                holder.bind(position)
+            }
+            is TitleViewHolder -> {
+                holder.bind(position)
+            }
         }
     }
 
@@ -219,9 +184,8 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
      *
      * @return item数量
      */
-    @Override
-    public int getItemCount() {
-        return (4 + (mJoined.size()) + (mType.size() == 0 ? 0 : 1));
+    override fun getItemCount(): Int {
+        return 4 + mJoined.size + if (forestWithType.isEmpty()) 0 else 1
     }
 
     /**
@@ -229,32 +193,21 @@ public class ForestRecyclerViewAdapter extends BaseRecyclerViewAdapter<DetailTyp
      *
      * @param mJoined
      */
-    public void changeDataJoinedForest(DetailTypeForestResponse mJoined) {
-        if (mJoined.getForests() != null) {//未加入的话，后端直接返回null
-            this.mJoined = mJoined.getForests();
-
-        }
-        notifyDataSetChanged();
+    fun changeDataJoinedForest(forests: List<ForestBrief>) {
+        this.mJoined = forests
+        notifyDataSetChanged()
     }
 
-    /**
-     * 添加小树林类型
-     *
-     * @param Type
-     */
-    public void changeDataType(List<String> Type) {
-        if (Type != null) {//防一手为null
-            mType = Type;
-            notifyDataSetChanged();
-        }
-    }
 
     /**
      * 改变具体类型的小树林
      *
      * @param lists
      */
-    public void changeDataDetailTypeForest(List<Pair<String, List<ForestBrief>>> lists) {
-        forestWithType = lists;
+    fun changeDataDetailTypeForest(lists: List<Pair<String, List<ForestBrief>>>) {
+        forestWithType = lists
+
+        notifyDataSetChanged()
     }
+
 }

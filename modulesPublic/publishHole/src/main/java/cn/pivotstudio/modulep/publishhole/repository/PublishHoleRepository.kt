@@ -8,6 +8,7 @@ import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.data.GetUrlUtil
 import cn.pivotstudio.modulep.publishhole.model.DetailTypeForestResponse
@@ -179,6 +180,21 @@ class PublishHoleRepository(
         )
     }.flowOn(dispatcher).catch { e ->
         e.printStackTrace()
+    }
+
+    fun loadJoinedForestsV2(): Flow<List<ForestBrief>> {
+        return flow {
+            emit(
+                hustHoleApiService.getJoinedForests(
+                    descend = true,
+                    limit = FOREST_SIZE,
+                    offset = 0,
+                    timestamp = DateUtil.getDateTime()
+                )
+            )
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
+        }
     }
 
 }

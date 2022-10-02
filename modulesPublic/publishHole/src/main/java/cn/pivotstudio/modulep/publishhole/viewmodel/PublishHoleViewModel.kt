@@ -6,7 +6,6 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
-import cn.pivotstudio.modulep.publishhole.model.DetailTypeForestResponse
 import cn.pivotstudio.modulep.publishhole.model.ForestTypeResponse
 import cn.pivotstudio.modulep.publishhole.model.MsgResponse
 import cn.pivotstudio.modulep.publishhole.repository.PublishHoleRepository
@@ -24,8 +23,10 @@ import kotlinx.coroutines.launch
  */
 class PublishHoleViewModel : BaseViewModel() {
 
+    private val repository: PublishHoleRepository = PublishHoleRepository()
     private var _forestsMeta = listOf<ForestBrief>()
     private var _forests = MutableStateFlow<List<Pair<String, List<ForestBrief>>>>(mutableListOf())
+    private var _joinedForests = MutableStateFlow<List<ForestBrief>>(mutableListOf())
 
     //所有小树林
     @JvmField
@@ -33,31 +34,22 @@ class PublishHoleViewModel : BaseViewModel() {
 
     //加入的小树林
     @JvmField
-    var joinedForest: MutableLiveData<DetailTypeForestResponse>
+    var joinedForest: LiveData<List<ForestBrief>> = _joinedForests.asLiveData()
 
     //小树林类型
     @JvmField
-    var pForestType: MutableLiveData<ForestTypeResponse>
+    var pForestType: MutableLiveData<ForestTypeResponse> = repository.pForestType
 
     //点击事件成功的网络请求结果
     @JvmField
-    var pOnClickMsg: MutableLiveData<MsgResponse>
+    var pOnClickMsg: MutableLiveData<MsgResponse> = repository.pClickMsg
 
     //选择的小树林的名字
     @JvmField
     var forestName: MutableLiveData<String> = MutableLiveData()
 
     //选中的小树林的id
-    private var mForestId: Int? = null
-    private val repository: PublishHoleRepository = PublishHoleRepository()
-    var forestId: Int?
-        get() {
-            if (mForestId == null) mForestId = 0
-            return mForestId
-        }
-        set(mForestId) {
-            this.mForestId = mForestId
-        }
+    var forestId: String? = null
 
     /**
      * 获取加入的小树林
@@ -99,7 +91,7 @@ class PublishHoleViewModel : BaseViewModel() {
      * @param content 树洞内容
      */
     fun postHoleRequest(content: String?) {
-        repository.publishHole(content, forestId!!)
+//        repository.publishHole(content, forestId!!)
     }
 
     fun loadAllForests() {
@@ -110,6 +102,15 @@ class PublishHoleViewModel : BaseViewModel() {
                     transToAllForestsWithType(it)
                 }.collectLatest {
                     _forests.emit(it)
+                }
+        }
+    }
+
+    fun loadJoinedForestsV2() {
+        viewModelScope.launch {
+            repository.loadJoinedForestsV2()
+                .collectLatest {
+                    _joinedForests.emit(it)
                 }
         }
     }
@@ -136,9 +137,6 @@ class PublishHoleViewModel : BaseViewModel() {
     }
 
     init {
-        pForestType = repository.pForestType
-        joinedForest = repository.pJoinedForest
-        pOnClickMsg = repository.pClickMsg
         failed = repository.failed
     }
 }

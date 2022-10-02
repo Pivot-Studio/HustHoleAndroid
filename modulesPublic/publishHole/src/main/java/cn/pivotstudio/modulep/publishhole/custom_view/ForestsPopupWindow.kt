@@ -1,28 +1,24 @@
-package cn.pivotstudio.modulep.publishhole.custom_view;
+package cn.pivotstudio.modulep.publishhole.custom_view
 
-import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
-import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
-
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-import cn.pivotstudio.moduleb.libbase.base.custom_view.MaxHeightRecyclerView;
-
-import cn.pivotstudio.modulep.publishhole.R;
-import cn.pivotstudio.modulep.publishhole.ui.activity.PublishHoleActivity;
-import cn.pivotstudio.modulep.publishhole.ui.adapter.ForestRecyclerViewAdapter;
-import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel;
+import android.animation.ValueAnimator
+import android.app.Activity
+import android.content.Context
+import android.graphics.Point
+import android.graphics.drawable.BitmapDrawable
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.PopupWindow
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.moduleb.libbase.base.custom_view.MaxHeightRecyclerView
+import cn.pivotstudio.modulep.publishhole.R
+import cn.pivotstudio.modulep.publishhole.ui.activity.PublishHoleActivity
+import cn.pivotstudio.modulep.publishhole.ui.adapter.ForestRecyclerViewAdapter
+import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel
 
 /**
  * @classname: ForestsPopupWindow
@@ -31,69 +27,54 @@ import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel;
  * @version: 1.0
  * @author:
  */
-public class ForestsPopupWindow extends PopupWindow {
-    private Context context;
-    public MaxHeightRecyclerView recyclerView;
-
-    public ForestsPopupWindow(Context context) {
-        this.context = context;
-        initView();
-        initListener();
-    }
+class ForestsPopupWindow(
+    private val context: Context
+) : PopupWindow() {
+    lateinit var recyclerView: MaxHeightRecyclerView
+    private val forestRecyclerViewAdapter: ForestRecyclerViewAdapter by lazy { ForestRecyclerViewAdapter(context, this) }
+    private lateinit var backIv: ImageView
+    private lateinit var chooseBtn: Button
 
     /**
      * 初始化view操作
      */
-    private void initView() {
-        View v = LayoutInflater.from(context).inflate(R.layout.ppw_publishhole_forests, null);
-        setContentView(v);
+    private fun initView() {
+        val v = LayoutInflater.from(context).inflate(R.layout.ppw_publishhole_forests, null)
+        contentView = v
 
-        Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
-        Point outSize = new Point();
+        backIv = v.findViewById(R.id.iv_ppwpublishhole_finish)
+        chooseBtn = v.findViewById(R.id.btn_publishholeforests_chooseforest)
+        recyclerView = v.findViewById(R.id.rv_ppwpublishhole)
+
+        val display = (context as Activity).windowManager.defaultDisplay
+        val outSize = Point()
         // 通过Display对象获取屏幕宽、高数据并保存到Point对象中
-        display.getSize(outSize);
+        display.getSize(outSize)
         // 从Point对象中获取宽、高
-        int x = outSize.x;
-        int y = outSize.y;//此为屏幕高度
+        val x = outSize.x
+        val y = outSize.y //此为屏幕高度
+        width = ViewGroup.LayoutParams.MATCH_PARENT
+        height = y - 300 //写死高度，不写死，会随着item数量变化，ppw上端上下跳动
+        isFocusable = true
+        setBackgroundDrawable(BitmapDrawable())
+        isOutsideTouchable = true
 
-        setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        setHeight(y - 300);//写死高度，不写死，会随着item数量变化，ppw上端上下跳动
-        setFocusable(true);
-        setBackgroundDrawable(new BitmapDrawable());
-        setOutsideTouchable(true);
+        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.adapter = forestRecyclerViewAdapter
 
-
-        MaxHeightRecyclerView recyclerView = v.findViewById(R.id.rv_ppwpublishhole);
-        this.recyclerView = recyclerView;
-
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(context));
-        recyclerView.setAdapter(new ForestRecyclerViewAdapter(context, this));
-
-        ImageView backIv = v.findViewById(R.id.iv_ppwpublishhole_finish);
-        Button chooseBtn = v.findViewById(R.id.btn_publishholeforests_chooseforest);
-        backIv.setOnClickListener(this::onClick);
-        chooseBtn.setOnClickListener(this::onClick);
-
+        backIv.setOnClickListener { v: View -> onClick(v) }
+        chooseBtn.setOnClickListener { v: View -> onClick(v) }
     }
 
     /**
      * 初始化监听器
      */
-    private void initListener() {
-        setOnDismissListener(new OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                ValueAnimator animator = ValueAnimator.ofFloat(0.5f, 1f).setDuration(300);
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        setBackgroundAlpha((Float) animation.getAnimatedValue());
-                    }
-                });
-                animator.start();
-            }
-        });
+    private fun initListener() {
+        setOnDismissListener {
+            val animator = ValueAnimator.ofFloat(0.5f, 1f).setDuration(300)
+            animator.addUpdateListener { animation -> setBackgroundAlpha(animation.animatedValue as Float) }
+            animator.start()
+        }
     }
 
     /**
@@ -101,18 +82,18 @@ public class ForestsPopupWindow extends PopupWindow {
      *
      * @param v
      */
-    private void onClick(View v) {
-        int id = v.getId();
+    private fun onClick(v: View) {
+        val id = v.id
         if (id == R.id.btn_publishholeforests_chooseforest) {
-            PublishHoleViewModel publishHoleViewModel = new ViewModelProvider(
-                    (PublishHoleActivity) context
-            )
-                    .get(PublishHoleViewModel.class);
-            publishHoleViewModel.setForestId(0);
-            publishHoleViewModel.forestName.setValue("未选择任何小树林");
-            dismiss();
+            val publishHoleViewModel = ViewModelProvider(
+                (context as PublishHoleActivity)
+            )[PublishHoleViewModel::class.java]
+
+            publishHoleViewModel.forestId = null
+            publishHoleViewModel.forestName.value = "未选择任何小树林"
+            dismiss()
         } else if (id == R.id.iv_ppwpublishhole_finish) {
-            dismiss();
+            dismiss()
         }
     }
 
@@ -121,23 +102,31 @@ public class ForestsPopupWindow extends PopupWindow {
      *
      * @param bgAlpha
      */
-    private void setBackgroundAlpha(float bgAlpha) {
-        WindowManager.LayoutParams lp = ((Activity) context).getWindow().getAttributes();
-        lp.alpha = bgAlpha;
-        ((Activity) context).getWindow().setAttributes(lp);
+    private fun setBackgroundAlpha(bgAlpha: Float) {
+        val lp = (context as Activity).window.attributes
+        lp.alpha = bgAlpha
+        context.window.attributes = lp
     }
 
     /**
      * 显式后面的半黑屏
      */
-    public void show() {
-        ValueAnimator animator = ValueAnimator.ofFloat(1, 0.5f).setDuration(300);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                setBackgroundAlpha((Float) animation.getAnimatedValue());
-            }
-        });
-        animator.start();
+    fun show() {
+        val animator = ValueAnimator.ofFloat(1f, 0.5f).setDuration(300)
+        animator.addUpdateListener { animation -> setBackgroundAlpha(animation.animatedValue as Float) }
+        animator.start()
+    }
+
+    fun setJoinedForests(forests: List<ForestBrief>) {
+        forestRecyclerViewAdapter.changeDataJoinedForest(forests)
+    }
+
+    fun setAllForests(allForests: List<Pair<String, List<ForestBrief>>>) {
+        forestRecyclerViewAdapter.changeDataDetailTypeForest(allForests)
+    }
+
+    init {
+        initView()
+        initListener()
     }
 }

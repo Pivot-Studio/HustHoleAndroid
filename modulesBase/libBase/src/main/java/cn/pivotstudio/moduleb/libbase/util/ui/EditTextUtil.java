@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
 import android.widget.Button;
 import android.widget.EditText;
+
 import cn.pivotstudio.moduleb.libbase.R;
 
 /**
@@ -62,7 +63,7 @@ public class EditTextUtil {
     /**
      * 设置editText中hint的内容和大小
      *
-     * @param string hint内容
+     * @param string   hint内容
      * @param textSize hint大小
      */
     public static void EditTextSize(EditText editText,
