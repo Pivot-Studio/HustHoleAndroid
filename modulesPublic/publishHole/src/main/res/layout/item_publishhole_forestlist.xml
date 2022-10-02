@@ -39,7 +39,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btn_publishholeforestlist_chooseforest"
+            android:id="@+id/btn_choose_forest"
             android:layout_width="@dimen/dp_48"
             android:layout_height="@dimen/dp_24"
             android:layout_marginEnd="@dimen/dp_23"

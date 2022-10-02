@@ -10,6 +10,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
@@ -24,6 +27,8 @@ import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.githang.statusbar.StatusBarCompat
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 /**
  * @classname PublishHoleActivity
@@ -137,6 +142,15 @@ class PublishHoleActivity : BaseActivity() {
      * 初始化数据监听
      */
     private fun initObserver() {
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.tip.collectLatest {
+                    showMsg(it)
+                }
+            }
+        }
+
         viewModel.joinedForest.observe(this) { joinedForests ->
             forestPopupWindow.setJoinedForests(joinedForests)
         }
@@ -186,7 +200,7 @@ class PublishHoleActivity : BaseActivity() {
                 val content = binding.etPublishhole.text.toString()
                 if (content.length > 15) {
                     binding.btnPublishholeSend.isClickable = false
-                    viewModel.postHoleRequest(content)
+                    viewModel.publishAHole(content = content)
                 } else {
                     showMsg("输入内容至少需要15字")
                 }

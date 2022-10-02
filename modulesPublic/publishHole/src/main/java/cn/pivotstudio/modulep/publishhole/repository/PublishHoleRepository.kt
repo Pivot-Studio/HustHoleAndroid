@@ -2,12 +2,10 @@ package cn.pivotstudio.modulep.publishhole.repository
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
-import cn.pivotstudio.husthole.moduleb.network.BaseObserver
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
-import cn.pivotstudio.husthole.moduleb.network.NetworkApi
+import cn.pivotstudio.husthole.moduleb.network.*
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.data.GetUrlUtil
@@ -169,6 +167,26 @@ class PublishHoleRepository(
                 }
             }))
     }
+
+    fun publishAHole(forestId: String? = null, content: String): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService.publishAHole(
+            RequestBody.HoleRequest(
+                forestId = forestId,
+                content = content
+            )
+        )
+        if (response.isSuccessful) {
+            emit(ApiResult.Success(data = Unit))
+        } else {
+            val errorCode = response.code()
+            response.errorBody()?.close()
+            emit(ApiResult.Error(code = errorCode))
+        }
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
+    }
+
 
     fun loadAllForests(): Flow<List<ForestBrief>> = flow {
         emit(

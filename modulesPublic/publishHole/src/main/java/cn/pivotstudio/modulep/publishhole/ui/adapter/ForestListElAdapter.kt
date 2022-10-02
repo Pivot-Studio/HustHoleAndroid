@@ -39,6 +39,10 @@ class ForestListElAdapter(
     private val forestsPopupWindow: ForestsPopupWindow
 ) : BaseExpandableListAdapter() {
 
+    private val publishHoleViewModel = ViewModelProvider(
+        (context as PublishHoleActivity)
+    )[PublishHoleViewModel::class.java]
+
     private var mForestLists: List<Pair<String, List<ForestBrief>>> = mutableListOf()
 
     /**
@@ -97,7 +101,8 @@ class ForestListElAdapter(
         var view = convertView
         val groupViewHolder: GroupTitleViewHolder
         if (view == null) {
-            view = LayoutInflater.from(parent.context).inflate(R.layout.item_publishhole_foresttype, parent, false)
+            view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_publishhole_foresttype, parent, false)
             groupViewHolder = GroupTitleViewHolder()
             groupViewHolder.parentImage = view.findViewById(R.id.iv_publishholetype_choosetype)
             groupViewHolder.titleTv = view.findViewById(R.id.tv_publishholeforesttype_name)
@@ -138,16 +143,11 @@ class ForestListElAdapter(
             childViewHolder = view.getTag(R.id.tag_first) as ChildViewHolder
         }
         childViewHolder.binding!!.forest = mForestLists[groupPosition].second[childPosition]
-        childViewHolder.binding!!.btnPublishholeforestlistChooseforest.setOnClickListener { v: View? ->
-            val publishHoleViewModel = ViewModelProvider(
-                (context as PublishHoleActivity)
-            )[PublishHoleViewModel::class.java]
-
-            publishHoleViewModel.forestId =
-                mForestLists[groupPosition].second[childPosition].forestId
-
-            publishHoleViewModel.forestName.value =
-                mForestLists[groupPosition].second[childPosition].forestName
+        childViewHolder.binding!!.btnChooseForest.setOnClickListener {
+            publishHoleViewModel.apply {
+                forestId = mForestLists[groupPosition].second[childPosition].forestId
+                forestName.value = mForestLists[groupPosition].second[childPosition].forestName
+            }
             forestsPopupWindow.dismiss()
         }
         childViewHolder.binding!!.ivPublishholeforestlistIcon.setOnClickListener { v: View? ->

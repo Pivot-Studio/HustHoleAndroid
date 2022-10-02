@@ -24,7 +24,7 @@ import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel
  * @version:1.0
  * @author:
  */
-class ForestRecyclerViewAdapter(
+class ChooseForestAdapter(
     context: Context?,
     private val forestsPopupWindow: ForestsPopupWindow
 ) : BaseRecyclerViewAdapter<ForestBrief, RecyclerView.ViewHolder>(context) {
@@ -75,7 +75,7 @@ class ForestRecyclerViewAdapter(
         }
 
         init {
-            binding.btnPublishholeforestlistChooseforest.setOnClickListener {
+            binding.btnChooseForest.setOnClickListener {
                 val publishHoleViewModel = ViewModelProvider(
                     (mContext as PublishHoleActivity)
                 )[PublishHoleViewModel::class.java]
@@ -84,7 +84,6 @@ class ForestRecyclerViewAdapter(
                 publishHoleViewModel.forestName.value = mJoined[currentPosition].forestName
                 forestsPopupWindow.dismiss()
             }
-            binding.ivPublishholeforestlistIcon.setOnClickListener { }
         }
     }
 
@@ -206,7 +205,6 @@ class ForestRecyclerViewAdapter(
      */
     fun changeDataDetailTypeForest(lists: List<Pair<String, List<ForestBrief>>>) {
         forestWithType = lists
-
         notifyDataSetChanged()
     }
 

@@ -101,7 +101,7 @@ interface HustHoleApiService {
 
     /** 单个树洞 */
     @GET("forest/findOne")
-    suspend fun getForestOverview(
+    suspend fun getForestBrief(
         @Query("forestId") forestId: String
     ): ForestBrief
 
@@ -168,10 +168,10 @@ interface HustHoleApiService {
     //========================================================================================================
 
     /** 添加树洞 */
-    @GET("hole/add")
+    @POST("hole/add")
     suspend fun publishAHole(
         @Body holeRequest: RequestBody.HoleRequest
-    )
+    ): Response<Unit>
 
     /** 删除树洞 */
     @GET("hole/{holeId}")
@@ -202,6 +202,7 @@ interface HustHoleApiService {
         @Query("timestamp") timestamp: String
     ): List<HoleV2>
 
+    //========================================================================================================
     @GET("msg/reply")
     suspend fun getReplies(
         @Query("limit") limit: Int = 20,

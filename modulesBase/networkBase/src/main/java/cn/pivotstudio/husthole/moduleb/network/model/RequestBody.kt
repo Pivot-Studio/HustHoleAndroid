@@ -16,8 +16,8 @@ sealed interface RequestBody {
     ) : RequestBody
 
     data class HoleRequest(
-        var content: String,
-        val forestId: String
+        val forestId: String?,
+        var content: String
     ) : RequestBody
 
     data class Reply(

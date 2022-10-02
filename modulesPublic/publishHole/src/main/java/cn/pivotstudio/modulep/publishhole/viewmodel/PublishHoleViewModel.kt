@@ -4,14 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
 import cn.pivotstudio.modulep.publishhole.model.ForestTypeResponse
 import cn.pivotstudio.modulep.publishhole.model.MsgResponse
 import cn.pivotstudio.modulep.publishhole.repository.PublishHoleRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 /**
@@ -27,6 +26,9 @@ class PublishHoleViewModel : BaseViewModel() {
     private var _forestsMeta = listOf<ForestBrief>()
     private var _forests = MutableStateFlow<List<Pair<String, List<ForestBrief>>>>(mutableListOf())
     private var _joinedForests = MutableStateFlow<List<ForestBrief>>(mutableListOf())
+
+    private var _tip = MutableSharedFlow<String>()
+    val tip = _tip.asSharedFlow()
 
     //所有小树林
     @JvmField
@@ -92,6 +94,23 @@ class PublishHoleViewModel : BaseViewModel() {
      */
     fun postHoleRequest(content: String?) {
 //        repository.publishHole(content, forestId!!)
+    }
+
+    fun publishAHole(forestId: String? = this.forestId, content: String) {
+        viewModelScope.launch {
+            repository.publishAHole(forestId, content)
+                .collectLatest { state ->
+                    when(state) {
+                        is ApiResult.Success<*> -> {
+                            _tip.emit("发布成功")
+                        }
+                        is ApiResult.Error -> {
+                            _tip.emit("${state.code}" + state.errorMessage)
+                        }
+                        else -> { }
+                    }
+                }
+        }
     }
 
     fun loadAllForests() {

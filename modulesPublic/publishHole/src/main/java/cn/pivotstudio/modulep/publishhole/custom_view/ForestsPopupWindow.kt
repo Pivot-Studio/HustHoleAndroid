@@ -17,7 +17,7 @@ import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.moduleb.libbase.base.custom_view.MaxHeightRecyclerView
 import cn.pivotstudio.modulep.publishhole.R
 import cn.pivotstudio.modulep.publishhole.ui.activity.PublishHoleActivity
-import cn.pivotstudio.modulep.publishhole.ui.adapter.ForestRecyclerViewAdapter
+import cn.pivotstudio.modulep.publishhole.ui.adapter.ChooseForestAdapter
 import cn.pivotstudio.modulep.publishhole.viewmodel.PublishHoleViewModel
 
 /**
@@ -31,7 +31,7 @@ class ForestsPopupWindow(
     private val context: Context
 ) : PopupWindow() {
     lateinit var recyclerView: MaxHeightRecyclerView
-    private val forestRecyclerViewAdapter: ForestRecyclerViewAdapter by lazy { ForestRecyclerViewAdapter(context, this) }
+    private val chooseForestAdapter: ChooseForestAdapter by lazy { ChooseForestAdapter(context, this) }
     private lateinit var backIv: ImageView
     private lateinit var chooseBtn: Button
 
@@ -60,7 +60,7 @@ class ForestsPopupWindow(
         isOutsideTouchable = true
 
         recyclerView.layoutManager = LinearLayoutManager(context)
-        recyclerView.adapter = forestRecyclerViewAdapter
+        recyclerView.adapter = chooseForestAdapter
 
         backIv.setOnClickListener { v: View -> onClick(v) }
         chooseBtn.setOnClickListener { v: View -> onClick(v) }
@@ -118,11 +118,11 @@ class ForestsPopupWindow(
     }
 
     fun setJoinedForests(forests: List<ForestBrief>) {
-        forestRecyclerViewAdapter.changeDataJoinedForest(forests)
+        chooseForestAdapter.changeDataJoinedForest(forests)
     }
 
     fun setAllForests(allForests: List<Pair<String, List<ForestBrief>>>) {
-        forestRecyclerViewAdapter.changeDataDetailTypeForest(allForests)
+        chooseForestAdapter.changeDataDetailTypeForest(allForests)
     }
 
     init {
