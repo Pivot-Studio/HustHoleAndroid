@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.repository.ForestRepository
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
@@ -58,7 +57,7 @@ class ForestViewModel : ViewModel() {
                 loadJoinedForestsV2().zip(loadForestHolesV2()) { forests, holes ->
                     packForestAvatarUrlToHoles(forests, holes)
                     forests to holes
-                }.collectLatest {
+                }.collect {
                     holesLoadState.value = LoadStatus.DONE
                     _forestsV2.emit(it.first)
                     _holesV2.emit(it.second)
@@ -71,7 +70,7 @@ class ForestViewModel : ViewModel() {
         holesLoadState.value = LoadStatus.LOADING
         viewModelScope.launch {
             repository.loadMoreForestHolesV2()
-                .collectLatest {
+                .collect {
                     val newHoles = _holesV2.value.toMutableList() + it
                     packForestAvatarUrlToHoles(
                         holes = newHoles
@@ -89,24 +88,10 @@ class ForestViewModel : ViewModel() {
     fun giveALikeToTheHole(hole: HoleV2) {
         viewModelScope.launch {
             repository.giveALikeToTheHole(hole)
-                .collectLatest {
+                .collect {
                     when (it) {
                         is ApiResult.Success<*> -> {
-                            refreshTheHole(hole)
-                        }
-                        else -> {}
-                    }
-                }
-        }
-    }
-
-    fun followTheHole(hole: HoleV2) {
-        viewModelScope.launch {
-            repository.followTheHole(hole)
-                .collectLatest {
-                    when (it) {
-                        is ApiResult.Success<*> -> {
-                            refreshTheHole(hole)
+                            likeTheHole(hole)
                         }
                         is ApiResult.Error -> {
                             tip.value = it.code.toString() + it.errorMessage
@@ -117,22 +102,87 @@ class ForestViewModel : ViewModel() {
         }
     }
 
-    fun refreshTheHole(hole: HoleV2) {
+    fun followTheHole(hole: HoleV2) {
         viewModelScope.launch {
-            repository.loadTheHole(hole)
-                .collectLatest {
-                    val newItems = _holesV2.value.toMutableList()
-                    for ((i, newHole) in newItems.withIndex()) {
-                        if (hole.holeId == newHole.holeId) newItems[i] =
-                            newItems[i].copy(followCount = 100, isFollow = true)
+            if (hole.isFollow) {
+                repository.unFollowTheHole(hole)
+                    .collect {
+                        when (it) {
+                            is ApiResult.Success<*> -> {
+                                val newItems = _holesV2.value.toMutableList()
+                                val i = newItems.indexOfFirst { newHole ->
+                                    hole.holeId == newHole.holeId
+                                }
+
+                                newItems[i] = newItems[i].copy(
+                                    isFollow = hole.isFollow.not(),
+                                    followCount = hole.followCount - 1
+                                )
+
+                                _holesV2.emit(newItems)
+                            }
+                            is ApiResult.Error -> {
+                                tip.value = it.code.toString() + it.errorMessage
+                            }
+                            else -> {}
+                        }
                     }
-                    _holesV2.emit(newItems)
-                }
+            } else {
+                repository.followTheHole(hole)
+                    .collect {
+                        when (it) {
+                            is ApiResult.Success<*> -> {
+                                val newItems = _holesV2.value.toMutableList()
+                                val i = newItems.indexOfFirst { newHole ->
+                                    hole.holeId == newHole.holeId
+                                }
+
+                                newItems[i] = newItems[i].copy(
+                                    isFollow = hole.isFollow.not(),
+                                    followCount = hole.followCount + 1
+                                )
+
+                                _holesV2.emit(newItems)
+                            }
+                            is ApiResult.Error -> {
+                                tip.value = it.code.toString() + it.errorMessage
+                            }
+                            else -> {}
+                        }
+                    }
+            }
         }
     }
 
-    fun deleteTheHole(hole: ForestHole) {
-        repository.deleteTheHole(hole)
+    private suspend fun likeTheHole(hole: HoleV2) {
+        val newItems = _holesV2.value.toMutableList()
+        val i = newItems.indexOfFirst { newHole ->
+            hole.holeId == newHole.holeId
+        }
+
+        newItems[i] = newItems[i].copy(
+            liked = hole.liked.not(),
+            likeCount = hole.likeCount.plus(
+                if (hole.liked) -1 else 1
+            )
+        )
+        _holesV2.emit(newItems)
+    }
+
+    fun deleteTheHole(hole: HoleV2) {
+        viewModelScope.launch {
+            repository.deleteTheHole(hole).collect {
+                when (it) {
+                    is ApiResult.Success<*> -> {
+                        loadHolesV2()
+                    }
+                    is ApiResult.Error -> {
+                        tip.value = it.code.toString() + it.errorMessage
+                    }
+                    else -> {}
+                }
+            }
+        }
     }
 
     fun doneShowingTip() {
@@ -206,7 +256,10 @@ class ForestViewModel : ViewModel() {
      * @param forests 带图标url的树林列表，默认为当前树林列表，也可以自己配置
      * @param holes 需要装载图标的树洞列表
      */
-    private fun packForestAvatarUrlToHoles(forests: List<ForestBrief> = forestsV2.value, holes: List<HoleV2>) {
+    private fun packForestAvatarUrlToHoles(
+        forests: List<ForestBrief> = forestsV2.value,
+        holes: List<HoleV2>
+    ) {
         holes.forEach { hole ->
             hole.forestAvatarUrl = forests.find { forest ->
                 forest.forestId == hole.forestId

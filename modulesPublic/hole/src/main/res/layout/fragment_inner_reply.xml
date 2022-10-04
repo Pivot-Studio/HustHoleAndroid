@@ -47,6 +47,7 @@
                         android:orientation="vertical">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/layout_reply_frame"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/HH_Surface">
@@ -225,6 +226,7 @@
 
             <cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext
                 android:id="@+id/et_reply_post"
+                hintText="@{viewModel.commentToReply}"
                 android:layout_width="@dimen/dp_223"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/dp_12"

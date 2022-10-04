@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.modulep.hole.databinding.ItemReplyBinding
+import cn.pivotstudio.modulep.hole.viewmodel.InnerReplyViewModel
 
-class InnerReplyAdapter : ListAdapter<Reply, InnerReplyAdapter.ReplyViewHolder>(DIFF_CALLBACK) {
+class InnerReplyAdapter(
+    val viewModel: InnerReplyViewModel
+) : ListAdapter<Reply, InnerReplyAdapter.ReplyViewHolder>(DIFF_CALLBACK) {
     var lastMoreListCl: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
     override fun onCreateViewHolder(
@@ -36,6 +39,11 @@ class InnerReplyAdapter : ListAdapter<Reply, InnerReplyAdapter.ReplyViewHolder>(
     ) {
         fun bind(reply: Reply) {
             binding.reply = reply
+            binding.apply {
+                clReply.setOnClickListener {
+                    viewModel.replyTo(reply)
+                }
+            }
         }
 
         init {
@@ -46,15 +54,13 @@ class InnerReplyAdapter : ListAdapter<Reply, InnerReplyAdapter.ReplyViewHolder>(
                 //                    showMsg("内容已复制至剪切板")
                 false
             }
-            binding.ivReplyMore.setOnClickListener(object : View.OnClickListener {
-                override fun onClick(v: View) {
-                    binding.clReplyMorelist.visibility = View.VISIBLE
-                    if (lastMoreListCl != null && lastMoreListCl !== binding.clReplyMorelist) {
-                        lastMoreListCl!!.visibility = View.GONE
-                    }
-                    lastMoreListCl = binding.clReplyMorelist
+            binding.ivReplyMore.setOnClickListener {
+                binding.clReplyMorelist.visibility = View.VISIBLE
+                if (lastMoreListCl != null && lastMoreListCl !== binding.clReplyMorelist) {
+                    lastMoreListCl!!.visibility = View.GONE
                 }
-            })
+                lastMoreListCl = binding.clReplyMorelist
+            }
             binding.clReplyMorelist.setOnClickListener { v: View? ->
                 binding.clReplyMorelist.visibility = View.INVISIBLE
             }

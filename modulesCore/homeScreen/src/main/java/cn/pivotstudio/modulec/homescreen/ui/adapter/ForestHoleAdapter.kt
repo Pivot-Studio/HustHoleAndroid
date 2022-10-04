@@ -75,9 +75,9 @@ class ForestHoleAdapter(
 
                 layoutItemForestMoreList.setOnClickListener {
                     if (forestHole.isMyHole) {
-//                        _context.deleteTheHole(forestHole)
+                        _context.deleteTheHole(forestHole)
                     } else {
-//                        _context.reportTheHole(forestHole)
+                        _context.reportTheHole(forestHole)
                     }
                     it.visibility = View.GONE
                 }

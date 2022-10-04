@@ -87,6 +87,12 @@ interface HustHoleApiService {
     @POST("user/expired")
     suspend fun checkIfLogin(): String?
 
+    /** 举报 */
+    @POST("user/report")
+    suspend fun report(
+        @Body reportRequest: RequestBody.ReportRequest
+    ): Response<Unit>
+
     //========================================================================================================
 
     /** 单个小树林树洞列表 */
@@ -157,13 +163,13 @@ interface HustHoleApiService {
 
     @POST("interact/like")
     suspend fun giveALikeToTheHole(
-        @Body holeId: RequestBody.HoleId
+        @Body like: RequestBody.LikeRequest
     ): Response<Unit>
 
     @POST("interact/unlike")
     suspend fun unLikeTheHole(
-        @Body holeId: RequestBody.HoleId
-    )
+        @Body like: RequestBody.LikeRequest
+    ): Response<Unit>
 
     //========================================================================================================
 
@@ -174,10 +180,10 @@ interface HustHoleApiService {
     ): Response<Unit>
 
     /** 删除树洞 */
-    @GET("hole/{holeId}")
+    @DELETE("hole/{holeId}")
     suspend fun deleteTheHole(
         @Path("holeId") holeId: String
-    )
+    ): Response<Unit>
 
     /** 搜索单个洞 */
     @GET("hole/one")

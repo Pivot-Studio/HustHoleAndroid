@@ -54,7 +54,7 @@
             android:maxWidth="@dimen/dp_340"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_reply_title"
-            app:replyContentShow="@{reply.replyTo}">
+            app:replyContentShow="@{reply.replyToInner}">
 
 
             <TextView

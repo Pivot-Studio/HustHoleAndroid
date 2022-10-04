@@ -460,6 +460,7 @@
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlisttitle.xml" value="0.2586050724637681" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_foresttype.xml" value="0.25181159420289856" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/ppw_publishhole_forests.xml" value="0.3710093412106948" />
+        <entry key="modulesPublic/report/src/main/res/layout/activity_report.xml" value="0.21042633056640625" />
       </map>
     </option>
   </component>

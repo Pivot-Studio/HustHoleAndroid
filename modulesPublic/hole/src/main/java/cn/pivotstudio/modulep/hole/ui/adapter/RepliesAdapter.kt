@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.modulep.hole.databinding.ItemFirstLevelReplyBinding
+import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
 
 class RepliesAdapter(
+    val viewModel: SpecificHoleViewModel,
     val onItemClick: (ReplyWrapper) -> Unit
 ) : ListAdapter<ReplyWrapper, RepliesAdapter.FirstLevelReplyViewHolder>(DIFF_CALLBACK) {
 
@@ -43,8 +45,15 @@ class RepliesAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(replyWrapper: ReplyWrapper) {
             binding.replyWrapper = replyWrapper
-            binding.layoutInnerReply.setOnClickListener {
-                onItemClick(replyWrapper)
+            binding.apply {
+                layoutInnerReply.setOnClickListener {
+                    onItemClick(replyWrapper)
+                }
+
+                clReply.setOnClickListener {
+                    viewModel.replyTo(replyWrapper.self)
+                }
+
             }
 
             binding.layoutInnerReply.visibility =

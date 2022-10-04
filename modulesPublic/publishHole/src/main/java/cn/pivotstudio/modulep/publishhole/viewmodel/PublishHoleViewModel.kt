@@ -5,10 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
+import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
-import cn.pivotstudio.modulep.publishhole.model.ForestTypeResponse
-import cn.pivotstudio.modulep.publishhole.model.MsgResponse
 import cn.pivotstudio.modulep.publishhole.repository.PublishHoleRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -27,8 +26,11 @@ class PublishHoleViewModel : BaseViewModel() {
     private var _forests = MutableStateFlow<List<Pair<String, List<ForestBrief>>>>(mutableListOf())
     private var _joinedForests = MutableStateFlow<List<ForestBrief>>(mutableListOf())
 
-    private var _tip = MutableSharedFlow<String>()
-    val tip = _tip.asSharedFlow()
+    private var _loadingState = MutableStateFlow<ApiStatus?>(null)
+    val loadingState = _loadingState.asStateFlow()
+
+    private var _errorTip = MutableSharedFlow<String>()
+    val errorTip = _errorTip.asSharedFlow()
 
     //所有小树林
     @JvmField
@@ -37,14 +39,6 @@ class PublishHoleViewModel : BaseViewModel() {
     //加入的小树林
     @JvmField
     var joinedForest: LiveData<List<ForestBrief>> = _joinedForests.asLiveData()
-
-    //小树林类型
-    @JvmField
-    var pForestType: MutableLiveData<ForestTypeResponse> = repository.pForestType
-
-    //点击事件成功的网络请求结果
-    @JvmField
-    var pOnClickMsg: MutableLiveData<MsgResponse> = repository.pClickMsg
 
     //选择的小树林的名字
     @JvmField
@@ -102,12 +96,15 @@ class PublishHoleViewModel : BaseViewModel() {
                 .collectLatest { state ->
                     when(state) {
                         is ApiResult.Success<*> -> {
-                            _tip.emit("发布成功")
+                            _loadingState.emit(state.status)
                         }
                         is ApiResult.Error -> {
-                            _tip.emit("${state.code}" + state.errorMessage)
+                            _loadingState.emit(state.status)
+                            _errorTip.emit("${state.code} " + state.errorMessage)
                         }
-                        else -> { }
+                        is ApiResult.Loading -> {
+                            _loadingState.emit(state.status)
+                        }
                     }
                 }
         }

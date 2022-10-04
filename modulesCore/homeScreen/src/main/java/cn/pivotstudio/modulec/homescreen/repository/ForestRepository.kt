@@ -6,8 +6,6 @@ import cn.pivotstudio.husthole.moduleb.network.*
 import cn.pivotstudio.husthole.moduleb.network.model.*
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
-import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
-import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.LOADING
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -91,28 +89,16 @@ class ForestRepository(
     fun giveALikeToTheHole(hole: HoleV2): Flow<ApiResult> {
         return flow {
             emit(ApiResult.Loading())
-            val response =
-                hustHoleApiService.giveALikeToTheHole(holeId = RequestBody.HoleId(hole.holeId))
-            if (response.isSuccessful) {
-                emit(ApiResult.Success(data = Unit))
+            val response = if (hole.liked) {
+                hustHoleApiService.unLikeTheHole(
+                    like = RequestBody.LikeRequest(holeId = hole.holeId)
+                )
             } else {
-                val errorCode = response.code()
-                response.errorBody()?.close()
-                emit(ApiResult.Error(code = errorCode))
+                hustHoleApiService.giveALikeToTheHole(
+                    like = RequestBody.LikeRequest(holeId = hole.holeId)
+                )
             }
-        }.flowOn(dispatcher)
-    }
 
-    fun followTheHole(hole: HoleV2): Flow<ApiResult> {
-        return flow {
-            emit(ApiResult.Loading())
-            val response = if (hole.isFollow) {
-                hustHoleApiService
-                    .unFollowTheHole(RequestBody.HoleId(hole.holeId))
-            } else {
-                hustHoleApiService
-                    .followTheHole(RequestBody.HoleId(hole.holeId))
-            }
             if (response.isSuccessful) {
                 emit(ApiResult.Success(data = Unit))
             } else {
@@ -127,6 +113,45 @@ class ForestRepository(
         }.flowOn(dispatcher)
     }
 
+    fun followTheHole(hole: HoleV2): Flow<ApiResult> {
+        return flow {
+            emit(ApiResult.Loading())
+            val response = hustHoleApiService
+                    .followTheHole(RequestBody.HoleId(hole.holeId))
+
+            if (response.isSuccessful) {
+                emit(ApiResult.Success(data = Unit))
+            } else {
+                emit(
+                    ApiResult.Error(
+                        code = response.code(),
+                        errorMessage = response.errorBody()?.string()
+                    )
+                )
+                response.errorBody()?.close()
+            }
+        }.flowOn(dispatcher)
+    }
+
+    fun unFollowTheHole(hole: HoleV2): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService
+                .unFollowTheHole(RequestBody.HoleId(hole.holeId))
+
+        if (response.isSuccessful) {
+            emit(ApiResult.Success(data = Unit))
+        } else {
+            emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = response.errorBody()?.string()
+                )
+            )
+            response.errorBody()?.close()
+        }
+    }.flowOn(dispatcher)
+
+
     fun loadTheHole(hole: HoleV2): Flow<HoleV2> {
         return flow {
             emit(hustHoleApiService.loadTheHole(hole.holeId))
@@ -135,23 +160,21 @@ class ForestRepository(
         }
     }
 
-    // 只有自己的树洞可以删除
-    fun deleteTheHole(hole: ForestHole) {
-        if (hole.isMine) {
-            retrofitService.deleteHole(hole.holeId.toString())
-                .compose(NetworkApi.applySchedulers())
-                .subscribe(object : BaseObserver<MsgResponse>() {
-                    override fun onSuccess(response: MsgResponse) {
-                        val newItems = _holes.value!!.toMutableList()
-                        newItems.remove(hole)
-                        _holes.value = newItems
-                        tip.value = response.msg
-                    }
+    fun deleteTheHole(hole: HoleV2): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService
+            .deleteTheHole(hole.holeId)
 
-                    override fun onFailure(e: Throwable?) {
-                        tip.value = "❌"
-                    }
-                })
+        if (response.isSuccessful) {
+            emit(ApiResult.Success(data = Unit))
+        } else {
+            emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = response.errorBody()?.string()
+                )
+            )
+            response.errorBody()?.close()
         }
     }
 

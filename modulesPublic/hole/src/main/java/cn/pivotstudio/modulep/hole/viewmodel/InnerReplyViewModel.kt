@@ -7,6 +7,7 @@ import cn.pivotstudio.modulep.hole.repository.InnerReplyRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -23,6 +24,9 @@ class InnerReplyViewModel(baseReply: Reply) : ViewModel() {
     private var _showingEmojiPad = MutableStateFlow(false)
     val showEmojiPad: StateFlow<Boolean> = _showingEmojiPad
 
+    private var _commentToReply = MutableStateFlow<Reply?>(null)
+    val commentToReply = _commentToReply.asStateFlow()
+
     fun triggerEmojiPad() {
         viewModelScope.launch {
             _showingEmojiPad.emit(showEmojiPad.value.not())
@@ -34,6 +38,18 @@ class InnerReplyViewModel(baseReply: Reply) : ViewModel() {
             repo.loadInnerReplies(reply.value.replyId).collectLatest {
                 _innerReplies.emit(it)
             }
+        }
+    }
+
+    fun replyTo(reply: Reply) {
+        viewModelScope.launch {
+            _commentToReply.emit(reply)
+        }
+    }
+
+    fun replyToOwner() {
+        viewModelScope.launch {
+            _commentToReply.emit(null)
         }
     }
 

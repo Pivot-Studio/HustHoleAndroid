@@ -7,12 +7,9 @@ import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.Res
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.util.data.GetUrlUtil
 import cn.pivotstudio.modulep.publishhole.model.DetailTypeForestResponse
 import cn.pivotstudio.modulep.publishhole.model.ForestListsResponse
 import cn.pivotstudio.modulep.publishhole.model.ForestTypeResponse
-import cn.pivotstudio.modulep.publishhole.model.MsgResponse
 import cn.pivotstudio.modulep.publishhole.network.PHRequestInterface
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -43,9 +40,6 @@ class PublishHoleRepository(
 
     @JvmField
     var pForestType: MutableLiveData<ForestTypeResponse> = MutableLiveData()
-
-    @JvmField
-    var pClickMsg: MutableLiveData<MsgResponse> = MutableLiveData()
 
     @JvmField
     var failed: MutableLiveData<String> = MutableLiveData()//放在总列表首位
@@ -148,25 +142,6 @@ class PublishHoleRepository(
                     }
                 }))
         }
-
-    fun publishHole(content: String?, forest_name: Int) {
-        NetworkApi.createService(PHRequestInterface::class.java, 2)
-            .publishHole(
-                Constant.BASE_URL + "holes?content=" + GetUrlUtil.getURLEncoderString(
-                    content
-                ) + "&forest_id=" + forest_name
-            )
-            .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(msg: MsgResponse) {
-                    //返回结果
-                    pClickMsg.postValue(msg)
-                }
-
-                override fun onFailure(e: Throwable) {
-                    failed.postValue((e as ResponseThrowable).message)
-                }
-            }))
-    }
 
     fun publishAHole(forestId: String? = null, content: String): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())

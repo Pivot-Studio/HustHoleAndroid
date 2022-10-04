@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <string name="publish_hole_successfully">发布成功</string>
+    <string name="publish_hole_fifteen_words_at_least">"输入内容至少需要15字"</string>
 </resources>

@@ -105,7 +105,7 @@
                 android:textColor="@color/GrayScale_0"
                 android:textColorHint="@color/GrayScale_70"
                 android:textSize="@dimen/sp_14"
-                app:hintText="@{viewModel.answered}"
+                app:hintText="@{viewModel.commentToReply}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

@@ -48,7 +48,7 @@ class HomePageFragment : BaseFragment() {
     private lateinit var binding: FragmentHomepageBinding
     private val viewModel: HomePageViewModel by activityViewModels()
 
-    private val homeHoleAdapter = HomeHoleAdapter(this)
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -86,7 +86,6 @@ class HomePageFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initRefresh()
-        initObserver()
     }
 
     /**
@@ -98,6 +97,8 @@ class HomePageFragment : BaseFragment() {
             SpannableString(this.resources.getString(R.string.page1fragment_1)),
             12
         )
+
+        val homeHoleAdapter = HomeHoleAdapter(viewModel, this)
 
         binding.apply {
             recyclerView.adapter = homeHoleAdapter
@@ -121,29 +122,6 @@ class HomePageFragment : BaseFragment() {
             }
         }
 
-    }
-
-    /**
-     * 初始化刷新框架
-     */
-    private fun initRefresh() {
-        binding.refreshLayout.setRefreshHeader(StandardRefreshHeader(activity)) //设置自定义刷新头
-        binding.refreshLayout.setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
-        binding.refreshLayout.setOnRefreshListener { //下拉刷新触发
-            viewModel.loadHolesV2()
-            binding.recyclerView.isEnabled = false
-        }
-
-        binding.refreshLayout.setOnLoadMoreListener {    //上拉加载触发
-            viewModel.loadMoreHoles()
-            binding.recyclerView.isEnabled = false
-        }
-    }
-
-    /**
-     * 初始化ViewModel数据观察者
-     */
-    private fun initObserver() {
         viewModel.apply {
             tip.observe(viewLifecycleOwner) {
                 it?.let {
@@ -167,6 +145,24 @@ class HomePageFragment : BaseFragment() {
                     }
                 }
             }
+        }
+
+    }
+
+    /**
+     * 初始化刷新框架
+     */
+    private fun initRefresh() {
+        binding.refreshLayout.setRefreshHeader(StandardRefreshHeader(activity)) //设置自定义刷新头
+        binding.refreshLayout.setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
+        binding.refreshLayout.setOnRefreshListener { //下拉刷新触发
+            viewModel.loadHolesV2()
+            binding.recyclerView.isEnabled = false
+        }
+
+        binding.refreshLayout.setOnLoadMoreListener {    //上拉加载触发
+            viewModel.loadMoreHoles()
+            binding.recyclerView.isEnabled = false
         }
     }
 

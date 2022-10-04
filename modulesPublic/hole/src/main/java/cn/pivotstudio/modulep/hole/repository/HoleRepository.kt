@@ -231,7 +231,7 @@ class HoleRepository(
         val response =
             hustHoleApiService.sendAComment(comment = RequestBody.Comment(
                 holeId = holeId,
-                replyId = replyId,
+                repliedId = replyId,
                 content = content
             ))
         if (response.isSuccessful) {
@@ -276,4 +276,87 @@ class HoleRepository(
     }.onEach {
         lastOffset += LIST_SIZE
     }.flowOn(dispatcher)
+
+    fun giveALikeToTheHole(hole: HoleV2): Flow<ApiResult> {
+        return flow {
+            emit(ApiResult.Loading())
+            val response = if (hole.liked) {
+                hustHoleApiService.unLikeTheHole(
+                    like = RequestBody.LikeRequest(holeId = hole.holeId)
+                )
+            } else {
+                hustHoleApiService.giveALikeToTheHole(
+                    like = RequestBody.LikeRequest(holeId = hole.holeId)
+                )
+            }
+
+            if (response.isSuccessful) {
+                emit(ApiResult.Success(data = Unit))
+            } else {
+                emit(
+                    ApiResult.Error(
+                        code = response.code(),
+                        errorMessage = response.errorBody()?.string()
+                    )
+                )
+                response.errorBody()?.close()
+            }
+        }.flowOn(dispatcher)
+    }
+
+    fun followTheHole(hole: HoleV2): Flow<ApiResult> {
+        return flow {
+            emit(ApiResult.Loading())
+            val response = hustHoleApiService
+                .followTheHole(RequestBody.HoleId(hole.holeId))
+
+            if (response.isSuccessful) {
+                emit(ApiResult.Success(data = Unit))
+            } else {
+                emit(
+                    ApiResult.Error(
+                        code = response.code(),
+                        errorMessage = response.errorBody()?.string()
+                    )
+                )
+                response.errorBody()?.close()
+            }
+        }.flowOn(dispatcher)
+    }
+
+    fun unFollowTheHole(hole: HoleV2): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService
+            .unFollowTheHole(RequestBody.HoleId(hole.holeId))
+
+        if (response.isSuccessful) {
+            emit(ApiResult.Success(data = Unit))
+        } else {
+            emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = response.errorBody()?.string()
+                )
+            )
+            response.errorBody()?.close()
+        }
+    }.flowOn(dispatcher)
+
+    fun deleteTheHole(hole: HoleV2): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService
+            .deleteTheHole(hole.holeId)
+
+        if (response.isSuccessful) {
+            emit(ApiResult.Success(data = Unit))
+        } else {
+            emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = response.errorBody()?.string()
+                )
+            )
+            response.errorBody()?.close()
+        }
+    }
 }

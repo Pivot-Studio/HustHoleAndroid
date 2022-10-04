@@ -13,6 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
@@ -145,8 +146,30 @@ class PublishHoleActivity : BaseActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.tip.collectLatest {
+                viewModel.errorTip.collectLatest {
                     showMsg(it)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.loadingState.collectLatest {
+                    it?.let { state ->
+                        when (state) {
+                            ApiStatus.SUCCESSFUL -> {
+                                mmkvUtil.put(Constant.HOLE_TEXT, "")
+                                showMsg(getString(R.string.publish_hole_successfully))
+                                finish()
+                            }
+                            ApiStatus.ERROR -> {
+                                binding.btnPublishholeSend.isClickable = true
+                            }
+                            ApiStatus.LOADING -> {
+                                binding.btnPublishholeSend.isClickable = false
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -158,20 +181,11 @@ class PublishHoleActivity : BaseActivity() {
         viewModel.typeForestList.observe(this) { forestsWithType ->
             forestPopupWindow.setAllForests(forestsWithType)
         }
+
         viewModel.forestName.observe(this) { s: String? ->
             binding.tvPublishholeForestname.text = s
         }
 
-        viewModel.pOnClickMsg.observe(this) {
-            binding.btnPublishholeSend.isClickable = true
-            mmkvUtil.put(Constant.HOLE_TEXT, "")
-            showMsg("发布成功")
-            finish()
-        }
-        viewModel.failed.observe(this) { s: String? ->
-            binding.btnPublishholeSend.isClickable = true
-            showMsg(s)
-        }
     }
 
     /**
@@ -199,10 +213,9 @@ class PublishHoleActivity : BaseActivity() {
             R.id.btn_publishhole_send -> {
                 val content = binding.etPublishhole.text.toString()
                 if (content.length > 15) {
-                    binding.btnPublishholeSend.isClickable = false
                     viewModel.publishAHole(content = content)
                 } else {
-                    showMsg("输入内容至少需要15字")
+                    showMsg(getString(R.string.publish_hole_fifteen_words_at_least))
                 }
             }
 
@@ -217,7 +230,7 @@ class PublishHoleActivity : BaseActivity() {
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.repeatCount == 0) { //按下的如果是BACK，同时没有重复
-            mmkvUtil.put(Constant.HOLE_TEXT, binding!!.etPublishhole.text.toString())
+            mmkvUtil.put(Constant.HOLE_TEXT, binding.etPublishhole.text.toString())
         }
         return super.onKeyDown(keyCode, event)
     }

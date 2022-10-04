@@ -3,8 +3,6 @@ package cn.pivotstudio.modulep.hole.ui.adapter
 import androidx.databinding.BindingAdapter
 import android.widget.TextView
 import cn.pivotstudio.modulep.hole.R
-import android.widget.EditText
-import cn.pivotstudio.modulep.hole.model.ReplyListResponse.ReplyResponse
 import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.text.Spanned
@@ -20,6 +18,7 @@ import android.widget.Button
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
+import cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext
 
 /**
  * @classname:HoleAdapter
@@ -45,14 +44,16 @@ fun showEmojiBar(view: ImageView, showingEmojiPad: Boolean?) {
 
 
 @BindingAdapter("hintText")
-fun setHintText(view: EditText, answered: ReplyResponse?) {
-    if (answered != null) {
-        val ss =
-            SpannableString("回复@" + answered.alias + (if (answered.is_mine) "(我)" else "") + ":")
-        val ass = AbsoluteSizeSpan(14, true)
-        ss.setSpan(ass, 0, ss.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        view.hint = ss
-    }
+fun setHintText(view: EmojiEdittext, reply: Reply?) {
+
+    val replyToNickName = reply?.nickname ?: "洞主"
+
+    val ss =
+        SpannableString("回复@" + replyToNickName + (if (reply?.mine == true) "(我)" else "") + ":")
+    val ass = AbsoluteSizeSpan(14, true)
+    ss.setSpan(ass, 0, ss.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    view.hint = ss
+
 }
 
 

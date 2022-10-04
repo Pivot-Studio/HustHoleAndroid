@@ -21,7 +21,7 @@ class InnerReplyFragment : BaseFragment() {
 
     private val args by navArgs<InnerReplyFragmentArgs>()
     private lateinit var binding: FragmentInnerReplyBinding
-    private val viewModel: InnerReplyViewModel by viewModels {
+    private val innerReplyViewModel: InnerReplyViewModel by viewModels {
         InnerReplyViewModelFactory(args.reply)
     }
 
@@ -38,14 +38,18 @@ class InnerReplyFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.viewModel = viewModel
+        binding.viewModel = innerReplyViewModel
 
-        val adapter = InnerReplyAdapter()
+        val adapter = InnerReplyAdapter(innerReplyViewModel)
         binding.apply {
             rvReplies.adapter = adapter
+            layoutReplyFrame.setOnClickListener {
+                innerReplyViewModel.replyToOwner()
+            }
+
         }
 
-        viewModel.apply {
+        innerReplyViewModel.apply {
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     innerReplies.collectLatest {

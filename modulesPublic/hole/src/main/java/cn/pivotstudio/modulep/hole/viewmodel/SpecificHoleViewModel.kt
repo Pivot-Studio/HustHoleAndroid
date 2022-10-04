@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
 import cn.pivotstudio.modulep.hole.repository.HoleRepository
@@ -59,6 +60,10 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
 
     //下面三项非网络请求所得，但是变化需要及时反馈在ui上
     var answered: ObservableField<ReplyResponse?>
+
+    private var _commentToReply = MutableStateFlow<Reply?>(null)
+    val commentToReply = _commentToReply.asStateFlow()
+
     private var is_descend: ObservableField<Boolean?>
     var is_owner: ObservableField<Boolean?>
     var is_emoji: ObservableField<Boolean?>
@@ -141,7 +146,7 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
 
     fun sendAComment(content: String) {
         viewModelScope.launch {
-            repository.sendAComment(content, null)
+            repository.sendAComment(content, _commentToReply.value?.replyId)
                 .collectLatest {
                     _sendingState.emit(it)
                 }
@@ -264,6 +269,100 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
                 `as`.is_mine = false
                 `as`.alias = "洞主"
                 answered.set(`as`)
+            }
+        }
+    }
+
+    fun replyTo(reply: Reply) {
+        viewModelScope.launch {
+            _commentToReply.emit(reply)
+        }
+    }
+
+    fun replyToOwner() {
+        viewModelScope.launch {
+            _commentToReply.emit(null)
+        }
+    }
+
+    fun followTheHole(hole: HoleV2 = _hole.value!!) {
+        viewModelScope.launch {
+            if (hole.isFollow) {
+                repository.unFollowTheHole(hole)
+                    .collect {
+                        when (it) {
+                            is ApiResult.Success<*> -> {
+                                _hole.emit(
+                                    hole.copy(
+                                        isFollow = hole.isFollow.not(),
+                                        followCount = hole.followCount - 1
+                                    )
+                                )
+                            }
+                            is ApiResult.Error -> {
+                                _sendingState.emit(it)
+                            }
+                            else -> {}
+                        }
+                    }
+            } else {
+                repository.followTheHole(hole)
+                    .collect {
+                        when (it) {
+                            is ApiResult.Success<*> -> {
+                                _hole.emit(
+                                    hole.copy(
+                                        isFollow = hole.isFollow.not(),
+                                        followCount = hole.followCount + 1
+                                    )
+                                )
+                            }
+                            is ApiResult.Error -> {
+                                _sendingState.emit(it)
+                            }
+                            else -> {}
+                        }
+                    }
+            }
+        }
+    }
+
+    fun giveALikeToTheHole(hole: HoleV2 = _hole.value!!) {
+        viewModelScope.launch {
+            repository.giveALikeToTheHole(hole)
+                .collect {
+                    when (it) {
+                        is ApiResult.Success<*> -> {
+                            _hole.emit(
+                                hole.copy(
+                                    liked = hole.liked.not(),
+                                    likeCount = hole.likeCount.plus(
+                                        if (hole.liked) -1 else 1
+                                    )
+                                )
+                            )
+                        }
+                        is ApiResult.Error -> {
+                            _sendingState.emit(it)
+                        }
+                        else -> {}
+                    }
+                }
+        }
+    }
+
+    fun deleteTheHole(hole: HoleV2 = _hole.value!!) {
+        viewModelScope.launch {
+            repository.deleteTheHole(hole).collect {
+                when (it) {
+                    is ApiResult.Success<*> -> {
+
+                    }
+                    is ApiResult.Error -> {
+                        _sendingState.emit(it)
+                    }
+                    else -> {}
+                }
             }
         }
     }

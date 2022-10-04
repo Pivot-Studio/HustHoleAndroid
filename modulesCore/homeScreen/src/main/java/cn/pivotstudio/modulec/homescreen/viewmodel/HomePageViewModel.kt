@@ -2,15 +2,13 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
 import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 /**
@@ -100,6 +98,106 @@ class HomePageViewModel : BaseViewModel() {
 
     fun loadHoleLater(holeId: Int) {
         _loadLaterHoleId = holeId
+    }
+
+    fun followTheHole(hole: HoleV2) {
+        viewModelScope.launch {
+            if (hole.isFollow) {
+                repository.unFollowTheHole(hole)
+                    .collect {
+                        when (it) {
+                            is ApiResult.Success<*> -> {
+                                val newItems = _holesV2.value.toMutableList()
+                                val i = newItems.indexOfFirst { newHole ->
+                                    hole.holeId == newHole.holeId
+                                }
+
+                                newItems[i] = newItems[i].copy(
+                                    isFollow = hole.isFollow.not(),
+                                    followCount = hole.followCount - 1
+                                )
+
+                                _holesV2.emit(newItems)
+                            }
+                            is ApiResult.Error -> {
+                                tip.value = it.code.toString() + it.errorMessage
+                            }
+                            else -> {}
+                        }
+                    }
+            } else {
+                repository.followTheHole(hole)
+                    .collect {
+                        when (it) {
+                            is ApiResult.Success<*> -> {
+                                val newItems = _holesV2.value.toMutableList()
+                                val i = newItems.indexOfFirst { newHole ->
+                                    hole.holeId == newHole.holeId
+                                }
+
+                                newItems[i] = newItems[i].copy(
+                                    isFollow = hole.isFollow.not(),
+                                    followCount = hole.followCount + 1
+                                )
+
+                                _holesV2.emit(newItems)
+                            }
+                            is ApiResult.Error -> {
+                                tip.value = it.code.toString() + it.errorMessage
+                            }
+                            else -> {}
+                        }
+                    }
+            }
+        }
+    }
+
+    fun giveALikeToTheHole(hole: HoleV2) {
+        viewModelScope.launch {
+            repository.giveALikeToTheHole(hole)
+                .collect {
+                    when (it) {
+                        is ApiResult.Success<*> -> {
+                            likeTheHole(hole)
+                        }
+                        is ApiResult.Error -> {
+                            tip.value = it.code.toString() + it.errorMessage
+                        }
+                        else -> {}
+                    }
+                }
+        }
+    }
+
+    fun deleteTheHole(hole: HoleV2) {
+        viewModelScope.launch {
+            repository.deleteTheHole(hole).collect {
+                when (it) {
+                    is ApiResult.Success<*> -> {
+                        loadHolesV2()
+                    }
+                    is ApiResult.Error -> {
+                        tip.value = it.code.toString() + it.errorMessage
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private suspend fun likeTheHole(hole: HoleV2) {
+        val newItems = _holesV2.value.toMutableList()
+        val i = newItems.indexOfFirst { newHole ->
+            hole.holeId == newHole.holeId
+        }
+
+        newItems[i] = newItems[i].copy(
+            liked = hole.liked.not(),
+            likeCount = hole.likeCount.plus(
+                if (hole.liked) -1 else 1
+            )
+        )
+        _holesV2.emit(newItems)
     }
 
 

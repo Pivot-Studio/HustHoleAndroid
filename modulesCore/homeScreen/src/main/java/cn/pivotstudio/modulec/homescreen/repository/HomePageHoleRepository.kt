@@ -3,19 +3,16 @@ package cn.pivotstudio.modulec.homescreen.repository
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
+import cn.pivotstudio.husthole.moduleb.network.*
 import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse
 import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
-import cn.pivotstudio.husthole.moduleb.network.NetworkApi
-import cn.pivotstudio.husthole.moduleb.network.BaseObserver
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.modulec.homescreen.network.MsgResponse
 import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.constant.Constant
-import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -98,6 +95,89 @@ class HomePageHoleRepository(
         e.printStackTrace()
     }
 
+    fun giveALikeToTheHole(hole: HoleV2): Flow<ApiResult> {
+        return flow {
+            emit(ApiResult.Loading())
+            val response = if (hole.liked) {
+                hustHoleApiService.unLikeTheHole(
+                    like = RequestBody.LikeRequest(holeId = hole.holeId)
+                )
+            } else {
+                hustHoleApiService.giveALikeToTheHole(
+                    like = RequestBody.LikeRequest(holeId = hole.holeId)
+                )
+            }
+
+            if (response.isSuccessful) {
+                emit(ApiResult.Success(data = Unit))
+            } else {
+                emit(
+                    ApiResult.Error(
+                        code = response.code(),
+                        errorMessage = response.errorBody()?.string()
+                    )
+                )
+                response.errorBody()?.close()
+            }
+        }.flowOn(dispatcher)
+    }
+
+    fun followTheHole(hole: HoleV2): Flow<ApiResult> {
+        return flow {
+            emit(ApiResult.Loading())
+            val response = hustHoleApiService
+                .followTheHole(RequestBody.HoleId(hole.holeId))
+
+            if (response.isSuccessful) {
+                emit(ApiResult.Success(data = Unit))
+            } else {
+                emit(
+                    ApiResult.Error(
+                        code = response.code(),
+                        errorMessage = response.errorBody()?.string()
+                    )
+                )
+                response.errorBody()?.close()
+            }
+        }.flowOn(dispatcher)
+    }
+
+    fun unFollowTheHole(hole: HoleV2): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService
+            .unFollowTheHole(RequestBody.HoleId(hole.holeId))
+
+        if (response.isSuccessful) {
+            emit(ApiResult.Success(data = Unit))
+        } else {
+            emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = response.errorBody()?.string()
+                )
+            )
+            response.errorBody()?.close()
+        }
+    }.flowOn(dispatcher)
+
+    fun deleteTheHole(hole: HoleV2): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService
+            .deleteTheHole(hole.holeId)
+
+        if (response.isSuccessful) {
+            emit(ApiResult.Success(data = Unit))
+        } else {
+            emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = response.errorBody()?.string()
+                )
+            )
+            response.errorBody()?.close()
+        }
+    }
+
     /**
      * 搜索单个树洞
      *
@@ -126,67 +206,12 @@ class HomePageHoleRepository(
             }))
     }
 
-    /**
-     * 点赞
-     *
-     * @param holeId   树洞号
-     * @param likeNum  网络请求成功前的点赞数量
-     * @param liked    网络请求成功前是否被点赞
-     * @param dataBean item的所有数据
-     */
-    fun giveALikeToAHole(holeId: Int, likeNum: Int, liked: Boolean, dataBean: DataBean) {
-        val observable: Observable<MsgResponse>
-        observable = if (!liked) {
-            retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + holeId + "/-1")
-        } else {
-            retrofitService.deleteThumbups(Constant.BASE_URL + "thumbups/" + holeId + "/-1")
+    fun loadTheHole(hole: HoleV2): Flow<HoleV2> {
+        return flow {
+            emit(hustHoleApiService.loadTheHole(hole.holeId))
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
         }
-        observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-            override fun onSuccess(msg: MsgResponse) {
-                if (liked) {
-                    dataBean.thumbup_num = likeNum - 1
-                } else {
-                    dataBean.thumbup_num = likeNum + 1
-                }
-                dataBean.is_thumbup = !liked
-                tip.value = msg.msg
-            }
-
-            override fun onFailure(e: Throwable) {
-                tip.value = (e as ResponseThrowable).message
-            }
-        }))
-    }
-
-    /**
-     * 收藏
-     *
-     * @param hole_id    树洞号
-     * @param follow_num 网络请求成功前的收藏数量
-     * @param is_follow  网络请求成功前是否被收藏
-     * @param dataBean   item的所有数据
-     */
-    fun followForNetwork(hole_id: Int, follow_num: Int, is_follow: Boolean, dataBean: DataBean) {
-        val observable: Observable<MsgResponse> = if (!is_follow) {
-            retrofitService.follow(Constant.BASE_URL + "follows/" + hole_id)
-        } else {
-            retrofitService.deleteFollow(Constant.BASE_URL + "follows/" + hole_id)
-        }
-        observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-            override fun onSuccess(msg: MsgResponse) {
-                if (is_follow) {
-                    dataBean.follow_num = follow_num - 1
-                } else {
-                    dataBean.follow_num = follow_num + 1
-                }
-                dataBean.is_follow = !is_follow
-                tip.value = msg.msg
-            }
-
-            override fun onFailure(e: Throwable) {
-                tip.value = (e as ResponseThrowable).message
-            }
-        }))
     }
 
     /**

@@ -54,7 +54,6 @@ class SpecificHoleFragment : BaseFragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_specific_hole, container, false)
-        findNavController().currentDestination?.label = args.holeId
         return binding.root
     }
 
@@ -64,7 +63,7 @@ class SpecificHoleFragment : BaseFragment() {
         initRefresh()
         initEmojiRv()
         initListener()
-        val repliesAdapter = RepliesAdapter(navToInnerReply)
+        val repliesAdapter = RepliesAdapter(replyViewModel, navToInnerReply)
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -80,12 +79,38 @@ class SpecificHoleFragment : BaseFragment() {
                 }
             })
 
+            layoutHole.apply {
+                layoutHoleFrame.setOnClickListener {
+                    replyViewModel.replyToOwner()
+                }
+
+                clHoleThumbup.setOnClickListener {
+                    replyViewModel.giveALikeToTheHole()
+                }
+
+                clHoleFollow.setOnClickListener {
+                    replyViewModel.followTheHole()
+                }
+
+                ivHoleMore.setOnClickListener {
+                    clHoleMoreAction.visibility = View.VISIBLE
+                }
+
+                clHoleMoreAction.setOnClickListener {
+                    if (replyViewModel.hole.value?.isMyHole == true) {
+                        replyViewModel.deleteTheHole()
+                    }
+                    it.visibility = View.GONE
+                }
+            }
+
             ivOpenEmoji.setOnClickListener {
                 replyViewModel.triggerEmojiPad()
             }
 
             btnSend.setOnClickListener {
                 replyViewModel.sendAComment("${binding.etReplyPost.text}")
+                (requireActivity() as HoleActivity).closeKeyBoard()
             }
 
             etReplyPost.setOnClickListener {
@@ -278,9 +303,8 @@ class SpecificHoleFragment : BaseFragment() {
             }
 
         }
-
-
     }
+
 
 }
 
