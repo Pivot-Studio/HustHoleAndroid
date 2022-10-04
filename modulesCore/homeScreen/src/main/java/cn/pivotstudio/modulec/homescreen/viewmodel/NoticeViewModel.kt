@@ -2,7 +2,7 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.modulec.homescreen.model.Notice
+import cn.pivotstudio.husthole.moduleb.network.model.Replied
 import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.repository.NoticeRepo
 import kotlinx.coroutines.Dispatchers
@@ -11,25 +11,35 @@ import kotlinx.coroutines.launch
 
 class NoticeViewModel : ViewModel() {
 
-    private val dataSource = NoticeRepo()
+    private val repository = NoticeRepo()
 
-    private val _replies = MutableStateFlow<List<Notice>>(emptyList())
+    private val _replies = MutableStateFlow<List<Replied>>(mutableListOf())
     private val _showPlaceholder = MutableStateFlow(false)
 
-    val replies: StateFlow<List<Notice>> = _replies
+    val replies: StateFlow<List<Replied>> = _replies
     val showPlaceholder: StateFlow<Boolean> = _showPlaceholder
-    val state = dataSource.state
+    val state = repository.state
 
     init {
-        loadRepliesFlow()
+        loadReplies()
     }
 
     fun loadReplies() {
-        dataSource.loadReplies(_replies)
+        viewModelScope.launch {
+            repository.loadRepliesV2()
+                .collectLatest {
+                    _replies.emit(it)
+                }
+        }
     }
 
-    fun loadMore() {
-        dataSource.loadMore(_replies)
+    fun loadMoreV2() {
+        viewModelScope.launch {
+            repository.loadMoreV2()
+                .collectLatest {
+                    _replies.emit(_replies.value.toMutableList().apply { addAll(it) })
+                }
+        }
     }
 
     /** Flow + Retrofit 迁移实验 **/
@@ -40,7 +50,7 @@ class NoticeViewModel : ViewModel() {
             }.flowOn(Dispatchers.IO).catch { e ->
                 e.printStackTrace()
             }.collect {
-                _replies.value = it.notices!!
+
                 _showPlaceholder.value = _replies.value.isEmpty()
             }
         }

@@ -3,12 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="42dp"
+    android:background="@color/HH_OnBackground"
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:background="@color/GrayScale_100"
+        android:layout_height="@dimen/dp_42"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -24,54 +24,30 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btn_ppwhomepage_newpublish"
-            android:layout_width="60dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="23dp"
+            android:id="@+id/btn_ppwhomepage_latest_reply"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_24"
+            android:layout_marginStart="@dimen/dp_24"
             android:background="@drawable/standard_button"
             android:text="@string/page1fragment_5"
-            android:textColor="@color/GrayScale_100"
-            android:textSize="10sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_ppwhomepage_line3" />
-
-        <Button
-            android:id="@+id/btn_ppwhomepage_newcomment"
-            android:layout_width="60dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="32dp"
-
-
-            android:background="@drawable/standard_button_g95"
-            android:text="@string/page1fragment_6"
-            android:textColor="@color/GrayScale_20"
-            android:textSize="10sp"
-            app:layout_constraintStart_toEndOf="@+id/btn_ppwhomepage_newpublish"
-            app:layout_constraintTop_toBottomOf="@+id/btn_ppwhomepage_line3" />
-
-        <TextView
-            android:id="@+id/btn_ppwhomepage_line3"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_marginTop="4dp"
-            android:background="@color/GrayScale_100"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            android:textColor="@color/white"
+            android:textAppearance="@style/HustHoleTypography.Button3"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/btn_ppwhomepage_line2"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:background="@color/GrayScale_100"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_ppwhomepage_newpublish" />
+        <Button
+            android:id="@+id/btn_ppwhomepage_latest_publish"
+            android:layout_width="@dimen/dp_60"
+            android:layout_height="@dimen/dp_24"
+            android:layout_marginStart="@dimen/dp_24"
+            android:background="@drawable/standard_button_g95"
+            android:text="@string/page1fragment_6"
+            android:textAppearance="@style/HustHoleTypography.Button3"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btn_ppwhomepage_latest_reply"
+            app:layout_constraintTop_toTopOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-    <!-- <TextView
-         android:layout_width="match_parent"
-         android:layout_height="900dp"
-         android:background="#66000000"/>-->
 </LinearLayout>

@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentAllFrorestBinding
 import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestAdapter
@@ -42,9 +42,6 @@ class AllForestFragment : BaseFragment() {
 
         val adapter = AllForestAdapter(::navToForestDetail)
         binding.allForestRecyclerView.adapter = adapter
-//        viewModel.forestCardsWithOneType.observe(viewLifecycleOwner) {
-//            adapter.submitList(viewModel.forestCards.toList())
-//        }
         viewModel.apply {
             lifecycleScope.launchWhenStarted {
                 forests.collectLatest {
@@ -55,13 +52,12 @@ class AllForestFragment : BaseFragment() {
     }
 
 
-    fun navToForestDetail(forestId: String) {
+    private fun navToForestDetail(forestId: String) {
         viewModel.getForestById(forestId)?.let {
             val action = AllForestFragmentDirections
                 .actionAllForestFragmentToForestDetailFragment(it)
             Log.d(TAG, "navToForestDetail: forest id : $forestId")
-            findNavController(requireActivity(), R.id.nav_host_fragment)
-                .navigate(action)
+            findNavController().navigate(action)
         }
     }
 }

@@ -96,7 +96,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             time = view.findViewById(R.id.time);
             content = view.findViewById(R.id.content);
             hole_id = view.findViewById(R.id.hole_id);
-            linearLayout = view.findViewById(R.id.layout_notice);
+            linearLayout = view.findViewById(R.id.layout_reply);
             relativeLayout = view.findViewById(R.id.relative_layout);
         }
     }

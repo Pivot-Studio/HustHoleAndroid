@@ -4,6 +4,10 @@ if (isRelease) {
     apply plugin: 'com.android.application'
 }
 
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'androidx.navigation.safeargs'
+
 android {
     compileSdkVersion androidID.compileSdkVersion
     defaultConfig {
@@ -49,7 +53,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                'proguard-rules.pro'
+                    'proguard-rules.pro'
         }
     }
     compileOptions {
@@ -63,13 +67,19 @@ dependencies {
     implementation project(':modulesBase:libBase')
     implementation project(':modulesBase:networkBase')
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
-    annotationProcessor "com.alibaba:arouter-compiler:$ARouter_version" // 每个组件都要添加
+    kapt "com.alibaba:arouter-compiler:$ARouter_version" // 每个组件都要添加
 
     //Room数据库
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     implementation "androidx.recyclerview:recyclerview:$recyclerview_version"
+
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
+    // navigation依赖 ui 和 fragment
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
     testImplementation 'junit:junit:4.13.2'
 

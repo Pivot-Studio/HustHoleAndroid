@@ -3,6 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
+
+        <variable
+            name="homePageHole"
+            type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_item_homepage_frame"
         android:layout_width="match_parent"
@@ -77,8 +86,8 @@
             android:textColor="@color/GrayScale_80"
             app:layout_constraintStart_toStartOf="@+id/tv_item_homepage_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_item_homepage_title"
-            app:time="@{homePageHole.createAt}"
-            app:timeSign="@{viewModel.isLatestReply}"
+            app:time="@{homePageHole.isLatestReply ? homePageHole.lastReplyAt : homePageHole.createAt}"
+            app:timeSign="@{homePageHole.isLatestReply}"
             tools:text="1920  2020-09-16" />
 
         <TextView
@@ -201,9 +210,10 @@
             android:layout_height="@dimen/dp_48"
             android:background="@drawable/more"
             android:elevation="@dimen/dp_20"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_item_homepage_more_icon"
@@ -228,20 +238,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <data>
 
-        <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
-
-        <variable
-            name="homePageHole"
-            type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
-
-        <variable
-            name="viewModel"
-            type="cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel" />
-    </data>
 
 </layout>

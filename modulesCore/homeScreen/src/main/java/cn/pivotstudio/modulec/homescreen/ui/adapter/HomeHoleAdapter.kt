@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.databinding.ItemHomepageholeBinding
+import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
 
 /**
  * @classname:ForestHoleAdapter
@@ -19,7 +20,8 @@ import cn.pivotstudio.modulec.homescreen.databinding.ItemHomepageholeBinding
  * @author: mhh
  */
 class HomeHoleAdapter(
-    private val _context: HomePageFragment,
+    private val viewModel: HomePageViewModel,
+    private val _context: HomePageFragment
 ) : ListAdapter<HoleV2, HomeHoleAdapter.HoleViewHolder>(DIFF_CALLBACK) {
     var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
@@ -34,8 +36,8 @@ class HomeHoleAdapter(
     }
 
     override fun onBindViewHolder(holder: HoleViewHolder, position: Int) {
-        val forestHole = currentList[position]
-        holder.bind(forestHole)
+        val hole = currentList[position]
+        holder.bind(hole)
     }
 
     inner class HoleViewHolder(private val binding: ItemHomepageholeBinding) :
@@ -49,11 +51,11 @@ class HomeHoleAdapter(
                 }
 
                 clItemHomepageThumbup.setOnClickListener {
-
+                    viewModel.giveALikeToTheHole(hole)
                 }
 
                 clItemHomepageFollow.setOnClickListener {
-
+                    viewModel.followTheHole(hole)
                 }
 
                 // 三个点
@@ -63,6 +65,13 @@ class HomeHoleAdapter(
                         lastImageMore?.visibility = View.GONE
                     }
                     lastImageMore = clItemHomepageMorelist
+                }
+
+                clItemHomepageMorelist.setOnClickListener {
+                    if (hole.isMyHole) {
+                        viewModel.deleteTheHole(hole)
+                    }
+                    it.visibility = View.GONE
                 }
 
                 clItemHomepageFrame.setOnClickListener {

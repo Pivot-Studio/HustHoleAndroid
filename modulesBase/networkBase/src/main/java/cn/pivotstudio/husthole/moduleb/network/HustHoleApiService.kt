@@ -3,6 +3,7 @@ package cn.pivotstudio.husthole.moduleb.network
 import android.content.Context
 import cn.pivotstudio.husthole.moduleb.network.model.*
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
+import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -12,10 +13,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 private const val BASE_URL = "https://hustholev2.pivotstudio.cn/api/"
@@ -24,7 +22,8 @@ object HustHoleApi {
     lateinit var retrofitService: HustHoleApiService
     fun init(context: Context) {
 
-        val httpLoggingInterceptor = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
+        val httpLoggingInterceptor =
+            HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS)
 
         val requestInterceptor = Interceptor { chain ->
             chain.request().newBuilder()
@@ -70,14 +69,6 @@ object HustHoleApi {
 
 interface HustHoleApiService {
 
-    @GET("hole/list")
-    suspend fun getHoles(
-        @Query("limit") limit: Int = 20,
-        @Query("mode") mode: String = "LATEST_REPLY",
-        @Query("offset") offset: Int = 0,
-        @Query("timestamp") timestamp: String
-    ): List<HoleV2>
-
     /** 我加入的小树林 */
     @GET("user/forest")
     suspend fun getJoinedForests(
@@ -96,6 +87,12 @@ interface HustHoleApiService {
     @POST("user/expired")
     suspend fun checkIfLogin(): String?
 
+    /** 举报 */
+    @POST("user/report")
+    suspend fun report(
+        @Body reportRequest: RequestBody.ReportRequest
+    ): Response<Unit>
+
     //========================================================================================================
 
     /** 单个小树林树洞列表 */
@@ -110,14 +107,14 @@ interface HustHoleApiService {
 
     /** 单个树洞 */
     @GET("forest/findOne")
-    suspend fun getForestOverview(
+    suspend fun getForestBrief(
         @Query("forestId") forestId: String
     ): ForestBrief
 
     /** 用户加入的小树林树洞列表 */
     @GET("forest/listJoinHole")
     suspend fun getAJoinedForestHoles(
-        @Query("limit") limit: Int = 20,
+        @Query("limit") limit: Int,
         @Query("mode") mode: String = "LATEST_REPLY",
         @Query("offset") offset: Int = 0,
         @Query("timestamp") timestamp: String
@@ -149,27 +146,101 @@ interface HustHoleApiService {
         @Body holeId: RequestBody.HoleId
     ): Response<Unit>
 
+    @POST("interact/follow")
+    suspend fun followTheReply(
+        @Body reply: RequestBody.Reply
+    ): Response<Unit>
+
     @POST("interact/unfollow")
     suspend fun unFollowTheHole(
         @Body holeId: RequestBody.HoleId
     ): Response<Unit>
 
+    @POST("interact/unfollow")
+    suspend fun unFollowTheReply(
+        @Body reply: RequestBody.Reply
+    ): Response<Unit>
+
     @POST("interact/like")
     suspend fun giveALikeToTheHole(
-        @Body holeId: RequestBody.HoleId
+        @Body like: RequestBody.LikeRequest
     ): Response<Unit>
 
     @POST("interact/unlike")
     suspend fun unLikeTheHole(
-        @Body holeId: RequestBody.HoleId
-    )
+        @Body like: RequestBody.LikeRequest
+    ): Response<Unit>
 
     //========================================================================================================
+
+    /** 添加树洞 */
+    @POST("hole/add")
+    suspend fun publishAHole(
+        @Body holeRequest: RequestBody.HoleRequest
+    ): Response<Unit>
+
+    /** 删除树洞 */
+    @DELETE("hole/{holeId}")
+    suspend fun deleteTheHole(
+        @Path("holeId") holeId: String
+    ): Response<Unit>
+
+    /** 搜索单个洞 */
     @GET("hole/one")
     suspend fun loadTheHole(
         @Query("holeId") holeId: String
     ): HoleV2
 
+    /** 搜索树洞 */
+    @GET("hole/search")
+    suspend fun searchHolesByKey(
+        @Query("key") key: String,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0
+    ): List<HoleV2>
+
+    /** 树洞列表 */
+    @GET("hole/list")
+    suspend fun getHoles(
+        @Query("limit") limit: Int = 20,
+        @Query("mode") mode: String = NetworkConstant.SortMode.LATEST_REPLY,
+        @Query("offset") offset: Int = 0,
+        @Query("timestamp") timestamp: String
+    ): List<HoleV2>
+
+    //========================================================================================================
+    @GET("msg/reply")
+    suspend fun getReplies(
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0
+    ): List<Replied>
+
+    //========================================================================================================
+    /** 用户浏览评论 */
+    @GET("reply/list")
+    suspend fun getHoleReplies(
+        @Query("descend") descend: Boolean = true,
+        @Query("holeId") holeId: String,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0,
+        @Query("timestamp") timestamp: String
+    ): List<ReplyWrapper>
+
+    /** 楼中楼评论列表 */
+    @GET("reply/innerList")
+    suspend fun getInnerReplies(
+        @Query("descend") descend: Boolean = true,
+        @Query("limit") limit: Int = 20,
+        @Query("offset") offset: Int = 0,
+        @Query("replyId") replyId: String,
+        @Query("timestamp") timestamp: String
+    ): List<Reply>
+
+    /** 发送评论 */
+    @POST("reply/add")
+    suspend fun sendAComment(
+        @Body comment: RequestBody.Comment
+    ): Response<Unit>
 
 }
 

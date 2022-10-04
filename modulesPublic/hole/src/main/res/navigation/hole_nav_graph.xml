@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hole_nav_graph"
+    app:startDestination="@id/specificHoleFragment">
+
+    <fragment
+        android:id="@+id/specificHoleFragment"
+        android:name="cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment"
+        tools:layout="@layout/fragment_specific_hole">
+        <argument
+            android:name="holeId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_specificHoleFragment_to_innerReplyFragment"
+            app:destination="@id/innerReplyFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/innerReplyFragment"
+        android:name="cn.pivotstudio.modulep.hole.ui.fragment.InnerReplyFragment"
+        tools:layout="@layout/fragment_inner_reply">
+        <argument
+            android:name="reply"
+            app:argType="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
+    </fragment>
+</navigation>

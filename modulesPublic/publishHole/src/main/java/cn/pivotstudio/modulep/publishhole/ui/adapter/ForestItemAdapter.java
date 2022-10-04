@@ -12,9 +12,9 @@ import com.bumptech.glide.request.RequestOptions;
 import cn.pivotstudio.modulep.publishhole.R;
 
 /**
- * @classname:ForestItemAdapter
- * @description:小树林列表item适配器
- * @date:2022/5/6 21:01
+ * @classname: ForestItemAdapter
+ * @description: 小树林列表item适配器
+ * @date: 2022/5/6 21:01
  * @version:1.0
  * @author:
  */
@@ -43,17 +43,17 @@ public class ForestItemAdapter {
     @BindingAdapter({"loadTypeUrl"})
     public static void getUrlFormLocal(ImageView v,String name){
         if ("限定".equals(name)) {
-            v.setImageResource(R.mipmap.specified);
+            v.setImageResource(R.drawable.ic_specified_48dp);
         } else if ("热门".equals(name)) {
-            v.setImageResource(R.mipmap.hot);
+            v.setImageResource(R.drawable.ic_hot_40dp);
         } else if ("情感".equals(name)) {
-            v.setImageResource(R.mipmap.emotion);
+            v.setImageResource(R.drawable.ic_emotion_38dp);
         } else if ("校园".equals(name)) {
-            v.setImageResource(R.mipmap.school);
+            v.setImageResource(R.drawable.ic_school_48dp);
         } else if ("学习".equals(name)) {
-            v.setImageResource(R.mipmap.study);
+            v.setImageResource(R.drawable.ic_study_48dp);
         } else if ("娱乐".equals(name)) {
-            v.setImageResource(R.mipmap.disport);
+            v.setImageResource(R.drawable.ic_disport_48dp);
         }
     }
 }

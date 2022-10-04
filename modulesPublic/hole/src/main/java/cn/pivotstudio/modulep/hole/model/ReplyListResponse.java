@@ -16,15 +16,17 @@ import cn.pivotstudio.modulep.hole.BR;
  */
 public class ReplyListResponse {
     List<ReplyResponse> msg;
-    private String model;
+    private String mode;
 
-    public String getModel() {
-        if(model==null) {model="BASE";}
-        return model;
+    public String getMode() {
+        if (mode == null) {
+            mode = "BASE";
+        }
+        return mode;
     }
 
-    public void setModel(String model) {
-        this.model = model;
+    public void setMode(String mode) {
+        this.mode = mode;
     }
 
     public List<ReplyResponse> getMsg() {

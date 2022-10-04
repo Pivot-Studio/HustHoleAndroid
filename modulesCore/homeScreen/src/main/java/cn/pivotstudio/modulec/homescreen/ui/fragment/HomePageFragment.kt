@@ -5,35 +5,32 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.constant.RequestCodeConstant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
-import cn.pivotstudio.moduleb.libbase.util.data.CheckStrUtil
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomepageBinding
-import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse
 import cn.pivotstudio.modulec.homescreen.ui.adapter.HomeHoleAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
 import com.alibaba.android.arouter.launcher.ARouter
-import com.scwang.smart.refresh.layout.api.RefreshLayout
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
 
 /**
  * @classname:HomePageFragment
@@ -47,18 +44,16 @@ class HomePageFragment : BaseFragment() {
     companion object {
         const val TAG = "HomePageFragment"
     }
-    
-    private lateinit var binding: FragmentHomepageBinding
-    private val viewModel: HomePageViewModel by viewModels()
 
-    private val homeHoleAdapter = HomeHoleAdapter(this)
+    private lateinit var binding: FragmentHomepageBinding
+    private val viewModel: HomePageViewModel by activityViewModels()
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_homepage, container, false) //
-        initView()
-        initRefresh()
-        initObserver()
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_homepage, container, false)
+        binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
 
@@ -87,6 +82,12 @@ class HomePageFragment : BaseFragment() {
         }
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+        initRefresh()
+    }
+
     /**
      * 视图初始化
      */
@@ -96,6 +97,8 @@ class HomePageFragment : BaseFragment() {
             SpannableString(this.resources.getString(R.string.page1fragment_1)),
             12
         )
+
+        val homeHoleAdapter = HomeHoleAdapter(viewModel, this)
 
         binding.apply {
             recyclerView.adapter = homeHoleAdapter
@@ -119,56 +122,7 @@ class HomePageFragment : BaseFragment() {
             }
         }
 
-    }
-
-    /**
-     * 初始化刷新框架
-     */
-    private fun initRefresh() {
-        binding.refreshLayout.setRefreshHeader(
-            StandardRefreshHeader(
-                activity
-            )
-        ) //设置自定义刷新头
-        binding.refreshLayout.setRefreshFooter(
-            StandardRefreshFooter(
-                activity
-            )
-        ) //设置自定义刷新底
-
-        binding.refreshLayout.setOnRefreshListener { refreshlayout: RefreshLayout? ->  //下拉刷新触发
-            viewModel.loadHolesV2()
-            binding.recyclerView.setOnTouchListener { v: View?, event: MotionEvent? -> true }
-        }
-
-        binding.refreshLayout.setOnLoadMoreListener { refreshlayout: RefreshLayout? ->  //上拉加载触发
-            if (viewModel.pHomePageHoles.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
-                viewModel.loadHolesV2()
-                binding.recyclerView.setOnTouchListener { v: View?, event: MotionEvent? -> true }
-            } else {
-                viewModel.loadHolesV2()
-            }
-        }
-    }
-
-    /**
-     * 初始化ViewModel数据观察者
-     */
-    private fun initObserver() {
         viewModel.apply {
-            pHomePageHoles.observe(viewLifecycleOwner) { homepageHoleResponse: HomepageHoleResponse ->  //监听列表信息变化
-                val length = homepageHoleResponse.data.size
-                when (homepageHoleResponse.model) {
-                    "REFRESH" -> finishRefresh(true)
-                    "SEARCH_REFRESH" -> finishRefresh(false)
-                    "LOAD_MORE" -> finishLoadMore(length)
-                    "SEARCH_LOAD_MORE" -> finishLoadMore(length)
-                    "SEARCH_HOLE" -> finishRefresh(false)
-                    "BASE" -> {}
-                }
-
-                finishRefreshAnim()
-            }
             tip.observe(viewLifecycleOwner) {
                 it?.let {
                     showMsg(it)
@@ -177,10 +131,38 @@ class HomePageFragment : BaseFragment() {
             }
 
             lifecycleScope.launchWhenStarted {
-                holesV2.collectLatest {
+                holesV2.onEach {
+                    finishRefreshAnim()
+                }.collectLatest {
                     homeHoleAdapter.submitList(it)
                 }
             }
+
+            lifecycleScope.launchWhenStarted {
+                loading.collectLatest { loading ->
+                    if (loading.not()) {
+                        finishRefreshAnim()
+                    }
+                }
+            }
+        }
+
+    }
+
+    /**
+     * 初始化刷新框架
+     */
+    private fun initRefresh() {
+        binding.refreshLayout.setRefreshHeader(StandardRefreshHeader(activity)) //设置自定义刷新头
+        binding.refreshLayout.setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
+        binding.refreshLayout.setOnRefreshListener { //下拉刷新触发
+            viewModel.loadHolesV2()
+            binding.recyclerView.isEnabled = false
+        }
+
+        binding.refreshLayout.setOnLoadMoreListener {    //上拉加载触发
+            viewModel.loadMoreHoles()
+            binding.recyclerView.isEnabled = false
         }
     }
 
@@ -191,16 +173,10 @@ class HomePageFragment : BaseFragment() {
      */
     private fun onClick(v: View) {
         val id = v.id
-        if (id == R.id.btn_ppwhomepage_newpublish) {
-            if (!viewModel.isDescend!!) {
-                viewModel.isDescend = true
-                viewModel.refreshHoleList(0)
-            }
-        } else if (id == R.id.btn_ppwhomepage_newcomment) {
-            if (viewModel.isDescend == true) {
-                viewModel.isDescend = false
-                viewModel.refreshHoleList(0)
-            }
+        if (id == R.id.btn_ppwhomepage_latest_reply) {
+            viewModel.loadHolesV2(sortMode = NetworkConstant.SortMode.LATEST_REPLY)
+        } else if (id == R.id.btn_ppwhomepage_latest_publish) {
+            viewModel.loadHolesV2(sortMode = NetworkConstant.SortMode.LATEST)
         }
     }
 
@@ -214,36 +190,12 @@ class HomePageFragment : BaseFragment() {
      */
     private fun onEditorListener(v: TextView, actionId: Int, event: KeyEvent?): Boolean {
         if ((binding.etHomepage.text != null && binding.etHomepage.text.toString() != "") && (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE || event != null && KeyEvent.KEYCODE_ENTER == event.keyCode && KeyEvent.ACTION_DOWN == event.action)) {
-            val et = binding.etHomepage.text.toString()
-            viewModel.searchKeyword = et
+            val queryKey = binding.etHomepage.text.toString()
+            viewModel.searchKeyword = queryKey
             viewModel.isSearch = true
-            if (CheckStrUtil.checkStrIsNum(et) || et[0] == '#') {
-                viewModel.searchSingleHole()
-            } else {
-                viewModel.searchHoleList(0)
-            }
+            viewModel.searchHolesV2(queryKey)
         }
         return false
-    }
-
-    /**
-     * 下拉刷新或搜索的数据更新
-     *
-     * @param isSearch 决定是否是搜索状态下，非搜索状态下下拉加载需要将状态切换
-     */
-    private fun finishRefresh(isSearch: Boolean) {
-        if (isSearch) viewModel.isSearch = false
-        viewModel.startLoadId = 0
-    }
-
-    /**
-     * 上拉加载的数据更新
-     */
-    private fun finishLoadMore(length: Int) {
-        val lastStartId = viewModel.startLoadId
-        if (lastStartId != null) {
-            viewModel.startLoadId = lastStartId + length
-        }
     }
 
     /**
@@ -253,18 +205,7 @@ class HomePageFragment : BaseFragment() {
         binding.etHomepage.setText("")
         binding.refreshLayout.finishRefresh() //结束下拉刷新动画
         binding.refreshLayout.finishLoadMore() //结束上拉加载动画
-        binding.recyclerView.setOnTouchListener { v: View?, event: MotionEvent? -> false } //加载结束后允许滑动
-    }
-
-    /**
-     * 利用 Navigation 导航到 AllForestFragment
-     *
-     * 相关类 [AllForestFragment],nav_graph.xml
-     */
-    fun navToAllForests() {
-        Navigation.findNavController(
-            requireActivity(), R.id.nav_host_fragment
-        ).navigate(R.id.action_forest_fragment_to_all_forest_fragment)
+        binding.recyclerView.isEnabled = true
     }
 
     // 点击文字内容跳转到树洞
