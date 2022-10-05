@@ -202,10 +202,10 @@ interface HustHoleApiService {
 
     //========================================================================================================
     @GET("msg/reply")
-    suspend fun getReplies(
+    suspend fun getReplyNotice(
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0
-    ): List<Replied>
+    ): List<ReplyNotice>
 
     //========================================================================================================
     /** 用户浏览评论 */

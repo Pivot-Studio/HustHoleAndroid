@@ -51,6 +51,10 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
+                <include
+                    android:id="@+id/notice_header"
+                    layout="@layout/item_notice_header" />
+
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_notices"
                     android:layout_width="match_parent"

@@ -65,7 +65,7 @@ data class TokenResponse(
     @Json(name = "token") val token: String
 )
 
-data class ReplyWrapper (
+data class ReplyWrapper(
     /** 子评论总数 */
     val count: String? = null,
 
@@ -75,7 +75,7 @@ data class ReplyWrapper (
     val self: Reply
 )
 
-data class Reply (
+data class Reply(
     /** 树洞内容 */
     val content: String? = null,
 
@@ -83,7 +83,7 @@ data class Reply (
     @Json(name = "creatAt")
     val createAt: String? = null,
 
-    val hole: HoleV2? = null,
+    val hole: HoleDto? = null,
 
     /** 树洞id */
     var holeId: String = "",
@@ -97,7 +97,7 @@ data class Reply (
     /** 昵称 */
     val nickname: String,
 
-    val replied: Replied? = null,
+    val replied: ReplyDto? = null,
 
     /** 评论id */
     val replyId: String,
@@ -115,11 +115,12 @@ data class Reply (
 /**
  * 被回复的评论
  */
-data class Replied(
+data class ReplyNotice(
     val checked: Boolean? = null,
 
     val content: String? = null,
 
+    @Json(name = "creatAt")
     val createAt: String,
 
     val holeId: String,
@@ -133,6 +134,42 @@ data class Replied(
     val replyMsgId: String? = null,
 
     val type: ReplyType? = null
+)
+
+/**
+ * HoleDto, 更详细的Hole
+ */
+data class HoleDto(
+    val content: String? = null,
+    val createAt: String? = null,
+    val deleteAt: String? = null,
+    val followCount: Long? = null,
+    val forestId: String? = null,
+    val holeId: String? = null,
+    val lastReplyAt: String? = null,
+    val likeCount: Long? = null,
+    val ownerId: String? = null,
+    val participant: Long? = null,
+    val replyCount: Long? = null,
+    val updateAt: String? = null
+)
+
+/**
+ * ReplyDto, 更详细的Reply
+ */
+data class ReplyDto(
+    val content: String? = null,
+    val createAt: String? = null,
+    val deleteAt: String? = null,
+    val holeId: String? = null,
+    val likeCount: Long? = null,
+    val nickname: String? = null,
+    val repliedUserId: String? = null,
+    val replyId: String? = null,
+    val replyTo: String? = null,
+    val replyToInner: String? = null,
+    val updateAt: String? = null,
+    val userId: String? = null
 )
 
 enum class ReplyType {
