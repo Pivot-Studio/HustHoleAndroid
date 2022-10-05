@@ -89,14 +89,11 @@ class ForestRepository(
     fun giveALikeToTheHole(hole: HoleV2): Flow<ApiResult> {
         return flow {
             emit(ApiResult.Loading())
+            val theHole = RequestBody.LikeRequest(holeId = hole.holeId)
             val response = if (hole.liked) {
-                hustHoleApiService.unLikeTheHole(
-                    like = RequestBody.LikeRequest(holeId = hole.holeId)
-                )
+                hustHoleApiService.unLike(theHole)
             } else {
-                hustHoleApiService.giveALikeToTheHole(
-                    like = RequestBody.LikeRequest(holeId = hole.holeId)
-                )
+                hustHoleApiService.giveALikeTo(theHole)
             }
 
             if (response.isSuccessful) {
@@ -117,7 +114,7 @@ class ForestRepository(
         return flow {
             emit(ApiResult.Loading())
             val response = hustHoleApiService
-                    .followTheHole(RequestBody.HoleId(hole.holeId))
+                .followTheHole(RequestBody.HoleId(hole.holeId))
 
             if (response.isSuccessful) {
                 emit(ApiResult.Success(data = Unit))
@@ -136,7 +133,7 @@ class ForestRepository(
     fun unFollowTheHole(hole: HoleV2): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
         val response = hustHoleApiService
-                .unFollowTheHole(RequestBody.HoleId(hole.holeId))
+            .unFollowTheHole(RequestBody.HoleId(hole.holeId))
 
         if (response.isSuccessful) {
             emit(ApiResult.Success(data = Unit))

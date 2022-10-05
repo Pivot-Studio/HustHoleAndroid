@@ -146,30 +146,22 @@ interface HustHoleApiService {
         @Body holeId: RequestBody.HoleId
     ): Response<Unit>
 
-    @POST("interact/follow")
-    suspend fun followTheReply(
-        @Body reply: RequestBody.Reply
-    ): Response<Unit>
-
     @POST("interact/unfollow")
     suspend fun unFollowTheHole(
         @Body holeId: RequestBody.HoleId
     ): Response<Unit>
 
-    @POST("interact/unfollow")
-    suspend fun unFollowTheReply(
-        @Body reply: RequestBody.Reply
-    ): Response<Unit>
-
     @POST("interact/like")
-    suspend fun giveALikeToTheHole(
+    suspend fun giveALikeTo(
         @Body like: RequestBody.LikeRequest
     ): Response<Unit>
 
     @POST("interact/unlike")
-    suspend fun unLikeTheHole(
+    suspend fun unLike(
         @Body like: RequestBody.LikeRequest
     ): Response<Unit>
+
+
 
     //========================================================================================================
 
@@ -240,6 +232,11 @@ interface HustHoleApiService {
     @POST("reply/add")
     suspend fun sendAComment(
         @Body comment: RequestBody.Comment
+    ): Response<Unit>
+
+    @DELETE("reply/{replyId}")
+    suspend fun deleteTheReply(
+        @Path("replyId") replyId: String
     ): Response<Unit>
 
 }

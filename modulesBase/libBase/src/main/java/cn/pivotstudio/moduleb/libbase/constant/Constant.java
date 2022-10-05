@@ -33,7 +33,7 @@ public class Constant {
     // 是否从小树林跳转 key
     public static final String FROM_DETAIL_FOREST = "FROM_DETAIL_FOREST";
     //选择号的标识
-    public static final String REPLY_LOCAL_ID = "reply_local_id";
+    public static final String REPLY_ID = "reply_local_id";
     //是否需要打开键盘的标识
     public static final String IF_OPEN_KEYBOARD = "IF_OPEN_KEYBOARD";
     //内容的拥有者的标识

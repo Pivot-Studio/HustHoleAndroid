@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="holeV2"
             type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
@@ -34,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_24"
             android:layout_marginTop="@dimen/dp_12"
-            android:layout_marginEnd="@dimen/dp_7"
+            android:layout_marginEnd="@dimen/dp_22"
             android:background="@drawable/tag_yellow"
             android:drawableLeft="@drawable/ic_forest_tag_16dp"
             android:paddingHorizontal="@dimen/dp_6"
@@ -42,19 +44,10 @@
             android:textAllCaps="false"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             android:textColor="@color/HH_BandColor_7"
-            app:layout_constraintEnd_toStartOf="@+id/iv_hole_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/forest_tag" />
-
-        <ImageView
-            android:id="@+id/iv_hole_icon"
-            android:layout_width="@dimen/dp_16"
-            android:layout_height="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_15"
-            android:layout_marginEnd="@dimen/dp_16"
+            android:visibility="@{holeV2.forestName == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_pivot_studio_16dp" />
+            tools:text="@string/forest_tag" />
 
         <TextView
             android:id="@+id/tv_hole_time"
@@ -71,13 +64,14 @@
 
         <TextView
             android:id="@+id/tv_hole_content"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp_22"
             android:layout_marginTop="4dp"
-            android:maxWidth="@dimen/dp_335"
             android:textAppearance="@style/HustHoleTypography.Body2"
             android:textColor="@color/GrayScale_20"
-            app:layout_constraintStart_toStartOf="@+id/tv_hole_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_hole_time"
             app:markDownContent="@{holeV2.content}"
             tools:text="@string/default_string_zh_long" />
@@ -212,7 +206,6 @@
             android:layout_width="@dimen/dp_50"
             android:layout_height="@dimen/dp_34"
             app:layout_constraintBottom_toBottomOf="@+id/tv_hole_frame"
-
             app:layout_constraintEnd_toEndOf="@+id/tv_hole_frame"
             app:layout_constraintTop_toTopOf="@+id/tv_hole_frame">
 
@@ -235,9 +228,9 @@
             android:background="@drawable/more"
             android:elevation="20dp"
             android:visibility="gone"
-            tools:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible">
 
             <ImageView
                 android:id="@+id/iv_hole_more_icon"
@@ -254,13 +247,14 @@
                 android:id="@+id/tv_hole_moretext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:text="@{holeV2.myHole ? `删除` : `举报`}"
+                android:layout_marginStart="@dimen/dp_12"
+                android:text="@{holeV2.myHole ? `删除` : `举报`, default = 删除}"
+                android:textAppearance="@style/HustHoleTypography.Button2"
                 android:textColor="@color/GrayScale_20"
-                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_hole_more_icon"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.483" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

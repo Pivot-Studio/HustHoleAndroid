@@ -198,7 +198,7 @@ class ForestDetailFragment : BaseFragment() {
         (hole as HoleV2).let {
             ARouter.getInstance().build("/report/ReportActivity")
                 .withInt(Constant.HOLE_ID, it.holeId.toInt())
-                .withInt(Constant.REPLY_LOCAL_ID, -1)
+                .withInt(Constant.REPLY_ID, -1)
                 .withString(Constant.ALIAS, "洞主")
                 .navigation()
         }

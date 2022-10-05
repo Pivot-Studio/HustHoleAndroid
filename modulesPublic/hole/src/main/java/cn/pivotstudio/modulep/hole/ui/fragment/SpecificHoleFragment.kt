@@ -3,11 +3,14 @@ package cn.pivotstudio.modulep.hole.ui.fragment
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -17,19 +20,21 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
+import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulep.hole.R
 import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulep.hole.databinding.FragmentSpecificHoleBinding
-import cn.pivotstudio.modulep.hole.model.MsgResponse
 import cn.pivotstudio.modulep.hole.model.ReplyListResponse
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
 import cn.pivotstudio.modulep.hole.ui.adapter.EmojiRvAdapter
 import cn.pivotstudio.modulep.hole.ui.adapter.RepliesAdapter
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
+import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.flow.collectLatest
 
 class SpecificHoleFragment : BaseFragment() {
@@ -37,7 +42,7 @@ class SpecificHoleFragment : BaseFragment() {
     private val args by navArgs<SpecificHoleFragmentArgs>()
 
     private lateinit var binding: FragmentSpecificHoleBinding
-    private val replyViewModel: SpecificHoleViewModel by viewModels {
+    private val replyViewModel: SpecificHoleViewModel by activityViewModels {
         SpecificHoleViewModelFactory(args.holeId)
     }
 
@@ -46,6 +51,16 @@ class SpecificHoleFragment : BaseFragment() {
             SpecificHoleFragmentDirections.actionSpecificHoleFragmentToInnerReplyFragment(it.self)
         findNavController().navigate(action)
     }
+
+    private val report: (Reply) -> Unit = {
+        ARouter.getInstance().build("/report/ReportActivity")
+            .withString(Constant.HOLE_ID, it.holeId)
+            .withString(Constant.REPLY_ID, it.replyId)
+            .withString(Constant.ALIAS, it.nickname)
+            .navigation()
+    }
+
+    private val repliesAdapter by lazy { RepliesAdapter(replyViewModel, report, navToInnerReply) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,18 +74,15 @@ class SpecificHoleFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initObserver()
-        initRefresh()
-        initEmojiRv()
-        initListener()
-        val repliesAdapter = RepliesAdapter(replyViewModel, navToInnerReply)
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = replyViewModel
             rvReplies.adapter = repliesAdapter
+
             rvReplies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    binding.layoutHole.clHoleMoreAction.visibility = View.GONE
                     repliesAdapter.lastMoreListCl?.let {
                         if (it.isVisible) {
                             it.visibility = View.GONE
@@ -115,7 +127,6 @@ class SpecificHoleFragment : BaseFragment() {
 
             etReplyPost.setOnClickListener {
                 activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-                binding.rvEmoji.visibility = View.VISIBLE
                 (requireActivity() as HoleActivity).openKeyBoard(binding.etReplyPost)
                 replyViewModel.doneShowingEmojiPad()
             }
@@ -123,7 +134,41 @@ class SpecificHoleFragment : BaseFragment() {
             btnFilterOwnerReply.setOnClickListener {
                 replyViewModel.filterReplyOfHoleOwner()
             }
+        }
 
+        replyViewModel.inputText()
+        replyViewModel.usedEmojiList()
+
+        EditTextUtil.ButtonReaction(
+            binding.etReplyPost,
+            binding.btnSend
+        )
+
+        initObserver()
+        initRefresh()
+        initEmojiRv()
+        initListener()
+    }
+
+
+    private fun initRefresh() {
+        binding.layoutRefresh.apply {
+            setRefreshHeader(StandardRefreshHeader(activity))
+            setRefreshFooter(StandardRefreshFooter(activity))
+            setOnRefreshListener {
+                replyViewModel.loadHole()
+                binding.rvReplies.isEnabled = false
+            }
+            setOnLoadMoreListener {    //上拉加载触发
+                replyViewModel.loadMoreReplies()
+                binding.rvReplies.isEnabled = true
+            }
+        }
+    }
+
+    private fun initObserver() {
+        replyViewModel.pInputText.observe(viewLifecycleOwner) { replyResponse: ReplyListResponse.ReplyResponse ->
+            binding.etReplyPost.setText(replyResponse.content)
         }
 
         replyViewModel.apply {
@@ -138,6 +183,16 @@ class SpecificHoleFragment : BaseFragment() {
             lifecycleScope.launchWhenStarted {
                 replies.collect {
                     repliesAdapter.submitList(it)
+                }
+            }
+
+            lifecycleScope.launchWhenStarted {
+                loadingState.collectLatest { state ->
+                    when (state) {
+                        ApiStatus.SUCCESSFUL,
+                        ApiStatus.ERROR -> finishRefreshAnim()
+                        ApiStatus.LOADING -> {}
+                    }
                 }
             }
 
@@ -181,46 +236,6 @@ class SpecificHoleFragment : BaseFragment() {
                 }
             }
         }
-
-        replyViewModel.inputText()
-        replyViewModel.usedEmojiList()
-
-        EditTextUtil.ButtonReaction(
-            binding.etReplyPost,
-            binding.btnSend
-        )
-
-    }
-
-    private fun initRefresh() {
-        binding.layoutRefresh.apply {
-            setRefreshHeader(StandardRefreshHeader(activity))
-            setRefreshFooter(StandardRefreshFooter(activity))
-            setOnRefreshListener {
-                replyViewModel.loadHole()
-                binding.rvReplies.isEnabled = false
-            }
-            setOnLoadMoreListener {    //上拉加载触发
-                replyViewModel.loadMoreReplies()
-                binding.rvReplies.isEnabled = true
-            }
-        }
-    }
-
-    private fun initObserver() {
-        replyViewModel.pInputText.observe(viewLifecycleOwner) { replyResponse: ReplyListResponse.ReplyResponse ->
-            binding.etReplyPost.setText(replyResponse.content)
-            replyViewModel.answered.set(replyResponse)
-        }
-
-        replyViewModel.pClickMsg.observe(viewLifecycleOwner) { msgResponse: MsgResponse ->
-            showMsg(msgResponse.msg)
-            when (msgResponse.model) {
-                "DELETE_HOLE" -> requireActivity().finish()
-//                "DELETE_REPLY" -> replyViewModel.getListData(false)
-            }
-        }
-
     }
 
     private fun initEmojiRv() {
@@ -243,7 +258,7 @@ class SpecificHoleFragment : BaseFragment() {
         binding.rvEmoji.adapter =
             EmojiRvAdapter(
                 context,
-                binding,
+                binding.etReplyPost,
                 replyViewModel
             )
     }
@@ -275,38 +290,21 @@ class SpecificHoleFragment : BaseFragment() {
         binding.rvReplies.isEnabled = true
     }
 
-    /**
-     * 处理activity点击事件
-     *
-     * @param view
-     */
-    fun onClick(view: View) {
-        if (view.id == R.id.btn_send) {
-            binding.btnSend.isClickable = false //避免重复发送
-//            replyViewModel.sendReply(binding.etReplyPost.text.toString())
-            (requireActivity() as HoleActivity).closeKeyBoard()
-        } else if (view.id == R.id.btn_filter_owner_reply) {
-            val observableField = replyViewModel.is_owner
-            observableField.set(!observableField.get()!!)
-//            replyViewModel.getListData(false)
-        }
-    }
-
     private fun clearSendingState() {
         binding.apply {
             btnSend.isClickable = true
             etReplyPost.text?.clear()
             rvEmoji.visibility = View.GONE
-            replyViewModel.doneShowingEmojiPad()
+
             lifecycleScope.launchWhenStarted {
+                replyViewModel.doneShowingEmojiPad()
                 replyViewModel.delayLoadReplies()
             }
-
         }
     }
 
-
 }
+
 
 class SpecificHoleViewModelFactory(private val holeId: String) :
     ViewModelProvider.Factory {

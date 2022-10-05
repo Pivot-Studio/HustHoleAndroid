@@ -15,7 +15,8 @@ import cn.pivotstudio.modulep.hole.databinding.ItemReplyBinding
 import cn.pivotstudio.modulep.hole.viewmodel.InnerReplyViewModel
 
 class InnerReplyAdapter(
-    val viewModel: InnerReplyViewModel
+    private val viewModel: InnerReplyViewModel,
+    private val report: (Reply) -> Unit,
 ) : ListAdapter<Reply, InnerReplyAdapter.ReplyViewHolder>(DIFF_CALLBACK) {
     var lastMoreListCl: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
@@ -44,9 +45,7 @@ class InnerReplyAdapter(
                     viewModel.replyTo(reply)
                 }
             }
-        }
 
-        init {
             binding.tvReplyContent.setOnLongClickListener { //重写监听器中的onLongClick()方法
                 val cm =
                     BaseApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -54,15 +53,22 @@ class InnerReplyAdapter(
                 //                    showMsg("内容已复制至剪切板")
                 false
             }
+
             binding.ivReplyMore.setOnClickListener {
-                binding.clReplyMorelist.visibility = View.VISIBLE
-                if (lastMoreListCl != null && lastMoreListCl !== binding.clReplyMorelist) {
+                binding.clReplyMoreAction.visibility = View.VISIBLE
+                if (lastMoreListCl != null && lastMoreListCl !== binding.clReplyMoreAction) {
                     lastMoreListCl!!.visibility = View.GONE
                 }
-                lastMoreListCl = binding.clReplyMorelist
+                lastMoreListCl = binding.clReplyMoreAction
             }
-            binding.clReplyMorelist.setOnClickListener { v: View? ->
-                binding.clReplyMorelist.visibility = View.INVISIBLE
+
+            binding.clReplyMoreAction.setOnClickListener {
+                if (reply.mine) {
+                    viewModel.deleteTheReply(reply)
+                } else {
+                    report(reply)
+                }
+                binding.clReplyMoreAction.visibility = View.INVISIBLE
             }
         }
     }

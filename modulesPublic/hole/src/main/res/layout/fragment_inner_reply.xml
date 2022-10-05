@@ -27,7 +27,6 @@
                 android:id="@+id/layout_refresh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/GrayScale_98"
                 android:minHeight="@dimen/dp_720"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -94,9 +93,9 @@
                                 android:id="@+id/cl_hole_thumbup"
                                 android:layout_width="wrap_content"
                                 android:layout_height="@dimen/dp_40"
-                                android:layout_marginEnd="@dimen/dp_20"
+                                android:layout_marginEnd="@dimen/dp_30"
                                 android:layout_marginBottom="@dimen/dp_4"
-                                app:layout_constraintEnd_toStartOf="@+id/iv_hole_more"
+                                app:layout_constraintEnd_toStartOf="@+id/iv_base_reply_more"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_hole_content">
 
                                 <ImageView
@@ -123,7 +122,7 @@
                             </androidx.constraintlayout.widget.ConstraintLayout>
 
                             <ImageView
-                                android:id="@+id/iv_hole_more"
+                                android:id="@+id/iv_base_reply_more"
                                 android:layout_width="@dimen/dp_25"
                                 android:layout_height="@dimen/dp_25"
                                 android:layout_marginEnd="22dp"
@@ -160,7 +159,7 @@
                                 android:layout_marginBottom="34dp"
                                 android:background="@drawable/more"
                                 android:elevation="20dp"
-                                android:visibility="invisible"
+                                android:visibility="gone"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent">
 
@@ -181,8 +180,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="15dp"
                                     android:text="@{viewModel.reply.mine ? `删除` : `举报`}"
+                                    android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
                                     android:textColor="@color/GrayScale_20"
-                                    android:textSize="14sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintStart_toEndOf="@+id/iv_hole_more_icon"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -236,7 +235,6 @@
                 android:maxLength="500"
                 android:maxLines="5"
                 android:minHeight="@dimen/dp_32"
-                android:onClick="onClick"
                 android:paddingLeft="@dimen/dp_10"
                 android:textColor="@color/GrayScale_0"
                 android:textColorHint="@color/GrayScale_70"

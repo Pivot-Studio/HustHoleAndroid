@@ -69,7 +69,7 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
     var is_emoji: ObservableField<Boolean?>
 
     //进行数据请求的地方
-    private val repository: HoleRepository = HoleRepository(holeId)
+    private val repository = HoleRepository(holeId)
     fun usedEmojiList() = repository.usedEmojiForLocalDB
 
     @JvmName("getAnswered1")
@@ -203,7 +203,9 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
     }
 
     fun doneShowingEmojiPad() {
-        _showingEmojiPad.value = false
+        viewModelScope.launch {
+            _showingEmojiPad.emit(false)
+        }
     }
 
     /**
@@ -327,6 +329,23 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
         }
     }
 
+    fun giveALikeToTheReply(reply: Reply) {
+        viewModelScope.launch {
+            repository.giveALikeToTheReply(reply)
+                .collect {
+                    when (it) {
+                        is ApiResult.Success<*> -> {
+                            likeTheReply(reply)
+                        }
+                        is ApiResult.Error -> {
+                            _sendingState.emit(it)
+                        }
+                        else -> {}
+                    }
+                }
+        }
+    }
+
     fun giveALikeToTheHole(hole: HoleV2 = _hole.value!!) {
         viewModelScope.launch {
             repository.giveALikeToTheHole(hole)
@@ -365,6 +384,39 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
                 }
             }
         }
+    }
+
+    fun deleteTheReply(reply: Reply) {
+        viewModelScope.launch {
+            repository.deleteTheReply(reply).collect {
+                when (it) {
+                    is ApiResult.Success<*> -> {
+
+                    }
+                    is ApiResult.Error -> {
+                        _sendingState.emit(it)
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    private suspend fun likeTheReply(reply: Reply) {
+        val newItems = replies.value.toMutableList()
+        val i = newItems.indexOfFirst { newReply ->
+            reply.replyId == newReply.self.replyId
+        }
+
+        val newSelfReply = newItems[i].self.copy(
+            thumb = reply.thumb.not(),
+            likeCount = reply.likeCount + if (reply.thumb) -1 else 1
+        )
+
+        newItems[i] = newItems[i].copy(
+            self = newSelfReply
+        )
+        _replies.emit(newItems)
     }
 
     /**

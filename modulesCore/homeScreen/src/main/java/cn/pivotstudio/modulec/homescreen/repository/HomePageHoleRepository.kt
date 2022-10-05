@@ -99,11 +99,11 @@ class HomePageHoleRepository(
         return flow {
             emit(ApiResult.Loading())
             val response = if (hole.liked) {
-                hustHoleApiService.unLikeTheHole(
+                hustHoleApiService.unLike(
                     like = RequestBody.LikeRequest(holeId = hole.holeId)
                 )
             } else {
-                hustHoleApiService.giveALikeToTheHole(
+                hustHoleApiService.giveALikeTo(
                     like = RequestBody.LikeRequest(holeId = hole.holeId)
                 )
             }
@@ -244,7 +244,7 @@ class HomePageHoleRepository(
         } else {
             ARouter.getInstance().build("/report/ReportActivity")
                 .withInt(Constant.HOLE_ID, hole_id)
-                .withInt(Constant.REPLY_LOCAL_ID, -1)
+                .withInt(Constant.REPLY_ID, -1)
                 .withString(Constant.ALIAS, "洞主")
                 .navigation()
         }

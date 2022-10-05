@@ -16,7 +16,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_16"
-        android:background="@color/HH_Surface">
+        android:background="@color/HH_Surface"
+        android:paddingBottom="@dimen/dp_10">
 
         <TextView
             android:id="@+id/tv_reply_title"
@@ -85,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_6"
-            android:layout_marginBottom="@dimen/dp_13"
+            android:layout_marginBottom="@dimen/dp_3"
             android:background="@drawable/reply_gray"
             android:padding="@dimen/dp_10"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -123,7 +124,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_reply_thumbup"
+            android:id="@+id/cl_reply_thumb"
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"
             android:layout_marginEnd="@dimen/dp_30"
@@ -164,7 +165,7 @@
             app:srcCompat="@mipmap/threepoint" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_reply_morelist"
+            android:id="@+id/cl_reply_more_action"
             android:layout_width="@dimen/dp_158"
             android:layout_height="@dimen/dp_48"
             android:layout_marginEnd="@dimen/dp_10"

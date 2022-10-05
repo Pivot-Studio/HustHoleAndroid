@@ -1,6 +1,7 @@
 package cn.pivotstudio.modulep.hole.ui.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -8,13 +9,16 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.modulep.hole.databinding.ItemFirstLevelReplyBinding
+import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
 
 class RepliesAdapter(
-    val viewModel: SpecificHoleViewModel,
-    val onItemClick: (ReplyWrapper) -> Unit
+    private val viewModel: SpecificHoleViewModel,
+    private val report: (Reply) -> Unit,
+    private val onItemClick: (ReplyWrapper) -> Unit
 ) : ListAdapter<ReplyWrapper, RepliesAdapter.FirstLevelReplyViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -46,6 +50,10 @@ class RepliesAdapter(
         fun bind(replyWrapper: ReplyWrapper) {
             binding.replyWrapper = replyWrapper
             binding.apply {
+                // 控制楼中楼视图框显示
+                layoutInnerReply.visibility =
+                    if (replyWrapper.innerList.isEmpty()) GONE else VISIBLE
+
                 layoutInnerReply.setOnClickListener {
                     onItemClick(replyWrapper)
                 }
@@ -54,10 +62,28 @@ class RepliesAdapter(
                     viewModel.replyTo(replyWrapper.self)
                 }
 
-            }
+                clReplyThumb.setOnClickListener {
+                    viewModel.giveALikeToTheReply(replyWrapper.self)
+                }
 
-            binding.layoutInnerReply.visibility =
-                if (replyWrapper.innerList.isEmpty()) GONE else VISIBLE
+                ivReplyMore.setOnClickListener {
+                    clReplyMoreAction.visibility = VISIBLE
+                    if (lastMoreListCl != clReplyMoreAction) {
+                        lastMoreListCl?.visibility = GONE
+                    }
+                    lastMoreListCl = clReplyMoreAction
+                }
+
+                clReplyMoreAction.setOnClickListener {
+                    if (replyWrapper.self.mine) {
+                        viewModel.deleteTheReply(replyWrapper.self)
+                    } else {
+                        report(replyWrapper.self)
+                    }
+                    it.visibility = GONE
+                }
+
+            }
         }
     }
 

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext;
 import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
 import cn.pivotstudio.moduleb.libbase.util.emoji.EmotionUtil;
 
@@ -36,7 +37,7 @@ public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
     private LinkedList<Integer> mUsedEmojiCopy;
     private List<Integer> mEmoji;
     private List<String> mEmojiName;
-    private FragmentSpecificHoleBinding binding;
+    private EmojiEdittext emojiEdittext;
 
     @Override
     public int getItemViewType(int position) {
@@ -83,9 +84,9 @@ public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
             super(itemView);
             img = itemView.findViewById(R.id.iv_emoji);
             itemView.setOnClickListener(v -> {
-                binding.etReplyPost.
+                emojiEdittext.
                         getText().
-                        insert(binding.etReplyPost.getSelectionStart(), mEmojiName.get(position));
+                        insert(emojiEdittext.getSelectionStart(), mEmojiName.get(position));
                 changeData(position);
             });
 
@@ -106,9 +107,9 @@ public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
             super(itemView);
             img = itemView.findViewById(R.id.iv_emoji);
             itemView.setOnClickListener(v -> {
-                binding.etReplyPost.
+                emojiEdittext.
                         getText().
-                        insert(binding.etReplyPost.getSelectionStart(), mEmojiName.get(mUsedEmoji.get(position)));
+                        insert(emojiEdittext.getSelectionStart(), mEmojiName.get(mUsedEmoji.get(position)));
                 changeData(mUsedEmoji.get(position));
 
             });
@@ -135,9 +136,9 @@ public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
 
     }
 
-    public EmojiRvAdapter(Context context, FragmentSpecificHoleBinding binding, SpecificHoleViewModel mViewModel) {
+    public EmojiRvAdapter(Context context, EmojiEdittext emojiEdittext, SpecificHoleViewModel mViewModel) {
         super(context);
-        this.binding = binding;
+        this.emojiEdittext = emojiEdittext;
         mEmoji = EmotionUtil.getResourceList();
         mEmojiName = EmotionUtil.getResourceName();
         mUsedEmoji = new LinkedList<>();

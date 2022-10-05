@@ -35,8 +35,8 @@ class ReportActivity : BaseActivity() {
     var holeId = ""
 
     @JvmField
-    @Autowired(name = Constant.REPLY_LOCAL_ID)
-    var replyLocalId: String? = null
+    @Autowired(name = Constant.REPLY_ID)
+    var replyId: String? = null
 
     @JvmField
     @Autowired(name = Constant.ALIAS)
@@ -93,7 +93,7 @@ class ReportActivity : BaseActivity() {
                     mViewModel.report(
                         holeId,
                         binding.etReport.text.toString(),
-                        replyLocalId,
+                        replyId,
                         reportType!!
                     )
                 } else {

@@ -86,13 +86,13 @@ data class Reply (
     val hole: HoleV2? = null,
 
     /** 树洞id */
-    val holeId: String? = null,
+    var holeId: String = "",
 
     /** 点赞数 */
-    val likeCount: Long? = null,
+    val likeCount: Long = 0,
 
     /** 是否我的 */
-    val mine: Boolean? = null,
+    var mine: Boolean = false,
 
     /** 昵称 */
     val nickname: String,
