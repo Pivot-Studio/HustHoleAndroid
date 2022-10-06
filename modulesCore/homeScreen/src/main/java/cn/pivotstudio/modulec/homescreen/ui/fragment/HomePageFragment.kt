@@ -135,6 +135,13 @@ class HomePageFragment : BaseFragment() {
                     finishRefreshAnim()
                 }.collectLatest {
                     homeHoleAdapter.submitList(it)
+                    if (it.isEmpty()) {
+                        binding.recyclerView.visibility = View.GONE
+                        binding.homepagePlaceholder.visibility = View.VISIBLE
+                    } else {
+                        binding.recyclerView.visibility = View.VISIBLE
+                        binding.homepagePlaceholder.visibility = View.GONE
+                    }
                 }
             }
 
@@ -145,8 +152,30 @@ class HomePageFragment : BaseFragment() {
                     }
                 }
             }
+
+            lifecycleScope.launchWhenStarted {
+                showingPlaceholder.collectLatest {
+                    it?.let { placeholderType ->
+                        showNoSearchResultPlaceHolder(placeholderType)
+                    }
+                }
+            }
         }
 
+    }
+
+    private fun showNoSearchResultPlaceHolder(type: HomePageViewModel.PlaceholderType) {
+        when (type) {
+            HomePageViewModel.PlaceholderType.PLACEHOLDER_NETWORK_ERROR -> {
+                binding.placeholderHomeNetError.visibility = View.VISIBLE
+                binding.placeholderHomeNoResult.visibility = View.GONE
+            }
+
+            HomePageViewModel.PlaceholderType.PLACEHOLDER_NO_SEARCH_RESULT -> {
+                binding.placeholderHomeNoResult.visibility = View.VISIBLE
+                binding.placeholderHomeNetError.visibility = View.GONE
+            }
+        }
     }
 
     /**

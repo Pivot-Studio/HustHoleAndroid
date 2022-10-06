@@ -153,6 +153,8 @@ class PublishHoleViewModel : BaseViewModel() {
     }
 
     init {
+        loadJoinedForestsV2()
+        loadAllForests()
         failed = repository.failed
     }
 }

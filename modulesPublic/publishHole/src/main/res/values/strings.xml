@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="publish_hole_successfully">发布成功</string>
-    <string name="publish_hole_fifteen_words_at_least">"输入内容至少需要15字"</string>
+    <string name="publish_hole_successfully" translatable="false">发布成功</string>
+    <string name="publish_hole_fifteen_words_at_least" translatable="false">输入内容至少需要15字</string>
+    <string name="publish_hole_choose_a_forest_first" translatable="false">你还未选择小树林\n无法发布哦～</string>
 </resources>

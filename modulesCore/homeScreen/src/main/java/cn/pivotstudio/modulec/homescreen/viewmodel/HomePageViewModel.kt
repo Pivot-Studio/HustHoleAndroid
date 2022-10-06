@@ -30,6 +30,9 @@ class HomePageViewModel : BaseViewModel() {
     private var _loading = MutableStateFlow(false)
     val loading: StateFlow<Boolean> = _loading
 
+    private var _showingPlaceholder = MutableStateFlow<PlaceholderType?>(null)
+    val showingPlaceholder = _showingPlaceholder.asStateFlow()
+
     private var _sortMode: String = NetworkConstant.SortMode.LATEST_REPLY
 
     private var _loadLaterHoleId = -1
@@ -81,6 +84,9 @@ class HomePageViewModel : BaseViewModel() {
                 repository.searchHolesBy(it)
                     .onEach { _loading.emit(false) }
                     .collectLatest { holes ->
+                        if (holes.isEmpty()) {
+                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_SEARCH_RESULT)
+                        }
                         _holesV2.emit(holes)
                     }
             }
@@ -224,5 +230,10 @@ class HomePageViewModel : BaseViewModel() {
 
     fun doneShowingTip() {
         tip.value = null
+    }
+
+    enum class PlaceholderType {
+        PLACEHOLDER_NO_SEARCH_RESULT,
+        PLACEHOLDER_NETWORK_ERROR
     }
 }

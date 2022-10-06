@@ -68,13 +68,21 @@ class HoleActivity : BaseActivity() {
         navController.addOnDestinationChangedListener { _, destination, argument ->
             when (destination.id) {
                 R.id.innerReplyFragment,
-                R.id.specificHoleFragment -> supportActionBar?.title = getString(R.string.hole_id, holeId.toString())
+                R.id.specificHoleFragment -> supportActionBar?.title =
+                    getString(R.string.hole_id, holeId.toString())
             }
         }
 
         binding.topAppbar.setupWithNavController(
             navController,
-            AppBarConfiguration(setOf())
+            AppBarConfiguration(setOf()) {
+                navController.currentDestination?.let {
+                    if (it.id == R.id.specificHoleFragment) {
+                        finish()
+                    }
+                }
+                false
+            }
         )
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)

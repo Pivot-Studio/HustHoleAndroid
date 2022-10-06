@@ -14,9 +14,10 @@
         android:id="@+id/layout_reply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/HH_Surface"
         android:layout_marginVertical="@dimen/dp_2"
+        android:background="@color/HH_Surface"
         android:orientation="vertical">
+
         <RelativeLayout
             android:id="@+id/relative_layout"
             android:layout_width="match_parent"
@@ -66,10 +67,10 @@
             android:layout_marginStart="@dimen/dp_22"
             android:layout_marginTop="@dimen/dp_4"
             android:text="@{reply.createAt}"
-            app:time="@{reply.createAt}"
-            app:timeSign="@{false}"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             android:textColor="@color/GrayScale_80"
+            app:time="@{reply.createAt}"
+            app:timeSign="@{false}"
             tools:text="19:20 2021 09-16" />
 
         <TextView

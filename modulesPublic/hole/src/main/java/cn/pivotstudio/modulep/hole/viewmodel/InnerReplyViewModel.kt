@@ -120,6 +120,48 @@ class InnerReplyViewModel(private val baseReply: Reply) : ViewModel() {
         }
     }
 
+    fun giveALikeTo(reply: Reply) {
+        viewModelScope.launch {
+            repo.giveALikeTo(reply)
+                .collect {
+                    when (it) {
+                        is ApiResult.Success<*> -> {
+                            likeTheReply(reply)
+                        }
+                        is ApiResult.Error -> {
+                            _sendingState.emit(it)
+                        }
+                        else -> {}
+                    }
+                }
+        }
+    }
+
+    private suspend fun likeTheReply(reply: Reply) {
+        if (reply.replyId == baseReply.replyId) {
+            _reply.emit(
+                _reply.value.copy(
+                    thumb = reply.thumb.not(),
+                    likeCount = reply.likeCount + if (reply.thumb) -1 else 1
+                )
+            )
+            return
+        }
+
+
+        val newItems = innerReplies.value.toMutableList()
+        val i = newItems.indexOfFirst { newReply ->
+            reply.replyId == newReply.replyId
+        }
+
+        newItems[i] = newItems[i].copy(
+            thumb = reply.thumb.not(),
+            likeCount = reply.likeCount + if (reply.thumb) -1 else 1
+        )
+
+        _innerReplies.emit(newItems)
+    }
+
     init {
         loadSecondLvReplies()
     }

@@ -44,32 +44,38 @@ class InnerReplyAdapter(
                 clReply.setOnClickListener {
                     viewModel.replyTo(reply)
                 }
-            }
 
-            binding.tvReplyContent.setOnLongClickListener { //重写监听器中的onLongClick()方法
-                val cm =
-                    BaseApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                cm.text = binding.tvReplyContent.text.toString()
-                //                    showMsg("内容已复制至剪切板")
-                false
-            }
-
-            binding.ivReplyMore.setOnClickListener {
-                binding.clReplyMoreAction.visibility = View.VISIBLE
-                if (lastMoreListCl != null && lastMoreListCl !== binding.clReplyMoreAction) {
-                    lastMoreListCl!!.visibility = View.GONE
+                tvReplyContent.setOnLongClickListener { //重写监听器中的onLongClick()方法
+                    val cm =
+                        BaseApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    cm.text = binding.tvReplyContent.text.toString()
+                    //                    showMsg("内容已复制至剪切板")
+                    false
                 }
-                lastMoreListCl = binding.clReplyMoreAction
+
+                ivReplyMore.setOnClickListener {
+                    binding.clReplyMoreAction.visibility = View.VISIBLE
+                    if (lastMoreListCl != null && lastMoreListCl !== binding.clReplyMoreAction) {
+                        lastMoreListCl!!.visibility = View.GONE
+                    }
+                    lastMoreListCl = binding.clReplyMoreAction
+                }
+
+                clReplyMoreAction.setOnClickListener {
+                    if (reply.mine) {
+                        viewModel.deleteTheReply(reply)
+                    } else {
+                        report(reply)
+                    }
+                    binding.clReplyMoreAction.visibility = View.INVISIBLE
+                }
+
+                clReplyThumb.setOnClickListener {
+                    viewModel.giveALikeTo(reply)
+                }
+
             }
 
-            binding.clReplyMoreAction.setOnClickListener {
-                if (reply.mine) {
-                    viewModel.deleteTheReply(reply)
-                } else {
-                    report(reply)
-                }
-                binding.clReplyMoreAction.visibility = View.INVISIBLE
-            }
         }
     }
 

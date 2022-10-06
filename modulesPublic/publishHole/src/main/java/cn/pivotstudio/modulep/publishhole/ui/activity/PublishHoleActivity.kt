@@ -75,6 +75,7 @@ class PublishHoleActivity : BaseActivity() {
         } else {
             viewModel.forestName.setValue("未选择小树林")
         }
+
         binding.clTitlebargreenBack.setOnClickListener { view: View -> onClick(view) }
         binding.titlebargreenAVLoadingIndicatorView.hide()
         binding.tvTitlebargreenTitle.text = "发树洞"
@@ -90,7 +91,7 @@ class PublishHoleActivity : BaseActivity() {
 
         EditTextUtil.ButtonReaction(
             binding.etPublishhole,
-            binding.btnPublishholeSend
+            binding.btnPublishHole
         )
 
         EditTextUtil.EditTextSize(
@@ -163,10 +164,10 @@ class PublishHoleActivity : BaseActivity() {
                                 finish()
                             }
                             ApiStatus.ERROR -> {
-                                binding.btnPublishholeSend.isClickable = true
+                                binding.btnPublishHole.isClickable = true
                             }
                             ApiStatus.LOADING -> {
-                                binding.btnPublishholeSend.isClickable = false
+                                binding.btnPublishHole.isClickable = false
                             }
                         }
                     }
@@ -188,6 +189,20 @@ class PublishHoleActivity : BaseActivity() {
 
     }
 
+    private var publishEnable = false
+
+    private fun showPopupWindow() {
+        forestPopupWindow.showAtLocation(
+            binding.clPublishhole,
+            Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
+            0,
+            0
+        ) //在activity的底部展示。
+        forestPopupWindow.show()
+        publishEnable = true
+    }
+
+
     /**
      * 相关点击事件
      *
@@ -197,25 +212,20 @@ class PublishHoleActivity : BaseActivity() {
         closeKeyBoard()
         when (view.id) {
             R.id.tv_publishhole_forestname -> {
-                //没有必要保证实时性重复创建，所以需要保存
-                viewModel.loadJoinedForestsV2()
-                viewModel.loadAllForests()
-
-                forestPopupWindow.showAtLocation(
-                    binding.clPublishhole,
-                    Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
-                    0,
-                    0
-                ) //在activity的底部展示。
-                forestPopupWindow.show()
+                showPopupWindow()
             }
 
-            R.id.btn_publishhole_send -> {
-                val content = binding.etPublishhole.text.toString()
-                if (content.length > 15) {
-                    viewModel.publishAHole(content = content)
+            R.id.btn_publish_hole -> {
+                if (publishEnable) {
+                    val content = binding.etPublishhole.text.toString()
+                    if (content.length > 15) {
+                        viewModel.publishAHole(content = content)
+                    } else {
+                        showMsg(getString(R.string.publish_hole_fifteen_words_at_least))
+                    }
                 } else {
-                    showMsg(getString(R.string.publish_hole_fifteen_words_at_least))
+                    showPopupWindow()
+                    showMsg(getString(R.string.publish_hole_choose_a_forest_first))
                 }
             }
 

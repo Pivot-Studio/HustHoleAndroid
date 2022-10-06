@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="viewModel"
             type="cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel" />
@@ -37,6 +39,7 @@
                     android:layout_height="wrap_content" />
 
                 <androidx.core.widget.NestedScrollView
+                    android:id="@+id/reply_nested_scroll_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -49,10 +52,34 @@
                             android:id="@+id/layout_hole"
                             layout="@layout/item_hole" />
 
+                        <LinearLayout
+                            android:id="@+id/specific_hole_placeholder"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:visibility="@{viewModel.showingPlaceholder ? View.VISIBLE : View.GONE}">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                app:srcCompat="@drawable/ic_no_notice_placeholder"
+                                tools:visibility="visible" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/no_reply"
+                                android:textAppearance="@style/HustHoleTypography.Headline5"
+                                android:textColor="@color/GrayScale_70" />
+                        </LinearLayout>
+
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/rv_replies"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:visibility="@{viewModel.showingPlaceholder ? View.GONE : View.VISIBLE}"
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             tools:listitem="@layout/item_first_level_reply" />
                     </LinearLayout>
@@ -60,20 +87,21 @@
 
             </com.scwang.smart.refresh.layout.SmartRefreshLayout>
 
-            <Button
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                 android:id="@+id/btn_filter_owner_reply"
-                android:layout_width="@dimen/dp_64"
-                android:layout_height="@dimen/dp_28"
+                style="@style/FilterOwnerExtendedFAB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp_22"
                 android:layout_marginBottom="@dimen/dp_20"
-                android:background="@drawable/ic_onlylookmaster"
-                android:onClick="onClick"
+                android:backgroundTint="@color/GrayScale_100"
+                android:onClick="@{() -> viewModel.filterHoleOfOwner()}"
                 android:text="只看洞主"
                 android:textAppearance="@style/HustHoleTypography.Button3"
-                android:textColor="@color/GrayScale_50"
+                android:textColor="@{viewModel.filteringOwner ? @color/HH_BandColor_3 : @color/GrayScale_50}"
+                app:icon="@{viewModel.filteringOwner ? @drawable/ic_filter_owner_6dp : null}"
                 app:layout_constraintBottom_toBottomOf="@+id/layout_refresh"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:ownerText="@{viewModel.is_owner}" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -144,8 +172,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_286"
             android:visibility="gone"
-
-
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:layout_height="@dimen/dp_50"
             tools:listitem="@layout/item_emoji"

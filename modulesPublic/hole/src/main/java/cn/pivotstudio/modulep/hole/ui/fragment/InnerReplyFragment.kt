@@ -45,6 +45,9 @@ class InnerReplyFragment : BaseFragment() {
         InnerReplyViewModelFactory(args.reply)
     }
 
+    private val baseReply: Reply
+        get() = innerReplyViewModel.reply.value
+
     private val report: (Reply) -> Unit = {
         ARouter.getInstance().build("/report/ReportActivity")
             .withString(Constant.HOLE_ID, it.holeId)
@@ -118,6 +121,10 @@ class InnerReplyFragment : BaseFragment() {
 
             ivOpenEmoji.setOnClickListener {
                 innerReplyViewModel.triggerEmojiPad()
+            }
+
+            clHoleThumb.setOnClickListener {
+                innerReplyViewModel.giveALikeTo(baseReply)
             }
         }
 

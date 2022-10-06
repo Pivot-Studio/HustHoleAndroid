@@ -80,23 +80,12 @@ class SpecificHoleFragment : BaseFragment() {
             viewModel = replyViewModel
             rvReplies.adapter = repliesAdapter
 
-            rvReplies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    binding.layoutHole.clHoleMoreAction.visibility = View.GONE
-                    repliesAdapter.lastMoreListCl?.let {
-                        if (it.isVisible) {
-                            it.visibility = View.GONE
-                        }
-                    }
-                }
-            })
-
             layoutHole.apply {
                 layoutHoleFrame.setOnClickListener {
                     replyViewModel.replyToOwner()
                 }
 
-                clHoleThumbup.setOnClickListener {
+                clHoleThumb.setOnClickListener {
                     replyViewModel.giveALikeToTheHole()
                 }
 
@@ -264,21 +253,45 @@ class SpecificHoleFragment : BaseFragment() {
     }
 
     private fun initListener() {
-        binding.etReplyPost.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
 
-            }
+        binding.apply {
+            etReplyPost.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                override fun afterTextChanged(s: Editable) {
+                    if (s.length >= 500) {
+                        Toast.makeText(context, "评论不得超过500个字噢~", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
 
-            }
+            replyNestedScrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+                if (scrollY > oldScrollY + 12) {
+                    btnFilterOwnerReply.hide()
+                }
 
-            override fun afterTextChanged(s: Editable) {
-                if (s.length >= 500) {
-                    Toast.makeText(context, "评论不得超过500个字噢~", Toast.LENGTH_SHORT).show()
+                if (scrollY < oldScrollY - 12) {
+                    btnFilterOwnerReply.show()
+                }
+
+                if (scrollY == 0) {
+                    btnFilterOwnerReply.show()
                 }
             }
-        })
+
+            rvReplies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    binding.layoutHole.clHoleMoreAction.visibility = View.GONE
+                    repliesAdapter.lastMoreListCl?.let {
+                        if (it.isVisible) {
+                            it.visibility = View.GONE
+                        }
+                    }
+                }
+            })
+        }
+
     }
 
     /**

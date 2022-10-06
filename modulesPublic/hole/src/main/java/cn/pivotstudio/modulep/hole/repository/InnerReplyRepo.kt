@@ -4,12 +4,12 @@ import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
-import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import retrofit2.Response
 
 class InnerReplyRepo(
     private val holeId: String,
@@ -34,8 +34,6 @@ class InnerReplyRepo(
     }.onEach {
         lastTimeStamp = DateUtil.getDateTime()
         lastOffset = 0
-    }.onCompletion {
-        lastOffset += HoleRepository.LIST_SIZE
     }
 
     fun loadMoreReplies(replyId: String): Flow<List<Reply>> = flow {
@@ -54,11 +52,13 @@ class InnerReplyRepo(
     fun sendAComment(content: String, repliedId: String?): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
         val response =
-            hustHoleApiService.sendAComment(comment = RequestBody.Comment(
-                holeId = holeId,
-                repliedId = repliedId,
-                content = content
-            ))
+            hustHoleApiService.sendAComment(
+                comment = RequestBody.Comment(
+                    holeId = holeId,
+                    repliedId = repliedId,
+                    content = content
+                )
+            )
         if (response.isSuccessful) {
             emit(ApiResult.Success(data = Unit))
         } else {
@@ -66,7 +66,9 @@ class InnerReplyRepo(
             response.errorBody()?.close()
             emit(ApiResult.Error(code = errorCode))
         }
-    }.flowOn(dispatcher)
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
+    }
 
     fun deleteTheReply(reply: Reply): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
@@ -84,5 +86,44 @@ class InnerReplyRepo(
             )
             response.errorBody()?.close()
         }
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
     }
+
+    fun giveALikeTo(reply: Reply): Flow<ApiResult> {
+        return flow {
+            emit(ApiResult.Loading())
+            val theReply = RequestBody.LikeRequest(
+                holeId = reply.holeId,
+                replyId = reply.replyId
+            )
+            val response = if (reply.thumb) {
+                hustHoleApiService.unLike(theReply)
+            } else {
+                hustHoleApiService.giveALikeTo(theReply)
+            }
+            checkResponse(response, this)
+
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
+        }
+    }
+
+    private suspend inline fun checkResponse(
+        response: Response<Unit>,
+        flow: FlowCollector<ApiResult>
+    ) {
+        if (response.isSuccessful) {
+            flow.emit(ApiResult.Success(data = Unit))
+        } else {
+            flow.emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = response.errorBody()?.string()
+                )
+            )
+            response.errorBody()?.close()
+        }
+    }
+
 }

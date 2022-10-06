@@ -45,11 +45,40 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
     private var _showingEmojiPad = MutableStateFlow(false)
     val showEmojiPad: StateFlow<Boolean> = _showingEmojiPad
 
+    private var _showingPlaceholder = MutableStateFlow(false)
+    val showingPlaceholder = _showingPlaceholder.asStateFlow()
+
+    private var _filteringOwner = MutableStateFlow(false)
+    val filteringOwner = _filteringOwner.asStateFlow()
+
     fun triggerEmojiPad() {
         viewModelScope.launch {
             _showingEmojiPad.emit(showEmojiPad.value.not())
         }
     }
+
+    fun filterHoleOfOwner() {
+        viewModelScope.launch {
+            _filteringOwner.emit(filteringOwner.value.not())
+        }
+
+        viewModelScope.launch {
+            filteringOwner.collectLatest {
+                when (it) {
+                    true -> {
+                        _replies.emit(replies.value.filter { reply ->
+                            reply.self.nickname == "洞主"
+                        })
+                    }
+                    false -> {
+
+                    }
+                }
+            }
+        }
+
+    }
+
 
     //网路数据
     var pInputText: MutableLiveData<ReplyResponse>
@@ -64,12 +93,9 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
     private var _commentToReply = MutableStateFlow<Reply?>(null)
     val commentToReply = _commentToReply.asStateFlow()
 
-    private var is_descend: ObservableField<Boolean?>
-    var is_owner: ObservableField<Boolean?>
-    var is_emoji: ObservableField<Boolean?>
-
     //进行数据请求的地方
     private val repository = HoleRepository(holeId)
+
     fun usedEmojiList() = repository.usedEmojiForLocalDB
 
     @JvmName("getAnswered1")
@@ -82,38 +108,6 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
             answered.set(base)
         }
         return answered
-    }
-
-    @JvmName("setAnswered1")
-    fun setAnswered(answered: ObservableField<ReplyResponse?>) {
-        this.answered = answered
-    }
-
-    fun getIs_owner(): ObservableField<Boolean?> {
-        if (is_owner.get() == null) is_owner.set(false)
-        return is_owner
-    }
-
-    fun setIs_owner(is_owner: ObservableField<Boolean?>) {
-        this.is_owner = is_owner
-    }
-
-    fun getIs_descend(): ObservableField<Boolean?> {
-        if (is_descend.get() == null) is_descend.set(false)
-        return is_descend
-    }
-
-    fun setIs_descend(is_descend: ObservableField<Boolean?>) {
-        this.is_descend = is_descend
-    }
-
-    fun getIs_emoji(): ObservableField<Boolean?> {
-        if (is_emoji.get() == null) is_emoji.set(false)
-        return is_emoji
-    }
-
-    fun setIs_emoji(is_emoji: ObservableField<Boolean?>) {
-        this.is_emoji = is_emoji
     }
 
     fun inputText() = repository.getInputTextForLocalDB(holeId.toInt())
@@ -157,7 +151,10 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             repository.loadMoreReplies()
-                .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
+                .onEach {
+                    _filteringOwner.emit(false)
+                    _loadingState.emit(ApiStatus.SUCCESSFUL)
+                }
                 .onCompletion {
                     it?.let { _loadingState.emit(ApiStatus.ERROR) }
                 }
@@ -176,12 +173,16 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
             _loadingState.emit(ApiStatus.LOADING)
             repository.apply {
                 loadHole().zip(loadReplies()) { hole, replies -> hole to replies }
-                    .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
+                    .onEach {
+                        _loadingState.emit(ApiStatus.SUCCESSFUL)
+                        _filteringOwner.emit(false)
+                    }
                     .onCompletion { it?.let { _loadingState.emit(ApiStatus.ERROR) } }
                     .catch { it.printStackTrace() }
                     .collect {
                         _hole.emit(it.first)
                         _replies.emit(it.second)
+                        _showingPlaceholder.emit(it.second.isEmpty())
                     }
             }
         }
@@ -217,7 +218,7 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
     fun itemClick(v: View, dataBean: HoleResponse) {
         val holeId = dataBean.hole_id
         when (v.id) {
-            R.id.cl_hole_thumbup -> {
+            R.id.cl_hole_thumb -> {
                 val isThunbup = dataBean.is_thumbup
                 val thumbupNum = dataBean.thumbup_num
                 repository.thumbupForNetwork(holeId, thumbupNum, isThunbup, dataBean)
@@ -260,9 +261,6 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
             }
 
             R.id.cl_hole_changesequence -> {
-                val observableField = getIs_descend()
-                observableField.set(!observableField.get()!!)
-//                getListData(false)
             }
 
             R.id.tv_hole_content -> {
@@ -332,6 +330,7 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
     fun giveALikeToTheReply(reply: Reply) {
         viewModelScope.launch {
             repository.giveALikeToTheReply(reply)
+                .catch { it.printStackTrace() }
                 .collect {
                     when (it) {
                         is ApiResult.Success<*> -> {
@@ -349,6 +348,7 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
     fun giveALikeToTheHole(hole: HoleV2 = _hole.value!!) {
         viewModelScope.launch {
             repository.giveALikeToTheHole(hole)
+                .catch { it.printStackTrace() }
                 .collect {
                     when (it) {
                         is ApiResult.Success<*> -> {
@@ -431,8 +431,6 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
         pUsedEmojiList = repository.pUsedEmojiList
         failed = repository.failed
         answered = ObservableField()
-        is_owner = ObservableField()
-        is_descend = ObservableField()
-        is_emoji = ObservableField()
+
     }
 }

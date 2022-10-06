@@ -107,4 +107,5 @@ class NoticeFragment : BaseFragment() {
         }
     }
 
+
 }

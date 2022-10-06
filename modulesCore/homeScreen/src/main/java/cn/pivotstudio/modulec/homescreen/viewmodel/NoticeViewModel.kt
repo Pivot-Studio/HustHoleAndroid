@@ -28,6 +28,7 @@ class NoticeViewModel : ViewModel() {
         viewModelScope.launch {
             repository.loadRepliesV2()
                 .collectLatest {
+                    _showPlaceholder.emit(it.isEmpty())
                     _replies.emit(it)
                 }
         }
@@ -39,21 +40,5 @@ class NoticeViewModel : ViewModel() {
                 .collectLatest {
                     _replies.emit(_replies.value.toMutableList().apply { addAll(it) })
                 }
-        }
-    }
-
-    /** Flow + Retrofit 迁移实验 **/
-    fun loadRepliesFlow() {
-        viewModelScope.launch {
-            flow {
-                emit(HomeScreenNetworkApi.retrofitService.searchNoticesFlow(0, 20))
-            }.flowOn(Dispatchers.IO).catch { e ->
-                e.printStackTrace()
-            }.collect {
-
-                _showPlaceholder.value = _replies.value.isEmpty()
-            }
-        }
-    }
-
+        } }
 }
