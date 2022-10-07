@@ -44,6 +44,12 @@ public class Constant {
      */
     //从树洞界面返回数据的标识
     public static final String HOLE_RETURN_INFO = "holeReturnInfo";
+    public static final String HOLE_LIKED = "HOLE_LIKED";
+    public static final String HOLE_LIKE_COUNT = "HOLE_LIKE_COUNT";
+    public static final String HOLE_REPLIED = "HOLE_REPLIED";
+    public static final String HOLE_REPLY_COUNT = "HOLE_REPLY_COUNT";
+    public static final String HOLE_FOLLOWED = "HOLE_FOLLOWED";
+    public static final String HOLE_FOLLOW_COUNT = "HOLE_FOLLOW_COUNT";
     /**
      * new Activity
      */

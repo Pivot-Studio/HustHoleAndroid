@@ -6,7 +6,7 @@
     <data>
 
         <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
-
+        <import type="android.view.View" />
         <variable
             name="homePageHole"
             type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
@@ -26,34 +26,23 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <Button
-            android:id="@+id/btn_item_homepage_jump_to_detail_forest"
+            android:id="@+id/btn_item_forest_tag"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_24"
             android:layout_marginTop="@dimen/dp_8"
             android:layout_marginEnd="@dimen/dp_5"
             android:background="@drawable/tag_yellow"
             android:drawableStart="@drawable/ic_forest_tag_16dp"
+            android:drawablePadding="@dimen/dp_5"
             android:paddingHorizontal="@dimen/dp_6"
-            android:text="@{` `+homePageHole.forestName+`   `}"
+            android:text="@{homePageHole.forestName}"
             android:textAllCaps="false"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             android:textColor="@color/HH_BandColor_7"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toStartOf="@+id/iv_item_homepage_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="@string/forest_tag"
-            tools:visibility="visible" />
-
-        <ImageView
-            android:id="@+id/iv_item_homepage_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_12"
-            android:layout_marginEnd="@dimen/dp_17"
-            android:visibility="invisible"
+            android:visibility="@{homePageHole.forestName == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_pivot_studio_16dp"
+            tools:text="@string/forest_tag"
             tools:visibility="visible" />
 
         <ImageView
@@ -239,7 +228,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
 
 </layout>

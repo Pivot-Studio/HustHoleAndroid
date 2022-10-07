@@ -53,20 +53,18 @@ class ForestFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == ResultCodeConstant.Hole) {
-            val returnInfo = data!!.getParcelableExtra<HoleReturnInfo>(
-                Constant.HOLE_RETURN_INFO
-            )
-            returnInfo?.let {
-                forestViewModel.refreshLoadLaterHole(
-                    it.is_thumbup,
-                    it.is_reply,
-                    it.is_follow,
-                    it.thumbup_num,
-                    it.reply_num,
-                    it.follow_num
-                )
+            data?.extras?.let { bundle ->
+                bundle.apply {
+                    forestViewModel.refreshLoadLaterHole(
+                        isThumb = getBoolean(Constant.HOLE_LIKED),
+                        replied = getBoolean(Constant.HOLE_REPLIED),
+                        followed = getBoolean(Constant.HOLE_FOLLOWED),
+                        thumbNum = getLong(Constant.HOLE_LIKE_COUNT),
+                        replyNum = getLong(Constant.HOLE_REPLY_COUNT),
+                        followNum = getLong(Constant.HOLE_FOLLOW_COUNT),
+                    )
+                }
             }
-
         }
     }
 
@@ -184,10 +182,10 @@ class ForestFragment : BaseFragment() {
     }
 
     // 点击文字内容跳转到树洞
-    fun navToSpecificHole(holeId: Int) {
+    fun navToSpecificHole(holeId: String) {
         forestViewModel.loadHoleLater(holeId)
         if (BuildConfig.isRelease) {
-            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
+            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId.toInt())
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                 .navigation(requireActivity(), ResultCodeConstant.Hole)
         }

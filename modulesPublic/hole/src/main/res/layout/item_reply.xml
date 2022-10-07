@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/dp_16"
-        android:paddingBottom="@dimen/dp_10"
         android:background="@color/HH_Surface">
 
         <TextView
@@ -47,20 +46,19 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_inner_reply"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginHorizontal="@dimen/dp_22"
+            android:layout_marginTop="@dimen/dp_6"
             android:background="@drawable/reply_gray"
-            android:maxWidth="@dimen/dp_340"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_reply_title"
             app:replyContentShow="@{reply.replyToInner}">
 
-
             <TextView
                 android:id="@+id/tv_inner_first_reply"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginHorizontal="@dimen/dp_8"
@@ -84,7 +82,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_22"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_reply_title"
             app:layout_constraintTop_toBottomOf="@+id/layout_inner_reply">
@@ -114,17 +112,18 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_reply_thumb"
-            android:layout_width="@dimen/dp_40"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:layout_marginEnd="30dp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_reply_more"
-            app:layout_constraintEnd_toStartOf="@+id/iv_reply_more">
+            android:layout_marginEnd="@dimen/dp_30"
+            android:layout_marginBottom="@dimen/dp_4"
+            app:layout_constraintEnd_toStartOf="@+id/iv_reply_more"
+            app:layout_constraintTop_toBottomOf="@+id/cl_reply_content">
 
             <ImageView
                 android:id="@+id/iv_reply_thumbup"
-                android:layout_width="@dimen/dp_20"
-                android:layout_height="@dimen/dp_24"
-                android:layout_marginBottom="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/ic_thumbs_up_active"
@@ -134,12 +133,12 @@
                 android:id="@+id/tv_reply_thumbupnumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
+                android:layout_marginStart="@dimen/dp_6"
+                android:layout_marginBottom="@dimen/dp_13"
                 android:text="@{String.valueOf(reply.likeCount), default = `0`}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
                 android:textColor="@color/GrayScale_70"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_reply_thumbup"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_reply_thumbup" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -148,7 +147,7 @@
             android:id="@+id/iv_reply_more"
             android:layout_width="@dimen/dp_25"
             android:layout_height="@dimen/dp_25"
-            android:layout_marginEnd="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_22"
             android:layout_marginBottom="@dimen/dp_2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

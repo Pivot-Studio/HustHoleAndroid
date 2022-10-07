@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
@@ -137,6 +138,10 @@ class SpecificHoleFragment : BaseFragment() {
         initRefresh()
         initEmojiRv()
         initListener()
+
+        if (args.openingKeyboard) {
+            (requireActivity() as HoleActivity).openKeyBoard(binding.etReplyPost)
+        }
     }
 
 
@@ -165,6 +170,7 @@ class SpecificHoleFragment : BaseFragment() {
                 hole.collectLatest {
                     it?.let { hole ->
                         binding.layoutHole.holeV2 = hole
+                        savaDate(hole)
                     }
                 }
             }
@@ -219,6 +225,7 @@ class SpecificHoleFragment : BaseFragment() {
                             showMsg(state.errorMessage)
                         }
                         is ApiResult.Success<*> -> {
+                            showMsg(getString(R.string.hole_sending_successfully))
                             clearSendingState()
                         }
                     }
@@ -256,7 +263,14 @@ class SpecificHoleFragment : BaseFragment() {
 
         binding.apply {
             etReplyPost.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
                 override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
                 override fun afterTextChanged(s: Editable) {
@@ -266,7 +280,7 @@ class SpecificHoleFragment : BaseFragment() {
                 }
             })
 
-            replyNestedScrollView.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
+            replyNestedScrollView.setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
                 if (scrollY > oldScrollY + 12) {
                     btnFilterOwnerReply.hide()
                 }
@@ -315,6 +329,11 @@ class SpecificHoleFragment : BaseFragment() {
             }
         }
     }
+
+    private fun savaDate(hole: HoleV2) {
+        (requireActivity() as HoleActivity).saveResultData(hole)
+    }
+
 
 }
 

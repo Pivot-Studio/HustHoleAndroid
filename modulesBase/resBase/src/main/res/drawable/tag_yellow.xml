@@ -9,5 +9,4 @@
         android:topRightRadius="13dip"
         android:bottomLeftRadius="13dip"
         android:bottomRightRadius="13dip"/>
-
 </shape>

@@ -15,10 +15,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
-import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.constant.RequestCodeConstant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.homescreen.BuildConfig
@@ -61,24 +59,19 @@ class HomePageFragment : BaseFragment() {
      * 获取点赞，关注，回复结果反馈的，fragment的onActivityResult在androidx的某个版本不推荐使用了，先暂时用着
      */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode != RequestCodeConstant.HOMEPAGE) { //如果不是由homepage这个fragment跳转过去的，返回的结果不接受
-            return
-        }
-
-        // 如果是具体的一个树洞页返回到首页，涉及到点赞等图标的数据刷新 TODO 提升成更上层的方式，因为 onActivityResult 已经弃用
         if (resultCode == ResultCodeConstant.Hole) {
-            val returnInfo = data!!.getParcelableExtra<HoleReturnInfo>(
-                Constant.HOLE_RETURN_INFO
-            )
-            returnInfo?.let {
-                viewModel.pClickDataBean?.is_thumbup = it.is_thumbup
-                viewModel.pClickDataBean?.is_reply = it.is_reply
-                viewModel.pClickDataBean?.is_follow = it.is_follow
-                viewModel.pClickDataBean?.thumbup_num = it.thumbup_num
-                viewModel.pClickDataBean?.reply_num = it.reply_num
-                viewModel.pClickDataBean?.follow_num = it.follow_num
+            data?.extras?.let { bundle ->
+                bundle.apply {
+                    viewModel.refreshLoadLaterHole(
+                        isThumb = getBoolean(Constant.HOLE_LIKED),
+                        replied = getBoolean(Constant.HOLE_REPLIED),
+                        followed = getBoolean(Constant.HOLE_FOLLOWED),
+                        thumbNum = getLong(Constant.HOLE_LIKE_COUNT),
+                        replyNum = getLong(Constant.HOLE_REPLY_COUNT),
+                        followNum = getLong(Constant.HOLE_FOLLOW_COUNT),
+                    )
+                }
             }
-            binding.recyclerView.adapter?.notifyDataSetChanged()
         }
     }
 
@@ -238,19 +231,19 @@ class HomePageFragment : BaseFragment() {
     }
 
     // 点击文字内容跳转到树洞
-    fun navToSpecificHole(holeId: Int) {
+    fun navToSpecificHole(holeId: String) {
         viewModel.loadHoleLater(holeId)
         if (BuildConfig.isRelease) {
-            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
+            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId.toInt())
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                 .navigation(requireActivity(), ResultCodeConstant.Hole)
         }
     }
 
     // 点击恢复图标跳转到树洞后自动打开软键盘
-    fun navToSpecificHoleWithReply(holeId: Int) {
+    fun navToSpecificHoleWithReply(holeId: String) {
         if (BuildConfig.isRelease) {
-            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
+            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId.toInt())
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
                 .navigation(requireActivity(), ResultCodeConstant.Hole)
         }

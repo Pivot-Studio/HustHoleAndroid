@@ -1,21 +1,15 @@
 package cn.pivotstudio.modulep.hole.viewmodel
 
-import android.view.View
-import cn.pivotstudio.modulep.hole.model.HoleResponse
-import cn.pivotstudio.modulep.hole.model.ReplyListResponse.ReplyResponse
-import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
-import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
+import cn.pivotstudio.modulep.hole.model.ReplyListResponse.ReplyResponse
 import cn.pivotstudio.modulep.hole.repository.HoleRepository
-import cn.pivotstudio.modulep.hole.R
-import cn.pivotstudio.modulep.hole.custom_view.dialog.DeleteDialog
-import cn.pivotstudio.modulep.hole.model.MsgResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -28,7 +22,7 @@ import java.util.*
  * @version:1.0
  * @author:
  */
-class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
+class SpecificHoleViewModel(private var holeId: String) : ViewModel() {
 
     private var _hole = MutableStateFlow<HoleV2?>(null)
     val hole: StateFlow<HoleV2?> = _hole
@@ -51,9 +45,24 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
     private var _filteringOwner = MutableStateFlow(false)
     val filteringOwner = _filteringOwner.asStateFlow()
 
+    private var _descend = MutableStateFlow(true)
+    val descend = _descend.asStateFlow()
+
     fun triggerEmojiPad() {
         viewModelScope.launch {
             _showingEmojiPad.emit(showEmojiPad.value.not())
+        }
+    }
+
+    fun triggerSort() {
+        viewModelScope.launch {
+            _descend.emit(descend.value.not())
+        }
+
+        viewModelScope.launch {
+            descend.collectLatest {
+                loadHole()
+            }
         }
     }
 
@@ -71,7 +80,7 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
                         })
                     }
                     false -> {
-
+                        loadHole()
                     }
                 }
             }
@@ -82,13 +91,9 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
 
     //网路数据
     var pInputText: MutableLiveData<ReplyResponse>
-    var pClickMsg: MutableLiveData<MsgResponse>
 
     @JvmField
     var pUsedEmojiList: MutableLiveData<LinkedList<Int>>
-
-    //下面三项非网络请求所得，但是变化需要及时反馈在ui上
-    var answered: ObservableField<ReplyResponse?>
 
     private var _commentToReply = MutableStateFlow<Reply?>(null)
     val commentToReply = _commentToReply.asStateFlow()
@@ -98,39 +103,27 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
 
     fun usedEmojiList() = repository.usedEmojiForLocalDB
 
-    @JvmName("getAnswered1")
-    fun getAnswered(): ObservableField<ReplyResponse?> {
-        if (answered.get() == null) {
-            val base = ReplyResponse()
-            base.alias = "洞主"
-            base.is_mine = false
-            base.reply_local_id = -1
-            answered.set(base)
-        }
-        return answered
-    }
-
     fun inputText() = repository.getInputTextForLocalDB(holeId.toInt())
 
     fun saveInputText(text: String?) {
-        val answered = getAnswered().get()
+        val answered = commentToReply.value
         repository.saveInputTextForLocalDB(
             holeId.toInt(),
             text,
-            answered!!.alias,
-            answered.is_mine,
-            answered.reply_local_id
+            answered!!.nickname,
+            answered.mine,
+            answered.replyId.toInt()
         )
     }
 
     fun updateInputText(text: String?) {
-        val answered = getAnswered().get()
+        val answered = commentToReply.value
         repository.updateInputTextForLocalDB(
             holeId.toInt(),
             text,
-            answered!!.alias,
-            answered.is_mine,
-            answered.reply_local_id
+            answered!!.nickname,
+            answered.mine,
+            answered.replyId.toInt()
         )
     }
 
@@ -150,7 +143,7 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
     fun loadMoreReplies() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
-            repository.loadMoreReplies()
+            repository.loadMoreReplies(descend.value)
                 .onEach {
                     _filteringOwner.emit(false)
                     _loadingState.emit(ApiStatus.SUCCESSFUL)
@@ -172,7 +165,7 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             repository.apply {
-                loadHole().zip(loadReplies()) { hole, replies -> hole to replies }
+                loadHole().zip(loadReplies(descend.value)) { hole, replies -> hole to replies }
                     .onEach {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
                         _filteringOwner.emit(false)
@@ -206,70 +199,6 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
     fun doneShowingEmojiPad() {
         viewModelScope.launch {
             _showingEmojiPad.emit(false)
-        }
-    }
-
-    /**
-     * 涉及到网络请求相关的点击事件
-     *
-     * @param v        被点击的view
-     * @param dataBean item的数据
-     */
-    fun itemClick(v: View, dataBean: HoleResponse) {
-        val holeId = dataBean.hole_id
-        when (v.id) {
-            R.id.cl_hole_thumb -> {
-                val isThunbup = dataBean.is_thumbup
-                val thumbupNum = dataBean.thumbup_num
-                repository.thumbupForNetwork(holeId, thumbupNum, isThunbup, dataBean)
-            }
-
-            R.id.cl_hole_reply -> {
-                val `as` = ReplyResponse()
-                `as`.reply_local_id = -1
-                `as`.is_mine = false
-                `as`.alias = "洞主"
-                answered.set(`as`)
-            }
-
-            R.id.cl_hole_follow -> {
-                val isFollow = dataBean.is_follow
-                val followNum = dataBean.follow_num
-                repository.followForNetwork(holeId, followNum, isFollow, dataBean)
-            }
-
-            R.id.btn_hole_jumptodetailforest -> {
-            }
-
-            R.id.cl_hole_more_action -> {
-                val isMine = dataBean.is_mine
-                if (isMine) {
-                    val dialog = DeleteDialog(v.context)
-                    dialog.show()
-                    dialog.setOptionsListener { v1: View? ->
-                        repository.moreActionForNetwork(
-                            holeId,
-                            isMine,
-                            -1,
-                            "洞主"
-                        )
-                    }
-                } else {
-                    repository.moreActionForNetwork(holeId, isMine, -1, "洞主")
-                }
-                v.visibility = View.GONE
-            }
-
-            R.id.cl_hole_changesequence -> {
-            }
-
-            R.id.tv_hole_content -> {
-                val `as` = ReplyResponse()
-                `as`.reply_local_id = -1
-                `as`.is_mine = false
-                `as`.alias = "洞主"
-                answered.set(`as`)
-            }
         }
     }
 
@@ -427,10 +356,7 @@ class SpecificHoleViewModel(private var holeId: String) : BaseViewModel() {
         loadHole()
 
         pInputText = repository.pInputText
-        pClickMsg = repository.pClickMsg
         pUsedEmojiList = repository.pUsedEmojiList
-        failed = repository.failed
-        answered = ObservableField()
 
     }
 }

@@ -15,6 +15,10 @@
         <action
             android:id="@+id/action_specificHoleFragment_to_innerReplyFragment"
             app:destination="@id/innerReplyFragment" />
+        <argument
+            android:name="openingKeyboard"
+            app:argType="boolean"
+            android:defaultValue="false" />
 
     </fragment>
     <fragment

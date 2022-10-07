@@ -35,7 +35,7 @@ class HomePageViewModel : BaseViewModel() {
 
     private var _sortMode: String = NetworkConstant.SortMode.LATEST_REPLY
 
-    private var _loadLaterHoleId = -1
+    private var _loadLaterHoleId = ""
 
     init {
         loadHolesV2()
@@ -102,7 +102,7 @@ class HomePageViewModel : BaseViewModel() {
         }
     }
 
-    fun loadHoleLater(holeId: Int) {
+    fun loadHoleLater(holeId: String) {
         _loadLaterHoleId = holeId
     }
 
@@ -230,6 +230,32 @@ class HomePageViewModel : BaseViewModel() {
 
     fun doneShowingTip() {
         tip.value = null
+    }
+
+    fun refreshLoadLaterHole(
+        isThumb: Boolean,
+        replied: Boolean,
+        followed: Boolean,
+        thumbNum: Long,
+        replyNum: Long,
+        followNum: Long
+    ) {
+        viewModelScope.launch {
+            val holes = holesV2.value.toMutableList()
+            val i = holes.indexOfFirst {
+                it.holeId == _loadLaterHoleId
+            }
+
+            holes[i] = holes[i].copy(
+                liked = isThumb,
+                isReply = replied,
+                isFollow = followed,
+                likeCount = thumbNum,
+                replyCount = replyNum,
+                followCount = followNum
+            )
+            _holesV2.emit(holes)
+        }
     }
 
     enum class PlaceholderType {

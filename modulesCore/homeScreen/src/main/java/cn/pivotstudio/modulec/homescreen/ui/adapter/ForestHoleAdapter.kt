@@ -70,7 +70,7 @@ class ForestHoleAdapter(
                 }
 
                 layoutItemForestHole.setOnClickListener {
-                    _context.navToSpecificHole(forestHole.holeId.toInt())
+                    _context.navToSpecificHole(forestHole.holeId)
                 }
 
                 layoutItemForestMoreList.setOnClickListener {

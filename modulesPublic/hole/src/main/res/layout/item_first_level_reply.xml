@@ -52,7 +52,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_8"
-            android:layout_marginEnd="@dimen/dp_15"
+            android:layout_marginEnd="@dimen/dp_22"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_reply_title"
             app:layout_constraintTop_toBottomOf="@+id/tv_reply_title">
@@ -88,6 +88,7 @@
             android:layout_marginTop="@dimen/dp_6"
             android:layout_marginBottom="@dimen/dp_3"
             android:background="@drawable/reply_gray"
+            android:minHeight="@dimen/dp_56"
             android:padding="@dimen/dp_10"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -98,9 +99,12 @@
             <TextView
                 android:id="@+id/tv_inner_first_reply"
                 innerReplies="@{replyWrapper.innerList}"
+                innerReplyPosition="@{0}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:text="@string/default_string_zh_short"
                 android:textAppearance="@style/HustHoleTypography.Body3"
                 android:textColor="@color/GrayScale_50"
@@ -110,14 +114,32 @@
                 tools:text="@string/default_string_zh_short" />
 
             <TextView
+                android:id="@+id/tv_inner_second_reply"
+                innerReplies="@{replyWrapper.innerList}"
+                innerReplyPosition="@{1}"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="@dimen/dp_5"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textAppearance="@style/HustHoleTypography.Body3"
+                android:textColor="@color/GrayScale_50"
+                app:layout_constraintBottom_toTopOf="@id/total_reply_count"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_inner_first_reply"
+                tools:text="@string/default_string_zh_short" />
+
+            <TextView
+                android:id="@+id/total_reply_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_5"
                 android:text="@{@string/reply_count(replyWrapper.count)}"
                 android:textAppearance="@style/HustHoleTypography.Body4"
                 android:textColor="@color/HH_BandColor_1"
-                app:layout_constraintStart_toStartOf="@+id/tv_inner_first_reply"
-                app:layout_constraintTop_toBottomOf="@id/tv_inner_first_reply"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 tools:text="@string/reply_count" />
 
 

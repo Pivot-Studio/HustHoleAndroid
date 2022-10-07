@@ -31,14 +31,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btn_hole_jumptodetailforest"
-            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/btn_item_forest_tag"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_24"
-            android:layout_marginTop="@dimen/dp_12"
-            android:layout_marginEnd="@dimen/dp_22"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_10"
             android:background="@drawable/tag_yellow"
-            android:drawableLeft="@drawable/ic_forest_tag_16dp"
+            android:drawableStart="@drawable/ic_forest_tag_16dp"
+            android:drawablePadding="@dimen/dp_5"
             android:paddingHorizontal="@dimen/dp_6"
             android:text="@{holeV2.forestName}"
             android:textAllCaps="false"
@@ -177,47 +177,9 @@
             android:layout_height="@dimen/dp_25"
             android:layout_marginEnd="22dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_hole_frame"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@mipmap/threepoint" />
-
-        <TextView
-            android:id="@+id/tv_hole_frame"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_34"
-            android:background="@color/HH_Background"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_hole_thumb" />
-
-        <TextView
-            android:id="@+id/tv_hole_allreply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:text="@string/commment_2"
-            android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
-            android:textColor="@color/GrayScale_20"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_hole_frame"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_hole_frame" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_hole_changesequence"
-            android:layout_width="@dimen/dp_50"
-            android:layout_height="@dimen/dp_34"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_hole_frame"
-            app:layout_constraintEnd_toEndOf="@+id/tv_hole_frame"
-            app:layout_constraintTop_toTopOf="@+id/tv_hole_frame">
-
-            <ImageView
-                android:id="@+id/iv_hole_changesequence"
-                android:layout_width="@dimen/dp_20"
-                android:layout_height="@dimen/dp_20"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_hole_more_action"

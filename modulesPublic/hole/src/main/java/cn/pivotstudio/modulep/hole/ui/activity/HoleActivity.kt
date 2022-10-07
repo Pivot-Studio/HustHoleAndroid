@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulep.hole.ui.activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -11,8 +12,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
 import cn.pivotstudio.modulep.hole.R
 import cn.pivotstudio.modulep.hole.databinding.ActivityHoleBinding
 import com.alibaba.android.arouter.facade.annotation.Autowired
@@ -42,6 +45,7 @@ class HoleActivity : BaseActivity() {
 
     companion object {
         const val KEY_HOLE_ID = "holeId"
+        const val KEY_OPEN_KEYBOARD = "openingKeyboard"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +53,7 @@ class HoleActivity : BaseActivity() {
         ARouter.getInstance().inject(this) //初始化@Autowired
         initView()
     }
+
 
     private fun initView() {
         StatusBarCompat.setStatusBarColor(this, resources.getColor(R.color.HH_BandColor_1), true)
@@ -62,7 +67,10 @@ class HoleActivity : BaseActivity() {
 
         navController.setGraph(
             R.navigation.hole_nav_graph,
-            bundleOf(KEY_HOLE_ID to holeId.toString())
+            bundleOf(
+                KEY_HOLE_ID to holeId.toString(),
+                KEY_OPEN_KEYBOARD to ifOpenKeyboard
+            )
         )
 
         navController.addOnDestinationChangedListener { _, destination, argument ->
@@ -105,6 +113,23 @@ class HoleActivity : BaseActivity() {
 
     override fun onNavigateUp(): Boolean {
         return navController.navigateUp() || super.onNavigateUp()
+    }
+
+    fun saveResultData(hole: HoleV2) {
+
+        val intent = Intent()
+            .putExtra(Constant.HOLE_LIKED, hole.liked)
+            .putExtra(Constant.HOLE_LIKE_COUNT, hole.likeCount)
+            .putExtra(Constant.HOLE_REPLIED, hole.isReply)
+            .putExtra(Constant.HOLE_REPLY_COUNT, hole.replyCount)
+            .putExtra(Constant.HOLE_FOLLOWED, hole.isFollow)
+            .putExtra(Constant.HOLE_FOLLOW_COUNT, hole.followCount)
+
+        setResult(
+            ResultCodeConstant.Hole,
+            intent
+        )
+
     }
 
 }

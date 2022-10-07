@@ -59,13 +59,7 @@ class InnerReplyRepo(
                     content = content
                 )
             )
-        if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
-        } else {
-            val errorCode = response.code()
-            response.errorBody()?.close()
-            emit(ApiResult.Error(code = errorCode))
-        }
+        checkResponse(response, this)
     }.flowOn(dispatcher).catch { e ->
         e.printStackTrace()
     }
@@ -74,18 +68,7 @@ class InnerReplyRepo(
         emit(ApiResult.Loading())
         val response = hustHoleApiService
             .deleteTheReply(reply.replyId)
-
-        if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
-        } else {
-            emit(
-                ApiResult.Error(
-                    code = response.code(),
-                    errorMessage = response.errorBody()?.string()
-                )
-            )
-            response.errorBody()?.close()
-        }
+        checkResponse(response, this)
     }.flowOn(dispatcher).catch { e ->
         e.printStackTrace()
     }

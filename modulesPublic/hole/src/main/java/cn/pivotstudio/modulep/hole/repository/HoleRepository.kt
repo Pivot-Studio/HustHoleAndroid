@@ -25,6 +25,7 @@ import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import retrofit2.Response
 import java.util.*
 
 /**
@@ -34,7 +35,6 @@ import java.util.*
  * @version:1.0
  * @author:
  */
-@SuppressLint("CheckResult")
 class HoleRepository(
     private val holeId: String,
     private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService,
@@ -49,8 +49,6 @@ class HoleRepository(
 
     var pInputText: MutableLiveData<ReplyResponse> = MutableLiveData()
     var pUsedEmojiList: MutableLiveData<LinkedList<Int>> = MutableLiveData()
-    var pClickMsg: MutableLiveData<MsgResponse> = MutableLiveData()
-    val failed: MutableLiveData<String> = MutableLiveData()
     private var hole: Hole? = null
     fun getInputTextForLocalDB(hole_id: Int?) {
         val flowable = DB!!.holeDao().findById(
@@ -124,110 +122,6 @@ class HoleRepository(
         }
     }
 
-
-    fun thumbupForNetwork(
-        hole_id: Int,
-        thumbup_num: Int,
-        is_thumbup: Boolean,
-        dataBean: HoleResponse
-    ) {
-        val observable: Observable<MsgResponse> = if (!is_thumbup) {
-            NetworkApi.createService(HRequestInterface::class.java, 2)
-                .thumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/-1")
-        } else {
-            NetworkApi.createService(HRequestInterface::class.java, 2)
-                .deleteThumbups(Constant.BASE_URL + "thumbups/" + hole_id + "/-1")
-        }
-        observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-            override fun onSuccess(msg: MsgResponse) {
-                if (is_thumbup) {
-                    dataBean.thumbup_num = thumbup_num - 1
-                } else {
-                    dataBean.thumbup_num = thumbup_num + 1
-                }
-                dataBean.is_thumbup = !is_thumbup
-                pClickMsg.setValue(msg)
-            }
-
-            override fun onFailure(e: Throwable) {
-                failed.postValue((e as ResponseThrowable).message)
-            }
-        }))
-    }
-
-    /**
-     * 收藏
-     *
-     * @param hole_id    树洞号
-     * @param follow_num 网络请求成功前的收藏数量
-     * @param is_follow  网络请求成功前是否被收藏
-     * @param dataBean   item的所有数据
-     */
-    fun followForNetwork(
-        hole_id: Int,
-        follow_num: Int,
-        is_follow: Boolean,
-        dataBean: HoleResponse
-    ) {
-        val observable: Observable<MsgResponse> = if (!is_follow) {
-            NetworkApi.createService(HRequestInterface::class.java, 2)
-                .follow(Constant.BASE_URL + "follows/" + hole_id)
-        } else {
-            NetworkApi.createService(HRequestInterface::class.java, 2)
-                .deleteFollow(Constant.BASE_URL + "follows/" + hole_id)
-        }
-        observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-            override fun onSuccess(msg: MsgResponse) {
-                if (is_follow) {
-                    dataBean.follow_num = follow_num - 1
-                } else {
-                    dataBean.follow_num = follow_num + 1
-                }
-                dataBean.is_follow = !is_follow
-                pClickMsg.setValue(msg)
-            }
-
-            override fun onFailure(e: Throwable) {
-                failed.postValue((e as ResponseThrowable).message)
-            }
-        }))
-    }
-
-    /**
-     * 举报或删除
-     *
-     * @param hole_id 树洞号
-     * @param is_mine 是否是自己发布的树洞
-     */
-    fun moreActionForNetwork(hole_id: Int, is_mine: Boolean, reply_local_id: Int, alias: String?) {
-        val observable: Observable<MsgResponse>
-        if (is_mine) {
-            observable = if (reply_local_id == -1) {
-                NetworkApi.createService(HRequestInterface::class.java, 2)
-                    .deleteHole(hole_id.toString())
-            } else {
-                NetworkApi.createService(HRequestInterface::class.java, 2)
-                    .deleteReply(Constant.BASE_URL + "replies/" + hole_id + "/" + reply_local_id)
-            }
-            observable.compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(msg: MsgResponse) {
-                    msg.model = if (reply_local_id == -1) "DELETE_HOLE" else "DELETE_REPLY"
-                    pClickMsg.value = msg
-                }
-
-                override fun onFailure(e: Throwable) {
-                    failed.postValue((e as ResponseThrowable).message)
-                }
-            }))
-        } else {
-            ARouter.getInstance().build("/report/ReportActivity")
-                .withInt(Constant.HOLE_ID, hole_id)
-                .withInt(Constant.REPLY_ID, reply_local_id)
-                .withString(Constant.ALIAS, alias)
-                .navigation()
-        }
-    }
-
     fun sendAComment(content: String, repliedId: String?): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
         val response =
@@ -238,13 +132,7 @@ class HoleRepository(
                     content = content
                 )
             )
-        if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
-        } else {
-            val errorCode = response.code()
-            response.errorBody()?.close()
-            emit(ApiResult.Error(code = errorCode))
-        }
+        checkResponse(response, this)
     }.flowOn(dispatcher)
 
 
@@ -256,26 +144,28 @@ class HoleRepository(
         lastTimeStamp = DateUtil.getDateTime()
     }
 
-    fun loadReplies(): Flow<List<ReplyWrapper>> = flow {
+    fun loadReplies(descend: Boolean = true): Flow<List<ReplyWrapper>> = flow {
         lastTimeStamp = DateUtil.getDateTime()
         emit(
             hustHoleApiService.getHoleReplies(
                 holeId = holeId,
                 timestamp = lastTimeStamp,
-                limit = LIST_SIZE
+                limit = LIST_SIZE,
+                descend = descend
             )
         )
     }.flowOn(dispatcher).onEach {
         lastOffset = 0
     }
 
-    fun loadMoreReplies(): Flow<List<ReplyWrapper>> = flow {
+    fun loadMoreReplies(descend: Boolean = true): Flow<List<ReplyWrapper>> = flow {
         emit(
             hustHoleApiService.getHoleReplies(
                 holeId = holeId,
                 timestamp = lastTimeStamp,
                 offset = lastOffset + LIST_SIZE,
-                limit = LIST_SIZE
+                limit = LIST_SIZE,
+                descend = descend
             )
         )
     }.onEach {
@@ -295,18 +185,8 @@ class HoleRepository(
                 )
             }
 
-            if (response.isSuccessful) {
-                emit(ApiResult.Success(data = Unit))
-            } else {
-                emit(
-                    ApiResult.Error(
-                        code = response.code(),
-                        errorMessage = response.errorBody()?.string()
-                    )
-                )
-                response.errorBody()?.close()
-            }
-        }.flowOn(dispatcher)
+            checkResponse(response, this)
+        }.flowOn(dispatcher).catch { it.printStackTrace() }
     }
 
     fun giveALikeToTheReply(reply: Reply): Flow<ApiResult> {
@@ -322,19 +202,8 @@ class HoleRepository(
             } else {
                 hustHoleApiService.giveALikeTo(like = likeRequest)
             }
-
-            if (response.isSuccessful) {
-                emit(ApiResult.Success(data = Unit))
-            } else {
-                emit(
-                    ApiResult.Error(
-                        code = response.code(),
-                        errorMessage = response.errorBody()?.string()
-                    )
-                )
-                response.errorBody()?.close()
-            }
-        }.flowOn(dispatcher)
+            checkResponse(response, this)
+        }.flowOn(dispatcher).catch { it.printStackTrace() }
     }
 
     fun followTheHole(hole: HoleV2): Flow<ApiResult> {
@@ -342,66 +211,41 @@ class HoleRepository(
             emit(ApiResult.Loading())
             val response = hustHoleApiService
                 .followTheHole(RequestBody.HoleId(hole.holeId))
-
-            if (response.isSuccessful) {
-                emit(ApiResult.Success(data = Unit))
-            } else {
-                emit(
-                    ApiResult.Error(
-                        code = response.code(),
-                        errorMessage = response.errorBody()?.string()
-                    )
-                )
-                response.errorBody()?.close()
-            }
-        }.flowOn(dispatcher)
+            checkResponse(response, this)
+        }.catch { it.printStackTrace() }.flowOn(dispatcher)
     }
 
     fun unFollowTheHole(hole: HoleV2): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
         val response = hustHoleApiService
             .unFollowTheHole(RequestBody.HoleId(hole.holeId))
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { it.printStackTrace() }
 
-        if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
-        } else {
-            emit(
-                ApiResult.Error(
-                    code = response.code(),
-                    errorMessage = response.errorBody()?.string()
-                )
-            )
-            response.errorBody()?.close()
-        }
-    }.flowOn(dispatcher)
 
     fun deleteTheHole(hole: HoleV2): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
         val response = hustHoleApiService
             .deleteTheHole(hole.holeId)
-
-        if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
-        } else {
-            emit(
-                ApiResult.Error(
-                    code = response.code(),
-                    errorMessage = response.errorBody()?.string()
-                )
-            )
-            response.errorBody()?.close()
-        }
+        checkResponse(response, this)
     }
+
 
     fun deleteTheReply(reply: Reply): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
-        val response = hustHoleApiService
-            .deleteTheReply(reply.replyId)
+        val response = hustHoleApiService.deleteTheReply(reply.replyId)
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { it.printStackTrace() }
 
+
+    private suspend inline fun checkResponse(
+        response: Response<Unit>,
+        flow: FlowCollector<ApiResult>
+    ) {
         if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
+            flow.emit(ApiResult.Success(data = Unit))
         } else {
-            emit(
+            flow.emit(
                 ApiResult.Error(
                     code = response.code(),
                     errorMessage = response.errorBody()?.string()

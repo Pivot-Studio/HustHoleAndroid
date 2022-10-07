@@ -163,7 +163,7 @@ data class ReplyDto(
     val deleteAt: String? = null,
     val holeId: String? = null,
     val likeCount: Long? = null,
-    val nickname: String? = null,
+    val nickname: String = "",
     val repliedUserId: String? = null,
     val replyId: String? = null,
     val replyTo: String? = null,

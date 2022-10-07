@@ -99,7 +99,7 @@
                             android:id="@+id/placeholder_home_no_result"
                             layout="@layout/no_search_result_placeholder"
                             android:visibility="gone"
-                            tools:visibility="visible"/>
+                            tools:visibility="visible" />
 
                     </FrameLayout>
 
@@ -108,7 +108,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_5"
-                        android:nestedScrollingEnabled="false"
                         android:visibility="gone"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                         tools:listitem="@layout/item_homepagehole" />

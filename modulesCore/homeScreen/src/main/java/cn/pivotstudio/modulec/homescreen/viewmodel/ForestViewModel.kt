@@ -32,7 +32,7 @@ class ForestViewModel : ViewModel() {
 
     private var _shouldRefreshHeader = false
 
-    private var _loadLaterHoleId = -1
+    private var _loadLaterHoleId = ""
 
     val tip: MutableLiveData<String?> = repository.tip
 
@@ -193,34 +193,34 @@ class ForestViewModel : ViewModel() {
         repository.holeState.value = null
     }
 
-    fun loadHoleLater(holeId: Int) {
+    fun loadHoleLater(holeId: String) {
         _loadLaterHoleId = holeId
     }
 
     fun refreshLoadLaterHole(
-        isThumb: Boolean?,
-        replied: Boolean?,
-        followed: Boolean?,
-        thumbNum: Int?,
-        replyNum: Int?,
-        followNum: Int?
+        isThumb: Boolean,
+        replied: Boolean,
+        followed: Boolean,
+        thumbNum: Long,
+        replyNum: Long,
+        followNum: Long
     ) {
-        if (isThumb == null) return
-        if (replied == null) return
-        if (followed == null) return
-        if (thumbNum == null) return
-        if (replyNum == null) return
-        if (followNum == null) return
+        viewModelScope.launch {
+            val holes = holesV2.value.toMutableList()
+            val i = holes.indexOfFirst {
+                it.holeId == _loadLaterHoleId
+            }
 
-        repository.refreshLoadLaterHole(
-            _loadLaterHoleId,
-            isThumb,
-            replied,
-            followed,
-            thumbNum,
-            replyNum,
-            followNum
-        )
+            holes[i] = holes[i].copy(
+                liked = isThumb,
+                isReply = replied,
+                isFollow = followed,
+                likeCount = thumbNum,
+                replyCount = replyNum,
+                followCount = followNum
+            )
+            _holesV2.emit(holes)
+        }
     }
 
     fun loadHolesV2() {
@@ -247,6 +247,26 @@ class ForestViewModel : ViewModel() {
                 .collectLatest {
                     _forestsV2.emit(it)
                 }
+        }
+    }
+
+    fun refresh(hole: HoleV2) {
+        viewModelScope.launch {
+            val holes = _holesV2.value.toMutableList()
+            val i = holes.indexOfFirst {
+                it.holeId == hole.holeId
+            }
+
+            holes[i] = holes[i].copy(
+                liked = hole.liked,
+                likeCount = hole.likeCount,
+                isReply = hole.isReply,
+                replyCount = hole.replyCount,
+                isFollow = hole.isFollow,
+                followCount = hole.followCount
+            )
+
+            _holesV2.emit(holes)
         }
     }
 

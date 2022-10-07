@@ -46,8 +46,9 @@ class HomeHoleAdapter(
         fun bind(hole: HoleV2) {
             binding.homePageHole = hole
             binding.apply {
+
                 clItemHomepageReply.setOnClickListener {
-                    _context.navToSpecificHoleWithReply(hole.holeId.toInt())
+                    _context.navToSpecificHoleWithReply(hole.holeId)
                 }
 
                 clItemHomepageThumbup.setOnClickListener {
@@ -75,7 +76,7 @@ class HomeHoleAdapter(
                 }
 
                 clItemHomepageFrame.setOnClickListener {
-                    _context.navToSpecificHole(hole.holeId.toInt())
+                    _context.navToSpecificHole(hole.holeId)
                 }
             }
         }

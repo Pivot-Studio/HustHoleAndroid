@@ -224,18 +224,43 @@ fun setCircleIcon(view: ImageView, forestName: String, role: String?) {
     }
 }
 
-@BindingAdapter("innerReplies")
-fun setInnerReplies(view: TextView, innerList: List<Reply>) {
-    innerList.firstOrNull()?.let {
-        val redSpan = ForegroundColorSpan(view.resources.getColor(R.color.GrayScale_0, null))
-        val builder = SpannableStringBuilder("${it.nickname} : ${it.content}")
-        //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
-        builder.setSpan(
-            redSpan,
-            0,
-            it.nickname.length + 1,
-            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-        )
-        view.text = builder
+@BindingAdapter("innerReplies", "innerReplyPosition")
+fun setInnerReplies(view: TextView, innerList: List<Reply>, position: Int = 0) {
+    innerList.getOrNull(position)?.let {
+        // replyToInner != "-1" 要渲染成三级评论的样式
+        if (it.replyToInner == "-1") {
+            val prefix = "${it.nickname}:"
+            val builder = SpannableStringBuilder("$prefix ${it.content}")
+            //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
+            builder.setSpan(
+                ForegroundColorSpan(view.resources.getColor(R.color.GrayScale_0, null)),
+                0,
+                prefix.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            view.text = builder
+
+        } else {
+            val prefix = "${it.nickname} 回复 @${it.replied!!.nickname}:"
+            val builder = SpannableStringBuilder("$prefix ${it.content}")
+            builder.setSpan(
+                ForegroundColorSpan(view.resources.getColor(R.color.GrayScale_0, null)),
+                0,
+                it.nickname.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            builder.setSpan(
+                ForegroundColorSpan(view.resources.getColor(R.color.GrayScale_0, null)),
+                prefix.length - it.replied!!.nickname.length - 2,
+                prefix.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+
+            view.text = builder
+        }
+        return
     }
+
+    view.visibility = View.GONE
 }
