@@ -7,8 +7,6 @@ import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler;
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.HttpErrorHandler;
 import cn.pivotstudio.husthole.moduleb.network.interceptor.RequestInterceptor;
 import cn.pivotstudio.husthole.moduleb.network.interceptor.ResponseInterceptor;
-import cn.pivotstudio.husthole.moduleb.network.interceptor.TokenInterceptor;
-import cn.pivotstudio.husthole.moduleb.network.interceptor.TokenInterceptorV2;
 import io.reactivex.Observable;
 import io.reactivex.ObservableTransformer;
 import io.reactivex.Observer;
@@ -41,7 +39,6 @@ public class NetworkApi {
     private static String BASE_URL = null;
 
     private static OkHttpClient okHttpClient;
-    private static OkHttpClient okHttpClientV2;
 
     private static final HashMap<String, Retrofit> retrofitHashMap = new HashMap<>();
 
@@ -105,7 +102,7 @@ public class NetworkApi {
             //添加返回拦截器，可用于查看接口的请求耗时，对于网络优化有帮助
             builder.addInterceptor(new ResponseInterceptor());
 
-            builder.addInterceptor(new TokenInterceptor(iNetworkRequiredInfo.getApplicationContext()));
+//            builder.addInterceptor(new TokenInterceptor(iNetworkRequiredInfo.getApplicationContext()));
             //当程序在debug过程中则打印数据日志，方便调试用。
             if (iNetworkRequiredInfo != null && iNetworkRequiredInfo.isDebug()) {
                 //iNetworkRequiredInfo不为空且处于debug状态下则初始化日志拦截器

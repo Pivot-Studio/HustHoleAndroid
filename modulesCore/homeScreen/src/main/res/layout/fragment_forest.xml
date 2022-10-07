@@ -122,8 +122,7 @@
                         android:layout_gravity="center"
                         android:text="@string/no_joined_forest"
                         android:textColor="@color/GrayScale_70"
-                        android:textSize="@dimen/sp_14"
-                        android:textStyle="bold" />
+                        android:textAppearance="@style/HustHoleTypography.Headline5" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

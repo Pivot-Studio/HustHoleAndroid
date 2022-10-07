@@ -6,17 +6,18 @@
     <data>
 
         <variable
-            name="notice"
-            type="cn.pivotstudio.modulec.homescreen.model.Notice" />
+            name="reply"
+            type="cn.pivotstudio.husthole.moduleb.network.model.ReplyNotice" />
     </data>
 
     <LinearLayout
-        android:id="@+id/layout_notice"
+        android:id="@+id/layout_reply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/HH_Surface"
         android:layout_marginVertical="@dimen/dp_2"
+        android:background="@color/HH_Surface"
         android:orientation="vertical">
+
         <RelativeLayout
             android:id="@+id/relative_layout"
             android:layout_width="match_parent"
@@ -30,7 +31,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="@dimen/dp_22"
-                android:text="@{notice.alias}"
+                android:text="@{reply.nickname}"
                 android:textAppearance="@style/HustHoleTypography.Headline5"
                 android:textColor="@color/GrayScale_20"
                 app:layout_constraintStart_toStartOf="parent"
@@ -53,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp_19"
-                android:text="@{@string/hole_id(notice.holeId)}"
+                android:text="@{@string/hole_id(reply.holeId)}"
                 android:textAppearance="@style/HustHoleTypography.Headline5"
                 android:textColor="@color/GrayScale_20"
                 tools:text="# 1037" />
@@ -65,11 +66,11 @@
             android:layout_height="@dimen/dp_17"
             android:layout_marginStart="@dimen/dp_22"
             android:layout_marginTop="@dimen/dp_4"
-            android:text="@{notice.timeStamp}"
-            app:time="@{notice.timeStamp}"
-            app:timeSign="@{false}"
+            android:text="@{reply.createAt}"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             android:textColor="@color/GrayScale_80"
+            app:time="@{reply.createAt}"
+            app:timeSign="@{false}"
             tools:text="19:20 2021 09-16" />
 
         <TextView
@@ -81,7 +82,7 @@
             android:layout_marginBottom="@dimen/dp_10"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{notice.content}"
+            android:text="@{reply.content}"
             android:textAppearance="@style/HustHoleTypography.Body2"
             android:textColor="@color/GrayScale_20"
             tools:text="我好想买Airpods但是没有钱，梁老师可不可以资助呀呀呀" />

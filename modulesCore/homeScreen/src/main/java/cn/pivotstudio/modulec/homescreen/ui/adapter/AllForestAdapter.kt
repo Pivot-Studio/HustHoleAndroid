@@ -5,37 +5,37 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.modulec.homescreen.databinding.ItemAllForestBinding
-import cn.pivotstudio.modulec.homescreen.model.ForestCardList
 
 class AllForestAdapter(
-    val onItemClick: (Int) -> Unit
-) : ListAdapter<Pair<String, ForestCardList>, AllForestAdapter.AllForestViewHolder>(DiffCallback) {
+    val onItemClick: (String) -> Unit
+) : ListAdapter<Pair<String, List<ForestBrief>>, AllForestAdapter.AllForestViewHolder>(DiffCallback) {
 
     inner class AllForestViewHolder(
         private var binding: ItemAllForestBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(forestCardList: Pair<String, ForestCardList>) {
+        fun bind(forestBriefList: Pair<String, List<ForestBrief>>) {
             val adapter = AllForestItemAdapter(onItemClick)
             binding.itemRecyclerView.adapter = adapter
-            binding.type = forestCardList.first
-            adapter.submitList(forestCardList.second.forests)
+            binding.type = forestBriefList.first
+            adapter.submitList(forestBriefList.second)
         }
 
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Pair<String, ForestCardList>>() {
+    companion object DiffCallback : DiffUtil.ItemCallback<Pair<String, List<ForestBrief>>>() {
         override fun areItemsTheSame(
-            oldItem: Pair<String, ForestCardList>,
-            newItem: Pair<String, ForestCardList>
+            oldItem: Pair<String, List<ForestBrief>>,
+            newItem: Pair<String, List<ForestBrief>>
         ): Boolean {
             return oldItem.first == newItem.first
         }
 
         override fun areContentsTheSame(
-            oldItem: Pair<String, ForestCardList>,
-            newItem: Pair<String, ForestCardList>
+            oldItem: Pair<String, List<ForestBrief>>,
+            newItem: Pair<String, List<ForestBrief>>
         ): Boolean {
             return false
         }
@@ -50,8 +50,8 @@ class AllForestAdapter(
     }
 
     override fun onBindViewHolder(holder: AllForestViewHolder, position: Int) {
-        val cardList = getItem(position)
-        holder.bind(cardList)
+        val briefs = getItem(position)
+        holder.bind(briefs)
     }
 
 }

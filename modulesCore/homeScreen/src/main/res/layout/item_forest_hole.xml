@@ -7,7 +7,7 @@
 
         <variable
             name="forestHole"
-            type="cn.pivotstudio.husthole.moduleb.network.model.ForestHole" />
+            type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,7 +25,7 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/image_item_forest_avatar"
-            imageUrl="@{forestHole.backgroundImageUrl}"
+            imageUrl="@{forestHole.forestAvatarUrl}"
             android:layout_width="@dimen/dp_32"
             android:layout_height="@dimen/dp_32"
             android:layout_marginStart="@dimen/dp_12"
@@ -49,7 +49,7 @@
 
         <TextView
             android:id="@+id/tv_itemforest_time"
-            time="@{forestHole.createdTimestamp}"
+            time="@{forestHole.createAt}"
             timeSign="@{false}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -85,9 +85,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="@{String.valueOf(forestHole.likeNum), default = 0}"
-                android:textColor="@color/GrayScale_70"
+                android:text="@{String.valueOf(forestHole.likeCount), default = 0}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+                android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_thumbs_up"
                 app:layout_constraintStart_toEndOf="@+id/image_item_forest_thumbs_up" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -103,7 +103,7 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_reply"
-                replyIcon="@{forestHole.replied}"
+                replyIcon="@{forestHole.reply}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -116,9 +116,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="@{String.valueOf(forestHole.replyNum), default = 0}"
-                android:textColor="@color/GrayScale_70"
+                android:text="@{String.valueOf(forestHole.replyCount), default = 0}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+                android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_reply"
                 app:layout_constraintStart_toEndOf="@+id/image_item_forest_reply" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -134,7 +134,7 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_follow"
-                followIcon="@{forestHole.followed}"
+                followIcon="@{forestHole.follow}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
@@ -147,9 +147,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
-                android:text="@{String.valueOf(forestHole.followNum), default = 0}"
-                android:textColor="@color/GrayScale_70"
+                android:text="@{String.valueOf(forestHole.followCount), default = 0}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+                android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="@+id/image_item_forest_follow"
                 app:layout_constraintStart_toEndOf="@+id/image_item_forest_follow" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -175,8 +175,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/dp_12"
             android:text="@{@string/hole_id(forestHole.holeId), default = @string/hole_id}"
-            android:textColor="@color/GrayScale_0"
             android:textAppearance="@style/HustHoleTypography.Headline5"
+            android:textColor="@color/GrayScale_0"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -204,7 +204,7 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_more_icon"
-                moreListIcon="@{forestHole.mine}"
+                moreListIcon="@{forestHole.myHole}"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
                 android:layout_marginStart="12dp"
@@ -217,9 +217,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="@{forestHole.mine?`删除`:`举报`}"
-                android:textColor="@color/GrayScale_20"
+                android:text="@{forestHole.myHole?`删除`:`举报`}"
                 android:textAppearance="@style/HustHoleTypography.Button2"
+                android:textColor="@color/GrayScale_20"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_item_forest_more_icon"
                 app:layout_constraintTop_toTopOf="parent" />

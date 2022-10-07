@@ -225,5 +225,18 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="FilterOwnerExtendedFAB" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="android:minHeight">24dp</item>
+        <item name="android:minWidth">56dp</item>
+        <item name="android:paddingTop">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+        <item name="strokeColor">@color/GrayScale_80</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="iconSize">8dp</item>
+        <item name="iconTint">@color/HH_BandColor_3</item>
+    </style>
+
 
 </resources>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="forestBrief"
+            type="cn.pivotstudio.husthole.moduleb.network.model.ForestBrief" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="@dimen/dp_154"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dp_5"
+        android:background="@drawable/standard_forest_1"
+        android:paddingBottom="@dimen/dp_20">
+
+        <TextView
+            android:id="@+id/text_item_all_forest_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_3"
+            android:text="@{forestBrief.forestName, default = 1037}"
+            android:textAppearance="@style/HustHoleTypography.Headline5"
+            android:textColor="@color/GrayScale_20"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image_item_all_forest_avatar_frame" />
+
+        <TextView
+            android:id="@+id/text_item_all_forest_follow_msg"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_17"
+            android:layout_marginTop="@dimen/dp_5"
+            android:text="@{@string/follow_msg(forestBrief.userNum, forestBrief.holeNum), default = @string/follow_msg}"
+            android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+            android:textColor="@color/GrayScale_70"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_item_all_forest_title" />
+
+        <TextView
+            android:id="@+id/text_forest_overview"
+            android:layout_width="@dimen/dp_134"
+            android:layout_height="@dimen/dp_34"
+            android:layout_marginTop="@dimen/dp_5"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="@{forestBrief.brief, default=@string/default_string_zh_long}"
+            android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+            android:textColor="@color/GrayScale_50"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_item_all_forest_follow_msg" />
+
+        <ToggleButton
+            android:id="@+id/btn_join_forest"
+            android:layout_width="@dimen/dp_68"
+            android:layout_height="@dimen/dp_32"
+            android:layout_marginEnd="@dimen/dp_10"
+            android:layout_marginBottom="@dimen/dp_10"
+            android:background="@drawable/detail_forest_join_button"
+            android:checked="@{forestBrief.joined}"
+            android:textSize="@dimen/sp_13"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_forest_overview" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image_item_all_forest_top_background"
+            imageUrl="@{forestBrief.iconUrl}"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_60"
+            android:scaleType="centerCrop"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/ForestCardUpperRoundedStyle"
+            tools:src="@drawable/test_background" />
+
+        <!--        后端返回数据没有"是否加入"，所以这里就暂时不显示加入按钮，而且个人感觉，这个界面加合格按钮很没必要 from mhh-->
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/image_item_all_forest_avatar_frame"
+            imageUrl="@{forestBrief.backUrl}"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
+            android:layout_marginTop="@dimen/dp_36"
+            android:padding="@dimen/dp_2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearance="@style/AvatarRoundedStyle"
+            app:strokeColor="@color/GrayScale_100"
+            app:strokeWidth="@dimen/dp_2"
+            tools:src="@drawable/icon" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>
+

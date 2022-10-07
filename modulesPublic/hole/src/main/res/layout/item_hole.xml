@@ -5,22 +5,18 @@
 
     <data>
 
-        <import type="cn.pivotstudio.modulep.hole.ui.adapter.HoleAdapter" />
+        <import type="android.view.View" />
 
         <variable
-            name="hole"
-            type="cn.pivotstudio.modulep.hole.model.HoleResponse" />
-
-        <variable
-            name="onClick"
-            type="cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel" />
+            name="holeV2"
+            type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_hole_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/HH_Surface">
-
 
         <TextView
             android:id="@+id/tv_hole"
@@ -35,37 +31,23 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/btn_hole_jumptodetailforest"
-            style="?android:attr/borderlessButtonStyle"
+            android:id="@+id/btn_item_forest_tag"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_24"
-            android:layout_marginTop="@dimen/dp_12"
-            android:layout_marginEnd="@dimen/dp_7"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_10"
             android:background="@drawable/tag_yellow"
-            android:drawableLeft="@drawable/ic_forest_tag_16dp"
-            android:onClick="@{(v)->onClick.itemClick(v,hole)}"
+            android:drawableStart="@drawable/ic_forest_tag_16dp"
+            android:drawablePadding="@dimen/dp_5"
             android:paddingHorizontal="@dimen/dp_6"
-            android:text="@{` `+hole.forest_name+` `}"
+            android:text="@{holeV2.forestName}"
             android:textAllCaps="false"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             android:textColor="@color/HH_BandColor_7"
-            app:forestIcon="@{hole.forest_name}"
-            app:layout_constraintEnd_toStartOf="@+id/iv_hole_icon"
-            app:layout_constraintTop_toTopOf="parent"
-            app:role="@{hole.role}"
-            tools:text="@string/forest_tag" />
-
-        <ImageView
-            android:id="@+id/iv_hole_icon"
-            android:layout_width="@dimen/dp_16"
-            android:layout_height="@dimen/dp_16"
-            android:layout_marginTop="@dimen/dp_15"
-            android:layout_marginEnd="@dimen/dp_16"
+            android:visibility="@{holeV2.forestName == null ? View.GONE : View.VISIBLE}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:psIcon="@{hole.forest_name}"
-            app:role="@{hole.role}"
-            app:srcCompat="@drawable/ic_pivot_studio_16dp" />
+            tools:text="@string/forest_tag" />
 
         <TextView
             android:id="@+id/tv_hole_time"
@@ -76,41 +58,40 @@
             android:textColor="@color/GrayScale_80"
             app:layout_constraintStart_toStartOf="@+id/tv_hole"
             app:layout_constraintTop_toBottomOf="@+id/tv_hole"
-            app:time="@{hole.created_timestamp}"
+            app:time="@{holeV2.createAt}"
+            app:timeSign="@{false}"
             tools:text="1920  2020-09-16" />
 
         <TextView
             android:id="@+id/tv_hole_content"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dp_22"
             android:layout_marginTop="4dp"
-            android:maxWidth="@dimen/dp_335"
-            android:onClick="@{(v)->onClick.itemClick(v,hole)}"
             android:textAppearance="@style/HustHoleTypography.Body2"
             android:textColor="@color/GrayScale_20"
-            app:layout_constraintStart_toStartOf="@+id/tv_hole_time"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_hole_time"
-            app:markDownContent="@{hole.content}"
+            app:markDownContent="@{holeV2.content}"
             tools:text="@string/default_string_zh_long" />
-        <!--    app:markDownContent="@{hole.content}"-->
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_hole_thumbup"
+            android:id="@+id/cl_hole_thumb"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
             android:layout_marginBottom="4dp"
-            android:onClick="@{(v)->onClick.itemClick(v,hole)}"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_hole_content"
-            app:layout_constraintStart_toStartOf="@+id/tv_hole_content">
+            app:layout_constraintStart_toStartOf="@+id/tv_hole_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_hole_content">
 
             <ImageView
                 android:id="@+id/iv_hole_thumbup"
+                thumbupIcon="@{holeV2.liked}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:thumbupIcon="@{hole.is_thumbup}"
                 tools:srcCompat="@drawable/ic_thumbs_up_active" />
 
             <TextView
@@ -119,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
                 android:layout_marginBottom="@dimen/dp_13"
-                android:text="@{String.valueOf(hole.thumbup_num), default = `0`}"
+                android:text="@{String.valueOf(holeV2.likeCount), default = `0`}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
                 android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -131,10 +112,9 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
             android:layout_marginStart="@dimen/dp_67"
-            android:onClick="@{(v)->onClick.itemClick(v,hole)}"
-            app:layout_constraintBottom_toBottomOf="@+id/cl_hole_thumbup"
-            app:layout_constraintStart_toStartOf="@+id/cl_hole_thumbup"
-            app:layout_constraintTop_toTopOf="@+id/cl_hole_thumbup">
+            app:layout_constraintBottom_toBottomOf="@+id/cl_hole_thumb"
+            app:layout_constraintStart_toStartOf="@+id/cl_hole_thumb"
+            app:layout_constraintTop_toTopOf="@+id/cl_hole_thumb">
 
             <ImageView
                 android:id="@+id/iv_hole_reply"
@@ -143,7 +123,7 @@
                 android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:replyIcon="@{hole.is_reply}"
+                app:replyIcon="@{holeV2.reply}"
                 tools:srcCompat="@drawable/ic_comment_active_20dp" />
 
             <TextView
@@ -152,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
                 android:layout_marginBottom="@dimen/dp_13"
-                android:text="@{String.valueOf(hole.reply_num), default = `0`}"
+                android:text="@{String.valueOf(holeV2.replyCount), default = `0`}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
                 android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -164,7 +144,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
             android:layout_marginStart="@dimen/dp_67"
-            android:onClick="@{(v)->onClick.itemClick(v,hole)}"
             app:layout_constraintBottom_toBottomOf="@+id/cl_hole_reply"
             app:layout_constraintStart_toStartOf="@+id/cl_hole_reply"
             app:layout_constraintTop_toTopOf="@+id/cl_hole_reply">
@@ -174,7 +153,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/dp_12"
-                app:followIcon="@{hole.is_follow}"
+                app:followIcon="@{holeV2.follow}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:srcCompat="@drawable/ic_follow_active_20dp" />
@@ -185,7 +164,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_6"
                 android:layout_marginBottom="@dimen/dp_13"
-                android:text="@{String.valueOf(hole.follow_num), default = `0`}"
+                android:text="@{String.valueOf(holeV2.followCount), default = `0`}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
                 android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -198,86 +177,46 @@
             android:layout_height="@dimen/dp_25"
             android:layout_marginEnd="22dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/tv_hole_frame"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@mipmap/threepoint" />
 
-        <TextView
-            android:id="@+id/tv_hole_frame"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_34"
-            android:background="@color/HH_Background"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_hole_thumbup" />
-
-        <TextView
-            android:id="@+id/tv_hole_allreply"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:text="@string/commment_2"
-            android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
-            android:textColor="@color/GrayScale_20"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_hole_frame"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_hole_frame" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_hole_changesequence"
-            android:layout_width="@dimen/dp_50"
-            android:layout_height="@dimen/dp_34"
-            android:onClick="@{(v)->onClick.itemClick(v,hole)}"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_hole_frame"
-
-            app:layout_constraintEnd_toEndOf="@+id/tv_hole_frame"
-            app:layout_constraintTop_toTopOf="@+id/tv_hole_frame">
-
-            <ImageView
-                android:id="@+id/iv_hole_changesequence"
-                android:layout_width="@dimen/dp_20"
-                android:layout_height="@dimen/dp_20"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:turnIcon="@{onClick.is_descend}" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_hole_morelist"
+            android:id="@+id/cl_hole_more_action"
             android:layout_width="@dimen/dp_158"
             android:layout_height="@dimen/dp_48"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="34dp"
             android:background="@drawable/more"
             android:elevation="20dp"
-            android:onClick="@{(v)->onClick.itemClick(v,hole)}"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="visible">
 
             <ImageView
-                android:id="@+id/iv_hole_moreicon"
+                android:id="@+id/iv_hole_more_icon"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
                 android:layout_marginStart="12dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:moreListIcon="@{hole.is_mine}"
+                app:moreListIcon="@{holeV2.myHole}"
                 app:srcCompat="@mipmap/vector4" />
 
             <TextView
                 android:id="@+id/tv_hole_moretext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:text="@{hole.is_mine?`删除`:`举报`}"
+                android:layout_marginStart="@dimen/dp_12"
+                android:text="@{holeV2.myHole ? `删除` : `举报`, default = 删除}"
+                android:textAppearance="@style/HustHoleTypography.Button2"
                 android:textColor="@color/GrayScale_20"
-                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_hole_moreicon"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@+id/iv_hole_more_icon"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.483" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

@@ -7,7 +7,7 @@
 
         <variable
             name="hole"
-            type="cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2" />
+            type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

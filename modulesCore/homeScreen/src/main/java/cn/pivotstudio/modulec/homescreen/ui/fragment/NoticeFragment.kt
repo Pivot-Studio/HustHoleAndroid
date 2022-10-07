@@ -93,7 +93,7 @@ class NoticeFragment : BaseFragment() {
                 binding.rvNotices.isEnabled = false
             }
             setOnLoadMoreListener {  //上拉加载触发
-                viewModel.loadMore()
+                viewModel.loadMoreV2()
                 binding.rvNotices.isEnabled = false
             }
         }
@@ -106,5 +106,6 @@ class NoticeFragment : BaseFragment() {
             rvNotices.isEnabled = true //加载结束后允许滑动
         }
     }
+
 
 }

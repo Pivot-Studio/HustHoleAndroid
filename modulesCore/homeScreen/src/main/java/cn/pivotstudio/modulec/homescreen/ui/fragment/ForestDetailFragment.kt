@@ -15,8 +15,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
-import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
@@ -34,7 +33,6 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModelFactory
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 import com.alibaba.android.arouter.launcher.ARouter
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class ForestDetailFragment : BaseFragment() {
@@ -43,7 +41,7 @@ class ForestDetailFragment : BaseFragment() {
     private lateinit var binding: FragmentForestDetailBinding
 
     private val viewModel: ForestDetailViewModel by viewModels {
-        ForestDetailViewModelFactory(_args.forestId)
+        ForestDetailViewModelFactory(_args.forestBrief)
     }
 
     // 只有 ForestViewModel 实例存放了所有关注了的小树林的列表
@@ -106,18 +104,14 @@ class ForestDetailFragment : BaseFragment() {
                 false
 
             fabPublishHoleFromForest.setOnClickListener {
-                navToPublishHoleFromDetailForest(_args.forestId)
+                navToPublishHoleFromDetailForest(_args.forestBrief.forestId)
             }
 
             detailForestJoinBtn.setOnClickListener {
-                detailForestQuitBtn.visibility = View.VISIBLE
-                detailForestJoinBtn.visibility = View.GONE
                 joinTheForest()
             }
 
             detailForestQuitBtn.setOnClickListener {
-                detailForestQuitBtn.visibility = View.GONE
-                detailForestJoinBtn.visibility = View.VISIBLE
                 quitTheForest()
             }
         }
@@ -127,20 +121,6 @@ class ForestDetailFragment : BaseFragment() {
                 viewModel.holesV2.collect {
                     adapter.submitList(it)
                 }
-            }
-        }
-
-        viewModel.overview.observe(viewLifecycleOwner) {
-            sharedViewModel.forestHeads.value?.run {
-                viewModel.checkIfJoinedTheForest(this.forests)
-            }
-
-            if (it.Joined) {
-                binding.detailForestQuitBtn.visibility = View.VISIBLE
-                binding.detailForestJoinBtn.visibility = View.GONE
-            } else {
-                binding.detailForestQuitBtn.visibility = View.GONE
-                binding.detailForestJoinBtn.visibility = View.VISIBLE
             }
         }
 
@@ -182,16 +162,14 @@ class ForestDetailFragment : BaseFragment() {
     }
 
     // 点击具体小树林 FloatingActionButton 跳转到发布树洞并填充小树林信息
-    fun navToPublishHoleFromDetailForest(forestId: Int) {
+    fun navToPublishHoleFromDetailForest(forestId: String) {
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/publishHole/PublishHoleActivity")
                 .withBundle(Constant.FROM_DETAIL_FOREST, Bundle().apply {
-                    putInt(Constant.FOREST_ID, forestId)
-                    putString(Constant.FOREST_NAME, viewModel.overview.value!!.name)
+                    putString(Constant.FOREST_ID, forestId)
+                    putString(Constant.FOREST_NAME, viewModel.forestBrief.forestName)
                 })
                 .navigation()
-        } else {
-            showMsg("当前为模块测试阶段")
         }
     }
 
@@ -217,10 +195,10 @@ class ForestDetailFragment : BaseFragment() {
 
     // 举报树洞交给举报界面处理
     fun reportTheHole(hole: Hole) {
-        (hole as DetailForestHoleV2).let {
+        (hole as HoleV2).let {
             ARouter.getInstance().build("/report/ReportActivity")
                 .withInt(Constant.HOLE_ID, it.holeId.toInt())
-                .withInt(Constant.REPLY_LOCAL_ID, -1)
+                .withInt(Constant.REPLY_ID, -1)
                 .withString(Constant.ALIAS, "洞主")
                 .navigation()
         }
@@ -241,7 +219,6 @@ class ForestDetailFragment : BaseFragment() {
             setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
             setOnRefreshListener {    //下拉刷新触发
                 viewModel.loadHoles()
-                viewModel.loadOverview()
                 binding.recyclerViewForestDetail.isEnabled = false
             }
             setOnLoadMoreListener { refreshlayout ->  //上拉加载触发

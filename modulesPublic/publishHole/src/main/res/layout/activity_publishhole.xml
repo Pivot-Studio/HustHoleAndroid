@@ -59,22 +59,16 @@
                 android:gravity="left"
                 android:text="加载中..."
                 android:textColor="@color/GrayScale_100"
-                android:textSize="18sp"
+                android:textAppearance="@style/HustHoleTypography.Headline1.Bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/titlebargreen_AVLoadingIndicatorView"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <!--    <include-->
-        <!--        android:id="@+id/include_titlebar"-->
-        <!--        layout="@layout/titlebar_green"-->
-        <!--         />-->
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_publishhole_frame"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="@dimen/dp_44"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/include_titlebar">
@@ -97,10 +91,10 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@mipmap/group218" />
+                app:srcCompat="@drawable/ic_forest_tag_16dp" />
 
             <Button
-                android:id="@+id/btn_publishhole_send"
+                android:id="@+id/btn_publish_hole"
                 android:layout_width="68dp"
                 android:layout_height="32dp"
                 android:layout_marginEnd="10dp"
@@ -108,7 +102,7 @@
                 android:onClick="onClick"
                 android:text="@string/publishhole_3"
                 android:textColor="@color/GrayScale_100"
-                android:textSize="14sp"
+                android:textAppearance="@style/HustHoleTypography.Button2"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -150,8 +144,8 @@
             android:layout_width="@dimen/dp_350"
             android:layout_height="@dimen/dp_300"
             android:layout_marginTop="@dimen/dp_10"
-            android:gravity="start"
             android:background="@null"
+            android:gravity="start"
             android:hint="@string/publishhole_4"
             android:maxLength="1037"
             android:textColorHint="@color/GrayScale_70"

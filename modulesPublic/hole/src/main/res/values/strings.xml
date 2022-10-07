@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hole_id"># %s</string>
+    <string name="hole_sending_successfully">发送成功</string>
+</resources>

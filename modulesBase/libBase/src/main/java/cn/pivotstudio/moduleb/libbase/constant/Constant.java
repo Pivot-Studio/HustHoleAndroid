@@ -33,7 +33,7 @@ public class Constant {
     // 是否从小树林跳转 key
     public static final String FROM_DETAIL_FOREST = "FROM_DETAIL_FOREST";
     //选择号的标识
-    public static final String REPLY_LOCAL_ID = "reply_local_id";
+    public static final String REPLY_ID = "reply_local_id";
     //是否需要打开键盘的标识
     public static final String IF_OPEN_KEYBOARD = "IF_OPEN_KEYBOARD";
     //内容的拥有者的标识
@@ -44,6 +44,12 @@ public class Constant {
      */
     //从树洞界面返回数据的标识
     public static final String HOLE_RETURN_INFO = "holeReturnInfo";
+    public static final String HOLE_LIKED = "HOLE_LIKED";
+    public static final String HOLE_LIKE_COUNT = "HOLE_LIKE_COUNT";
+    public static final String HOLE_REPLIED = "HOLE_REPLIED";
+    public static final String HOLE_REPLY_COUNT = "HOLE_REPLY_COUNT";
+    public static final String HOLE_FOLLOWED = "HOLE_FOLLOWED";
+    public static final String HOLE_FOLLOW_COUNT = "HOLE_FOLLOW_COUNT";
     /**
      * new Activity
      */
@@ -62,4 +68,6 @@ public class Constant {
     public static final Integer CONSTANT_STANDARD_LOAD_SIZE = 20;
     //数据库
     public static final String ROOM_DATABASE_NAME = "hust_hole";
+
+
 }

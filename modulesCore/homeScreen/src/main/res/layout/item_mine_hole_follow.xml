@@ -40,6 +40,7 @@
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             android:textColor="@color/GrayScale_80"
             app:time="@{hole[2]}"
+            app:timeSign="@{false}"
             tools:text="1920  2020-09-16" />
 
         <TextView

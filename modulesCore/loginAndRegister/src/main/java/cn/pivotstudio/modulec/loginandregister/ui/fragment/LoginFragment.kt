@@ -18,10 +18,6 @@ import cn.pivotstudio.modulec.loginandregister.R
 import cn.pivotstudio.modulec.loginandregister.databinding.FragmentLoginBinding
 import cn.pivotstudio.modulec.loginandregister.viewmodel.LARViewModel
 import com.alibaba.android.arouter.launcher.ARouter
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
 
 class LoginFragment : BaseFragment() {
     private lateinit var binding: FragmentLoginBinding
@@ -68,30 +64,34 @@ class LoginFragment : BaseFragment() {
         }
 
         viewModel.apply {
-            loginToken.observe(viewLifecycleOwner) { token ->
-                token?.let {
-                    mmkvUtil.apply {
-                        if (!token.isNullOrBlank()) {
-                            put(Constant.USER_TOKEN, token)
-                            put(Constant.IS_LOGIN, true)
-                        }
-                    }
-                    if (BuildConfig.isRelease) {
-                        ARouter.getInstance().build("/homeScreen/HomeScreenActivity")
-                            .navigation()
-                        requireActivity().finish()
-                    }
-                    viewModel.doneTokenChange()
-                }
-            }
+//            loginToken.observe(viewLifecycleOwner) { token ->
+//                token?.let {
+//                    mmkvUtil.apply {
+//                        if (!token.isNullOrBlank()) {
+//                            // 取消V1接口，此后所有的v1请求都不会带上Token导致失败
+//                            put(Constant.USER_TOKEN, "")
+//                        }
+//                    }
+//                    if (BuildConfig.isRelease) {
+//                        ARouter.getInstance().build("/homeScreen/HomeScreenActivity")
+//                            .navigation()
+//                        requireActivity().finish()
+//                    }
+//                }
+//            }
 
-            CoroutineScope(Dispatchers.IO).launch {
+            lifecycleScope.launchWhenStarted {
                 loginTokenV2.collect { token ->
-                    token.let {
+                    token.takeIf { it.isNotBlank() }.let {
                         mmkvUtil.apply {
                             if (token.isNotBlank()) {
                                 put(Constant.USER_TOKEN_V2, token)
                                 put(Constant.IS_LOGIN, true)
+                                if (BuildConfig.isRelease) {
+                                    ARouter.getInstance().build("/homeScreen/HomeScreenActivity")
+                                        .navigation()
+                                    requireActivity().finish()
+                                }
                             }
                         }
                     }

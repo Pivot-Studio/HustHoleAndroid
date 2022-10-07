@@ -18,9 +18,9 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import cn.pivotstudio.modulec.homescreen.R;
 
 /**
- * @classname:HomePageOptionBox
- * @description:选项栏
- * @date:2022/5/5 2:19
+ * @classname: HomePageOptionBox
+ * @description: 选项栏
+ * @date: 2022/5/5 2:19
  * @version:1.0
  * @author:
  */
@@ -75,8 +75,8 @@ public class HomePageOptionBox extends ConstraintLayout {
         View darkScreen = LayoutInflater.from(context).inflate(R.layout.ppw_homepagedarkscreen, null);
         mSlideBoxPpw = new PopupWindow(contentView);
         mDarkScreenPpw = new PopupWindow(darkScreen);
-        mNewPublishBtn = (Button) contentView.findViewById(R.id.btn_ppwhomepage_newpublish);
-        mNewCommentBtn = (Button) contentView.findViewById(R.id.btn_ppwhomepage_newcomment);
+        mNewPublishBtn = (Button) contentView.findViewById(R.id.btn_ppwhomepage_latest_reply);
+        mNewCommentBtn = (Button) contentView.findViewById(R.id.btn_ppwhomepage_latest_publish);
         mNewPublishBtn.setOnClickListener(this::onClick);
         mNewCommentBtn.setOnClickListener(this::onClick);
         darkScreen.setOnClickListener(this::onClick);
@@ -96,7 +96,7 @@ public class HomePageOptionBox extends ConstraintLayout {
                 EndTriangleAnim();
             }
             mFlag = !mFlag;
-        } else if (id == R.id.btn_ppwhomepage_newpublish) {
+        } else if (id == R.id.btn_ppwhomepage_latest_reply) {
             mNewPublishBtn.setBackgroundResource(R.drawable.standard_button);
             mNewPublishBtn.setTextAppearance(v.getContext(), R.style.popupwindow_button_click);
             mNewCommentBtn.setBackgroundResource(R.drawable.standard_button_g95);
@@ -104,7 +104,7 @@ public class HomePageOptionBox extends ConstraintLayout {
             EndTriangleAnim();
             mFlag = !mFlag;
             mOptionsListener.onClick(v);
-        } else if (id == R.id.btn_ppwhomepage_newcomment) {
+        } else if (id == R.id.btn_ppwhomepage_latest_publish) {
             mNewCommentBtn.setBackgroundResource(R.drawable.standard_button);
             mNewCommentBtn.setTextAppearance(v.getContext(), R.style.popupwindow_button_click);
             mNewPublishBtn.setBackgroundResource(R.drawable.standard_button_g95);

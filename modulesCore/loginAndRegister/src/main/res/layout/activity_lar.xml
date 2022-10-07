@@ -28,7 +28,7 @@
                     android:id="@+id/lar_top_appbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="@color/GrayScale_100"
+                    android:background="@color/white"
                     app:title="@null"
                     app:navigationIcon="@drawable/lr_back_icon" />
 

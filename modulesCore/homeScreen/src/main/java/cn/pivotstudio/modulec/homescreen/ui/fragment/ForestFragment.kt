@@ -10,18 +10,17 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHole
-import cn.pivotstudio.husthole.moduleb.network.model.DetailForestHoleV2
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
-import cn.pivotstudio.husthole.moduleb.network.model.ForestHole
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.JoinedForestsAdapter
@@ -30,9 +29,7 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.constant.RequestCodeConstant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 
 /**
@@ -56,20 +53,18 @@ class ForestFragment : BaseFragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == ResultCodeConstant.Hole) {
-            val returnInfo = data!!.getParcelableExtra<HoleReturnInfo>(
-                Constant.HOLE_RETURN_INFO
-            )
-            returnInfo?.let {
-                forestViewModel.refreshLoadLaterHole(
-                    it.is_thumbup,
-                    it.is_reply,
-                    it.is_follow,
-                    it.thumbup_num,
-                    it.reply_num,
-                    it.follow_num
-                )
+            data?.extras?.let { bundle ->
+                bundle.apply {
+                    forestViewModel.refreshLoadLaterHole(
+                        isThumb = getBoolean(Constant.HOLE_LIKED),
+                        replied = getBoolean(Constant.HOLE_REPLIED),
+                        followed = getBoolean(Constant.HOLE_FOLLOWED),
+                        thumbNum = getLong(Constant.HOLE_LIKE_COUNT),
+                        replyNum = getLong(Constant.HOLE_REPLY_COUNT),
+                        followNum = getLong(Constant.HOLE_FOLLOW_COUNT),
+                    )
+                }
             }
-
         }
     }
 
@@ -104,18 +99,19 @@ class ForestFragment : BaseFragment() {
 
             recyclerViewForestHead.adapter = headAdapter
             viewModel = forestViewModel.apply {
-                forestHoles.observe(viewLifecycleOwner) {
-                    holeAdapter.submitList(it)
-                }
-
-                forestHeads.observe(viewLifecycleOwner) {
-                    headAdapter.submitList(it.forests)
-                    if (it.forests.isEmpty()) {
-                        forestViewModel.showPlaceHolder()
+                lifecycleScope.launchWhenStarted {
+                    holesV2.collect {
+                        holeAdapter.submitList(it)
                     }
                 }
 
-                holesLoadState.observe(viewLifecycleOwner) { it ->
+                lifecycleScope.launchWhenStarted {
+                    forestsV2.collect {
+                        headAdapter.submitList(it)
+                    }
+                }
+
+                holesLoadState.observe(viewLifecycleOwner) {
                     when (it) {
                         LoadStatus.DONE -> {
                             recyclerViewForestHoles.visibility = VISIBLE
@@ -123,7 +119,7 @@ class ForestFragment : BaseFragment() {
                             finishRefreshAnim()
                         }
                         LoadStatus.ERROR -> {
-                            forestHoles.value?.takeIf { holes ->
+                            holesV2.value.takeIf { holes ->
                                 holes.isEmpty()
                             }?.let {
                                 forestPlaceholder.visibility = VISIBLE
@@ -177,17 +173,19 @@ class ForestFragment : BaseFragment() {
         ).navigate(R.id.action_forest_fragment_to_all_forest_fragment)
     }
 
-    fun navToSpecificForest(forestId: Int) {
+    fun navToSpecificForest(forestId: String) {
         forestViewModel.loadHeaderLater()
-        val action = ForestFragmentDirections.actionForestFragmentToForestDetailFragment(forestId)
+        val action = ForestFragmentDirections.actionForestFragmentToForestDetailFragment(
+            forestViewModel.getForestById(forestId)
+        )
         findNavController(requireActivity(), R.id.nav_host_fragment).navigate(action)
     }
 
     // 点击文字内容跳转到树洞
-    fun navToSpecificHole(holeId: Int) {
+    fun navToSpecificHole(holeId: String) {
         forestViewModel.loadHoleLater(holeId)
         if (BuildConfig.isRelease) {
-            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId)
+            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId.toInt())
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                 .navigation(requireActivity(), ResultCodeConstant.Hole)
         }
@@ -203,25 +201,25 @@ class ForestFragment : BaseFragment() {
     }
 
     // 点赞
-    fun giveALikeToTheHole(hole: ForestHole) {
+    fun giveALikeToTheHole(hole: HoleV2) {
         forestViewModel.giveALikeToTheHole(hole)
     }
 
     // 关注/收藏
-    fun followTheHole(hole: ForestHole) {
+    fun followTheHole(hole: HoleV2) {
         forestViewModel.followTheHole(hole)
     }
 
     // 举报树洞交给举报界面处理
-    fun reportTheHole(hole: ForestHole) {
-        ARouter.getInstance().build("/report/ReportActivity").withInt(Constant.HOLE_ID, hole.holeId)
-            .withInt(Constant.REPLY_LOCAL_ID, -1).withString(
-                Constant.ALIAS, "洞主"
-            ).navigation()
+    fun reportTheHole(hole: HoleV2) {
+        ARouter.getInstance().build("/report/ReportActivity")
+            .withString(Constant.HOLE_ID, hole.holeId)
+            .withString(Constant.ALIAS, "洞主")
+            .navigation()
     }
 
     // 删除树洞
-    fun deleteTheHole(hole: ForestHole) {
+    fun deleteTheHole(hole: HoleV2) {
         val dialog = DeleteDialog(context)
         dialog.show()
         dialog.setOptionsListener {
@@ -239,7 +237,7 @@ class ForestFragment : BaseFragment() {
                 binding.recyclerViewForestHoles.isEnabled = false
             }
             setOnLoadMoreListener {   //上拉加载触发
-                if (forestViewModel.forestHoles.value == null || forestViewModel.forestHeads.value == null) { //特殊情况，首次加载没加载出来又选择上拉加载
+                if (forestViewModel.holesV2.value.isEmpty() || forestViewModel.holesV2.value.isEmpty()) { //特殊情况，首次加载没加载出来又选择上拉加载
                     forestViewModel.loadHolesAndHeads()
                 } else {
                     forestViewModel.loadMoreForestHoles()

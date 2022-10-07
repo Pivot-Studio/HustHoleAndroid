@@ -65,8 +65,7 @@ class HomeScreenActivity : BaseActivity() {
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val mMainNavFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        val fragment = mMainNavFragment!!.childFragmentManager.primaryNavigationFragment
-        when (fragment) {
+        when (val fragment = mMainNavFragment!!.childFragmentManager.primaryNavigationFragment) {
             is HomePageFragment,
             is ForestDetailFragment,
             is ForestFragment -> {

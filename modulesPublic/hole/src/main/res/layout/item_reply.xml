@@ -5,23 +5,17 @@
 
     <data>
 
-        <import type="cn.pivotstudio.modulep.hole.ui.adapter.HoleAdapter" />
-
         <variable
             name="reply"
-            type="cn.pivotstudio.modulep.hole.model.ReplyListResponse.ReplyResponse" />
-
-        <variable
-            name="onClick"
-            type="cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel" />
+            type="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_reply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/HH_Surface"
-        android:onClick="@{(v)->onClick.replyItemClick(v,reply)}">
+        android:layout_marginBottom="@dimen/dp_16"
+        android:background="@color/HH_Surface">
 
         <TextView
             android:id="@+id/tv_reply_title"
@@ -29,10 +23,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_12"
-            android:textColor="@color/GrayScale_20"
             android:textAppearance="@style/HustHoleTypography.Headline3"
-            app:aliasName="@{reply.alias}"
-            app:aliasNameOwner="@{reply.is_mine}"
+            android:textColor="@color/GrayScale_20"
+            app:aliasName="@{reply.nickname}"
+            app:aliasNameOwner="@{reply.mine}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/default_string_zh_short" />
@@ -42,113 +36,109 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_20"
-            android:textColor="@color/GrayScale_80"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+            android:textColor="@color/GrayScale_80"
             app:layout_constraintBottom_toBottomOf="@+id/tv_reply_title"
             app:layout_constraintStart_toEndOf="@+id/tv_reply_title"
             app:layout_constraintTop_toTopOf="@+id/tv_reply_title"
-            app:time="@{reply.created_timestamp}"
-            tools:text="1920  2020-09-16"/>
+            tools:text="1920  2020-09-16" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ll_reply_replycontent"
-            android:layout_width="wrap_content"
+            android:id="@+id/layout_inner_reply"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginHorizontal="@dimen/dp_22"
+            android:layout_marginTop="@dimen/dp_6"
             android:background="@drawable/reply_gray"
-            android:maxWidth="@dimen/dp_340"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_reply_title"
-            app:replyContentShow="@{reply.reply_to}">
-
+            app:replyContentShow="@{reply.replyToInner}">
 
             <TextView
-                android:id="@+id/tv_reply_detailreplycontent"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_inner_first_reply"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginVertical="@dimen/dp_4"
                 android:layout_marginHorizontal="@dimen/dp_8"
+                android:layout_marginVertical="@dimen/dp_4"
                 android:maxWidth="@dimen/dp_327"
-                android:textColor="@color/GrayScale_50"
                 android:textAppearance="@style/HustHoleTypography.Body3"
-                app:isMine="@{reply.is_mine}"
+                android:textColor="@color/GrayScale_50"
+                app:isMine="@{reply.mine}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:replyToAlias="@{reply.reply_to_alias}"
-                app:replyToContent="@{reply.reply_to_content}"
+                app:replyToAlias="@{reply.replied.nickname}"
+                app:replyToContent="@{reply.replied.content}"
                 tools:text="@string/default_string_zh_long" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cl_reply_content"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:onClick="@{(v)->onClick.replyItemClick(v,reply)}"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_22"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_reply_title"
-            app:layout_constraintTop_toBottomOf="@+id/ll_reply_replycontent">
+            app:layout_constraintTop_toBottomOf="@+id/layout_inner_reply">
 
             <TextView
                 android:id="@+id/tv_reply_content"
-                android:layout_width="@dimen/dp_327"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_30"
-                android:maxWidth="@dimen/dp_320"
-                android:onClick="@{(v)->onClick.replyItemClick(v,reply)}"
-                android:text="@string/default_string_zh_long"
+                android:layout_marginStart="@dimen/dp_10"
                 android:textAppearance="@style/HustHoleTypography.Body2"
                 android:textColor="@color/GrayScale_20"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/tv_reply_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:markDownContent="@{reply.content}" />
+                app:markDownContent="@{reply.content}"
+                tools:text="@string/default_string_zh_long" />
 
-
-            <TextView
+            <View
                 android:id="@+id/tv_reply_line"
-                android:layout_width="@dimen/dp_1_5"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="21dp"
+                android:layout_width="@dimen/dp_2"
+                android:layout_height="0dp"
                 android:background="@color/GrayScale_80"
-                android:minHeight="@dimen/dp_10" />
-        </RelativeLayout>
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_reply_thumbup"
-            android:layout_width="@dimen/dp_40"
+            android:id="@+id/cl_reply_thumb"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:layout_marginEnd="30dp"
-            android:onClick="@{(v)->onClick.replyItemClick(v,reply)}"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_reply_more"
-            app:layout_constraintEnd_toStartOf="@+id/iv_reply_more">
+            android:layout_marginEnd="@dimen/dp_30"
+            android:layout_marginBottom="@dimen/dp_4"
+            app:layout_constraintEnd_toStartOf="@+id/iv_reply_more"
+            app:layout_constraintTop_toBottomOf="@+id/cl_reply_content">
 
             <ImageView
                 android:id="@+id/iv_reply_thumbup"
-                android:layout_width="@dimen/dp_20"
-                android:layout_height="@dimen/dp_24"
-                android:layout_marginBottom="2dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/ic_thumbs_up_active"
-                app:thumbupIcon="@{reply.is_thumbup}" />
+                app:thumbupIcon="@{reply.thumb}" />
 
             <TextView
                 android:id="@+id/tv_reply_thumbupnumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="2dp"
-                android:text="@{String.valueOf(reply.thumbup_num), default = `0`}"
-                android:textColor="@color/GrayScale_70"
+                android:layout_marginStart="@dimen/dp_6"
+                android:layout_marginBottom="@dimen/dp_13"
+                android:text="@{String.valueOf(reply.likeCount), default = `0`}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_reply_thumbup"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textColor="@color/GrayScale_70"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_reply_thumbup" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -157,34 +147,22 @@
             android:id="@+id/iv_reply_more"
             android:layout_width="@dimen/dp_25"
             android:layout_height="@dimen/dp_25"
-
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="2dp"
-            app:layout_constraintBottom_toBottomOf="@+id/cl_reply_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:srcCompat="@mipmap/threepoint" />
-
-        <TextView
-            android:id="@+id/tv_reply_interval1"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_marginTop="11dp"
-            android:background="@color/GrayScale_98"
+            android:layout_marginEnd="@dimen/dp_22"
+            android:layout_marginBottom="@dimen/dp_2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cl_reply_thumbup" />
+            app:layout_constraintTop_toBottomOf="@id/cl_reply_content"
+            app:srcCompat="@mipmap/threepoint" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cl_reply_morelist"
+            android:id="@+id/cl_reply_more_action"
             android:layout_width="@dimen/dp_158"
             android:layout_height="@dimen/dp_48"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
             android:background="@drawable/more"
             android:elevation="15dp"
-            android:onClick="@{(v)->onClick.replyItemClick(v,reply)}"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
@@ -203,28 +181,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="@{reply.is_mine?`删除`:`举报`}"
-                android:textColor="@color/GrayScale_20"
+                android:text="@{reply.mine?`删除`:`举报`}"
                 android:textAppearance="@style/HustHoleTypography.Button2"
+                android:textColor="@color/GrayScale_20"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_reply_moreicon"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <TextView
-            android:id="@+id/tv_reply_ifhot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_marginEnd="@dimen/dp_22"
-            android:paddingHorizontal="@dimen/dp_12"
-            android:background="@drawable/tag_yellow"
-            android:gravity="center"
-            android:text="@string/hot_tag"
-            android:textColor="@color/HH_BandColor_7"
-            android:textAppearance="@style/HustHoleTypography.Button3"
-            app:hotIcon="@{reply.is_hot}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
