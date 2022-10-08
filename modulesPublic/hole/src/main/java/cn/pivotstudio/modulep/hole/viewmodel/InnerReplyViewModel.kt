@@ -127,6 +127,7 @@ class InnerReplyViewModel(private val baseReply: Reply) : ViewModel() {
                     when (it) {
                         is ApiResult.Success<*> -> {
                             likeTheReply(reply)
+                            _loadingState.emit(ApiStatus.SUCCESSFUL)
                         }
                         is ApiResult.Error -> {
                             _sendingState.emit(it)

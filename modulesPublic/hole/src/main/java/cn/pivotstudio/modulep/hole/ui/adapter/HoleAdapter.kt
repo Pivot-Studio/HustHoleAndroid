@@ -79,29 +79,6 @@ fun setTurnIcon(view: ImageView, is_descend: ObservableField<Boolean>?) {
 }
 
 /**
- * 修改只看洞主图标
- *
- * @param view
- * @param is_owner
- */
-@BindingAdapter("ownerText")
-fun setOwnerText(view: Button, is_owner: ObservableField<Boolean>?) {
-    if (is_owner != null) {
-        if (is_owner.get()!!) {
-            view.setPadding(20, 5, 6, 6)
-            view.setTextColor(view.resources.getColor(R.color.HH_BandColor_3))
-            val homepressed = view.resources.getDrawable(R.mipmap.vector8, null)
-            homepressed.setBounds(0, 0, homepressed.minimumWidth, homepressed.minimumHeight)
-            view.setCompoundDrawables(homepressed, null, null, null)
-        } else {
-            view.setPadding(0, 0, 0, 0)
-            view.setCompoundDrawables(null, null, null, null)
-            view.setTextColor(view.resources.getColor(R.color.GrayScale_50))
-        }
-    }
-}
-
-/**
  * 设置热评icon
  *
  * @param view
@@ -166,7 +143,7 @@ fun setForestIcon(view: Button, forestName: String, role: String?) {
             view.setPadding(15, 5, 6, 6)
             view.setTextColor(view.context.resources.getColor(R.color.GrayScale_50))
             view.text = " Pivot Studio团队 "
-            val homepressed = view.context.resources.getDrawable(R.mipmap.pivot, null)
+            val homepressed = view.context.resources.getDrawable(R.drawable.ic_pivot_studio_16dp, null)
             homepressed.setBounds(0, 0, homepressed.minimumWidth, homepressed.minimumHeight)
             view.setCompoundDrawables(homepressed, null, null, null)
             view.setBackgroundResource(R.drawable.tag_gray)

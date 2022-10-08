@@ -2,4 +2,5 @@
 <resources>
     <string name="hole_id"># %s</string>
     <string name="hole_sending_successfully">发送成功</string>
+    <string name="hole_filter_owner">只看洞主</string>
 </resources>

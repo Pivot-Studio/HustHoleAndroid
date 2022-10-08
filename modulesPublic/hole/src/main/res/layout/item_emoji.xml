@@ -11,11 +11,10 @@
         android:id="@+id/iv_emoji"
         android:layout_width="@dimen/dp_32"
         android:layout_height="@dimen/dp_28"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/a138" />
+        app:srcCompat="@mipmap/resource_emoji1" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

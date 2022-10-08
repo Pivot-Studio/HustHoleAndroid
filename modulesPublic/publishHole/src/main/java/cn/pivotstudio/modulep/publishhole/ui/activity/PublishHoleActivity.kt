@@ -189,7 +189,7 @@ class PublishHoleActivity : BaseActivity() {
 
     }
 
-    private var publishEnable = false
+    private var publishEnable = forestId.isNotBlank()
 
     private fun showPopupWindow() {
         forestPopupWindow.showAtLocation(

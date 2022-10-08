@@ -25,11 +25,11 @@ import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity;
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel;
 
 /**
- * @classname:EmojiRecyclerViewAdapter
+ * @classname: EmojiRecyclerViewAdapter
  * @description:
- * @date:2022/5/12 23:20
+ * @date: 2022/5/12 23:20
  * @version:1.0
- * @author:
+ * @author: liuzhongtian
  */
 public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
     private final static Integer Title = 0, Used_Emoji = 1, Emoji = 2;

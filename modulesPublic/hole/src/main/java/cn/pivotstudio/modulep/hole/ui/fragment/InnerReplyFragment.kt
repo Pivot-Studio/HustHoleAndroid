@@ -13,14 +13,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.*
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
-import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
@@ -58,7 +56,9 @@ class InnerReplyFragment : BaseFragment() {
 
     private val innerReplyAdapter by lazy { InnerReplyAdapter(innerReplyViewModel, report) }
 
-    private val replyViewModel: SpecificHoleViewModel by activityViewModels()
+
+    // 二级评论页的点赞可以直接通过ViewModel反馈给一级评论页
+    private val sharedViewModel: SpecificHoleViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -94,7 +94,7 @@ class InnerReplyFragment : BaseFragment() {
             etReplyPost.setOnClickListener {
                 activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
                 (requireActivity() as HoleActivity).openKeyBoard(binding.etReplyPost)
-                replyViewModel.doneShowingEmojiPad()
+                innerReplyViewModel.doneShowingEmojiPad()
             }
 
             btnSend.setOnClickListener {
@@ -137,6 +137,15 @@ class InnerReplyFragment : BaseFragment() {
 
     private fun initObserver() {
         innerReplyViewModel.apply {
+
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    reply.collectLatest {
+                        sharedViewModel.refreshTheReply(it)
+                    }
+                }
+            }
+
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     innerReplies.collectLatest {
@@ -162,7 +171,9 @@ class InnerReplyFragment : BaseFragment() {
             lifecycleScope.launchWhenStarted {
                 loadingState.collectLatest { state ->
                     when (state) {
-                        ApiStatus.SUCCESSFUL,
+                        ApiStatus.SUCCESSFUL -> {
+                            finishRefreshAnim()
+                        }
                         ApiStatus.ERROR -> finishRefreshAnim()
                         ApiStatus.LOADING -> {}
                     }
@@ -218,11 +229,12 @@ class InnerReplyFragment : BaseFragment() {
         }
 
         binding.rvEmoji.layoutManager = layoutManager
+
         binding.rvEmoji.adapter =
             EmojiRvAdapter(
                 context,
                 binding.etReplyPost,
-                replyViewModel
+                sharedViewModel
             )
     }
 

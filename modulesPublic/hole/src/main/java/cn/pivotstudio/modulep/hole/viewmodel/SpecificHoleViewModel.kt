@@ -331,7 +331,22 @@ class SpecificHoleViewModel(private var holeId: String) : ViewModel() {
         }
     }
 
-    private suspend fun likeTheReply(reply: Reply) {
+    suspend fun refreshTheReply(reply: Reply) {
+        val newItems = replies.value.toMutableList()
+        val i = newItems.indexOfFirst { newReply ->
+            reply.replyId == newReply.self.replyId
+        }
+
+        newItems[i] = newItems[i].copy(
+            self = reply
+        )
+        _replies.emit(newItems)
+    }
+
+    /**
+     * 点赞请求成功后端上直接更改显示信息, 避免再次请求后端的耗时和不稳定
+     */
+    suspend fun likeTheReply(reply: Reply) {
         val newItems = replies.value.toMutableList()
         val i = newItems.indexOfFirst { newReply ->
             reply.replyId == newReply.self.replyId

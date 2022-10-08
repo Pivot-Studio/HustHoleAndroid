@@ -51,6 +51,7 @@
                         <include
                             android:id="@+id/layout_hole"
                             layout="@layout/item_hole" />
+
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/cl_hole_changesequence"
                             android:layout_width="match_parent"
@@ -128,7 +129,7 @@
                 android:layout_marginBottom="@dimen/dp_20"
                 android:backgroundTint="@color/GrayScale_100"
                 android:onClick="@{() -> viewModel.filterHoleOfOwner()}"
-                android:text="只看洞主"
+                android:text="@string/hole_filter_owner"
                 android:textAppearance="@style/HustHoleTypography.Button3"
                 android:textColor="@{viewModel.filteringOwner ? @color/HH_BandColor_3 : @color/GrayScale_50}"
                 app:icon="@{viewModel.filteringOwner ? @drawable/ic_filter_owner_6dp : null}"
@@ -188,9 +189,9 @@
                 android:layout_gravity="center"
                 android:layout_marginEnd="@dimen/dp_10"
                 android:background="@drawable/standard_button_gray"
+                android:enabled="false"
                 android:minWidth="@dimen/dp_60"
                 android:text="发送"
-                android:enabled="false"
                 android:textAppearance="@style/HustHoleTypography.Button2"
                 android:textColor="@color/GrayScale_100"
                 app:layout_constraintBottom_toBottomOf="parent"
