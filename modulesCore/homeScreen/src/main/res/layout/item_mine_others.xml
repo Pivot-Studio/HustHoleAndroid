@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="name"
+            type="Integer" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/rl_others"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/standard_mine"
+        android:clickable="true"
+        android:focusable="true">
+
+        <ImageView
+            android:id="@+id/ic_back"
+            android:layout_width="@dimen/dp_10"
+            android:layout_height="@dimen/dp_18"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_17"
+            android:scaleType="fitXY"
+            app:srcCompat="@mipmap/back_black2"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/dp_14"
+            android:paddingStart="@dimen/dp_20"
+            android:text="@{context.getResources().getString(name)}"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@{context.getResources().getString(name) == @string/login_out ? @color/HH_Reminder_Warning : @color/GrayScale_20}" />
+
+        <TextView
+            android:id="@+id/tv_verify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/ic_back"
+            android:paddingVertical="@dimen/dp_14"
+            android:padding="@dimen/dp_12"
+            android:text=""
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/GrayScale_50" />
+    </RelativeLayout>
+</layout>

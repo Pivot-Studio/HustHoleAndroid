@@ -1,466 +1,174 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel" />
     </data>
+
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/HH_Background">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/total"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <RelativeLayout
+            <ImageView
+                android:id="@+id/img_my_background"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <ImageView
-                    android:id="@+id/img_my_background"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:scaleType="fitXY"
-                    app:srcCompat="@mipmap/my_background" />
-
-                <RelativeLayout
-                    android:id="@+id/my_hole_star"
-                    android:layout_width="wrap_content"
-                    android:layout_height="@dimen/dp_50"
-                    android:layout_below="@id/my_date"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="1dp">
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/my_hole"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp_55"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/my_hole_num"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="8dp"
-                            android:textColor="@color/GrayScale_20"
-                            android:textSize="@dimen/sp_11"
-                            android:text="0"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:layout_marginBottom="5dp"
-
-                            android:text="@string/tv_myHoles"
-                            android:textColor="@color/GrayScale_50"
-                            android:textSize="@dimen/sp_11"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/my_star"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp_55"
-                        android:layout_marginStart="@dimen/dp_40"
-                        android:layout_toEndOf="@id/my_hole"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/my_star_num"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="8dp"
-                            android:text="0"
-                            android:textColor="@color/GrayScale_20"
-                            android:textSize="@dimen/sp_11"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-
-                            android:layout_marginBottom="5dp"
-
-                            android:text="@string/tv_myFollows"
-                            android:textColor="@color/GrayScale_50"
-                            android:textSize="@dimen/sp_11"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/my_reply"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/dp_55"
-                        android:layout_marginStart="@dimen/dp_40"
-                        android:layout_toEndOf="@id/my_star"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:orientation="vertical">
-
-
-                        <TextView
-                            android:id="@+id/my_reply_num"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="0"
-                            android:layout_marginTop="8dp"
-                            android:textColor="@color/GrayScale_20"
-                            android:textSize="@dimen/sp_11"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/textView8"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="5dp"
-                            android:text="@string/tv_myReply"
-                            android:textColor="@color/GrayScale_50"
-                            android:textSize="@dimen/sp_11"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/settings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/my_hole_star"
-                    android:layout_marginTop="10dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:layout_width="@dimen/dp_10"
-                        android:layout_height="@dimen/dp_18"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp_17"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@mipmap/back_black2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/dp_14"
-                        android:paddingStart="@dimen/dp_20"
-                        android:text="@string/个人设置"
-                        android:textColor="@color/GrayScale_20"
-                        android:textSize="@dimen/sp_14" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/shield"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/settings"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:layout_width="@dimen/dp_10"
-                        android:layout_height="@dimen/dp_18"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp_17"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@mipmap/back_black2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/dp_14"
-                        android:paddingStart="@dimen/dp_20"
-                        android:text="屏蔽设置"
-
-                        android:textColor="@color/GrayScale_20"
-                        android:textSize="@dimen/sp_14" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/rules"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/shield"
-                    android:layout_marginTop="0dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:layout_width="@dimen/dp_10"
-                        android:layout_height="@dimen/dp_18"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp_17"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@mipmap/back_black2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/dp_14"
-                        android:paddingStart="@dimen/dp_20"
-                        android:text="社区规范"
-
-                        android:textColor="@color/GrayScale_20"
-                        android:textSize="@dimen/sp_14" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/share"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/rules"
-                    android:layout_marginTop="0dp"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:layout_width="@dimen/dp_10"
-                        android:layout_height="@dimen/dp_18"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp_17"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@mipmap/back_black2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/dp_14"
-                        android:paddingStart="@dimen/dp_20"
-                        android:text="把树洞分享给同学"
-
-                        android:textColor="@color/GrayScale_20"
-                        android:textSize="@dimen/sp_14" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/evaluateAndAdvice"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/share"
-                    android:layout_marginTop="10dp"
-                    android:clickable="true">
-
-                    <ImageView
-                        android:layout_width="@dimen/dp_10"
-                        android:layout_height="@dimen/dp_18"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp_17"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@mipmap/back_black2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/dp_14"
-                        android:paddingStart="@dimen/dp_20"
-                        android:text="评价与建议"
-                        android:textColor="@color/GrayScale_20"
-
-                        android:textSize="@dimen/sp_14" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/about"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/evaluateAndAdvice"
-                    android:layout_marginTop="1dp"
-                    android:clickable="true">
-
-                    <ImageView
-                        android:layout_width="@dimen/dp_10"
-                        android:layout_height="@dimen/dp_18"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp_17"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@mipmap/back_black2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/dp_14"
-                        android:paddingStart="@dimen/dp_20"
-                        android:text="关于1037树洞"
-
-                        android:textColor="@color/GrayScale_20"
-                        android:textSize="@dimen/sp_14" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/update"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/about"
-                    android:layout_marginTop="1dp"
-                    android:clickable="true">
-
-                    <ImageView
-                        android:layout_width="@dimen/dp_10"
-                        android:layout_height="@dimen/dp_18"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp_17"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@mipmap/back_black2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/dp_14"
-                        android:paddingStart="@dimen/dp_20"
-                        android:text="更新"
-
-                        android:textColor="@color/GrayScale_20"
-                        android:textSize="@dimen/sp_14" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/logout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/update"
-                    android:layout_marginTop="10dp"
-                    android:clickable="true">
-
-                    <ImageView
-                        android:layout_width="@dimen/dp_10"
-                        android:layout_height="@dimen/dp_18"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="@dimen/dp_17"
-                        android:scaleType="fitXY"
-                        app:srcCompat="@mipmap/back_black2" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingVertical="@dimen/dp_14"
-                        android:paddingStart="@dimen/dp_20"
-                        android:text="退出登录"
-
-                        android:textColor="@color/HH_Reminder_Warning"
-                        android:textSize="@dimen/sp_14" />
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/my_date"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/img_my_background"
-                    android:layout_marginTop="10dp"
-                    android:padding="12dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/GrayScale_20"
-                    android:textSize="@dimen/sp_12" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:layout_below="@id/img_my_background"
-                    android:background="@color/GrayScale_95" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/my_date"
-                    android:background="@color/GrayScale_95" />
-
-                <View
-                    android:id="@+id/my_view2"
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:layout_below="@id/my_hole_star"
-                    android:background="@color/GrayScale_95" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_1"
-                    android:layout_alignBottom="@id/settings"
-                    android:background="@color/GrayScale_95" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_1"
-                    android:layout_alignBottom="@id/shield"
-                    android:background="@color/GrayScale_95" />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/rules"
-                    android:background="@color/GrayScale_95" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:layout_below="@id/share"
-                    android:background="@color/GrayScale_95" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/evaluateAndAdvice"
-                    android:background="@color/GrayScale_95" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_below="@id/about"
-                    android:background="@color/GrayScale_95" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="10dp"
-                    android:layout_below="@id/update"
-                    android:background="@color/GrayScale_95" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_below="@id/logout"
-                    android:background="@color/GrayScale_95" />
-            </RelativeLayout>
+                android:scaleType="centerCrop"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@mipmap/my_background" />
 
             <TextView
-                android:id="@+id/ppw_share_location"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_join_days"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/dp_200"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
+                android:layout_marginTop="@dimen/dp_10"
+                android:background="@drawable/standard_mine"
+                android:gravity="center"
+                android:paddingTop="@dimen/dp_3"
+                android:textAppearance="@style/HustHoleTypography.Body3"
+                app:joinDay="@{@string/join_days(viewModel.joinDay.toString())}"
+                app:layout_constraintTop_toBottomOf="@+id/img_my_background" />
+
+            <RelativeLayout
+                android:id="@+id/my_hole_star_reply"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50"
+                android:layout_centerHorizontal="true"
+                android:gravity="center"
+                android:background="@drawable/standard_mine"
+                app:layout_constraintTop_toBottomOf="@+id/tv_join_days">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/my_hole"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_55"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/my_hole_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dp_8"
+                        android:text="@{viewModel.myHoleNum.toString()}"
+                        android:textColor="@color/GrayScale_20"
+                        android:textSize="@dimen/sp_11"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp_5"
+                        android:text="@string/tv_myHoles"
+                        android:textColor="@color/GrayScale_50"
+                        android:textSize="@dimen/sp_11"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/my_star"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_55"
+                    android:layout_marginStart="@dimen/dp_40"
+                    android:layout_toEndOf="@id/my_hole"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/my_star_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dp_8"
+                        android:text="@{viewModel.myFollowNum.toString()}"
+                        android:textColor="@color/GrayScale_20"
+                        android:textSize="@dimen/sp_11"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp_5"
+                        android:text="@string/tv_myFollows"
+                        android:textColor="@color/GrayScale_50"
+                        android:textSize="@dimen/sp_11"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/my_reply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_55"
+                    android:layout_marginStart="@dimen/dp_40"
+                    android:layout_toEndOf="@id/my_star"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:orientation="vertical">
+
+
+                    <TextView
+                        android:id="@+id/my_reply_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="@dimen/dp_8"
+                        android:text="@{viewModel.myReplyNum.toString()}"
+                        android:textColor="@color/GrayScale_20"
+                        android:textSize="@dimen/sp_11"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp_5"
+                        android:text="@string/tv_myReply"
+                        android:textColor="@color/GrayScale_50"
+                        android:textSize="@dimen/sp_11"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_options"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_10"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toBottomOf="@+id/my_hole_star_reply" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_200"
+                android:background="@color/HH_Background"
+                app:layout_constraintTop_toBottomOf="@+id/rv_options" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 </layout>

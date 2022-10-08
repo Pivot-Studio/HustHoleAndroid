@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginTop="@dimen/dp_10"
-            android:text="@{@string/hole_id(String.valueOf(hole[4])), default = @string/hole_id}"
+            android:text="@{@string/hole_id(String.valueOf(hole[3])), default = @string/hole_id}"
             android:textAppearance="@style/HustHoleTypography.Headline5" />
 
         <TextView
@@ -50,6 +50,7 @@
             android:layout_below="@id/tv_myhole_time"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginEnd="@dimen/dp_12"
             android:ellipsize="end"
             android:lineSpacingExtra="4dp"
             android:maxLines="2"
@@ -58,14 +59,14 @@
             tools:text="@string/default_string_zh_long" />
 
         <TextView
-            android:id="@+id/tv_myhole_thumb_reply"
+            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tv_myhole_content"
             android:layout_marginStart="@dimen/dp_12"
             android:layout_marginTop="@dimen/dp_5"
             android:layout_marginBottom="@dimen/dp_10"
-            android:text="@{@string/thumb_follow(hole[8],hole[7]),default = @string/thumb_follow}"
+            android:text="@{@string/thumb_follow(hole[6],hole[5]),default = @string/thumb_follow}"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             android:textColor="@color/GrayScale_80"
             tools:text="24 点赞 · 23 评论" />

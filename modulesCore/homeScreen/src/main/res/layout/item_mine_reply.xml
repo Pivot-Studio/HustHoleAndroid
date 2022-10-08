@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginHorizontal="@dimen/dp_12"
-    android:layout_marginTop="@dimen/dp_10"
-    app:cardCornerRadius="@dimen/dp_20">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
+
+        <variable
+            name="hole"
+            type="String[]" />
+    </data>
+
+    <RelativeLayout
         android:id="@+id/cl_1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/standard_forest_hole">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/my_reply_total"
@@ -28,7 +32,7 @@
                 android:id="@+id/my_reply_moreWhat"
                 android:layout_width="@dimen/dp_25"
                 android:layout_height="@dimen/dp_25"
-                android:layout_marginEnd="3dp"
+                android:layout_marginEnd="@dimen/dp_3"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@mipmap/threepoint" />
@@ -37,9 +41,9 @@
                 android:id="@+id/my_reply_created_timestamp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_3"
                 android:textColor="@color/GrayScale_80"
                 android:textSize="@dimen/sp_11"
+                android:text="@{TimeUtil.replyTime(hole[2])}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/my_reply_alias" />
 
@@ -47,8 +51,8 @@
                 android:id="@+id/my_reply_alias"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/GrayScale_0"
-                android:textStyle="bold"
+                android:textAppearance="@style/HustHoleTypography.Headline5"
+                android:text="@{hole[4]}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,47 +62,47 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dp_5"
                 android:ellipsize="end"
-                android:lineSpacingExtra="4dp"
+                android:lineSpacingExtra="@dimen/dp_4"
                 android:maxLines="2"
                 android:textColor="@color/GrayScale_20"
                 android:textSize="@dimen/sp_14"
+                android:text="@{hole[1]}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/my_reply_created_timestamp" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_30"
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/dp_5"
-                app:cardBackgroundColor="#F2F2F2"
-                app:cardCornerRadius="@dimen/dp_10"
+                android:orientation="horizontal"
+                android:background="@drawable/standard_reply"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/my_reply_content">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/my_reply_hole_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:orientation="horizontal">
+                    android:layout_marginStart="@dimen/dp_13"
+                    android:textColor="@color/GrayScale_50"
+                    android:textSize="@dimen/sp_13"
+                    android:text="@{'#' + hole[3]}"/>
 
-                    <TextView
-                        android:id="@+id/my_reply_hole_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_13"
-                        android:textColor="@color/GrayScale_50"
-                        android:textSize="@dimen/sp_13" />
+                <TextView
+                    android:id="@+id/my_reply_hole_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_8"
+                    android:layout_marginEnd="@dimen/dp_6"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/GrayScale_50"
+                    android:textSize="@dimen/sp_13"
+                    android:text="@{hole[5]}"/>
+            </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/my_reply_hole_content"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/dp_8"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:textColor="@color/GrayScale_50"
-                        android:textSize="@dimen/sp_13" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -109,10 +113,11 @@
             android:clickable="true"
             android:elevation="20dp"
             android:focusable="true"
-            android:paddingEnd="@dimen/dp_80"
             android:paddingVertical="@dimen/dp_10"
-            app:layout_constraintEnd_toEndOf="@id/cl_1"
-            app:layout_constraintTop_toTopOf="@id/cl_1">
+            android:paddingEnd="@dimen/dp_80"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:visibility="invisible">
 
             <ImageView
                 android:id="@+id/iv_item_homepage_more_icon"
@@ -136,5 +141,5 @@
                 app:layout_constraintStart_toEndOf="@+id/iv_item_homepage_more_icon"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</layout>
