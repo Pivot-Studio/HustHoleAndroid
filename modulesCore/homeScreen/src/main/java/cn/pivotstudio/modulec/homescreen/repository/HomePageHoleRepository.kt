@@ -16,6 +16,7 @@ import cn.pivotstudio.moduleb.libbase.constant.Constant
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import retrofit2.Response
 import java.util.ArrayList
 
 /**
@@ -39,7 +40,6 @@ class HomePageHoleRepository(
         const val HOLES_LIST_SIZE = 20
     }
 
-    var pHomePageHoles = MutableLiveData<HomepageHoleResponse>()
     var tip = MutableLiveData<String?>()
 
     fun loadHoles(sortMode: String): Flow<List<HoleV2>> = flow {
@@ -50,9 +50,7 @@ class HomePageHoleRepository(
                 timestamp = lastTimeStamp
             )
         )
-    }.flowOn(dispatcher).catch { e ->
-        e.printStackTrace()
-    }.onEach {
+    }.flowOn(dispatcher).onEach {
         refreshTimestamp()
         lastOffset = 0
     }
@@ -73,21 +71,22 @@ class HomePageHoleRepository(
     }
 
     fun searchHolesBy(queryKey: String) = flow {
-        emit(hustHoleApiService.searchHolesByKey(
-            key = queryKey,
-        ))
+        emit(
+            hustHoleApiService.searchHolesByKey(
+                key = queryKey,
+            )
+        )
     }.onEach {
         lastOffset = 0
-    }.flowOn(dispatcher).catch { e ->
-        tip.value = e.message
-        e.printStackTrace()
-    }
+    }.flowOn(dispatcher)
 
     fun loadMoreSearchHoles(queryKey: String) = flow {
-        emit(hustHoleApiService.searchHolesByKey(
-            key = queryKey,
-            offset = lastOffset
-        ))
+        emit(
+            hustHoleApiService.searchHolesByKey(
+                key = queryKey,
+                offset = lastOffset
+            )
+        )
     }.onEach {
         lastOffset += HOLES_LIST_SIZE
     }.flowOn(dispatcher).catch { e ->
@@ -107,18 +106,7 @@ class HomePageHoleRepository(
                     like = RequestBody.LikeRequest(holeId = hole.holeId)
                 )
             }
-
-            if (response.isSuccessful) {
-                emit(ApiResult.Success(data = Unit))
-            } else {
-                emit(
-                    ApiResult.Error(
-                        code = response.code(),
-                        errorMessage = response.errorBody()?.string()
-                    )
-                )
-                response.errorBody()?.close()
-            }
+            checkResponse(response, this)
         }.flowOn(dispatcher)
     }
 
@@ -128,18 +116,8 @@ class HomePageHoleRepository(
             val response = hustHoleApiService
                 .followTheHole(RequestBody.HoleId(hole.holeId))
 
-            if (response.isSuccessful) {
-                emit(ApiResult.Success(data = Unit))
-            } else {
-                emit(
-                    ApiResult.Error(
-                        code = response.code(),
-                        errorMessage = response.errorBody()?.string()
-                    )
-                )
-                response.errorBody()?.close()
-            }
-        }.flowOn(dispatcher)
+            checkResponse(response, this)
+        }.flowOn(dispatcher).catch { it.printStackTrace() }
     }
 
     fun unFollowTheHole(hole: HoleV2): Flow<ApiResult> = flow {
@@ -147,64 +125,16 @@ class HomePageHoleRepository(
         val response = hustHoleApiService
             .unFollowTheHole(RequestBody.HoleId(hole.holeId))
 
-        if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
-        } else {
-            emit(
-                ApiResult.Error(
-                    code = response.code(),
-                    errorMessage = response.errorBody()?.string()
-                )
-            )
-            response.errorBody()?.close()
-        }
-    }.flowOn(dispatcher)
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { it.printStackTrace() }
 
     fun deleteTheHole(hole: HoleV2): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
         val response = hustHoleApiService
             .deleteTheHole(hole.holeId)
 
-        if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
-        } else {
-            emit(
-                ApiResult.Error(
-                    code = response.code(),
-                    errorMessage = response.errorBody()?.string()
-                )
-            )
-            response.errorBody()?.close()
-        }
-    }
-
-    /**
-     * 搜索单个树洞
-     *
-     * @param et 树洞号
-     */
-    fun searchSingleHoleForNetwork(et: String) {
-        retrofitService.searchSingleHole(Constant.BASE_URL + "holes/" + et)
-            .compose(NetworkApi.applySchedulers(object : BaseObserver<DataBean>() {
-                override fun onSuccess(requestedData: DataBean) {
-                    //手动为期添加状态，判断是新更新还是新发布，用于数据绑定，显式在解析的时间后
-                    requestedData.is_last_reply = false
-                    //封装为list
-                    val requestDataList: MutableList<DataBean> = ArrayList()
-                    requestDataList.add(requestedData)
-
-                    //手动补充为完整response
-                    val homepageHoleResponse = HomepageHoleResponse()
-                    homepageHoleResponse.data = requestDataList
-                    homepageHoleResponse.model = "SEARCH_HOLE"
-                    pHomePageHoles.setValue(homepageHoleResponse)
-                }
-
-                override fun onFailure(e: Throwable) {
-                    tip.value = (e as ResponseThrowable).message
-                }
-            }))
-    }
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { it.printStackTrace() }
 
     fun loadTheHole(hole: HoleV2): Flow<HoleV2> {
         return flow {
@@ -214,44 +144,25 @@ class HomePageHoleRepository(
         }
     }
 
-    /**
-     * 举报或删除
-     *
-     * @param hole_id 树洞号
-     * @param is_mine 是否是自己发布的树洞
-     */
-    fun moreActionForNetwork(hole_id: Int, is_mine: Boolean) {
-        if (is_mine) {
-            retrofitService.deleteHole(hole_id.toString())
-                .compose(NetworkApi.applySchedulers(object : BaseObserver<MsgResponse>() {
-                    override fun onSuccess(msg: MsgResponse) {
-                        val newItems = pHomePageHoles.value!!.data.toMutableList()
-                        val model = pHomePageHoles.value!!.model
-                        newItems.removeIf {
-                            it.hole_id == hole_id
-                        }
-                        pHomePageHoles.value = HomepageHoleResponse().apply {
-                            data = newItems
-                            this.model = model
-                        }
-                        tip.value = msg.msg
-                    }
-
-                    override fun onFailure(e: Throwable) {
-                        tip.value = (e as ResponseThrowable).message
-                    }
-                }))
-        } else {
-            ARouter.getInstance().build("/report/ReportActivity")
-                .withInt(Constant.HOLE_ID, hole_id)
-                .withInt(Constant.REPLY_ID, -1)
-                .withString(Constant.ALIAS, "洞主")
-                .navigation()
-        }
-    }
-
     private fun refreshTimestamp() {
         lastTimeStamp = DateUtil.getDateTime()
+    }
+
+    private suspend inline fun checkResponse(
+        response: Response<Unit>,
+        flow: FlowCollector<ApiResult>
+    ) {
+        if (response.isSuccessful) {
+            flow.emit(ApiResult.Success(data = Unit))
+        } else {
+            flow.emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = response.errorBody()?.string()
+                )
+            )
+            response.errorBody()?.close()
+        }
     }
 
 }

@@ -10,6 +10,7 @@ import cn.pivotstudio.modulec.homescreen.repository.LoadStatus.LOADING
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import retrofit2.Response
 
 
 enum class LoadStatus { LOADING, ERROR, DONE, LATERLOAD }
@@ -32,12 +33,9 @@ class ForestRepository(
     private var lastOffset = INITIAL_OFFSET
 
     private var _holeState = MutableLiveData<LoadStatus?>()
-    private var _headerLoadState = MutableLiveData<LoadStatus>()
-    private var _holes = MutableLiveData<List<ForestHole>>()
 
     val tip = MutableLiveData<String?>()
     val holeState = _holeState
-    val headerLoadState = _headerLoadState
 
     fun loadForestHolesV2(): Flow<List<HoleV2>> {
         return flow {
@@ -96,18 +94,10 @@ class ForestRepository(
                 hustHoleApiService.giveALikeTo(theHole)
             }
 
-            if (response.isSuccessful) {
-                emit(ApiResult.Success(data = Unit))
-            } else {
-                emit(
-                    ApiResult.Error(
-                        code = response.code(),
-                        errorMessage = response.errorBody()?.string()
-                    )
-                )
-                response.errorBody()?.close()
-            }
-        }.flowOn(dispatcher)
+            checkResponse(response, this)
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
+        }
     }
 
     fun followTheHole(hole: HoleV2): Flow<ApiResult> {
@@ -116,18 +106,10 @@ class ForestRepository(
             val response = hustHoleApiService
                 .followTheHole(RequestBody.HoleId(hole.holeId))
 
-            if (response.isSuccessful) {
-                emit(ApiResult.Success(data = Unit))
-            } else {
-                emit(
-                    ApiResult.Error(
-                        code = response.code(),
-                        errorMessage = response.errorBody()?.string()
-                    )
-                )
-                response.errorBody()?.close()
-            }
-        }.flowOn(dispatcher)
+            checkResponse(response, this)
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
+        }
     }
 
     fun unFollowTheHole(hole: HoleV2): Flow<ApiResult> = flow {
@@ -135,18 +117,10 @@ class ForestRepository(
         val response = hustHoleApiService
             .unFollowTheHole(RequestBody.HoleId(hole.holeId))
 
-        if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
-        } else {
-            emit(
-                ApiResult.Error(
-                    code = response.code(),
-                    errorMessage = response.errorBody()?.string()
-                )
-            )
-            response.errorBody()?.close()
-        }
-    }.flowOn(dispatcher)
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
+    }
 
 
     fun loadTheHole(hole: HoleV2): Flow<HoleV2> {
@@ -162,10 +136,21 @@ class ForestRepository(
         val response = hustHoleApiService
             .deleteTheHole(hole.holeId)
 
+        checkResponse(response, this)
+    }
+
+    private fun refreshTimestamp() {
+        lastTimeStamp = DateUtil.getDateTime()
+    }
+
+    private suspend inline fun checkResponse(
+        response: Response<Unit>,
+        flow: FlowCollector<ApiResult>
+    ) {
         if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
+            flow.emit(ApiResult.Success(data = Unit))
         } else {
-            emit(
+            flow.emit(
                 ApiResult.Error(
                     code = response.code(),
                     errorMessage = response.errorBody()?.string()
@@ -173,35 +158,5 @@ class ForestRepository(
             )
             response.errorBody()?.close()
         }
-    }
-
-    fun refreshLoadLaterHole(
-        holeId: Int,
-        isThumb: Boolean,
-        replied: Boolean,
-        followed: Boolean,
-        thumbNum: Int,
-        replyNum: Int,
-        followNum: Int
-    ) {
-        if (holeId < 0) return
-        _holes.value?.toMutableList()?.let { newItems ->
-            for ((i, newHole) in newItems.withIndex()) {
-                if (holeId == newHole.holeId)
-                    newItems[i] = newHole.copy().apply {
-                        likeNum = thumbNum
-                        liked = isThumb
-                        this.replied = replied
-                        this.followed = followed
-                        this.replyNum = replyNum
-                        this.followNum = followNum
-                    }
-            }
-            _holes.value = newItems
-        }
-    }
-
-    private fun refreshTimestamp() {
-        lastTimeStamp = DateUtil.getDateTime()
     }
 }

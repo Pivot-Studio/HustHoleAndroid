@@ -73,7 +73,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
             android:layout_marginStart="@dimen/dp_67"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/layout_forest_detail_reply">
 
@@ -103,7 +102,6 @@
             android:id="@+id/layout_forest_detail_thumbup"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
-            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/text_item_forest_detail_content"
             app:layout_constraintTop_toBottomOf="@+id/text_item_forest_detail_content">
 
@@ -134,7 +132,6 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_40"
             android:layout_marginStart="@dimen/dp_67"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/layout_forest_detail_thumbup">
 
@@ -172,6 +169,7 @@
 
             <ImageView
                 android:id="@+id/image_item_forest_detail_more_icon"
+                moreListIcon="@{hole.myHole}"
                 android:layout_width="@dimen/dp_24"
                 android:layout_height="@dimen/dp_24"
                 android:layout_marginStart="@dimen/dp_12"
@@ -185,9 +183,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:text="举报"
-                android:textColor="@color/GrayScale_20"
+                android:text="@{hole.myHole?`删除`:`举报`}"
                 android:textAppearance="@style/HustHoleTypography.Button2"
+                android:textColor="@color/GrayScale_20"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/image_item_forest_detail_more_icon"
                 app:layout_constraintTop_toTopOf="parent" />

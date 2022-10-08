@@ -70,7 +70,9 @@ class HomeHoleAdapter(
 
                 clItemHomepageMorelist.setOnClickListener {
                     if (hole.isMyHole) {
-                        viewModel.deleteTheHole(hole)
+                        _context.deleteTheHole(hole)
+                    } else {
+                        _context.reportTheHole(hole)
                     }
                     it.visibility = View.GONE
                 }

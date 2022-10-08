@@ -45,7 +45,7 @@ class ForestHoleAdapter(
             binding.forestHole = forestHole
             binding.apply {
                 layoutItemForestReply.setOnClickListener {
-                    _context.navToSpecificHoleWithReply(forestHole.holeId.toInt())
+                    _context.navToSpecificHoleWithReply(forestHole.holeId)
                 }
 
                 imageItemForestAvatar.setOnClickListener {

@@ -93,12 +93,12 @@
 
                         <include
                             android:id="@+id/placeholder_home_net_error"
-                            layout="@layout/network_error_placeholder" />
+                            layout="@layout/network_error_placeholder"
+                            android:visibility="gone"/>
 
                         <include
                             android:id="@+id/placeholder_home_no_result"
                             layout="@layout/no_search_result_placeholder"
-                            android:visibility="gone"
                             tools:visibility="visible" />
 
                     </FrameLayout>

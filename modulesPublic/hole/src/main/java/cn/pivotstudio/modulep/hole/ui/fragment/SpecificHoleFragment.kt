@@ -192,16 +192,6 @@ class SpecificHoleFragment : BaseFragment() {
             }
 
             lifecycleScope.launchWhenStarted {
-                loadingState.collectLatest { state ->
-                    when (state) {
-                        ApiStatus.SUCCESSFUL,
-                        ApiStatus.ERROR -> finishRefreshAnim()
-                        ApiStatus.LOADING -> {}
-                    }
-                }
-            }
-
-            lifecycleScope.launchWhenStarted {
                 showEmojiPad.collectLatest { showingEmojiPad ->
                     if (showingEmojiPad) {
                         (requireActivity() as HoleActivity).closeKeyBoard()

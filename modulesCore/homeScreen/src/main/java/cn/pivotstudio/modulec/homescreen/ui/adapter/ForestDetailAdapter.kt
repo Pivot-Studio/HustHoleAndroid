@@ -33,30 +33,26 @@ class ForestDetailAdapter(
     }
 
     inner class DetailViewHolder(private val binding: ItemForestDetailBinding) :
-        RecyclerView.ViewHolder(
-            binding.root
-        ) {
+        RecyclerView.ViewHolder(binding.root) {
 
         fun bind(hole: HoleV2) {
             binding.hole = hole
             binding.apply {
 
                 layoutDetailForestItem.setOnClickListener {
-                    _context.navToSpecificHole(hole.holeId.toInt())
+                    _context.navToSpecificHole(hole.holeId)
                 }
 
                 layoutForestDetailReply.setOnClickListener {
-                    _context.navToSpecificHoleWithReply(hole.holeId.toInt())
+                    _context.navToSpecificHoleWithReply(hole.holeId)
                 }
 
                 layoutForestDetailThumbup.setOnClickListener {
-                    Log.e(TAG, "bind: v2接口暂时不支持点赞")
-//                    _context.giveALikeToTheHole(hole)
+                    _context.giveALikeToTheHole(hole)
                 }
 
                 layoutForestDetailFollow.setOnClickListener {
-                    Log.e(TAG, "bind: v2接口暂时不支持收藏")
-//                    _context.followTheHole(hole)
+                    _context.followTheHole(hole)
                 }
 
                 // 三个点

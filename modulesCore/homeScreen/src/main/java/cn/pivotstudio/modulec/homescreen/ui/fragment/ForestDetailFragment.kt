@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Hole
-import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
@@ -31,7 +29,6 @@ import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestDetailAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.ForestDetailViewModelFactory
-import cn.pivotstudio.modulec.homescreen.viewmodel.ForestViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.launch
 
@@ -44,27 +41,20 @@ class ForestDetailFragment : BaseFragment() {
         ForestDetailViewModelFactory(_args.forestBrief)
     }
 
-    // 只有 ForestViewModel 实例存放了所有关注了的小树林的列表
-    // 所以需要从这里拿到这个列表进行状态判断
-    // 决定小树林"是否加入" 的显示状态
-    private val sharedViewModel: ForestViewModel by activityViewModels()
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == ResultCodeConstant.Hole) {
-            val returnInfo = data!!.getParcelableExtra<HoleReturnInfo>(
-                Constant.HOLE_RETURN_INFO
-            )
-            returnInfo?.let {
-                viewModel.refreshLoadLaterHole(
-                    it.is_thumbup,
-                    it.is_reply,
-                    it.is_follow,
-                    it.thumbup_num,
-                    it.reply_num,
-                    it.follow_num
-                )
+            data?.extras?.let { bundle ->
+                bundle.apply {
+                    viewModel.refreshLoadLaterHole(
+                        isThumb = getBoolean(Constant.HOLE_LIKED),
+                        replied = getBoolean(Constant.HOLE_REPLIED),
+                        followed = getBoolean(Constant.HOLE_FOLLOWED),
+                        thumbNum = getLong(Constant.HOLE_LIKE_COUNT),
+                        replyNum = getLong(Constant.HOLE_REPLY_COUNT),
+                        followNum = getLong(Constant.HOLE_FOLLOW_COUNT),
+                    )
+                }
             }
-
         }
     }
 
@@ -152,10 +142,11 @@ class ForestDetailFragment : BaseFragment() {
     }
 
     // 点击item跳转到树洞
-    fun navToSpecificHole(holeId: Int) {
+    fun navToSpecificHole(holeId: String) {
+        viewModel.loadHoleLater(holeId)
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
-                .withInt(Constant.HOLE_ID, holeId)
+                .withInt(Constant.HOLE_ID, holeId.toInt())
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                 .navigation(requireActivity(), ResultCodeConstant.Hole)
         }
@@ -174,38 +165,37 @@ class ForestDetailFragment : BaseFragment() {
     }
 
     // 点击回复图标跳转到树洞后自动打开软键盘
-    fun navToSpecificHoleWithReply(holeId: Int) {
+    fun navToSpecificHoleWithReply(holeId: String) {
         if (BuildConfig.isRelease) {
             ARouter.getInstance().build("/hole/HoleActivity")
-                .withInt(Constant.HOLE_ID, holeId)
+                .withInt(Constant.HOLE_ID, holeId.toInt())
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
                 .navigation(requireActivity(), ResultCodeConstant.Hole)
         }
     }
 
     // 点赞
-    fun giveALikeToTheHole(hole: Hole) {
+    fun giveALikeToTheHole(hole: HoleV2) {
         viewModel.giveALikeToTheHole(hole)
     }
 
     // 关注/收藏
-    fun followTheHole(hole: Hole) {
+    fun followTheHole(hole: HoleV2) {
         viewModel.followTheHole(hole)
     }
 
     // 举报树洞交给举报界面处理
-    fun reportTheHole(hole: Hole) {
-        (hole as HoleV2).let {
+    fun reportTheHole(hole: HoleV2) {
+        hole.let {
             ARouter.getInstance().build("/report/ReportActivity")
-                .withInt(Constant.HOLE_ID, it.holeId.toInt())
-                .withInt(Constant.REPLY_ID, -1)
+                .withString(Constant.HOLE_ID, it.holeId)
                 .withString(Constant.ALIAS, "洞主")
                 .navigation()
         }
     }
 
     // 删除树洞
-    fun deleteTheHole(hole: Hole) {
+    fun deleteTheHole(hole: HoleV2) {
         val dialog = DeleteDialog(context)
         dialog.show()
         dialog.setOptionsListener {

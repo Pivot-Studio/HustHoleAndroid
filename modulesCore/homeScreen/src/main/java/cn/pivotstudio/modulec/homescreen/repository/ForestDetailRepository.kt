@@ -2,10 +2,7 @@ package cn.pivotstudio.modulec.homescreen.repository
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
-import cn.pivotstudio.husthole.moduleb.network.BaseObserver
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
-import cn.pivotstudio.husthole.moduleb.network.NetworkApi
+import cn.pivotstudio.husthole.moduleb.network.*
 import cn.pivotstudio.husthole.moduleb.network.model.*
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
@@ -15,6 +12,7 @@ import io.reactivex.Observable
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import retrofit2.Response
 
 enum class ForestDetailHolesLoadStatus { LOADING, ERROR, DONE }
 
@@ -63,62 +61,34 @@ class ForestDetailRepository(
         }
     }
 
-    fun giveALikeToTheHole(hole: HoleV2) {
-        if (!hole.liked) {
-            HomeScreenNetworkApi.retrofitService.thumbups(Constant.BASE_URL + "thumbups/" + hole.holeId + "/-1")
-        } else {
-            HomeScreenNetworkApi.retrofitService.deleteThumbups(Constant.BASE_URL + "thumbups/" + hole.holeId + "/-1")
-        }.apply {
-            compose(NetworkApi.applySchedulers()).subscribe(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(response: MsgResponse) {
-                    tip.value = response.msg
-                }
+    fun followTheHole(hole: HoleV2): Flow<ApiResult> {
+        return flow {
+            emit(ApiResult.Loading())
+            val response = hustHoleApiService
+                .followTheHole(RequestBody.HoleId(hole.holeId))
 
-                override fun onFailure(e: Throwable?) {
-                    tip.value = "点赞失败"
-                }
-
-            })
+            checkResponse(response, this)
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
         }
-
-
     }
 
-    fun followTheHole(hole: HoleV2) {
-        val observable: Observable<MsgResponse> = if (!hole.isFollow) {
-            HomeScreenNetworkApi.retrofitService.follow(Constant.BASE_URL + "follows/" + hole.holeId)
-        } else {
-            HomeScreenNetworkApi.retrofitService.deleteFollow(Constant.BASE_URL + "follows/" + hole.holeId)
-        }
-        observable.compose(NetworkApi.applySchedulers())
-            .subscribe(object : BaseObserver<MsgResponse>() {
-                override fun onSuccess(response: MsgResponse) {
-                    tip.value = response.msg
-                }
+    fun unFollowTheHole(hole: HoleV2): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService
+            .unFollowTheHole(RequestBody.HoleId(hole.holeId))
 
-                override fun onFailure(e: Throwable) {
-                    tip.value = "收藏失败"
-                }
-            })
-
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
     }
 
-    fun deleteTheHole(hole: Hole) {
-        (hole as DetailForestHole).takeIf {
-            it.isMine
-        }?.let {
-            HomeScreenNetworkApi.retrofitService.deleteHole(it.holeId.toString())
-                .compose(NetworkApi.applySchedulers())
-                .subscribe(object : BaseObserver<MsgResponse>() {
-                    override fun onSuccess(response: MsgResponse) {
+    fun deleteTheHole(hole: HoleV2): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService
+            .deleteTheHole(hole.holeId)
 
-                    }
-
-                    override fun onFailure(e: Throwable?) {
-                        tip.value = "❌"
-                    }
-                })
-        }
+        checkResponse(response, this)
     }
 
     fun joinTheForestV2(): Flow<Boolean> {
@@ -150,5 +120,39 @@ class ForestDetailRepository(
         const val LIST_SIZE = 20
         const val TAG = "ForestDetailRepository"
     }
+
+    fun giveALikeToTheHole(hole: HoleV2): Flow<ApiResult> {
+        return flow {
+            emit(ApiResult.Loading())
+            val theHole = RequestBody.LikeRequest(holeId = hole.holeId)
+            val response = if (hole.liked) {
+                hustHoleApiService.unLike(theHole)
+            } else {
+                hustHoleApiService.giveALikeTo(theHole)
+            }
+
+            checkResponse(response, this)
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
+        }
+    }
+
+    private suspend inline fun checkResponse(
+        response: Response<Unit>,
+        flow: FlowCollector<ApiResult>
+    ) {
+        if (response.isSuccessful) {
+            flow.emit(ApiResult.Success(data = Unit))
+        } else {
+            flow.emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = response.errorBody()?.string()
+                )
+            )
+            response.errorBody()?.close()
+        }
+    }
+
 
 }

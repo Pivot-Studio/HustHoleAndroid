@@ -22,7 +22,6 @@ class ForestViewModel : ViewModel() {
     private val repository = ForestRepository()
 
     val holesLoadState: MutableLiveData<LoadStatus?> = repository.holeState
-    val headerLoadState: MutableLiveData<LoadStatus> = repository.headerLoadState
 
     private var _holesV2 = MutableStateFlow<List<HoleV2>>(mutableListOf())
     val holesV2: StateFlow<List<HoleV2>> = _holesV2
@@ -187,10 +186,6 @@ class ForestViewModel : ViewModel() {
 
     fun doneShowingTip() {
         tip.value = null
-    }
-
-    fun showPlaceHolder() {
-        repository.holeState.value = null
     }
 
     fun loadHoleLater(holeId: String) {

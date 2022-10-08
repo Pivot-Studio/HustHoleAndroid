@@ -3,6 +3,7 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
+import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
@@ -27,8 +28,8 @@ class HomePageViewModel : BaseViewModel() {
     private var _isLatestReply = MutableStateFlow(true)
     val isLatestReply: StateFlow<Boolean> = _isLatestReply
 
-    private var _loading = MutableStateFlow(false)
-    val loading: StateFlow<Boolean> = _loading
+    private var _loadingState = MutableStateFlow(ApiStatus.SUCCESSFUL)
+    val loadingState: StateFlow<ApiStatus> = _loadingState
 
     private var _showingPlaceholder = MutableStateFlow<PlaceholderType?>(null)
     val showingPlaceholder = _showingPlaceholder.asStateFlow()
@@ -49,11 +50,16 @@ class HomePageViewModel : BaseViewModel() {
         }
 
         viewModelScope.launch {
-            _loading.emit(true)
+            _loadingState.emit(ApiStatus.LOADING)
             repository.loadHoles(sortMode)
                 .onEach {
-                    _loading.emit(false)
+                    _loadingState.emit(ApiStatus.SUCCESSFUL)
                     _sortMode = sortMode
+                }
+                .catch { e ->
+                    _loadingState.emit(ApiStatus.ERROR)
+                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                    e.printStackTrace()
                 }
                 .collectLatest {
                     it.forEach { hole ->
@@ -80,9 +86,14 @@ class HomePageViewModel : BaseViewModel() {
     fun searchHolesV2(queryKey: String) {
         queryKey.takeIf { it.isNotBlank() }?.let {
             viewModelScope.launch {
-                _loading.emit(true)
+                _loadingState.emit(ApiStatus.LOADING)
                 repository.searchHolesBy(it)
-                    .onEach { _loading.emit(false) }
+                    .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
+                    .catch {
+                        tip.value = it.message
+                        _loadingState.emit(ApiStatus.ERROR)
+                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                    }
                     .collectLatest { holes ->
                         if (holes.isEmpty()) {
                             _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_SEARCH_RESULT)
@@ -96,6 +107,12 @@ class HomePageViewModel : BaseViewModel() {
     private fun loadMoreSearchHoles() {
         viewModelScope.launch {
             repository.loadMoreSearchHoles(searchKeyword)
+                .catch { e ->
+                    _loadingState.emit(ApiStatus.ERROR)
+                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                    tip.value = e.message
+                    e.printStackTrace()
+                }
                 .collectLatest {
                     _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it) })
                 }
@@ -210,7 +227,6 @@ class HomePageViewModel : BaseViewModel() {
     val tip: MutableLiveData<String?> = repository.tip
     private var mIsSearch: Boolean = false //是否是搜索状态
     private var mSearchKeyword: String = "" //搜索关键词
-    var pClickDataBean: DataBean? = null
     var isSearch: Boolean
         get() {
             return mIsSearch
