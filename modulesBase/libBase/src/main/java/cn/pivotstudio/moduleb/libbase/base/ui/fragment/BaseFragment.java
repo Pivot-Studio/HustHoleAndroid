@@ -53,10 +53,4 @@ public class BaseFragment extends Fragment {
     protected void showMsg(String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
-
-    protected boolean isNight() {
-        UiModeManager uiModeManager =
-            (UiModeManager) context.getSystemService(Context.UI_MODE_SERVICE);
-        return uiModeManager.getNightMode() == UiModeManager.MODE_NIGHT_YES;
-    }
 }

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @classname:ActivityManager
+ * @classname: ActivityManager
  * @description:
- * @date:2022/4/28 20:24
+ * @date: 2022/4/28 20:24
  * @version:1.0
  * @author:
  */

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:text="类型"
-        android:textSize="11sp"
+        android:textAppearance="@style/HustHoleTypography.Headline5"
         android:textColor="@color/GrayScale_50"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

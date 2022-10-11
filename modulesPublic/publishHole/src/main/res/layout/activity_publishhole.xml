@@ -58,8 +58,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="left"
                 android:text="加载中..."
-                android:textColor="@color/GrayScale_100"
                 android:textAppearance="@style/HustHoleTypography.Headline1.Bold"
+                android:textColor="@color/GrayScale_100"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/titlebargreen_AVLoadingIndicatorView"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -101,8 +101,8 @@
                 android:background="@drawable/standard_button_gray"
                 android:onClick="onClick"
                 android:text="@string/publishhole_3"
-                android:textColor="@color/GrayScale_100"
                 android:textAppearance="@style/HustHoleTypography.Button2"
+                android:textColor="@color/GrayScale_100"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -114,8 +114,8 @@
                 android:layout_marginStart="5dp"
                 android:onClick="onClick"
                 android:text="@string/publishhole_2"
+                android:textAppearance="@style/HustHoleTypography.Headline5"
                 android:textColor="@color/GrayScale_50"
-                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_publishhole_foresticon"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -149,7 +149,7 @@
             android:hint="@string/publishhole_4"
             android:maxLength="1037"
             android:textColorHint="@color/GrayScale_70"
-            android:textSize="14sp"
+            android:textAppearance="@style/HustHoleTypography.Body2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cl_publishhole_frame" />

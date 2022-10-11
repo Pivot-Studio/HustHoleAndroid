@@ -1,13 +1,9 @@
 package cn.pivotstudio.modulep.publishhole.viewmodel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
-import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
 import cn.pivotstudio.modulep.publishhole.repository.PublishHoleRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -19,7 +15,7 @@ import kotlinx.coroutines.launch
  * @version:1.0
  * @author:
  */
-class PublishHoleViewModel : BaseViewModel() {
+class PublishHoleViewModel : ViewModel() {
 
     private val repository: PublishHoleRepository = PublishHoleRepository()
     private var _forestsMeta = listOf<ForestBrief>()
@@ -47,54 +43,11 @@ class PublishHoleViewModel : BaseViewModel() {
     //选中的小树林的id
     var forestId: String? = null
 
-    /**
-     * 获取加入的小树林
-     */
-    val joinedForests: Unit
-        get() {
-            repository.joinedForestForNetwork
-        }
-
-    /**
-     * 获取小树林类型
-     */
-    val forestType: Unit
-        get() {
-            repository.forestTypeForNetwork
-        }
-
-    /**
-     * 获取某一类型的所有小树林
-     *
-     * @param forest_type 小树林类型
-     * @param location    对应总列表的位置
-     */
-    fun getTypeForest(forest_type: String?, location: Int) {
-        repository.getTypeForestForNetwork(forest_type, location)
-    }
-
-    /**
-     * 获取热门小树林
-     */
-    val hotForest: Unit
-        get() {
-            repository.hotForestForNetwork
-        }
-
-    /**
-     * 发送树洞
-     *
-     * @param content 树洞内容
-     */
-    fun postHoleRequest(content: String?) {
-//        repository.publishHole(content, forestId!!)
-    }
-
     fun publishAHole(forestId: String? = this.forestId, content: String) {
         viewModelScope.launch {
             repository.publishAHole(forestId, content)
                 .collectLatest { state ->
-                    when(state) {
+                    when (state) {
                         is ApiResult.Success<*> -> {
                             _loadingState.emit(state.status)
                         }
@@ -155,6 +108,5 @@ class PublishHoleViewModel : BaseViewModel() {
     init {
         loadJoinedForestsV2()
         loadAllForests()
-        failed = repository.failed
     }
 }

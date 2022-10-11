@@ -1,13 +1,12 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
-import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
-import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -19,7 +18,7 @@ import kotlinx.coroutines.launch
  * @version:1.0
  * @author:
  */
-class HomePageViewModel : BaseViewModel() {
+class HomePageViewModel : ViewModel() {
     private val repository = HomePageHoleRepository()
 
     private var _holesV2 = MutableStateFlow<List<HoleV2>>(mutableListOf())

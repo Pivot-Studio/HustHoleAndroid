@@ -9,9 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import cn.pivotstudio.moduleb.libbase.R;
 
 /**
- * @classname:MaxHeightRecyclerView
- * @description:允许设置最大长度的recyclerview
- * @date:2022/5/3 16:47
+ * @classname: MaxHeightRecyclerView
+ * @description: 允许设置最大长度的recyclerview
+ * @date: 2022/5/3 16:47
  * @version:1.0
  * @author:
  */

@@ -515,8 +515,10 @@
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_expandablelistview.xml" value="0.4990942028985507" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlist.xml" value="0.2586050724637681" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_forestlisttitle.xml" value="0.2586050724637681" />
-        <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_foresttype.xml" value="0.25181159420289856" />
+        <entry key="modulesPublic/publishHole/src/main/res/layout/item_publishhole_foresttype.xml" value="0.1" />
+        <entry key="modulesPublic/publishHole/src/main/res/layout/ppw_homepage_darkscreen.xml" value="0.19519927536231885" />
         <entry key="modulesPublic/publishHole/src/main/res/layout/ppw_publishhole_forests.xml" value="0.3710093412106948" />
+        <entry key="modulesPublic/publishHole/src/main/res/layout/titlebar_green.xml" value="0.1" />
         <entry key="modulesPublic/report/src/main/res/layout/activity_report.xml" value="0.21042633056640625" />
       </map>
     </option>

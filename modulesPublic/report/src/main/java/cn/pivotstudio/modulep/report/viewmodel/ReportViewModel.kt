@@ -1,11 +1,11 @@
 package cn.pivotstudio.modulep.report.viewmodel
 
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.model.ReportType
 import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
-import cn.pivotstudio.moduleb.libbase.base.viewmodel.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +18,7 @@ import kotlinx.coroutines.launch
  * @version:1.0
  * @author:
  */
-class ReportViewModel : BaseViewModel() {
+class ReportViewModel : ViewModel() {
 
     private var _reportingState = MutableStateFlow<ApiResult?>(null)
     val reportingState = _reportingState.asStateFlow()
