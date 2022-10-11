@@ -1,9 +1,14 @@
 package cn.pivotstudio.moduleb.libbase.util.ui;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 /**
  * @classname: SoftKeyBoardUtil
@@ -71,6 +76,17 @@ public class SoftKeyBoardUtil {
         void keyBoardShow(int height);
 
         void keyBoardHide(int height);
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm =
+                (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(activity.getWindow().getDecorView().getWindowToken(), 0);
+    }
+
+    public static void showKeyboard(Activity activity, EditText et) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(INPUT_METHOD_SERVICE);
+        imm.showSoftInput(et, InputMethodManager.SHOW_IMPLICIT);
     }
 
     public static void setListener(Activity activity,

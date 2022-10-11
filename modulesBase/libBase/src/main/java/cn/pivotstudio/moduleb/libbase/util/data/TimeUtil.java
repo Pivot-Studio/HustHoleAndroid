@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * @classname:TimeUtil
+ * @classname: TimeUtil
  * @description:
  * @date:2022/5/4 22:21
  * @version:1.0

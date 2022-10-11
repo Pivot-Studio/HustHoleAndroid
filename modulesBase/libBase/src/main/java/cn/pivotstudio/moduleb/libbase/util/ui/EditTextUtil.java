@@ -12,7 +12,7 @@ import android.widget.EditText;
 import cn.pivotstudio.moduleb.libbase.R;
 
 /**
- * @author
+ * @author lzt
  * @version:1.0
  * @classname:EditTextUtil
  * @description:editText工具类

@@ -15,6 +15,7 @@ import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFoot
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentNoticeBinding
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.adapter.NoticeAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.NoticeViewModel
 import com.alibaba.android.arouter.launcher.ARouter
@@ -96,6 +97,11 @@ class NoticeFragment : BaseFragment() {
                 viewModel.loadMoreV2()
                 binding.rvNotices.isEnabled = false
             }
+        }
+
+        (activity as HomeScreenActivity).setOnBottomBarItemReselectedListener {
+            binding.refreshLayout.autoRefresh()
+            binding.noticeNestedScrollView.scrollTo(0, 0)
         }
     }
 

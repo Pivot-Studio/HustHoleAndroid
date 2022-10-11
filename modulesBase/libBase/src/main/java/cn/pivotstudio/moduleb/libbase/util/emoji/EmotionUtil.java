@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @classname:EmojiUtils
+ * @classname: EmojiUtils
  * @description:
- * @date:2022/5/16 16:11
+ * @date: 2022/5/16 16:11
  * @version:1.0
- * @author:
+ * @author: lzt
  */
 public class EmotionUtil {
 

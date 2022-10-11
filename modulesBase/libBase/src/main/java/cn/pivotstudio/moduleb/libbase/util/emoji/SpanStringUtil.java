@@ -15,11 +15,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @classname:SpanStringUtils
- * @description:解析【】内的表情
- * @date:2022/5/16 16:13
+ * @classname: SpanStringUtils
+ * @description: 解析【】内的表情
+ * @date: 2022/5/16 16:13
  * @version:1.0
- * @author:
+ * @author: lzt
  */
 public class SpanStringUtil {
     /**

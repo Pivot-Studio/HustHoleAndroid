@@ -22,6 +22,7 @@ import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
+import cn.pivotstudio.moduleb.libbase.util.ui.SoftKeyBoardUtil
 import cn.pivotstudio.modulep.hole.R
 import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshHeader
@@ -92,14 +93,12 @@ class InnerReplyFragment : BaseFragment() {
             })
 
             etReplyPost.setOnClickListener {
-                activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-                (requireActivity() as HoleActivity).openKeyBoard(binding.etReplyPost)
                 innerReplyViewModel.doneShowingEmojiPad()
             }
 
             btnSend.setOnClickListener {
                 innerReplyViewModel.sendAInnerComment("${binding.etReplyPost.text}")
-                (requireActivity() as HoleActivity).closeKeyBoard()
+                SoftKeyBoardUtil.hideKeyboard(requireActivity())
             }
 
             layoutReplyFrame.setOnClickListener {
@@ -157,12 +156,10 @@ class InnerReplyFragment : BaseFragment() {
             lifecycleScope.launchWhenStarted {
                 showEmojiPad.collectLatest { showingEmojiPad ->
                     if (showingEmojiPad) {
-                        (requireActivity() as HoleActivity).closeKeyBoard()
-                        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+                        SoftKeyBoardUtil.hideKeyboard(requireActivity())
                         (binding.rvEmoji.adapter as EmojiRvAdapter).refreshData()
                         binding.rvEmoji.visibility = View.VISIBLE
                     } else {
-                        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
                         binding.rvEmoji.visibility = View.GONE
                     }
                 }

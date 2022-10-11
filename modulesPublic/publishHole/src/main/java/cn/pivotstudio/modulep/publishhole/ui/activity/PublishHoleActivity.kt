@@ -209,7 +209,7 @@ class PublishHoleActivity : BaseActivity() {
      * @param view
      */
     fun onClick(view: View) {
-        closeKeyBoard()
+        SoftKeyBoardUtil.hideKeyboard(this)
         when (view.id) {
             R.id.tv_publishhole_forestname -> {
                 showPopupWindow()

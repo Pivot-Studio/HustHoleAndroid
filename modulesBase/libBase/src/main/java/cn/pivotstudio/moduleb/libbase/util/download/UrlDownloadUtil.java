@@ -27,9 +27,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /**
- * @classname:UrlDownloadUtil
- * @description:根据url下载apk
- * @date:2022/5/3 16:01
+ * @classname: UrlDownloadUtil
+ * @description: 根据url下载apk
+ * @date: 2022/5/3 16:01
  * @version:1.0
  * @author:
  */

@@ -27,6 +27,7 @@ import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomepageBinding
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.adapter.HomeHoleAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
 import com.alibaba.android.arouter.launcher.ARouter
@@ -193,6 +194,12 @@ class HomePageFragment : BaseFragment() {
             viewModel.loadMoreHoles()
             binding.recyclerView.isEnabled = false
         }
+
+        (activity as HomeScreenActivity).setOnBottomBarItemReselectedListener {
+            binding.refreshLayout.autoRefresh()
+            binding.homepageNestedScrollView.scrollTo(0, 0)
+        }
+
     }
 
     // 删除树洞

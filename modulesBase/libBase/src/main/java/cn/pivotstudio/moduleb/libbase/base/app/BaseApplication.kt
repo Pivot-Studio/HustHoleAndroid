@@ -1,10 +1,8 @@
 package cn.pivotstudio.moduleb.libbase.base.app
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Application
 import android.content.Context
-import android.content.ContextWrapper
 import cn.pivotstudio.husthole.moduleb.network.*
 import cn.pivotstudio.moduleb.database.HustHoleRoomDatabase
 import cn.pivotstudio.moduleb.libbase.BuildConfig

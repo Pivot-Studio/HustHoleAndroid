@@ -30,6 +30,7 @@ import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
+import com.google.android.material.navigation.NavigationBarView
 
 /**
  * @classname: HomeScreenActivity
@@ -42,7 +43,8 @@ import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
 class HomeScreenActivity : BaseActivity() {
     private lateinit var binding: ActivityHsHomescreenBinding
     private lateinit var navController: NavController
-    val fragmentList = listOf<Int>(
+
+    private val fragmentList = listOf(
         R.id.all_forest_fragment,
         R.id.forest_detail_fragment,
         R.id.holeFollowReplyFragment,
@@ -51,6 +53,7 @@ class HomeScreenActivity : BaseActivity() {
         R.id.verifyFragment,
         R.id.howToVerifyFragment
     )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hs_homescreen)
@@ -106,7 +109,7 @@ class HomeScreenActivity : BaseActivity() {
             // BottomNavigationBar显示情况特判
             binding.apply {
                 layoutBottomBar.isVisible =
-                    !fragmentList.any{it == destination.id}
+                    !fragmentList.any { it == destination.id }
 
                 bottomNavigationView.setupWithNavController(navController)
                 bottomNavigationView.background = null
@@ -122,6 +125,8 @@ class HomeScreenActivity : BaseActivity() {
             }
 
         }
+
+
 
     }
 
@@ -190,7 +195,7 @@ class HomeScreenActivity : BaseActivity() {
      */
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         navController.currentDestination?.let { navDestination ->
-            if(fragmentList.any { it == navDestination.id })
+            if (fragmentList.any { it == navDestination.id })
                 return navController.popBackStack()
 //            if (it.id == R.id.all_forest_fragment || it.id == R.id.forest_detail_fragment || it.id == R.id.holeFollowReplyFragment) {
 //                return navController.popBackStack()
@@ -208,6 +213,10 @@ class HomeScreenActivity : BaseActivity() {
             }
         }
         return super.onKeyUp(keyCode, event)
+    }
+
+    fun setOnBottomBarItemReselectedListener(listener: NavigationBarView.OnItemReselectedListener) {
+        binding.bottomNavigationView.setOnItemReselectedListener(listener)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

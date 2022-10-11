@@ -21,7 +21,6 @@ import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFoot
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestBinding
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.moduleb.libbase.base.model.HoleReturnInfo
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.JoinedForestsAdapter
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestHoleAdapter
@@ -30,6 +29,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
 
 /**
@@ -244,6 +244,12 @@ class ForestFragment : BaseFragment() {
                 }
                 binding.recyclerViewForestHoles.isEnabled = false
             }
+
+        }
+
+        (activity as HomeScreenActivity).setOnBottomBarItemReselectedListener {
+            binding.refreshLayout.autoRefresh()
+            binding.forestNestedScrollView.scrollTo(0, 0)
         }
     }
 

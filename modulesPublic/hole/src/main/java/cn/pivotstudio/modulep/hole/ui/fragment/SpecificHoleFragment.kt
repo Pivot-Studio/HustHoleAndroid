@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -26,6 +25,7 @@ import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
+import cn.pivotstudio.moduleb.libbase.util.ui.SoftKeyBoardUtil
 import cn.pivotstudio.modulep.hole.R
 import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshHeader
@@ -112,12 +112,11 @@ class SpecificHoleFragment : BaseFragment() {
 
             btnSend.setOnClickListener {
                 replyViewModel.sendAComment("${binding.etReplyPost.text}")
-                (requireActivity() as HoleActivity).closeKeyBoard()
+                SoftKeyBoardUtil.hideKeyboard(requireActivity())
             }
 
             etReplyPost.setOnClickListener {
-                activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
-                (requireActivity() as HoleActivity).openKeyBoard(binding.etReplyPost)
+                SoftKeyBoardUtil.showKeyboard(requireActivity(), etReplyPost)
                 replyViewModel.doneShowingEmojiPad()
             }
 
@@ -140,7 +139,7 @@ class SpecificHoleFragment : BaseFragment() {
         initListener()
 
         if (args.openingKeyboard) {
-            (requireActivity() as HoleActivity).openKeyBoard(binding.etReplyPost)
+            SoftKeyBoardUtil.showKeyboard(requireActivity(), binding.etReplyPost)
         }
     }
 
@@ -194,12 +193,10 @@ class SpecificHoleFragment : BaseFragment() {
             lifecycleScope.launchWhenStarted {
                 showEmojiPad.collectLatest { showingEmojiPad ->
                     if (showingEmojiPad) {
-                        (requireActivity() as HoleActivity).closeKeyBoard()
-                        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+                        SoftKeyBoardUtil.hideKeyboard(requireActivity())
                         (binding.rvEmoji.adapter as EmojiRvAdapter).refreshData()
                         binding.rvEmoji.visibility = View.VISIBLE
                     } else {
-                        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
                         binding.rvEmoji.visibility = View.GONE
                     }
                 }

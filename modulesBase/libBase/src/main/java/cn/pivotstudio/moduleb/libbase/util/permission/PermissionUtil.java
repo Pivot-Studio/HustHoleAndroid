@@ -7,9 +7,9 @@ import android.os.Build;
 import androidx.core.app.ActivityCompat;
 
 /**
- * @classname:PermissionUtil
- * @description:获取权限
- * @date:2022/4/28 19:53
+ * @classname: PermissionUtil
+ * @description: 获取权限
+ * @date: 2022/4/28 19:53
  * @version:1.0
  * @author:
  */

@@ -12,6 +12,7 @@ import cn.pivotstudio.husthole.moduleb.network.model.ReportType
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
+import cn.pivotstudio.moduleb.libbase.util.ui.SoftKeyBoardUtil
 import cn.pivotstudio.modulep.report.BuildConfig
 import cn.pivotstudio.modulep.report.R
 import cn.pivotstudio.modulep.report.databinding.ActivityReportBinding
@@ -99,12 +100,12 @@ class ReportActivity : BaseActivity() {
                 } else {
                     showMsg("您还未选择举报类型")
                 }
-                closeKeyBoard()
+                SoftKeyBoardUtil.hideKeyboard(this)
             }
             R.id.cl_titlebargreen_back -> {
                 if (BuildConfig.isRelease) {
+                    SoftKeyBoardUtil.hideKeyboard(this)
                     finish()
-                    closeKeyBoard()
                 } else {
                     showMsg("当前处于模块测试阶段")
                 }
