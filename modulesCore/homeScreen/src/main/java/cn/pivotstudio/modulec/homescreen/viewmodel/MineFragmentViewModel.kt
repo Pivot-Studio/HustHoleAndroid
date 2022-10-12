@@ -26,6 +26,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cn.pivotstudio.husthole.moduleb.network.model.ProFile
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.*
@@ -35,11 +36,13 @@ import cn.pivotstudio.modulec.homescreen.oldversion.network.ErrorMsg
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RetrofitManager.API
+import cn.pivotstudio.modulec.homescreen.repository.MineRepository
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragment
 import com.google.android.material.chip.Chip
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -63,9 +66,13 @@ import java.io.IOException
  * @version :1.0
  * @author
  */
-enum class Status { LOADING, DONE, ERROR }
 
 class MineFragmentViewModel : ViewModel() {
+    private val repository = MineRepository()
+
+    private val _status = MutableStateFlow(false)
+
+    private val _myProFile = MutableStateFlow(ProFile())
     private val _joinDay = MutableLiveData<Int>()  //加入天数
     private val _myHoleNum = MutableLiveData<Int>() //我的树洞数
     private val _myFollowNum = MutableLiveData<Int>()   //我的关注数
@@ -85,6 +92,8 @@ class MineFragmentViewModel : ViewModel() {
     private val _chipTitleList = MutableLiveData<List<Int>>()
     private val _updateLogList = MutableLiveData<List<ItemDetailFragment.Update>>()
 
+    val status: StateFlow<Boolean> = _status
+    val myProFile: StateFlow<ProFile> = _myProFile
     val joinDay: LiveData<Int> = _joinDay
     val myHoleNum: LiveData<Int> = _myHoleNum
     val myFollowNum: LiveData<Int> = _myFollowNum
@@ -1246,34 +1255,13 @@ class MineFragmentViewModel : ViewModel() {
     }
 
     private fun getMineData() {
-        val call = request!!.myData() //进行封装
         viewModelScope.launch {
-            call.enqueue(object : Callback<ResponseBody?> {
-                override fun onResponse(
-                    call: Call<ResponseBody?>,
-                    response: Response<ResponseBody?>
-                ) {
-                    try {
-                        if (response.body() != null) {
-                            val jsonStr = response.body()!!.string()
-                            val data = JSONObject(jsonStr)
-                            _joinDay.value = data.getInt("join_days")
-                            _myHoleNum.value = data.getInt("hole_sum")
-                            _myFollowNum.value = data.getInt("follow_num")
-                            _myReplyNum.value = data.getInt("replies_num")
-
-                        } else {
-                            Log.d("MineJson", "is null");
-                        }
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    } catch (e: JSONException) {
-                        e.printStackTrace()
-                    }
+            _status.emit(true)
+            repository.getProfile()
+                .onEach { _status.emit(false) }
+                .collectLatest {
+                    _myProFile.emit(it)
                 }
-
-                override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {}
-            })
         }
     }
 

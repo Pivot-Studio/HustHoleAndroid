@@ -14,7 +14,9 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
+import java.lang.invoke.MethodHandles.constant
 import java.util.concurrent.TimeUnit
+
 
 private const val BASE_URL = "https://hustholev2.pivotstudio.cn/api/"
 
@@ -108,6 +110,16 @@ interface HustHoleApiService {
         @Body reportRequest: RequestBody.ReportRequest
     ): Response<Unit>
 
+    @GET("user/profile")
+    suspend fun getProFile(): ProFile
+
+    @GET("user/hole")
+    suspend fun getMyHole(
+        @Query("timestamp") timestamp: String,
+        @Query("offset") offset: Int = 0,
+        @Query("limit") limit: Int = 20,
+        @Query("mode") mode: String = NetworkConstant.SortMode.LATEST_REPLY,
+    ): List<HoleV2>
     //========================================================================================================
 
     /** 单个小树林树洞列表 */

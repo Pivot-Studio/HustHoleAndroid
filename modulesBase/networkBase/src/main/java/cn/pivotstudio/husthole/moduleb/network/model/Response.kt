@@ -176,3 +176,25 @@ enum class ReplyType {
     REPLY_TO_HOLE,
     REPLY_TO_REPLY
 }
+
+data class ProFile (
+    /**
+     * 加入时间
+     */
+    val days: String? = null,
+
+    /**
+     * 收藏数
+     */
+    val follow: String? = null,
+
+    /**
+     * 树洞数
+     */
+    val hole: String? = null,
+
+    /**
+     * 评论数
+     */
+    val reply: String? = null
+) {}
