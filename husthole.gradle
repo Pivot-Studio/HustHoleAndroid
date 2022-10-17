@@ -4,7 +4,7 @@ ext {
 
     androidID = [
             compileSdkVersion: 31,
-            minSdkVersion    : 29,
+            minSdkVersion    : 28,
             targetSdkVersion : 31,
             versionCode      : 2,//不能是非整数，无语子
             versionName      : "v1.1.9-测试版"
