@@ -39,7 +39,7 @@
             android:textAllCaps="false"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             android:textColor="@color/HH_BandColor_7"
-            android:visibility="@{homePageHole.forestName == null ? View.GONE : View.VISIBLE}"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@string/forest_tag"

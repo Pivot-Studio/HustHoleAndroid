@@ -167,17 +167,5 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.1246" />
 
-        <TextView
-            android:id="@+id/tv_register_notice"
-            android:layout_width="@dimen/dp_311"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_60"
-            android:text="@string/login_id_8"
-            android:textColor="@color/GrayScale_80"
-            android:textAppearance="@style/HustHoleTypography.Body3"
-            app:layout_constraintEnd_toEndOf="@+id/btn_next"
-            app:layout_constraintStart_toStartOf="@+id/btn_next"
-            app:layout_constraintTop_toBottomOf="@+id/btn_next" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

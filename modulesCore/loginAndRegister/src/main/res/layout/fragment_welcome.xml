@@ -33,7 +33,6 @@
             android:layout_width="wrap_content"
             android:layout_height="19dp"
             android:layout_marginTop="10dp"
-            android:text="@string/register_welcome_2"
             android:textAppearance="@style/HustHoleTypography.Headline5"
             android:textColor="@color/GrayScale_50"
             app:layout_constraintStart_toStartOf="@+id/tv_title_start"
@@ -62,7 +61,7 @@
 
             <TextView
                 android:id="@+id/btn_welcome_greenline"
-                android:layout_width="@dimen/dp_120"
+                android:layout_width="0dp"
                 android:layout_height="@dimen/dp_10"
                 android:layout_marginBottom="9dp"
                 android:background="@drawable/block_line"
@@ -74,7 +73,6 @@
                 android:id="@+id/tv_welcome_title"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_45"
-                android:text="1037树洞"
                 android:textAppearance="@style/HustHoleTypography.Headline1"
                 android:textSize="@dimen/sp_30"
                 app:layout_constraintBottom_toBottomOf="parent"

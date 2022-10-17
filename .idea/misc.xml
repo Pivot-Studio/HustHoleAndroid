@@ -433,6 +433,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_myfollow.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_myhole.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/card_myreply.xml" value="0.28229166666666666" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/constraintlayout_homepageoptionbox.xml" value="0.13728470111448834" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_inform.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_screen.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/dialog_update.xml" value="0.28229166666666666" />
@@ -491,9 +492,12 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/titlebar_transparent.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/titlebar_white.xml" value="0.2595108695652174" />
         <entry key="modulesCore/homeScreen/src/main/res/menu/bottom_navigation_menu.xml" value="0.29375" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/drawable-night/lr_et_corner.xml" value="0.1" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/drawable/lr_et_corner.xml" value="0.1" />
         <entry key="modulesCore/loginAndRegister/src/main/res/layout/activity_lar.xml" value="0.26721014492753625" />
         <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_login.xml" value="0.10104166666666667" />
         <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_register.xml" value="0.26721014492753625" />
+        <entry key="modulesCore/loginAndRegister/src/main/res/layout/fragment_welcome.xml" value="0.20934959349593496" />
         <entry key="modulesPublic/hole/src/main/res/layout/activity_hole.xml" value="0.1107086181640625" />
         <entry key="modulesPublic/hole/src/main/res/layout/cl_emoji.xml" value="0.29483695652173914" />
         <entry key="modulesPublic/hole/src/main/res/layout/dialog_delete.xml" value="0.29483695652173914" />

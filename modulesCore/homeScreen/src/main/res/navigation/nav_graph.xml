@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homepage_fragment"
         android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment"
-        android:label="@string/default_string_zh_short"
+        android:label="主页"
         tools:layout="@layout/fragment_homepage" />
 
     <fragment

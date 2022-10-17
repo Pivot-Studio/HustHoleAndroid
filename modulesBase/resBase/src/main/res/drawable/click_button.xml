@@ -5,11 +5,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 内部颜色 -->
     <solid
-        android:color="@color/HH_BandColor_5" android:state_pressed="false"/>
+        android:color="?attr/colorPrimaryVariant" android:state_pressed="false"/>
     <!-- 边缘线条颜色 -->
     <stroke
         android:width="0dp"
-        android:color="@color/HH_BandColor_5" />
+        android:color="?attr/colorPrimaryVariant" />
     <!-- 圆角的幅度 -->
     <corners
         android:topLeftRadius="13dip"

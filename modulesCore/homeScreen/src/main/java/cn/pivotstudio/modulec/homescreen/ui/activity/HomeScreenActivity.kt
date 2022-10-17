@@ -108,8 +108,8 @@ class HomeScreenActivity : BaseActivity() {
 
             // BottomNavigationBar显示情况特判
             binding.apply {
-                layoutBottomBar.isVisible =
-                    !fragmentList.any { it == destination.id }
+                layoutBottomBar.visibility = View.GONE
+                fabHomescreenPublishhole.visibility = View.GONE
 
                 bottomNavigationView.setupWithNavController(navController)
                 bottomNavigationView.background = null

@@ -5,7 +5,7 @@
     <string name="register_welcome_4">我先逛逛</string>
 
 
-    <string name="register_1">登录1037树洞</string>
+    <string name="register_1">登录</string>
     <string name="register_2">输入学号</string>
     <string name="register_3">\&#064;hust.edu.cn</string>
     <string name="register_4">输入密码</string>
@@ -15,7 +15,7 @@
     <string name="register_8">登录</string>
 
 
-    <string name="login_id_1">注册1037树洞</string>
+    <string name="login_id_1">注册</string>
     <string name="login_id_2">输入学号</string>
     <string name="login_id_3">\@hust.edu.cn</string>
     <string name="login_id_4">下一步</string>
