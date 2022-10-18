@@ -5,18 +5,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import android.widget.TextView
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.ApiStatus
+import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineRecycleViewAdapter
-import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel
+import cn.pivotstudio.modulec.homescreen.viewmodel.HoleFollowReplyViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_HOLE
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_REPLY
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 /**
  *@classname MyHoleFollowReplyFragment
@@ -26,14 +36,9 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Compa
  * @author
  */
 
-class MyHoleFollowReplyFragment(val type: Int) : Fragment() {
-    private val viewModel: MyHoleFragmentViewModel by viewModels()
+class MyHoleFollowReplyFragment(val type: Int) : BaseFragment() {
+    private val viewModel: HoleFollowReplyViewModel by viewModels()
     private lateinit var binding: FragmentMyholeBinding
-
-//    private var isRefresh: Boolean = false     //表示是否处于刷新状态
-//    private var isFinishRefresh: Boolean = false  //表示是否完成刷新
-//    private var isOnLoadMore: Boolean = false    //表示是否处于加载更多状态
-//    private var isFinishOnLoadMore: Boolean = false    //表示是否加载完成
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,30 +52,72 @@ class MyHoleFollowReplyFragment(val type: Int) : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+        initRefresh()
+    }
+
+    private fun initView() {
         val adapter = MineRecycleViewAdapter(type, viewModel, this, binding)
-        when (type) {
-            GET_HOLE -> viewModel.myHolesList.observe(viewLifecycleOwner) { list ->
-                adapter.submitList(
-                    list
-                )
-            }
-            GET_FOLLOW -> viewModel.myFollowList.observe(viewLifecycleOwner) { list ->
-                adapter.submitList(
-                    list
-                )
-            }
-            GET_REPLY -> viewModel.myReplyList.observe(viewLifecycleOwner) { list ->
-                adapter.submitList(
-                    list
-                )
-            }
-        }
         binding.myHoleRecyclerView.apply {
             this.adapter = adapter
             addItemDecoration(SpaceItemDecoration(0, 20))
         }
-
-        initRefresh()
+        viewModel.apply {
+            tip.observe(viewLifecycleOwner) {
+                it?.let {
+                    showMsg(it)
+                    viewModel.doneShowingTip()
+                }
+            }
+            lifecycleScope.launch {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    //依据页面的不同提交相应的List
+                    val list: StateFlow<List<*>>? = when (type) {
+                        GET_HOLE -> myHole
+                        GET_FOLLOW -> myFollow
+                        GET_REPLY -> myReply
+                        else -> null
+                    }
+                    list?.onEach {
+                        finishRefreshAnim()
+                    }?.collectLatest {
+                        adapter.submitList(it)
+                        if (it.isEmpty()) {
+                            binding.myHoleRecyclerView.visibility = View.GONE
+                            binding.minePlaceholder.visibility = View.VISIBLE
+                        } else {
+                            binding.myHoleRecyclerView.visibility = View.VISIBLE
+                            binding.minePlaceholder.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+            lifecycleScope.launch {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    //对不同网络状态处理
+                    loadingState.collectLatest { state ->
+                        when (state) {
+                            ApiStatus.SUCCESSFUL,
+                            ApiStatus.ERROR -> {
+                                finishRefreshAnim()
+                            }
+                            ApiStatus.LOADING -> {}
+                        }
+                    }
+                }
+            }
+            lifecycleScope.launch {
+                lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    //展示异常时相应的视图
+                    showingPlaceholder.collectLatest {
+                        it?.let { placeholderType ->
+                            showPlaceHolderBy(placeholderType)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initRefresh() {
@@ -81,28 +128,46 @@ class MyHoleFollowReplyFragment(val type: Int) : Fragment() {
             setEnableRefresh(true)
             setOnRefreshListener {
                 when (type) {
-                    GET_HOLE -> {
-                        viewModel.initMyHoleRefresh()
-                        viewModel.getMyHoleList()
-                    }
-                    GET_FOLLOW -> {
-                        viewModel.initMyFollowRefresh()
-                        viewModel.getMyFollowList()
-                    }
-                    GET_REPLY -> {
-                        viewModel.initMyReplyRefresh()
-                        viewModel.getMyReplyList()
-                    }
+                    GET_HOLE -> viewModel.getMyHole()
+                    GET_FOLLOW -> viewModel.getMyFollow()
+                    GET_REPLY -> viewModel.getMyReply()
                 }
-                finishRefresh()
+                binding.myHoleRecyclerView.isEnabled = false
             }
             setOnLoadMoreListener {
                 when (type) {
-                    GET_HOLE -> viewModel.getMyHoleList()
-                    GET_FOLLOW -> viewModel.getMyFollowList()
-                    GET_REPLY -> viewModel.getMyReplyList()
+                    GET_HOLE -> viewModel.loadMoreHole()
+                    GET_FOLLOW -> viewModel.loadMoreFollow()
+                    GET_REPLY -> viewModel.loadMoreReply()
                 }
-                finishLoadMore()
+                binding.myHoleRecyclerView.isEnabled = false
+            }
+        }
+    }
+
+    private fun finishRefreshAnim() {
+        binding.refreshLayout.finishRefresh() //结束下拉刷新动画
+        binding.refreshLayout.finishLoadMore() //结束上拉加载动画
+        binding.myHoleRecyclerView.isEnabled = true
+    }
+
+    private fun showPlaceHolderBy(placeholderType: HoleFollowReplyViewModel.PlaceholderType) {
+        when (placeholderType) {
+            HoleFollowReplyViewModel.PlaceholderType.PLACEHOLDER_NETWORK_ERROR -> {
+                binding.placeholderHomeNetError.visibility = View.VISIBLE
+                binding.placeholderHomeNoContent.visibility = View.GONE
+            }
+
+            HoleFollowReplyViewModel.PlaceholderType.PLACEHOLDER_NO_CONTENT -> {
+                binding.placeholderHomeNoContent.visibility = View.VISIBLE
+                binding.placeholderHomeNetError.visibility = View.GONE
+                val tv = requireView().findViewById<TextView>(R.id.tv_no_content)
+                tv.text = when (type) {
+                    GET_HOLE -> getString(R.string.res_no_myhole)
+                    GET_FOLLOW -> getString(R.string.res_no_myfollow)
+                    GET_REPLY -> getString(R.string.res_no_myreply)
+                    else -> "null"
+                }
             }
         }
     }
@@ -143,6 +208,7 @@ class MyHoleFollowReplyFragment(val type: Int) : Fragment() {
 
     companion object {
         const val TAG = "MyHoleFollowReplyFragment"
+
         @JvmStatic
         fun newInstance(type: Int): MyHoleFollowReplyFragment {
             return MyHoleFollowReplyFragment(type)

@@ -24,7 +24,9 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.OTHER_OPTION
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel
 
-
+/**
+ * 设置加入天数的显示颜色
+ */
 @BindingAdapter("joinDay")
 fun bindDay(
     view: TextView,
@@ -84,6 +86,11 @@ class MineFragment : BaseFragment() {
             this.adapter = adapter
             addItemDecoration(SpaceItemDecoration(0, 2))
         }
+    }
+
+    override fun onResume() {
+        viewModel.getMineData()
+        super.onResume()
     }
 
     class SpaceItemDecoration(

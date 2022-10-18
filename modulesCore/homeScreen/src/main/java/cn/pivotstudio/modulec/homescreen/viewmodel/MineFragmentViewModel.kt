@@ -26,6 +26,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.ProFile
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.modulec.homescreen.R
@@ -72,7 +73,7 @@ class MineFragmentViewModel : ViewModel() {
 
     private val _status = MutableStateFlow(false)
 
-    private val _myProFile = MutableStateFlow(ProFile())
+    private val _myProFile = MutableStateFlow(ProFile("1037", "0", "0", "0"))
     private val _joinDay = MutableLiveData<Int>()  //加入天数
     private val _myHoleNum = MutableLiveData<Int>() //我的树洞数
     private val _myFollowNum = MutableLiveData<Int>()   //我的关注数
@@ -1254,7 +1255,7 @@ class MineFragmentViewModel : ViewModel() {
         }
     }
 
-    private fun getMineData() {
+    fun getMineData() {
         viewModelScope.launch {
             _status.emit(true)
             repository.getProfile()

@@ -43,6 +43,7 @@ class HomePageHoleRepository(
     var tip = MutableLiveData<String?>()
 
     fun loadHoles(sortMode: String): Flow<List<HoleV2>> = flow {
+        refreshTimestamp()
         emit(
             hustHoleApiService.getHoles(
                 limit = HOLES_LIST_SIZE,

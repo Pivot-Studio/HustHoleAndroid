@@ -4,12 +4,15 @@ import android.app.Dialog
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
@@ -17,6 +20,7 @@ import cn.pivotstudio.modulec.homescreen.databinding.ItemMineHoleFollowBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineReplyBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.mine.HoleStarReplyActivity
 import cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment
+import cn.pivotstudio.modulec.homescreen.viewmodel.HoleFollowReplyViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_HOLE
@@ -33,15 +37,17 @@ import com.alibaba.android.arouter.launcher.ARouter
  */
 class MineRecycleViewAdapter(
     val type: Int,
-    val viewModel: MyHoleFragmentViewModel,
+    val viewModel: HoleFollowReplyViewModel,
     val frag: MyHoleFollowReplyFragment,
     val fragBinding: FragmentMyholeBinding
-    ) : ListAdapter<Array<String?>, RecyclerView.ViewHolder>(DiffCallback) {
+    ) : ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
+
+    var view: View? = null
 
     inner class HoleAndFollowViewHolder(
         private val binding: ItemMineHoleFollowBinding
     ) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(hole: Array<String?>) {
+        fun bind(hole: HoleV2) {
             binding.apply {
                 this.hole = hole
                 totalView.setOnClickListener {
@@ -49,15 +55,16 @@ class MineRecycleViewAdapter(
                         .build("/hole/HoleActivity")
                         .withInt(
                             Constant.HOLE_ID,
-                            Integer.valueOf(hole[3].toString())
+                            Integer.valueOf(hole.holeId)
                         )
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                         .navigation(frag.requireActivity(), 2)
                 }
+
                 if(type == GET_HOLE)
-                    textView.text = R.string.thumb_follow.toString().format(hole[6],hole[5])
+                    textView.text = frag.getString(R.string.thumb_follow).format(hole.likeCount.toString(),hole.replyCount.toString())
                 if(type == GET_FOLLOW)
-                    textView.text = R.string.reply_follow.toString().format(hole[5],hole[4])
+                    textView.text = frag.getString(R.string.reply_follow).format(hole.replyCount.toString(),hole.followCount.toString())
                 executePendingBindings()
             }
         }
@@ -67,28 +74,27 @@ class MineRecycleViewAdapter(
         private val binding: ItemMineReplyBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        private var moreCondition: Boolean = false
-
-        fun bind(hole: Array<String?>) {
+        fun bind(reply: Reply) {
             binding.apply {
-                this.hole = hole
+                this.reply = reply
                 myReplyTotal.setOnClickListener{
                     ARouter.getInstance()
                         .build("/hole/HoleActivity")
                         .withInt(
                             Constant.HOLE_ID,
-                            Integer.valueOf(hole[3].toString())
+                            Integer.valueOf(reply.holeId)
                         )
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                         .navigation(frag.requireActivity(), 2)
                 }
                 myReplyMoreWhat.setOnClickListener{
-                    if (!moreCondition) {
+                    if (view == null) {   //没有删除视图出现
                         myReplyDelete.visibility = View.VISIBLE
-                        moreCondition = true
-                    } else {
-                        myReplyDelete.visibility = View.GONE
-                        moreCondition = false
+                        view = myReplyDelete
+                    } else {  //已经有删除视图出现，去重
+                        view!!.visibility = View.GONE
+                        myReplyDelete.visibility = View.VISIBLE
+                        view = myReplyDelete
                     }
                 }
                 myReplyDelete.setOnClickListener{
@@ -100,12 +106,12 @@ class MineRecycleViewAdapter(
                     val yes = mView.findViewById<View>(R.id.dialog_delete_tv_yes) as TextView
                     no.setOnClickListener{
                         binding.myReplyDelete.visibility = View.GONE
-                        moreCondition = false
+                        view = null
                         dialog.dismiss()
                     }
                     yes.setOnClickListener{
-                        viewModel.deleteHole(dialog, binding, frag.context, layoutPosition)
-                        moreCondition = false
+//                        viewModel.deleteHole(dialog, binding, frag.context, layoutPosition)
+                        view = null
                         notifyDataSetChanged()
                     }
                     dialog.show()
@@ -116,7 +122,7 @@ class MineRecycleViewAdapter(
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     binding.myReplyDelete.visibility = View.GONE
-                    moreCondition = false
+                    view = null
                 }
             })
         }
@@ -132,21 +138,27 @@ class MineRecycleViewAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
         if(type == GET_HOLE || type == GET_FOLLOW) {
-            holder as HoleAndFollowViewHolder
-            holder.bind(item)
+            (holder as HoleAndFollowViewHolder).bind(item as HoleV2)
         } else if (type == GET_REPLY) {
-            holder as ReplyViewHolder
-            holder.bind(item)
+            (holder as ReplyViewHolder).bind(item as Reply)
         }
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Array<String?>>() {
-        override fun areItemsTheSame(oldItem: Array<String?>, newItem: Array<String?>): Boolean {
-            return oldItem[1] == newItem[1]
+
+
+    companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
+        override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {
+            return if(oldItem is HoleV2 && newItem is HoleV2)
+                 oldItem.holeId == newItem.holeId
+            else
+                (oldItem as Reply).holeId == (newItem as Reply).holeId
         }
 
-        override fun areContentsTheSame(oldItem: Array<String?>, newItem: Array<String?>): Boolean {
-            return oldItem[3] == newItem[3] || oldItem[7] == newItem[7] || oldItem[8] == newItem[8]
+        override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
+            return if(oldItem is HoleV2 && newItem is HoleV2)
+                oldItem.lastReplyAt == newItem.lastReplyAt || oldItem.likeCount == newItem.likeCount || oldItem.followCount == newItem.followCount
+            else
+                true
         }
     }
 }

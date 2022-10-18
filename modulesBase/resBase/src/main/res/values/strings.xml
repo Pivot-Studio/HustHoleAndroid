@@ -14,7 +14,7 @@
     <string name="notification_zh">通知</string>
     <string name="mine_zh">我的</string>
 
-
+    <string name="reply_count">共 %s 条回复 ></string>
 
     <string name="page1fragment_1">搜搜你想倾听的</string>
     <string name="page1fragment_2">树洞广场</string>
@@ -63,7 +63,8 @@
     <string name="page2_applyforest_12">添加封面图片</string>
     <string name="page2_applyforest_13">提交</string>
     <string name="no_joined_forest">还没有加入小树林噢～</string>
-    <string name="no_notice">还没有通知噢...</string>
+    <string name="no_notice">还没有通知噢…</string>
+    <string name="no_reply">还没有评论噢…</string>
 
 
     <string name="commment_1">洞主</string>
@@ -176,4 +177,9 @@
     <string name="discover_more">发现更多</string>
     <string name="hot_tag">热评</string>
 
+    <string name="res_network_error">糟糕！网络出问题了，请检查网络连接</string>
+    <string name="res_no_search_result">暂无搜索内容</string>
+    <string name="res_no_myhole">还没有发布过树洞哟~</string>
+    <string name="res_no_myfollow">还没有关注过树洞哟(˘•ω•˘)</string>
+    <string name="res_no_myreply">来点锐评吧(◕ᴗ◕✿)</string>
 </resources>

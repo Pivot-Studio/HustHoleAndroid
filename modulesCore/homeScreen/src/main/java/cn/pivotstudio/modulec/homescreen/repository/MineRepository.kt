@@ -8,10 +8,7 @@ import cn.pivotstudio.husthole.moduleb.network.model.ProFile
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
 
 /**
  *@classname MineRepository
@@ -35,9 +32,5 @@ class MineRepository(
         e.printStackTrace()
     }
 
-    fun getMyHole(): Flow<List<HoleV2>> = flow {
-        emit(
-            hustHoleApiService.getMyHole()
-        )
-    }
+
 }

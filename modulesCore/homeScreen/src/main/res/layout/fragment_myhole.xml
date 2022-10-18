@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel" />
+            type="cn.pivotstudio.modulec.homescreen.viewmodel.HoleFollowReplyViewModel" />
     </data>
 
     <com.scwang.smart.refresh.layout.SmartRefreshLayout
@@ -28,14 +28,37 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/myHoleRecyclerView"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:padding="@dimen/dp_10"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_mine_hole_follow" />
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:id="@+id/mine_placeholder"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp_150">
+
+                    <include
+                        android:id="@+id/placeholder_home_net_error"
+                        layout="@layout/network_error_placeholder"
+                        android:visibility="gone"/>
+
+                    <include
+                        android:id="@+id/placeholder_home_no_content"
+                        layout="@layout/no_content_placeholder"
+                        android:visibility="gone" />
+                </FrameLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/myHoleRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:clipToPadding="false"
+                    android:padding="@dimen/dp_10"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_mine_hole_follow" />
+            </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
 

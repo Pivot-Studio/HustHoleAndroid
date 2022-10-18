@@ -8,5 +8,6 @@ object NetworkConstant {
         const val REC = "REC"
         const val ASC = "ASC"
     }
+    const val CONSTANT_STANDARD_LOAD_SIZE = 20
 
 }
