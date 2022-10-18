@@ -4,6 +4,7 @@ import android.content.Context
 import cn.pivotstudio.husthole.moduleb.network.model.*
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
+import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant.CONSTANT_STANDARD_LOAD_SIZE
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -117,9 +118,23 @@ interface HustHoleApiService {
     suspend fun getMyHole(
         @Query("timestamp") timestamp: String,
         @Query("offset") offset: Int = 0,
-        @Query("limit") limit: Int = 20,
-        @Query("mode") mode: String = NetworkConstant.SortMode.LATEST_REPLY,
+        @Query("limit") limit: Int = CONSTANT_STANDARD_LOAD_SIZE,
+        @Query("descend") descend: Boolean = true,
     ): List<HoleV2>
+
+    @GET("user/follow")
+    suspend fun getMyFollow(
+        @Query("offset") offset: Int = 0,
+        @Query("limit") limit: Int = CONSTANT_STANDARD_LOAD_SIZE
+    ): List<HoleV2>
+
+    @GET("user/reply")
+    suspend fun getMyReply(
+        @Query("timestamp") timestamp: String,
+        @Query("offset") offset: Int = 0,
+        @Query("descend") descend: Boolean = true,
+        @Query("limit") limit: Int = CONSTANT_STANDARD_LOAD_SIZE
+    ): List<Reply>
     //========================================================================================================
 
     /** 单个小树林树洞列表 */
