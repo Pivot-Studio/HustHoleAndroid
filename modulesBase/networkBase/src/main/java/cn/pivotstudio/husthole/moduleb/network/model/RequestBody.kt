@@ -50,7 +50,14 @@ sealed interface RequestBody {
         val type: ReportType
     ): RequestBody
 
+    data class ScoreRequest(
+        val score: Int
+    ) : RequestBody
 
+    data class FeedBackRequest (
+        val content: String? = null,
+        val type: Type? = null
+    ) : RequestBody
 }
 
 /**
@@ -66,4 +73,23 @@ enum class ReportType {
     PRON,
     SCAM_GAMBLING,
     TROLL
+}
+
+/**
+ * 反馈类型
+ */
+enum class Type(val value: String) {
+    Suggestion("Suggestion"),
+    Bug("Bug"),
+    Other("Other");
+
+
+    companion object {
+            fun fromValue(value: Int): Type = when (value) {
+            0        -> Suggestion
+            1      -> Bug
+            2 -> Other
+            else         -> throw IllegalArgumentException()
+        }
+    }
 }

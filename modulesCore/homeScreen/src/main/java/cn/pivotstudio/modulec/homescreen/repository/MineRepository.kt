@@ -1,14 +1,19 @@
 package cn.pivotstudio.modulec.homescreen.repository
 
 import android.annotation.SuppressLint
+import androidx.lifecycle.MutableLiveData
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.ProFile
+import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
+import cn.pivotstudio.husthole.moduleb.network.model.Type
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import retrofit2.Response
 
 /**
  *@classname MineRepository
@@ -21,9 +26,10 @@ import kotlinx.coroutines.flow.*
 class MineRepository(
     private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private var lastTimeStamp: String = DateUtil.getDateTime(),
-    private var lastOffset: Int = HomePageHoleRepository.INITIAL_OFFSET
 ) {
+    var tip = MutableLiveData<String?>()
+
+
     fun getProfile(): Flow<ProFile> = flow {
         emit(
             hustHoleApiService.getProFile()
@@ -32,5 +38,46 @@ class MineRepository(
         e.printStackTrace()
     }
 
+    fun sendEvaluation(
+        score: Int
+    ): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService.sendEvaluation(
+                RequestBody.ScoreRequest(score)
+            )
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
+    }
 
+    fun sendAdvice(
+        adv: String,
+        type: Type
+    ): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService
+            .sendAdvice(RequestBody.FeedBackRequest(adv, type))
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { it.printStackTrace() }
+
+    private fun refreshTimestamp(): String {
+        return DateUtil.getDateTime()
+    }
+
+    private suspend inline fun checkResponse(
+        response: Response<Unit>,
+        flow: FlowCollector<ApiResult>
+    ) {
+        if (response.isSuccessful) {
+            flow.emit(ApiResult.Success(data = Unit))
+        } else {
+            flow.emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = response.errorBody()?.string()
+                )
+            )
+            response.errorBody()?.close()
+        }
+    }
 }

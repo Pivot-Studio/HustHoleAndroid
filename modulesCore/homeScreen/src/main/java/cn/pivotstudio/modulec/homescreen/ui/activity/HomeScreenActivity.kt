@@ -30,6 +30,7 @@ import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
+import com.google.android.material.navigation.NavigationBarView
 
 /**
  * @classname: HomeScreenActivity
@@ -209,6 +210,10 @@ class HomeScreenActivity : BaseActivity() {
             }
         }
         return super.onKeyUp(keyCode, event)
+    }
+
+    fun setOnBottomBarItemReselectedListener(listener: NavigationBarView.OnItemReselectedListener) {
+        binding.bottomNavigationView.setOnItemReselectedListener(listener)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

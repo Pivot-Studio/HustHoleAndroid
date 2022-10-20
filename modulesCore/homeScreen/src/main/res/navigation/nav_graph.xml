@@ -68,8 +68,8 @@
             android:id="@+id/action_forest_detail_fragment_to_forest_fragment"
             app:destination="@id/forest_fragment" />
         <argument
-            android:name="forestId"
-            app:argType="integer" />
+            android:name="forestBrief"
+            app:argType="cn.pivotstudio.husthole.moduleb.network.model.ForestBrief" />
     </fragment>
     <fragment
         android:id="@+id/holeFollowReplyFragment"
