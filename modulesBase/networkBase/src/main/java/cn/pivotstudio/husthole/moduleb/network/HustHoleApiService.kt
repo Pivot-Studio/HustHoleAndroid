@@ -87,6 +87,21 @@ interface HustHoleApiService {
     @POST("user/expired")
     suspend fun checkIfLogin(): String?
 
+    @POST("user/verify")
+    suspend fun register(
+        @Body verifyRequest: RequestBody.VerifyRequest
+    ): TokenResponse
+
+    @POST("user/sendVerifyCode")
+    suspend fun sendVerifyCode(
+        @Body sendVerifyCode: RequestBody.SendVerifyCode
+    ): Response<Unit>
+
+    @POST("user/verifyCode")
+    suspend fun verifyCode(
+        @Body verifyCode: RequestBody.VerifyCode
+    ): Response<Unit>
+
     /** 举报 */
     @POST("user/report")
     suspend fun report(

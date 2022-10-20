@@ -36,7 +36,7 @@ sealed interface RequestBody {
         var content: String
     ) : RequestBody
 
-    data class ReportRequest (
+    data class ReportRequest(
         /** null / not null 举报理由 */
         val content: String? = null,
 
@@ -48,8 +48,40 @@ sealed interface RequestBody {
 
         /** 举报类型 */
         val type: ReportType
-    ): RequestBody
+    ) : RequestBody
 
+    data class VerifyRequest(
+        /** 验证码 */
+        val code: String? = null,
+
+        /** 邮箱 */
+        val email: String? = null,
+
+        /** 密码，null/not null */
+        val password: String? = null,
+
+        /** 是否重置密码 */
+        val resetPassword: Boolean? = null
+    ) : RequestBody
+
+    data class SendVerifyCode(
+        /** 邮箱 */
+        val email: String? = null,
+
+        /** 是否重置密码 */
+        val resetPassword: Boolean? = null
+    ) : RequestBody
+
+    data class VerifyCode(
+        /** 验证码 */
+        val code: String? = null,
+
+        /** 邮箱 */
+        val email: String? = null,
+
+        /** 是否重置密码 */
+        val resetPassword: Boolean? = null
+    )
 
 }
 
