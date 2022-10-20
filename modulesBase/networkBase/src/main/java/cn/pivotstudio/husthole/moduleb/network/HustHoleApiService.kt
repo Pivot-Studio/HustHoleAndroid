@@ -111,6 +111,16 @@ interface HustHoleApiService {
         @Body reportRequest: RequestBody.ReportRequest
     ): Response<Unit>
 
+    @POST("user/score")
+    suspend fun sendEvaluation(
+        @Body score: RequestBody.ScoreRequest
+    ): Response<Unit>
+
+    @POST("user/feedback")
+    suspend fun sendAdvice(
+        @Body advice: RequestBody.FeedBackRequest
+    ): Response<Unit>
+
     @GET("user/profile")
     suspend fun getProFile(): ProFile
 

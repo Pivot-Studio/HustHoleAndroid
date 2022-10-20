@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import cn.pivotstudio.husthole.moduleb.network.model.Type.Companion.fromValue
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentAdviceBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.model.SoftKeyBoardListener

@@ -5,10 +5,7 @@ import android.app.Dialog
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.LinearLayout
-import android.widget.PopupWindow
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -27,6 +24,7 @@ import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragmentDirections
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
+import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.CHECK_UPDATE
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.DETAIL
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.LOGOUT
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.OTHER_OPTION
@@ -55,44 +53,59 @@ class MineOthersAdapter(
         fun bind(name: Int) {
             binding.apply {
                 this.name = name
-                if (type == OTHER_OPTION) {
-                    binding.rlOthers.setOnClickListener {
-                        if (layoutPosition == PERSONAL_SETTING || layoutPosition == SHIELD_SETTING || layoutPosition == UPDATE) {
-                            val action =
-                                MineFragmentDirections.actionMineFragmentToItemMineFragment(
-                                    layoutPosition
-                                )
-                            it.findNavController().navigate(action)
-                        } else if (layoutPosition == SHARE) {
-                            initShareCardView()
-                        } else if (layoutPosition == LOGOUT) {
-                            initLogOutDialog()
-                        } else {
-                            val action =
-                                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
-                                    layoutPosition, true
-                                )
-                            it.findNavController().navigate(action)
-                        }
-                    }
-                } else if (type == DETAIL) {
-                    if (name == R.string.campus_email) {
-                        viewModel.checkEmailVerifyState(binding)
-                    } else if (name == R.string.check_update) {
+
+                    if (type == OTHER_OPTION) {
                         binding.rlOthers.setOnClickListener {
-                            viewModel.checkVersion(fragment as ItemMineFragment)
+                            if (viewModel.optSwitch[layoutPosition] == true) {
+                                if (layoutPosition == PERSONAL_SETTING || layoutPosition == SHIELD_SETTING || layoutPosition == UPDATE) {
+                                    val action =
+                                        MineFragmentDirections.actionMineFragmentToItemMineFragment(
+                                            layoutPosition
+                                        )
+                                    it.findNavController().navigate(action)
+                                } else if (layoutPosition == SHARE) {
+                                    initShareCardView()
+                                } else if (layoutPosition == LOGOUT) {
+                                    initLogOutDialog()
+                                } else {
+                                    val action =
+                                        MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
+                                            layoutPosition, true
+                                        )
+                                    it.findNavController().navigate(action)
+                                }
+                            } else {
+                                Toast.makeText(fragment.context,"功能正在维护！",Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    } else if (type == DETAIL) {
+                        if (name == R.string.campus_email) {
+                            viewModel.checkEmailVerifyState(binding)
+                        } else if (name == R.string.check_update) {
+                            binding.rlOthers.setOnClickListener {
+                                if (viewModel.optSwitch[CHECK_UPDATE] == true) {
+                                    viewModel.checkVersion(fragment as ItemMineFragment)
+                                } else {
+                                    Toast.makeText(fragment.context, "功能正在维护！", Toast.LENGTH_SHORT)
+                                        .show()
+                                }
+                            }
+                            if (name != R.string.check_update) {
+                                binding.rlOthers.setOnClickListener {
+                                    if (viewModel.optSwitch[layoutPosition] == true) {
+                                        val action =
+                                            ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
+                                                name, viewModel.isVerifiedEmail.value!!
+                                            )
+                                        it.findNavController().navigate(action)
+                                    } else {
+                                        Toast.makeText(fragment.context, "功能正在维护！", Toast.LENGTH_SHORT)
+                                            .show()
+                                    }
+                                }
+                            }
                         }
                     }
-                    if (name != R.string.check_update) {
-                        binding.rlOthers.setOnClickListener {
-                            val action =
-                                ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
-                                    name, viewModel.isVerifiedEmail.value!!
-                                )
-                            it.findNavController().navigate(action)
-                        }
-                    }
-                }
                 executePendingBindings()
             }
         }
