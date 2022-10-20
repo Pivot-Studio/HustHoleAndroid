@@ -1,23 +1,17 @@
 package cn.pivotstudio.modulec.homescreen.repository
 
-import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi.retrofitService
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
-import cn.pivotstudio.husthole.moduleb.network.*
-import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse
-import cn.pivotstudio.modulec.homescreen.network.HomepageHoleResponse.DataBean
-import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
+import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
+import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
-import cn.pivotstudio.modulec.homescreen.network.MsgResponse
-import com.alibaba.android.arouter.launcher.ARouter
-import cn.pivotstudio.moduleb.libbase.constant.Constant
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import retrofit2.Response
-import java.util.ArrayList
 
 /**
  * @classname: HomePageHoleResponse
@@ -43,6 +37,8 @@ class HomePageHoleRepository(
     var tip = MutableLiveData<String?>()
 
     fun loadHoles(sortMode: String): Flow<List<HoleV2>> = flow {
+        refreshTimestamp()
+        lastOffset = 0
         emit(
             hustHoleApiService.getHoles(
                 limit = HOLES_LIST_SIZE,
@@ -50,10 +46,7 @@ class HomePageHoleRepository(
                 timestamp = lastTimeStamp
             )
         )
-    }.flowOn(dispatcher).onEach {
-        refreshTimestamp()
-        lastOffset = 0
-    }
+    }.flowOn(dispatcher)
 
     fun loadMoreHoles(sortMode: String): Flow<List<HoleV2>> = flow {
         lastOffset += HOLES_LIST_SIZE

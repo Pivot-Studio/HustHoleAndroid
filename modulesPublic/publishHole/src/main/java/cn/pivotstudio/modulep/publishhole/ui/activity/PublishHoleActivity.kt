@@ -17,6 +17,8 @@ import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.constant.RequestCodeConstant
+import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.moduleb.libbase.util.ui.SoftKeyBoardUtil
 import cn.pivotstudio.modulep.publishhole.BuildConfig
@@ -161,6 +163,7 @@ class PublishHoleActivity : BaseActivity() {
                             ApiStatus.SUCCESSFUL -> {
                                 mmkvUtil.put(Constant.HOLE_TEXT, "")
                                 showMsg(getString(R.string.publish_hole_successfully))
+                                setResult(ResultCodeConstant.PUBLISH_HOLE)
                                 finish()
                             }
                             ApiStatus.ERROR -> {

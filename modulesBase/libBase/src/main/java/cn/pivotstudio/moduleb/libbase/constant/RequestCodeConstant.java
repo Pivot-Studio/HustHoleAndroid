@@ -9,4 +9,5 @@ package cn.pivotstudio.moduleb.libbase.constant;
  */
 public class RequestCodeConstant {
     public static final int HOMEPAGE = 1;
+    public static final int PUBLISH_HOLE = 2;
 }

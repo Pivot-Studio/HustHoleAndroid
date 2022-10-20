@@ -24,9 +24,9 @@ import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
 
 /**
- * @classname:UpdateDialog
- * @description:更新时的dialog
- * @date:2022/5/3 1:00
+ * @classname: UpdateDialog
+ * @description: 更新时的dialog
+ * @date: 2022/5/3 1:00
  * @version:1.0
  * @author:
  */

@@ -9,4 +9,5 @@ package cn.pivotstudio.moduleb.libbase.constant;
  */
 public class ResultCodeConstant {
     public static final int Hole = 1;
+    public static final int PUBLISH_HOLE = 2;
 }
