@@ -56,7 +56,7 @@ class MineRepository(
     ): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
         val response = hustHoleApiService
-            .sendAdvice(RequestBody.FeedBackRequest(adv, type))
+            .sendAdvice(RequestBody.FeedBackRequest(adv, type.value))
         checkResponse(response, this)
     }.flowOn(dispatcher).catch { it.printStackTrace() }
 

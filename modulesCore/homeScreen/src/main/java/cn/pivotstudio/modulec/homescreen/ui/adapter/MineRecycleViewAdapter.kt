@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -60,7 +61,9 @@ class MineRecycleViewAdapter(
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                         .navigation(frag.requireActivity(), 2)
                 }
-
+//                totalView.setOnLongClickListener {
+//                    Toast.makeText(frag.requireContext(), "正在测试中！",Toast.LENGTH_SHORT).show()
+//                }
                 if(type == GET_HOLE)
                     textView.text = frag.getString(R.string.thumb_follow).format(hole.likeCount.toString(),hole.replyCount.toString())
                 if(type == GET_FOLLOW)
@@ -86,6 +89,10 @@ class MineRecycleViewAdapter(
                         )
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                         .navigation(frag.requireActivity(), 2)
+                    if(view != null) {
+                        view!!.visibility = View.GONE
+                        view = null
+                    }
                 }
                 myReplyMoreWhat.setOnClickListener{
                     if (view == null) {   //没有删除视图出现

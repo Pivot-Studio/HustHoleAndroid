@@ -39,9 +39,9 @@ class HoleFollowReplyViewModel : ViewModel() {
     val myReply: StateFlow<List<Reply>> = _myReply
 
     init {
-        getMyHole()
-        getMyFollow()
-        getMyReply()
+//        getMyHole()
+//        getMyFollow()
+//        getMyReply()
     }
 
     fun getMyHole() {

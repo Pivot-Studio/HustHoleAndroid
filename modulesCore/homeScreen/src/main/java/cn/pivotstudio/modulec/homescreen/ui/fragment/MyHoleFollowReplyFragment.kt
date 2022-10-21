@@ -57,6 +57,14 @@ class MyHoleFollowReplyFragment(val type: Int) : BaseFragment() {
         initRefresh()
     }
 
+    override fun onResume() {
+        when (type) {  //更新列表
+            GET_HOLE -> viewModel.getMyHole()
+            GET_FOLLOW -> viewModel.getMyFollow()
+            GET_REPLY -> viewModel.getMyReply()
+        }
+        super.onResume()
+    }
     private fun initView() {
         val adapter = MineRecycleViewAdapter(type, viewModel, this, binding)
         binding.myHoleRecyclerView.apply {

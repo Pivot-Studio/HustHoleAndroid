@@ -56,7 +56,7 @@ sealed interface RequestBody {
 
     data class FeedBackRequest (
         val content: String? = null,
-        val type: Type? = null
+        val type: String? = null
     ) : RequestBody
 }
 
@@ -79,9 +79,9 @@ enum class ReportType {
  * 反馈类型
  */
 enum class Type(val value: String) {
-    Suggestion("Suggestion"),
-    Bug("Bug"),
-    Other("Other");
+    Suggestion("SUGGESTION"),
+    Bug("BUG"),
+    Other("OTHER");
 
 
     companion object {

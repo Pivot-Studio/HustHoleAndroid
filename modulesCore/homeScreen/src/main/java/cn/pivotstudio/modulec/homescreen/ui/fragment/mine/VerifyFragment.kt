@@ -58,4 +58,11 @@ class VerifyFragment : Fragment() {
             }
         }
     }
+
+    override fun onResume() {
+        if ((activity as HomeScreenActivity).supportActionBar != null) {
+            (activity as HomeScreenActivity).supportActionBar!!.hide()
+        }
+        super.onResume()
+    }
 }

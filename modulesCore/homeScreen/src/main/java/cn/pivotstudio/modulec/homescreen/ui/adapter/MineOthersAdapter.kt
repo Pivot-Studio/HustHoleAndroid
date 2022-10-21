@@ -20,7 +20,6 @@ import cn.pivotstudio.modulec.homescreen.databinding.ItemMineOthersBinding
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragmentDirections
-import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragmentDirections
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
@@ -35,8 +34,8 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Compani
 import com.alibaba.android.arouter.launcher.ARouter
 
 /**
- *@classname MineSettingAdapter
- * @description:
+ *@classname MineOtherAdapter
+ * @description: 选项RecycleView适配器
  * @date :2022/9/23 22:35
  * @version :1.0
  * @author
@@ -53,7 +52,6 @@ class MineOthersAdapter(
         fun bind(name: Int) {
             binding.apply {
                 this.name = name
-
                     if (type == OTHER_OPTION) {
                         binding.rlOthers.setOnClickListener {
                             if (viewModel.optSwitch[layoutPosition] == true) {
@@ -83,12 +81,7 @@ class MineOthersAdapter(
                             viewModel.checkEmailVerifyState(binding)
                         } else if (name == R.string.check_update) {
                             binding.rlOthers.setOnClickListener {
-                                if (viewModel.optSwitch[CHECK_UPDATE] == true) {
                                     viewModel.checkVersion(fragment as ItemMineFragment)
-                                } else {
-                                    Toast.makeText(fragment.context, "功能正在维护！", Toast.LENGTH_SHORT)
-                                        .show()
-                                }
                             }
                             if (name != R.string.check_update) {
                                 binding.rlOthers.setOnClickListener {
