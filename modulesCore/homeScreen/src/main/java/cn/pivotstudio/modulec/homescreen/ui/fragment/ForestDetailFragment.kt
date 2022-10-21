@@ -55,6 +55,11 @@ class ForestDetailFragment : BaseFragment() {
                     )
                 }
             }
+            return
+        }
+
+        if (resultCode == ResultCodeConstant.PUBLISH_HOLE) {
+            viewModel.delayLoadHoles()
         }
     }
 

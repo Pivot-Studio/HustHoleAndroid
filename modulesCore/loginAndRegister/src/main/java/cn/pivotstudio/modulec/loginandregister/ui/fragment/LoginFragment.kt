@@ -64,22 +64,6 @@ class LoginFragment : BaseFragment() {
         }
 
         viewModel.apply {
-//            loginToken.observe(viewLifecycleOwner) { token ->
-//                token?.let {
-//                    mmkvUtil.apply {
-//                        if (!token.isNullOrBlank()) {
-//                            // 取消V1接口，此后所有的v1请求都不会带上Token导致失败
-//                            put(Constant.USER_TOKEN, "")
-//                        }
-//                    }
-//                    if (BuildConfig.isRelease) {
-//                        ARouter.getInstance().build("/homeScreen/HomeScreenActivity")
-//                            .navigation()
-//                        requireActivity().finish()
-//                    }
-//                }
-//            }
-
             lifecycleScope.launchWhenStarted {
                 loginTokenV2.collect { token ->
                     token.takeIf { it.isNotBlank() }.let {

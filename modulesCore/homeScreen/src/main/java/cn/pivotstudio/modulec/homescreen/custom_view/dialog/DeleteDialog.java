@@ -23,9 +23,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * @classname:DeleteDIalog
- * @description:删除个人树洞的dialog
- * @date:2022/5/5 20:36
+ * @classname: DeleteDIalog
+ * @description: 删除个人树洞的dialog
+ * @date: 2022/5/5 20:36
  * @version:1.0
  * @author:
  */

@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.BaseObserver
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
+import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.NetworkApi
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
@@ -18,6 +19,7 @@ import cn.pivotstudio.modulec.loginandregister.network.LoginAndRegisterNetworkAp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 enum class LARState {
     LOGIN, REGISTERED,
@@ -63,7 +65,6 @@ class LARViewModel : ViewModel() {
 
     val larState: LiveData<LARState?> = _larState
     val tip: LiveData<String?> = _tip
-    val loginToken: LiveData<String?> = _loginToken
     val studentCode = MutableLiveData<String?>()
     val countDownTime: LiveData<Long?> = _countDownTime
     val loginTokenV2: StateFlow<String> = _loginTokenV2
@@ -85,10 +86,9 @@ class LARViewModel : ViewModel() {
                 emit(result)
             }.flowOn(Dispatchers.IO).catch { e ->
                 e.printStackTrace()
-                Log.e(TAG, "login: v2登录失败")
+                _tip.value = e.message
             }.collect {
                 _loginTokenV2.emit(it.token)
-                Log.e(TAG, "login: v2成功")
             }
         }
     }
@@ -99,20 +99,25 @@ class LARViewModel : ViewModel() {
             return
         }
         studentCode.value?.let {
-            LoginAndRegisterNetworkApi.retrofitService
-                .register(it, password)
-                .compose(NetworkApi.applySchedulers())
-                .subscribe(object : BaseObserver<MsgResponse>() {
-                    override fun onSuccess(t: MsgResponse) {
-                        _tip.value = t.msg
-                        _larState.value = LARState.REGISTERED
-                    }
+            viewModelScope.launch {
+                flow {
+                    val result = HustHoleApi.retrofitService.register(
+                        RequestBody.VerifyRequest(
+                            code = _verifyCode.value,
+                            email = studentCode.value + Constant.EMAIL_SUFFIX,
+                            password = password,
+                            resetPassword = isResetPassword
+                        )
+                    )
+                    emit(result)
+                }.flowOn(Dispatchers.IO).catch { e ->
+                    e.printStackTrace()
+                    _tip.value = e.message
+                }.collect {
+                    _loginTokenV2.emit(it.token)
+                }
+            }
 
-                    override fun onFailure(e: Throwable?) {
-                        _tip.value = (e as ResponseThrowable).message
-                    }
-
-                })
         }
     }
 
@@ -121,22 +126,27 @@ class LARViewModel : ViewModel() {
             _showPasswordWarning.value = true
             return
         }
-        studentCode.value?.also { studentCode ->
-            _verifyCode.value?.let { verifyCode ->
-                LoginAndRegisterNetworkApi.retrofitService
-                    .setNewPassword(studentCode, verifyCode, newPassword)
-                    .compose(NetworkApi.applySchedulers())
-                    .subscribe(object : BaseObserver<MsgResponse>() {
-                        override fun onSuccess(t: MsgResponse) {
-                            _larState.value = LARState.REGISTERED
-                            _tip.value = t.msg
-                        }
-
-                        override fun onFailure(e: Throwable?) {
-                            _tip.value = (e as ResponseThrowable).message
-                        }
-
-                    })
+        viewModelScope.launch {
+            studentCode.value?.also { studentCode ->
+                _verifyCode.value?.let { verifyCode ->
+                    flow {
+                        emit(
+                            HustHoleApi.retrofitService
+                                .register(
+                                    RequestBody.VerifyRequest(
+                                        code = verifyCode,
+                                        email = studentCode + Constant.EMAIL_SUFFIX,
+                                        password = newPassword,
+                                        resetPassword = isResetPassword
+                                    )
+                                )
+                        )
+                    }.flowOn(Dispatchers.IO).catch { e ->
+                        _tip.value = e.message
+                    }.collect {
+                        _larState.value = LARState.REGISTERED
+                    }
+                }
             }
         }
 
@@ -146,20 +156,24 @@ class LARViewModel : ViewModel() {
     fun verify(code: String) {
         _verifyCode.value = code
         studentCode.value?.let {
-            LoginAndRegisterNetworkApi.retrofitService
-                .codeVerify(it, code)
-                .compose(NetworkApi.applySchedulers())
-                .subscribe(object : BaseObserver<MsgResponse>() {
-                    override fun onSuccess(t: MsgResponse) {
+            viewModelScope.launch {
+                flow {
+                    emit(HustHoleApi.retrofitService.verifyCode(
+                        RequestBody.VerifyCode(
+                            code = code,
+                            email = it + Constant.EMAIL_SUFFIX
+                        )
+                    ))
+                }.flowOn(Dispatchers.IO).catch { e ->
+                    e.printStackTrace()
+                    _tip.value = e.message
+                }.collect { response ->
+                    if (response.isSuccessful) {
                         _larState.value = LARState.VERIFIED
-                        _tip.value = t.msg
+                        _tip.value = "验证成功"
                     }
-
-                    override fun onFailure(e: Throwable?) {
-                        _tip.value = (e as ResponseThrowable).message
-                    }
-
-                })
+                }
+            }
         }
     }
 
@@ -170,22 +184,29 @@ class LARViewModel : ViewModel() {
             _showStudentCodeWarning.value = true
             return
         }
+
         _showStudentCodeWarning.value = false
         countDown()
         studentCode.value?.let {
-            LoginAndRegisterNetworkApi.retrofitService
-                .sendVerifyCode(it, isResetPassword)
-                .compose(NetworkApi.applySchedulers())
-                .subscribe(object : BaseObserver<MsgResponse>() {
-                    override fun onSuccess(t: MsgResponse) {
-                        _tip.value = t.msg
+            viewModelScope.launch {
+                flow {
+                    val result = HustHoleApi.retrofitService
+                        .sendVerifyCode(
+                            RequestBody.SendVerifyCode(
+                                email = it + Constant.EMAIL_SUFFIX,
+                                resetPassword = isResetPassword
+                            )
+                        )
+                    emit(result)
+                }.flowOn(Dispatchers.IO).catch { e ->
+                    e.printStackTrace()
+                    _tip.value = e.message
+                }.collect {
+                    if (it.isSuccessful) {
+                        _tip.value = "发送成功"
                     }
-
-                    override fun onFailure(e: Throwable?) {
-                        _tip.value = (e as ResponseThrowable).message
-                    }
-
-                })
+                }
+            }
         }
     }
 

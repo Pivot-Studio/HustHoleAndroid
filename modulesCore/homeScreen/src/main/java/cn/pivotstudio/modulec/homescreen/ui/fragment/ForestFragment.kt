@@ -65,6 +65,11 @@ class ForestFragment : BaseFragment() {
                     )
                 }
             }
+            return
+        }
+
+        if (resultCode == ResultCodeConstant.PUBLISH_HOLE) {
+            forestViewModel.delayLoadHoles()
         }
     }
 
@@ -185,7 +190,8 @@ class ForestFragment : BaseFragment() {
     fun navToSpecificHole(holeId: String) {
         forestViewModel.loadHoleLater(holeId)
         if (BuildConfig.isRelease) {
-            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId.toInt())
+            ARouter.getInstance().build("/hole/HoleActivity")
+                .withInt(Constant.HOLE_ID, holeId.toInt())
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                 .navigation(requireActivity(), ResultCodeConstant.Hole)
         }
@@ -194,7 +200,8 @@ class ForestFragment : BaseFragment() {
     // 点击恢复图标跳转到树洞后自动打开软键盘
     fun navToSpecificHoleWithReply(holeId: String) {
         if (BuildConfig.isRelease) {
-            ARouter.getInstance().build("/hole/HoleActivity").withInt(Constant.HOLE_ID, holeId.toInt())
+            ARouter.getInstance().build("/hole/HoleActivity")
+                .withInt(Constant.HOLE_ID, holeId.toInt())
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
                 .navigation(requireActivity(), ResultCodeConstant.Hole)
         }
