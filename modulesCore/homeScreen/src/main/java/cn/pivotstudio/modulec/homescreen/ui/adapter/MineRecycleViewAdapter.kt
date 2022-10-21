@@ -1,28 +1,27 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
 import android.app.Dialog
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
+import android.view.View.OnLongClickListener
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
+import cn.pivotstudio.moduleb.database.MMKVUtil
+import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineHoleFollowBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineReplyBinding
-import cn.pivotstudio.modulec.homescreen.oldversion.mine.HoleStarReplyActivity
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment
 import cn.pivotstudio.modulec.homescreen.viewmodel.HoleFollowReplyViewModel
-import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_HOLE
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_REPLY
@@ -61,15 +60,36 @@ class MineRecycleViewAdapter(
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                         .navigation(frag.requireActivity(), 2)
                 }
-//                totalView.setOnLongClickListener {
-//                    Toast.makeText(frag.requireContext(), "正在测试中！",Toast.LENGTH_SHORT).show()
-//                }
-                if(type == GET_HOLE)
+                if(type == GET_HOLE) {
+                    totalView.setOnLongClickListener {
+                        initDialog()
+                        true
+                    }
                     textView.text = frag.getString(R.string.thumb_follow).format(hole.likeCount.toString(),hole.replyCount.toString())
+                }
+
                 if(type == GET_FOLLOW)
                     textView.text = frag.getString(R.string.reply_follow).format(hole.replyCount.toString(),hole.followCount.toString())
+
+
                 executePendingBindings()
             }
+        }
+
+        private fun initDialog(){
+            val dialog = Dialog(frag.requireContext())
+            val dialogView = frag.requireActivity().layoutInflater.inflate(R.layout.dialog_delete, null)
+            dialog.setContentView(dialogView)
+            val btnNo = dialogView.findViewById<TextView>(R.id.dialog_delete_tv_cancel)
+            val btnYes = dialogView.findViewById<TextView>(R.id.dialog_delete_tv_yes)
+            dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            btnNo.setOnClickListener { dialog.dismiss() }
+            btnYes.setOnClickListener {
+                dialog.dismiss()
+                //TODO 删除树洞
+            }
+            dialog.show()
+
         }
     }
 

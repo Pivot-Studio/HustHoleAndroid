@@ -6,8 +6,8 @@
     android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="316dp"
-        android:layout_height="144dp"
+        android:layout_width="@dimen/dp_316"
+        android:layout_height="@dimen/dp_144"
         android:layout_gravity="center"
         android:background="@drawable/notice"
         android:gravity="center">
@@ -15,11 +15,11 @@
         <TextView
             android:id="@+id/tv_dialogforestquit_title"
             android:layout_width="wrap_content"
-            android:layout_height="22dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="@dimen/dp_22"
+            android:layout_marginTop="@dimen/dp_16"
             android:text="删除"
             android:textColor="@color/GrayScale_0"
-            android:textSize="18sp"
+            android:textSize="@dimen/sp_18"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -29,11 +29,11 @@
             android:id="@+id/dialog_delete_tv_yes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginEnd="25dp"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_25"
             android:text="@string/forest_quit_notice_4"
             android:textColor="@color/HH_BandColor_1"
-            android:textSize="16sp"
+            android:textSize="@dimen/sp_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -41,11 +41,11 @@
             android:id="@+id/dialog_delete_tv_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginEnd="@dimen/dp_20"
             android:text="@string/forest_quit_notice_3"
             android:textColor="@color/HH_BandColor_1"
-            android:textSize="16sp"
+            android:textSize="@dimen/sp_16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/dialog_delete_tv_yes" />
 
@@ -53,11 +53,11 @@
             android:id="@+id/tv_dialogforestquit_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginStart="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_20"
             android:text="你确认要删除该内容吗？"
             android:textColor="@color/GrayScale_0"
-            android:textSize="14sp"
+            android:textSize="@dimen/sp_14"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_dialogforestquit_title" />
 

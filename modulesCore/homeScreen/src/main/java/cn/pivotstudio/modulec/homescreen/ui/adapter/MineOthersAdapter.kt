@@ -85,16 +85,11 @@ class MineOthersAdapter(
                             }
                             if (name != R.string.check_update) {
                                 binding.rlOthers.setOnClickListener {
-                                    if (viewModel.optSwitch[layoutPosition] == true) {
                                         val action =
                                             ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
                                                 name, viewModel.isVerifiedEmail.value!!
                                             )
                                         it.findNavController().navigate(action)
-                                    } else {
-                                        Toast.makeText(fragment.context, "功能正在维护！", Toast.LENGTH_SHORT)
-                                            .show()
-                                    }
                                 }
                             }
                         }

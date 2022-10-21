@@ -634,7 +634,7 @@ class MineFragmentViewModel : ViewModel(){
         optSwitch[SHARE] = false
         optSwitch[EVALUATION_AND_SUGGESTIONS] = true
         optSwitch[ABOUT] = true
-        optSwitch[UPDATE] = true
+        optSwitch[UPDATE] = false
         optSwitch[LOGOUT] = true
         optSwitch[CHECK_UPDATE] = false
         optSwitch[UPDATE_LOG] = true
