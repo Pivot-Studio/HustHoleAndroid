@@ -6,7 +6,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import cn.pivotstudio.moduleb.libbase.R
+import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.moduleb.libbase.util.data.TimeUtil
+import cn.pivotstudio.moduleb.libbase.util.emoji.SpanStringUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
@@ -170,6 +172,17 @@ fun bindBlurImage(imgView: ImageView, imgUrl: String?) {
             .error(R.drawable.icon)
             .into(imgView)
     }
+}
+
+@BindingAdapter("parseEmoji")
+fun parseEmoji(view: TextView, content: String?) {
+    val spannableString = SpanStringUtil.getEmotionContent(
+        0x0001,
+        BaseApplication.context,
+        view,
+        content
+    )
+    view.text = spannableString
 }
 
 

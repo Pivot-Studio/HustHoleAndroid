@@ -14,7 +14,6 @@ public class Constant {
     //是否登录
     public static final String IS_LOGIN = "isLogin";
     //登录获得的token
-    public static final String USER_TOKEN = "USER_TOKEN";
     public static final String USER_TOKEN_V2 = "USER_TOKEN_V2";
     //是否第一次使用app
     public static final String IS_FIRST_USED = "isFirstUseD";

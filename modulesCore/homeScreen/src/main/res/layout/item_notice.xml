@@ -75,6 +75,7 @@
 
         <TextView
             android:id="@+id/content"
+            parseEmoji="@{reply.content}"
             android:layout_width="@dimen/dp_331"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_22"
@@ -82,7 +83,6 @@
             android:layout_marginBottom="@dimen/dp_10"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="@{reply.content}"
             android:textAppearance="@style/HustHoleTypography.Body2"
             android:textColor="@color/GrayScale_20"
             tools:text="我好想买Airpods但是没有钱，梁老师可不可以资助呀呀呀" />

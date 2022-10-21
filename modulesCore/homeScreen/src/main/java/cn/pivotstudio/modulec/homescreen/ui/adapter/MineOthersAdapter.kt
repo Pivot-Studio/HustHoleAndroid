@@ -142,7 +142,6 @@ class MineOthersAdapter(
             btnLogout.setOnClickListener {
                 dialog.dismiss()
                 val mmkvUtil = MMKVUtil.getMMKV(fragment.context)
-                mmkvUtil.put(Constant.USER_TOKEN, "")
                 mmkvUtil.put(Constant.USER_TOKEN_V2, "")
                 mmkvUtil.put(Constant.IS_LOGIN, false)
                 ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation()
