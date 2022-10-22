@@ -4,11 +4,7 @@ import android.annotation.SuppressLint;
 
 import androidx.lifecycle.MutableLiveData;
 
-import cn.pivotstudio.husthole.moduleb.network.BaseObserver;
-import cn.pivotstudio.husthole.moduleb.network.NetworkApi;
-import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler;
 import cn.pivotstudio.modulec.homescreen.network.VersionResponse;
-import cn.pivotstudio.modulec.homescreen.network.HSRequestInterface;
 
 /**
  * @classname HomeScreenRepository
@@ -28,23 +24,5 @@ public class HomeScreenRepository {
     public HomeScreenRepository() {
         pHomeScreenVersionMsg = new MutableLiveData<>();
         failed = new MutableLiveData<>();
-    }
-
-    /**
-     * 获取版本号
-     */
-    public void getVersionMsgForNetwork() {
-        NetworkApi.createService(HSRequestInterface.class, 2).
-                checkUpdate().compose(NetworkApi.applySchedulers(new BaseObserver<VersionResponse>() {
-                    @Override
-                    public void onSuccess(VersionResponse versionResponse) {
-                        pHomeScreenVersionMsg.setValue(versionResponse);
-                    }
-
-                    @Override
-                    public void onFailure(Throwable e) {
-                        failed.postValue(((ExceptionHandler.ResponseThrowable) e).message);
-                    }
-                }));
     }
 }

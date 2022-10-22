@@ -43,6 +43,7 @@ class VerifyCodeFragment : BaseFragment() {
 
             btnVerifyNext.setOnClickListener {
                 viewModel.verify(etVerifyCode.text.toString())
+                navToNext()
             }
 
             tvResendCode.setOnClickListener {
@@ -64,9 +65,6 @@ class VerifyCodeFragment : BaseFragment() {
             larState.observe(viewLifecycleOwner) {
                 it?.let {
                     when (it) {
-                        LARState.VERIFIED -> {
-                            navToNext()
-                        }
                         LARState.COUNT_DOWN_START -> {
                             binding.apply {
                                 tvResendCode.visibility = View.INVISIBLE

@@ -13,6 +13,7 @@ import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import org.json.JSONObject
 import retrofit2.Response
 
 /**
@@ -71,10 +72,13 @@ class MineRepository(
         if (response.isSuccessful) {
             flow.emit(ApiResult.Success(data = Unit))
         } else {
+            val json = response.errorBody()?.string()
+            val jsonObject = json?.let { JSONObject(it) }
+            val returnCondition = jsonObject?.getString("errorMsg")
             flow.emit(
                 ApiResult.Error(
                     code = response.code(),
-                    errorMessage = response.errorBody()?.string()
+                    errorMessage = returnCondition
                 )
             )
             response.errorBody()?.close()

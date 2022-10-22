@@ -5,19 +5,23 @@ import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.loginandregister.R
 import cn.pivotstudio.modulec.loginandregister.databinding.FragmentRegisterBinding
+import cn.pivotstudio.modulec.loginandregister.viewmodel.LARState
 import cn.pivotstudio.modulec.loginandregister.viewmodel.LARViewModel
 
 class RegisterFragment : BaseFragment() {
     private lateinit var binding: FragmentRegisterBinding
     private val navController by lazy { findNavController() }
     private val viewModel: LARViewModel by activityViewModels()
+    private lateinit var mmkvUtil: MMKVUtil
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,6 +30,7 @@ class RegisterFragment : BaseFragment() {
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_register, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
+        mmkvUtil = MMKVUtil.getMMKV(context)
         return binding.root
     }
 
@@ -51,6 +56,10 @@ class RegisterFragment : BaseFragment() {
                 viewModel.isResetPassword = false
                 viewModel.sendVerifyCodeToStudentEmail()
             }
+
+            tvRegisterAppeal.setOnClickListener {
+                Toast.makeText(context, getString(R.string.lar_appeal_to), Toast.LENGTH_LONG).show()
+            }
         }
 
         viewModel.apply {
@@ -60,10 +69,19 @@ class RegisterFragment : BaseFragment() {
                     else {
                         binding.tvRegisterWarn.visibility = View.GONE
                         doneShowingWarning()
-                        navToVerifyCode()
                     }
                 }
             }
+
+            larState.observe(viewLifecycleOwner) { state ->
+                when (state) {
+                    LARState.REG_END -> {
+                        navToVerifyCode()
+                    }
+                    else -> {}
+                }
+            }
+
 
             tip.observe(viewLifecycleOwner) {
                 it?.let {

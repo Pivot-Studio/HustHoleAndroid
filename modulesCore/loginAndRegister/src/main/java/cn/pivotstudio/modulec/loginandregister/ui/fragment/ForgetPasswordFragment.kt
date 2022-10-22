@@ -5,6 +5,7 @@ import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -42,6 +43,10 @@ class ForgetPasswordFragment : BaseFragment() {
                 viewModel.studentCode.value = etForgetEmail.text.toString()
                 viewModel.isResetPassword = true
                 viewModel.sendVerifyCodeToStudentEmail()
+            }
+
+            tvForgetAppeal.setOnClickListener {
+                Toast.makeText(context, getString(R.string.lar_appeal_to), Toast.LENGTH_LONG).show()
             }
         }
 

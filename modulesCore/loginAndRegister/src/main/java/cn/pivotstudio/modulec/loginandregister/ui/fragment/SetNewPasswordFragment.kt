@@ -9,18 +9,25 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import cn.pivotstudio.moduleb.database.MMKVUtil
+import cn.pivotstudio.moduleb.libbase.BuildConfig
+import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.loginandregister.R
 import cn.pivotstudio.modulec.loginandregister.databinding.FragmentSetNewPasswordBinding
-import cn.pivotstudio.modulec.loginandregister.viewmodel.LARState
+import cn.pivotstudio.modulec.loginandregister.ui.activity.LARActivity
 import cn.pivotstudio.modulec.loginandregister.viewmodel.LARViewModel
+import com.alibaba.android.arouter.launcher.ARouter
 
-class SetNewPasswordFragment : Fragment() {
+class SetNewPasswordFragment : BaseFragment() {
     private lateinit var binding: FragmentSetNewPasswordBinding
     private lateinit var navController: NavController
     private val viewModel: LARViewModel by activityViewModels()
+    private lateinit var mmkvUtil: MMKVUtil
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,6 +38,7 @@ class SetNewPasswordFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_set_new_password, container, false)
         binding.lifecycleOwner = viewLifecycleOwner
         navController = findNavController()
+        mmkvUtil = MMKVUtil.getMMKV(context)
         return binding.root
     }
 
@@ -61,30 +69,30 @@ class SetNewPasswordFragment : Fragment() {
 
 
         viewModel.apply {
-            larState.observe(viewLifecycleOwner) {
-                it?.let {
-                    when (it) {
-                        LARState.REGISTERED -> {
-                            popBackWithSuccessfulRegistry()
-                        }
-                        else -> {}
+
+            lifecycleScope.launchWhenStarted {
+                loginTokenV2.collect { token ->
+                    token.takeIf { it.isNotBlank() }?.let {
+                        (activity as? LARActivity)?.loginWithUseToken(it)
                     }
-                    doneStateChanged()
                 }
             }
 
             showPasswordWarning.observe(viewLifecycleOwner) {
                 it?.let {
-                    if(it) binding.tvModifyWarn.visibility = View.GONE
+                    if (it) binding.tvModifyWarn.visibility = View.GONE
                     else binding.tvModifyWarn.visibility = View.VISIBLE
+                }
+            }
+
+            tip.observe(viewLifecycleOwner) {
+                it?.let {
+                    showMsg(it)
+                    viewModel.doneShowingTip()
                 }
             }
         }
 
     }
 
-    fun popBackWithSuccessfulRegistry() {
-        viewModel.clear()
-        navController.popBackStack(R.id.welcomeFragment, false)
-    }
 }

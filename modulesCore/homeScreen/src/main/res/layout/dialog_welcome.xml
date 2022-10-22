@@ -21,8 +21,8 @@
             android:background="@drawable/button"
             android:onClick="jumpToPublishHoleByARouter"
             android:text="@string/homepage_3"
+            android:textAppearance="@style/HustHoleTypography.Button2"
             android:textColor="@color/GrayScale_100"
-            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -42,8 +42,8 @@
                 android:layout_width="220dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="9dp"
-
-                android:text="TextView" />
+                android:text="TextView"
+                android:textAppearance="@style/HustHoleTypography.Body2" />
         </ScrollView>
 
         <TextView
@@ -51,9 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="22dp"
             android:text="TextView"
-            android:textColor="@color/GrayScale_0"
-            android:textSize="15sp"
-            android:textStyle="bold"
+            android:textAppearance="@style/HustHoleTypography.Headline6"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.504"
