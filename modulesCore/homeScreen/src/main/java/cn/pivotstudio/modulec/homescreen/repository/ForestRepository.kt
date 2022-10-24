@@ -39,6 +39,8 @@ class ForestRepository(
 
     fun loadForestHolesV2(): Flow<List<HoleV2>> {
         return flow {
+            lastOffset = INITIAL_OFFSET
+            refreshTimestamp()
             emit(
                 hustHoleApiService.getAJoinedForestHoles(
                     limit = HOLES_LIST_SIZE,
@@ -47,9 +49,6 @@ class ForestRepository(
             )
         }.flowOn(dispatcher).catch { e ->
             e.printStackTrace()
-        }.onEach {
-            lastOffset = INITIAL_OFFSET
-            refreshTimestamp()
         }
     }
 

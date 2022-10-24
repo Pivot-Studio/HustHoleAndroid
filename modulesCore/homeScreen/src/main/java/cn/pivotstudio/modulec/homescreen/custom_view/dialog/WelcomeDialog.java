@@ -13,9 +13,9 @@ import androidx.annotation.Nullable;
 import cn.pivotstudio.modulec.homescreen.R;
 
 /**
- * @classname:WelcomeDialog
- * @description:欢迎的dialog
- * @date:2022/5/3 16:19
+ * @classname: WelcomeDialog
+ * @description: 欢迎的dialog
+ * @date: 2022/5/3 16:19
  * @version:1.0
  * @author:
  */

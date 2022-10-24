@@ -86,7 +86,7 @@ class VerifyCodeFragment : BaseFragment() {
             }
 
             countDownTime.observe(viewLifecycleOwner) {
-                binding.tvCountDownSecond.text = resources.getString(R.string.second ,it)
+                binding.tvCountDownSecond.text = resources.getString(R.string.second, it)
             }
         }
     }

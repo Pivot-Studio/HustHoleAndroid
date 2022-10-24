@@ -8,6 +8,7 @@ import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 

@@ -7,6 +7,7 @@ import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -163,6 +164,13 @@ class ForestDetailViewModel(
 
     fun doneShowingTip() {
         tip.value = null
+    }
+
+    fun delayLoadHoles() {
+        viewModelScope.launch {
+            delay(2000)
+            loadHoles()
+        }
     }
 
     fun refreshLoadLaterHole(

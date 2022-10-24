@@ -28,6 +28,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.BuildConfig
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
 import com.google.android.material.navigation.NavigationBarView
@@ -66,8 +67,7 @@ class HomeScreenActivity : BaseActivity() {
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         val mMainNavFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment)
-        val fragment = mMainNavFragment!!.childFragmentManager.primaryNavigationFragment
-        when (fragment) {
+        when (val fragment = mMainNavFragment!!.childFragmentManager.primaryNavigationFragment) {
             is HomePageFragment,
             is ForestDetailFragment,
             is ForestFragment -> {
@@ -108,7 +108,7 @@ class HomeScreenActivity : BaseActivity() {
             // BottomNavigationBar显示情况特判
             binding.apply {
                 layoutBottomBar.isVisible =
-                    !fragmentList.any{it == destination.id}
+                    !fragmentList.any { it == destination.id }
 
                 bottomNavigationView.setupWithNavController(navController)
                 bottomNavigationView.background = null
@@ -124,6 +124,7 @@ class HomeScreenActivity : BaseActivity() {
             }
 
         }
+
 
     }
 
@@ -146,24 +147,26 @@ class HomeScreenActivity : BaseActivity() {
      * 检查版本以及是否第一次使用
      */
     private fun checkVersion() {
-        val homeScreenRepository = HomeScreenRepository()
-        homeScreenRepository.getVersionMsgForNetwork()
-        homeScreenRepository.pHomeScreenVersionMsg.observe(this) { versionResponse: VersionResponse ->
-            val oldVersion = packageName(this@HomeScreenActivity)
-            val lastVersion = versionResponse.androidversion
-            val downloadUrl = versionResponse.androidUpdateUrl
-            if (lastVersion != oldVersion) { //如果当前不是新版本
-                val updateDialog =
-                    UpdateDialog(this@HomeScreenActivity, oldVersion, lastVersion, downloadUrl)
-                updateDialog.show()
-            } else { //是最新版本
-                val mmkvUtil = MMKVUtil.getMMKV(this)
-                if (!mmkvUtil.getBoolean(Constant.IS_FIRST_USED)) { //是否第一次使用1037树洞,保证welcomeDialog只在第一使用时显式
-                    val welcomeDialog = WelcomeDialog(context)
-                    welcomeDialog.show()
-                    mmkvUtil.put(Constant.IS_FIRST_USED, true)
-                }
-            }
+//        val homeScreenRepository = HomeScreenRepository()
+//        homeScreenRepository.getVersionMsgForNetwork()
+//        homeScreenRepository.pHomeScreenVersionMsg.observe(this) { versionResponse: VersionResponse ->
+//            val oldVersion = packageName(this@HomeScreenActivity)
+//            val lastVersion = versionResponse.androidversion
+//            val downloadUrl = versionResponse.androidUpdateUrl
+//            if (lastVersion != oldVersion) { //如果当前不是新版本
+//                val updateDialog =
+//                    UpdateDialog(this@HomeScreenActivity, oldVersion, lastVersion, downloadUrl)
+//                updateDialog.show()
+//            } else { //是最新版本
+//
+//            }
+//        }
+
+        val mmkvUtil = MMKVUtil.getMMKV(this)
+        if (!mmkvUtil.getBoolean(Constant.IS_FIRST_USED)) { //是否第一次使用1037树洞,保证welcomeDialog只在第一使用时显式
+            val welcomeDialog = WelcomeDialog(context)
+            welcomeDialog.show()
+            mmkvUtil.put(Constant.IS_FIRST_USED, true)
         }
     }
 
@@ -174,7 +177,8 @@ class HomeScreenActivity : BaseActivity() {
         val id = v.id
         if (id == R.id.fab_homescreen_publishhole) {
             if (BuildConfig.isRelease) {
-                ARouter.getInstance().build("/publishHole/PublishHoleActivity").navigation()
+                ARouter.getInstance().build("/publishHole/PublishHoleActivity")
+                    .navigation(this, ResultCodeConstant.PUBLISH_HOLE)
             } else {
                 showMsg("当前为模块测试阶段")
             }
