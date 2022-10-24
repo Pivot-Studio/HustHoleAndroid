@@ -100,7 +100,7 @@
                     android:maxLines="1"
                     android:textColor="@color/GrayScale_50"
                     android:textSize="@dimen/sp_13"
-                    android:text="@{reply.hole.content}"/>
+                    android:text="@{reply.hole == null ? reply.replied.content : reply.hole.content}"/>
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

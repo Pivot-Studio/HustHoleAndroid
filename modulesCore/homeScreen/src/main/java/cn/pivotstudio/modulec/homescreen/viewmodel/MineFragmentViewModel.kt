@@ -637,7 +637,6 @@ class MineFragmentViewModel : ViewModel(){
         optSwitch[UPDATE] = false
         optSwitch[LOGOUT] = true
         optSwitch[CHECK_UPDATE] = false
-        optSwitch[UPDATE_LOG] = true
     }
 
     companion object {
