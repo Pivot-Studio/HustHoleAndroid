@@ -16,6 +16,7 @@ import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.loginandregister.R
 import cn.pivotstudio.modulec.loginandregister.databinding.FragmentLoginBinding
+import cn.pivotstudio.modulec.loginandregister.ui.activity.LARActivity
 import cn.pivotstudio.modulec.loginandregister.viewmodel.LARViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 
@@ -66,18 +67,8 @@ class LoginFragment : BaseFragment() {
         viewModel.apply {
             lifecycleScope.launchWhenStarted {
                 loginTokenV2.collect { token ->
-                    token.takeIf { it.isNotBlank() }.let {
-                        mmkvUtil.apply {
-                            if (token.isNotBlank()) {
-                                put(Constant.USER_TOKEN_V2, token)
-                                put(Constant.IS_LOGIN, true)
-                                if (BuildConfig.isRelease) {
-                                    ARouter.getInstance().build("/homeScreen/HomeScreenActivity")
-                                        .navigation()
-                                    requireActivity().finish()
-                                }
-                            }
-                        }
+                    token.takeIf { it.isNotBlank() }?.let {
+                        (activity as? LARActivity)?.loginWithUseToken(it)
                     }
                 }
             }

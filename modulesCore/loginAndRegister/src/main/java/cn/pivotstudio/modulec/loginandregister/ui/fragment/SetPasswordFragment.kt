@@ -9,12 +9,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.loginandregister.R
 import cn.pivotstudio.modulec.loginandregister.databinding.FragmentSetPasswordBinding
-import cn.pivotstudio.modulec.loginandregister.viewmodel.LARState
+import cn.pivotstudio.modulec.loginandregister.ui.activity.LARActivity
 import cn.pivotstudio.modulec.loginandregister.viewmodel.LARViewModel
 
 class SetPasswordFragment : Fragment() {
@@ -59,30 +60,22 @@ class SetPasswordFragment : Fragment() {
         }
 
         viewModel.apply {
-            larState.observe(viewLifecycleOwner) {
-                it?.let {
-                    when (it) {
-                        LARState.REGISTERED -> {
-                            popBackWithSuccessfulRegistry()
-                        }
-                        else -> { }
-                    }
-                    doneStateChanged()
-                }
-            }
 
             showPasswordWarning.observe(viewLifecycleOwner) {
                 it?.let {
-                    if(it) binding.tvSetPasswordWarn.visibility = View.GONE
+                    if (it) binding.tvSetPasswordWarn.visibility = View.GONE
                     else binding.tvSetPasswordWarn.visibility = View.VISIBLE
                 }
             }
-        }
-    }
 
-    fun popBackWithSuccessfulRegistry() {
-        viewModel.clear()
-        navController.popBackStack(R.id.welcomeFragment, false)
+            lifecycleScope.launchWhenStarted {
+                loginTokenV2.collect { token ->
+                    token.takeIf { it.isNotBlank() }?.let {
+                        (activity as? LARActivity)?.loginWithUseToken(it)
+                    }
+                }
+            }
+        }
     }
 
 }

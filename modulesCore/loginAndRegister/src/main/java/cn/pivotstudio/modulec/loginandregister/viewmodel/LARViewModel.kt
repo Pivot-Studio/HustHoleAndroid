@@ -6,27 +6,35 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.BaseObserver
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
-import cn.pivotstudio.husthole.moduleb.network.NetworkApi
+import cn.pivotstudio.husthole.moduleb.network.*
+import cn.pivotstudio.husthole.moduleb.network.errorhandler.ErrorCodeHandlerV2
+import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler
 import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
 import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
+import cn.pivotstudio.husthole.moduleb.network.model.TokenResponse
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.data.CheckStudentCodeUtil
 import cn.pivotstudio.modulec.loginandregister.model.MsgResponse
 import cn.pivotstudio.modulec.loginandregister.network.LoginAndRegisterNetworkApi
+import cn.pivotstudio.modulec.loginandregister.repository.LARRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 enum class LARState {
-    LOGIN, REGISTERED,
+    LOGIN_LOADING, LOGIN_END, LOGIN_ERROR, // 登录状态
+
+    REG_LOADING, REG_END, REG_ERROR,       // 注册状态
+
+    VERIFY_LOADING, VERIFY_END, VERIFY_ERROR, // 验证状态
+
     VERIFIED, VERIFYING, COUNT_DOWN_START, COUNT_DOWN_END
 }
 
 class LARViewModel : ViewModel() {
+
+    private val repo = LARRepo()
 
     companion object {
         const val TAG = "LARViewModel"
@@ -79,17 +87,26 @@ class LARViewModel : ViewModel() {
         _showStudentCodeWarning.value = false
 
         viewModelScope.launch {
-            flow {
-                val result = HustHoleApi.retrofitService.signIn(
-                    RequestBody.User(email = id + Constant.EMAIL_SUFFIX, password = password)
-                )
-                emit(result)
-            }.flowOn(Dispatchers.IO).catch { e ->
-                e.printStackTrace()
-                _tip.value = e.message
-            }.collect {
-                _loginTokenV2.emit(it.token)
-            }
+            repo.login(id, password)
+                .catch { e ->
+                    e.printStackTrace()
+                }.collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Success<*> -> {
+                            _loginTokenV2.emit((apiResult.data as TokenResponse).token)
+                            _larState.value = LARState.LOGIN_END
+                            _tip.value = "登录成功"
+                        }
+                        is ApiResult.Error -> {
+                            _larState.value = LARState.LOGIN_ERROR
+                            _tip.value = ErrorCodeHandlerV2.handleErrorCode2String(apiResult.code)
+                        }
+                        is ApiResult.Loading -> {
+                            _larState.value = LARState.LOGIN_LOADING
+                            _tip.value = "登录中..."
+                        }
+                    }
+                }
         }
     }
 
@@ -100,21 +117,26 @@ class LARViewModel : ViewModel() {
         }
         studentCode.value?.let {
             viewModelScope.launch {
-                flow {
-                    val result = HustHoleApi.retrofitService.register(
-                        RequestBody.VerifyRequest(
-                            code = _verifyCode.value,
-                            email = studentCode.value + Constant.EMAIL_SUFFIX,
-                            password = password,
-                            resetPassword = isResetPassword
-                        )
-                    )
-                    emit(result)
-                }.flowOn(Dispatchers.IO).catch { e ->
+                repo.register(
+                    email = it + Constant.EMAIL_SUFFIX,
+                    password = password,
+                    isResetPassword = isResetPassword,
+                    code = _verifyCode.value!!
+                ).catch { e ->
                     e.printStackTrace()
-                    _tip.value = e.message
-                }.collect {
-                    _loginTokenV2.emit(it.token)
+                }.collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Success<*> -> {
+                            _loginTokenV2.emit((apiResult.data as TokenResponse).token)
+                            _tip.value = "验证中..."
+                        }
+                        is ApiResult.Error -> {
+                            _tip.value = "该用户已存在"
+                        }
+                        is ApiResult.Loading -> {
+                            _tip.value = "验证成功"
+                        }
+                    }
                 }
             }
 
@@ -129,22 +151,23 @@ class LARViewModel : ViewModel() {
         viewModelScope.launch {
             studentCode.value?.also { studentCode ->
                 _verifyCode.value?.let { verifyCode ->
-                    flow {
-                        emit(
-                            HustHoleApi.retrofitService
-                                .register(
-                                    RequestBody.VerifyRequest(
-                                        code = verifyCode,
-                                        email = studentCode + Constant.EMAIL_SUFFIX,
-                                        password = newPassword,
-                                        resetPassword = isResetPassword
-                                    )
-                                )
-                        )
-                    }.flowOn(Dispatchers.IO).catch { e ->
-                        _tip.value = e.message
-                    }.collect {
-                        _larState.value = LARState.REGISTERED
+                    repo.setNewPassword(
+                        verifyCode,
+                        studentCode + Constant.EMAIL_SUFFIX,
+                        newPassword,
+                        true
+                    ).catch { e ->
+                        e.printStackTrace()
+                    }.collect { apiResult ->
+                        when (apiResult) {
+                            is ApiResult.Success<*> -> {
+                                _loginTokenV2.emit((apiResult.data as TokenResponse).token)
+                            }
+                            is ApiResult.Error -> {
+                                _tip.value = ErrorCodeHandlerV2.handleErrorCode2String(apiResult.code)
+                            }
+                            else -> {}
+                        }
                     }
                 }
             }
@@ -155,26 +178,6 @@ class LARViewModel : ViewModel() {
 
     fun verify(code: String) {
         _verifyCode.value = code
-        studentCode.value?.let {
-            viewModelScope.launch {
-                flow {
-                    emit(HustHoleApi.retrofitService.verifyCode(
-                        RequestBody.VerifyCode(
-                            code = code,
-                            email = it + Constant.EMAIL_SUFFIX
-                        )
-                    ))
-                }.flowOn(Dispatchers.IO).catch { e ->
-                    e.printStackTrace()
-                    _tip.value = e.message
-                }.collect { response ->
-                    if (response.isSuccessful) {
-                        _larState.value = LARState.VERIFIED
-                        _tip.value = "验证成功"
-                    }
-                }
-            }
-        }
     }
 
     var isResetPassword = false
@@ -189,21 +192,22 @@ class LARViewModel : ViewModel() {
         countDown()
         studentCode.value?.let {
             viewModelScope.launch {
-                flow {
-                    val result = HustHoleApi.retrofitService
-                        .sendVerifyCode(
-                            RequestBody.SendVerifyCode(
-                                email = it + Constant.EMAIL_SUFFIX,
-                                resetPassword = isResetPassword
-                            )
-                        )
-                    emit(result)
-                }.flowOn(Dispatchers.IO).catch { e ->
-                    e.printStackTrace()
-                    _tip.value = e.message
-                }.collect {
-                    if (it.isSuccessful) {
-                        _tip.value = "发送成功"
+                repo.sendVerifyCodeToStudentEmail(
+                    email = it + Constant.EMAIL_SUFFIX,
+                    isResetPassword = isResetPassword
+                ).collect { apiResult ->
+                    when (apiResult) {
+                        is ApiResult.Success<*> -> {
+                            _larState.value = LARState.REG_END
+                            _tip.value = "发送成功"
+                        }
+                        is ApiResult.Error -> {
+                            _larState.value = LARState.REG_ERROR
+                            _tip.value = apiResult.errorMessage
+                        }
+                        is ApiResult.Loading -> {
+                            _larState.value = LARState.REG_LOADING
+                        }
                     }
                 }
             }

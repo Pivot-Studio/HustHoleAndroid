@@ -125,7 +125,6 @@ class HomeScreenActivity : BaseActivity() {
 
         }
 
-
     }
 
     /**

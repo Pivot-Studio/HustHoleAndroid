@@ -486,6 +486,7 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_detailforesthead.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_discover_more.xml" value="0.5667001838358039" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest.xml" value="0.34475402832031254" />
+        <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_brief.xml" value="0.1" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_card.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.5041320579639379" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_head.xml" value="0.2572463768115942" />

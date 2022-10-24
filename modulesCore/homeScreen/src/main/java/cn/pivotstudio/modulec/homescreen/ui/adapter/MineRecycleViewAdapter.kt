@@ -2,6 +2,7 @@ package cn.pivotstudio.modulec.homescreen.ui.adapter
 
 import android.app.Dialog
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnLongClickListener
 import android.view.ViewGroup

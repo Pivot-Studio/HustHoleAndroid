@@ -56,7 +56,6 @@ fun setHintText(view: EmojiEdittext, reply: Reply?) {
 
 }
 
-
 @BindingAdapter("markDownContent")
 fun setMDContent(view: TextView, content: String?) {
     if (content != null) {
