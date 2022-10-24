@@ -50,10 +50,6 @@ sealed interface RequestBody {
         val type: ReportType
     ) : RequestBody
 
-    data class ScoreRequest(
-        val score: Int
-    ) : RequestBody
-
     data class VerifyRequest(
         /** 验证码 */
         val code: String? = null,
@@ -86,10 +82,13 @@ sealed interface RequestBody {
         /** 是否重置密码 */
         val resetPassword: Boolean? = null
     )
+    data class ScoreRequest(
+        val score: Int
+    ) : RequestBody
 
     data class FeedBackRequest (
         val content: String? = null,
-        val type: Type? = null
+        val type: String? = null
     ) : RequestBody
 }
 
@@ -112,9 +111,9 @@ enum class ReportType {
  * 反馈类型
  */
 enum class Type(val value: String) {
-    Suggestion("Suggestion"),
-    Bug("Bug"),
-    Other("Other");
+    Suggestion("SUGGESTION"),
+    Bug("BUG"),
+    Other("OTHER");
 
 
     companion object {

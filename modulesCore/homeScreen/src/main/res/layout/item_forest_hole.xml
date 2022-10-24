@@ -106,7 +106,7 @@
                 replyIcon="@{forestHole.reply}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:srcCompat="@drawable/ic_comment_active_20dp" />
@@ -137,7 +137,7 @@
                 followIcon="@{forestHole.follow}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="@dimen/dp_12"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 tools:srcCompat="@drawable/ic_follow_active_20dp" />

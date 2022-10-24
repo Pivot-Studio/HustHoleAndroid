@@ -117,7 +117,7 @@
                 <View
                     android:id="@+id/view1"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_1"
+                    android:layout_height="@dimen/dp_150"
                     android:layout_marginTop="@dimen/dp_9"
                     android:background="@color/GrayScale_80" />
             </LinearLayout>

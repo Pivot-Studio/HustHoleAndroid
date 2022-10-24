@@ -127,6 +127,7 @@
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_email_ok.xml" value="0.14130434782608695" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_email_verify1.xml" value="0.33" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_email_verify2.xml" value="0.33" />
+        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_emailverify.xml" value="0.161231884057971" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_hole_star.xml" value="0.45580808080808083" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_rules.xml" value="0.25" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/activity_screen.xml" value="0.14130434782608695" />
@@ -149,7 +150,8 @@
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/fragment_myhole.xml" value="0.18802083333333333" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_advice_chip.xml" value="0.14130434782608695" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_chip.xml" value="0.14130434782608695" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.25" />
+        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.264" />
+        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_forest_hole.xml" value="0.22760416666666666" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.18802083333333333" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_label.xml" value="0.33" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_mine_hole_follow.xml" value="0.33" />

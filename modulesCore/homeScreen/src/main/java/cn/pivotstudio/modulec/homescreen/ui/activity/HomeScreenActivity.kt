@@ -108,7 +108,7 @@ class HomeScreenActivity : BaseActivity() {
             // BottomNavigationBar显示情况特判
             binding.apply {
                 layoutBottomBar.isVisible =
-                    !fragmentList.any{it == destination.id}
+                    !fragmentList.any { it == destination.id }
 
                 bottomNavigationView.setupWithNavController(navController)
                 bottomNavigationView.background = null
@@ -124,6 +124,7 @@ class HomeScreenActivity : BaseActivity() {
             }
 
         }
+
 
     }
 
@@ -194,14 +195,15 @@ class HomeScreenActivity : BaseActivity() {
      * @return
      */
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        navController.currentDestination?.let { navDestination ->
-            if(fragmentList.any { it == navDestination.id })
-                return navController.popBackStack()
+
 //            if (it.id == R.id.all_forest_fragment || it.id == R.id.forest_detail_fragment || it.id == R.id.holeFollowReplyFragment) {
 //                return navController.popBackStack()
 //            }
 
-            if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+            navController.currentDestination?.let { navDestination ->
+                if (fragmentList.any { it == navDestination.id })
+                    return navController.popBackStack()
                 val secondTime = System.currentTimeMillis()
                 if (secondTime - firstTime > 2000) {
                     Toast.makeText(this@HomeScreenActivity, "再按一次退出程序", Toast.LENGTH_SHORT).show()
