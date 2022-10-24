@@ -50,10 +50,6 @@ sealed interface RequestBody {
         val type: ReportType
     ) : RequestBody
 
-    data class ScoreRequest(
-        val score: Int
-    ) : RequestBody
-
     data class VerifyRequest(
         /** 验证码 */
         val code: String? = null,
@@ -86,6 +82,9 @@ sealed interface RequestBody {
         /** 是否重置密码 */
         val resetPassword: Boolean? = null
     )
+    data class ScoreRequest(
+        val score: Int
+    ) : RequestBody
 
     data class FeedBackRequest (
         val content: String? = null,
