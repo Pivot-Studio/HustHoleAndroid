@@ -152,7 +152,7 @@
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_chip.xml" value="0.14130434782608695" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.264" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_forest_hole.xml" value="0.22760416666666666" />
-        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.18802083333333333" />
+        <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_homepagehole.xml" value="0.72" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_label.xml" value="0.33" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_mine_hole_follow.xml" value="0.33" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/item_mine_others.xml" value="0.33" />
@@ -486,7 +486,6 @@
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_detailforesthead.xml" value="0.2572463768115942" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_discover_more.xml" value="0.5667001838358039" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest.xml" value="0.34475402832031254" />
-        <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_brief.xml" value="0.1" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_card.xml" value="0.28229166666666666" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_detail.xml" value="0.5041320579639379" />
         <entry key="modulesCore/homeScreen/src/main/res/layout/item_forest_head.xml" value="0.2572463768115942" />

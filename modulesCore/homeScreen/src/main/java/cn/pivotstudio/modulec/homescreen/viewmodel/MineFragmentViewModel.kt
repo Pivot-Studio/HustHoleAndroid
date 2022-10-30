@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
@@ -335,7 +336,12 @@ class MineFragmentViewModel : ViewModel(){
 
     fun checkVersion(
         frag: ItemMineFragment
-    ) {}
+    ) {
+        //temp临时方法
+        val queryUrl: Uri = Uri.parse(OFFICIAL_WEB)
+        val intent = Intent(Intent.ACTION_VIEW, queryUrl)
+        frag.requireContext().startActivity(intent)
+    }
 
     fun checkPrivacyState(
         binding: ActivitySecurityBinding
@@ -634,9 +640,9 @@ class MineFragmentViewModel : ViewModel(){
         optSwitch[SHARE] = false
         optSwitch[EVALUATION_AND_SUGGESTIONS] = true
         optSwitch[ABOUT] = true
-        optSwitch[UPDATE] = false
+        optSwitch[UPDATE] = true
         optSwitch[LOGOUT] = true
-        optSwitch[CHECK_UPDATE] = false
+        optSwitch[CHECK_UPDATE] = true
     }
 
     companion object {
@@ -654,5 +660,7 @@ class MineFragmentViewModel : ViewModel(){
 
         const val CHECK_UPDATE = 8
         const val UPDATE_LOG = 9
+
+        const val OFFICIAL_WEB = "https://www.pivotstudio.cn/download"
     }
 }

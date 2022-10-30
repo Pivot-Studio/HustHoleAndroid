@@ -6,7 +6,9 @@
     <data>
 
         <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
+
         <import type="android.view.View" />
+
         <variable
             name="homePageHole"
             type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
@@ -107,7 +109,7 @@
                 android:id="@+id/iv_itemhomepage_thumbup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginStart="@dimen/dp_4"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

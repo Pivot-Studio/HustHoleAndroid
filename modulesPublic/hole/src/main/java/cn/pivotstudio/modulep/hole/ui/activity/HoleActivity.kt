@@ -94,13 +94,14 @@ class HoleActivity : BaseActivity() {
         )
 
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-        navController.currentDestination?.let {
-            if (it.id == R.id.innerReplyFragment) {
-                return navController.popBackStack()
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
+            navController.currentDestination?.let {
+                if (it.id == R.id.innerReplyFragment) {
+                    return navController.popBackStack()
+                }
             }
         }
         return super.onKeyUp(keyCode, event)
