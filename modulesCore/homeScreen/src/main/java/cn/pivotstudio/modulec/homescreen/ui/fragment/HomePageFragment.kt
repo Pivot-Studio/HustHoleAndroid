@@ -34,7 +34,6 @@ import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 
 /**
  * @classname:HomePageFragment

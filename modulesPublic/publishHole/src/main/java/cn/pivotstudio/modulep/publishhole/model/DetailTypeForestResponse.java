@@ -1,6 +1,5 @@
 package cn.pivotstudio.modulep.publishhole.model;
 
-import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 

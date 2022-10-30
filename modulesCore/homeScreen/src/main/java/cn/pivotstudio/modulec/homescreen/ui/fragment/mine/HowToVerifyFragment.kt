@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityEmailHowToBinding
-import cn.pivotstudio.modulec.homescreen.databinding.ActivityEmailVerify2Binding
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 
 /**

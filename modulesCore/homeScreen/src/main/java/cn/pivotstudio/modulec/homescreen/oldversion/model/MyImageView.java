@@ -11,10 +11,11 @@ import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+
 import androidx.appcompat.widget.AppCompatImageView;
 
 public class MyImageView extends AppCompatImageView
-    implements ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
+        implements ScaleGestureDetector.OnScaleGestureListener, View.OnTouchListener {
     // 不同状态的表示：
     private static final int NONE = 0;
     private static final int DRAG = 1;
@@ -73,12 +74,15 @@ public class MyImageView extends AppCompatImageView
     private float oriDis = 1f;
     private final PointF startPoint = new PointF();
     private PointF midPoint = new PointF();
+
     public MyImageView(Context context) {
         this(context, null);
     }
+
     public MyImageView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
+
     public MyImageView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOnTouchListener(this);
@@ -100,26 +104,26 @@ public class MyImageView extends AppCompatImageView
         setScaleType(ScaleType.MATRIX);
         // 添加观察者
         getViewTreeObserver().addOnGlobalLayoutListener(
-            new ViewTreeObserver.OnGlobalLayoutListener() {
-                @Override
-                public void onGlobalLayout() {
-                    // 移除观察者
-                    getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                    // 获取控件大小
-                    mWidth = getWidth();
-                    mHeight = getHeight();
+                new ViewTreeObserver.OnGlobalLayoutListener() {
+                    @Override
+                    public void onGlobalLayout() {
+                        // 移除观察者
+                        getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                        // 获取控件大小
+                        mWidth = getWidth();
+                        mHeight = getHeight();
 
-                    //通过getDrawable获得Src的图片
-                    mDrawable = getDrawable();
-                    if (mDrawable == null) {
-                        return;
+                        //通过getDrawable获得Src的图片
+                        mDrawable = getDrawable();
+                        if (mDrawable == null) {
+                            return;
+                        }
+                        mDrawableWidth = mDrawable.getIntrinsicWidth();
+                        mDrawableHeight = mDrawable.getIntrinsicHeight();
+                        initImageViewSize();
+                        moveToCenter();
                     }
-                    mDrawableWidth = mDrawable.getIntrinsicWidth();
-                    mDrawableHeight = mDrawable.getIntrinsicHeight();
-                    initImageViewSize();
-                    moveToCenter();
-                }
-            });
+                });
     }
 
     /**

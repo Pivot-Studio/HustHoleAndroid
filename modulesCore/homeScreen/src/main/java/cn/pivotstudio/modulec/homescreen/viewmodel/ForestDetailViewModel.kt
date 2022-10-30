@@ -1,14 +1,19 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel;
 
-import androidx.lifecycle.*
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.husthole.moduleb.network.errorhandler.ErrorCodeHandlerV2
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
-import cn.pivotstudio.husthole.moduleb.network.model.Hole
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class ForestDetailViewModel(
@@ -68,7 +73,7 @@ class ForestDetailViewModel(
                             likeTheHole(hole)
                         }
                         is ApiResult.Error -> {
-                            tip.value = it.code.toString() + it.errorMessage
+                            tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
                         }
                         else -> {}
                     }
@@ -96,7 +101,7 @@ class ForestDetailViewModel(
                                 _holesV2.emit(newItems)
                             }
                             is ApiResult.Error -> {
-                                tip.value = it.code.toString() + it.errorMessage
+                                tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
                             }
                             else -> {}
                         }
@@ -119,7 +124,7 @@ class ForestDetailViewModel(
                                 _holesV2.emit(newItems)
                             }
                             is ApiResult.Error -> {
-                                tip.value = it.code.toString() + it.errorMessage
+                                tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
                             }
                             else -> {}
                         }
@@ -136,7 +141,7 @@ class ForestDetailViewModel(
                         loadHoles()
                     }
                     is ApiResult.Error -> {
-                        tip.value = it.errorMessage
+                        tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
                     }
                     else -> {}
                 }

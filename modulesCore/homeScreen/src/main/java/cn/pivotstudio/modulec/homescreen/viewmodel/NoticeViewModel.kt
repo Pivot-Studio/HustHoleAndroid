@@ -3,10 +3,10 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyNotice
-import cn.pivotstudio.modulec.homescreen.network.HomeScreenNetworkApi
 import cn.pivotstudio.modulec.homescreen.repository.NoticeRepo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 class NoticeViewModel : ViewModel() {

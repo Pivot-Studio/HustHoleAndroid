@@ -23,7 +23,6 @@ class ReportViewModel : ViewModel() {
     private var _reportingState = MutableStateFlow<ApiResult?>(null)
     val reportingState = _reportingState.asStateFlow()
 
-
     fun report(holeId: String, content: String?, replyId: String?, reportType: ReportType) {
         viewModelScope.launch(Dispatchers.IO) {
             val response = HustHoleApi.retrofitService.report(
