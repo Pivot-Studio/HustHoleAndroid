@@ -23,7 +23,6 @@ import cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragmentDirections
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragmentDirections
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.CHECK_UPDATE
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.DETAIL
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.LOGOUT
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.OTHER_OPTION
@@ -83,14 +82,14 @@ class MineOthersAdapter(
                             binding.rlOthers.setOnClickListener {
                                     viewModel.checkVersion(fragment as ItemMineFragment)
                             }
-                            if (name != R.string.check_update) {
-                                binding.rlOthers.setOnClickListener {
-                                        val action =
-                                            ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
-                                                name, viewModel.isVerifiedEmail.value!!
-                                            )
-                                        it.findNavController().navigate(action)
-                                }
+                        }
+                        if (name != R.string.check_update) {
+                            binding.rlOthers.setOnClickListener {
+                                val action =
+                                    ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
+                                        name, viewModel.isVerifiedEmail.value!!
+                                    )
+                                fragment.findNavController().navigate(action)
                             }
                         }
                     }

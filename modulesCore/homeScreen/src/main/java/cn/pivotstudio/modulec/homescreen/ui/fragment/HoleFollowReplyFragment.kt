@@ -24,7 +24,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 class HoleFollowReplyFragment : Fragment() {
     lateinit var binding: ActivityHoleStarBinding
     private val viewModel: MineFragmentViewModel by viewModels()
-    private val hfrViewModel: HoleFollowReplyViewModel by viewModels()
     private var type = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
