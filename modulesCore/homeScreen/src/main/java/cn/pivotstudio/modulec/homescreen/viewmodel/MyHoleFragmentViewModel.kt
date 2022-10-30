@@ -4,13 +4,11 @@ import android.app.Dialog
 import android.content.Context
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.moduleb.libbase.constant.Constant.CONSTANT_STANDARD_LOAD_SIZE
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineReplyBinding
@@ -148,8 +146,7 @@ class MyHoleFragmentViewModel : ViewModel() {
                                 singleHole[4] = sonObject.getInt("follow_num").toString() + ""
                                 singleHole[5] = sonObject.getInt("reply_num").toString() + ""
                                 singleHole[6] = sonObject.getInt("thumbup_num").toString() + ""
-                            }
-                            else if(type == GET_REPLY) {
+                            } else if (type == GET_REPLY) {
                                 singleHole[4] = sonObject.getString("alias").toString() + ""
                                 singleHole[5] = sonObject.getString("hole_content").toString() + ""
                                 singleHole[6] = sonObject.getInt("local_reply_id").toString() + ""
@@ -180,9 +177,10 @@ class MyHoleFragmentViewModel : ViewModel() {
         binding: ItemMineReplyBinding,
         content: Context?,
         position: Int,
-    ){
+    ) {
 
-        val call = request!!.delete_hole_2(BASE_URL+ "replies/" + _myReplyList.value!![position][3] + "/" +_myReplyList.value!![position][6])
+        val call =
+            request!!.delete_hole_2(BASE_URL + "replies/" + _myReplyList.value!![position][3] + "/" + _myReplyList.value!![position][6])
 
         viewModelScope.launch {
             call.enqueue(object : Callback<ResponseBody?> {

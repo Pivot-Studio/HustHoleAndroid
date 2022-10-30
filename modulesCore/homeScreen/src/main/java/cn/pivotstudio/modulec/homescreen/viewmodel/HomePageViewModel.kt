@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
+import cn.pivotstudio.husthole.moduleb.network.errorhandler.ErrorCodeHandlerV2
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
@@ -143,7 +144,7 @@ class HomePageViewModel : ViewModel() {
                                 _holesV2.emit(newItems)
                             }
                             is ApiResult.Error -> {
-                                tip.value = it.code.toString() + it.errorMessage
+                                tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
                             }
                             else -> {}
                         }
@@ -166,7 +167,7 @@ class HomePageViewModel : ViewModel() {
                                 _holesV2.emit(newItems)
                             }
                             is ApiResult.Error -> {
-                                tip.value = it.code.toString() + it.errorMessage
+                                tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
                             }
                             else -> {}
                         }
@@ -184,7 +185,7 @@ class HomePageViewModel : ViewModel() {
                             likeTheHole(hole)
                         }
                         is ApiResult.Error -> {
-                            tip.value = it.code.toString() + it.errorMessage
+                            tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
                         }
                         else -> {}
                     }
@@ -200,7 +201,7 @@ class HomePageViewModel : ViewModel() {
                         loadHolesV2()
                     }
                     is ApiResult.Error -> {
-                        tip.value = it.code.toString() + it.errorMessage
+                        tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
                     }
                     else -> {}
                 }

@@ -15,9 +15,9 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.modulec.homescreen.R
+import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
+import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
-import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshFooter
-import cn.pivotstudio.modulec.homescreen.oldversion.model.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineRecycleViewAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.HoleFollowReplyViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW

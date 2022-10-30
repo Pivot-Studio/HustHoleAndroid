@@ -1,9 +1,9 @@
 package cn.pivotstudio.modulec.homescreen.network;
 
 /**
- * @classname:VersionResponse
- * @description:版本数据类
- * @date:2022/5/3 0:47
+ * @classname: VersionResponse
+ * @description: 版本数据类
+ * @date: 2022/5/3 0:47
  * @version:1.0
  * @author:
  */

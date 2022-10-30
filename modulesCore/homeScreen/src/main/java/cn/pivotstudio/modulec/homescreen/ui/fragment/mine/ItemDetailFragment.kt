@@ -25,7 +25,6 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.*
 import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken
 import cn.pivotstudio.modulec.homescreen.oldversion.model.EditTextReaction
-import cn.pivotstudio.modulec.homescreen.oldversion.mypage.UpdateRecycleViewAdapter
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.ABOUT

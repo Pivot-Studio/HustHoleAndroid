@@ -1,15 +1,10 @@
 package cn.pivotstudio.modulep.publishhole.network;
 
 
-
-import java.util.List;
-
 import cn.pivotstudio.modulep.publishhole.model.DetailTypeForestResponse;
 import cn.pivotstudio.modulep.publishhole.model.ForestTypeResponse;
 import cn.pivotstudio.modulep.publishhole.model.MsgResponse;
 import io.reactivex.Observable;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.HTTP;
 import retrofit2.http.POST;

@@ -15,7 +15,6 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant

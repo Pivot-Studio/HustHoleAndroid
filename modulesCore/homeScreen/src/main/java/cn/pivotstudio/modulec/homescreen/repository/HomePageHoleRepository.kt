@@ -44,6 +44,7 @@ class HomePageHoleRepository(
             hustHoleApiService.getHoles(
                 limit = HOLES_LIST_SIZE,
                 mode = sortMode,
+                offset = 0,
                 timestamp = lastTimeStamp
             )
         )

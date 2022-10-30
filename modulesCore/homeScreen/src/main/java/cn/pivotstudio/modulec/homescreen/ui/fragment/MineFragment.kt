@@ -9,7 +9,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
@@ -17,7 +17,6 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
-import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineBinding
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineOthersAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel

@@ -203,7 +203,7 @@ class LARViewModel : ViewModel() {
                         }
                         is ApiResult.Error -> {
                             _larState.value = LARState.REG_ERROR
-                            _tip.value = apiResult.errorMessage
+                            _tip.value = ErrorCodeHandlerV2.handleErrorCode2String(apiResult.code)
                         }
                         is ApiResult.Loading -> {
                             _larState.value = LARState.REG_LOADING

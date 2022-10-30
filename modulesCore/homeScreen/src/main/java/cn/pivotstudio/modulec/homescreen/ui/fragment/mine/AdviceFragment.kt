@@ -8,23 +8,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import cn.pivotstudio.husthole.moduleb.network.model.Type.Companion.fromValue
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentAdviceBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.model.SoftKeyBoardListener
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 
 /**
  *@classname AdviceFragment

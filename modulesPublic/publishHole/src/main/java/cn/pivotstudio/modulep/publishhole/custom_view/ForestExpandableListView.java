@@ -1,12 +1,8 @@
 package cn.pivotstudio.modulep.publishhole.custom_view;
 
 import android.content.Context;
-import android.os.Handler;
-import android.os.Message;
 import android.util.AttributeSet;
 import android.widget.ExpandableListView;
-
-import java.util.logging.LogRecord;
 
 /**
  * @classname: ForestExpandableListView
