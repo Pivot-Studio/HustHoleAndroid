@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
+import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
@@ -56,8 +58,27 @@ class MineRecycleViewAdapter(
                         .navigation(frag.requireActivity(), 2)
                 }
 
-                if(type == GET_HOLE)
+                if(type == GET_HOLE) {
                     textView.text = frag.getString(R.string.thumb_follow).format(hole.likeCount.toString(),hole.replyCount.toString())
+                    totalView.setOnLongClickListener {
+                        val mView = View.inflate(frag.context, R.layout.dialog_delete, null)
+                        val dialog = Dialog(frag.requireContext())
+                        dialog.setContentView(mView)
+                        dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
+                        val no = mView.findViewById<View>(R.id.dialog_delete_tv_cancel) as TextView
+                        val yes = mView.findViewById<View>(R.id.dialog_delete_tv_yes) as TextView
+                        no.setOnClickListener {
+                            dialog.dismiss()
+                        }
+                        yes.setOnClickListener {
+                            viewModel.deleteTheHole(hole)
+                            dialog.dismiss()
+                        }
+                        dialog.show()
+                        false
+                    }
+                }
+                
                 if(type == GET_FOLLOW)
                     textView.text = frag.getString(R.string.reply_follow).format(hole.replyCount.toString(),hole.followCount.toString())
                 executePendingBindings()
@@ -106,6 +127,8 @@ class MineRecycleViewAdapter(
                     }
                     yes.setOnClickListener{
 //                        viewModel.deleteHole(dialog, binding, frag.context, layoutPosition)
+                        viewModel.deleteReply(reply.replyId)
+                        dialog.dismiss()
                         view = null
                         notifyDataSetChanged()
                     }

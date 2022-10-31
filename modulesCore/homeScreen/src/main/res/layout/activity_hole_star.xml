@@ -43,6 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_42"
             android:layout_below="@id/my_bar"
+            android:textSize="@dimen/sp_11"
             android:background="@color/GrayScale_100" />
 
         <androidx.viewpager2.widget.ViewPager2
