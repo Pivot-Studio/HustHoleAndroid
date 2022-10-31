@@ -13,7 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import cn.pivotstudio.husthole.moduleb.network.ApiStatus
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
@@ -148,27 +148,20 @@ class PublishHoleActivity : BaseActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.errorTip.collectLatest {
-                    showMsg(it)
-                }
-            }
-        }
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.loadingState.collectLatest {
                     it?.let { state ->
                         when (state) {
-                            ApiStatus.SUCCESSFUL -> {
+                            is ApiResult.Success<*> -> {
                                 mmkvUtil.put(Constant.HOLE_TEXT, "")
                                 showMsg(getString(R.string.publish_hole_successfully))
                                 setResult(ResultCodeConstant.PUBLISH_HOLE)
                                 finish()
                             }
-                            ApiStatus.ERROR -> {
+                            is ApiResult.Error -> {
                                 binding.btnPublishHole.isClickable = true
+                                showMsg(state.errorMessage)
                             }
-                            ApiStatus.LOADING -> {
+                            is ApiResult.Loading -> {
                                 binding.btnPublishHole.isClickable = false
                             }
                         }

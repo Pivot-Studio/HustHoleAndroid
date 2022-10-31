@@ -15,7 +15,6 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
-import java.lang.invoke.MethodHandles.constant
 import java.util.concurrent.TimeUnit
 
 
@@ -31,7 +30,9 @@ object HustHoleApi {
         val requestInterceptor = Interceptor { chain ->
             chain.request().newBuilder()
                 .addHeader("os", "android")
-                .addHeader("dateTime", DateUtil.getDateTime()).build()
+                .addHeader("dateTime", DateUtil.getDateTime())
+                .addHeader("Accept-Language", "zh-CN")
+                .build()
                 .let { chain.proceed(it) }
         }
 

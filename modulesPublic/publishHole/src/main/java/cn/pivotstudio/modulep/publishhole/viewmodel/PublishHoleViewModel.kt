@@ -2,7 +2,6 @@ package cn.pivotstudio.modulep.publishhole.viewmodel
 
 import androidx.lifecycle.*
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
 import cn.pivotstudio.modulep.publishhole.repository.PublishHoleRepository
 import kotlinx.coroutines.flow.*
@@ -22,7 +21,7 @@ class PublishHoleViewModel : ViewModel() {
     private var _forests = MutableStateFlow<List<Pair<String, List<ForestBrief>>>>(mutableListOf())
     private var _joinedForests = MutableStateFlow<List<ForestBrief>>(mutableListOf())
 
-    private var _loadingState = MutableStateFlow<ApiStatus?>(null)
+    private var _loadingState = MutableStateFlow<ApiResult?>(null)
     val loadingState = _loadingState.asStateFlow()
 
     private var _errorTip = MutableSharedFlow<String>()
@@ -47,18 +46,7 @@ class PublishHoleViewModel : ViewModel() {
         viewModelScope.launch {
             repository.publishAHole(forestId, content)
                 .collectLatest { state ->
-                    when (state) {
-                        is ApiResult.Success<*> -> {
-                            _loadingState.emit(state.status)
-                        }
-                        is ApiResult.Error -> {
-                            _loadingState.emit(state.status)
-                            _errorTip.emit("${state.code} " + state.errorMessage)
-                        }
-                        is ApiResult.Loading -> {
-                            _loadingState.emit(state.status)
-                        }
-                    }
+                    _loadingState.emit(state)
                 }
         }
     }
