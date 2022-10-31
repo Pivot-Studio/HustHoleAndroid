@@ -7,10 +7,11 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/HH_Background">
+        android:background="@color/HH_Background"
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/update_bar"
@@ -40,14 +41,33 @@
                 android:textSize="@dimen/sp_18" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/update_recyclerview"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scrollView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_16"
-            android:clipToPadding="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toBottomOf="@+id/update_bar" />
+            android:layout_below="@+id/update_bar"
+            android:fastScrollEnabled="true"
+            android:scrollbars="none">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_16">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/update_recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/dp_16"
+                    android:clipToPadding="false"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_200"
+                    android:layout_below="@id/update_recyclerview"/>
+            </RelativeLayout>
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
 </layout>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
         <variable
             name="reply"
             type="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
@@ -38,6 +38,8 @@
             android:layout_marginStart="@dimen/dp_20"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             android:textColor="@color/GrayScale_80"
+            app:time="@{reply.createAt}"
+            app:timeSign="@{false}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_reply_title"
             app:layout_constraintStart_toEndOf="@+id/tv_reply_title"
             app:layout_constraintTop_toTopOf="@+id/tv_reply_title"

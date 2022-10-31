@@ -102,6 +102,10 @@ class MineRecycleViewAdapter(
                         )
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                         .navigation(frag.requireActivity(), 2)
+                    if(view != null) {
+                        view!!.visibility = View.GONE
+                        view = null
+                    }
                 }
                 myReplyMoreWhat.setOnClickListener{
                     if (view == null) {   //没有删除视图出现

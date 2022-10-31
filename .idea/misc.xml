@@ -163,9 +163,12 @@
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/ppw_share.xml" value="0.18802083333333333" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/ppw_share_to.xml" value="0.25" />
         <entry key="..\:/HustHoleAndroids/modulesCore/homeScreen/src/main/res/layout/update_item.xml" value="0.18802083333333333" />
+        <entry key="..\:/HustHoleAndroids/modulesCore/loginAndRegister/src/main/res/layout/fragment_login.xml" value="0.22760416666666666" />
         <entry key="..\:/HustHoleAndroids/modulesPublic/hole/src/main/res/layout/activity_hole.xml" value="0.18802083333333333" />
-        <entry key="..\:/HustHoleAndroids/modulesPublic/hole/src/main/res/layout/fragment_inner_reply.xml" value="0.22760416666666666" />
-        <entry key="..\:/HustHoleAndroids/modulesPublic/hole/src/main/res/layout/item_reply.xml" value="0.18802083333333333" />
+        <entry key="..\:/HustHoleAndroids/modulesPublic/hole/src/main/res/layout/fragment_inner_reply.xml" value="0.2207070707070707" />
+        <entry key="..\:/HustHoleAndroids/modulesPublic/hole/src/main/res/layout/fragment_specific_hole.xml" value="0.22760416666666666" />
+        <entry key="..\:/HustHoleAndroids/modulesPublic/hole/src/main/res/layout/item_first_level_reply.xml" value="0.22760416666666666" />
+        <entry key="..\:/HustHoleAndroids/modulesPublic/hole/src/main/res/layout/item_reply.xml" value="0.4" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/app/src/main/res/layout/activity_rl_preparation.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/app/src/main/res/layout/activity_rl_welcome.xml" value="0.1" />
         <entry key="..\:/Users/HDQ/Desktop/HustHole/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />

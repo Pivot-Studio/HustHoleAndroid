@@ -1,16 +1,21 @@
 package cn.pivotstudio.modulep.hole.ui.adapter
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
+import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.modulep.hole.databinding.ItemFirstLevelReplyBinding
 import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
@@ -56,6 +61,19 @@ class RepliesAdapter(
 
                 layoutInnerReply.setOnClickListener {
                     onItemClick(replyWrapper)
+                }
+
+                tvReplyContent.setOnLongClickListener { //重写监听器中的onLongClick()方法
+                    val cm =
+                        BaseApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+//                    cm.text = binding.tvReplyContent.text.toString()
+                    //                    showMsg("内容已复制至剪切板")
+                    cm.setPrimaryClip(ClipData.newPlainText(null,binding.tvReplyContent.text.toString()))
+                    if (cm.hasPrimaryClip()){
+                        cm.primaryClip?.getItemAt(0)?.text
+                    }
+                    Toast.makeText(it.context,"已将内容复制到剪切板！",Toast.LENGTH_SHORT).show()
+                    false
                 }
 
                 clReply.setOnClickListener {
