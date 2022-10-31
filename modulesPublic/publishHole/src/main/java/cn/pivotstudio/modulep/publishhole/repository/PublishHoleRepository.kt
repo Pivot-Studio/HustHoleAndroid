@@ -9,10 +9,9 @@ import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.*
+import org.json.JSONObject
+import retrofit2.Response
 
 /**
  * @classname:PublishHoleRepository
@@ -39,13 +38,7 @@ class PublishHoleRepository(
                 content = content
             )
         )
-        if (response.isSuccessful) {
-            emit(ApiResult.Success(data = Unit))
-        } else {
-            val errorCode = response.code()
-            response.errorBody()?.close()
-            emit(ApiResult.Error(code = errorCode))
-        }
+        checkResponse(response, this)
     }.flowOn(dispatcher).catch { e ->
         e.printStackTrace()
     }
@@ -75,6 +68,26 @@ class PublishHoleRepository(
             )
         }.flowOn(dispatcher).catch { e ->
             e.printStackTrace()
+        }
+    }
+
+    private suspend inline fun checkResponse(
+        response: Response<Unit>,
+        flow: FlowCollector<ApiResult>
+    ) {
+        if (response.isSuccessful) {
+            flow.emit(ApiResult.Success(data = Unit))
+        } else {
+            val json = response.errorBody()?.string()
+            val jsonObject = json?.let { JSONObject(it) }
+            val returnCondition = jsonObject?.getString("errorMsg")
+            flow.emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = returnCondition
+                )
+            )
+            response.errorBody()?.close()
         }
     }
 

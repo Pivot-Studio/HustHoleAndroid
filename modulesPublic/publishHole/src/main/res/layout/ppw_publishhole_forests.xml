@@ -79,7 +79,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
-                android:text="不选择任何树洞"
+                android:text="不选择任何小树林"
                 android:textAppearance="@style/HustHoleTypography.Headline5"
                 android:textColor="@color/GrayScale_20"
                 app:layout_constraintBottom_toBottomOf="parent"

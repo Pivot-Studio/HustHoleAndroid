@@ -1,26 +1,17 @@
 package cn.pivotstudio.modulec.loginandregister.viewmodel
 
 import android.os.CountDownTimer
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.*
-import cn.pivotstudio.husthole.moduleb.network.errorhandler.ErrorCodeHandlerV2
-import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler
-import cn.pivotstudio.husthole.moduleb.network.errorhandler.ExceptionHandler.ResponseThrowable
-import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.husthole.moduleb.network.model.TokenResponse
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.data.CheckStudentCodeUtil
-import cn.pivotstudio.modulec.loginandregister.model.MsgResponse
-import cn.pivotstudio.modulec.loginandregister.network.LoginAndRegisterNetworkApi
 import cn.pivotstudio.modulec.loginandregister.repository.LARRepo
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 
 enum class LARState {
     LOGIN_LOADING, LOGIN_END, LOGIN_ERROR, // 登录状态
@@ -99,7 +90,7 @@ class LARViewModel : ViewModel() {
                         }
                         is ApiResult.Error -> {
                             _larState.value = LARState.LOGIN_ERROR
-                            _tip.value = ErrorCodeHandlerV2.handleErrorCode2String(apiResult.code)
+                            _tip.value = apiResult.errorMessage
                         }
                         is ApiResult.Loading -> {
                             _larState.value = LARState.LOGIN_LOADING
@@ -131,7 +122,7 @@ class LARViewModel : ViewModel() {
                             _tip.value = "验证中..."
                         }
                         is ApiResult.Error -> {
-                            _tip.value = "该用户已存在"
+                            _tip.value = apiResult.errorMessage
                         }
                         is ApiResult.Loading -> {
                             _tip.value = "验证成功"
@@ -164,7 +155,7 @@ class LARViewModel : ViewModel() {
                                 _loginTokenV2.emit((apiResult.data as TokenResponse).token)
                             }
                             is ApiResult.Error -> {
-                                _tip.value = ErrorCodeHandlerV2.handleErrorCode2String(apiResult.code)
+                                _tip.value = apiResult.errorMessage
                             }
                             else -> {}
                         }
@@ -203,7 +194,7 @@ class LARViewModel : ViewModel() {
                         }
                         is ApiResult.Error -> {
                             _larState.value = LARState.REG_ERROR
-                            _tip.value = ErrorCodeHandlerV2.handleErrorCode2String(apiResult.code)
+                            _tip.value = apiResult.errorMessage
                         }
                         is ApiResult.Loading -> {
                             _larState.value = LARState.REG_LOADING
