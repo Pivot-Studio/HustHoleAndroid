@@ -38,6 +38,7 @@
             android:layout_marginStart="@dimen/dp_20"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
             android:textColor="@color/GrayScale_80"
+            app:time="@{reply.createAt}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_reply_title"
             app:layout_constraintStart_toEndOf="@+id/tv_reply_title"
             app:layout_constraintTop_toTopOf="@+id/tv_reply_title"
