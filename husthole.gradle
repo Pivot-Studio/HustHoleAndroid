@@ -6,7 +6,7 @@ ext {
             compileSdkVersion: 31,
             minSdkVersion    : 28,
             targetSdkVersion : 31,
-            versionCode      : 2,//不能是非整数，无语子
+            versionCode      : 3,//不能是非整数，无语子
             versionName      : "v1.2.0-预览版"
     ]
 
