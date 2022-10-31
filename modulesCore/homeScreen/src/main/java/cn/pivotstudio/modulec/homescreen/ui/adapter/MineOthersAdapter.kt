@@ -146,6 +146,7 @@ class MineOthersAdapter(
                 mmkvUtil.put(Constant.USER_TOKEN_V2, "")
                 mmkvUtil.put(Constant.IS_LOGIN, false)
                 ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation()
+                fragment.requireActivity().finish()
             }
             dialog.show()
         }

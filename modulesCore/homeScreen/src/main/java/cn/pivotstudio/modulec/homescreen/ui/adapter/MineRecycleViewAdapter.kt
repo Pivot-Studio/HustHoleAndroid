@@ -71,7 +71,7 @@ class MineRecycleViewAdapter(
                             dialog.dismiss()
                         }
                         yes.setOnClickListener {
-                            Toast.makeText(context,"暂时无法删除树洞喔",Toast.LENGTH_SHORT).show()
+                            viewModel.deleteTheHole(hole)
                             dialog.dismiss()
                         }
                         dialog.show()
@@ -101,6 +101,10 @@ class MineRecycleViewAdapter(
                         )
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                         .navigation(frag.requireActivity(), 2)
+                    if(view != null) {
+                        view!!.visibility = View.GONE
+                        view = null
+                    }
                 }
                 myReplyMoreWhat.setOnClickListener{
                     if (view == null) {   //没有删除视图出现
@@ -126,7 +130,7 @@ class MineRecycleViewAdapter(
                     }
                     yes.setOnClickListener{
 //                        viewModel.deleteHole(dialog, binding, frag.context, layoutPosition)
-                        Toast.makeText(context,"暂时无法删除评论喔",Toast.LENGTH_SHORT).show()
+                        viewModel.deleteReply(reply.replyId)
                         dialog.dismiss()
                         view = null
                         notifyDataSetChanged()

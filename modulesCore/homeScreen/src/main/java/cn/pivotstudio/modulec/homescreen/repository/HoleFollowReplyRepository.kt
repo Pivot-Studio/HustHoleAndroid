@@ -2,6 +2,7 @@ package cn.pivotstudio.modulec.homescreen.repository
 
 import android.annotation.SuppressLint
 import androidx.lifecycle.MutableLiveData
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
@@ -11,6 +12,8 @@ import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant.CONSTANT_STA
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import org.json.JSONObject
+import retrofit2.Response
 
 
 /**
@@ -21,7 +24,7 @@ import kotlinx.coroutines.flow.*
  * @author
  */
 @SuppressLint("CheckResult")
-class HoleFollowReplyRepository  {
+class HoleFollowReplyRepository {
     private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
     private var holeOffset: Int = 0
@@ -92,7 +95,43 @@ class HoleFollowReplyRepository  {
         e.printStackTrace()
     }
 
+    fun deleteTheHole(hole: HoleV2): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService
+            .deleteTheHole(hole.holeId)
+
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { it.printStackTrace() }
+
+    fun deleteReply(
+        replyId: String
+    ): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val resp = hustHoleApiService.deleteTheReply(replyId)
+        checkResponse(resp, this)
+    }.flowOn(dispatcher).catch { it.printStackTrace() }
+
     private fun refreshTimestamp(): String {
         return DateUtil.getDateTime()
+    }
+
+    private suspend inline fun checkResponse(
+        response: Response<Unit>,
+        flow: FlowCollector<ApiResult>
+    ) {
+        if (response.isSuccessful) {
+            flow.emit(ApiResult.Success(data = Unit))
+        } else {
+            val json = response.errorBody()?.string()
+            val jsonObject = json?.let { JSONObject(it) }
+            val returnCondition = jsonObject?.getString("errorMsg")
+            flow.emit(
+                ApiResult.Error(
+                    code = response.code(),
+                    errorMessage = returnCondition
+                )
+            )
+            response.errorBody()?.close()
+        }
     }
 }

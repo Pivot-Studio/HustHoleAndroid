@@ -4,7 +4,9 @@ import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
+import cn.pivotstudio.husthole.moduleb.network.errorhandler.ErrorCodeHandlerV2
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
@@ -185,6 +187,41 @@ class HoleFollowReplyViewModel : ViewModel() {
                 _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
                 repository.tip.value = context!!.getString(R.string.network_loadfailure)
             }
+        }
+    }
+
+    fun deleteTheHole(hole: HoleV2) {
+        viewModelScope.launch {
+            repository.deleteTheHole(hole).collect {
+                when (it) {
+                    is ApiResult.Success<*> -> {
+                        Toast.makeText(context, "删除成功！", Toast.LENGTH_SHORT).show()
+                        getMyHole()
+                    }
+                    is ApiResult.Error -> {
+                        tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
+                    }
+                    else -> {}
+                }
+            }
+        }
+    }
+
+    fun deleteReply(replyId: String) {
+        viewModelScope.launch {
+            repository.deleteReply(replyId)
+                .collect {
+                    when (it) {
+                        is ApiResult.Success<*> -> {
+                            Toast.makeText(context, "删除成功！", Toast.LENGTH_SHORT).show()
+                            getMyReply()
+                        }
+                        is ApiResult.Error -> {
+                            tip.value = it.code.toString() + it.errorMessage
+                        }
+                        else -> {}
+                    }
+                }
         }
     }
 
