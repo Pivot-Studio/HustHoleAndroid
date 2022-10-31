@@ -78,6 +78,7 @@ class MineRecycleViewAdapter(
                         false
                     }
                 }
+                
                 if(type == GET_FOLLOW)
                     textView.text = frag.getString(R.string.reply_follow).format(hole.replyCount.toString(),hole.followCount.toString())
                 executePendingBindings()
@@ -101,10 +102,6 @@ class MineRecycleViewAdapter(
                         )
                         .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
                         .navigation(frag.requireActivity(), 2)
-                    if(view != null) {
-                        view!!.visibility = View.GONE
-                        view = null
-                    }
                 }
                 myReplyMoreWhat.setOnClickListener{
                     if (view == null) {   //没有删除视图出现
