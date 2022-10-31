@@ -73,7 +73,7 @@ class ForestDetailViewModel(
                             likeTheHole(hole)
                         }
                         is ApiResult.Error -> {
-                            tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
+                            tip.value = it.errorMessage
                         }
                         else -> {}
                     }
@@ -101,7 +101,7 @@ class ForestDetailViewModel(
                                 _holesV2.emit(newItems)
                             }
                             is ApiResult.Error -> {
-                                tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
+                                tip.value = it.errorMessage
                             }
                             else -> {}
                         }
@@ -124,7 +124,7 @@ class ForestDetailViewModel(
                                 _holesV2.emit(newItems)
                             }
                             is ApiResult.Error -> {
-                                tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
+                                tip.value = it.errorMessage
                             }
                             else -> {}
                         }
@@ -141,7 +141,7 @@ class ForestDetailViewModel(
                         loadHoles()
                     }
                     is ApiResult.Error -> {
-                        tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
+                        tip.value = it.errorMessage
                     }
                     else -> {}
                 }

@@ -199,7 +199,7 @@ class HoleFollowReplyViewModel : ViewModel() {
                         getMyHole()
                     }
                     is ApiResult.Error -> {
-                        tip.value = ErrorCodeHandlerV2.handleErrorCode2String(it.code)
+                        tip.value = it.errorMessage
                     }
                     else -> {}
                 }
