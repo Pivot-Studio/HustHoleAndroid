@@ -672,6 +672,6 @@ class MineFragmentViewModel : ViewModel(){
         const val CHECK_UPDATE = 8
         const val UPDATE_LOG = 9
 
-        const val OFFICIAL_WEB = "https://www.pivotstudio.cn/download"
+        const val OFFICIAL_WEB = "https://husthole.com/#/download"
     }
 }
