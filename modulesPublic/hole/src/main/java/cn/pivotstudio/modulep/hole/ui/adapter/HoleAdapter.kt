@@ -203,6 +203,10 @@ fun setCircleIcon(view: ImageView, forestName: String, role: String?) {
 @BindingAdapter("innerReplies", "innerReplyPosition")
 fun setInnerReplies(view: TextView, innerList: List<Reply>, position: Int = 0) {
     innerList.getOrNull(position)?.let {
+
+        // replied 为空，说明既不回复洞主，也不回复评论
+        if (it.replied == null) return
+
         // replyToInner != "-1" 要渲染成三级评论的样式
         if (it.replyToInner == "-1") {
             val prefix = "${it.nickname}:"
