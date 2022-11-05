@@ -10,7 +10,7 @@ data class HoleV2(
 
     /** 发布时间 */
     @Json(name = "creatAt")
-    val createAt: String,
+    var createAt: String = "",
 
     /** 收藏数 */
     @Json(name = "follow")
@@ -81,7 +81,7 @@ data class Reply(
 
     /** 发布时间 */
     @Json(name = "creatAt")
-    val createAt: String? = null,
+    val createAt: String = "",
 
     val hole: HoleDto? = null,
 
