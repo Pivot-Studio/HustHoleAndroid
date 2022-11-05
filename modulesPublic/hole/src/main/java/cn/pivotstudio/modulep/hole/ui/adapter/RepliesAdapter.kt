@@ -66,13 +66,16 @@ class RepliesAdapter(
                 tvReplyContent.setOnLongClickListener { //重写监听器中的onLongClick()方法
                     val cm =
                         BaseApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-//                    cm.text = binding.tvReplyContent.text.toString()
-                    //                    showMsg("内容已复制至剪切板")
-                    cm.setPrimaryClip(ClipData.newPlainText(null,binding.tvReplyContent.text.toString()))
-                    if (cm.hasPrimaryClip()){
+                    cm.setPrimaryClip(
+                        ClipData.newPlainText(
+                            null,
+                            binding.tvReplyContent.text.toString()
+                        )
+                    )
+                    if (cm.hasPrimaryClip()) {
                         cm.primaryClip?.getItemAt(0)?.text
                     }
-                    Toast.makeText(it.context,"已将内容复制到剪切板！",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(it.context, "已将内容复制到剪切板！", Toast.LENGTH_SHORT).show()
                     false
                 }
 

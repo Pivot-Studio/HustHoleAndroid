@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -83,22 +84,36 @@ class HomePageViewModel : ViewModel() {
     }
 
     fun searchHolesV2(queryKey: String) {
+
         queryKey.takeIf { it.isNotBlank() }?.let {
             viewModelScope.launch {
                 _loadingState.emit(ApiStatus.LOADING)
-                repository.searchHolesBy(it)
-                    .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
-                    .catch {
-                        tip.value = it.message
-                        _loadingState.emit(ApiStatus.ERROR)
-                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                    }
-                    .collectLatest { holes ->
-                        if (holes.isEmpty()) {
-                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_SEARCH_RESULT)
+                if (queryKey.isDigitsOnly()) {
+                    repository.loadTheHole(queryKey)
+                        .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
+                        .catch {
+                            tip.value = it.message
+                            _loadingState.emit(ApiStatus.ERROR)
+                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
                         }
-                        _holesV2.emit(holes)
-                    }
+                        .collectLatest {
+                            _holesV2.emit(listOf(it))
+                        }
+                } else {
+                    repository.searchHolesBy(it)
+                        .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
+                        .catch {
+                            tip.value = it.message
+                            _loadingState.emit(ApiStatus.ERROR)
+                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                        }
+                        .collectLatest { holes ->
+                            if (holes.isEmpty()) {
+                                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_SEARCH_RESULT)
+                            }
+                            _holesV2.emit(holes)
+                        }
+                }
             }
         }
     }

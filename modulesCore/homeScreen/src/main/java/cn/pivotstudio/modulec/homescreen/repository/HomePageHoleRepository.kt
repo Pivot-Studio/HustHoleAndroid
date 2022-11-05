@@ -139,6 +139,14 @@ class HomePageHoleRepository(
         }
     }
 
+    fun loadTheHole(holeId: String): Flow<HoleV2> {
+        return flow {
+            emit(hustHoleApiService.loadTheHole(holeId))
+        }.flowOn(dispatcher).catch { e ->
+            e.printStackTrace()
+        }
+    }
+
     private fun refreshTimestamp() {
         lastTimeStamp = DateUtil.getDateTime()
     }

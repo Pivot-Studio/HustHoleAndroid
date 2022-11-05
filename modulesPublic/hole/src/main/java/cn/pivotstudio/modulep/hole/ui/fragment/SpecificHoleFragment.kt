@@ -1,5 +1,8 @@
 package cn.pivotstudio.modulep.hole.ui.fragment
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,6 +25,7 @@ import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
+import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
@@ -84,6 +88,22 @@ class SpecificHoleFragment : BaseFragment() {
             layoutHole.apply {
                 layoutHoleFrame.setOnClickListener {
                     replyViewModel.replyToOwner()
+                }
+
+                layoutHoleFrame.setOnLongClickListener {
+                    val cm =
+                        BaseApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                    cm.setPrimaryClip(
+                        ClipData.newPlainText(
+                            null,
+                            tvHoleContent.text.toString()
+                        )
+                    )
+                    if (cm.hasPrimaryClip()) {
+                        cm.primaryClip?.getItemAt(0)?.text
+                    }
+                    Toast.makeText(it.context, "已将内容复制到剪切板！", Toast.LENGTH_SHORT).show()
+                    false
                 }
 
                 clHoleThumb.setOnClickListener {

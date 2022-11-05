@@ -84,9 +84,9 @@
                                 android:layout_marginEnd="@dimen/dp_22"
                                 android:textAppearance="@style/HustHoleTypography.Body2"
                                 android:textColor="@color/GrayScale_20"
+                                app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/tv_hole_time"
                                 app:layout_constraintTop_toBottomOf="@+id/tv_hole_time"
-                                app:layout_constraintEnd_toEndOf="parent"
                                 app:markDownContent="@{viewModel.reply.content}"
                                 tools:text="@string/default_string_zh_long" />
 
