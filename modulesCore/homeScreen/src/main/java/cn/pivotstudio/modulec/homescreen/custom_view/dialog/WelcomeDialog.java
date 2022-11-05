@@ -47,7 +47,8 @@ public class WelcomeDialog extends Dialog {
         mTitleTv.setText(R.string.homepage_2);
 
         TextView mContentTv = (TextView) findViewById(R.id.tv_dialoghomepage_content);
-        String welcomeMsg = ("<small><font color=\"#00000000\">你好，这里是1037树洞~</font></small><br>" +
+        String welcomeMsg = ("<small><font color=\"#00000000\">你好，这里是1037树洞v1.2.0~</font></small><br>" +
+                "<small><font color=\"#00000000\">新增功能：黑暗模式、专属表情、楼中楼回复...</font></small><br>" +
                 " <small><font color=\"#666666\">请先别急着跳过噢，花三十秒听听树洞的悄悄话吧</font></small>" + "<font color=\"#666666\">(●'◡'●)</font><br><br>" +
                 "<strong><font color=\"#00000000\">1037树洞是什么</font></strong><br><br>" +
                 "<small><font color=\"#666666\">1037树洞是专属于HUSTer的</font></small><small><font color=\"#00000000\">匿名社区</font></small>，" +
