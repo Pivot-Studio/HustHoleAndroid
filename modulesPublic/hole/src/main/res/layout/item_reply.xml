@@ -76,8 +76,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:replyToAlias="@{reply.replied.nickname}"
-                app:replyToContent="@{reply.replied.content}"
+                app:replyToContent="@{reply.replied}"
                 tools:text="@string/default_string_zh_long" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,6 +19,7 @@ import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
+import cn.pivotstudio.husthole.moduleb.network.model.ReplyDto
 import cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext
 import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment
 
@@ -104,23 +105,23 @@ fun setContentVisibility(view: ConstraintLayout, replyTo: String) {
 }
 
 
-@BindingAdapter("replyToContent", "replyToAlias", "isMine")
+@BindingAdapter("replyToContent", "isMine")
 fun setReplyToContent(
     view: TextView,
-    content: String,
-    nickname: String,
+    relied: ReplyDto?,
     is_mine: Boolean?
 ) {
-    if (content == "") {
+    if (relied == null) {
         view.text = " 该评论（or回复）已删除 "
+        return
     } else {
         val redSpan = ForegroundColorSpan(view.resources.getColor(R.color.GrayScale_0, null))
-        val builder = SpannableStringBuilder("$nickname : $content")
+        val builder = SpannableStringBuilder("${relied.nickname} : ${relied.content}")
         //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
         builder.setSpan(
             redSpan,
             0,
-            nickname.length + 1,
+            relied.nickname.length + 1,
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         view.text = builder
@@ -146,7 +147,8 @@ fun setForestIcon(view: Button, forestName: String, role: String?) {
             view.setPadding(15, 5, 6, 6)
             view.setTextColor(view.context.resources.getColor(R.color.GrayScale_50))
             view.text = " Pivot Studio团队 "
-            val homepressed = view.context.resources.getDrawable(R.drawable.ic_pivot_studio_16dp, null)
+            val homepressed =
+                view.context.resources.getDrawable(R.drawable.ic_pivot_studio_16dp, null)
             homepressed.setBounds(0, 0, homepressed.minimumWidth, homepressed.minimumHeight)
             view.setCompoundDrawables(homepressed, null, null, null)
             view.setBackgroundResource(R.drawable.tag_gray)
