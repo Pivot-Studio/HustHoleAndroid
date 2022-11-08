@@ -140,7 +140,7 @@ data class ReplyNotice(
  * HoleDto, 更详细的Hole
  */
 data class HoleDto(
-    val content: String? = null,
+    var content: String = "",
     val createAt: String? = null,
     val deleteAt: String? = null,
     val followCount: Long? = null,
@@ -158,8 +158,8 @@ data class HoleDto(
  * ReplyDto, 更详细的Reply
  */
 data class ReplyDto(
-    val content: String? = null,
-    val createAt: String? = null,
+    var content: String = "",
+    var createAt: String? = null,
     val deleteAt: String? = null,
     val holeId: String? = null,
     val likeCount: Long? = null,
