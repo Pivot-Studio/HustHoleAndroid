@@ -55,7 +55,7 @@ class InnerReplyFragment : BaseFragment() {
             .navigation()
     }
 
-    private val innerReplyAdapter by lazy { InnerReplyAdapter(innerReplyViewModel, report) }
+    private val innerReplyAdapter by lazy { InnerReplyAdapter(innerReplyViewModel, report, this) }
 
 
     // 二级评论页的点赞可以直接通过ViewModel反馈给一级评论页
@@ -80,6 +80,7 @@ class InnerReplyFragment : BaseFragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = innerReplyViewModel
+        binding.fragment = this
         binding.apply {
             rvReplies.adapter = innerReplyAdapter
             rvReplies.addOnScrollListener(object : RecyclerView.OnScrollListener() {

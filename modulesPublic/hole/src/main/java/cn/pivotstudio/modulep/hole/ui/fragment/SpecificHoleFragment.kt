@@ -61,7 +61,7 @@ class SpecificHoleFragment : BaseFragment() {
             .navigation()
     }
 
-    private val repliesAdapter by lazy { RepliesAdapter(replyViewModel, report, navToInnerReply) }
+    private val repliesAdapter by lazy { RepliesAdapter(replyViewModel, report, navToInnerReply, this) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +75,7 @@ class SpecificHoleFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        binding.layoutHole.fragment = this
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = replyViewModel

@@ -4,6 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <variable
+            name="fragment"
+            type="cn.pivotstudio.modulep.hole.ui.fragment.InnerReplyFragment" />
 
         <variable
             name="viewModel"
@@ -88,6 +91,8 @@
                                 app:layout_constraintTop_toBottomOf="@+id/tv_hole_time"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:markDownContent="@{viewModel.reply.content}"
+                                app:fragment="@{fragment}"
+                                app:currentId="@{viewModel.reply.holeId}"
                                 tools:text="@string/default_string_zh_long" />
 
                             <androidx.constraintlayout.widget.ConstraintLayout
