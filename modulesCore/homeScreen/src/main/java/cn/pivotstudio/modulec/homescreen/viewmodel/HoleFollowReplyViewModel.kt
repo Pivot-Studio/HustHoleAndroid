@@ -11,9 +11,8 @@ import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.repository.HoleFollowReplyRepository
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  *@classname HoleFollowReplyViewModel
@@ -23,7 +22,7 @@ import kotlinx.coroutines.withTimeoutOrNull
  * @author
  */
 class HoleFollowReplyViewModel : ViewModel() {
-    private val repository = HoleFollowReplyRepository()
+    val repository = HoleFollowReplyRepository()
     val tip: MutableLiveData<String?> = repository.tip
 
     private val _loadingState = MutableStateFlow(ApiStatus.SUCCESSFUL)
@@ -65,33 +64,36 @@ class HoleFollowReplyViewModel : ViewModel() {
             if (_loadingState.value == ApiStatus.LOADING) {
                 _loadingState.emit(ApiStatus.ERROR)
                 _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                repository.tip.value = context!!.getString(R.string.network_loadfailure)
             }
         }
     }
 
     fun getMyFollow() {
         viewModelScope.launch {
-            _loadingState.emit(ApiStatus.LOADING)
-            withTimeoutOrNull(MAX_REQUEST_TIME) {
-                repository.getMyFollow()
-                    .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
-                    .catch { e ->
-                        _loadingState.emit(ApiStatus.ERROR)
-                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                        e.printStackTrace()
+            try{
+                withTimeout(MAX_REQUEST_TIME) {
+                    repository.getMyFollow().collect {
+                        when (it) {
+                            is ApiResult.Success<*> -> {
+                                _myFollow.emit(it.data as List<HoleV2>)
+                                if (_myFollow.value.isEmpty())
+                                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
+                            }
+                            is ApiResult.Error -> {
+                                tip.value = it.code.toString() + it.errorMessage
+                                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                            }
+                            else -> {}
+                        }
                     }
-                    .collectLatest {
-                        _myFollow.emit(it)
-                        if (it.isEmpty())
-                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
-                    }
+                }
+            } catch (e: TimeoutCancellationException) {
+                if (_loadingState.value == ApiStatus.LOADING) {
+                    _loadingState.emit(ApiStatus.ERROR)
+                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                }
             }
-            if (_loadingState.value == ApiStatus.LOADING) {
-                _loadingState.emit(ApiStatus.ERROR)
-                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                repository.tip.value = context!!.getString(R.string.network_loadfailure)
-            }
+
         }
     }
 
@@ -115,7 +117,6 @@ class HoleFollowReplyViewModel : ViewModel() {
             if (_loadingState.value == ApiStatus.LOADING) {
                 _loadingState.emit(ApiStatus.ERROR)
                 _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                repository.tip.value = context!!.getString(R.string.network_loadfailure)
             }
         }
     }
@@ -138,7 +139,6 @@ class HoleFollowReplyViewModel : ViewModel() {
             if (_loadingState.value == ApiStatus.LOADING) {
                 _loadingState.emit(ApiStatus.ERROR)
                 _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                repository.tip.value = context!!.getString(R.string.network_loadfailure)
             }
         }
     }
@@ -147,21 +147,22 @@ class HoleFollowReplyViewModel : ViewModel() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             withTimeoutOrNull(MAX_REQUEST_TIME) {
-                repository.loadMoreFollow()
-                    .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
-                    .catch { e ->
-                        _loadingState.emit(ApiStatus.ERROR)
-                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                        e.printStackTrace()
+                repository.loadMoreFollow().collect {
+                    when (it) {
+                        is ApiResult.Success<*> -> {
+                            _myFollow.emit(_myFollow.value.toMutableList().apply { addAll(it.data as List<HoleV2>) })
+                        }
+                        is ApiResult.Error -> {
+                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                            tip.value = it.code.toString() + it.errorMessage
+                        }
+                        else -> {}
                     }
-                    .collectLatest {
-                        _myFollow.emit(_myFollow.value.toMutableList().apply { addAll(it) })
-                    }
+                }
             }
             if (_loadingState.value == ApiStatus.LOADING) {
                 _loadingState.emit(ApiStatus.ERROR)
                 _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                repository.tip.value = context!!.getString(R.string.network_loadfailure)
             }
         }
     }
@@ -184,7 +185,6 @@ class HoleFollowReplyViewModel : ViewModel() {
             if (_loadingState.value == ApiStatus.LOADING) {
                 _loadingState.emit(ApiStatus.ERROR)
                 _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                repository.tip.value = context!!.getString(R.string.network_loadfailure)
             }
         }
     }
@@ -194,11 +194,11 @@ class HoleFollowReplyViewModel : ViewModel() {
             repository.deleteTheHole(hole).collect {
                 when (it) {
                     is ApiResult.Success<*> -> {
-                        Toast.makeText(context, "删除成功！", Toast.LENGTH_SHORT).show()
+                        tip.value = "删除成功！"
                         getMyHole()
                     }
                     is ApiResult.Error -> {
-                        tip.value = it.errorMessage
+                        tip.value = it.code.toString() + it.errorMessage
                     }
                     else -> {}
                 }
@@ -212,7 +212,7 @@ class HoleFollowReplyViewModel : ViewModel() {
                 .collect {
                     when (it) {
                         is ApiResult.Success<*> -> {
-                            Toast.makeText(context, "删除成功！", Toast.LENGTH_SHORT).show()
+                            tip.value = "删除成功！"
                             getMyReply()
                         }
                         is ApiResult.Error -> {

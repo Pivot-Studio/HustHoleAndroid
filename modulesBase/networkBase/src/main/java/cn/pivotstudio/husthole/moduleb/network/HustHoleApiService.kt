@@ -137,7 +137,7 @@ interface HustHoleApiService {
     suspend fun getMyFollow(
         @Query("offset") offset: Int = 0,
         @Query("limit") limit: Int = CONSTANT_STANDARD_LOAD_SIZE
-    ): List<HoleV2>
+    ): Response<List<HoleV2>>
 
     @GET("user/reply")
     suspend fun getMyReply(

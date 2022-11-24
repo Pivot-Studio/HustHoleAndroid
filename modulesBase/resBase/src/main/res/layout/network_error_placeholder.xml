@@ -15,6 +15,7 @@
         app:srcCompat="@drawable/ic_network_error_placeholder_80dp" />
 
     <TextView
+        android:id="@+id/fff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/res_network_error"
