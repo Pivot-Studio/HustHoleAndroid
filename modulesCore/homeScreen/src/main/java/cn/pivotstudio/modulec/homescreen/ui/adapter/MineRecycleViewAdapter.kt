@@ -203,7 +203,7 @@ class MineRecycleViewAdapter(
 
         override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean {
             return if(oldItem is HoleV2 && newItem is HoleV2)
-                oldItem.lastReplyAt == newItem.lastReplyAt || oldItem.likeCount == newItem.likeCount || oldItem.followCount == newItem.followCount
+                oldItem.lastReplyAt == newItem.lastReplyAt || oldItem.likeCount == newItem.likeCount || oldItem.followCount == newItem.followCount || oldItem.replyCount == newItem.replyCount
             else
                 true
         }

@@ -90,7 +90,7 @@ data class Reply(
     val hole: HoleDto? = null,
 
     /** 树洞id */
-    var holeId: String = "",
+    val holeId: String = "",
 
     /** 点赞数 */
     val likeCount: Long = 0,

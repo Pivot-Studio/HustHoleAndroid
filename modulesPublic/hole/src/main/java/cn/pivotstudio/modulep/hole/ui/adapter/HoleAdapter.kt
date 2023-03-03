@@ -17,9 +17,11 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.Fragment
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyDto
 import cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext
+import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment
 
 /**
  * @classname:HoleAdapter
@@ -57,17 +59,19 @@ fun setHintText(view: EmojiEdittext, reply: Reply?) {
 
 }
 
-@BindingAdapter("markDownContent")
-fun setMDContent(view: TextView, content: String?) {
+@BindingAdapter("markDownContent", "fragment" ,"currentId", requireAll = true)
+fun setMDContent(view: TextView, content: String?, fragment: Fragment, currentId: String?) {
     if (content != null) {
         val text = Markwon.markdown(BaseApplication.context!!, content.trim { it <= ' ' }
             .replace("\n", "  \n"))
         val spannableString = SpanStringUtil.getEmotionMarkdownContent(
             0x0001,
-            BaseApplication.context,
+            fragment,
             view,
-            text
+            text,
+            currentId
         )
+
         view.text = spannableString
     }
 }

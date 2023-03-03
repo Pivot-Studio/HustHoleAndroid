@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="fragment"
+            type="cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment" />
         <variable
             name="replyWrapper"
             type="cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper" />
@@ -68,6 +70,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:markDownContent="@{replyWrapper.self.content}"
+                app:fragment="@{fragment}"
+                app:currentId="@{replyWrapper.self.holeId}"
                 tools:text="@string/default_string_zh_short" />
 
             <View

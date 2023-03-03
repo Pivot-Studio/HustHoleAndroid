@@ -164,6 +164,7 @@ class MyHoleFollowReplyFragment(val type: Int) : BaseFragment() {
             HoleFollowReplyViewModel.PlaceholderType.PLACEHOLDER_NETWORK_ERROR -> {
                 binding.placeholderHomeNetError.visibility = View.VISIBLE
                 binding.placeholderHomeNoContent.visibility = View.GONE
+                viewModel.repository.tip.value = getString(R.string.network_loadfailure)
             }
 
             HoleFollowReplyViewModel.PlaceholderType.PLACEHOLDER_NO_CONTENT -> {

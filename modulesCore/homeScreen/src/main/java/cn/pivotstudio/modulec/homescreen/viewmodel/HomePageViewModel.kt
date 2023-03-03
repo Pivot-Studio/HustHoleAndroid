@@ -2,6 +2,7 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import android.widget.Toast
 import androidx.core.text.isDigitsOnly
+import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
