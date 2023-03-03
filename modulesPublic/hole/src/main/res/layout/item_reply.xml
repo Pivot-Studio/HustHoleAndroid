@@ -6,6 +6,9 @@
     <data>
         <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
         <variable
+            name="fragment"
+            type="cn.pivotstudio.modulep.hole.ui.fragment.InnerReplyFragment" />
+        <variable
             name="reply"
             type="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
     </data>
