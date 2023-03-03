@@ -30,6 +30,17 @@
             android:text="@{@string/hole_id(hole.holeId), default = @string/hole_id}"
             android:textAppearance="@style/HustHoleTypography.Headline5" />
 
+        <Button
+            android:id="@+id/bt_audit_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="@dimen/dp_2"
+            android:layout_marginEnd="@dimen/dp_2"
+            android:textSize="@dimen/sp_13"
+            android:background="@color/transparent"
+            android:clickable="false"/>
+
         <TextView
             android:id="@+id/tv_myhole_time"
             android:layout_width="wrap_content"

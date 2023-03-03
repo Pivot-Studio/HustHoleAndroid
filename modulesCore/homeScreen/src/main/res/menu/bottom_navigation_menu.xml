@@ -4,13 +4,13 @@
         android:id="@+id/homepage_fragment"
         android:enabled="true"
         android:icon="@drawable/ic_home"
-        android:title="首页" />
+        android:title="@string/homepage_zh" />
 
     <item
         android:id="@+id/forest_fragment"
         android:enabled="true"
         android:icon="@drawable/ic_forest"
-        android:title="小树林" />
+        android:title="@string/forest_zh" />
 
     <item
         android:enabled="false"
@@ -20,12 +20,12 @@
         android:id="@+id/notice_fragment"
         android:enabled="true"
         android:icon="@drawable/ic_msg"
-        android:title="通知" />
+        android:title="@string/notification_zh" />
 
     <item
         android:id="@+id/mine_fragment"
         android:enabled="true"
         android:icon="@drawable/ic_mine"
-        android:title="我的" />
+        android:title="@string/mine_zh" />
 
 </menu>

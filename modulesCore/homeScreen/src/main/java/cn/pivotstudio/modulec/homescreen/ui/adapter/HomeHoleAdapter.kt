@@ -42,7 +42,6 @@ class HomeHoleAdapter(
 
     inner class HoleViewHolder(private val binding: ItemHomepageholeBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun bind(hole: HoleV2) {
             binding.homePageHole = hole
             binding.apply {

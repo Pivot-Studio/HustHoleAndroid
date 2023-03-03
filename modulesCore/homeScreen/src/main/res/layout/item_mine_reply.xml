@@ -70,7 +70,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/my_reply_created_timestamp" />
 
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -141,5 +140,15 @@
                 app:layout_constraintStart_toEndOf="@+id/iv_itemhomepage_moreicon"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/bt_audit_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_alignParentEnd="true"
+            android:textSize="@dimen/sp_13"
+            android:background="@color/transparent"
+            android:clickable="false"/>
     </RelativeLayout>
 </layout>

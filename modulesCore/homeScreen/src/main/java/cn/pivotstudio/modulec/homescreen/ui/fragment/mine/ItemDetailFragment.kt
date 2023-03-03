@@ -34,12 +34,13 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Compani
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**
- *@classname ItemDetailFragment
+ * @classname ItemDetailFragment
  * @description:
  * @date :2022/9/26 17:51
  * @version :1.0
- * @author
+ * @author yuruop
  */
+
 class ItemDetailFragment : Fragment() {
     private lateinit var binding: ViewDataBinding
     private val viewModel: MineFragmentViewModel by viewModels()
@@ -86,13 +87,13 @@ class ItemDetailFragment : Fragment() {
             R.string.update_log -> {
                 binding = ActivityUpdateBinding.inflate(inflater, container, false)
             }
-            R.string.campus_email -> {
+            /*R.string.campus_email -> {
                 if (isVerifiedEmail) {
                     binding = ActivityEmailOkBinding.inflate(inflater, container, false)
                 } else if (!isVerifiedEmail) {
                     binding = ActivityEmailVerify1Binding.inflate(inflater, container, false)
                 }
-            }
+            }*/
             R.string.privacy_security -> {
                 binding = ActivitySecurityBinding.inflate(inflater, container, false)
             }

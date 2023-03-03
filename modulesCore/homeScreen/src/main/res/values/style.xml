@@ -45,6 +45,7 @@
         <item name="labelVisibilityMode">labeled</item>
         <item name="itemTextAppearanceActive">@style/HustHoleTypography.Headline4.Bold</item>
         <item name="itemTextAppearanceInactive">@style/HustHoleTypography.Headline4.Bold</item>
+        <item name="itemIconPadding">@dimen/dp_10</item>
     </style>
 
 </resources>

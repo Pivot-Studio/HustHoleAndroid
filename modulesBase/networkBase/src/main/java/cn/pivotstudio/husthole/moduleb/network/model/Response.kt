@@ -56,6 +56,10 @@ data class HoleV2(
     @Json(name = "thumb")
     var likeCount: Long,
 
+    /** 审核状态 */
+    @Json(name = "status")
+    var status: AuditType? = null,
+
     var forestAvatarUrl: String? = null,
 
     var isLatestReply: Boolean = true
@@ -109,7 +113,10 @@ data class Reply(
     val replyToInner: String? = null,
 
     /** 是否点赞 */
-    val thumb: Boolean
+    val thumb: Boolean,
+
+    /** 审核状态 */
+    val status: AuditType? = null
 ) : Serializable
 
 /**
@@ -151,7 +158,8 @@ data class HoleDto(
     val ownerId: String? = null,
     val participant: Long? = null,
     val replyCount: Long? = null,
-    val updateAt: String? = null
+    val updateAt: String? = null,
+    val status: AuditType?= null
 )
 
 /**
@@ -169,12 +177,19 @@ data class ReplyDto(
     val replyTo: String? = null,
     val replyToInner: String? = null,
     val updateAt: String? = null,
-    val userId: String? = null
+    val userId: String? = null,
+    val status: AuditType? = null
 )
 
 enum class ReplyType {
     REPLY_TO_HOLE,
     REPLY_TO_REPLY
+}
+
+enum class AuditType {
+    UNAUDITED,
+    REVIEW_PASSED,
+    NOT_APPROVED
 }
 
 data class ProFile (

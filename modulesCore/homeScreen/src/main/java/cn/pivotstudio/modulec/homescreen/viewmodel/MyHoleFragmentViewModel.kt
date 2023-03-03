@@ -178,7 +178,6 @@ class MyHoleFragmentViewModel : ViewModel() {
         content: Context?,
         position: Int,
     ) {
-
         val call =
             request!!.delete_hole_2(BASE_URL + "replies/" + _myReplyList.value!![position][3] + "/" + _myReplyList.value!![position][6])
 

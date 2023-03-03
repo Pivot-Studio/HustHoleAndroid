@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
+import android.widget.Toast
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -36,7 +37,7 @@ class HomePageViewModel : ViewModel() {
 
     private var _sortMode: String = NetworkConstant.SortMode.LATEST_REPLY
 
-    private var _loadLaterHoleId = ""
+    private var _loadLaterHoleId = MutableStateFlow("")
 
     init {
         loadHolesV2()
@@ -134,7 +135,9 @@ class HomePageViewModel : ViewModel() {
     }
 
     fun loadHoleLater(holeId: String) {
-        _loadLaterHoleId = holeId
+        viewModelScope.launch {
+            _loadLaterHoleId.emit(holeId)
+        }
     }
 
     fun followTheHole(hole: HoleV2) {
@@ -271,11 +274,10 @@ class HomePageViewModel : ViewModel() {
         followNum: Long
     ) {
         viewModelScope.launch {
-            val holes = holesV2.value.toMutableList()
-            val i = holes.indexOfFirst {
-                it.holeId == _loadLaterHoleId
+            val i = holesV2.value.indexOfFirst {
+                it.holeId == _loadLaterHoleId.value
             }
-
+            val holes = holesV2.value.toMutableList()
             holes[i] = holes[i].copy(
                 liked = isThumb,
                 isReply = replied,

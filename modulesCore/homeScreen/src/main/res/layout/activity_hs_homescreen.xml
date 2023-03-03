@@ -72,7 +72,7 @@
                         style="@style/HustHoleBottomNavigationBarTheme"
                         android:background="@null"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/dp_54"
+                        android:layout_height="wrap_content"
                         android:paddingEnd="@dimen/dp_15"
                         android:textSize="@dimen/sp_30"
                         app:layout_constraintBottom_toBottomOf="parent"

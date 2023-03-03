@@ -44,7 +44,7 @@ import com.google.android.material.navigation.NavigationBarView
 class HomeScreenActivity : BaseActivity() {
     private lateinit var binding: ActivityHsHomescreenBinding
     private lateinit var navController: NavController
-    val fragmentList = listOf<Int>(
+    private val fragmentList = listOf(
         R.id.all_forest_fragment,
         R.id.forest_detail_fragment,
         R.id.holeFollowReplyFragment,

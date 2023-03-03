@@ -51,49 +51,47 @@ class MineOthersAdapter(
         fun bind(name: Int) {
             binding.apply {
                 this.name = name
-                    if (type == OTHER_OPTION) {
-                        binding.rlOthers.setOnClickListener {
-                            if (viewModel.optSwitch[layoutPosition] == true) {
-                                if (layoutPosition == PERSONAL_SETTING || layoutPosition == SHIELD_SETTING || layoutPosition == UPDATE) {
-                                    val action =
-                                        MineFragmentDirections.actionMineFragmentToItemMineFragment(
-                                            layoutPosition
-                                        )
-                                    it.findNavController().navigate(action)
-                                } else if (layoutPosition == SHARE) {
-                                    initShareCardView()
-                                } else if (layoutPosition == LOGOUT) {
-                                    initLogOutDialog()
-                                } else {
-                                    val action =
-                                        MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
-                                            layoutPosition, true
-                                        )
-                                    it.findNavController().navigate(action)
-                                }
-                            } else {
-                                Toast.makeText(fragment.context,"功能正在维护！",Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    } else if (type == DETAIL) {
-                        if (name == R.string.campus_email) {
-                            viewModel.checkEmailVerifyState(binding)
-                        } else if (name == R.string.check_update) {
-                            binding.rlOthers.setOnClickListener {
-                                    viewModel.checkVersion(fragment as ItemMineFragment)
-                            }
-                        }
-                        if (name != R.string.check_update) {
-                            binding.rlOthers.setOnClickListener {
+                if (type == OTHER_OPTION) {
+                    binding.rlOthers.setOnClickListener {
+                        if (viewModel.optSwitch[layoutPosition] == true) {
+                            if (layoutPosition == PERSONAL_SETTING || layoutPosition == SHIELD_SETTING || layoutPosition == UPDATE) {
                                 val action =
-                                    ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
-                                        name, viewModel.isVerifiedEmail.value!!
+                                    MineFragmentDirections.actionMineFragmentToItemMineFragment(
+                                        layoutPosition
                                     )
-                                fragment.findNavController().navigate(action)
+                                it.findNavController().navigate(action)
+                            } else if (layoutPosition == SHARE) {
+                                initShareCardView()
+                            } else if (layoutPosition == LOGOUT) {
+                                initLogOutDialog()
+                            } else {
+                                val action =
+                                    MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
+                                        layoutPosition, true
+                                    )
+                                it.findNavController().navigate(action)
                             }
+                        } else {
+                            Toast.makeText(fragment.context,"功能正在维护！",Toast.LENGTH_SHORT).show()
                         }
                     }
-                executePendingBindings()
+                } else if (type == DETAIL) {
+                    if (name == R.string.check_update) {
+                        binding.rlOthers.setOnClickListener {
+                                //viewModel.checkVersion(fragment as ItemMineFragment)
+                            viewModel.initialNotification(fragment as ItemMineFragment)
+                        }
+                    }else {
+                        binding.rlOthers.setOnClickListener {
+                            val action =
+                                ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
+                                    name, viewModel.isVerifiedEmail.value!!
+                                )
+                            fragment.findNavController().navigate(action)
+                        }
+                    }
+                }
+            executePendingBindings()
             }
         }
 

@@ -237,6 +237,4 @@
         <item name="iconSize">8dp</item>
         <item name="iconTint">@color/HH_BandColor_3</item>
     </style>
-
-
 </resources>

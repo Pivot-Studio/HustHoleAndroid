@@ -4,11 +4,13 @@ import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.model.AuditType
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
@@ -47,6 +49,7 @@ class MineRecycleViewAdapter(
         fun bind(hole: HoleV2) {
             binding.apply {
                 this.hole = hole
+                showAuditStatus(hole.status, btAuditStatus)
                 totalView.setOnClickListener {
                     ARouter.getInstance()
                         .build("/hole/HoleActivity")
@@ -93,6 +96,7 @@ class MineRecycleViewAdapter(
         fun bind(reply: Reply) {
             binding.apply {
                 this.reply = reply
+                showAuditStatus(reply.status, btAuditStatus)
                 myReplyTotal.setOnClickListener{
                     ARouter.getInstance()
                         .build("/hole/HoleActivity")
@@ -150,6 +154,29 @@ class MineRecycleViewAdapter(
         }
     }
 
+    fun showAuditStatus(
+        status: AuditType?,
+        button: Button
+    ) {
+        when (status) {
+            AuditType.REVIEW_PASSED -> {
+                button.visibility = View.GONE
+            }
+            AuditType.NOT_APPROVED -> {
+                button.text = "未通过"
+                button.setTextColor(
+                    frag.requireContext().getColor(R.color.HH_Reminder_Warning)
+                )
+            }
+            AuditType.UNAUDITED, null -> {
+                button.text = "审核中"
+                button.setTextColor(
+                    frag.requireContext().getColor(R.color.HH_BandColor_7)
+                )
+            }
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(type == GET_HOLE || type == GET_FOLLOW)
              HoleAndFollowViewHolder(ItemMineHoleFollowBinding.inflate(LayoutInflater.from(parent.context)))
@@ -165,8 +192,6 @@ class MineRecycleViewAdapter(
             (holder as ReplyViewHolder).bind(item as Reply)
         }
     }
-
-
 
     companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
         override fun areItemsTheSame(oldItem: Any, newItem: Any): Boolean {

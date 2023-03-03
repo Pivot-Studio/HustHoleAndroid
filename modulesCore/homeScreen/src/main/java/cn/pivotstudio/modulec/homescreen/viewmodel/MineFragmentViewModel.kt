@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
@@ -46,6 +47,14 @@ import java.io.IOException
  * @date :2022/10/20 17:21
  * @version :1.0
  * @author
+ */
+/**
+ * list of functions:
+ * 1. private fun getVersionName(): String  返回版本名
+ * 2. private fun initialNotification(ItemMineFragment) 通知栏初始化下载通知
+ * 3. private fun localStorage(okhttp3.Response, File, ItemMineFragment) 保存安装包到本地
+ * 4. private fun download(String, ItemMineFragment) 启动下载
+ * 5.
  */
 class MineFragmentViewModel : ViewModel(){
     private val repository = MineRepository()
@@ -103,17 +112,10 @@ class MineFragmentViewModel : ViewModel(){
         initOptionSwitch()
     }
 
-    fun checkEmailVerifyState(
-        binding: ItemMineOthersBinding
-    ) {
-        //TODO 等后端做接口
-    }
-
     private fun getVersionName(): String {
-        val manager = BaseApplication.context!!.packageManager
         var name: String? = null
         try {
-            val info = manager.getPackageInfo(BaseApplication.context!!.packageName, 0)
+            val info = context!!.packageManager.getPackageInfo(context!!.packageName, 0)
             name = info.versionName
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
@@ -122,14 +124,19 @@ class MineFragmentViewModel : ViewModel(){
         return name!!
     }
 
-    private fun initialNotification(
+    @SuppressLint("UnspecifiedImmutableFlag")
+    fun initialNotification(
         frag: ItemMineFragment
     ) {
         //Notification跳转页面
         notificationManager = frag.requireContext()
             .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
         val notificationIntent = Intent(frag.context, HomeScreenActivity::class.java)
-        val contentIntent = PendingIntent.getActivity(frag.context, 0, notificationIntent, 0)
+        val contentIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            PendingIntent.getActivity(frag.context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        } else {
+            PendingIntent.getActivity(frag.context, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+        }
         val PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID"
         val PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME"
         /*
@@ -168,17 +175,12 @@ class MineFragmentViewModel : ViewModel(){
             .setProgress(100, 0, false)
         //进度最大100，默认是从0开始
 
-        lateinit var notify: Notification
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel("to-do", "待办消息", NotificationManager.IMPORTANCE_LOW)
-            channel.enableVibration(true)
-            channel.vibrationPattern = longArrayOf(500)
-            notificationManager!!.createNotificationChannel(channel)
-            builder!!.setChannelId("to-do")
-            notify = builder!!.build()
-        } else {
-            notify = builder!!.build()
-        }
+        val channel = NotificationChannel("to-do", "待办消息", NotificationManager.IMPORTANCE_LOW)
+        channel.enableVibration(true)
+        channel.vibrationPattern = longArrayOf(500)
+        notificationManager!!.createNotificationChannel(channel)
+        builder!!.setChannelId("to-do")
+        val notify: Notification = builder!!.build()
         notify.flags = notify.flags or Notification.FLAG_AUTO_CANCEL // 但用户点击消息后，消息自动在通知栏自动消失
         notificationManager!!.notify(1, notify) // 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
     }
@@ -196,25 +198,22 @@ class MineFragmentViewModel : ViewModel(){
         frag: ItemMineFragment
     ) {
         //拿到字节流
-        val `is` = response.body!!.byteStream()
+        val mByteStream = response.body!!.byteStream()
         var len = 0
         val fos = FileOutputStream(file)
         val buf = ByteArray(2048)
         try {
-            while (`is`.read(buf).also { len = it } != -1) {
+            while (mByteStream.read(buf).also { len = it } != -1) {
                 fos.write(buf, 0, len)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val channel = NotificationChannel(
-                        "to-do2", "待办消息",
-                        NotificationManager.IMPORTANCE_LOW
-                    )
-                    channel.enableVibration(false)
-                    channel.setSound(null, null)
-                    // channel.setVibrationPattern(new long[]{500});
-                    notificationManager!!.createNotificationChannel(channel)
-                    builder!!.setChannelId("to-do2")
-                } else {
-                }
+                val channel = NotificationChannel(
+                    "to-do2", "待办消息",
+                    NotificationManager.IMPORTANCE_LOW
+                )
+                channel.enableVibration(false)
+                channel.setSound(null, null)
+                // channel.setVibrationPattern(new long[]{500});
+                notificationManager!!.createNotificationChannel(channel)
+                builder!!.setChannelId("to-do2")
                 //Log.e("TAG每次写入到文件大小", "onResponse: "+len);
                 Log.e(
                     "TAG保存到文件进度：",
@@ -235,13 +234,13 @@ class MineFragmentViewModel : ViewModel(){
             }
             fos.flush()
             fos.close()
-            `is`.close()
+            mByteStream.close()
 
             //下载完成，点击通知，安装
             installingAPK(file)
         } catch (e: IOException) {
             viewModelScope.launch {
-                Toast.makeText(context, "下载失败", Toast.LENGTH_SHORT).show()
+                Toast.makeText(frag.context, "下载失败", Toast.LENGTH_SHORT).show()
                 notificationManager!!.cancel(1)
                 notificationManager = frag.requireContext()
                     .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
@@ -249,10 +248,11 @@ class MineFragmentViewModel : ViewModel(){
                     frag.context,
                     frag.activity!!::class.java
                 )
-                val contentIntent = PendingIntent.getActivity(
-                    frag.context, 0, notificationIntent,
-                    0
-                )
+                val contentIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    PendingIntent.getActivity(frag.context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+                } else {
+                    PendingIntent.getActivity(frag.context, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
+                }
                 val PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID"
                 val PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME"
 
@@ -276,22 +276,18 @@ class MineFragmentViewModel : ViewModel(){
                     .setOnlyAlertOnce(true)
                     .setChannelId(PUSH_CHANNEL_ID)
                     .setProgress(100, 0, false)
+
+                val channel = NotificationChannel(
+                    "to-do", "待办消息",
+                    NotificationManager.IMPORTANCE_HIGH
+                )
+                channel.enableVibration(false)
+                channel.setSound(null, null)
+                // channel.setVibrationPattern(new long[]{500});
+                notificationManager!!.createNotificationChannel(channel)
+                builder!!.setChannelId("to-do")
                 //进度最大100，默认是从0开始
-                var notify: Notification? = null
-                notify = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    val channel = NotificationChannel(
-                        "to-do", "待办消息",
-                        NotificationManager.IMPORTANCE_HIGH
-                    )
-                    channel.enableVibration(false)
-                    channel.setSound(null, null)
-                    // channel.setVibrationPattern(new long[]{500});
-                    notificationManager!!.createNotificationChannel(channel)
-                    builder!!.setChannelId("to-do")
-                    builder!!.build()
-                } else {
-                    builder!!.build()
-                }
+                val notify: Notification = builder!!.build()
                 //使用默认的声音
                 //  notify.defaults |= Notification.DEFAULT_SOUND;
                 //notify.sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.doorbell);
@@ -332,7 +328,9 @@ class MineFragmentViewModel : ViewModel(){
 
     }
 
-    private fun installingAPK(file: File) {}
+    private fun installingAPK(file: File) {
+
+    }
 
     fun checkVersion(
         frag: ItemMineFragment
@@ -631,7 +629,6 @@ class MineFragmentViewModel : ViewModel(){
 
     private fun initOption() {
         _mySettingList.value = listOf(
-            R.string.campus_email,
             R.string.privacy_security
         )
         _shieldList.value = listOf(
