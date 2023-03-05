@@ -3,6 +3,7 @@ package cn.pivotstudio.modulep.hole.ui.adapter
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -102,6 +103,7 @@ class RepliesAdapter(
                         viewModel.deleteTheReply(replyWrapper.self)
                     } else {
                         report(replyWrapper.self)
+                        Log.e("error", "reply")
                     }
                     it.visibility = GONE
                 }

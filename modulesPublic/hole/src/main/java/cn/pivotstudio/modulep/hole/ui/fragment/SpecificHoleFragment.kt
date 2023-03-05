@@ -89,7 +89,6 @@ class SpecificHoleFragment : BaseFragment() {
                 layoutHoleFrame.setOnClickListener {
                     replyViewModel.replyToOwner()
                 }
-
                 layoutHoleFrame.setOnLongClickListener {
                     val cm =
                         BaseApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
@@ -103,7 +102,7 @@ class SpecificHoleFragment : BaseFragment() {
                         cm.primaryClip?.getItemAt(0)?.text
                     }
                     Toast.makeText(it.context, "已将内容复制到剪切板！", Toast.LENGTH_SHORT).show()
-                    false
+                    true
                 }
 
                 clHoleThumb.setOnClickListener {

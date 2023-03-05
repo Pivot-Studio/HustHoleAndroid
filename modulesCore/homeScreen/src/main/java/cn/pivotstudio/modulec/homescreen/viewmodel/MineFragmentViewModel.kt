@@ -139,21 +139,6 @@ class MineFragmentViewModel : ViewModel(){
         }
         val PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID"
         val PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME"
-        /*
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(PUSH_CHANNEL_ID, PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH);
-            Log.d("ssss","1");
-            if (notificationManager != null) {
-                notificationManager.createNotificationChannel(channel);
-            }
-            Log.d("ssss","2");
-        }
-        //初始化通知管理器
-
-        //NotificationChannel channel =notificationManager.getNotificationChannel(PUSH_CHANNEL_ID);
-        notificationManager.deleteNotificationChannel(PUSH_CHANNEL_ID);
-        //8.0及以上需要设置好“channelId”（没有特殊要求、唯一即可）、“channelName”（用户看得到的信息）、“importance”（重要等级）这三个重要参数，然后创建到NotificationManager。
-        */
 
         //创建Notification
         builder = NotificationCompat.Builder(frag.requireContext(), "sss")
@@ -185,7 +170,7 @@ class MineFragmentViewModel : ViewModel(){
         notificationManager!!.notify(1, notify) // 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
     }
 
-    /*
+    /**
      * 方法名：localStorage(final Response response, final File file)
      * 功    能：保存文件到本地
      * 参    数：Response response, File file
@@ -211,7 +196,6 @@ class MineFragmentViewModel : ViewModel(){
                 )
                 channel.enableVibration(false)
                 channel.setSound(null, null)
-                // channel.setVibrationPattern(new long[]{500});
                 notificationManager!!.createNotificationChannel(channel)
                 builder!!.setChannelId("to-do2")
                 //Log.e("TAG每次写入到文件大小", "onResponse: "+len);
@@ -645,7 +629,7 @@ class MineFragmentViewModel : ViewModel(){
         optSwitch[PERSONAL_SETTING] = false
         optSwitch[SHIELD_SETTING] = false
         optSwitch[COMMUNITY_NORM] = true
-        optSwitch[SHARE] = false
+        optSwitch[SHARE] = true
         optSwitch[EVALUATION_AND_SUGGESTIONS] = true
         optSwitch[ABOUT] = true
         optSwitch[UPDATE] = true

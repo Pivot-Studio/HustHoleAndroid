@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineRecycleviewBinding
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineOthersAdapter
@@ -55,7 +56,21 @@ class ItemMineFragment : Fragment() {
         }
         binding.myTitle.text = context?.getString(viewModel.myNameList.value!![type])
         if (type == PERSONAL_SETTING || type == SHIELD_SETTING || type == UPDATE) {
-            val adapter = MineOthersAdapter(MineFragmentViewModel.DETAIL, viewModel, this)
+            val adapter = MineOthersAdapter()
+            adapter.setOnItemClickListener(object :MineOthersAdapter.OnItemClickListener {
+                override fun onClick(view: View, position: Int, nameID: Int) {
+                    if (nameID == R.string.check_update) {
+                        //viewModel.checkVersion(fragment as ItemMineFragment)
+                        viewModel.initialNotification(this@ItemMineFragment)
+                    }else {
+                        val action =
+                            ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
+                                nameID, viewModel.isVerifiedEmail.value!!
+                            )
+                        this@ItemMineFragment.findNavController().navigate(action)
+                    }
+                }
+            })
             when (type) {
                 PERSONAL_SETTING -> viewModel.mySettingList.observe(viewLifecycleOwner) { list ->
                     adapter.submitList(list)
@@ -77,9 +92,9 @@ class ItemMineFragment : Fragment() {
     }
 
     override fun onResume() {
-        super.onResume()
         if((activity as HomeScreenActivity).supportActionBar != null){
             (activity as HomeScreenActivity).supportActionBar!!.hide()
         }
+        super.onResume()
     }
 }

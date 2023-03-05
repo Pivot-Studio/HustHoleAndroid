@@ -2,12 +2,20 @@ package cn.pivotstudio.moduleb.libbase.base.custom_view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.inputmethodservice.Keyboard;
+import android.os.Message;
 import android.text.Editable;
 import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.text.style.DynamicDrawableSpan;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication;
 import cn.pivotstudio.moduleb.libbase.util.emoji.SpanStringUtil;
 import cn.pivotstudio.moduleb.libbase.R;
@@ -26,6 +34,7 @@ public class EmojiEdittext extends androidx.appcompat.widget.AppCompatEditText {
     private int mEmojiconTextSize;
     private boolean mUseSystemDefault = false;
     private final TextWatcher textWatcher = new TextWatcher() {
+        Boolean isDetele = false;
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -33,7 +42,7 @@ public class EmojiEdittext extends androidx.appcompat.widget.AppCompatEditText {
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            isDetele = (before != 0);
         }
 
         @Override
@@ -43,15 +52,17 @@ public class EmojiEdittext extends androidx.appcompat.widget.AppCompatEditText {
             }
             int start = getSelectionStart();
             int end = getSelectionEnd();
-            removeTextChangedListener(this);//取消监听
+            if(!isDetele) {
+                removeTextChangedListener(this);//取消监听
 
-            SpannableString spannableString =
-                SpanStringUtil.getEmotionContent(0x0001, BaseApplication.context, EmojiEdittext.this,
-                    editable.toString());
-            setText(spannableString);
+                SpannableString spannableString =
+                    SpanStringUtil.getEmotionContent(0x0001, BaseApplication.context, EmojiEdittext.this,
+                        editable.toString());
+                setText(spannableString);
 
-            setSelection(start, end);
-            addTextChangedListener(this);
+                setSelection(start, end);
+                addTextChangedListener(this);
+            }
         }
     };
 
