@@ -120,6 +120,8 @@ class SpecificHoleFragment : BaseFragment() {
                 clHoleMoreAction.setOnClickListener {
                     if (replyViewModel.hole.value?.isMyHole == true) {
                         replyViewModel.deleteTheHole()
+                    }else {
+                        replyViewModel.reportTheHole()
                     }
                     it.visibility = View.GONE
                 }

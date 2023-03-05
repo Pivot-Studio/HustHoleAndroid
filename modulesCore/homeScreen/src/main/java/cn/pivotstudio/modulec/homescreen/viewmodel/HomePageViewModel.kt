@@ -50,7 +50,6 @@ class HomePageViewModel : ViewModel() {
             NetworkConstant.SortMode.LATEST_REPLY -> _isLatestReply.value = true
             else -> _isLatestReply.value = false
         }
-
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             repository.loadHoles(sortMode)
@@ -275,10 +274,14 @@ class HomePageViewModel : ViewModel() {
         followNum: Long
     ) {
         viewModelScope.launch {
-            val i = holesV2.value.indexOfFirst {
+            var i = _holesV2.value.indexOfFirst {
                 it.holeId == _loadLaterHoleId.value
             }
-            val holes = holesV2.value.toMutableList()
+            if(i == -1) {
+                i = 0
+                tip.value = _holesV2.value[0].holeId
+            }
+            val holes = _holesV2.value.toMutableList()
             holes[i] = holes[i].copy(
                 liked = isThumb,
                 isReply = replied,

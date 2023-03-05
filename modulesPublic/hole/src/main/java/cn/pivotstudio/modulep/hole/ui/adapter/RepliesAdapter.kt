@@ -79,7 +79,7 @@ class RepliesAdapter(
                         cm.primaryClip?.getItemAt(0)?.text
                     }
                     Toast.makeText(it.context, "已将内容复制到剪切板！", Toast.LENGTH_SHORT).show()
-                    false
+                    true
                 }
 
                 clReply.setOnClickListener {
@@ -103,7 +103,6 @@ class RepliesAdapter(
                         viewModel.deleteTheReply(replyWrapper.self)
                     } else {
                         report(replyWrapper.self)
-                        Log.e("error", "reply")
                     }
                     it.visibility = GONE
                 }
