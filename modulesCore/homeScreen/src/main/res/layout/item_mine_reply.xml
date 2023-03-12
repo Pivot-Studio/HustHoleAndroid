@@ -15,6 +15,7 @@
         android:id="@+id/cl_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/dp_5"
         android:background="@drawable/standard_forest_hole">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -145,7 +146,7 @@
             android:id="@+id/bt_audit_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginEnd="@dimen/dp_27"
             android:layout_alignParentEnd="true"
             android:textSize="@dimen/sp_13"
             android:background="@color/transparent"

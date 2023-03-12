@@ -3,6 +3,7 @@ package cn.pivotstudio.modulep.hole.ui.adapter
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -17,6 +18,7 @@ import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.modulep.hole.databinding.ItemFirstLevelReplyBinding
+import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
 import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
 
@@ -24,7 +26,6 @@ class RepliesAdapter(
     private val viewModel: SpecificHoleViewModel,
     private val report: (Reply) -> Unit,
     private val onItemClick: (ReplyWrapper) -> Unit,
-    private val fragment: SpecificHoleFragment
 ) : ListAdapter<ReplyWrapper, RepliesAdapter.FirstLevelReplyViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -55,7 +56,6 @@ class RepliesAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(replyWrapper: ReplyWrapper) {
             binding.replyWrapper = replyWrapper
-            binding.fragment = fragment
             binding.apply {
                 // 控制楼中楼视图框显示
                 layoutInnerReply.visibility =
@@ -78,7 +78,7 @@ class RepliesAdapter(
                         cm.primaryClip?.getItemAt(0)?.text
                     }
                     Toast.makeText(it.context, "已将内容复制到剪切板！", Toast.LENGTH_SHORT).show()
-                    false
+                    true
                 }
 
                 clReply.setOnClickListener {

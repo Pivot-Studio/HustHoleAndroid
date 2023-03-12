@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
+import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
@@ -44,6 +46,7 @@ class InnerReplyFragment : BaseFragment() {
 
     private val args by navArgs<InnerReplyFragmentArgs>()
     private lateinit var binding: FragmentInnerReplyBinding
+    private lateinit var mActionBar: ActionBar
     private val innerReplyViewModel: InnerReplyViewModel by viewModels {
         InnerReplyViewModelFactory(args.reply)
     }
@@ -59,12 +62,16 @@ class InnerReplyFragment : BaseFragment() {
             .navigation()
     }
 
-    private val innerReplyAdapter by lazy { InnerReplyAdapter(innerReplyViewModel, report, this) }
+    private val innerReplyAdapter by lazy { InnerReplyAdapter(innerReplyViewModel, report) }
 
 
     // 二级评论页的点赞可以直接通过ViewModel反馈给一级评论页
     private val sharedViewModel: SpecificHoleViewModel by activityViewModels()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mActionBar = (requireActivity() as HoleActivity).supportActionBar!!
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -84,16 +91,21 @@ class InnerReplyFragment : BaseFragment() {
 
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = innerReplyViewModel
-        binding.fragment = this
         binding.apply {
             rvReplies.adapter = innerReplyAdapter
             rvReplies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    innerReplyAdapter.lastMoreListCl?.let {
-                        if (it.isVisible) {
-                            it.visibility = View.GONE
+                    if(newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                        mActionBar.hide()
+                        SoftKeyBoardUtil.hideKeyboard(requireActivity())
+                        innerReplyAdapter.lastMoreListCl?.let {
+                            if (it.isVisible) {
+                                it.visibility = View.GONE
+                            }
                         }
                     }
+                    else
+                        mActionBar.show()
                 }
             })
 

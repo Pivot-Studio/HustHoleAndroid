@@ -43,13 +43,13 @@
         <TextView
             android:id="@+id/law_title"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_20"
+            android:layout_height="@dimen/dp_25"
             android:layout_below="@id/rules_bar"
-            android:background="@color/GrayScale_100"
+            android:background="@color/HH_Background"
             android:gravity="center"
             android:text="@string/norm_1037"
             android:textColor="@color/black"
-            android:textSize="@dimen/sp_15"
+            android:textSize="@dimen/sp_18"
             android:textStyle="bold" />
 
         <TextView
@@ -57,8 +57,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/law_title"
-            android:layout_marginTop="@dimen/dp_1"
-            android:background="@color/GrayScale_100"
+            android:layout_marginVertical="@dimen/dp_1"
+            android:background="@color/HH_Background"
             android:gravity="right"
             android:text="@string/update_date"
             android:textAppearance="@style/HustHoleTypography.Body3"

@@ -178,7 +178,7 @@ fun bindBlurImage(imgView: ImageView, imgUrl: String?) {
 fun parseEmoji(view: TextView, content: String?) {
     val spannableString = SpanStringUtil.getEmotionContent(
         0x0001,
-        BaseApplication.context,
+        BaseApplication.context!!,
         view,
         content
     )

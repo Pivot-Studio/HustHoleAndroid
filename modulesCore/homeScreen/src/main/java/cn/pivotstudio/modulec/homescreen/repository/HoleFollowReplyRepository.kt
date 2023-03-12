@@ -130,7 +130,6 @@ class HoleFollowReplyRepository {
             val errorCode = jsonObject?.getString("errorCode")
             flow.emit(
                 ApiResult.Error(
-//                    code = response.code(),
                     code = errorCode?.toInt() ?: response?.code() ?: 0,
                     errorMessage = returnCondition
                 )

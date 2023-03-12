@@ -1,27 +1,33 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
+import android.app.Dialog
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.*
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineBinding
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineOthersAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.OTHER_OPTION
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel
+import com.alibaba.android.arouter.launcher.ARouter
 
 /**
  * 设置加入天数的显示颜色
@@ -79,8 +85,38 @@ class MineFragment : BaseFragment() {
             }
         }
 
-        val adapter = MineOthersAdapter(OTHER_OPTION, viewModel, this)
+        val adapter = MineOthersAdapter()
         viewModel.myNameList.observe(viewLifecycleOwner) { list -> adapter.submitList(list) }
+        adapter.setOnItemClickListener(object :MineOthersAdapter.OnItemClickListener {
+            override fun onClick(view: View, position: Int, nameID: Int) {
+                if (viewModel.optSwitch[position] == true) {
+                    when (position) {
+                        MineFragmentViewModel.PERSONAL_SETTING, MineFragmentViewModel.SHIELD_SETTING, MineFragmentViewModel.UPDATE -> {
+                            val action =
+                                MineFragmentDirections.actionMineFragmentToItemMineFragment(
+                                    position
+                                )
+                            view.findNavController().navigate(action)
+                        }
+                        MineFragmentViewModel.SHARE -> {
+                            initShareCardView()
+                        }
+                        MineFragmentViewModel.LOGOUT -> {
+                            initLogOutDialog()
+                        }
+                        else -> {
+                            val action =
+                                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
+                                    position, true
+                                )
+                            this@MineFragment.findNavController().navigate(action)
+                        }
+                    }
+                } else {
+                    Toast.makeText(context,"功能正在维护！", Toast.LENGTH_SHORT).show()
+                }
+            }
+        })
         binding.rvOptions.apply {
             this.adapter = adapter
             addItemDecoration(SpaceItemDecoration(0, 2))
@@ -92,6 +128,64 @@ class MineFragment : BaseFragment() {
         super.onResume()
     }
 
+    private fun cancelDarkBackGround() {
+        val lp = this.requireActivity().window.attributes
+        lp.alpha = 1f // 0.0~1.0
+        this.requireActivity().window.attributes = lp
+    }   //取消暗背景
+
+    private fun initShareCardView() {
+        val shareCardView = View.inflate(context, R.layout.ppw_share, null)
+        val shareCard = shareCardView.findViewById<LinearLayout>(R.id.share_card)
+        val cancel = shareCardView.findViewById<TextView>(R.id.share_cancel_button)
+        val ppwShare = PopupWindow(shareCardView)
+
+        ppwShare.isOutsideTouchable = true  //点击卡片外部退出
+        ppwShare.isFocusable = true     //按返回键允许退出
+        ppwShare.width = ViewGroup.LayoutParams.MATCH_PARENT
+        ppwShare.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        val lp = this.requireActivity().window.attributes
+        lp.alpha = 0.6f // 0.0~1.0   减弱背景亮度
+        this.requireActivity().window.attributes = lp
+        ppwShare.showAtLocation(
+            this.requireActivity().window.decorView, Gravity.BOTTOM,
+            0, 0
+        )    //设置显示位置
+        ppwShare.setOnDismissListener {
+            cancelDarkBackGround()
+        }
+        cancel.setOnClickListener {
+            ppwShare.dismiss()
+        }
+        shareCard.setOnClickListener {
+            ppwShare.dismiss()
+            val action =
+                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
+                    MineFragmentViewModel.SHARE, true
+                )
+            this.findNavController().navigate(action)
+        }
+    }
+
+    private fun initLogOutDialog() {
+        val dialog = Dialog(this.requireContext())
+        val dialogView = this.requireActivity().layoutInflater.inflate(R.layout.dialog_logout, null)
+        dialog.setContentView(dialogView)
+        val btnCancel = dialogView.findViewById<Button>(R.id.cancel)
+        val btnLogout = dialogView.findViewById<Button>(R.id.logout)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        btnCancel.setOnClickListener { dialog.dismiss() }
+        btnLogout.setOnClickListener {
+            dialog.dismiss()
+            val mmkvUtil = MMKVUtil.getMMKV(context)
+            mmkvUtil.put(Constant.USER_TOKEN, "")
+            mmkvUtil.put(Constant.USER_TOKEN_V2, "")
+            mmkvUtil.put(Constant.IS_LOGIN, false)
+            ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation()
+            this.requireActivity().finish()
+        }
+        dialog.show()
+    }
     class SpaceItemDecoration(
         private val leftRight: Int,
         private val topBottom: Int

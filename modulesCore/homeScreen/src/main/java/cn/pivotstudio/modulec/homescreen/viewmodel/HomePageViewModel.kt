@@ -1,16 +1,13 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
-import android.widget.Toast
 import androidx.core.text.isDigitsOnly
-import androidx.core.text.isDigitsOnly
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -25,10 +22,10 @@ class HomePageViewModel : ViewModel() {
     private val repository = HomePageHoleRepository()
 
     private var _holesV2 = MutableStateFlow<List<HoleV2>>(mutableListOf())
-    val holesV2: StateFlow<List<HoleV2>> = _holesV2
+    val holesV2 = _holesV2.asStateFlow()
 
     private var _isLatestReply = MutableStateFlow(true)
-    val isLatestReply: StateFlow<Boolean> = _isLatestReply
+    val isLatestReply: StateFlow<Boolean> = _isLatestReply.asStateFlow()
 
     private var _loadingState = MutableStateFlow(ApiStatus.SUCCESSFUL)
     val loadingState: StateFlow<ApiStatus> = _loadingState
@@ -40,6 +37,30 @@ class HomePageViewModel : ViewModel() {
 
     private var _loadLaterHoleId = MutableStateFlow("")
 
+    private val lifeCycleState = MutableSharedFlow<Lifecycle.State>(replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+    private fun <T> Flow<T>.whenAtLeast(requiredState: Lifecycle.State): Flow<T> {
+        return lifeCycleState.map { state -> state.isAtLeast(requiredState) }
+            .distinctUntilChanged()
+            .flatMapLatest {
+                // flatMapLatest will take care of cancelling the upstream Flow
+                if (it) this else emptyFlow()
+            }
+    }
+
+    private val lifecycleObserver = object : LifecycleEventObserver {
+        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+            lifeCycleState.tryEmit(event.targetState)
+            if (event.targetState == Lifecycle.State.DESTROYED) {
+                source.lifecycle.removeObserver(this)
+            }
+        }
+    }
+
+    fun startObservingLifecycle(lifecycle: Lifecycle) {
+        lifecycle.addObserver(lifecycleObserver)
+    }
     init {
         loadHolesV2()
     }
@@ -50,7 +71,6 @@ class HomePageViewModel : ViewModel() {
             NetworkConstant.SortMode.LATEST_REPLY -> _isLatestReply.value = true
             else -> _isLatestReply.value = false
         }
-
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             repository.loadHoles(sortMode)
@@ -86,7 +106,6 @@ class HomePageViewModel : ViewModel() {
     }
 
     fun searchHolesV2(queryKey: String) {
-
         queryKey.takeIf { it.isNotBlank() }?.let {
             viewModelScope.launch {
                 _loadingState.emit(ApiStatus.LOADING)
@@ -275,10 +294,14 @@ class HomePageViewModel : ViewModel() {
         followNum: Long
     ) {
         viewModelScope.launch {
-            val i = holesV2.value.indexOfFirst {
+            var i = _holesV2.value.indexOfFirst {
                 it.holeId == _loadLaterHoleId.value
             }
-            val holes = holesV2.value.toMutableList()
+            /*if(i == -1) {
+                i = 0
+                tip.value = _holesV2.value[0].holeId
+            }*/
+            val holes = _holesV2.value.toMutableList()
             holes[i] = holes[i].copy(
                 liked = isThumb,
                 isReply = replied,

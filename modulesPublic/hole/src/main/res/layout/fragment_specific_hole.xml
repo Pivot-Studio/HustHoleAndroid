@@ -12,6 +12,7 @@
             type="cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel" />
     </data>
 
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -47,6 +48,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
+
+                        <View
+                            android:id="@+id/empty_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="?attr/actionBarSize"
+                            android:background="@color/transparent"
+                            app:layout_constraintTop_toTopOf="parent"/>
 
                         <include
                             android:id="@+id/layout_hole"
@@ -152,7 +160,7 @@
 
             <cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext
                 android:id="@+id/et_reply_post"
-                android:layout_width="@dimen/dp_223"
+                android:layout_width="@dimen/dp_235"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="@dimen/dp_12"
                 android:layout_marginStart="@dimen/dp_20"

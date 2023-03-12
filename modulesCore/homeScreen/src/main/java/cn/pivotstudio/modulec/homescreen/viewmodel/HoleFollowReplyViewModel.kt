@@ -1,9 +1,8 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.*
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
@@ -12,6 +11,7 @@ import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.repository.HoleFollowReplyRepository
 import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 
 /**
@@ -24,6 +24,7 @@ import kotlinx.coroutines.flow.*
 class HoleFollowReplyViewModel : ViewModel() {
     val repository = HoleFollowReplyRepository()
     val tip: MutableLiveData<String?> = repository.tip
+    val view = MutableLiveData<ConstraintLayout>(null)
 
     private val _loadingState = MutableStateFlow(ApiStatus.SUCCESSFUL)
     val loadingState: StateFlow<ApiStatus> = _loadingState

@@ -13,6 +13,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
@@ -33,7 +34,9 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 /**
  * @classname:HomePageFragment
@@ -79,7 +82,6 @@ class HomePageFragment : BaseFragment() {
             }
             return
         }
-
         if (resultCode == ResultCodeConstant.PUBLISH_HOLE) {
             lifecycleScope.launchWhenStarted {
                 delay(2000)
@@ -198,7 +200,7 @@ class HomePageFragment : BaseFragment() {
             viewModel.loadHolesV2()
             binding.recyclerView.isEnabled = false
         }
-
+        
         binding.refreshLayout.setOnLoadMoreListener {    //上拉加载触发
             viewModel.loadMoreHoles()
             binding.recyclerView.isEnabled = false

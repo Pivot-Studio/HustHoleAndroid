@@ -8,8 +8,10 @@ import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulep.hole.model.ReplyListResponse.ReplyResponse
 import cn.pivotstudio.modulep.hole.repository.HoleRepository
+import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -47,6 +49,13 @@ class SpecificHoleViewModel(private var holeId: String) : ViewModel() {
 
     private var _descend = MutableStateFlow(true)
     val descend = _descend.asStateFlow()
+
+    fun reportTheHole() {
+        ARouter.getInstance().build("/report/ReportActivity")
+            .withString(Constant.HOLE_ID, _hole.value?.holeId)
+            .withString(Constant.ALIAS, "洞主")
+            .navigation()
+    }
 
     fun triggerEmojiPad() {
         viewModelScope.launch {
