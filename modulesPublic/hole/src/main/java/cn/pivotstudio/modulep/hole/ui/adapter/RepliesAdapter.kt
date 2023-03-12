@@ -18,6 +18,7 @@ import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.modulep.hole.databinding.ItemFirstLevelReplyBinding
+import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
 import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
 

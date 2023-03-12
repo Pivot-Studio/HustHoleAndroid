@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="replyWrapper"
             type="cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper" />

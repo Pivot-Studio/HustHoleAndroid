@@ -14,12 +14,13 @@ import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.modulep.hole.databinding.ItemReplyBinding
+import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
 import cn.pivotstudio.modulep.hole.ui.fragment.InnerReplyFragment
 import cn.pivotstudio.modulep.hole.viewmodel.InnerReplyViewModel
 
 class InnerReplyAdapter(
     private val viewModel: InnerReplyViewModel,
-    private val report: (Reply) -> Unit,
+    private val report: (Reply) -> Unit
 ) : ListAdapter<Reply, InnerReplyAdapter.ReplyViewHolder>(DIFF_CALLBACK) {
     var lastMoreListCl: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 

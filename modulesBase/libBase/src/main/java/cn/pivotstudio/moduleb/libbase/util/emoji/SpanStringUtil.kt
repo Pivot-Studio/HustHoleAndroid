@@ -73,8 +73,7 @@ object SpanStringUtil {
     fun getEmotionMarkdownContent(
         emotion_map_type: Int,
         tv: View,
-        source: CharSequence?,
-        currentId: String
+        source: CharSequence?
     ): SpannableString {
         val spannableString = SpannableString(source)
         val res = tv.resources
@@ -105,35 +104,7 @@ object SpanStringUtil {
                 )
             }
         }
-        if (tv is TextView) {
-            tv.movementMethod = LinkMovementMethod.getInstance()
-        }
-        val regexHoleId = "#\\d+"
-        val patternHoleId = Pattern.compile(regexHoleId)
-        val matcherHoleId = patternHoleId.matcher(spannableString)
-        while (matcherHoleId.find()) {
-            val key = matcherHoleId.group()
-            val start = matcherHoleId.start()
-            //这里限制最长树洞号为8位，百万够用了吧哈哈
-            val length = key.length.coerceAtMost(8)
-            spannableString.setSpan(object : ClickableSpan() {
-                override fun onClick(view: View) {
-                    val id = key.substring(1, length)
-                    if (currentId == id) {
-                        Toast.makeText(tv.context, "你已经在这个树洞了", Toast.LENGTH_SHORT).show()
-                    } else {
-                        ARouter.getInstance()
-                            .build("/hole/HoleActivity")
-                            .withInt(
-                                Constant.HOLE_ID,
-                                id.toInt()
-                            )
-                            .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                            .navigation()
-                    }
-                }
-            }, start, start + length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        }
+
         return spannableString
     }
 }

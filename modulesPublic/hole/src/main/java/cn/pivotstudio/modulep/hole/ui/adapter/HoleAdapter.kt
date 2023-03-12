@@ -13,15 +13,22 @@ import androidx.databinding.ObservableField
 import android.text.style.ForegroundColorSpan
 import android.text.SpannableStringBuilder
 import android.text.Spannable
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyDto
 import cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext
+import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
 import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment
+import com.alibaba.android.arouter.launcher.ARouter
+import java.util.regex.Pattern
 
 /**
  * @classname:HoleAdapter
@@ -67,10 +74,35 @@ fun setMDContent(view: TextView, content: String?, currentId: String?) {
         val spannableString = SpanStringUtil.getEmotionMarkdownContent(
             0x0001,
             view,
-            text,
-            currentId!!
+            text
         )
-
+        view.movementMethod = LinkMovementMethod.getInstance()
+        val regexHoleId = "#\\d+"
+        val patternHoleId = Pattern.compile(regexHoleId)
+        val matcherHoleId = patternHoleId.matcher(spannableString)
+        while (matcherHoleId.find()) {
+            val key = matcherHoleId.group()
+            val start = matcherHoleId.start()
+            //这里限制最长树洞号为8位，百万够用了吧哈哈
+            val length = key.length.coerceAtMost(8)
+            spannableString.setSpan(object : ClickableSpan() {
+                override fun onClick(view: View) {
+                    val id = key.substring(1, length)
+                    if (currentId == id) {
+                        Toast.makeText(view.context, "你已经在这个树洞了", Toast.LENGTH_SHORT).show()
+                    } else {
+                        ARouter.getInstance()
+                            .build("/hole/HoleActivity")
+                            .withInt(
+                                Constant.HOLE_ID,
+                                id.toInt()
+                            )
+                            .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                            .navigation()
+                    }
+                }
+            }, start, start + length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
         view.text = spannableString
     }
 }
