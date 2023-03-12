@@ -233,7 +233,7 @@ interface HustHoleApiService {
     @GET("hole/one")
     suspend fun loadTheHole(
         @Query("holeId") holeId: String
-    ): HoleV2
+    ): Response<HoleV2>
 
     /** 搜索树洞 */
     @GET("hole/search")
@@ -268,7 +268,7 @@ interface HustHoleApiService {
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0,
         @Query("timestamp") timestamp: String
-    ): List<ReplyWrapper>
+    ): Response<List<ReplyWrapper>>
 
     /** 楼中楼评论列表 */
     @GET("reply/innerList")

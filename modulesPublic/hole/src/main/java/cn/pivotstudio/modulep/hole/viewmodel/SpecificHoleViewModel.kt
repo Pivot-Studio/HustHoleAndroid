@@ -15,6 +15,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.io.IOException
 import java.util.*
 
 /**
@@ -24,7 +25,10 @@ import java.util.*
  * @version:1.0
  * @author:
  */
-class SpecificHoleViewModel(private var holeId: String) : ViewModel() {
+class SpecificHoleViewModel(
+    private var holeId: String,
+    private val finish: () -> Unit
+) : ViewModel() {
 
     private var _hole = MutableStateFlow<HoleV2?>(null)
     val hole: StateFlow<HoleV2?> = _hole
@@ -151,41 +155,53 @@ class SpecificHoleViewModel(private var holeId: String) : ViewModel() {
 
     fun loadMoreReplies() {
         viewModelScope.launch {
-            _loadingState.emit(ApiStatus.LOADING)
-            repository.loadMoreReplies(descend.value)
-                .onEach {
-                    _filteringOwner.emit(false)
-                    _loadingState.emit(ApiStatus.SUCCESSFUL)
+            repository.loadMoreReplies(descend.value).collect {
+                when(it) {
+                    is ApiResult.Success<*> -> {
+                        _filteringOwner.emit(false)
+                        _replies.emit(_replies.value.toMutableList().apply {
+                            addAll(it.data as MutableList<ReplyWrapper>)
+                        })
+                    }
+                    is ApiResult.Error -> {
+                        _loadingState.emit(ApiStatus.ERROR)
+                    }
+                    else -> {}
                 }
-                .onCompletion {
-                    it?.let { _loadingState.emit(ApiStatus.ERROR) }
-                }
-                .catch { it.printStackTrace() }
-                .collectLatest { holes ->
-                    _replies.emit(_replies.value.toMutableList().apply {
-                        addAll(holes)
-                    })
-                }
+            }
         }
     }
 
-
     fun loadHole() {
         viewModelScope.launch {
-            _loadingState.emit(ApiStatus.LOADING)
             repository.apply {
-                loadHole().zip(loadReplies(descend.value)) { hole, replies -> hole to replies }
-                    .onEach {
-                        _loadingState.emit(ApiStatus.SUCCESSFUL)
-                        _filteringOwner.emit(false)
+                loadHole().collect {loadHoleResult ->
+                    when(loadHoleResult) {
+                        is ApiResult.Success<*> -> {
+                            _hole.emit(loadHoleResult.data as HoleV2)
+                            loadReplies(descend.value).collect {loadRepliesResult ->
+                                when(loadRepliesResult) {
+                                    is ApiResult.Success<*> -> {
+                                        _replies.emit(loadRepliesResult.data as List<ReplyWrapper>)
+                                        if(_replies.value.isEmpty()) {
+                                            _showingPlaceholder.emit(true)
+                                        }
+                                    }
+                                    is ApiResult.Error -> {
+                                        _sendingState.emit(loadRepliesResult)
+                                    }
+                                    else -> {}
+                                }
+                            }
+                        }
+                        is ApiResult.Error -> {
+                            if(loadHoleResult.code == 1006)
+                                finish()
+                            _sendingState.emit(loadHoleResult)
+                        }
+                        else -> {}
                     }
-                    .onCompletion { it?.let { _loadingState.emit(ApiStatus.ERROR) } }
-                    .catch { it.printStackTrace() }
-                    .collect {
-                        _hole.emit(it.first)
-                        _replies.emit(it.second)
-                        _showingPlaceholder.emit(it.second.isEmpty())
-                    }
+                }
             }
         }
     }

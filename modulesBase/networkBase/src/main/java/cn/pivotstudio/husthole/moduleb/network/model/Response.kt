@@ -77,7 +77,7 @@ data class ReplyWrapper(
     val innerList: List<Reply>,
 
     val self: Reply
-)
+): Serializable
 
 data class Reply(
     /** 树洞内容 */

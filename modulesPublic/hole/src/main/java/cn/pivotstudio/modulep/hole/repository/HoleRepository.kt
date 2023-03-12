@@ -3,6 +3,7 @@ package cn.pivotstudio.modulep.hole.repository
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
+import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
@@ -132,38 +133,42 @@ class HoleRepository(
     }.flowOn(dispatcher)
 
 
-    fun loadHole(): Flow<HoleV2> = flow {
-        emit(hustHoleApiService.loadTheHole(holeId))
-    }.flowOn(dispatcher).catch { e ->
-        e.printStackTrace()
-    }.onEach {
+    fun loadHole(): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService.loadTheHole(holeId)
+        checkResponse(response, this)
+    }.flowOn(dispatcher).onEach {
         lastTimeStamp = DateUtil.getDateTime()
+    }.catch { e ->
+        e.printStackTrace()
     }
 
-    fun loadReplies(descend: Boolean = true): Flow<List<ReplyWrapper>> = flow {
+    fun loadReplies(descend: Boolean = true): Flow<ApiResult> = flow {
         lastTimeStamp = DateUtil.getDateTime()
-        emit(
-            hustHoleApiService.getHoleReplies(
-                holeId = holeId,
-                timestamp = lastTimeStamp,
-                limit = LIST_SIZE,
-                descend = descend
-            )
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService.getHoleReplies(
+            holeId = holeId,
+            timestamp = lastTimeStamp,
+            limit = LIST_SIZE,
+            descend = descend
         )
-    }.flowOn(dispatcher).onEach {
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch {
+        it.printStackTrace()
+    }.onEach {
         lastOffset = 0
     }
 
-    fun loadMoreReplies(descend: Boolean = true): Flow<List<ReplyWrapper>> = flow {
-        emit(
-            hustHoleApiService.getHoleReplies(
-                holeId = holeId,
-                timestamp = lastTimeStamp,
-                offset = lastOffset + LIST_SIZE,
-                limit = LIST_SIZE,
-                descend = descend
-            )
+    fun loadMoreReplies(descend: Boolean = true): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService.getHoleReplies(
+            holeId = holeId,
+            timestamp = lastTimeStamp,
+            offset = lastOffset + LIST_SIZE,
+            limit = LIST_SIZE,
+            descend = descend
         )
+        checkResponse(response, this)
     }.onEach {
         lastOffset += LIST_SIZE
     }.flowOn(dispatcher)
@@ -234,23 +239,24 @@ class HoleRepository(
     }.flowOn(dispatcher).catch { it.printStackTrace() }
 
 
-    private suspend inline fun checkResponse(
-        response: Response<Unit>,
+    private suspend fun <T> checkResponse(
+        response: Response<T>?,
         flow: FlowCollector<ApiResult>
     ) {
-        if (response.isSuccessful) {
-            flow.emit(ApiResult.Success(data = Unit))
+        if (response?.isSuccessful == true) {
+            flow.emit(ApiResult.Success(data = response.body()))
         } else {
-            val json = response.errorBody()?.string()
+            val json = response?.errorBody()?.string()
             val jsonObject = json?.let { JSONObject(it) }
             val returnCondition = jsonObject?.getString("errorMsg")
+            val errorCode = jsonObject?.getString("errorCode")
             flow.emit(
                 ApiResult.Error(
-                    code = response.code(),
+                    code = errorCode?.toInt() ?: response?.code() ?: 0,
                     errorMessage = returnCondition
                 )
             )
-            response.errorBody()?.close()
+            response?.errorBody()?.close()
         }
     }
 }

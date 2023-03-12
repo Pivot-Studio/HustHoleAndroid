@@ -5,7 +5,7 @@
         <activity
             android:name=".ui.activity.HoleActivity"
             android:exported="true"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:windowSoftInputMode="stateVisible|adjustResize"
             android:screenOrientation="portrait">
         </activity>

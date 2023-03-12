@@ -110,16 +110,20 @@ class HomePageViewModel : ViewModel() {
             viewModelScope.launch {
                 _loadingState.emit(ApiStatus.LOADING)
                 if (queryKey.isDigitsOnly()) {
-                    repository.loadTheHole(queryKey)
-                        .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
-                        .catch {
-                            tip.value = it.message
-                            _loadingState.emit(ApiStatus.ERROR)
-                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                    repository.loadTheHole(queryKey).collectLatest {
+                        when(it) {
+                            is ApiResult.Success<*> -> {
+                                _loadingState.emit(ApiStatus.SUCCESSFUL)
+                                _holesV2.emit(listOf(it.data as HoleV2))
+                            }
+                            is ApiResult.Error -> {
+                                tip.value = it.errorMessage
+                                _loadingState.emit(ApiStatus.ERROR)
+                                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                            }
+                            else -> {}
                         }
-                        .collectLatest {
-                            _holesV2.emit(listOf(it))
-                        }
+                    }
                 } else {
                     repository.searchHolesBy(it)
                         .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
