@@ -1,17 +1,13 @@
 package cn.pivotstudio.modulec.homescreen.viewmodel
 
-import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.net.Uri
-import android.os.Build
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.core.app.NotificationCompat
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -24,9 +20,10 @@ import cn.pivotstudio.husthole.moduleb.network.model.Type.Companion.fromValue
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.modulec.homescreen.R
+import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
 import cn.pivotstudio.modulec.homescreen.databinding.*
+import cn.pivotstudio.modulec.homescreen.network.DownloadService
 import cn.pivotstudio.modulec.homescreen.repository.MineRepository
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragment
@@ -36,10 +33,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
-import java.io.IOException
 
 /**
  *@classname MineFragmentViewModels
@@ -48,21 +41,13 @@ import java.io.IOException
  * @version :1.0
  * @author
  */
-/**
- * list of functions:
- * 1. private fun getVersionName(): String  返回版本名
- * 2. private fun initialNotification(ItemMineFragment) 通知栏初始化下载通知
- * 3. private fun localStorage(okhttp3.Response, File, ItemMineFragment) 保存安装包到本地
- * 4. private fun download(String, ItemMineFragment) 启动下载
- * 5.
- */
 class MineFragmentViewModel : ViewModel(){
     private val repository = MineRepository()
 
     val optSwitch = hashMapOf<Int, Boolean>()
+    var downloadBinder: DownloadService.DownloadBinder? = null
 
     private val _status = MutableStateFlow(false)
-    val status: StateFlow<Boolean> = _status
     val tip: MutableLiveData<String?> = repository.tip
 
     private val _myProFile = MutableStateFlow(ProFile("1037", "0", "0", "0"))
@@ -99,9 +84,6 @@ class MineFragmentViewModel : ViewModel(){
     val chipTitleList: LiveData<List<Int>> = _chipTitleList
     val updateLogList: LiveData<List<ItemDetailFragment.Update>> = _updateLogList
 
-    private var notificationManager: NotificationManager? = null
-    private var builder: NotificationCompat.Builder? = null
-
     init {
         _isVerifiedEmail.value = false
 
@@ -123,199 +105,6 @@ class MineFragmentViewModel : ViewModel(){
 
         return name!!
     }
-
-    @SuppressLint("UnspecifiedImmutableFlag")
-    fun initialNotification(
-        frag: ItemMineFragment
-    ) {
-        //Notification跳转页面
-        notificationManager = frag.requireContext()
-            .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-        val notificationIntent = Intent(frag.context, HomeScreenActivity::class.java)
-        val contentIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            PendingIntent.getActivity(frag.context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
-        } else {
-            PendingIntent.getActivity(frag.context, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
-        }
-        val PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID"
-        val PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME"
-
-        //创建Notification
-        builder = NotificationCompat.Builder(frag.requireContext(), "sss")
-        //设置通知标题
-        builder!!.setContentTitle("正在更新...")
-            .setContentIntent(contentIntent)
-            .setSmallIcon(R.drawable.icon) //设置通知的小图标(有些手机设置Icon图标不管用，默认图标就是Manifest.xml里的图标)
-            .setLargeIcon(
-                BitmapFactory.decodeResource(
-                    frag.requireContext().resources,
-                    R.drawable.icon
-                )
-            ) //设置通知的大图标
-            .setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE) //设置通知的提醒方式： 呼吸灯
-            .setPriority(NotificationCompat.PRIORITY_MAX) //设置通知的优先级：最大
-            .setAutoCancel(false) //设置通知被点击一次是否自动取消
-            .setContentText("下载进度:0%")
-            .setChannelId(PUSH_CHANNEL_ID)
-            .setProgress(100, 0, false)
-        //进度最大100，默认是从0开始
-
-        val channel = NotificationChannel("to-do", "待办消息", NotificationManager.IMPORTANCE_LOW)
-        channel.enableVibration(true)
-        channel.vibrationPattern = longArrayOf(500)
-        notificationManager!!.createNotificationChannel(channel)
-        builder!!.setChannelId("to-do")
-        val notify: Notification = builder!!.build()
-        notify.flags = notify.flags or Notification.FLAG_AUTO_CANCEL // 但用户点击消息后，消息自动在通知栏自动消失
-        notificationManager!!.notify(1, notify) // 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
-    }
-
-    /**
-     * 方法名：localStorage(final Response response, final File file)
-     * 功    能：保存文件到本地
-     * 参    数：Response response, File file
-     * 返回值：无
-     */
-    @Throws(FileNotFoundException::class)
-    private fun localStorage(
-        response: okhttp3.Response,
-        file: File,
-        frag: ItemMineFragment
-    ) {
-        //拿到字节流
-        val mByteStream = response.body!!.byteStream()
-        var len = 0
-        val fos = FileOutputStream(file)
-        val buf = ByteArray(2048)
-        try {
-            while (mByteStream.read(buf).also { len = it } != -1) {
-                fos.write(buf, 0, len)
-                val channel = NotificationChannel(
-                    "to-do2", "待办消息",
-                    NotificationManager.IMPORTANCE_LOW
-                )
-                channel.enableVibration(false)
-                channel.setSound(null, null)
-                notificationManager!!.createNotificationChannel(channel)
-                builder!!.setChannelId("to-do2")
-                //Log.e("TAG每次写入到文件大小", "onResponse: "+len);
-                Log.e(
-                    "TAG保存到文件进度：",
-                    file.length().toString() + "/" + response.body!!.contentLength()
-                )
-
-                //notification进度条和显示内容不断变化，并刷新。
-                builder!!.setProgress(
-                    100,
-                    (file.length() * 100 / response.body!!.contentLength()).toInt(), false
-                )
-                builder!!.setContentText(
-                    "下载进度:" + (file.length() * 100 / response.body!!.contentLength()).toInt() + "%"
-                )
-                builder!!.setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE)
-                val notification: Notification = builder!!.build()
-                notificationManager!!.notify(1, notification)
-            }
-            fos.flush()
-            fos.close()
-            mByteStream.close()
-
-            //下载完成，点击通知，安装
-            installingAPK(file)
-        } catch (e: IOException) {
-            viewModelScope.launch {
-                Toast.makeText(frag.context, "下载失败", Toast.LENGTH_SHORT).show()
-                notificationManager!!.cancel(1)
-                notificationManager = frag.requireContext()
-                    .getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-                val notificationIntent = Intent(
-                    frag.context,
-                    frag.activity!!::class.java
-                )
-                val contentIntent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    PendingIntent.getActivity(frag.context, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
-                } else {
-                    PendingIntent.getActivity(frag.context, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
-                }
-                val PUSH_CHANNEL_ID = "PUSH_NOTIFY_ID"
-                val PUSH_CHANNEL_NAME = "PUSH_NOTIFY_NAME"
-
-                //创建Notification
-                builder = NotificationCompat.Builder(frag.requireContext(), "sss2")
-                builder!!.setContentTitle("下载失败") //设置通知标题
-                    .setContentIntent(contentIntent)
-                    .setSmallIcon(
-                        R.mipmap.icon
-                    ) //设置通知的小图标(有些手机设置Icon图标不管用，默认图标就是Manifest.xml里的图标)
-                    .setLargeIcon(
-                        BitmapFactory.decodeResource(
-                            frag.requireContext().resources,
-                            R.mipmap.icon
-                        )
-                    ) //设置通知的大图标
-                    .setDefaults(Notification.DEFAULT_LIGHTS) //设置通知的提醒方式： 呼吸灯
-                    .setPriority(NotificationCompat.PRIORITY_MAX) //设置通知的优先级：最大
-                    .setAutoCancel(true) //设置通知被点击一次是否自动取消
-                    .setContentText("请重试")
-                    .setOnlyAlertOnce(true)
-                    .setChannelId(PUSH_CHANNEL_ID)
-                    .setProgress(100, 0, false)
-
-                val channel = NotificationChannel(
-                    "to-do", "待办消息",
-                    NotificationManager.IMPORTANCE_HIGH
-                )
-                channel.enableVibration(false)
-                channel.setSound(null, null)
-                // channel.setVibrationPattern(new long[]{500});
-                notificationManager!!.createNotificationChannel(channel)
-                builder!!.setChannelId("to-do")
-                //进度最大100，默认是从0开始
-                val notify: Notification = builder!!.build()
-                //使用默认的声音
-                //  notify.defaults |= Notification.DEFAULT_SOUND;
-                //notify.sound = Uri.parse("android.resource://" + context.getPackageName() + "/" + R.raw.doorbell);
-                //   notify.defaults |= Notification.DEFAULT_VIBRATE;
-                notify.flags =
-                    notify.flags or Notification.FLAG_AUTO_CANCEL // 但用户点击消息后，消息自动在通知栏自动消失
-                notificationManager!!.notify(
-                    1,
-                    notify
-                ) // 步骤4：通过通知管理器来发起通知。如果id不同，则每click，在status哪里增加一个提示
-
-                //构建通知对象
-                val notification: Notification = builder!!.build()
-                notificationManager!!.notify(1, notification)
-
-
-                /*
-
-                    //    builder.setContentTitle("下载失败");
-                          builder.setContentText("请重试");
-                      //  builder.setAutoCancel(true);//设置通知被点击一次是否自动取消
-
-
-                        Notification notification = builder.build();
-                        notificationManager.notify(1, notification);
-                        Log.d("hahahahaha","hahahahahaha");
-
-                         */
-                e.printStackTrace()
-            }
-        }
-    }
-
-    private fun download(
-        androidUpdateUrl: String,
-        frag: ItemMineFragment
-    ) {
-
-    }
-
-    private fun installingAPK(file: File) {
-
-    }
-
     fun checkVersion(
         frag: ItemMineFragment
     ) {
@@ -521,7 +310,6 @@ class MineFragmentViewModel : ViewModel(){
                     }
                 }
         }
-
     }
 
     fun sendAdvice(
@@ -653,6 +441,6 @@ class MineFragmentViewModel : ViewModel(){
         const val CHECK_UPDATE = 8
         const val UPDATE_LOG = 9
 
-        const val OFFICIAL_WEB = "https://husthole.com/#/download"
+        const val OFFICIAL_WEB = "https://static.pivotstudio.cn/husthole/download/husthole.apk"
     }
 }

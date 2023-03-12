@@ -15,6 +15,7 @@
         android:id="@+id/cl_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/dp_5"
         android:background="@drawable/standard_forest_hole">
 
         <androidx.constraintlayout.widget.ConstraintLayout

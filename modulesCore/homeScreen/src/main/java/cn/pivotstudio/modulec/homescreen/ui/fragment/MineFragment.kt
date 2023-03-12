@@ -1,6 +1,5 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.Rect
@@ -27,7 +26,6 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineBinding
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineOthersAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.OTHER_OPTION
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 

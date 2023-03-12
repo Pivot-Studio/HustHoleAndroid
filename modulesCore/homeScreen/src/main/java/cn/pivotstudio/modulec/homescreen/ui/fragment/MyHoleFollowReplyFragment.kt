@@ -1,11 +1,14 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
+import android.app.Dialog
 import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -13,7 +16,9 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
+import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
@@ -23,6 +28,7 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.HoleFollowReplyViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_HOLE
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_REPLY
+import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
@@ -66,11 +72,53 @@ class MyHoleFollowReplyFragment(val type: Int) : BaseFragment() {
         super.onResume()
     }
     private fun initView() {
-        val adapter = MineRecycleViewAdapter(type, viewModel, this, binding)
+        val adapter = MineRecycleViewAdapter(type, viewModel)
+        adapter.setOnItemClickListener(object : MineRecycleViewAdapter.OnItemClickListener {
+            override fun navigateToHole(dest: String) {
+                ARouter.getInstance()
+                    .build("/hole/HoleActivity")
+                    .withInt(
+                        Constant.HOLE_ID,
+                        Integer.valueOf(dest)
+                    )
+                    .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
+                    .navigation(requireActivity(), 2)
+            }
+
+            override fun getDialog(): Dialog = createDialog()
+
+            override fun onTotalViewLongClick(hole: HoleV2) {
+                val dialog = createDialog()
+                val no = dialog.findViewById<View>(R.id.dialog_delete_tv_cancel) as TextView
+                val yes = dialog.findViewById<View>(R.id.dialog_delete_tv_yes) as TextView
+                no.setOnClickListener {
+                    dialog.dismiss()
+                }
+                yes.setOnClickListener {
+                    viewModel.deleteTheHole(hole)
+                    dialog.dismiss()
+                }
+                dialog.show()
+            }
+
+            override fun getColor(color: Int) = requireContext().getColor(color)
+
+            override fun getText(strId: Int): String = requireContext().getString(strId)
+
+        })
         binding.myHoleRecyclerView.apply {
             this.adapter = adapter
-            addItemDecoration(SpaceItemDecoration(0, 20))
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    viewModel.view.value?.let {
+                        it.visibility = View.GONE
+                        viewModel.view.value = null
+                    }
+                }
+            })
         }
+
         viewModel.apply {
             tip.observe(viewLifecycleOwner) {
                 it?.let {
@@ -128,6 +176,14 @@ class MyHoleFollowReplyFragment(val type: Int) : BaseFragment() {
         }
     }
 
+    private fun createDialog(): Dialog{
+        val mView = View.inflate(context, R.layout.dialog_delete, null)
+        val dialog = Dialog(requireContext())
+        dialog.setContentView(mView)
+        dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
+        return dialog
+    }
+
     private fun initRefresh() {
         binding.refreshLayout.apply {
             setRefreshHeader(StandardRefreshHeader(activity))
@@ -180,41 +236,6 @@ class MyHoleFollowReplyFragment(val type: Int) : BaseFragment() {
             }
         }
     }
-
-    /**
-     * @description:自定义设置item间距
-     */
-    class SpaceItemDecoration(
-        private val leftRight: Int,
-        private val topBottom: Int
-    ) : RecyclerView.ItemDecoration() {
-        override fun getItemOffsets(
-            outRect: Rect,
-            view: View,
-            parent: RecyclerView,
-            state: RecyclerView.State
-        ) {
-            val layoutManager: LinearLayoutManager = parent.layoutManager as LinearLayoutManager
-            if (layoutManager.orientation == LinearLayoutManager.VERTICAL) {
-                //最后一项需要 bottom
-                if (parent.getChildAdapterPosition(view) == layoutManager.itemCount - 1) {
-                    outRect.bottom = topBottom;
-                }
-                outRect.top = topBottom;
-                outRect.left = leftRight;
-                outRect.right = leftRight;
-            } else {
-                //最后一项需要right
-                if (parent.getChildAdapterPosition(view) == layoutManager.itemCount - 1) {
-                    outRect.right = leftRight;
-                }
-                outRect.top = topBottom;
-                outRect.left = leftRight;
-                outRect.bottom = topBottom;
-            }
-        }
-    }
-
     companion object {
         const val TAG = "MyHoleFollowReplyFragment"
 

@@ -1,13 +1,17 @@
 package cn.pivotstudio.modulec.homescreen.ui.activity
 
-import android.content.Context
-import android.content.Intent
+import android.content.*
+import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.os.IBinder
+import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
@@ -16,22 +20,24 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import cn.pivotstudio.moduleb.database.MMKVUtil
-import cn.pivotstudio.modulec.homescreen.R
-import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
-import cn.pivotstudio.modulec.homescreen.custom_view.dialog.WelcomeDialog
-import cn.pivotstudio.modulec.homescreen.databinding.ActivityHsHomescreenBinding
-import cn.pivotstudio.modulec.homescreen.network.VersionResponse
-import cn.pivotstudio.modulec.homescreen.repository.HomeScreenRepository
-import cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment
-import com.alibaba.android.arouter.facade.annotation.Route
-import com.alibaba.android.arouter.launcher.ARouter
 import cn.pivotstudio.moduleb.libbase.BuildConfig
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
+import cn.pivotstudio.modulec.homescreen.R
+import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
+import cn.pivotstudio.modulec.homescreen.custom_view.dialog.WelcomeDialog
+import cn.pivotstudio.modulec.homescreen.databinding.ActivityHsHomescreenBinding
+import cn.pivotstudio.modulec.homescreen.network.DownloadService
+import cn.pivotstudio.modulec.homescreen.network.DownloadService.DownloadBinder
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
+import cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment
+import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import com.google.android.material.navigation.NavigationBarView
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 /**
  * @classname: HomeScreenActivity
@@ -75,6 +81,9 @@ class HomeScreenActivity : BaseActivity() {
             }
         }
     }
+
+
+
 
     /**
      * 视图初始化
@@ -161,6 +170,30 @@ class HomeScreenActivity : BaseActivity() {
 //
 //            }
 //        }
+        val manager = this.packageManager
+        var oldCode = 0L
+        try {
+            val info: PackageInfo = manager.getPackageInfo(this.packageName, 0)
+            oldCode = info.longVersionCode
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        if(4L > oldCode) {
+            if(checkNotification()) {
+                val updateDialog = UpdateDialog(context, "4", oldCode.toString())
+                updateDialog.show()
+            }else {
+                runBlocking {
+                    Toast.makeText(context, "没有开启通知权限，请前往开启", Toast.LENGTH_SHORT).show()
+                    delay(1000L)
+                }
+                val localIntent = Intent()
+                localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
+                localIntent.data = Uri.fromParts("package", this.packageName, null)
+                startActivity(localIntent)
+            }
+        }
 
         val mmkvUtil = MMKVUtil.getMMKV(this)
         if (!mmkvUtil.getBoolean(Constant.IS_FIRST_USED)) { //是否第一次使用1037树洞,保证welcomeDialog只在第一使用时显式
@@ -169,6 +202,9 @@ class HomeScreenActivity : BaseActivity() {
             mmkvUtil.put(Constant.IS_FIRST_USED, true)
         }
     }
+
+    private fun checkNotification(): Boolean =
+        NotificationManagerCompat.from(this).areNotificationsEnabled()
 
     /**
      * 监听点击事件
@@ -195,22 +231,19 @@ class HomeScreenActivity : BaseActivity() {
      * @return
      */
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
-
-//            if (it.id == R.id.all_forest_fragment || it.id == R.id.forest_detail_fragment || it.id == R.id.holeFollowReplyFragment) {
-//                return navController.popBackStack()
-//            }
-
         if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
             navController.currentDestination?.let { navDestination ->
-                if (fragmentList.any { it == navDestination.id })
+                if (fragmentList.any { it == navDestination.id } || supportFragmentManager.backStackEntryCount > 0) {
                     return navController.popBackStack()
-                val secondTime = System.currentTimeMillis()
-                if (secondTime - firstTime > 2000) {
-                    Toast.makeText(this@HomeScreenActivity, "再按一次退出程序", Toast.LENGTH_SHORT).show()
-                    firstTime = secondTime
-                    return true
-                } else {
-                    finish()
+                }else {
+                    val secondTime = System.currentTimeMillis()
+                    if (secondTime - firstTime > 2000) {
+                        Toast.makeText(this@HomeScreenActivity, "再按一次退出程序", Toast.LENGTH_SHORT).show()
+                        firstTime = secondTime
+                        return true
+                    } else {
+                        finish()
+                    }
                 }
             }
         }

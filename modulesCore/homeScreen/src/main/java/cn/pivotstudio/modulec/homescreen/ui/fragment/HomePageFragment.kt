@@ -34,7 +34,9 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 /**
  * @classname:HomePageFragment

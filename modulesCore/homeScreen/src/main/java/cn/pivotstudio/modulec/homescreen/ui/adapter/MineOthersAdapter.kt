@@ -1,37 +1,12 @@
 package cn.pivotstudio.modulec.homescreen.ui.adapter
 
-import android.annotation.SuppressLint
-import android.app.Dialog
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.moduleb.database.MMKVUtil
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineOthersBinding
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
-import cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragment
-import cn.pivotstudio.modulec.homescreen.ui.fragment.MineFragmentDirections
-import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragment
-import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragmentDirections
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.DETAIL
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.LOGOUT
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.OTHER_OPTION
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.PERSONAL_SETTING
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHARE
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHIELD_SETTING
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.UPDATE
-import com.alibaba.android.arouter.launcher.ARouter
 
 /**
  *@classname MineOtherAdapter
@@ -55,7 +30,7 @@ class MineOthersAdapter : ListAdapter<Int, MineOthersAdapter.MyOthersViewHolder>
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyOthersViewHolder {
-        return MyOthersViewHolder(ItemMineOthersBinding.inflate(LayoutInflater.from(parent.context)))
+        return MyOthersViewHolder(ItemMineOthersBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: MyOthersViewHolder, position: Int) {

@@ -1,15 +1,15 @@
 package cn.pivotstudio.modulep.hole.ui.fragment
 
+import android.R.attr.startY
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
+import androidx.appcompat.app.ActionBar
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -42,11 +42,13 @@ import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.flow.collectLatest
 
+
 class SpecificHoleFragment : BaseFragment() {
 
     private val args by navArgs<SpecificHoleFragmentArgs>()
 
     private lateinit var binding: FragmentSpecificHoleBinding
+    private lateinit var mActionBar: ActionBar
     private val replyViewModel: SpecificHoleViewModel by activityViewModels {
         SpecificHoleViewModelFactory(args.holeId)
     }
@@ -65,7 +67,12 @@ class SpecificHoleFragment : BaseFragment() {
             .navigation()
     }
 
-    private val repliesAdapter by lazy { RepliesAdapter(replyViewModel, report, navToInnerReply, this) }
+    private val repliesAdapter by lazy { RepliesAdapter(replyViewModel, report, navToInnerReply) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        mActionBar = (requireActivity() as HoleActivity).supportActionBar!!
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,12 +86,23 @@ class SpecificHoleFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.layoutHole.fragment = this
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = replyViewModel
-            rvReplies.adapter = repliesAdapter
-
+            rvReplies.apply {
+                this.adapter = repliesAdapter
+                addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+                        if(newState == RecyclerView.SCROLL_STATE_DRAGGING) {
+                            SoftKeyBoardUtil.hideKeyboard(requireActivity())
+                            mActionBar.hide()
+                        }
+                        else
+                            mActionBar.show()
+                    }
+                })
+            }
             layoutHole.apply {
                 layoutHoleFrame.setOnClickListener {
                     replyViewModel.replyToOwner()
@@ -140,10 +158,6 @@ class SpecificHoleFragment : BaseFragment() {
                 SoftKeyBoardUtil.showKeyboard(requireActivity(), etReplyPost)
                 replyViewModel.doneShowingEmojiPad()
             }
-
-            btnFilterOwnerReply.setOnClickListener {
-                replyViewModel.filterReplyOfHoleOwner()
-            }
         }
 
         replyViewModel.inputText()
@@ -163,7 +177,6 @@ class SpecificHoleFragment : BaseFragment() {
             SoftKeyBoardUtil.showKeyboard(requireActivity(), binding.etReplyPost)
         }
     }
-
 
     private fun initRefresh() {
         binding.layoutRefresh.apply {

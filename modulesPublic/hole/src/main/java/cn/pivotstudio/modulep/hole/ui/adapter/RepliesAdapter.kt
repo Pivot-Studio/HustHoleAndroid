@@ -25,7 +25,6 @@ class RepliesAdapter(
     private val viewModel: SpecificHoleViewModel,
     private val report: (Reply) -> Unit,
     private val onItemClick: (ReplyWrapper) -> Unit,
-    private val fragment: SpecificHoleFragment
 ) : ListAdapter<ReplyWrapper, RepliesAdapter.FirstLevelReplyViewHolder>(DIFF_CALLBACK) {
 
     companion object {
@@ -56,7 +55,6 @@ class RepliesAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(replyWrapper: ReplyWrapper) {
             binding.replyWrapper = replyWrapper
-            binding.fragment = fragment
             binding.apply {
                 // 控制楼中楼视图框显示
                 layoutInnerReply.visibility =

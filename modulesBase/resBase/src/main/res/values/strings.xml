@@ -184,4 +184,10 @@
     <string name="res_no_myhole">还没有发布过树洞哟~</string>
     <string name="res_no_myfollow">还没有关注过树洞哟(˘•ω•˘)</string>
     <string name="res_no_myreply">还没在树洞留下你的足迹…</string>
+
+    <string name="download_success">下载成功！</string>
+    <string name="download_failure">下载失败T^T</string>
+    <string name="downloading">正在光速下载中…</string>
+    <string name="download_pause">已暂停</string>
+    <string name="download_cancel">取消下载</string>
 </resources>

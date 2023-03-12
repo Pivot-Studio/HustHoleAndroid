@@ -20,7 +20,6 @@ import cn.pivotstudio.modulep.hole.viewmodel.InnerReplyViewModel
 class InnerReplyAdapter(
     private val viewModel: InnerReplyViewModel,
     private val report: (Reply) -> Unit,
-    private val fragment: InnerReplyFragment
 ) : ListAdapter<Reply, InnerReplyAdapter.ReplyViewHolder>(DIFF_CALLBACK) {
     var lastMoreListCl: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
 
@@ -44,7 +43,6 @@ class InnerReplyAdapter(
     ) {
         fun bind(reply: Reply) {
             binding.reply = reply
-            binding.fragment = fragment
             binding.apply {
                 clReply.setOnClickListener {
                     viewModel.replyTo(reply)

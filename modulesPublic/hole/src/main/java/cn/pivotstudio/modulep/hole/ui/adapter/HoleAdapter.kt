@@ -59,17 +59,16 @@ fun setHintText(view: EmojiEdittext, reply: Reply?) {
 
 }
 
-@BindingAdapter("markDownContent", "fragment" ,"currentId", requireAll = true)
-fun setMDContent(view: TextView, content: String?, fragment: Fragment, currentId: String?) {
+@BindingAdapter("markDownContent","currentId", requireAll = true)
+fun setMDContent(view: TextView, content: String?, currentId: String?) {
     if (content != null) {
         val text = Markwon.markdown(BaseApplication.context!!, content.trim { it <= ' ' }
             .replace("\n", "  \n"))
         val spannableString = SpanStringUtil.getEmotionMarkdownContent(
             0x0001,
-            fragment,
             view,
             text,
-            currentId
+            currentId!!
         )
 
         view.text = spannableString

@@ -6,25 +6,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.model.AuditType
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
-import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
-import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineHoleFollowBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineReplyBinding
-import cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment
 import cn.pivotstudio.modulec.homescreen.viewmodel.HoleFollowReplyViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_HOLE
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_REPLY
-import com.alibaba.android.arouter.launcher.ARouter
 
 
 /**
@@ -37,120 +31,44 @@ import com.alibaba.android.arouter.launcher.ARouter
 class MineRecycleViewAdapter(
     val type: Int,
     val viewModel: HoleFollowReplyViewModel,
-    val frag: MyHoleFollowReplyFragment,
-    val fragBinding: FragmentMyholeBinding
     ) : ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
 
-    var view: View? = null
+    private lateinit var onItemClickListener: OnItemClickListener
 
     inner class HoleAndFollowViewHolder(
-        private val binding: ItemMineHoleFollowBinding
+        val binding: ItemMineHoleFollowBinding
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(hole: HoleV2) {
             binding.apply {
                 this.hole = hole
                 showAuditStatus(hole.status, btAuditStatus)
-                totalView.setOnClickListener {
-                    ARouter.getInstance()
-                        .build("/hole/HoleActivity")
-                        .withInt(
-                            Constant.HOLE_ID,
-                            Integer.valueOf(hole.holeId)
-                        )
-                        .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                        .navigation(frag.requireActivity(), 2)
-                }
-
-                if(type == GET_HOLE) {
-                    textView.text = frag.getString(R.string.thumb_follow).format(hole.likeCount.toString(),hole.replyCount.toString())
-                    totalView.setOnLongClickListener {
-                        val mView = View.inflate(frag.context, R.layout.dialog_delete, null)
-                        val dialog = Dialog(frag.requireContext())
-                        dialog.setContentView(mView)
-                        dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
-                        val no = mView.findViewById<View>(R.id.dialog_delete_tv_cancel) as TextView
-                        val yes = mView.findViewById<View>(R.id.dialog_delete_tv_yes) as TextView
-                        no.setOnClickListener {
-                            dialog.dismiss()
-                        }
-                        yes.setOnClickListener {
-                            viewModel.deleteTheHole(hole)
-                            dialog.dismiss()
-                        }
-                        dialog.show()
-                        false
-                    }
-                }
-                
-                if(type == GET_FOLLOW)
-                    textView.text = frag.getString(R.string.reply_follow).format(hole.replyCount.toString(),hole.followCount.toString())
                 executePendingBindings()
             }
         }
     }
 
     inner class ReplyViewHolder(
-        private val binding: ItemMineReplyBinding,
+        val binding: ItemMineReplyBinding,
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(reply: Reply) {
             binding.apply {
                 this.reply = reply
                 showAuditStatus(reply.status, btAuditStatus)
-                myReplyTotal.setOnClickListener{
-                    ARouter.getInstance()
-                        .build("/hole/HoleActivity")
-                        .withInt(
-                            Constant.HOLE_ID,
-                            Integer.valueOf(reply.holeId)
-                        )
-                        .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                        .navigation(frag.requireActivity(), 2)
-                    if(view != null) {
-                        view!!.visibility = View.GONE
-                        view = null
-                    }
-                }
                 myReplyMoreWhat.setOnClickListener{
-                    if (view == null) {   //没有删除视图出现
+                    if (viewModel.view.value == null) {   //没有删除视图出现
                         myReplyDelete.visibility = View.VISIBLE
-                        view = myReplyDelete
+                        viewModel.view.value = myReplyDelete
                     } else {  //已经有删除视图出现，去重
-                        view!!.visibility = View.GONE
+                        viewModel.view.value!!.visibility = View.GONE
                         myReplyDelete.visibility = View.VISIBLE
-                        view = myReplyDelete
+                        viewModel.view.value = myReplyDelete
                     }
-                }
-                myReplyDelete.setOnClickListener{
-                    val mView = View.inflate(frag.context, R.layout.dialog_delete, null)
-                    val dialog = Dialog(frag.requireContext())
-                    dialog.setContentView(mView)
-                    dialog.window!!.setBackgroundDrawableResource(R.drawable.notice)
-                    val no = mView.findViewById<View>(R.id.dialog_delete_tv_cancel) as TextView
-                    val yes = mView.findViewById<View>(R.id.dialog_delete_tv_yes) as TextView
-                    no.setOnClickListener{
-                        binding.myReplyDelete.visibility = View.GONE
-                        view = null
-                        dialog.dismiss()
-                    }
-                    yes.setOnClickListener{
-//                        viewModel.deleteHole(dialog, binding, frag.context, layoutPosition)
-                        viewModel.deleteReply(reply.replyId)
-                        dialog.dismiss()
-                        view = null
-                        notifyDataSetChanged()
-                    }
-                    dialog.show()
                 }
                 executePendingBindings()
             }
-            fragBinding.myHoleRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    binding.myReplyDelete.visibility = View.GONE
-                    view = null
-                }
-            })
+
+
         }
     }
 
@@ -163,15 +81,15 @@ class MineRecycleViewAdapter(
                 button.visibility = View.GONE
             }
             AuditType.NOT_APPROVED -> {
-                button.text = "未通过"
+                button.text = onItemClickListener.getText(R.string.status_not_approved)
                 button.setTextColor(
-                    frag.requireContext().getColor(R.color.HH_Reminder_Warning)
+                    onItemClickListener.getColor(R.color.HH_Reminder_Warning)
                 )
             }
             AuditType.UNAUDITED, null -> {
-                button.text = "审核中"
+                button.text = onItemClickListener.getText(R.string.status_unaudited)
                 button.setTextColor(
-                    frag.requireContext().getColor(R.color.HH_BandColor_7)
+                    onItemClickListener.getColor(R.color.HH_BandColor_7)
                 )
             }
         }
@@ -179,9 +97,9 @@ class MineRecycleViewAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return if(type == GET_HOLE || type == GET_FOLLOW)
-             HoleAndFollowViewHolder(ItemMineHoleFollowBinding.inflate(LayoutInflater.from(parent.context)))
+             HoleAndFollowViewHolder(ItemMineHoleFollowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         else
-            ReplyViewHolder(ItemMineReplyBinding.inflate(LayoutInflater.from(parent.context)))
+            ReplyViewHolder(ItemMineReplyBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -191,6 +109,67 @@ class MineRecycleViewAdapter(
         } else if (type == GET_REPLY) {
             (holder as ReplyViewHolder).bind(item as Reply)
         }
+        onItemClickListener.let {
+            if(holder is HoleAndFollowViewHolder) {
+                holder.binding.apply {
+                    totalView.setOnClickListener {
+                        onItemClickListener.navigateToHole((item as HoleV2).holeId)
+                    }
+                    if(type == GET_HOLE) {
+                        textView.text = onItemClickListener.getText(R.string.thumb_follow).format(hole?.likeCount.toString(),hole?.replyCount.toString())
+                        totalView.setOnLongClickListener {
+                            onItemClickListener.onTotalViewLongClick(item as HoleV2)
+                            true
+                        }
+                    }
+                    if(type == GET_FOLLOW)
+                        textView.text = onItemClickListener.getText(R.string.reply_follow).format(hole?.replyCount.toString(),hole?.followCount.toString())
+                }
+            } else {
+                (holder as ReplyViewHolder).binding.apply {
+                    myReplyTotal.setOnClickListener {
+                        onItemClickListener.navigateToHole((item as Reply).holeId)
+                        if(viewModel.view.value != null) {
+                            viewModel.view.value!!.visibility = View.GONE
+                            viewModel.view.value = null
+                        }
+                    }
+                    myReplyDelete.setOnClickListener{
+                        val dialog = onItemClickListener.getDialog()
+                        val no = dialog.findViewById<View>(R.id.dialog_delete_tv_cancel) as TextView
+                        val yes = dialog.findViewById<View>(R.id.dialog_delete_tv_yes) as TextView
+                        no.setOnClickListener{
+                            myReplyDelete.visibility = View.GONE
+                            viewModel.view.value = null
+                            dialog.dismiss()
+                        }
+                        yes.setOnClickListener{
+                            reply?.replyId?.let { it1 -> viewModel.deleteReply(it1) }
+                            dialog.dismiss()
+                            viewModel.view.value = null
+                            notifyDataSetChanged()
+                        }
+                        dialog.show()
+                    }
+                }
+            }
+        }
+    }
+
+    fun setOnItemClickListener(onItemClickListener: MineRecycleViewAdapter.OnItemClickListener){
+        this.onItemClickListener = onItemClickListener
+    }
+
+    interface OnItemClickListener {
+        fun navigateToHole(dest: String)
+
+        fun getDialog(): Dialog
+
+        fun onTotalViewLongClick(hole: HoleV2)
+
+        fun getColor(color: Int): Int
+
+        fun getText(strId: Int): String
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Any>() {
