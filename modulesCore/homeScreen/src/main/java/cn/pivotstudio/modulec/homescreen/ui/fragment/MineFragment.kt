@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.Rect
@@ -106,9 +107,7 @@ class MineFragment : BaseFragment() {
                         }
                         else -> {
                             val action =
-                                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
-                                    position, true
-                                )
+                                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(position)
                             this@MineFragment.findNavController().navigate(action)
                         }
                     }
@@ -139,16 +138,19 @@ class MineFragment : BaseFragment() {
         val shareCard = shareCardView.findViewById<LinearLayout>(R.id.share_card)
         val cancel = shareCardView.findViewById<TextView>(R.id.share_cancel_button)
         val ppwShare = PopupWindow(shareCardView)
+        val window = this.requireActivity().window
 
         ppwShare.isOutsideTouchable = true  //点击卡片外部退出
         ppwShare.isFocusable = true     //按返回键允许退出
         ppwShare.width = ViewGroup.LayoutParams.MATCH_PARENT
         ppwShare.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        val lp = this.requireActivity().window.attributes
-        lp.alpha = 0.6f // 0.0~1.0   减弱背景亮度
-        this.requireActivity().window.attributes = lp
+        ppwShare.animationStyle = R.style.Page2Anim
+
+        //减弱背景亮度
+        window.attributes.alpha = 0.6f
+        window.setWindowAnimations(R.style.darkScreenAnim)
         ppwShare.showAtLocation(
-            this.requireActivity().window.decorView, Gravity.BOTTOM,
+            window.decorView, Gravity.BOTTOM,
             0, 0
         )    //设置显示位置
         ppwShare.setOnDismissListener {
@@ -160,13 +162,12 @@ class MineFragment : BaseFragment() {
         shareCard.setOnClickListener {
             ppwShare.dismiss()
             val action =
-                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
-                    MineFragmentViewModel.SHARE, true
-                )
+                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(MineFragmentViewModel.SHARE)
             this.findNavController().navigate(action)
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun initLogOutDialog() {
         val dialog = Dialog(this.requireContext())
         val dialogView = this.requireActivity().layoutInflater.inflate(R.layout.dialog_logout, null)

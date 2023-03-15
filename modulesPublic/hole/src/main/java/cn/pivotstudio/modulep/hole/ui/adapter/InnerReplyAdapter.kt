@@ -44,6 +44,7 @@ class InnerReplyAdapter(
     ) {
         fun bind(reply: Reply) {
             binding.reply = reply
+            binding.type = "ReplyToHole"
             binding.apply {
                 clReply.setOnClickListener {
                     viewModel.replyTo(reply)

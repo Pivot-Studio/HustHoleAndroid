@@ -105,9 +105,25 @@ class HomePageFragment : BaseFragment() {
             SpannableString(this.resources.getString(R.string.page1fragment_1)),
             12
         )
+        val homeHoleAdapter = HomeHoleAdapter(viewModel)
+        homeHoleAdapter.setOnItemClickListener(object : HomeHoleAdapter.OnItemClickListener {
+            override fun navigateWithReply(holeId: String) {
+                navToSpecificHoleWithReply(holeId)
+            }
 
-        val homeHoleAdapter = HomeHoleAdapter(viewModel, this)
+            override fun navigate(holeId: String) {
+                navToSpecificHole(holeId)
+            }
 
+            override fun deleteHole(hole: HoleV2) {
+                deleteTheHole(hole)
+            }
+
+            override fun reportHole(hole: HoleV2) {
+                reportTheHole(hole)
+            }
+
+        })
         binding.apply {
             recyclerView.adapter = homeHoleAdapter
 
@@ -142,11 +158,11 @@ class HomePageFragment : BaseFragment() {
                 holesV2.onEach {
                     finishRefreshAnim()
                 }.collectLatest {
-                    homeHoleAdapter.submitList(it)
                     if (it.isEmpty()) {
                         binding.recyclerView.visibility = View.GONE
                         binding.homepagePlaceholder.visibility = View.VISIBLE
                     } else {
+                        homeHoleAdapter.submitList(it)
                         binding.recyclerView.visibility = View.VISIBLE
                         binding.homepagePlaceholder.visibility = View.GONE
                     }

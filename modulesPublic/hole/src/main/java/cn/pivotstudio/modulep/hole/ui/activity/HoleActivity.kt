@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -18,6 +20,7 @@ import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
 import cn.pivotstudio.modulep.hole.R
 import cn.pivotstudio.modulep.hole.databinding.ActivityHoleBinding
+import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
@@ -73,40 +76,30 @@ class HoleActivity : BaseActivity() {
             )
         )
 
-        navController.addOnDestinationChangedListener { _, destination, argument ->
-            when (destination.id) {
-                R.id.innerReplyFragment,
-                R.id.specificHoleFragment -> supportActionBar?.title =
-                    getString(R.string.hole_id, holeId.toString())
-            }
-        }
-
         binding.topAppbar.setupWithNavController(
             navController,
             AppBarConfiguration(setOf()) {
                 navController.currentDestination?.let {
-                    if (it.id == R.id.specificHoleFragment) {
+                    if (it.id == R.id.specificHoleFragment && navController.previousBackStackEntry == null) {
                         finish()
                     }
                 }
                 false
             }
         )
-
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
     }
 
     override fun onKeyUp(keyCode: Int, event: KeyEvent): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.action == KeyEvent.ACTION_UP) {
             navController.currentDestination?.let {
-                if (it.id == R.id.innerReplyFragment) {
+                if ((it.id == R.id.innerReplyFragment || it.id == R.id.specificHoleFragment) && navController.previousBackStackEntry != null) {
                     return navController.popBackStack()
                 }
             }
         }
         return super.onKeyUp(keyCode, event)
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return item.onNavDestinationSelected(navController) || super.onOptionsItemSelected(item)

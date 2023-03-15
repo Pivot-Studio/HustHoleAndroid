@@ -250,7 +250,7 @@ interface HustHoleApiService {
         @Query("mode") mode: String = NetworkConstant.SortMode.LATEST_REPLY,
         @Query("offset") offset: Int = 0,
         @Query("timestamp") timestamp: String
-    ): List<HoleV2>
+    ): Response<List<HoleV2>>
 
     //========================================================================================================
     @GET("msg/reply")

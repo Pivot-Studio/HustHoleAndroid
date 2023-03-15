@@ -9,7 +9,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.core.view.isVisible
@@ -22,25 +21,25 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
-import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.moduleb.libbase.util.ui.SoftKeyBoardUtil
-import cn.pivotstudio.modulep.hole.R
 import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulep.hole.databinding.FragmentInnerReplyBinding
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
 import cn.pivotstudio.modulep.hole.ui.adapter.EmojiRvAdapter
 import cn.pivotstudio.modulep.hole.ui.adapter.InnerReplyAdapter
+import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel
 import cn.pivotstudio.modulep.hole.viewmodel.InnerReplyViewModel
-import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import cn.pivotstudio.modulep.hole.R
+
 
 class InnerReplyFragment : BaseFragment() {
 
@@ -50,6 +49,7 @@ class InnerReplyFragment : BaseFragment() {
     private val innerReplyViewModel: InnerReplyViewModel by viewModels {
         InnerReplyViewModelFactory(args.reply)
     }
+    private var stackPosition: Int = 0
 
     private val baseReply: Reply
         get() = innerReplyViewModel.reply.value
@@ -66,11 +66,13 @@ class InnerReplyFragment : BaseFragment() {
 
 
     // 二级评论页的点赞可以直接通过ViewModel反馈给一级评论页
-    private val sharedViewModel: SpecificHoleViewModel by activityViewModels()
+    private val sharedViewModel: HoleViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mActionBar = (requireActivity() as HoleActivity).supportActionBar!!
+        sharedViewModel.fragmentStack.push(this)
+        stackPosition = sharedViewModel.fragmentStack.size
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,6 +94,7 @@ class InnerReplyFragment : BaseFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = innerReplyViewModel
         binding.apply {
+            type = "ReplyToHole"
             rvReplies.adapter = innerReplyAdapter
             rvReplies.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -167,13 +170,23 @@ class InnerReplyFragment : BaseFragment() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        mActionBar.title = '#' + args.reply.holeId
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        sharedViewModel.fragmentStack.pop()
+    }
     private fun initObserver() {
         innerReplyViewModel.apply {
-
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     reply.collectLatest {
-                        sharedViewModel.refreshTheReply(it)
+                        sharedViewModel.fragmentStack.apply {
+                            (this[stackPosition - 2] as SpecificHoleFragment).replyViewModel.refreshTheReply(it)
+                        }
                     }
                 }
             }
@@ -306,8 +319,8 @@ class InnerReplyFragment : BaseFragment() {
         binding.layoutRefresh.finishLoadMore() //结束上拉加载动画
         binding.rvReplies.isEnabled = true
     }
-
 }
+
 
 class InnerReplyViewModelFactory(private val reply: Reply) :
     ViewModelProvider.Factory {
@@ -318,5 +331,4 @@ class InnerReplyViewModelFactory(private val reply: Reply) :
         }
         throw IllegalArgumentException("Unknown ViewModel Class")
     }
-
 }

@@ -11,9 +11,9 @@
         <item name="colorSecondaryVariant">@color/HH_BandColor_5</item>
         <item name="colorOnSecondary">@color/HH_OnSurface</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="android:forceDarkAllowed">true</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">true</item>
         <!--        <item name="colorOnSecondary">@color/white</item>-->
     </style>
 

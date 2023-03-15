@@ -60,7 +60,6 @@ class MineFragmentViewModel : ViewModel(){
     private val _mySettingList = MutableLiveData<List<Int>>() //个人设置标题
     private val _shieldList = MutableLiveData<List<Int>>()  //屏蔽设置标题
     private val _updateList = MutableLiveData<List<Int>>()  //更新标题
-    private val _isVerifiedEmail = MutableLiveData<Boolean>()   //是否验证邮箱
     private val _isPrivacy = MutableLiveData<Boolean>() //是否选择隐私安全
     private val _communityNorm = MutableLiveData<String>()
     private val _shieldWordList = MutableLiveData<MutableList<String>>()
@@ -75,7 +74,6 @@ class MineFragmentViewModel : ViewModel(){
     val mySettingList: LiveData<List<Int>> = _mySettingList
     val shieldList: LiveData<List<Int>> = _shieldList
     val updateList: LiveData<List<Int>> = _updateList
-    val isVerifiedEmail: LiveData<Boolean> = _isVerifiedEmail
     val isPrivacy: LiveData<Boolean> = _isPrivacy
     val communityNorm: LiveData<String> = _communityNorm
     val shieldWordList: LiveData<MutableList<String>> = _shieldWordList
@@ -85,8 +83,6 @@ class MineFragmentViewModel : ViewModel(){
     val updateLogList: LiveData<List<ItemDetailFragment.Update>> = _updateLogList
 
     init {
-        _isVerifiedEmail.value = false
-
         initNameList()
         getMineData()
         initViewPager()
@@ -401,7 +397,8 @@ class MineFragmentViewModel : ViewModel(){
 
     private fun initOption() {
         _mySettingList.value = listOf(
-            R.string.privacy_security
+            R.string.privacy_security,
+            R.string.dark_mode
         )
         _shieldList.value = listOf(
             R.string.keyword_shielding
@@ -414,8 +411,8 @@ class MineFragmentViewModel : ViewModel(){
     }
 
     private fun initOptionSwitch() {
-        optSwitch[PERSONAL_SETTING] = false
-        optSwitch[SHIELD_SETTING] = false
+        optSwitch[PERSONAL_SETTING] = true
+        optSwitch[SHIELD_SETTING] = true
         optSwitch[COMMUNITY_NORM] = true
         optSwitch[SHARE] = true
         optSwitch[EVALUATION_AND_SUGGESTIONS] = true

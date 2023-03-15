@@ -1,7 +1,14 @@
 package cn.pivotstudio.husthole;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.os.Bundle;
 import android.os.Handler;
+
+import androidx.appcompat.app.AppCompatDelegate;
+
 import cn.pivotstudio.moduleb.database.MMKVUtil;
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity;
 import cn.pivotstudio.moduleb.libbase.constant.Constant;
@@ -24,6 +31,19 @@ public class StartActivity extends BaseActivity {
             @Override
             public void run() {
                 if (mvUtil.getBoolean(Constant.IS_LOGIN)) {
+                    switch (mvUtil.getInt(Constant.IS_DARK_MODE)) {
+                        case 0:
+                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                            break;
+                        case 1:
+                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                            break;
+                        case 2:
+                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                            break;
+                        default:
+                            break;
+                    }
                     ARouter.getInstance().build("/homeScreen/HomeScreenActivity").navigation();
                 } else {
                     ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation();

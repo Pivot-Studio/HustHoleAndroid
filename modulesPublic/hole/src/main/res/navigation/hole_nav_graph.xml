@@ -14,11 +14,16 @@
             app:argType="string" />
         <action
             android:id="@+id/action_specificHoleFragment_to_innerReplyFragment"
-            app:destination="@id/innerReplyFragment" />
+            app:destination="@id/innerReplyFragment"
+            android:defaultValue="false" />
         <argument
             android:name="openingKeyboard"
             app:argType="boolean"
             android:defaultValue="false" />
+        <action
+            android:id="@+id/action_specificHoleFragment_self"
+            app:destination="@id/specificHoleFragment"
+            app:launchSingleTop="false"/>
 
     </fragment>
     <fragment
@@ -28,5 +33,9 @@
         <argument
             android:name="reply"
             app:argType="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
+        <action
+            android:id="@+id/action_innerReplyFragment_to_specificHoleFragment"
+            app:destination="@id/specificHoleFragment"
+            app:launchSingleTop="false"/>
     </fragment>
 </navigation>

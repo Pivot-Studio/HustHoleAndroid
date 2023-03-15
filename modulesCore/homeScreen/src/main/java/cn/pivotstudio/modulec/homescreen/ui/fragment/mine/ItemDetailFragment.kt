@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import cn.pivotstudio.moduleb.database.MMKVUtil
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.*
 import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken
@@ -45,7 +47,6 @@ class ItemDetailFragment : Fragment() {
     private lateinit var binding: ViewDataBinding
     private val viewModel: MineFragmentViewModel by viewModels()
     private var option: Int = 0
-    private var isVerifiedEmail: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if ((activity as HomeScreenActivity).supportActionBar != null) {
@@ -54,7 +55,6 @@ class ItemDetailFragment : Fragment() {
         super.onCreate(savedInstanceState)
         arguments?.let {
             option = it.getInt("fragType")
-            isVerifiedEmail = it.getBoolean("isVerified")
         }
     }
 
@@ -87,13 +87,6 @@ class ItemDetailFragment : Fragment() {
             R.string.update_log -> {
                 binding = ActivityUpdateBinding.inflate(inflater, container, false)
             }
-            /*R.string.campus_email -> {
-                if (isVerifiedEmail) {
-                    binding = ActivityEmailOkBinding.inflate(inflater, container, false)
-                } else if (!isVerifiedEmail) {
-                    binding = ActivityEmailVerify1Binding.inflate(inflater, container, false)
-                }
-            }*/
             R.string.privacy_security -> {
                 binding = ActivitySecurityBinding.inflate(inflater, container, false)
             }
@@ -107,25 +100,6 @@ class ItemDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         when (binding) {
-            is ActivityEmailOkBinding -> {
-                (binding as ActivityEmailOkBinding).emailOkImg.setOnClickListener {
-                    view.findNavController().popBackStack()
-                }
-            }
-            is ActivityEmailVerify1Binding -> {
-                (binding as ActivityEmailVerify1Binding).apply {
-                    btn1.setOnClickListener {
-                        val action = ItemDetailFragmentDirections.actionItemDetailFragment2ToVerifyFragment()
-                        view.findNavController().navigate(action)
-                    }
-                    btn2.setOnClickListener {
-                        view.findNavController().popBackStack()
-                    }
-                    emailVerify1Img.setOnClickListener {
-                        view.findNavController().popBackStack()
-                    }
-                }
-            }
             is ActivitySecurityBinding -> {
                 viewModel.checkPrivacyState(binding as ActivitySecurityBinding)
                 (binding as ActivitySecurityBinding).apply {
@@ -133,11 +107,7 @@ class ItemDetailFragment : Fragment() {
                         view.findNavController().popBackStack()
                     }
                     stSecurity.setOnCheckedChangeListener { _, isChecked ->
-                        if (CheckingToken.IfTokenExist()) {
-                            viewModel.changePrivacyState(!isChecked)
-                        } else {
-                            Toast.makeText(context, "认证信息无效，请先登录。", Toast.LENGTH_SHORT).show()
-                        }
+                        viewModel.changePrivacyState(!isChecked)
                     }
                 }
             }
@@ -257,35 +227,36 @@ class ItemDetailFragment : Fragment() {
         }
     }
 
-//    private fun initPopUpView(
-////        binding: ActivityShareCardBinding
-//    ) {
-//        var isShow = false
-//        val shareToView= LayoutInflater.from(context).inflate(R.layout.ppw_share_to, null)
-//        val store: LinearLayout = shareToView.findViewById(R.id.store)
-//        val ppwShareTo= PopupWindow(shareToView)
-//        ppwShareTo.width = ViewGroup.LayoutParams.MATCH_PARENT
-//        ppwShareTo.height = ViewGroup.LayoutParams.WRAP_CONTENT
-//        ppwShareTo.animationStyle = R.style.Page2Anim
-//        ppwShareTo.isOutsideTouchable = true
-//
-////        binding.shareCardImg.setOnClickListener {
-////            isShow = if (!isShow) {
-////                ppwShareTo.showAsDropDown(binding.ppwLocation)
-////                true
-////            } else {
-////                ppwShareTo.dismiss()
-////                false
-////            }
-////        }
-//        store.setOnClickListener {
-//            Toast.makeText(context, "保存成功", Toast.LENGTH_SHORT).show()
-//            ppwShareTo.dismiss()
-//        }
-//        MediaScannerConnection.scanFile(context, arrayOf("path"), arrayOf("image/jpeg")) { path, _ ->
-//            Log.i("shareCard", "onScanCompleted$path") }
-//
-//    }
+    /*
+    private fun initPopUpView(
+        binding: ActivityShareCardBinding
+    ) {
+        var isShow = false
+        val shareToView= LayoutInflater.from(context).inflate(R.layout.ppw_share_to, null)
+        val store: LinearLayout = shareToView.findViewById(R.id.store)
+        val ppwShareTo= PopupWindow(shareToView)
+       ppwShareTo.width = ViewGroup.LayoutParams.MATCH_PARENT
+       ppwShareTo.height = ViewGroup.LayoutParams.WRAP_CONTENT
+       ppwShareTo.animationStyle = R.style.Page2Anim
+        ppwShareTo.isOutsideTouchable = true
+
+        binding.shareCardImg.setOnClickListener {
+            isShow = if (!isShow) {
+                ppwShareTo.showAsDropDown(binding.ppwLocation)
+               true
+            } else {
+                ppwShareTo.dismiss()
+                false
+            }
+        }
+        store.setOnClickListener {
+            Toast.makeText(context, "保存成功", Toast.LENGTH_SHORT).show()
+            ppwShareTo.dismiss()
+        }
+        /*
+        MediaScannerConnection.scanFile(context, arrayOf("path"), arrayOf("image/jpeg")) { path, _ ->
+            Log.i("shareCard", "onScanCompleted$path") }*/
+    }*/
 
     private fun onLabelClick(
         pos: Int

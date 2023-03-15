@@ -48,10 +48,6 @@ class VerifyFragment : Fragment() {
             tvAgain.setOnClickListener{
                 viewModel.sendEmailVerifyAgain(this)
             }
-            tvHowTo.setOnClickListener {
-                val action = VerifyFragmentDirections.actionVerifyFragmentToHowToVerifyFragment()
-                view.findNavController().navigate(action)
-            }
             emailVerify2Img.setOnClickListener{
                 view.findNavController().popBackStack()
             }

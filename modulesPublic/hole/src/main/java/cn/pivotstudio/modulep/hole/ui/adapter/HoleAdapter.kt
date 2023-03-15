@@ -21,12 +21,16 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
 import cn.pivotstudio.husthole.moduleb.network.model.ReplyDto
 import cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
+import cn.pivotstudio.modulep.hole.ui.fragment.InnerReplyFragmentDirections
 import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment
+import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragmentDirections
 import com.alibaba.android.arouter.launcher.ARouter
 import java.util.regex.Pattern
 
@@ -66,8 +70,13 @@ fun setHintText(view: EmojiEdittext, reply: Reply?) {
 
 }
 
-@BindingAdapter("markDownContent","currentId", requireAll = true)
-fun setMDContent(view: TextView, content: String?, currentId: String?) {
+@BindingAdapter("markDownContent", "currentId", "naviType",requireAll = true)
+fun setMDContent(
+    view: TextView,
+    content: String?,
+    currentId: String?,
+    naviType: String
+) {
     if (content != null) {
         val text = Markwon.markdown(BaseApplication.context!!, content.trim { it <= ' ' }
             .replace("\n", "  \n"))
@@ -91,6 +100,7 @@ fun setMDContent(view: TextView, content: String?, currentId: String?) {
                     if (currentId == id) {
                         Toast.makeText(view.context, "你已经在这个树洞了", Toast.LENGTH_SHORT).show()
                     } else {
+                        /*
                         ARouter.getInstance()
                             .build("/hole/HoleActivity")
                             .withInt(
@@ -98,7 +108,13 @@ fun setMDContent(view: TextView, content: String?, currentId: String?) {
                                 id.toInt()
                             )
                             .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                            .navigation()
+                            .navigation()*/
+                        val action: NavDirections = if(naviType == "HoleToHole") {
+                            SpecificHoleFragmentDirections.actionSpecificHoleFragmentSelf(id)
+                        }else {
+                            InnerReplyFragmentDirections.actionInnerReplyFragmentToSpecificHoleFragment(id)
+                        }
+                        view.findNavController().navigate(action)
                     }
                 }
             }, start, start + length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

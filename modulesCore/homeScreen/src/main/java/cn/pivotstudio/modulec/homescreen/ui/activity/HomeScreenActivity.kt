@@ -3,6 +3,7 @@ package cn.pivotstudio.modulec.homescreen.ui.activity
 import android.content.*
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
@@ -55,9 +56,7 @@ class HomeScreenActivity : BaseActivity() {
         R.id.forest_detail_fragment,
         R.id.holeFollowReplyFragment,
         R.id.itemMineFragment,
-        R.id.itemDetailFragment2,
-        R.id.verifyFragment,
-        R.id.howToVerifyFragment
+        R.id.itemDetailFragment2
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,6 +80,12 @@ class HomeScreenActivity : BaseActivity() {
             }
         }
     }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        newConfig.uiMode
+    }
+
 
 
 
@@ -170,6 +175,13 @@ class HomeScreenActivity : BaseActivity() {
 //
 //            }
 //        }
+        val mmkvUtil = MMKVUtil.getMMKV(this)
+        if (!mmkvUtil.getBoolean(Constant.IS_FIRST_USED)) { //是否第一次使用1037树洞,保证welcomeDialog只在第一使用时显式
+            val welcomeDialog = WelcomeDialog(context)
+            welcomeDialog.show()
+            mmkvUtil.put(Constant.IS_FIRST_USED, true)
+        }
+
         val manager = this.packageManager
         var oldCode = 0L
         try {
@@ -180,7 +192,7 @@ class HomeScreenActivity : BaseActivity() {
         }
         if(4L > oldCode) {
             if(checkNotification()) {
-                val updateDialog = UpdateDialog(context, "4", oldCode.toString())
+                val updateDialog = UpdateDialog(context, oldCode.toString(), "4")
                 updateDialog.show()
             }else {
                 runBlocking {
@@ -193,13 +205,6 @@ class HomeScreenActivity : BaseActivity() {
                 localIntent.data = Uri.fromParts("package", this.packageName, null)
                 startActivity(localIntent)
             }
-        }
-
-        val mmkvUtil = MMKVUtil.getMMKV(this)
-        if (!mmkvUtil.getBoolean(Constant.IS_FIRST_USED)) { //是否第一次使用1037树洞,保证welcomeDialog只在第一使用时显式
-            val welcomeDialog = WelcomeDialog(context)
-            welcomeDialog.show()
-            mmkvUtil.put(Constant.IS_FIRST_USED, true)
         }
     }
 

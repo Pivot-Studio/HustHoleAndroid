@@ -6,22 +6,32 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import android.widget.PopupWindow
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.core.app.NotificationManagerCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import cn.pivotstudio.moduleb.database.MMKVUtil
+import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineRecycleviewBinding
+import cn.pivotstudio.modulec.homescreen.databinding.PpwDarkModeBinding
 import cn.pivotstudio.modulec.homescreen.network.DownloadService
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineOthersAdapter
@@ -30,6 +40,7 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.PERSONAL_SETTING
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHIELD_SETTING
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.UPDATE
+import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -45,6 +56,7 @@ class ItemMineFragment : Fragment() {
     private lateinit var binding: FragmentMineRecycleviewBinding
     private val viewModel: MineFragmentViewModel by viewModels()
     private var type: Int = 0
+    private val mmkvUtil = MMKVUtil.getMMKV(context)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if ((activity as HomeScreenActivity).supportActionBar != null) {
@@ -73,16 +85,22 @@ class ItemMineFragment : Fragment() {
         binding.myTitle.text = getString(viewModel.myNameList.value!![type])
         if (type == PERSONAL_SETTING || type == SHIELD_SETTING || type == UPDATE) {
             val adapter = MineOthersAdapter()
-            adapter.setOnItemClickListener(object :MineOthersAdapter.OnItemClickListener {
+            adapter.setOnItemClickListener(object : MineOthersAdapter.OnItemClickListener {
                 override fun onClick(view: View, position: Int, nameID: Int) {
-                    if (nameID == R.string.check_update) {
-                        check()
-                    }else {
-                        val action =
-                            ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
-                                nameID, viewModel.isVerifiedEmail.value!!
-                            )
-                        this@ItemMineFragment.findNavController().navigate(action)
+                    when (nameID) {
+                        R.string.check_update -> {
+                            check()
+                        }
+                        R.string.dark_mode -> {
+                            getPopUpWindows()
+                        }
+                        else -> {
+                            val action =
+                                ItemMineFragmentDirections.actionItemMineFragmentToItemDetailFragment2(
+                                    nameID
+                                )
+                            this@ItemMineFragment.findNavController().navigate(action)
+                        }
                     }
                 }
             })
@@ -106,7 +124,7 @@ class ItemMineFragment : Fragment() {
     }
 
     override fun onResume() {
-        if((activity as HomeScreenActivity).supportActionBar != null){
+        if ((activity as HomeScreenActivity).supportActionBar != null) {
             (activity as HomeScreenActivity).supportActionBar!!.hide()
         }
         super.onResume()
@@ -128,10 +146,10 @@ class ItemMineFragment : Fragment() {
     }
 
     private fun check() {
-        if(checkNotification()) {
-            val updateDialog = UpdateDialog(requireContext(), "4", getVersionCode().toString())
+        if (checkNotification()) {
+            val updateDialog = UpdateDialog(requireContext(), getVersionCode().toString(), "4")
             updateDialog.show()
-        }else {
+        } else {
             runBlocking {
                 Toast.makeText(context, "没有开启通知权限，请前往开启", Toast.LENGTH_SHORT).show()
                 delay(1000L)
@@ -144,7 +162,73 @@ class ItemMineFragment : Fragment() {
         }
     }
 
+    private fun cancelDarkBackGround() {
+        val lp = this.requireActivity().window.attributes
+        lp.alpha = 1f // 0.0~1.0
+        this.requireActivity().window.attributes = lp
+    }   //取消暗背景
+
+    private fun getPopUpWindows() {
+        val darkBind: PpwDarkModeBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.ppw_dark_mode,
+            null,
+            false
+        )
+        val ppwDark = PopupWindow(darkBind.root)
+        val window = this.requireActivity().window
+
+        ppwDark.isOutsideTouchable = true  //点击卡片外部退出
+        ppwDark.isFocusable = true     //按返回键允许退出
+        ppwDark.width = ViewGroup.LayoutParams.MATCH_PARENT
+        ppwDark.height = ViewGroup.LayoutParams.WRAP_CONTENT
+        ppwDark.animationStyle = R.style.Page2Anim
+
+        window.attributes.alpha = 0.6f
+        ppwDark.showAtLocation(
+            window.decorView, Gravity.BOTTOM,
+            0, 0
+        )
+        ppwDark.setOnDismissListener {
+            cancelDarkBackGround()
+        }
+        darkBind.apply {
+            this.mode = mmkvUtil.getInt(Constant.IS_DARK_MODE)
+            imgDark.setOnClickListener {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mode != DARK) {
+                        ppwDark.dismiss()
+                        mmkvUtil.put(Constant.IS_DARK_MODE, DARK)
+                        mode = DARK
+                        setDefaultNightMode(MODE_NIGHT_YES)
+                    }
+                }else {
+                    Toast.makeText(context, "非常抱歉，您手机不支持强制深色模式555~", Toast.LENGTH_SHORT).show()
+                }
+            }
+            imgLight.setOnClickListener {
+                if (mode != LIGHT) {
+                    ppwDark.dismiss()
+                    mmkvUtil.put(Constant.IS_DARK_MODE, LIGHT)
+                    mode = LIGHT
+                    setDefaultNightMode(MODE_NIGHT_NO)
+                }
+            }
+            imgFollowSystem.setOnClickListener {
+                if (mode != FOLLOW_SYSTEM) {
+                    ppwDark.dismiss()
+                    mmkvUtil.put(Constant.IS_DARK_MODE, FOLLOW_SYSTEM)
+                    mode = FOLLOW_SYSTEM
+                    setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM)
+                }
+            }
+        }
+    }
+
     companion object {
         const val TAG = "ItemMineFragment"
+        const val DARK = 0
+        const val LIGHT = 1
+        const val FOLLOW_SYSTEM = 2
     }
 }

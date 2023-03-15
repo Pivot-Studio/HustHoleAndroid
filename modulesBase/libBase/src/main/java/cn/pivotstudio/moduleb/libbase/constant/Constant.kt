@@ -82,4 +82,7 @@ object Constant {
 
     //数据库
     const val ROOM_DATABASE_NAME = "hust_hole"
+
+    //深色模式
+    const val IS_DARK_MODE = "is_dark_mode"
 }

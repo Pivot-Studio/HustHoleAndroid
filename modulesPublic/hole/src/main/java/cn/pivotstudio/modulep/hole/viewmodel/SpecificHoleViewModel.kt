@@ -155,12 +155,14 @@ class SpecificHoleViewModel(
 
     fun loadMoreReplies() {
         viewModelScope.launch {
+            _loadingState.emit(ApiStatus.LOADING)
             repository.loadMoreReplies(descend.value).collect {
                 when(it) {
                     is ApiResult.Success<*> -> {
+                        _loadingState.emit(ApiStatus.SUCCESSFUL)
                         _filteringOwner.emit(false)
                         _replies.emit(_replies.value.toMutableList().apply {
-                            addAll(it.data as MutableList<ReplyWrapper>)
+                            addAll(it.data as Collection<ReplyWrapper>)
                         })
                     }
                     is ApiResult.Error -> {
@@ -174,6 +176,7 @@ class SpecificHoleViewModel(
 
     fun loadHole() {
         viewModelScope.launch {
+            _loadingState.emit(ApiStatus.LOADING)
             repository.apply {
                 loadHole().collect {loadHoleResult ->
                     when(loadHoleResult) {
@@ -182,12 +185,14 @@ class SpecificHoleViewModel(
                             loadReplies(descend.value).collect {loadRepliesResult ->
                                 when(loadRepliesResult) {
                                     is ApiResult.Success<*> -> {
+                                        _loadingState.emit(ApiStatus.SUCCESSFUL)
                                         _replies.emit(loadRepliesResult.data as List<ReplyWrapper>)
                                         if(_replies.value.isEmpty()) {
                                             _showingPlaceholder.emit(true)
                                         }
                                     }
                                     is ApiResult.Error -> {
+                                        _loadingState.emit(ApiStatus.ERROR)
                                         _sendingState.emit(loadRepliesResult)
                                     }
                                     else -> {}
@@ -198,6 +203,7 @@ class SpecificHoleViewModel(
                             if(loadHoleResult.code == 1006)
                                 finish()
                             _sendingState.emit(loadHoleResult)
+                            _loadingState.emit(ApiStatus.ERROR)
                         }
                         else -> {}
                     }
@@ -356,16 +362,18 @@ class SpecificHoleViewModel(
         }
     }
 
-    suspend fun refreshTheReply(reply: Reply) {
-        val newItems = replies.value.toMutableList()
-        val i = newItems.indexOfFirst { newReply ->
-            reply.replyId == newReply.self.replyId
-        }
+    fun refreshTheReply(reply: Reply) {
+        viewModelScope.launch {
+            val newItems = replies.value.toMutableList()
+            val i = newItems.indexOfFirst { newReply ->
+                reply.replyId == newReply.self.replyId
+            }
 
-        newItems[i] = newItems[i].copy(
-            self = reply
-        )
-        _replies.emit(newItems)
+            newItems[i] = newItems[i].copy(
+                self = reply
+            )
+            _replies.emit(newItems)
+        }
     }
 
     /**
@@ -397,6 +405,5 @@ class SpecificHoleViewModel(
 
         pInputText = repository.pInputText
         pUsedEmojiList = repository.pUsedEmojiList
-
     }
 }

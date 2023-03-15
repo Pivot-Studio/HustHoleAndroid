@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineOthersBinding
 
 /**
@@ -24,7 +25,7 @@ class MineOthersAdapter : ListAdapter<Int, MineOthersAdapter.MyOthersViewHolder>
         fun bind(name: Int) {
             binding.apply {
                 this.name = name
-            executePendingBindings()
+                executePendingBindings()
             }
         }
     }

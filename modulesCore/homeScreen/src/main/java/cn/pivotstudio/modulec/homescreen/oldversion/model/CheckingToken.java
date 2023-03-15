@@ -15,7 +15,7 @@ public class CheckingToken {
         String token = mmkvUtil.getString("USER_TOKEN");
         //        SharedPreferences editor = context.getSharedPreferences("Depository", Context.MODE_PRIVATE);//
         //        String token = editor.getString("token", "");
-        return !token.equals("");
+        return !token.isEmpty();
     }
 
     public static void IfSessionExpired() {

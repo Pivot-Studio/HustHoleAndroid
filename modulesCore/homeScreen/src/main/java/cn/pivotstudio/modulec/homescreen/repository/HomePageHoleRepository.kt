@@ -37,29 +37,32 @@ class HomePageHoleRepository(
 
     var tip = MutableLiveData<String?>()
 
-    fun loadHoles(sortMode: String): Flow<List<HoleV2>> = flow {
+    fun loadHoles(sortMode: String): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
         refreshTimestamp()
         lastOffset = 0
-        emit(
-            hustHoleApiService.getHoles(
+        val response = hustHoleApiService.getHoles(
                 limit = HOLES_LIST_SIZE,
                 mode = sortMode,
                 offset = 0,
                 timestamp = lastTimeStamp
-            )
         )
-    }.flowOn(dispatcher)
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch {
+        tip.value = it.message
+        it.printStackTrace()
+    }
 
-    fun loadMoreHoles(sortMode: String): Flow<List<HoleV2>> = flow {
+    fun loadMoreHoles(sortMode: String): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
         lastOffset += HOLES_LIST_SIZE
-        emit(
-            hustHoleApiService.getHoles(
+        val response = hustHoleApiService.getHoles(
                 limit = HOLES_LIST_SIZE,
                 timestamp = lastTimeStamp,
                 offset = lastOffset,
                 mode = sortMode
-            )
         )
+        checkResponse(response, this)
     }.flowOn(dispatcher).catch { e ->
         tip.value = e.message
         e.printStackTrace()

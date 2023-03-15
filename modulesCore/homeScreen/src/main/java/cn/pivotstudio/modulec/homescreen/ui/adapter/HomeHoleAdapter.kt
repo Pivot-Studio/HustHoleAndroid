@@ -8,6 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.databinding.ItemHomepageholeBinding
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
@@ -20,10 +21,10 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
  * @author: mhh
  */
 class HomeHoleAdapter(
-    private val viewModel: HomePageViewModel,
-    private val _context: HomePageFragment
+    private val viewModel: HomePageViewModel
 ) : ListAdapter<HoleV2, HomeHoleAdapter.HoleViewHolder>(DIFF_CALLBACK) {
     var lastImageMore: ConstraintLayout? = null // 记录上一次点开三个小点界面的引用
+    private var onItemClickListener: OnItemClickListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HoleViewHolder {
         return HoleViewHolder(
@@ -47,7 +48,7 @@ class HomeHoleAdapter(
             binding.apply {
 
                 clItemHomepageReply.setOnClickListener {
-                    _context.navToSpecificHoleWithReply(hole.holeId)
+                    onItemClickListener?.navigateWithReply(hole.holeId)
                 }
 
                 clItemHomepageThumbup.setOnClickListener {
@@ -69,18 +70,32 @@ class HomeHoleAdapter(
 
                 clItemHomepageMorelist.setOnClickListener {
                     if (hole.isMyHole) {
-                        _context.deleteTheHole(hole)
+                        onItemClickListener?.deleteHole(hole)
                     } else {
-                        _context.reportTheHole(hole)
+                        onItemClickListener?.reportHole(hole)
                     }
                     it.visibility = View.GONE
                 }
 
                 clItemHomepageFrame.setOnClickListener {
-                    _context.navToSpecificHole(hole.holeId)
+                    onItemClickListener?.navigate(hole.holeId)
                 }
             }
         }
+    }
+
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
+
+    interface OnItemClickListener {
+        fun navigateWithReply(holeId: String)
+
+        fun navigate(holeId: String)
+
+        fun deleteHole(hole: HoleV2)
+
+        fun reportHole(hole: HoleV2)
     }
 
     companion object {

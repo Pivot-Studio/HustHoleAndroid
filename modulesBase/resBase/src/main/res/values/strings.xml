@@ -26,6 +26,8 @@
 
     <string name="page3fragment_1">系统通知</string>
     <string name="page3fragment_2">还没有通知噢...</string>
+    <string name="reply_to_hole">回复了你的树洞</string>
+    <string name="reply_to_reply">回复了你的评论</string>
     
     <string name="publishmessage_1">发树洞</string>
     <string name="publishmessage_2">发布</string>
@@ -132,6 +134,9 @@
     <string name="update">更新</string>
     <string name="login_out">退出登录</string>
     <string name="privacy_security">隐私安全</string>
+    <string name="dark_mode">深色模式</string>
+    <string name="light_mode">日间模式</string>
+    <string name="follow_mode">跟随系统</string>
     <string name="keyword_shielding">关键词屏蔽</string>
     <string name="update_log">更新日志</string>
     <string name="check_update">检查更新</string>
@@ -190,4 +195,9 @@
     <string name="downloading">正在光速下载中…</string>
     <string name="download_pause">已暂停</string>
     <string name="download_cancel">取消下载</string>
+
+    //Image contentDescription
+    <string name="change_dark">强制深色模式</string>
+    <string name="change_light">强制浅色模式</string>
+    <string name="change_follow_system">跟随系统</string>
 </resources>
