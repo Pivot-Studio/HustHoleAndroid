@@ -13,6 +13,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -38,9 +39,11 @@ import cn.pivotstudio.modulep.hole.model.ReplyListResponse
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
 import cn.pivotstudio.modulep.hole.ui.adapter.EmojiRvAdapter
 import cn.pivotstudio.modulep.hole.ui.adapter.RepliesAdapter
+import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.runBlocking
 
 
 class SpecificHoleFragment : BaseFragment() {
@@ -49,9 +52,10 @@ class SpecificHoleFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSpecificHoleBinding
     private lateinit var mActionBar: ActionBar
-    private val replyViewModel: SpecificHoleViewModel by activityViewModels {
-        SpecificHoleViewModelFactory(args.holeId)
+     val replyViewModel: SpecificHoleViewModel by viewModels {
+        SpecificHoleViewModelFactory(args.holeId, end)
     }
+    private val sharedViewModel: HoleViewModel by activityViewModels()
 
     private val navToInnerReply: (ReplyWrapper) -> Unit = {
         val action =
@@ -59,12 +63,16 @@ class SpecificHoleFragment : BaseFragment() {
         findNavController().navigate(action)
     }
 
-    private val report: (Reply) -> Unit = {
+    private val report: (Reply?) -> Unit = {
         ARouter.getInstance().build("/report/ReportActivity")
-            .withString(Constant.HOLE_ID, it.holeId)
-            .withString(Constant.REPLY_ID, it.replyId)
-            .withString(Constant.ALIAS, it.nickname)
+            .withString(Constant.HOLE_ID, it?.holeId)
+            .withString(Constant.REPLY_ID, it?.replyId)
+            .withString(Constant.ALIAS, it?.nickname)
             .navigation()
+    }
+
+    private val end: () -> Unit = {
+        this.findNavController().popBackStack()
     }
 
     private val repliesAdapter by lazy { RepliesAdapter(replyViewModel, report, navToInnerReply) }
@@ -72,6 +80,8 @@ class SpecificHoleFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mActionBar = (requireActivity() as HoleActivity).supportActionBar!!
+        mActionBar.title = '#' + args.holeId
+        sharedViewModel.fragmentStack.push(this)
     }
 
     override fun onCreateView(
@@ -87,6 +97,7 @@ class SpecificHoleFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+            layoutHole.type = "HoleToHole"
             lifecycleOwner = viewLifecycleOwner
             viewModel = replyViewModel
             rvReplies.apply {
@@ -161,7 +172,7 @@ class SpecificHoleFragment : BaseFragment() {
         }
 
         replyViewModel.inputText()
-        replyViewModel.usedEmojiList()
+        sharedViewModel.usedEmojiList()
 
         EditTextUtil.ButtonReaction(
             binding.etReplyPost,
@@ -176,6 +187,17 @@ class SpecificHoleFragment : BaseFragment() {
         if (args.openingKeyboard) {
             SoftKeyBoardUtil.showKeyboard(requireActivity(), binding.etReplyPost)
         }
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        mActionBar.title = '#' + args.holeId
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        sharedViewModel.fragmentStack.pop()
     }
 
     private fun initRefresh() {
@@ -276,7 +298,7 @@ class SpecificHoleFragment : BaseFragment() {
             EmojiRvAdapter(
                 context,
                 binding.etReplyPost,
-                replyViewModel
+                sharedViewModel
             )
     }
 
@@ -354,17 +376,17 @@ class SpecificHoleFragment : BaseFragment() {
     private fun savaDate(hole: HoleV2) {
         (requireActivity() as HoleActivity).saveResultData(hole)
     }
-
-
 }
 
-
-class SpecificHoleViewModelFactory(private val holeId: String) :
+class SpecificHoleViewModelFactory(
+    private val holeId: String,
+    private val finish: () -> Unit
+) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(SpecificHoleViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return SpecificHoleViewModel(holeId) as T
+            return SpecificHoleViewModel(holeId, finish) as T
         }
         throw IllegalArgumentException("Unknown ViewModel Class")
     }

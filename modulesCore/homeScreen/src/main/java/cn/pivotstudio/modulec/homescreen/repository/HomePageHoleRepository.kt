@@ -37,29 +37,32 @@ class HomePageHoleRepository(
 
     var tip = MutableLiveData<String?>()
 
-    fun loadHoles(sortMode: String): Flow<List<HoleV2>> = flow {
+    fun loadHoles(sortMode: String): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
         refreshTimestamp()
         lastOffset = 0
-        emit(
-            hustHoleApiService.getHoles(
+        val response = hustHoleApiService.getHoles(
                 limit = HOLES_LIST_SIZE,
                 mode = sortMode,
                 offset = 0,
                 timestamp = lastTimeStamp
-            )
         )
-    }.flowOn(dispatcher)
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch {
+        tip.value = it.message
+        it.printStackTrace()
+    }
 
-    fun loadMoreHoles(sortMode: String): Flow<List<HoleV2>> = flow {
+    fun loadMoreHoles(sortMode: String): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
         lastOffset += HOLES_LIST_SIZE
-        emit(
-            hustHoleApiService.getHoles(
+        val response = hustHoleApiService.getHoles(
                 limit = HOLES_LIST_SIZE,
                 timestamp = lastTimeStamp,
                 offset = lastOffset,
                 mode = sortMode
-            )
         )
+        checkResponse(response, this)
     }.flowOn(dispatcher).catch { e ->
         tip.value = e.message
         e.printStackTrace()
@@ -131,44 +134,44 @@ class HomePageHoleRepository(
         checkResponse(response, this)
     }.flowOn(dispatcher).catch { it.printStackTrace() }
 
-    fun loadTheHole(hole: HoleV2): Flow<HoleV2> {
-        return flow {
-            emit(hustHoleApiService.loadTheHole(hole.holeId))
-        }.flowOn(dispatcher).catch { e ->
-            e.printStackTrace()
-        }
+    fun loadTheHole(hole: HoleV2): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService.loadTheHole(hole.holeId)
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
     }
 
-    fun loadTheHole(holeId: String): Flow<HoleV2> {
-        return flow {
-            emit(hustHoleApiService.loadTheHole(holeId))
-        }.flowOn(dispatcher).catch { e ->
-            e.printStackTrace()
-        }
+    fun loadTheHole(holeId: String): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService.loadTheHole(holeId)
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
     }
 
     private fun refreshTimestamp() {
         lastTimeStamp = DateUtil.getDateTime()
     }
 
-    private suspend inline fun checkResponse(
-        response: Response<Unit>,
+    private suspend inline fun <T> checkResponse(
+        response: Response<T>?,
         flow: FlowCollector<ApiResult>
     ) {
-        if (response.isSuccessful) {
-            flow.emit(ApiResult.Success(data = Unit))
+        if (response?.isSuccessful == true) {
+            flow.emit(ApiResult.Success(data = response.body()))
         } else {
-            val json = response.errorBody()?.string()
+            val json = response?.errorBody()?.string()
             val jsonObject = json?.let { JSONObject(it) }
             val returnCondition = jsonObject?.getString("errorMsg")
+            val errorCode = jsonObject?.getString("errorCode")
             flow.emit(
                 ApiResult.Error(
-                    code = response.code(),
+                    code = errorCode?.toInt() ?: response?.code() ?: 0,
                     errorMessage = returnCondition
                 )
             )
-            response.errorBody()?.close()
+            response?.errorBody()?.close()
         }
     }
-
 }

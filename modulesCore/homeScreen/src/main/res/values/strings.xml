@@ -9,10 +9,5 @@
     <string name="shield_num">( %d / %d )</string>
     <string name="dialog_shield_delete">你确认要删除对关键词 \"%s\" 的屏蔽吗？</string>
     <string name="charNum">%s/300</string>
-    <string name="newVersionTip">"""
-                    叮咚~洞洞子发现新版本：
-                    您的当前版本为%s
-                    1037树洞的最新版本为%s
-                    请确定是否进行更新
-                    """</string>
+    <string name="newVersionTip">叮咚~洞洞子发现新版本：\n您的当前版本为%s\n1037树洞的最新版本为%s\n新版本更新：\n%s\n请确定是否进行更新\n</string>
 </resources>

@@ -35,7 +35,7 @@ class HomePageViewModel : ViewModel() {
 
     private var _sortMode: String = NetworkConstant.SortMode.LATEST_REPLY
 
-    private var _loadLaterHoleId = MutableStateFlow("")
+    private var _loadLaterHoleId = ""
 
     private val lifeCycleState = MutableSharedFlow<Lifecycle.State>(replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST)
@@ -73,22 +73,24 @@ class HomePageViewModel : ViewModel() {
         }
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
-            repository.loadHoles(sortMode)
-                .onEach {
-                    _loadingState.emit(ApiStatus.SUCCESSFUL)
-                    _sortMode = sortMode
-                }
-                .catch { e ->
-                    _loadingState.emit(ApiStatus.ERROR)
-                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                    e.printStackTrace()
-                }
-                .collectLatest {
-                    it.forEach { hole ->
-                        hole.isLatestReply = isLatestReply.value
+            repository.loadHoles(sortMode).collect {
+                when (it) {
+                    is ApiResult.Success<*> -> {
+                        _loadingState.emit(ApiStatus.SUCCESSFUL)
+                        _sortMode = sortMode
+                        (it.data as List<HoleV2>).forEach {hole ->
+                            hole.isLatestReply = isLatestReply.value
+                        }
+                        _holesV2.emit(it.data as List<HoleV2>)
                     }
-                    _holesV2.emit(it)
+                    is ApiResult.Error -> {
+                        _loadingState.emit(ApiStatus.ERROR)
+                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                        tip.value = it.errorMessage
+                    }
+                    else -> {}
                 }
+            }
         }
     }
 
@@ -98,10 +100,20 @@ class HomePageViewModel : ViewModel() {
             return
         }
         viewModelScope.launch {
-            repository.loadMoreHoles(sortMode)
-                .collectLatest {
-                    _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it) })
+            _loadingState.emit(ApiStatus.LOADING)
+            repository.loadMoreHoles(sortMode).collect {
+                when(it) {
+                    is ApiResult.Success<*> -> {
+                        _loadingState.emit(ApiStatus.SUCCESSFUL)
+                        _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it.data as List<HoleV2>) })
+                    }
+                    is ApiResult.Error -> {
+                        _loadingState.emit(ApiStatus.ERROR)
+                        tip.value = it.errorMessage
+                    }
+                    else -> {}
                 }
+            }
         }
     }
 
@@ -110,16 +122,20 @@ class HomePageViewModel : ViewModel() {
             viewModelScope.launch {
                 _loadingState.emit(ApiStatus.LOADING)
                 if (queryKey.isDigitsOnly()) {
-                    repository.loadTheHole(queryKey)
-                        .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
-                        .catch {
-                            tip.value = it.message
-                            _loadingState.emit(ApiStatus.ERROR)
-                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                    repository.loadTheHole(queryKey).collectLatest {
+                        when(it) {
+                            is ApiResult.Success<*> -> {
+                                _loadingState.emit(ApiStatus.SUCCESSFUL)
+                                _holesV2.emit(listOf(it.data as HoleV2))
+                            }
+                            is ApiResult.Error -> {
+                                tip.value = it.errorMessage
+                                _loadingState.emit(ApiStatus.ERROR)
+                                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                            }
+                            else -> {}
                         }
-                        .collectLatest {
-                            _holesV2.emit(listOf(it))
-                        }
+                    }
                 } else {
                     repository.searchHolesBy(it)
                         .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
@@ -156,7 +172,7 @@ class HomePageViewModel : ViewModel() {
 
     fun loadHoleLater(holeId: String) {
         viewModelScope.launch {
-            _loadLaterHoleId.emit(holeId)
+            _loadLaterHoleId = holeId
         }
     }
 
@@ -295,12 +311,12 @@ class HomePageViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
             var i = _holesV2.value.indexOfFirst {
-                it.holeId == _loadLaterHoleId.value
+                it.holeId == _loadLaterHoleId
             }
-            /*if(i == -1) {
+            if(i == -1) {
                 i = 0
                 tip.value = _holesV2.value[0].holeId
-            }*/
+            }
             val holes = _holesV2.value.toMutableList()
             holes[i] = holes[i].copy(
                 liked = isThumb,

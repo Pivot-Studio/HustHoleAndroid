@@ -25,8 +25,8 @@
 
         <Button
             android:id="@+id/btn_ppwhomepage_latest_reply"
-            android:layout_width="@dimen/dp_60"
-            android:layout_height="@dimen/dp_24"
+            android:layout_width="@dimen/dp_64"
+            android:layout_height="@dimen/dp_26"
             android:layout_marginStart="@dimen/dp_24"
             android:background="@drawable/standard_button"
             android:text="@string/page1fragment_5"
@@ -38,8 +38,8 @@
 
         <Button
             android:id="@+id/btn_ppwhomepage_latest_publish"
-            android:layout_width="@dimen/dp_60"
-            android:layout_height="@dimen/dp_24"
+            android:layout_width="@dimen/dp_64"
+            android:layout_height="@dimen/dp_26"
             android:layout_marginStart="@dimen/dp_24"
             android:background="@drawable/standard_button_g95"
             android:text="@string/page1fragment_6"

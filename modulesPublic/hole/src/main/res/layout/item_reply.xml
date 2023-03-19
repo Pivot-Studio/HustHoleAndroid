@@ -6,6 +6,9 @@
     <data>
         <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
         <variable
+            name="type"
+            type="String" />
+        <variable
             name="reply"
             type="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
     </data>
@@ -100,6 +103,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:markDownContent="@{reply.content}"
                 app:currentId="@{reply.holeId}"
+                app:naviType="@{type}"
                 tools:text="@string/default_string_zh_long" />
 
             <View

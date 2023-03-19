@@ -7,6 +7,9 @@
 
         <import type="android.view.View" />
         <variable
+            name="type"
+            type="String" />
+        <variable
             name="holeV2"
             type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
     </data>
@@ -74,6 +77,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_hole_time"
             app:markDownContent="@{holeV2.content}"
             app:currentId="@{holeV2.holeId}"
+            app:naviType="@{type}"
             tools:text="@string/default_string_zh_long" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

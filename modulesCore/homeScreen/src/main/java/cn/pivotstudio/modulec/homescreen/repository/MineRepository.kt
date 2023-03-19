@@ -13,6 +13,7 @@ import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import org.json.JSONObject
 import retrofit2.Response
 
 /**
@@ -29,6 +30,13 @@ class MineRepository(
 ) {
     var tip = MutableLiveData<String?>()
 
+    fun getVersion(): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val response = hustHoleApiService.getVersion()
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { e ->
+        e.printStackTrace()
+    }
 
     fun getProfile(): Flow<ProFile> = flow {
         emit(
@@ -64,20 +72,24 @@ class MineRepository(
         return DateUtil.getDateTime()
     }
 
-    private suspend inline fun checkResponse(
-        response: Response<Unit>,
+    private suspend inline fun <T> checkResponse(
+        response: Response<T>?,
         flow: FlowCollector<ApiResult>
     ) {
-        if (response.isSuccessful) {
-            flow.emit(ApiResult.Success(data = Unit))
+        if (response?.isSuccessful == true) {
+            flow.emit(ApiResult.Success(data = response.body()))
         } else {
+            val json = response?.errorBody()?.string()
+            val jsonObject = json?.let { JSONObject(it) }
+            val returnCondition = jsonObject?.getString("errorMsg")
+            val errorCode = jsonObject?.getString("errorCode")
             flow.emit(
                 ApiResult.Error(
-                    code = response.code(),
-                    errorMessage = response.errorBody()?.string()
+                    code = errorCode?.toInt() ?: response?.code() ?: 0,
+                    errorMessage = returnCondition
                 )
             )
-            response.errorBody()?.close()
+            response?.errorBody()?.close()
         }
     }
 }

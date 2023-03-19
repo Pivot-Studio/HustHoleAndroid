@@ -39,7 +39,6 @@ class ForestDetailFragment : BaseFragment() {
     private val viewModel: ForestDetailViewModel by viewModels {
         ForestDetailViewModelFactory(_args.forestBrief)
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == ResultCodeConstant.Hole) {
             data?.extras?.let { bundle ->

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="contextMenuAnim" parent="@android:style/Animation.Activity">
         <item name="android:windowEnterAnimation">@anim/popupwindow_enter</item>
@@ -32,7 +32,7 @@
 
     </style>
 
-    <style name="myBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="myBarTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/HH_BandColor_3</item>
         <item name="colorPrimaryDark">@color/HH_BandColor_1</item>
         <item name="colorAccent">@color/GrayScale_100</item>
@@ -46,6 +46,7 @@
         <item name="itemTextAppearanceActive">@style/HustHoleTypography.Headline4.Bold</item>
         <item name="itemTextAppearanceInactive">@style/HustHoleTypography.Headline4.Bold</item>
         <item name="itemIconPadding">@dimen/dp_10</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">true</item>
     </style>
 
 </resources>

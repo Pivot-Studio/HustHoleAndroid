@@ -10,7 +10,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/HH_Background"
+        android:background="@color/HH_Surface"
         android:orientation="vertical">
 
         <LinearLayout
@@ -45,11 +45,9 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_25"
             android:layout_below="@id/rules_bar"
-            android:background="@color/HH_Background"
             android:gravity="center"
             android:text="@string/norm_1037"
-            android:textColor="@color/black"
-            android:textSize="@dimen/sp_18"
+            android:textAppearance="@style/HustHoleTypography.Body1"
             android:textStyle="bold" />
 
         <TextView
@@ -58,7 +56,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/law_title"
             android:layout_marginVertical="@dimen/dp_1"
-            android:background="@color/HH_Background"
+            android:paddingVertical="@dimen/dp_5"
             android:gravity="right"
             android:text="@string/update_date"
             android:textAppearance="@style/HustHoleTypography.Body3"

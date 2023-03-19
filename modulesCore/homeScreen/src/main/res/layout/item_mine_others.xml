@@ -36,18 +36,18 @@
             android:paddingVertical="@dimen/dp_14"
             android:paddingStart="@dimen/dp_20"
             android:text="@{context.getResources().getString(name)}"
-            android:textSize="@dimen/sp_14"
-            android:textColor="@{context.getResources().getString(name) == @string/login_out ? @color/HH_Reminder_Warning : @color/GrayScale_20}" />
+            android:textColor="@{context.getResources().getString(name) == @string/login_out ? @color/HH_Reminder_Warning : @color/GrayScale_20}"
+            android:textSize="@dimen/sp_14" />
 
         <TextView
             android:id="@+id/tv_verify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/ic_back"
-            android:paddingVertical="@dimen/dp_14"
             android:padding="@dimen/dp_12"
+            android:paddingVertical="@dimen/dp_14"
             android:text=""
-            android:textSize="@dimen/sp_14"
-            android:textColor="@color/GrayScale_50" />
+            android:textColor="@color/GrayScale_50"
+            android:textSize="@dimen/sp_14" />
     </RelativeLayout>
 </layout>

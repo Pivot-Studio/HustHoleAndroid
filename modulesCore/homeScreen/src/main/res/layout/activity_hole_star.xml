@@ -22,10 +22,10 @@
                 android:layout_width="@dimen/dp_45"
                 android:layout_height="@dimen/dp_45"
                 android:clickable="true"
+                android:contentDescription="@string/back"
                 android:focusable="true"
                 android:scaleType="center"
-                app:srcCompat="@drawable/back_black"
-                android:contentDescription="@string/back" />
+                app:srcCompat="@drawable/back_black" />
 
             <TextView
                 android:id="@+id/my_title"
@@ -35,16 +35,23 @@
                 android:text="@string/mine"
                 android:textColor="@color/GrayScale_100"
                 android:textSize="@dimen/sp_18"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </LinearLayout>
+
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_hole_star"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_42"
             android:layout_below="@id/my_bar"
-            android:textSize="@dimen/sp_11"
-            android:background="@color/GrayScale_100" />
+            android:layout_marginStart="@dimen/dp_10"
+            android:background="@color/HH_Surface"
+            app:tabIndicator="@drawable/tab_indicator"
+            app:tabIndicatorAnimationMode="elastic"
+            app:tabMode="scrollable"
+            app:tabPaddingEnd="@dimen/dp_0"
+            app:tabPaddingStart="@dimen/dp_0" />
+
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/vp_hole_star"

@@ -56,6 +56,7 @@ class RepliesAdapter(
     ) : RecyclerView.ViewHolder(binding.root) {
         fun bind(replyWrapper: ReplyWrapper) {
             binding.replyWrapper = replyWrapper
+            binding.type = "HoleToHole"
             binding.apply {
                 // 控制楼中楼视图框显示
                 layoutInnerReply.visibility =

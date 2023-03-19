@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.graphics.Color
 import android.graphics.Rect
@@ -15,6 +16,7 @@ import android.widget.*
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,7 +52,6 @@ fun bindDay(
 class MineFragment : BaseFragment() {
     private lateinit var binding: FragmentMineBinding
     private val viewModel: MineFragmentViewModel by viewModels()
-    private lateinit var action: NavDirections
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,24 +65,25 @@ class MineFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.tip.observe(viewLifecycleOwner) {
+            it?.let {
+                showMsg(it)
+                viewModel.doneShowingTip()
+            }
+        }
+
         binding.apply {
             myHole.setOnClickListener {
-                action = MineFragmentDirections.actionMineFragmentToHoleFollowReplyFragment(
-                    MyHoleFragmentViewModel.GET_HOLE
-                )
-                view.findNavController().navigate(action)
+                viewModel?.currentProfile!!.value = MyHoleFragmentViewModel.GET_HOLE
+                navigate()
             }
             myStar.setOnClickListener {
-                action = MineFragmentDirections.actionMineFragmentToHoleFollowReplyFragment(
-                    MyHoleFragmentViewModel.GET_FOLLOW
-                )
-                view.findNavController().navigate(action)
+                viewModel?.currentProfile!!.value = MyHoleFragmentViewModel.GET_FOLLOW
+                navigate()
             }
             myReply.setOnClickListener {
-                action = MineFragmentDirections.actionMineFragmentToHoleFollowReplyFragment(
-                    MyHoleFragmentViewModel.GET_REPLY
-                )
-                view.findNavController().navigate(action)
+                viewModel?.currentProfile!!.value = MyHoleFragmentViewModel.GET_REPLY
+                navigate()
             }
         }
 
@@ -106,9 +108,7 @@ class MineFragment : BaseFragment() {
                         }
                         else -> {
                             val action =
-                                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
-                                    position, true
-                                )
+                                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(position)
                             this@MineFragment.findNavController().navigate(action)
                         }
                     }
@@ -128,6 +128,13 @@ class MineFragment : BaseFragment() {
         super.onResume()
     }
 
+    private fun navigate() {
+        val action = MineFragmentDirections.actionMineFragmentToHoleFollowReplyFragment(
+            viewModel.currentProfile.value!!
+        )
+        this@MineFragment.findNavController().navigate(action)
+    }
+
     private fun cancelDarkBackGround() {
         val lp = this.requireActivity().window.attributes
         lp.alpha = 1f // 0.0~1.0
@@ -139,16 +146,19 @@ class MineFragment : BaseFragment() {
         val shareCard = shareCardView.findViewById<LinearLayout>(R.id.share_card)
         val cancel = shareCardView.findViewById<TextView>(R.id.share_cancel_button)
         val ppwShare = PopupWindow(shareCardView)
+        val window = this.requireActivity().window
 
         ppwShare.isOutsideTouchable = true  //点击卡片外部退出
         ppwShare.isFocusable = true     //按返回键允许退出
         ppwShare.width = ViewGroup.LayoutParams.MATCH_PARENT
         ppwShare.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        val lp = this.requireActivity().window.attributes
-        lp.alpha = 0.6f // 0.0~1.0   减弱背景亮度
-        this.requireActivity().window.attributes = lp
+        ppwShare.animationStyle = R.style.Page2Anim
+
+        //减弱背景亮度
+        window.attributes.alpha = 0.6f
+        window.setWindowAnimations(R.style.darkScreenAnim)
         ppwShare.showAtLocation(
-            this.requireActivity().window.decorView, Gravity.BOTTOM,
+            window.decorView, Gravity.BOTTOM,
             0, 0
         )    //设置显示位置
         ppwShare.setOnDismissListener {
@@ -160,13 +170,12 @@ class MineFragment : BaseFragment() {
         shareCard.setOnClickListener {
             ppwShare.dismiss()
             val action =
-                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
-                    MineFragmentViewModel.SHARE, true
-                )
+                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(MineFragmentViewModel.SHARE)
             this.findNavController().navigate(action)
         }
     }
 
+    @SuppressLint("InflateParams")
     private fun initLogOutDialog() {
         val dialog = Dialog(this.requireContext())
         val dialogView = this.requireActivity().layoutInflater.inflate(R.layout.dialog_logout, null)

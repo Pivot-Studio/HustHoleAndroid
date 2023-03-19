@@ -5,4 +5,6 @@
     <color name="HH_OnBackground">@color/BlackScale_2</color>
     <color name="HH_Surface">@color/BlackScale_2</color>
     <color name="HH_OnSurface">@color/GrayScale_98</color>
+    <color name="GrayScale_20">@color/GrayScale_80</color>
+    <color name="GrayScale_0">@color/GrayScale_80</color>
 </resources>

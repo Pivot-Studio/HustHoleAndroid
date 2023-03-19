@@ -25,6 +25,7 @@ class HoleFollowReplyViewModel : ViewModel() {
     val repository = HoleFollowReplyRepository()
     val tip: MutableLiveData<String?> = repository.tip
     val view = MutableLiveData<ConstraintLayout>(null)
+    var fragType = 1
 
     private val _loadingState = MutableStateFlow(ApiStatus.SUCCESSFUL)
     val loadingState: StateFlow<ApiStatus> = _loadingState

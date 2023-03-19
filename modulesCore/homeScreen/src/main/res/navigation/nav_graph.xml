@@ -97,23 +97,6 @@
         <argument
             android:name="fragType"
             app:argType="integer" />
-        <argument
-            android:name="isVerified"
-            app:argType="boolean" />
-        <action
-            android:id="@+id/action_itemDetailFragment2_to_verifyFragment"
-            app:destination="@id/verifyFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/verifyFragment"
-        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.mine.VerifyFragment"
-        android:label="VerifyFragment" >
-        <action
-            android:id="@+id/action_verifyFragment_to_howToVerifyFragment"
-            app:destination="@id/howToVerifyFragment" />
-    </fragment>
-    <fragment
-        android:id="@+id/howToVerifyFragment"
-        android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.mine.HowToVerifyFragment"
-        android:label="HowToVerifyFragment" />
+
 </navigation>

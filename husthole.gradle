@@ -7,7 +7,7 @@ ext {
             minSdkVersion    : 28,
             targetSdkVersion : 31,
             versionCode      : 3,//不能是非整数，无语子
-            versionName      : "v1.2.0-预览版"
+            versionName      : "v2.3.9"
     ]
 
     networkID = [

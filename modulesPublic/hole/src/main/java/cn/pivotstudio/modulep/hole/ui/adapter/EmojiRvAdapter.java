@@ -22,6 +22,7 @@ import java.util.List;
 import cn.pivotstudio.modulep.hole.R;
 import cn.pivotstudio.modulep.hole.databinding.FragmentSpecificHoleBinding;
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity;
+import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel;
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel;
 
 /**
@@ -136,14 +137,14 @@ public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
 
     }
 
-    public EmojiRvAdapter(Context context, EmojiEdittext emojiEdittext, SpecificHoleViewModel mViewModel) {
+    public EmojiRvAdapter(Context context, EmojiEdittext emojiEdittext, HoleViewModel mViewModel) {
         super(context);
         this.emojiEdittext = emojiEdittext;
         mEmoji = EmotionUtil.getResourceList();
         mEmojiName = EmotionUtil.getResourceName();
         mUsedEmoji = new LinkedList<>();
         mViewModel.pUsedEmojiList.observe((HoleActivity) context, usedEmojiList -> {
-            if (usedEmojiList != null) mUsedEmoji.addAll(usedEmojiList);
+            if (usedEmojiList != null) {mUsedEmoji.addAll(usedEmojiList);}
             mUsedEmojiCopy = usedEmojiList;
         });
     }

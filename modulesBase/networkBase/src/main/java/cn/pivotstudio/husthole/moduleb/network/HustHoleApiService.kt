@@ -72,6 +72,9 @@ object HustHoleApi {
 
 
 interface HustHoleApiService {
+    /** 版本检查**/
+    @GET("version/getLatestVersionInfo")
+    suspend fun getVersion() : Response<VersionInfo>
 
     /** 我加入的小树林 */
     @GET("user/forest")
@@ -216,7 +219,6 @@ interface HustHoleApiService {
 
 
     //========================================================================================================
-
     /** 添加树洞 */
     @POST("hole/add")
     suspend fun publishAHole(
@@ -233,7 +235,7 @@ interface HustHoleApiService {
     @GET("hole/one")
     suspend fun loadTheHole(
         @Query("holeId") holeId: String
-    ): HoleV2
+    ): Response<HoleV2>
 
     /** 搜索树洞 */
     @GET("hole/search")
@@ -250,7 +252,7 @@ interface HustHoleApiService {
         @Query("mode") mode: String = NetworkConstant.SortMode.LATEST_REPLY,
         @Query("offset") offset: Int = 0,
         @Query("timestamp") timestamp: String
-    ): List<HoleV2>
+    ): Response<List<HoleV2>>
 
     //========================================================================================================
     @GET("msg/reply")
@@ -268,7 +270,7 @@ interface HustHoleApiService {
         @Query("limit") limit: Int = 20,
         @Query("offset") offset: Int = 0,
         @Query("timestamp") timestamp: String
-    ): List<ReplyWrapper>
+    ): Response<List<ReplyWrapper>>
 
     /** 楼中楼评论列表 */
     @GET("reply/innerList")
