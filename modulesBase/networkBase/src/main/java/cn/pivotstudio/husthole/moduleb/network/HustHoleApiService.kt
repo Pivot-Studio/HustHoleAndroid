@@ -72,6 +72,9 @@ object HustHoleApi {
 
 
 interface HustHoleApiService {
+    /** 版本检查**/
+    @GET("version/getLatestVersionInfo")
+    suspend fun getVersion() : Response<VersionInfo>
 
     /** 我加入的小树林 */
     @GET("user/forest")
@@ -216,7 +219,6 @@ interface HustHoleApiService {
 
 
     //========================================================================================================
-
     /** 添加树洞 */
     @POST("hole/add")
     suspend fun publishAHole(

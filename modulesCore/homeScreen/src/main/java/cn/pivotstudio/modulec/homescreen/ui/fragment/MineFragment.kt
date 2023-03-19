@@ -16,6 +16,7 @@ import android.widget.*
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -51,7 +52,6 @@ fun bindDay(
 class MineFragment : BaseFragment() {
     private lateinit var binding: FragmentMineBinding
     private val viewModel: MineFragmentViewModel by viewModels()
-    private lateinit var action: NavDirections
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,24 +65,25 @@ class MineFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.tip.observe(viewLifecycleOwner) {
+            it?.let {
+                showMsg(it)
+                viewModel.doneShowingTip()
+            }
+        }
+
         binding.apply {
             myHole.setOnClickListener {
-                action = MineFragmentDirections.actionMineFragmentToHoleFollowReplyFragment(
-                    MyHoleFragmentViewModel.GET_HOLE
-                )
-                view.findNavController().navigate(action)
+                viewModel?.currentProfile!!.value = MyHoleFragmentViewModel.GET_HOLE
+                navigate()
             }
             myStar.setOnClickListener {
-                action = MineFragmentDirections.actionMineFragmentToHoleFollowReplyFragment(
-                    MyHoleFragmentViewModel.GET_FOLLOW
-                )
-                view.findNavController().navigate(action)
+                viewModel?.currentProfile!!.value = MyHoleFragmentViewModel.GET_FOLLOW
+                navigate()
             }
             myReply.setOnClickListener {
-                action = MineFragmentDirections.actionMineFragmentToHoleFollowReplyFragment(
-                    MyHoleFragmentViewModel.GET_REPLY
-                )
-                view.findNavController().navigate(action)
+                viewModel?.currentProfile!!.value = MyHoleFragmentViewModel.GET_REPLY
+                navigate()
             }
         }
 
@@ -125,6 +126,13 @@ class MineFragment : BaseFragment() {
     override fun onResume() {
         viewModel.getMineData()
         super.onResume()
+    }
+
+    private fun navigate() {
+        val action = MineFragmentDirections.actionMineFragmentToHoleFollowReplyFragment(
+            viewModel.currentProfile.value!!
+        )
+        this@MineFragment.findNavController().navigate(action)
     }
 
     private fun cancelDarkBackGround() {

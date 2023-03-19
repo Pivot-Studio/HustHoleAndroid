@@ -29,8 +29,7 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Compa
  * @author
  */
 class MineRecycleViewAdapter(
-    val type: Int,
-    val viewModel: HoleFollowReplyViewModel,
+    val viewModel: HoleFollowReplyViewModel
     ) : ListAdapter<Any, RecyclerView.ViewHolder>(DiffCallback) {
 
     private lateinit var onItemClickListener: OnItemClickListener
@@ -96,7 +95,7 @@ class MineRecycleViewAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return if(type == GET_HOLE || type == GET_FOLLOW)
+        return if(viewModel.fragType == GET_HOLE || viewModel.fragType == GET_FOLLOW)
              HoleAndFollowViewHolder(ItemMineHoleFollowBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         else
             ReplyViewHolder(ItemMineReplyBinding.inflate(LayoutInflater.from(parent.context), parent, false))
@@ -104,9 +103,9 @@ class MineRecycleViewAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val item = getItem(position)
-        if(type == GET_HOLE || type == GET_FOLLOW) {
+        if(viewModel.fragType == GET_HOLE || viewModel.fragType == GET_FOLLOW) {
             (holder as HoleAndFollowViewHolder).bind(item as HoleV2)
-        } else if (type == GET_REPLY) {
+        } else if (viewModel.fragType == GET_REPLY) {
             (holder as ReplyViewHolder).bind(item as Reply)
         }
         onItemClickListener.let {
@@ -115,14 +114,14 @@ class MineRecycleViewAdapter(
                     totalView.setOnClickListener {
                         onItemClickListener.navigateToHole((item as HoleV2).holeId)
                     }
-                    if(type == GET_HOLE) {
+                    if(viewModel.fragType == GET_HOLE) {
                         textView.text = onItemClickListener.getText(R.string.thumb_follow).format(hole?.likeCount.toString(),hole?.replyCount.toString())
                         totalView.setOnLongClickListener {
                             onItemClickListener.onTotalViewLongClick(item as HoleV2)
                             true
                         }
                     }
-                    if(type == GET_FOLLOW)
+                    if(viewModel.fragType == GET_FOLLOW)
                         textView.text = onItemClickListener.getText(R.string.reply_follow).format(hole?.replyCount.toString(),hole?.followCount.toString())
                 }
             } else {

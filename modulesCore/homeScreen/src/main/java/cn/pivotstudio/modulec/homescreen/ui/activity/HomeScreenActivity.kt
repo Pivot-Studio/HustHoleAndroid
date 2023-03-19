@@ -5,21 +5,26 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
-import android.util.AttributeSet
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
+import cn.pivotstudio.husthole.moduleb.network.model.VersionInfo
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.BuildConfig
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
@@ -29,16 +34,18 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.WelcomeDialog
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityHsHomescreenBinding
-import cn.pivotstudio.modulec.homescreen.network.DownloadService
-import cn.pivotstudio.modulec.homescreen.network.DownloadService.DownloadBinder
+import cn.pivotstudio.modulec.homescreen.repository.HomeScreenRepository
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment
+import cn.pivotstudio.modulec.homescreen.viewmodel.HomeScreenActivityViewModel
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.android.material.navigation.NavigationBarView
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
 
 /**
  * @classname: HomeScreenActivity
@@ -50,6 +57,7 @@ import kotlinx.coroutines.runBlocking
 @Route(path = "/homeScreen/HomeScreenActivity")
 class HomeScreenActivity : BaseActivity() {
     private lateinit var binding: ActivityHsHomescreenBinding
+    private val viewModel: HomeScreenActivityViewModel by viewModels()
     private lateinit var navController: NavController
     private val fragmentList = listOf(
         R.id.all_forest_fragment,
@@ -58,12 +66,14 @@ class HomeScreenActivity : BaseActivity() {
         R.id.itemMineFragment,
         R.id.itemDetailFragment2
     )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hs_homescreen)
-        initView()
         checkVersion()
+        initView()
     }
+
 
     /**
      * fragment中使用onActivityResult需要在此重写触发，使用navigation后activity的onActivityResult被调用后不会再触发子fragment的onActivityResult，需要手动调用
@@ -81,20 +91,17 @@ class HomeScreenActivity : BaseActivity() {
         }
     }
 
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        newConfig.uiMode
-    }
-
-
-
-
 
     /**
      * 视图初始化
      */
     private fun initView() {
-
+        viewModel.tip.observe(this) {
+            it?.let {
+                showMsg(it)
+                viewModel.doneShowingTip()
+            }
+        }
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -142,39 +149,11 @@ class HomeScreenActivity : BaseActivity() {
 
     }
 
-    /**
-     * 获取版本内容
-     */
-    private fun packageName(context: Context): String? {
-        val manager = context.packageManager
-        var name: String? = null
-        try {
-            val info = manager.getPackageInfo(context.packageName, 0)
-            name = info.versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-        return name
-    }
 
     /**
      * 检查版本以及是否第一次使用
      */
     private fun checkVersion() {
-//        val homeScreenRepository = HomeScreenRepository()
-//        homeScreenRepository.getVersionMsgForNetwork()
-//        homeScreenRepository.pHomeScreenVersionMsg.observe(this) { versionResponse: VersionResponse ->
-//            val oldVersion = packageName(this@HomeScreenActivity)
-//            val lastVersion = versionResponse.androidversion
-//            val downloadUrl = versionResponse.androidUpdateUrl
-//            if (lastVersion != oldVersion) { //如果当前不是新版本
-//                val updateDialog =
-//                    UpdateDialog(this@HomeScreenActivity, oldVersion, lastVersion, downloadUrl)
-//                updateDialog.show()
-//            } else { //是最新版本
-//
-//            }
-//        }
         val mmkvUtil = MMKVUtil.getMMKV(this)
         if (!mmkvUtil.getBoolean(Constant.IS_FIRST_USED)) { //是否第一次使用1037树洞,保证welcomeDialog只在第一使用时显式
             val welcomeDialog = WelcomeDialog(context)
@@ -184,26 +163,35 @@ class HomeScreenActivity : BaseActivity() {
 
         val manager = this.packageManager
         var oldCode = 0L
+        var oldName: String? = null
         try {
-            val info: PackageInfo = manager.getPackageInfo(this.packageName, 0)
-            oldCode = info.longVersionCode
+            val mInfo: PackageInfo = manager.getPackageInfo(this.packageName, 0)
+            oldCode = mInfo.longVersionCode
+            oldName = mInfo.versionName
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
-        if(4L > oldCode) {
-            if(checkNotification()) {
-                val updateDialog = UpdateDialog(context, oldCode.toString(), "4")
-                updateDialog.show()
-            }else {
-                runBlocking {
-                    Toast.makeText(context, "没有开启通知权限，请前往开启", Toast.LENGTH_SHORT).show()
-                    delay(1000L)
+        lifecycleScope.launch {
+            viewModel.versionInfo.collect {
+                it?.let {
+                    if (it.versionId.toLong() > oldCode || it.versionName != oldName!!) {
+                        if (checkNotification()) {
+                            val updateDialog = UpdateDialog(context, it)
+                            updateDialog.show()
+                        } else {
+                            runBlocking {
+                                Toast.makeText(context, "没有开启通知权限，请前往开启", Toast.LENGTH_SHORT).show()
+                                delay(1000L)
+                            }
+                            val localIntent = Intent()
+                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
+                            localIntent.data =
+                                Uri.fromParts("package", this@HomeScreenActivity.packageName, null)
+                            startActivity(localIntent)
+                        }
+                    }
                 }
-                val localIntent = Intent()
-                localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
-                localIntent.data = Uri.fromParts("package", this.packageName, null)
-                startActivity(localIntent)
             }
         }
     }
@@ -240,10 +228,11 @@ class HomeScreenActivity : BaseActivity() {
             navController.currentDestination?.let { navDestination ->
                 if (fragmentList.any { it == navDestination.id } || supportFragmentManager.backStackEntryCount > 0) {
                     return navController.popBackStack()
-                }else {
+                } else {
                     val secondTime = System.currentTimeMillis()
                     if (secondTime - firstTime > 2000) {
-                        Toast.makeText(this@HomeScreenActivity, "再按一次退出程序", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@HomeScreenActivity, "再按一次退出程序", Toast.LENGTH_SHORT)
+                            .show()
                         firstTime = secondTime
                         return true
                     } else {

@@ -30,7 +30,8 @@ class DownloadService : Service() {
     }
     private val mBinder = DownloadBinder()
     private var downloadFileTask: DownloadTask? = null
-    private var downloadUrl: String = "https://static.pivotstudio.cn/husthole/download/husthole.apk"
+    private var downloadUrl: String? = null
+    private var fileName: String? = null
     private val mCoroutineScope = CoroutineScope(Dispatchers.IO)
 
     private val notificationManager: NotificationManager by lazy {
@@ -129,11 +130,13 @@ class DownloadService : Service() {
 
     // 创建 DownloadBinder 实例
     inner class DownloadBinder : Binder() {
-        fun startDownload() {
+        fun startDownload(url: String) {
             mCoroutineScope.launch {
+                downloadUrl = url
+                fileName = downloadUrl?.substring(downloadUrl!!.lastIndexOf("/"))!!.drop(1)
                 Log.d(TAG, "startDownload--------: 开始下载")
                 if (downloadFileTask == null) {
-                    downloadFileTask = DownloadTask(listener, downloadUrl)
+                    downloadFileTask = DownloadTask(listener, url)
                 }
                 getNotification("正在请求下载...", 0)
                 notificationManager.notify(1, notification!!.build())
@@ -143,9 +146,8 @@ class DownloadService : Service() {
     }
 
     override fun onDestroy() {
-        val fileName: String = downloadUrl.substring(downloadUrl.lastIndexOf("/")).drop(1)
-        val file = File(path , fileName)
-        if (file.exists()) {
+        val file = fileName?.let { File(path , it) }
+        if (file!!.exists()) {
             file.delete()
             Log.d("TAG", "delete file $fileName")
         }

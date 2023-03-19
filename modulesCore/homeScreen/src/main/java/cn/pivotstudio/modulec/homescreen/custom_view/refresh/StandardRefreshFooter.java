@@ -73,16 +73,16 @@ public class StandardRefreshFooter extends LinearLayout implements RefreshFooter
         public void onStateChanged(RefreshLayout refreshLayout, RefreshState oldState, RefreshState newState) {
             switch (newState) {
                 case PullDownToRefresh:
-
                     break;
-                case Refreshing: //正在刷新。只调用一次
+                //正在刷新。只调用一次
+                case Refreshing:
                     mLoadmore.show();
                     refreshCondition=true;
 
                     break;
                 case ReleaseToRefresh:
-
-
+                    break;
+                default:
                     break;
             }
         }

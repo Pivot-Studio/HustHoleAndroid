@@ -10,7 +10,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/GrayScale_95">
+        android:background="@color/HH_Background">
 
         <LinearLayout
             android:id="@+id/screen_keyword_bar"
@@ -43,10 +43,10 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout1_label"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_44"
+            android:layout_height="@dimen/dp_50"
             android:layout_gravity="center"
             android:layout_weight="30.0"
-            android:background="@color/white"
+            android:background="@color/HH_Surface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/screen_keyword_bar">
@@ -80,7 +80,7 @@
             android:layout_height="@dimen/dp_44"
             android:layout_gravity="center"
             android:layout_weight="30.0"
-            android:background="@color/white"
+            android:background="@color/HH_Surface"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -121,7 +121,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_26"
-            android:background="@color/GrayScale_100"
+            android:background="@color/HH_Surface"
             android:minHeight="@dimen/dp_256"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"

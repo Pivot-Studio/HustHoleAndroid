@@ -1,38 +1,26 @@
 package cn.pivotstudio.modulec.homescreen.custom_view.dialog;
 
 import static android.content.Context.BIND_AUTO_CREATE;
-
-import static java.lang.Thread.sleep;
-
-import android.Manifest;
-import android.app.Activity;
 import android.app.Dialog;
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.IBinder;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.ContextCompat;
-
-import cn.pivotstudio.moduleb.libbase.util.permission.NotificationSetUtil;
-import cn.pivotstudio.moduleb.libbase.util.download.UrlDownloadUtil;
-
+import cn.pivotstudio.husthole.moduleb.network.model.VersionInfo;
 import cn.pivotstudio.modulec.homescreen.R;
 import cn.pivotstudio.modulec.homescreen.network.DownloadService;
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
+
 
 /**
  * @classname: UpdateDialog
@@ -43,9 +31,7 @@ import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity;
  */
 public class UpdateDialog extends Dialog {
     Context context;
-    String oldVersion, lastVersion, downloadUrl;
-    private NotificationCompat.Builder builder;
-    private NotificationManager notificationManager;
+    VersionInfo versionInfo;
     private DownloadService.DownloadBinder downloadBinder;
     ServiceConnection connection = new ServiceConnection() {
         @Override
@@ -68,15 +54,13 @@ public class UpdateDialog extends Dialog {
     /**
      * 构造函数
      *
-     * @param context
-     * @param oldVersion  老版本
-     * @param lastVersion 新版本
+     * @param context context
+     * @param versionInfo 版本信息
      */
-    public UpdateDialog(@NonNull Context context, String oldVersion, String lastVersion) {
+    public UpdateDialog(@NonNull Context context, VersionInfo versionInfo) {
         super(context);
         this.context = context;
-        this.oldVersion = oldVersion;
-        this.lastVersion = lastVersion;
+        this.versionInfo = versionInfo;
         Intent intent = new Intent(context, DownloadService.class);
         context.bindService(intent, connection, BIND_AUTO_CREATE);
 
@@ -98,7 +82,8 @@ public class UpdateDialog extends Dialog {
         backIcon.setImageResource(R.mipmap.vector10);
 
         TextView updateText = findViewById(R.id.tv_dialoghsupdate_content);
-        updateText.setText("叮咚~洞洞子发现新版本：" + "\n您的当前版本为" + oldVersion + "\n1037树洞的最新版本为" + lastVersion + "\n请确定是否进行更新");
+        String notification = String.format(context.getString(R.string.newVersionTip), getVersionName(), versionInfo.getVersionName(), versionInfo.getUpdateContent());
+        updateText.setText(notification);
     }
 
     /**
@@ -109,27 +94,7 @@ public class UpdateDialog extends Dialog {
     private void onClick(View v) {
         int id = v.getId();
         if (id == R.id.dialog_dialoghsupdate_delete_tv_yes) {
-            /*if (ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                //判断是否有存储权限
-                //没有权限则申请权限
-                ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            } else {
-                //有权限直接执行
-                if (downloadUrl.isEmpty()) {
-                    Toast.makeText(context, "获取的下载链接为空", Toast.LENGTH_SHORT).show();
-                    dismiss();
-                } else {
-                    NotificationSetUtil.OpenNotificationSetting(context, new NotificationSetUtil.OnNextLitener() {
-                        @Override
-                        public void onNext() {
-                            UrlDownloadUtil urlDownloadUtil = new UrlDownloadUtil(context, downloadUrl, HomeScreenActivity.class);
-                            urlDownloadUtil.startDownload();
-                            dismiss();
-                        }
-                    });
-                }
-            }*/
-            downloadBinder.startDownload();
+            downloadBinder.startDownload(versionInfo.getDownloadUrl());
             Toast.makeText(context, "开始下载", Toast.LENGTH_SHORT).show();
             IntentFilter filter = new IntentFilter("DONE");
             BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -144,5 +109,16 @@ public class UpdateDialog extends Dialog {
         } else if (id == R.id.cl_hsupdate) {
             dismiss();
         }
+    }
+
+    private String getVersionName(){
+        String name = null;
+        try {
+            PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+            name = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        return name;
     }
 }

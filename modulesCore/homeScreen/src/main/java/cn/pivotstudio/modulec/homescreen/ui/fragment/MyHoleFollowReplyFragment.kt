@@ -1,19 +1,15 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
 import android.app.Dialog
-import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
@@ -23,6 +19,7 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMyholeBinding
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineRecycleViewAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.HoleFollowReplyViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MyHoleFragmentViewModel.Companion.GET_FOLLOW
@@ -39,12 +36,17 @@ import kotlinx.coroutines.launch
  * @description:
  * @date :2022/9/20 21:46
  * @version :1.0
- * @author
+ * @author yuruop
  */
 
-class MyHoleFollowReplyFragment(val type: Int) : BaseFragment() {
+class MyHoleFollowReplyFragment() : BaseFragment() {
     private val viewModel: HoleFollowReplyViewModel by viewModels()
     private lateinit var binding: FragmentMyholeBinding
+    private var type: Int = -1
+
+    constructor(type: Int) : this() {
+        this.type = type
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,6 +61,11 @@ class MyHoleFollowReplyFragment(val type: Int) : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(type == -1) {
+            type = viewModel.fragType
+        }else {
+            viewModel.fragType = type
+        }
         initView()
         initRefresh()
     }
@@ -69,10 +76,13 @@ class MyHoleFollowReplyFragment(val type: Int) : BaseFragment() {
             GET_FOLLOW -> viewModel.getMyFollow()
             GET_REPLY -> viewModel.getMyReply()
         }
+        if((requireActivity() as HomeScreenActivity).supportActionBar != null){
+            (requireActivity() as HomeScreenActivity).supportActionBar!!.hide()
+        }
         super.onResume()
     }
     private fun initView() {
-        val adapter = MineRecycleViewAdapter(type, viewModel)
+        val adapter = MineRecycleViewAdapter(viewModel)
         adapter.setOnItemClickListener(object : MineRecycleViewAdapter.OnItemClickListener {
             override fun navigateToHole(dest: String) {
                 ARouter.getInstance()

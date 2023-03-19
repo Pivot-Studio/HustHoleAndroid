@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- 内部颜色 -->
     <solid
-        android:color="@color/GrayScale_100" android:state_pressed="false" />
+        android:color="@color/HH_Surface" android:state_pressed="false" />
 
     <!-- 圆角的幅度 -->
     <corners

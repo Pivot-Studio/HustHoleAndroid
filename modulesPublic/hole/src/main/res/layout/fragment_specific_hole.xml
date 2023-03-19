@@ -16,13 +16,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/HH_Background"
         android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10000"
-            android:background="@color/GrayScale_95"
             android:minHeight="@dimen/dp_720"
             android:orientation="vertical">
 
@@ -54,7 +54,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="?attr/actionBarSize"
                             android:background="@color/transparent"
-                            app:layout_constraintTop_toTopOf="parent"/>
+                            app:layout_constraintTop_toTopOf="parent" />
 
                         <include
                             android:id="@+id/layout_hole"
@@ -72,10 +72,9 @@
                                 android:id="@+id/tv_hole_allreply"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="22dp"
+                                android:layout_marginStart="@dimen/dp_22"
                                 android:text="@string/commment_2"
                                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
-                                android:textColor="@color/GrayScale_20"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -152,7 +151,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:background="@color/GrayScale_100"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -170,7 +168,8 @@
                 android:maxLines="5"
                 android:minHeight="@dimen/dp_32"
                 android:onClick="onClick"
-                android:paddingLeft="@dimen/dp_10"
+                android:paddingVertical="@dimen/dp_5"
+                android:paddingStart="@dimen/dp_10"
                 android:textColor="@color/GrayScale_0"
                 android:textColorHint="@color/GrayScale_70"
                 android:textSize="@dimen/sp_14"
@@ -213,6 +212,7 @@
             android:id="@+id/rv_emoji"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_286"
+            android:background="@color/HH_Background"
             android:visibility="gone"
             tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:layout_height="@dimen/dp_50"

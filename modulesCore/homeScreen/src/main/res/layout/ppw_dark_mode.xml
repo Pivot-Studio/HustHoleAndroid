@@ -18,6 +18,7 @@
         android:orientation="horizontal">
 
         <RelativeLayout
+            android:id="@+id/rl_dark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -38,12 +39,14 @@
                 android:layout_below="@+id/img_dark"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/dp_8"
-                android:text="@string/dark_mode" />
+                android:text="@string/dark_mode"
+                android:textColor="@{mode == 0 ? @color/HH_Reminder_Link : @color/GrayScale_20}"/>
 
         </RelativeLayout>
 
 
         <RelativeLayout
+            android:id="@+id/rl_light"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -65,12 +68,14 @@
                 android:layout_below="@id/img_light"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/dp_8"
-                android:text="@string/light_mode" />
+                android:text="@string/light_mode"
+                android:textColor="@{mode == 1 ? @color/HH_Reminder_Link : @color/GrayScale_20}"/>
 
         </RelativeLayout>
 
 
         <RelativeLayout
+            android:id="@+id/rl_follow_system"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -92,7 +97,8 @@
                 android:layout_below="@id/img_follow_system"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/dp_8"
-                android:text="@string/follow_mode" />
+                android:text="@string/follow_mode"
+                android:textColor="@{mode == 2 ? @color/HH_Reminder_Link : @color/GrayScale_20}"/>
         </RelativeLayout>
 
 

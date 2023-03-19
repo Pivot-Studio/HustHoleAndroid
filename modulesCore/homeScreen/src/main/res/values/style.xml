@@ -32,12 +32,11 @@
 
     </style>
 
-    <style name="myBarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="myBarTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/HH_BandColor_3</item>
         <item name="colorPrimaryDark">@color/HH_BandColor_1</item>
         <item name="colorAccent">@color/GrayScale_100</item>
         <item name="titleTextAppearance">@style/HustHoleTypography.Headline1</item>
-        <item name="android:forceDarkAllowed">true</item>
     </style>
 
     <style name="HustHoleBottomNavigationBarTheme" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
@@ -47,6 +46,7 @@
         <item name="itemTextAppearanceActive">@style/HustHoleTypography.Headline4.Bold</item>
         <item name="itemTextAppearanceInactive">@style/HustHoleTypography.Headline4.Bold</item>
         <item name="itemIconPadding">@dimen/dp_10</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">true</item>
     </style>
 
 </resources>

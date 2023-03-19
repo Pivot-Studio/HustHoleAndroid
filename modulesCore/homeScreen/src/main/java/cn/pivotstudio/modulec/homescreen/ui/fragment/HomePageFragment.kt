@@ -154,7 +154,7 @@ class HomePageFragment : BaseFragment() {
                 }
             }
 
-            lifecycleScope.launchWhenStarted {
+            lifecycleScope.launch {
                 holesV2.onEach {
                     finishRefreshAnim()
                 }.collectLatest {
@@ -169,7 +169,7 @@ class HomePageFragment : BaseFragment() {
                 }
             }
 
-            lifecycleScope.launchWhenStarted {
+            lifecycleScope.launch {
                 loadingState.collectLatest { state ->
                     when (state) {
                         ApiStatus.SUCCESSFUL,
@@ -181,7 +181,7 @@ class HomePageFragment : BaseFragment() {
                 }
             }
 
-            lifecycleScope.launchWhenStarted {
+            lifecycleScope.launch {
                 showingPlaceholder.collectLatest {
                     it?.let { placeholderType ->
                         showPlaceHolderBy(placeholderType)

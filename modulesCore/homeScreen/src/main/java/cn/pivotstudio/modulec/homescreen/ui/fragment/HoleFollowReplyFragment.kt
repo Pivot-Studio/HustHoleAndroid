@@ -4,13 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityHoleStarBinding
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
-import cn.pivotstudio.modulec.homescreen.viewmodel.HoleFollowReplyViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -21,20 +24,18 @@ import com.google.android.material.tabs.TabLayoutMediator
  * @version :1.0
  * @author
  */
-class HoleFollowReplyFragment : Fragment() {
+class HoleFollowReplyFragment : BaseFragment() {
+    private val args by navArgs<HoleFollowReplyFragmentArgs>()
     lateinit var binding: ActivityHoleStarBinding
-    private val viewModel: MineFragmentViewModel by viewModels()
-    private var type = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if((activity as HomeScreenActivity).supportActionBar != null){
-            (activity as HomeScreenActivity).supportActionBar!!.hide()
-        }
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            type = it.getInt("fragType")
+        if((requireActivity() as HomeScreenActivity).supportActionBar != null){
+            (requireActivity() as HomeScreenActivity).supportActionBar!!.hide()
         }
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,21 +52,31 @@ class HoleFollowReplyFragment : Fragment() {
         }
 
         binding.vpHoleStar.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = viewModel.myFragmentList.value!!.size
+            override fun getItemCount(): Int = titleList.size
 
             override fun createFragment(position: Int): Fragment {
-                return viewModel.myFragmentList.value!![position]
+                return MyHoleFollowReplyFragment.newInstance(position + 1)
             }
         }
-
         TabLayoutMediator(binding.tlHoleStar, binding.vpHoleStar) { tab, position ->
-            tab.text = context?.getString(viewModel.myTabTitle.value!![position])
+            val tabView = LayoutInflater.from(context).inflate(R.layout.tab_mine, null)
+            val tv = tabView.findViewById(R.id.title) as TextView
+            tv.text = requireContext().getString(titleList[position])
+            tab.customView = tabView
         }.attach()
         //用post延迟切换
         binding.vpHoleStar.post {
-            binding.vpHoleStar.setCurrentItem(type - 1, true)
+            binding.vpHoleStar.setCurrentItem(args.fragType - 1, true)
         }
     }
 
+
+    companion object {
+        val titleList = listOf(
+        R.string.tv_myHoles,
+        R.string.tv_myFollows,
+        R.string.tv_myReply
+        )
+    }
 
 }

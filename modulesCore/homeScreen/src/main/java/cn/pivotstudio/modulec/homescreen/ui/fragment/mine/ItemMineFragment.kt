@@ -1,17 +1,11 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment.mine
 
-import android.content.ComponentName
-import android.content.Context.BIND_AUTO_CREATE
 import android.content.Intent
-import android.content.ServiceConnection
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -19,28 +13,27 @@ import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.AppCompatDelegate.*
 import androidx.core.app.NotificationManagerCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import cn.pivotstudio.husthole.moduleb.network.model.VersionInfo
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineRecycleviewBinding
 import cn.pivotstudio.modulec.homescreen.databinding.PpwDarkModeBinding
-import cn.pivotstudio.modulec.homescreen.network.DownloadService
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.adapter.MineOthersAdapter
-import cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment
+import cn.pivotstudio.modulec.homescreen.viewmodel.HomeScreenActivityViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.PERSONAL_SETTING
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHIELD_SETTING
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.UPDATE
-import com.google.android.material.switchmaterial.SwitchMaterial
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 
@@ -89,7 +82,14 @@ class ItemMineFragment : Fragment() {
                 override fun onClick(view: View, position: Int, nameID: Int) {
                     when (nameID) {
                         R.string.check_update -> {
-                            check()
+                            val sharedViewModel = ViewModelProvider(requireActivity())[HomeScreenActivityViewModel::class.java]
+                            sharedViewModel.versionInfo.value?.let {
+                                if(getVersionCode() != it.versionId.toLong() || viewModel.getVersionName() != it.versionName) {
+                                    check(it)
+                                }else {
+                                    Toast.makeText(context, "已经是最新版本", Toast.LENGTH_SHORT).show()
+                                }
+                            }
                         }
                         R.string.dark_mode -> {
                             getPopUpWindows()
@@ -145,9 +145,9 @@ class ItemMineFragment : Fragment() {
         return code
     }
 
-    private fun check() {
+    private fun check(info: VersionInfo) {
         if (checkNotification()) {
-            val updateDialog = UpdateDialog(requireContext(), getVersionCode().toString(), "4")
+            val updateDialog = UpdateDialog(requireContext(), info)
             updateDialog.show()
         } else {
             runBlocking {
@@ -185,6 +185,7 @@ class ItemMineFragment : Fragment() {
         ppwDark.animationStyle = R.style.Page2Anim
 
         window.attributes.alpha = 0.6f
+        window.setWindowAnimations(R.style.darkScreenAnim)
         ppwDark.showAtLocation(
             window.decorView, Gravity.BOTTOM,
             0, 0
@@ -194,7 +195,7 @@ class ItemMineFragment : Fragment() {
         }
         darkBind.apply {
             this.mode = mmkvUtil.getInt(Constant.IS_DARK_MODE)
-            imgDark.setOnClickListener {
+            rlDark.setOnClickListener {
                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     if (mode != DARK) {
                         ppwDark.dismiss()
@@ -206,15 +207,19 @@ class ItemMineFragment : Fragment() {
                     Toast.makeText(context, "非常抱歉，您手机不支持强制深色模式555~", Toast.LENGTH_SHORT).show()
                 }
             }
-            imgLight.setOnClickListener {
-                if (mode != LIGHT) {
-                    ppwDark.dismiss()
-                    mmkvUtil.put(Constant.IS_DARK_MODE, LIGHT)
-                    mode = LIGHT
-                    setDefaultNightMode(MODE_NIGHT_NO)
+            rlLight.setOnClickListener {
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    if (mode != LIGHT) {
+                        ppwDark.dismiss()
+                        mmkvUtil.put(Constant.IS_DARK_MODE, LIGHT)
+                        mode = LIGHT
+                        setDefaultNightMode(MODE_NIGHT_NO)
+                    }
+                }else {
+                    Toast.makeText(context, "非常抱歉，您手机不支持强制浅色模式555~", Toast.LENGTH_SHORT).show()
                 }
             }
-            imgFollowSystem.setOnClickListener {
+            rlFollowSystem.setOnClickListener {
                 if (mode != FOLLOW_SYSTEM) {
                     ppwDark.dismiss()
                     mmkvUtil.put(Constant.IS_DARK_MODE, FOLLOW_SYSTEM)

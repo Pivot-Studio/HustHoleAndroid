@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/GrayScale_95">
+        android:background="@color/HH_Background">
 
         <LinearLayout
             android:id="@+id/security_bar"
@@ -44,6 +44,7 @@
             android:id="@+id/layout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/HH_Surface"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/security_bar">
 
@@ -51,7 +52,6 @@
                 android:id="@+id/tv1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_30"
-                android:background="@color/GrayScale_95"
                 android:gravity="center_vertical"
                 android:paddingStart="@dimen/dp_15"
                 android:text="安全"
@@ -62,7 +62,6 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/GrayScale_100"
                 android:paddingHorizontal="@dimen/dp_15"
                 app:layout_constraintTop_toBottomOf="@id/tv1">
 

@@ -14,9 +14,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiResult.*
 import cn.pivotstudio.husthole.moduleb.network.model.ProFile
 import cn.pivotstudio.husthole.moduleb.network.model.Type.Companion.fromValue
+import cn.pivotstudio.husthole.moduleb.network.model.VersionInfo
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.modulec.homescreen.R
@@ -45,18 +47,16 @@ class MineFragmentViewModel : ViewModel(){
     private val repository = MineRepository()
 
     val optSwitch = hashMapOf<Int, Boolean>()
-    var downloadBinder: DownloadService.DownloadBinder? = null
 
     private val _status = MutableStateFlow(false)
     val tip: MutableLiveData<String?> = repository.tip
 
     private val _myProFile = MutableStateFlow(ProFile("1037", "0", "0", "0"))
 
+
     val myProFile: StateFlow<ProFile> = _myProFile
 
     private val _myNameList = MutableLiveData<List<Int>>()  //设置栏标题名称
-    private val _myFragmentList = MutableLiveData<List<Fragment>>()     //viewPager存放fragment
-    private val _myTabTitle = MutableLiveData<List<Int>>()  //TabLayout标题的ResId
     private val _mySettingList = MutableLiveData<List<Int>>() //个人设置标题
     private val _shieldList = MutableLiveData<List<Int>>()  //屏蔽设置标题
     private val _updateList = MutableLiveData<List<Int>>()  //更新标题
@@ -69,8 +69,6 @@ class MineFragmentViewModel : ViewModel(){
     private val _updateLogList = MutableLiveData<List<ItemDetailFragment.Update>>()
 
     val myNameList: LiveData<List<Int>> = _myNameList
-    val myFragmentList: LiveData<List<Fragment>> = _myFragmentList
-    val myTabTitle: LiveData<List<Int>> = _myTabTitle
     val mySettingList: LiveData<List<Int>> = _mySettingList
     val shieldList: LiveData<List<Int>> = _shieldList
     val updateList: LiveData<List<Int>> = _updateList
@@ -81,6 +79,7 @@ class MineFragmentViewModel : ViewModel(){
     val evalAndAdvFragmentList: LiveData<List<Fragment>> = _evalAndAdvFragmentList
     val chipTitleList: LiveData<List<Int>> = _chipTitleList
     val updateLogList: LiveData<List<ItemDetailFragment.Update>> = _updateLogList
+    val currentProfile = MutableLiveData<Int>()
 
     init {
         initNameList()
@@ -90,7 +89,7 @@ class MineFragmentViewModel : ViewModel(){
         initOptionSwitch()
     }
 
-    private fun getVersionName(): String {
+    fun getVersionName(): String {
         var name: String? = null
         try {
             val info = context!!.packageManager.getPackageInfo(context!!.packageName, 0)
@@ -98,9 +97,9 @@ class MineFragmentViewModel : ViewModel(){
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
-
         return name!!
     }
+
     fun checkVersion(
         frag: ItemMineFragment
     ) {
@@ -375,16 +374,6 @@ class MineFragmentViewModel : ViewModel(){
     }
 
     private fun initViewPager() {
-        _myFragmentList.value = listOf(
-            MyHoleFollowReplyFragment.newInstance(MyHoleFragmentViewModel.GET_HOLE),
-            MyHoleFollowReplyFragment.newInstance(MyHoleFragmentViewModel.GET_FOLLOW),
-            MyHoleFollowReplyFragment.newInstance(MyHoleFragmentViewModel.GET_REPLY)
-        )
-        _myTabTitle.value = listOf(
-            R.string.tv_myHoles,
-            R.string.tv_myFollows,
-            R.string.tv_myReply
-        )
         _evalAndAdvFragmentList.value = listOf(
             cn.pivotstudio.modulec.homescreen.ui.fragment.mine.EvaluateFragment.newInstance(),
             cn.pivotstudio.modulec.homescreen.ui.fragment.mine.AdviceFragment.newInstance()

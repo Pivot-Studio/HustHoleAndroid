@@ -3,6 +3,22 @@ package cn.pivotstudio.husthole.moduleb.network.model
 import com.squareup.moshi.Json
 import java.io.Serializable
 
+data class VersionInfo(
+    /** 版本号 **/
+    val versionId: String,
+
+    /** 版本名 **/
+    val versionName: String,
+
+    /** 更新内容**/
+    @Json(name = "update_content")
+    val updateContent: String?,
+
+    /** 下载链接 **/
+    val downloadUrl: String
+
+)
+
 data class HoleV2(
     /** 内容 */
     @Json(name = "content")

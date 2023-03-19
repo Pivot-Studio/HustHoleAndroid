@@ -37,7 +37,7 @@ class HomeHoleAdapter(
     }
 
     override fun onBindViewHolder(holder: HoleViewHolder, position: Int) {
-        val hole = currentList[position]
+        val hole = getItem(position)
         holder.bind(hole)
     }
 
