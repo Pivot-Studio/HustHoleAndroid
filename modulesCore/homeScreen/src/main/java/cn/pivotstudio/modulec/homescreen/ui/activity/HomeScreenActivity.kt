@@ -37,6 +37,7 @@ import cn.pivotstudio.modulec.homescreen.databinding.ActivityHsHomescreenBinding
 import cn.pivotstudio.modulec.homescreen.repository.HomeScreenRepository
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
+import cn.pivotstudio.modulec.homescreen.ui.fragment.HomeHoleFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomeScreenActivityViewModel
 import com.alibaba.android.arouter.facade.annotation.Route
