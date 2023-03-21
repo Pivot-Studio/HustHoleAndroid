@@ -390,5 +390,4 @@ class SpecificHoleViewModelFactory(
         }
         throw IllegalArgumentException("Unknown ViewModel Class")
     }
-
 }

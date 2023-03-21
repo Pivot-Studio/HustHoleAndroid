@@ -8,6 +8,7 @@ import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
 import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
+import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -36,6 +37,53 @@ class HomePageHoleRepository(
     }
 
     var tip = MutableLiveData<String?>()
+
+    fun getMyFollow(): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        val resp = hustHoleApiService.getMyFollow()
+        checkResponse(resp, this)
+    }.flowOn(dispatcher).onEach {
+        lastOffset = 0
+    }.catch {
+        it.printStackTrace()
+    }
+
+    fun loadMoreFollow(): Flow<ApiResult> = flow {
+        lastOffset += NetworkConstant.CONSTANT_STANDARD_LOAD_SIZE
+        emit(ApiResult.Loading())
+        val resp = hustHoleApiService.getMyFollow(lastOffset)
+        checkResponse(resp, this)
+    }.flowOn(dispatcher).catch { e ->
+        tip.value = e.message
+        e.printStackTrace()
+    }
+    fun loadRecHoles(sortMode: String): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        refreshTimestamp()
+        lastOffset = 0
+        val response = hustHoleApiService.getRec(
+            mode = sortMode,
+            timestamp = lastTimeStamp
+        )
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch {
+        tip.value = it.message
+        it.printStackTrace()
+    }
+
+    fun loadMoreRecHoles(sortMode: String): Flow<ApiResult> = flow {
+        emit(ApiResult.Loading())
+        lastOffset += HOLES_LIST_SIZE
+        val response = hustHoleApiService.getRec(
+            timestamp = lastTimeStamp,
+            offset = lastOffset,
+            mode = sortMode
+        )
+        checkResponse(response, this)
+    }.flowOn(dispatcher).catch { e ->
+        tip.value = e.message
+        e.printStackTrace()
+    }
 
     fun loadHoles(sortMode: String): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())

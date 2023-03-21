@@ -7,9 +7,12 @@ import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
-import kotlinx.coroutines.channels.BufferOverflow
+import cn.pivotstudio.modulec.homescreen.ui.fragment.HomeHoleFragment.Companion.RECOMMEND
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.withTimeoutOrNull
 
 /**
  * @classname:HomePageViewModel
@@ -36,33 +39,106 @@ class HomePageViewModel : ViewModel() {
     private var _sortMode: String = NetworkConstant.SortMode.LATEST_REPLY
 
     private var _loadLaterHoleId = ""
+    var type = 1
 
-    private val lifeCycleState = MutableSharedFlow<Lifecycle.State>(replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST)
-
-    private fun <T> Flow<T>.whenAtLeast(requiredState: Lifecycle.State): Flow<T> {
-        return lifeCycleState.map { state -> state.isAtLeast(requiredState) }
-            .distinctUntilChanged()
-            .flatMapLatest {
-                // flatMapLatest will take care of cancelling the upstream Flow
-                if (it) this else emptyFlow()
+    fun getMyFollow() {
+        viewModelScope.launch {
+            try{
+                withTimeout(HoleFollowReplyViewModel.MAX_REQUEST_TIME) {
+                    repository.getMyFollow().collect {
+                        when (it) {
+                            is ApiResult.Success<*> -> {
+                                _holesV2.emit(it.data as List<HoleV2>)
+                                if (_holesV2.value.isEmpty())
+                                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
+                            }
+                            is ApiResult.Error -> {
+                                tip.value = it.code.toString() + it.errorMessage
+                                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                            }
+                            else -> {}
+                        }
+                    }
+                }
+            } catch (e: TimeoutCancellationException) {
+                if (_loadingState.value == ApiStatus.LOADING) {
+                    _loadingState.emit(ApiStatus.ERROR)
+                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                }
             }
+
+        }
     }
 
-    private val lifecycleObserver = object : LifecycleEventObserver {
-        override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-            lifeCycleState.tryEmit(event.targetState)
-            if (event.targetState == Lifecycle.State.DESTROYED) {
-                source.lifecycle.removeObserver(this)
+    fun loadMoreFollow() {
+        viewModelScope.launch {
+            _loadingState.emit(ApiStatus.LOADING)
+            withTimeoutOrNull(HoleFollowReplyViewModel.MAX_REQUEST_TIME) {
+                repository.loadMoreFollow().collect {
+                    when (it) {
+                        is ApiResult.Success<*> -> {
+                            _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it.data as List<HoleV2>) })
+                        }
+                        is ApiResult.Error -> {
+                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                            tip.value = it.code.toString() + it.errorMessage
+                        }
+                        else -> {}
+                    }
+                }
+            }
+            if (_loadingState.value == ApiStatus.LOADING) {
+                _loadingState.emit(ApiStatus.ERROR)
+                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
             }
         }
     }
 
-    fun startObservingLifecycle(lifecycle: Lifecycle) {
-        lifecycle.addObserver(lifecycleObserver)
+    fun loadRecHoles(sortMode: String = _sortMode) {
+        when (sortMode) {
+            NetworkConstant.SortMode.LATEST_REPLY -> _isLatestReply.value = true
+            else -> _isLatestReply.value = false
+        }
+        viewModelScope.launch {
+            _loadingState.emit(ApiStatus.LOADING)
+            repository.loadRecHoles(sortMode).collect {
+                when (it) {
+                    is ApiResult.Success<*> -> {
+                        _loadingState.emit(ApiStatus.SUCCESSFUL)
+                        _sortMode = sortMode
+                        (it.data as List<HoleV2>).forEach { hole ->
+                            hole.isLatestReply = isLatestReply.value
+                        }
+                        _holesV2.emit(it.data as List<HoleV2>)
+                    }
+                    is ApiResult.Error -> {
+                        _loadingState.emit(ApiStatus.ERROR)
+                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                        tip.value = it.errorMessage
+                    }
+                    else -> {}
+                }
+            }
+        }
     }
-    init {
-        loadHolesV2()
+
+    fun loadMoreRecHoles(sortMode: String = _sortMode) {
+        viewModelScope.launch {
+            _loadingState.emit(ApiStatus.LOADING)
+            repository.loadMoreRecHoles(sortMode).collect {
+                when(it) {
+                    is ApiResult.Success<*> -> {
+                        _loadingState.emit(ApiStatus.SUCCESSFUL)
+                        _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it.data as List<HoleV2>) })
+                    }
+                    is ApiResult.Error -> {
+                        _loadingState.emit(ApiStatus.ERROR)
+                        tip.value = it.errorMessage
+                    }
+                    else -> {}
+                }
+            }
+        }
     }
 
     fun loadHolesV2(sortMode: String = _sortMode) {
@@ -331,6 +407,7 @@ class HomePageViewModel : ViewModel() {
     }
 
     enum class PlaceholderType {
+        PLACEHOLDER_NO_CONTENT,
         PLACEHOLDER_NO_SEARCH_RESULT,
         PLACEHOLDER_NETWORK_ERROR
     }

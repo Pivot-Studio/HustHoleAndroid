@@ -12,7 +12,7 @@
         <LinearLayout
             android:id="@+id/linearLayout_et"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_44"
+            android:layout_height="@dimen/dp_38"
             android:background="@color/HH_OnBackground"
             android:orientation="horizontal"
             android:paddingHorizontal="@dimen/dp_16"
@@ -56,71 +56,37 @@
 
         </LinearLayout>
 
-        <cn.pivotstudio.modulec.homescreen.custom_view.HomePageOptionBox
-            android:id="@+id/cl_mid_block"
+        <LinearLayout
+            android:id="@+id/ll_hole_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/linearLayout_et"
-            android:background="@color/HH_OnBackground" />
+            android:background="@color/HH_OnBackground"
+            android:orientation="horizontal">
 
-        <com.scwang.smart.refresh.layout.SmartRefreshLayout
-            android:id="@+id/refreshLayout"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tb_mode"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_44"
+                android:layout_marginStart="@dimen/dp_11"
+                android:background="@color/HH_Surface"
+                app:tabIndicator="@drawable/tab_indicator"
+                app:tabIndicatorAnimationMode="elastic"
+                app:tabMode="scrollable"
+                app:tabPaddingEnd="@dimen/dp_10"
+                app:tabPaddingStart="@dimen/dp_11"
+                app:tabMinWidth="0dp"
+                app:tabMaxWidth="0dp"/>
+
+
+        </LinearLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/vp_homescreen_hole"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/cl_mid_block"
-            android:minHeight="@dimen/dp_400"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <com.scwang.smart.refresh.header.ClassicsHeader
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/homepage_nested_scroll_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
-
-                    <FrameLayout
-                        android:id="@+id/homepage_placeholder"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/dp_100">
-
-                        <include
-                            android:id="@+id/placeholder_home_net_error"
-                            layout="@layout/network_error_placeholder"
-                            android:visibility="gone"/>
-
-                        <include
-                            android:id="@+id/placeholder_home_no_result"
-                            layout="@layout/no_search_result_placeholder"
-                            tools:visibility="visible" />
-
-                    </FrameLayout>
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/recyclerView"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/dp_5"
-                        android:visibility="gone"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        tools:listitem="@layout/item_homepagehole" />
-
-                </LinearLayout>
-
-            </androidx.core.widget.NestedScrollView>
-
-            <com.scwang.smart.refresh.footer.ClassicsFooter
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+            android:layout_below="@+id/ll_hole_mode"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     </RelativeLayout>
 </layout>

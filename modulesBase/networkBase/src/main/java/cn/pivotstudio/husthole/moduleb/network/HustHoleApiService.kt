@@ -254,6 +254,15 @@ interface HustHoleApiService {
         @Query("timestamp") timestamp: String
     ): Response<List<HoleV2>>
 
+    /** 推荐列表 **/
+    @GET("hole/rec")
+    suspend fun getRec(
+        @Query("timestamp") timestamp: String,
+        @Query("offset") offset: Int = 0,
+        @Query("mode") mode: String = NetworkConstant.SortMode.REC,
+        @Query("limit") limit: Int = 20
+    ) : Response<List<HoleV2>>
+
     //========================================================================================================
     @GET("msg/reply")
     suspend fun getReplyNotice(
