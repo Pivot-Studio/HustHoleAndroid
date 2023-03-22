@@ -10,19 +10,14 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.findFragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.HomePageOptionBox
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomepageBinding
-import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -45,6 +40,7 @@ class HomePageFragment : BaseFragment() {
     }
 
     private lateinit var binding: FragmentHomepageBinding
+    private var listener: EditActionListener? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -58,6 +54,7 @@ class HomePageFragment : BaseFragment() {
         initView()
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         childFragmentManager.fragments[binding.tbMode.selectedTabPosition]?.onActivityResult(
@@ -78,35 +75,20 @@ class HomePageFragment : BaseFragment() {
         )
 
         binding.apply {
+            etHomepage.setOnClickListener {}
             etHomepage.imeOptions = EditorInfo.IME_ACTION_SEARCH
 
             vpHomescreenHole.adapter = object : FragmentStateAdapter(this@HomePageFragment) {
                 override fun getItemCount(): Int = 3
 
-                override fun createFragment(position: Int): Fragment {
-                    val fragment = HomeHoleFragment.newInstance(position + 1)
-                    if (position == 0) {
-                        etHomepage.setOnClickListener { v -> fragment.onSelectModeClick(v) }
-                        etHomepage.setOnEditorActionListener { v: TextView, actionId: Int, event: KeyEvent? ->
-                            if (tbMode.selectedTabPosition != 0) {
-                                tbMode.selectTab(tbMode.getTabAt(0), true)
-                            }
-                            fragment.onEditorListener(
-                                v, actionId, event
-                            )
-                        }
-                        (tbMode.getTabAt(0)?.customView as HomePageOptionBox).setOptionsListener { v: View ->
-                            fragment.onSelectModeClick(v)
-                        }
-                    }
-                    return fragment
-                }
+                override fun createFragment(position: Int): Fragment =
+                    HomeHoleFragment.newInstance(position + 1)
             }
             TabLayoutMediator(tbMode, vpHomescreenHole) { tab, position ->
                 val tabView = if (position != 0) {
                     LayoutInflater.from(context).inflate(R.layout.tab_mine, tbMode, false)
                 } else {
-                    HomePageOptionBox(context)
+                    HomePageOptionBox(context, tbMode)
                 }
                 val tv = tabView.findViewById(R.id.title) as TextView
                 tv.text = requireContext().getString(titleList[position])
@@ -117,21 +99,23 @@ class HomePageFragment : BaseFragment() {
                     if (tab?.customView is HomePageOptionBox) {
                         val mForestSquareCl =
                             (tab.customView as HomePageOptionBox).findViewById<LinearLayout>(R.id.ll_mid_block)
+                        //恢复上层（子）视图点击事件
                         mForestSquareCl.isClickable = true
                         mForestSquareCl.isFocusable = true
-                        //mForestSquareCl.setOnClickListener { v: View -> (tab.customView as HomePageOptionBox).onClick(v) }
                     }
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                     if (tab?.customView is HomePageOptionBox) {
-                        val mForestSquareCl =
-                            (tab.customView as HomePageOptionBox).findViewById<LinearLayout>(R.id.ll_mid_block)
-                        if ((tab.customView as HomePageOptionBox).mFlag) {
-                            (tab.customView as HomePageOptionBox).endTriangleAnim()
-                            (tab.customView as HomePageOptionBox).mFlag =
-                                !(tab.customView as HomePageOptionBox).mFlag
+                        val view = tab.customView as HomePageOptionBox
+                        val mForestSquareCl: LinearLayout =
+                            view.findViewById(R.id.ll_mid_block)
+                        //如果ppw是打开的，跳转其他tab会收起ppw
+                        if (view.mFlag) {
+                            view.endTriangleAnim()
+                            view.mFlag = !view.mFlag
                         }
+                        //解决按键事件冲突
                         mForestSquareCl.isClickable = false
                         mForestSquareCl.isFocusable = false
                     }
@@ -140,7 +124,29 @@ class HomePageFragment : BaseFragment() {
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                 }
             })
-        }
 
+            etHomepage.setOnEditorActionListener { v: TextView, actionId: Int, event: KeyEvent? ->
+                //在其他tab点击搜索时会回到树洞列表tab里面
+                if (tbMode.selectedTabPosition != 0) {
+                    tbMode.selectTab(tbMode.getTabAt(0), true)
+                }
+                // 这里用接口回调的原因是因为viewPager内的Fragment可能会被销毁重建
+                // 使用接口可以保证新的Fragment实例实现绑定了点击事件，避免点击时新的Fragment没有设置处理点击事件而无反应或者闪退
+                if (tbMode.selectedTabPosition == 0) {
+                    if (!v.text.isNullOrEmpty() && (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE || event != null && KeyEvent.KEYCODE_ENTER == event.keyCode && KeyEvent.ACTION_DOWN == event.action)) {
+                        listener!!.onSend(v.text.toString())
+                    }
+                }
+                false
+            }
+        }
+    }
+
+    fun setEditActionListener(listener: EditActionListener) {
+        this.listener = listener
+    }
+
+    interface EditActionListener {
+        fun onSend(text: String)
     }
 }

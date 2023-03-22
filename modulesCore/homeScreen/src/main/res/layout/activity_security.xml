@@ -94,6 +94,7 @@
                     android:layout_marginTop="@dimen/dp_16"
                     android:buttonTint="@color/HH_BandColor_3"
                     android:enabled="true"
+                    android:checked="true"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>

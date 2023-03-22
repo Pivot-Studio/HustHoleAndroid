@@ -49,6 +49,9 @@ class InnerReplyAdapter(
                 clReply.setOnClickListener {
                     viewModel.replyTo(reply)
                 }
+                tvReplyContent.setOnClickListener {
+                    viewModel.replyTo(reply)
+                }
 
                 tvReplyContent.setOnLongClickListener { //重写监听器中的onLongClick()方法
                     val cm =

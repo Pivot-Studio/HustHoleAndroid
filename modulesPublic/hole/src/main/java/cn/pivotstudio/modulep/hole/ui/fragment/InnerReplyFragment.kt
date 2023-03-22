@@ -124,8 +124,11 @@ class InnerReplyFragment : BaseFragment() {
             layoutReplyFrame.setOnClickListener {
                 innerReplyViewModel.replyToOwner()
             }
+            tvHoleContent.setOnClickListener {
+                innerReplyViewModel.replyToOwner()
+            }
 
-            layoutReplyFrame.setOnLongClickListener {
+            tvHoleContent.setOnLongClickListener {
                 val cm =
                     BaseApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                 cm.setPrimaryClip(
@@ -138,7 +141,7 @@ class InnerReplyFragment : BaseFragment() {
                     cm.primaryClip?.getItemAt(0)?.text
                 }
                 Toast.makeText(it.context, "已将内容复制到剪切板！", Toast.LENGTH_SHORT).show()
-                false
+                true
             }
 
             ivBaseReplyMore.setOnClickListener {

@@ -7,7 +7,6 @@ import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
-import cn.pivotstudio.modulec.homescreen.ui.fragment.HomeHoleFragment.Companion.RECOMMEND
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -36,7 +35,8 @@ class HomePageViewModel : ViewModel() {
     private var _showingPlaceholder = MutableStateFlow<PlaceholderType?>(null)
     val showingPlaceholder = _showingPlaceholder.asStateFlow()
 
-    private var _sortMode: String = NetworkConstant.SortMode.LATEST_REPLY
+    private val _sortMode = MutableLiveData(NetworkConstant.SortMode.LATEST_REPLY)
+    val sortMode: LiveData<String> = _sortMode
 
     private var _loadLaterHoleId = ""
     var type = 1
@@ -45,14 +45,17 @@ class HomePageViewModel : ViewModel() {
         viewModelScope.launch {
             try{
                 withTimeout(HoleFollowReplyViewModel.MAX_REQUEST_TIME) {
+                    _loadingState.emit(ApiStatus.LOADING)
                     repository.getMyFollow().collect {
                         when (it) {
                             is ApiResult.Success<*> -> {
+                                _loadingState.emit(ApiStatus.SUCCESSFUL)
                                 _holesV2.emit(it.data as List<HoleV2>)
                                 if (_holesV2.value.isEmpty())
                                     _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
                             }
                             is ApiResult.Error -> {
+                                _loadingState.emit(ApiStatus.ERROR)
                                 tip.value = it.code.toString() + it.errorMessage
                                 _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
                             }
@@ -77,9 +80,11 @@ class HomePageViewModel : ViewModel() {
                 repository.loadMoreFollow().collect {
                     when (it) {
                         is ApiResult.Success<*> -> {
+                            _loadingState.emit(ApiStatus.SUCCESSFUL)
                             _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it.data as List<HoleV2>) })
                         }
                         is ApiResult.Error -> {
+                            _loadingState.emit(ApiStatus.ERROR)
                             _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
                             tip.value = it.code.toString() + it.errorMessage
                         }
@@ -94,7 +99,7 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun loadRecHoles(sortMode: String = _sortMode) {
+    fun loadRecHoles(sortMode: String = _sortMode.value!!) {
         when (sortMode) {
             NetworkConstant.SortMode.LATEST_REPLY -> _isLatestReply.value = true
             else -> _isLatestReply.value = false
@@ -105,7 +110,7 @@ class HomePageViewModel : ViewModel() {
                 when (it) {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
-                        _sortMode = sortMode
+                        _sortMode.value = sortMode
                         (it.data as List<HoleV2>).forEach { hole ->
                             hole.isLatestReply = isLatestReply.value
                         }
@@ -122,7 +127,7 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun loadMoreRecHoles(sortMode: String = _sortMode) {
+    fun loadMoreRecHoles(sortMode: String = _sortMode.value!!) {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             repository.loadMoreRecHoles(sortMode).collect {
@@ -141,7 +146,7 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun loadHolesV2(sortMode: String = _sortMode) {
+    fun loadHolesV2(sortMode: String = _sortMode.value!!) {
         isSearch = false
         when (sortMode) {
             NetworkConstant.SortMode.LATEST_REPLY -> _isLatestReply.value = true
@@ -153,7 +158,7 @@ class HomePageViewModel : ViewModel() {
                 when (it) {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
-                        _sortMode = sortMode
+                        _sortMode.value = sortMode
                         (it.data as List<HoleV2>).forEach {hole ->
                             hole.isLatestReply = isLatestReply.value
                         }
@@ -170,7 +175,7 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun loadMoreHoles(sortMode: String = _sortMode) {
+    fun loadMoreHoles(sortMode: String = _sortMode.value!!) {
         if (isSearch) {
             loadMoreSearchHoles()
             return

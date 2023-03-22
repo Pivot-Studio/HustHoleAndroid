@@ -85,6 +85,9 @@ class RepliesAdapter(
                 clReply.setOnClickListener {
                     viewModel.replyTo(replyWrapper.self)
                 }
+                tvReplyContent.setOnClickListener {
+                    viewModel.replyTo(replyWrapper.self)
+                }
 
                 clReplyThumb.setOnClickListener {
                     viewModel.giveALikeToTheReply(replyWrapper.self)

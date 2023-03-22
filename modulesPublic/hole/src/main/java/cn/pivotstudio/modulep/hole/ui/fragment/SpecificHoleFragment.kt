@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.core.view.isVisible
@@ -118,19 +119,11 @@ class SpecificHoleFragment : BaseFragment() {
                 layoutHoleFrame.setOnClickListener {
                     replyViewModel.replyToOwner()
                 }
-                layoutHoleFrame.setOnLongClickListener {
-                    val cm =
-                        BaseApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                    cm.setPrimaryClip(
-                        ClipData.newPlainText(
-                            null,
-                            tvHoleContent.text.toString()
-                        )
-                    )
-                    if (cm.hasPrimaryClip()) {
-                        cm.primaryClip?.getItemAt(0)?.text
-                    }
-                    Toast.makeText(it.context, "已将内容复制到剪切板！", Toast.LENGTH_SHORT).show()
+                tvHoleContent.setOnClickListener {
+                    replyViewModel.replyToOwner()
+                }
+                tvHoleContent.setOnLongClickListener {
+                    copyToClipboard(tvHoleContent)
                     true
                 }
 
@@ -375,6 +368,21 @@ class SpecificHoleFragment : BaseFragment() {
 
     private fun savaDate(hole: HoleV2) {
         (requireActivity() as HoleActivity).saveResultData(hole)
+    }
+
+    private fun copyToClipboard(view: TextView) {
+        val cm =
+            BaseApplication.context!!.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        cm.setPrimaryClip(
+            ClipData.newPlainText(
+                null,
+                view.text.toString()
+            )
+        )
+        if (cm.hasPrimaryClip()) {
+            cm.primaryClip?.getItemAt(0)?.text
+        }
+        Toast.makeText(context, "已将内容复制到剪切板！", Toast.LENGTH_SHORT).show()
     }
 }
 
