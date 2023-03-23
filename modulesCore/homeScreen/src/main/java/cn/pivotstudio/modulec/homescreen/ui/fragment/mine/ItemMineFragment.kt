@@ -19,6 +19,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import cn.pivotstudio.husthole.moduleb.network.model.VersionInfo
 import cn.pivotstudio.moduleb.database.MMKVUtil
@@ -35,6 +36,7 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Compani
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHIELD_SETTING
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.UPDATE
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
@@ -84,8 +86,10 @@ class ItemMineFragment : Fragment() {
                         R.string.check_update -> {
                             val sharedViewModel = ViewModelProvider(requireActivity())[HomeScreenActivityViewModel::class.java]
                             sharedViewModel.versionInfo.value?.let {
-                                if(getVersionCode() != it.versionId.toLong() || viewModel.getVersionName() != it.versionName) {
-                                    check(it)
+                                if(getVersionCode() < it.versionId.toLong() || viewModel.getVersionName() != it.versionName) {
+                                    lifecycleScope.launch {
+                                        check(it)
+                                    }
                                 }else {
                                     Toast.makeText(context, "已经是最新版本", Toast.LENGTH_SHORT).show()
                                 }

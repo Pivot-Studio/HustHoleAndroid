@@ -29,11 +29,16 @@ class HomePageOptionBox : LinearLayout {
     private var mDarkScreenPpw: PopupWindow? = null
     private var mNewPublishBtn: Button? = null
     private var mNewCommentBtn: Button? = null
+    private var parent: ViewGroup? = null
     var mFlag = false
 
 
     constructor(context: Context) : super(context) {
         initView(context)
+    }
+
+    constructor(context: Context, parent: ViewGroup) : this(context) {
+        this.parent = parent
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
@@ -72,8 +77,13 @@ class HomePageOptionBox : LinearLayout {
      * @param context
      */
     private fun initView(context: Context) {
-        LayoutInflater.from(context)
-            .inflate(R.layout.tab_hole_list, this, true)
+        if(parent != null) {
+            LayoutInflater.from(context)
+                .inflate(R.layout.tab_hole_list, parent, false)
+        }else {
+            LayoutInflater.from(context)
+                .inflate(R.layout.tab_hole_list, this, true)
+        }
         mTriangleIv = findViewById<View>(R.id.iv_homepage_triangle) as ImageView
 
         val mForestSquareCl = findViewById<LinearLayout>(R.id.ll_mid_block)

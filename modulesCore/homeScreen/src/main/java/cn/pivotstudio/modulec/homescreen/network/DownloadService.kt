@@ -19,7 +19,6 @@ import cn.pivotstudio.husthole.moduleb.network.download.DownloadStateListener
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import kotlinx.coroutines.*
-import okhttp3.internal.notify
 import java.io.File
 
 
@@ -55,7 +54,7 @@ class DownloadService : Service() {
             getNotification(getString(R.string.download_success), -1)
             notification!!.setAutoCancel(true)
             notificationManager.notify(1, notification!!.build())
-            installApk("husthole.apk")
+            installApk(fileName!!)
         }
 
         override fun onFailure() {
@@ -119,7 +118,7 @@ class DownloadService : Service() {
         startActivity(intent)
         val broadcastIntent = Intent("DONE")
         runBlocking {
-            delay(10000L)
+            delay(8000L)
             sendBroadcast(broadcastIntent)
         }
     }

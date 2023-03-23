@@ -29,7 +29,6 @@
                     android:background="@color/HH_BandColor_1"
                     app:titleTextAppearance="@style/HustHoleTypography.Headline1.Bold"
                     app:titleTextColor="?attr/colorOnPrimary" />
-
             </com.google.android.material.appbar.AppBarLayout>
 
 

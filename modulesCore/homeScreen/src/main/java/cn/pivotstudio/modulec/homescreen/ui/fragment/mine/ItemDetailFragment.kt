@@ -107,6 +107,7 @@ class ItemDetailFragment : Fragment() {
                         view.findNavController().popBackStack()
                     }
                     stSecurity.setOnCheckedChangeListener { _, isChecked ->
+                        Toast.makeText(context, "维护中！", Toast.LENGTH_SHORT).show()
                         viewModel.changePrivacyState(!isChecked)
                     }
                 }

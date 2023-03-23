@@ -18,6 +18,7 @@ class DownloadRepository(
     fun getDownloadRetrofitService(
         downloadedLength: Long = 0
     ): DownloadRetrofitService {
+        //断点下载
         val requestInterceptor = Interceptor { chain ->
             chain.request().newBuilder()
                 .addHeader("RANGE", "bytes=$downloadedLength-")

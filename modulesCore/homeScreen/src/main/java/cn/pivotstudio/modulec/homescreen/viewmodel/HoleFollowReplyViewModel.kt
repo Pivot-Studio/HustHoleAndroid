@@ -40,131 +40,105 @@ class HoleFollowReplyViewModel : ViewModel() {
     val myFollow: StateFlow<List<HoleV2>> = _myFollow
     val myReply: StateFlow<List<Reply>> = _myReply
 
-    init {
-        getMyHole()
-        getMyFollow()
-        getMyReply()
-    }
 
     fun getMyHole() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
-            withTimeoutOrNull(MAX_REQUEST_TIME) {
-                repository.getMyHole()
-                    .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
-                    .catch { e ->
-                        _loadingState.emit(ApiStatus.ERROR)
-                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                        e.printStackTrace()
-                    }
-                    .collectLatest {
+            repository.getMyHole()
+                .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
+                .catch { e ->
+                    _loadingState.emit(ApiStatus.ERROR)
+                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                    e.printStackTrace()
+                }
+                .collectLatest {
+                    if (it.isEmpty()) {
+                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
+                    } else {
                         _myHole.emit(it)
-                        if (it.isEmpty())
-                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
                     }
-            }
-            if (_loadingState.value == ApiStatus.LOADING) {
-                _loadingState.emit(ApiStatus.ERROR)
-                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-            }
+                }
         }
     }
 
     fun getMyFollow() {
         viewModelScope.launch {
-            try{
-                withTimeout(MAX_REQUEST_TIME) {
-                    repository.getMyFollow().collect {
-                        when (it) {
-                            is ApiResult.Success<*> -> {
-                                _myFollow.emit(it.data as List<HoleV2>)
-                                if (_myFollow.value.isEmpty())
-                                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
-                            }
-                            is ApiResult.Error -> {
-                                tip.value = it.code.toString() + it.errorMessage
-                                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                            }
-                            else -> {}
-                        }
+            _loadingState.emit(ApiStatus.LOADING)
+            repository.getMyFollow().collect {
+                when (it) {
+                    is ApiResult.Success<*> -> {
+                        _loadingState.emit(ApiStatus.SUCCESSFUL)
+                        _myFollow.emit(it.data as List<HoleV2>)
+                        if (_myFollow.value.isEmpty())
+                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
                     }
-                }
-            } catch (e: TimeoutCancellationException) {
-                if (_loadingState.value == ApiStatus.LOADING) {
-                    _loadingState.emit(ApiStatus.ERROR)
-                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                    is ApiResult.Error -> {
+                        _loadingState.emit(ApiStatus.ERROR)
+                        tip.value = it.code.toString() + it.errorMessage
+                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                    }
+                    else -> {}
                 }
             }
-
         }
     }
 
     fun getMyReply() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
-            withTimeoutOrNull(MAX_REQUEST_TIME) {
-                repository.getMyReply()
-                    .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
-                    .catch { e ->
-                        _loadingState.emit(ApiStatus.ERROR)
-                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                        e.printStackTrace()
-                    }
-                    .collectLatest {
-                        _myReply.emit(it)
-                        if (it.isEmpty())
-                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
-                    }
-            }
-            if (_loadingState.value == ApiStatus.LOADING) {
-                _loadingState.emit(ApiStatus.ERROR)
-                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-            }
+            repository.getMyReply()
+                .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
+                .catch { e ->
+                    _loadingState.emit(ApiStatus.ERROR)
+                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                    e.printStackTrace()
+                }
+                .collectLatest {
+                    _myReply.emit(it)
+                    if (it.isEmpty())
+                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
+                }
         }
     }
 
     fun loadMoreHole() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
-            withTimeoutOrNull(MAX_REQUEST_TIME) {
-                repository.loadMoreHole()
-                    .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
-                    .catch { e ->
-                        _loadingState.emit(ApiStatus.ERROR)
-                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                        e.printStackTrace()
-                    }
-                    .collectLatest {
-                        _myHole.emit(_myHole.value.toMutableList().apply { addAll(it) })
-                    }
-            }
-            if (_loadingState.value == ApiStatus.LOADING) {
-                _loadingState.emit(ApiStatus.ERROR)
-                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-            }
+            repository.loadMoreHole()
+                .onEach { _loadingState.emit(ApiStatus.SUCCESSFUL) }
+                .catch { e ->
+                    _loadingState.emit(ApiStatus.ERROR)
+                    _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                    e.printStackTrace()
+                }
+                .collectLatest {
+                    _myHole.emit(_myHole.value.toMutableList().apply { addAll(it) })
+                }
         }
     }
 
     fun loadMoreFollow() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
-            withTimeoutOrNull(MAX_REQUEST_TIME) {
-                repository.loadMoreFollow().collect {
-                    when (it) {
-                        is ApiResult.Success<*> -> {
-                            _myFollow.emit(_myFollow.value.toMutableList().apply { addAll(it.data as List<HoleV2>) })
+            repository.loadMoreFollow().collect {
+                when (it) {
+                    is ApiResult.Success<*> -> {
+                        _loadingState.emit(ApiStatus.SUCCESSFUL)
+                        if ((it.data as List<HoleV2>).isNotEmpty()) {
+                            _myFollow.emit(
+                                _myFollow.value.toMutableList()
+                                    .apply { addAll(it.data as List<HoleV2>) })
+                        } else {
+                            tip.value = "没有更多内容啦~"
                         }
-                        is ApiResult.Error -> {
-                            _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
-                            tip.value = it.code.toString() + it.errorMessage
-                        }
-                        else -> {}
                     }
+                    is ApiResult.Error -> {
+                        _loadingState.emit(ApiStatus.ERROR)
+                        _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
+                        tip.value = it.code.toString() + it.errorMessage
+                    }
+                    else -> {}
                 }
-            }
-            if (_loadingState.value == ApiStatus.LOADING) {
-                _loadingState.emit(ApiStatus.ERROR)
-                _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NETWORK_ERROR)
             }
         }
     }

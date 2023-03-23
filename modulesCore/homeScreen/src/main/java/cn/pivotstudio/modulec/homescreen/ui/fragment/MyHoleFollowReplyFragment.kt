@@ -61,26 +61,31 @@ class MyHoleFollowReplyFragment() : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(type == -1) {
-            type = viewModel.fragType
-        }else {
-            viewModel.fragType = type
-        }
+        initData()
         initView()
         initRefresh()
     }
 
     override fun onResume() {
-        when (type) {  //更新列表
-            GET_HOLE -> viewModel.getMyHole()
-            GET_FOLLOW -> viewModel.getMyFollow()
-            GET_REPLY -> viewModel.getMyReply()
-        }
         if((requireActivity() as HomeScreenActivity).supportActionBar != null){
             (requireActivity() as HomeScreenActivity).supportActionBar!!.hide()
         }
         super.onResume()
     }
+
+    private fun initData() {
+        if(type == -1) {
+            type = viewModel.fragType
+        }else {
+            viewModel.fragType = type
+        }
+        when(type) {
+            GET_HOLE -> viewModel.getMyHole()
+            GET_FOLLOW -> viewModel.getMyFollow()
+            GET_REPLY -> viewModel.getMyReply()
+        }
+    }
+
     private fun initView() {
         val adapter = MineRecycleViewAdapter(viewModel)
         adapter.setOnItemClickListener(object : MineRecycleViewAdapter.OnItemClickListener {
@@ -114,7 +119,6 @@ class MyHoleFollowReplyFragment() : BaseFragment() {
             override fun getColor(color: Int) = requireContext().getColor(color)
 
             override fun getText(strId: Int): String = requireContext().getString(strId)
-
         })
         binding.myHoleRecyclerView.apply {
             this.adapter = adapter
