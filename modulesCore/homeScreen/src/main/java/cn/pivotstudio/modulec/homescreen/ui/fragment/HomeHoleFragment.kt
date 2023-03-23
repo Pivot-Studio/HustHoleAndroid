@@ -29,14 +29,18 @@ import cn.pivotstudio.modulec.homescreen.ui.adapter.HomeHoleAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
+
 class HomeHoleFragment() : BaseFragment() {
     private lateinit var binding: FragmentHomeHoleBinding
     private val viewModel: HomePageViewModel by viewModels()
+    private var job: Job? = null
+    private var homeHoleAdapter: HomeHoleAdapter? = null
     private var etText: EditText? = null
     private var tbMode: TabLayout? = null
     private var type = -1
@@ -61,6 +65,29 @@ class HomeHoleFragment() : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initRefresh()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        job = lifecycleScope.launch {
+            viewModel.holesV2.onEach {
+                finishRefreshAnim()
+            }.collectLatest {
+                if (it.isEmpty()) {
+                    binding.recyclerView.visibility = View.GONE
+                    binding.homepagePlaceholder.visibility = View.VISIBLE
+                } else {
+                    homeHoleAdapter?.submitList(it)
+                    binding.recyclerView.visibility = View.VISIBLE
+                    binding.homepagePlaceholder.visibility = View.GONE
+                }
+            }
+        }
+    }
+
+    override fun onStop() {
+        job?.cancel()
+        super.onStop()
     }
 
     /**
@@ -109,18 +136,18 @@ class HomeHoleFragment() : BaseFragment() {
                 binding.placeholderHomeNetError.visibility = View.GONE
                 binding.placeholderHomeNoResult.visibility = View.GONE
                 val tv = context.findViewById<TextView>(R.id.tv_no_content)
-                tv.text =  getString(R.string.res_no_myfollow)
+                tv.text = getString(R.string.res_no_myfollow)
             }
         }
     }
 
     private fun initData() {
-        if(type == -1) {
+        if (type == -1) {
             type = viewModel.type
-        }else {
+        } else {
             viewModel.type = type
         }
-        if(viewModel.holesV2.value.isEmpty()) {
+        if (viewModel.holesV2.value.isEmpty()) {
             when (type) {
                 HOLE_LIST -> viewModel.loadHolesV2()
                 FOLLOW -> viewModel.getMyFollow()
@@ -132,8 +159,8 @@ class HomeHoleFragment() : BaseFragment() {
     private fun initView() {
         etText = context.findViewById(R.id.et_homepage)
         tbMode = context.findViewById(R.id.tb_mode)
-        val homeHoleAdapter = HomeHoleAdapter(viewModel)
-        homeHoleAdapter.setOnItemClickListener(object : HomeHoleAdapter.OnItemClickListener {
+        homeHoleAdapter = HomeHoleAdapter(viewModel)
+        homeHoleAdapter?.setOnItemClickListener(object : HomeHoleAdapter.OnItemClickListener {
             override fun navigateWithReply(holeId: String) {
                 navToSpecificHoleWithReply(holeId)
             }
@@ -153,7 +180,7 @@ class HomeHoleFragment() : BaseFragment() {
         })
         binding.apply {
             recyclerView.adapter = homeHoleAdapter
-
+            recyclerView.setHasFixedSize(true)
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(view: RecyclerView, newState: Int) {
                     (recyclerView.adapter as HomeHoleAdapter).lastImageMore?.let {
@@ -171,10 +198,10 @@ class HomeHoleFragment() : BaseFragment() {
                     viewModel.doneShowingTip()
                 }
             }
-            if(type == HOLE_LIST) {
+            if (type == HOLE_LIST) {
                 (parentFragment as HomePageFragment).setEditActionListener(object :
                     HomePageFragment.EditActionListener {
-                    override fun onSend(text: String){
+                    override fun onSend(text: String) {
                         viewModel.searchKeyword = text
                         viewModel.isSearch = true
                         viewModel.searchHolesV2(text)
@@ -185,22 +212,7 @@ class HomeHoleFragment() : BaseFragment() {
                     onSelectModeClick(v)
                 }
             }
-
-            lifecycleScope.launch {
-                holesV2.onEach {
-                    finishRefreshAnim()
-                }.collectLatest {
-                    if (it.isEmpty()) {
-                        binding.recyclerView.visibility = View.GONE
-                        binding.homepagePlaceholder.visibility = View.VISIBLE
-                    } else {
-                        homeHoleAdapter.submitList(it)
-                        binding.recyclerView.visibility = View.VISIBLE
-                        binding.homepagePlaceholder.visibility = View.GONE
-                    }
-                }
-            }
-
+            
             lifecycleScope.launch {
                 loadingState.collectLatest { state ->
                     when (state) {
@@ -230,19 +242,31 @@ class HomeHoleFragment() : BaseFragment() {
         binding.refreshLayout.setRefreshHeader(StandardRefreshHeader(activity)) //设置自定义刷新头
         binding.refreshLayout.setRefreshFooter(StandardRefreshFooter(activity)) //设置自定义刷新底
         binding.refreshLayout.setOnRefreshListener { //下拉刷新触发
-            when(type) {
-                HOLE_LIST -> {viewModel.loadHolesV2()}
-                FOLLOW -> {viewModel.getMyFollow()}
-                RECOMMEND -> {viewModel.loadRecHoles(NetworkConstant.SortMode.REC)}
+            when (type) {
+                HOLE_LIST -> {
+                    viewModel.loadHolesV2()
+                }
+                FOLLOW -> {
+                    viewModel.getMyFollow()
+                }
+                RECOMMEND -> {
+                    viewModel.loadRecHoles(NetworkConstant.SortMode.REC)
+                }
             }
             binding.recyclerView.isEnabled = false
         }
 
         binding.refreshLayout.setOnLoadMoreListener {    //上拉加载触发
-            when(type) {
-                HOLE_LIST -> {viewModel.loadMoreHoles()}
-                FOLLOW -> {viewModel.loadMoreFollow()}
-                RECOMMEND -> {viewModel.loadMoreRecHoles(NetworkConstant.SortMode.REC)}
+            when (type) {
+                HOLE_LIST -> {
+                    viewModel.loadMoreHoles()
+                }
+                FOLLOW -> {
+                    viewModel.loadMoreFollow()
+                }
+                RECOMMEND -> {
+                    viewModel.loadMoreRecHoles(NetworkConstant.SortMode.REC)
+                }
             }
             binding.recyclerView.isEnabled = false
         }
@@ -253,8 +277,8 @@ class HomeHoleFragment() : BaseFragment() {
     }
 
     private fun autoRefreshAndScrollToTop() {
+        binding.homepageNestedScrollView.smoothScrollTo(0 , 0)
         binding.refreshLayout.autoRefresh()
-        binding.homepageNestedScrollView.scrollTo(0, 0)
     }
 
     /**
@@ -275,11 +299,11 @@ class HomeHoleFragment() : BaseFragment() {
     private fun onSelectModeClick(v: View) {
         val id = v.id
         if (id == R.id.btn_ppwhomepage_latest_reply) {
-            if(viewModel.sortMode.value != NetworkConstant.SortMode.LATEST_REPLY) {
+            if (viewModel.sortMode.value != NetworkConstant.SortMode.LATEST_REPLY) {
                 viewModel.loadHolesV2(sortMode = NetworkConstant.SortMode.LATEST_REPLY)
             }
         } else if (id == R.id.btn_ppwhomepage_latest_publish) {
-            if(viewModel.sortMode.value != NetworkConstant.SortMode.LATEST) {
+            if (viewModel.sortMode.value != NetworkConstant.SortMode.LATEST) {
                 viewModel.loadHolesV2(sortMode = NetworkConstant.SortMode.LATEST)
             }
         }

@@ -1,6 +1,5 @@
 package cn.pivotstudio.modulep.hole.ui.fragment
 
-import android.R.attr.startY
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -44,7 +43,6 @@ import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel
 import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.runBlocking
 
 
 class SpecificHoleFragment : BaseFragment() {
@@ -52,7 +50,8 @@ class SpecificHoleFragment : BaseFragment() {
     private val args by navArgs<SpecificHoleFragmentArgs>()
 
     private lateinit var binding: FragmentSpecificHoleBinding
-    private lateinit var mActionBar: ActionBar
+    private var mActionBar: ActionBar? = null
+
      val replyViewModel: SpecificHoleViewModel by viewModels {
         SpecificHoleViewModelFactory(args.holeId, end)
     }
@@ -80,8 +79,6 @@ class SpecificHoleFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        mActionBar = (requireActivity() as HoleActivity).supportActionBar!!
-        mActionBar.title = '#' + args.holeId
         sharedViewModel.fragmentStack.push(this)
     }
 
@@ -97,6 +94,8 @@ class SpecificHoleFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mActionBar = (requireActivity() as HoleActivity).supportActionBar
+        mActionBar?.title = '#' + args.holeId
         binding.apply {
             layoutHole.type = "HoleToHole"
             lifecycleOwner = viewLifecycleOwner
@@ -108,10 +107,11 @@ class SpecificHoleFragment : BaseFragment() {
                         super.onScrollStateChanged(recyclerView, newState)
                         if(newState == RecyclerView.SCROLL_STATE_DRAGGING) {
                             SoftKeyBoardUtil.hideKeyboard(requireActivity())
-                            mActionBar.hide()
+                            mActionBar?.hide()
                         }
-                        else
-                            mActionBar.show()
+                        else {
+                            mActionBar?.show()
+                        }
                     }
                 })
             }
@@ -185,7 +185,7 @@ class SpecificHoleFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        mActionBar.title = '#' + args.holeId
+        mActionBar?.title = '#' + args.holeId
     }
 
     override fun onDestroy() {

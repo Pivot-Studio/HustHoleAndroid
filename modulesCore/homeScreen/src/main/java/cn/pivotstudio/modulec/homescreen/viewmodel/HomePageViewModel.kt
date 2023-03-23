@@ -391,23 +391,25 @@ class HomePageViewModel : ViewModel() {
         followNum: Long
     ) {
         viewModelScope.launch {
-            var i = _holesV2.value.indexOfFirst {
-                it.holeId == _loadLaterHoleId
+            if(_holesV2.value.isNotEmpty()) {
+                var i = _holesV2.value.indexOfFirst {
+                    it.holeId == _loadLaterHoleId
+                }
+                if(i == -1) {
+                    i = 0
+                    tip.value = _holesV2.value[0].holeId
+                }
+                val holes = _holesV2.value.toMutableList()
+                holes[i] = holes[i].copy(
+                    liked = isThumb,
+                    isReply = replied,
+                    isFollow = followed,
+                    likeCount = thumbNum,
+                    replyCount = replyNum,
+                    followCount = followNum
+                )
+                _holesV2.emit(holes)
             }
-            if(i == -1) {
-                i = 0
-                tip.value = _holesV2.value[0].holeId
-            }
-            val holes = _holesV2.value.toMutableList()
-            holes[i] = holes[i].copy(
-                liked = isThumb,
-                isReply = replied,
-                isFollow = followed,
-                likeCount = thumbNum,
-                replyCount = replyNum,
-                followCount = followNum
-            )
-            _holesV2.emit(holes)
         }
     }
 

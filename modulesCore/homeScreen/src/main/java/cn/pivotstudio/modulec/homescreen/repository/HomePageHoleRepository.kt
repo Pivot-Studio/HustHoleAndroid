@@ -11,7 +11,9 @@ import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONObject
 import retrofit2.Response
 
@@ -57,6 +59,7 @@ class HomePageHoleRepository(
         tip.value = e.message
         e.printStackTrace()
     }
+
     fun loadRecHoles(sortMode: String): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
         refreshTimestamp()
@@ -105,10 +108,10 @@ class HomePageHoleRepository(
         emit(ApiResult.Loading())
         lastOffset += HOLES_LIST_SIZE
         val response = hustHoleApiService.getHoles(
-                limit = HOLES_LIST_SIZE,
-                timestamp = lastTimeStamp,
-                offset = lastOffset,
-                mode = sortMode
+            limit = HOLES_LIST_SIZE,
+            timestamp = lastTimeStamp,
+            offset = lastOffset,
+            mode = sortMode
         )
         checkResponse(response, this)
     }.flowOn(dispatcher).catch { e ->

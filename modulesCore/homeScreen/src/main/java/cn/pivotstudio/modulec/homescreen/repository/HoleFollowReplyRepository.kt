@@ -25,7 +25,6 @@ import retrofit2.Response
  * @version :1.0
  * @author
  */
-@SuppressLint("CheckResult")
 class HoleFollowReplyRepository {
     private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO

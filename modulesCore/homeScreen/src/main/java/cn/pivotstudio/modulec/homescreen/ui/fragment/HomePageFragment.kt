@@ -94,6 +94,9 @@ class HomePageFragment : BaseFragment() {
                 tv.text = requireContext().getString(titleList[position])
                 tab.customView = tabView
             }.attach()
+            binding.vpHomescreenHole.post {
+                binding.vpHomescreenHole.setCurrentItem(0, true)
+            }
             tbMode.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                     if (tab?.customView is HomePageOptionBox) {

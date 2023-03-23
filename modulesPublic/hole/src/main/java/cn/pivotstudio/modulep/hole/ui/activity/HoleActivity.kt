@@ -63,7 +63,6 @@ class HoleActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hole)
 
         setSupportActionBar(binding.topAppbar)
-
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
