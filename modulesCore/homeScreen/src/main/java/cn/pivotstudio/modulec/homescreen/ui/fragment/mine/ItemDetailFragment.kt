@@ -75,9 +75,6 @@ class ItemDetailFragment : Fragment() {
             COMMUNITY_NORM -> {
                 binding = ActivityRulesBinding.inflate(inflater, container, false)
             }
-            SHARE -> {
-                binding = ActivityShareCardBinding.inflate(inflater, container, false)
-            }
             EVALUATION_AND_SUGGESTIONS -> {
                 binding = ActivityHoleStarBinding.inflate(inflater, container, false)
             }
@@ -181,13 +178,7 @@ class ItemDetailFragment : Fragment() {
                     }
                 }
             }
-            is ActivityShareCardBinding -> {
-                (binding as ActivityShareCardBinding).apply {
-                    shareCardBack.setOnClickListener {
-                        view.findNavController().popBackStack()
-                    }
-                }
-            }
+
             is ActivityHoleStarBinding -> {
                 val frag = this
                 (binding as ActivityHoleStarBinding).apply {
@@ -227,37 +218,6 @@ class ItemDetailFragment : Fragment() {
             }
         }
     }
-
-    /*
-    private fun initPopUpView(
-        binding: ActivityShareCardBinding
-    ) {
-        var isShow = false
-        val shareToView= LayoutInflater.from(context).inflate(R.layout.ppw_share_to, null)
-        val store: LinearLayout = shareToView.findViewById(R.id.store)
-        val ppwShareTo= PopupWindow(shareToView)
-       ppwShareTo.width = ViewGroup.LayoutParams.MATCH_PARENT
-       ppwShareTo.height = ViewGroup.LayoutParams.WRAP_CONTENT
-       ppwShareTo.animationStyle = R.style.Page2Anim
-        ppwShareTo.isOutsideTouchable = true
-
-        binding.shareCardImg.setOnClickListener {
-            isShow = if (!isShow) {
-                ppwShareTo.showAsDropDown(binding.ppwLocation)
-               true
-            } else {
-                ppwShareTo.dismiss()
-                false
-            }
-        }
-        store.setOnClickListener {
-            Toast.makeText(context, "保存成功", Toast.LENGTH_SHORT).show()
-            ppwShareTo.dismiss()
-        }
-        /*
-        MediaScannerConnection.scanFile(context, arrayOf("path"), arrayOf("image/jpeg")) { path, _ ->
-            Log.i("shareCard", "onScanCompleted$path") }*/
-    }*/
 
     private fun onLabelClick(
         pos: Int

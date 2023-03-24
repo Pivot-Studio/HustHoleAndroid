@@ -47,7 +47,10 @@ class HomeHoleAdapter(
         fun bind(hole: HoleV2) {
             binding.homePageHole = hole
             binding.apply {
-
+                clItemHomepageFrame.setOnLongClickListener {
+                    onItemClickListener?.generate(hole)
+                    false
+                }
                 clItemHomepageReply.setOnClickListener {
                     onItemClickListener?.navigateWithReply(hole.holeId)
                 }
@@ -97,6 +100,8 @@ class HomeHoleAdapter(
         fun deleteHole(hole: HoleV2)
 
         fun reportHole(hole: HoleV2)
+
+        fun generate(hole: HoleV2)
     }
 
     companion object {

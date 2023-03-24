@@ -4,6 +4,7 @@
     <string name="hole_id"># %s</string>
     <string name="thumb_follow">%s 点赞 · %s 评论</string>
     <string name="reply_follow">%s 评论 · %s 关注</string>
+    <string name="created_at">发布于%s</string>
     <string name="description_publish_hole">发布树洞</string>
     <string name="join_days">我来到树洞已经%s天啦(◕ᴗ◕✿)</string>
     <string name="shield_num">( %d / %d )</string>

@@ -1,15 +1,29 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
+import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
+import android.system.Os.mkdir
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.PopupWindow
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
@@ -20,23 +34,37 @@ import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.HomePageOptionBox
+import cn.pivotstudio.modulec.homescreen.custom_view.PicGenerator
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
 import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomeHoleBinding
+import cn.pivotstudio.modulec.homescreen.databinding.HoleShareCardBinding
+import cn.pivotstudio.modulec.homescreen.databinding.PpwBottomShareBinding
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.ui.adapter.HomeHoleAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.android.material.tabs.TabLayout
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.datamatrix.encoder.SymbolShapeHint
+import com.google.zxing.qrcode.QRCodeWriter
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 
 
-class HomeHoleFragment() : BaseFragment() {
+class HomeHoleFragment() : BaseFragment(), PicGenerator {
     private lateinit var binding: FragmentHomeHoleBinding
     private val viewModel: HomePageViewModel by viewModels()
     private var job: Job? = null
@@ -177,6 +205,9 @@ class HomeHoleFragment() : BaseFragment() {
                 reportTheHole(hole)
             }
 
+            override fun generate(hole: HoleV2) {
+                getPopUpWindows(hole)
+            }
         })
         binding.apply {
             recyclerView.adapter = homeHoleAdapter
@@ -212,7 +243,7 @@ class HomeHoleFragment() : BaseFragment() {
                     onSelectModeClick(v)
                 }
             }
-            
+
             lifecycleScope.launch {
                 loadingState.collectLatest { state ->
                     when (state) {
@@ -277,7 +308,7 @@ class HomeHoleFragment() : BaseFragment() {
     }
 
     private fun autoRefreshAndScrollToTop() {
-        binding.homepageNestedScrollView.smoothScrollTo(0 , 0)
+        binding.homepageNestedScrollView.smoothScrollTo(0, 0)
         binding.refreshLayout.autoRefresh()
     }
 
@@ -343,6 +374,190 @@ class HomeHoleFragment() : BaseFragment() {
                 .withInt(Constant.HOLE_ID, holeId.toInt())
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
                 .navigation(requireActivity(), ResultCodeConstant.Hole)
+        }
+    }
+
+    private fun cancelDarkBackGround() {
+        val lp = requireActivity().window.attributes
+        lp.alpha = 1f // 0.0~1.0
+        requireActivity().window.attributes = lp
+    }   //取消暗背景
+
+    private fun getPopUpWindows(data: HoleV2) {
+        val shareBind: HoleShareCardBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.hole_share_card,
+            null,
+            false
+        )
+
+        val funcBind: PpwBottomShareBinding = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.ppw_bottom_share,
+            null,
+            false
+        )
+        var bitmap: Bitmap? = null
+        viewModel.viewModelScope.launch {
+            bitmap = generateQRCode("https://husthole.com/#/holeDetail/" + data.holeId)
+            shareBind.QRCode.setImageBitmap(bitmap)
+        }
+        val ppwShare = PopupWindow(shareBind.root)
+        val ppwFunc = PopupWindow(funcBind.root)
+        val window = requireActivity().window
+
+        setAttri(ppwShare)
+        with(ppwFunc) {
+            isFocusable = false
+            isOutsideTouchable = false
+            width = ViewGroup.LayoutParams.MATCH_PARENT
+            height = ViewGroup.LayoutParams.WRAP_CONTENT
+            animationStyle = R.style.Page2Anim
+        }
+
+        window.attributes.alpha = 0.6f
+        window.setWindowAnimations(R.style.darkScreenAnim)
+        ppwShare.showAtLocation(
+            window.decorView, Gravity.CENTER,
+            0, 0
+        )
+        ppwFunc.showAtLocation(
+            window.decorView, Gravity.BOTTOM,
+            0, 0
+        )
+        ppwShare.setOnDismissListener {
+            ppwFunc.dismiss()
+            cancelDarkBackGround()
+        }
+        shareBind.apply {
+            this.hole = data
+            createAt.text = getString(R.string.created_at).format(data.createAt.substring(0, 10))
+            funcBind.download.setOnClickListener {
+                val now = Date()
+                val ft2 = SimpleDateFormat("yyyyMMddhhmmss", Locale.CHINA)
+                viewModel.viewModelScope.launch {
+                    generate(this@apply.mainContent)?.let {
+                        save(it, data.holeId + ft2.format(now))
+                        bitmap?.recycle()
+                        ppwShare.dismiss()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setAttri(ppw: PopupWindow) {
+        with(ppw) {
+            isOutsideTouchable = true
+            isFocusable = true
+            width = ViewGroup.LayoutParams.WRAP_CONTENT
+            height = ViewGroup.LayoutParams.WRAP_CONTENT
+            animationStyle = R.style.Page2Anim
+        }
+    }
+
+    override suspend fun generate(view: View): Bitmap? {
+        val bitmap: Bitmap?
+        try {
+           bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        }catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(context, "图片生成失败！", Toast.LENGTH_SHORT).show()
+            return null
+        }
+        val canvas = Canvas(bitmap)
+        view.draw(canvas)
+        return bitmap
+    }
+
+    override suspend fun save(photo: Bitmap, fileName: String) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val imageSaveFilePath = Environment.DIRECTORY_DCIM + File.separator + "hustHole"
+            val file = File(imageSaveFilePath)
+            if(!file.exists()) {
+                file.mkdirs()
+            }
+            val contentValues = ContentValues()
+            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
+            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+            contentValues.put(MediaStore.MediaColumns.DATE_TAKEN, System.currentTimeMillis())
+            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, imageSaveFilePath)
+            var uri: Uri? = null
+            var fos: OutputStream? = null
+            val localContentResolver = context.contentResolver
+            try {
+                uri = localContentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+                fos = uri?.let { localContentResolver.openOutputStream(it) }
+
+                photo.compress(Bitmap.CompressFormat.JPEG, 80, fos)
+                fos?.flush()
+                fos?.close()
+                Toast.makeText(context, "保存成功！", Toast.LENGTH_SHORT).show()
+            }catch (e: IOException) {
+                e.printStackTrace()
+                uri?.let {
+                    localContentResolver.delete(it, null, null)
+                }
+                Toast.makeText(context, "文件保存失败！", Toast.LENGTH_SHORT).show()
+            }finally {
+                photo.recycle()
+                try {
+                    fos?.let {
+                        fos.close()
+                    }
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
+            }
+        }else {
+            val path = Environment.getExternalStorageDirectory().absolutePath + File.separator + "hustHole"
+            // 创建文件夹
+            mkdir(path, 755)
+            val file = File(path, fileName)
+            try {
+                val fos = FileOutputStream(file)
+                // 通过io流的方式来压缩保存图片
+                photo.compress(Bitmap.CompressFormat.JPEG, 70, fos)
+                fos.flush()
+                fos.close()
+                // 保存图片后发送广播通知更新数据库
+                val uri = Uri.fromFile(file)
+                context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
+                Toast.makeText(context, "保存成功！", Toast.LENGTH_SHORT).show()
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Toast.makeText(context, "文件保存失败！", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    override suspend fun generateQRCode(url: String): Bitmap? {
+        var bitmap: Bitmap? = null
+        try {
+            val hints = Hashtable<EncodeHintType, Any>()
+            hints[EncodeHintType.CHARACTER_SET] = "utf-8"
+            hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.H
+            hints[EncodeHintType.DATA_MATRIX_SHAPE] = SymbolShapeHint.FORCE_SQUARE
+            val matrix = QRCodeWriter().encode(url, BarcodeFormat.QR_CODE, 45, 45, hints)
+            val width = matrix.width
+            val height = matrix.height
+            val pixels = IntArray(width * height)
+            for (y in 0 until height) {
+                for (x in 0 until width) {
+                if (matrix.get(x, y)) {
+                    pixels[y * width + x] = Color.BLACK
+                } else {
+                    pixels[y * width + x] = Color.WHITE
+                }
+            }
+            }
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
+            return bitmap
+        } catch (e: Exception) {
+            e.printStackTrace()
+            bitmap?.recycle()
+            return null
         }
     }
 

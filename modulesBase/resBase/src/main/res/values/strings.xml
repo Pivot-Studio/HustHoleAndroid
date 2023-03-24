@@ -25,7 +25,7 @@
     <string name="page1fragment_6">最新发布</string>
 
     <string name="page3fragment_1">系统通知</string>
-    <string name="page3fragment_2">还没有通知噢...</string>
+    <string name="page3fragment_2">还没有通知噢…</string>
     <string name="reply_to_hole">回复了你的树洞</string>
     <string name="reply_to_reply">回复了你的评论</string>
     
@@ -76,7 +76,7 @@
     <string name="publishhole_1">发树洞</string>
     <string name="publishhole_2">未选择小树林</string>
     <string name="publishhole_3">发布</string>
-    <string name="publishhole_4">让树洞倾听你的声音...</string>
+    <string name="publishhole_4">让树洞倾听你的声音…</string>
 
     <string name="publishhole_popupwindow_1">选择小树林</string>
     <string name="publishhole_popupwindow_2">不选择任何小树林</string>
@@ -98,7 +98,7 @@
     <string name="retrieve_password_modify_1">输入新密码</string>
     <string name="retrieve_password_modify_2">输入密码</string>
     <string name="retrieve_password_modify_3">完成</string>
-    <string name="retrieve_password_modify_4">密码不合规范，需6-16个字符</string>
+    <string name="retrieve_password_modify_4">密码不合规范，需6–16个字符</string>
 
 
     <string name="network_thumbupfailure_">点赞失败，请检查网络</string>
@@ -169,6 +169,10 @@
     <string name="tv_4">方法二： 选择通过华中大统一身份认证登录： https://pass.hust.edu.cn/cas/login?service=https%3A%2F%2Fmail.hust.edu.cn%2Fsso%2Findex.jsp</string>
     <string name="des_mine_img">Logo of hust hole 1037</string>
     <string name="back">icon of return</string>
+    <string name="purport">有时治愈 时常帮助 总是倾听</string>
+    <string name="long_click_scan">长按扫码查看</string>
+    <string name="save_phone">保存到手机</string>
+    <string name="mobile_1037">1037树洞移动版来啦！</string>
 
     <string name="chip_1">1</string>
     <string name="chip_2">2</string>
@@ -200,4 +204,5 @@
     <string name="change_dark">强制深色模式</string>
     <string name="change_light">强制浅色模式</string>
     <string name="change_follow_system">跟随系统</string>
+    <string name="QR_code">长按扫描二维码跳转对应树洞</string>
 </resources>

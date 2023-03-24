@@ -29,8 +29,9 @@
     <style name="myChipStyle" parent="Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/bg_chip_state_list</item>
         <item name="android:textColor">@color/tx_chip_state_list</item>
-
     </style>
+
+
 
     <style name="myBarTheme" parent="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">@color/HH_BandColor_3</item>

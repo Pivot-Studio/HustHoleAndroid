@@ -60,14 +60,14 @@
                 android:layout_height="@dimen/dp_36"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/ic_share_36dp" />
+                app:srcCompat="@drawable/ic_download" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/dp_5"
-                android:text="分享卡片"
+                android:text="@string/save_phone"
                 android:textColor="@color/GrayScale_20"
                 android:textSize="@dimen/sp_10" />
         </LinearLayout>
