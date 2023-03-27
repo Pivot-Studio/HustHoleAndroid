@@ -33,5 +33,25 @@
             app:layout_constraintEnd_toEndOf="@id/download"
             app:layout_constraintStart_toStartOf="@id/download"
             app:layout_constraintTop_toBottomOf="@id/download" />
+
+        <ImageView
+            android:id="@+id/share_to_qq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_58"
+            android:src="@drawable/ic_qq"
+            app:layout_constraintStart_toEndOf="@id/download"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/download"
+            android:layout_marginTop="@dimen/dp_8"
+            android:text="@string/share_qq"
+            android:textAppearance="@style/HustHoleTypography.Body3"
+            app:layout_constraintEnd_toEndOf="@id/share_to_qq"
+            app:layout_constraintStart_toStartOf="@id/share_to_qq"
+            app:layout_constraintTop_toBottomOf="@id/share_to_qq" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

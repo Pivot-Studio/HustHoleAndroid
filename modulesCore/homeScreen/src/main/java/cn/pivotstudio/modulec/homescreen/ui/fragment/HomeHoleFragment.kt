@@ -51,6 +51,10 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.datamatrix.encoder.SymbolShapeHint
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
+import com.tencent.connect.share.QQShare
+import com.tencent.tauth.IUiListener
+import com.tencent.tauth.Tencent
+import com.tencent.tauth.UiError
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -444,6 +448,36 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
                 }
             }
         }
+        /*funcBind.shareToQq.setOnClickListener {
+            val params = Bundle()
+            params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT)
+            params.putString(QQShare.SHARE_TO_QQ_TITLE, '#' + data.holeId)
+            params.putString(QQShare.SHARE_TO_QQ_SUMMARY, if(data.content.length <= 40) data.content else data.content.substring(0..40))
+            params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://husthole.com/#/holeDetail/1" + data.holeId)
+            params.putString(
+                QQShare.SHARE_TO_QQ_IMAGE_URL,
+                "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif"
+            )
+            params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "1037树洞")
+            val mTencent = Tencent.createInstance("jjj", this.requireActivity().applicationContext, "${this.requireActivity().applicationContext.packageName}.fileprovider")
+            mTencent.shareToQQ(this.requireActivity(), params, object : IUiListener {
+                override fun onComplete(p0: Any?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onError(p0: UiError?) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onCancel() {
+                    TODO("Not yet implemented")
+                }
+                override fun onWarning(p0: Int) {
+                    TODO("Not yet implemented")
+                }
+            })
+            ppwShare.dismiss()
+        }*/
     }
 
     private fun setAttri(ppw: PopupWindow) {
@@ -538,7 +572,7 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
             hints[EncodeHintType.CHARACTER_SET] = "utf-8"
             hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.H
             hints[EncodeHintType.DATA_MATRIX_SHAPE] = SymbolShapeHint.FORCE_SQUARE
-            val matrix = QRCodeWriter().encode(url, BarcodeFormat.QR_CODE, 45, 45, hints)
+            val matrix = QRCodeWriter().encode(url, BarcodeFormat.QR_CODE, 720, 720, hints)
             val width = matrix.width
             val height = matrix.height
             val pixels = IntArray(width * height)

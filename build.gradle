@@ -4,7 +4,7 @@ apply from :'husthole.gradle'//
 buildscript {
     ext {
         appcompat_version = '1.4.2'
-        kotlin_version = '1.7.0'
+        kotlin_version = '1.8.0'
         okhttp_version = '4.9.3'
         retrofit_version = '2.9.0'
         rxjava2_version = '2.2.21'

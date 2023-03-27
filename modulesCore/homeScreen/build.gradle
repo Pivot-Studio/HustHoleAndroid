@@ -94,4 +94,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
     //QRCode
     implementation 'com.google.zxing:core:3.3.0'
+    //TencentQQ
+    implementation 'com.tencent.tauth:qqopensdk:3.52.0'
 }

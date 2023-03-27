@@ -11,11 +11,11 @@
         android:id="@+id/tv_ppw_share_title"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_38"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="@dimen/dp_10"
         android:gravity="center"
         android:text="@string/分享"
         android:textColor="@color/GrayScale_0"
-        android:textSize="18sp"
+        android:textSize="@dimen/sp_18"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +47,7 @@
 
         <LinearLayout
             android:id="@+id/share_card"
-            android:layout_width="@dimen/dp_54"
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_54"
             android:clickable="true"
             android:focusable="true"

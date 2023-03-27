@@ -173,7 +173,7 @@ class MineFragment : BaseFragment(), PicGenerator {
             val shareCardView = View.inflate(context, R.layout.ppw_share, null)
             val shareCard = shareCardView.findViewById<LinearLayout>(R.id.share_card)
             val cancel = shareCardView.findViewById<TextView>(R.id.share_cancel_button)
-            val mainContent = view.findViewById<LinearLayout>(R.id.main_content)
+            val mainContent = view.findViewById<ScrollView>(R.id.main_content)
             val code =  view.findViewById<ImageView>(R.id.QR_code)
             val ppwFunc = PopupWindow(shareCardView)
 
@@ -197,7 +197,7 @@ class MineFragment : BaseFragment(), PicGenerator {
             window.attributes.alpha = 0.6f
             window.setWindowAnimations(R.style.darkScreenAnim)
             ppwShare.showAtLocation(
-                window.decorView, Gravity.CENTER,
+                window.decorView, Gravity.TOP,
                 0, 0
             )
             ppwFunc.showAtLocation(
@@ -320,7 +320,7 @@ class MineFragment : BaseFragment(), PicGenerator {
                 uri = localContentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
                 fos = uri?.let { localContentResolver.openOutputStream(it) }
 
-                photo.compress(Bitmap.CompressFormat.JPEG, 80, fos)
+                photo.compress(Bitmap.CompressFormat.JPEG, 100, fos)
                 fos?.flush()
                 fos?.close()
                 Toast.makeText(context, "保存成功！", Toast.LENGTH_SHORT).show()
@@ -348,7 +348,7 @@ class MineFragment : BaseFragment(), PicGenerator {
             try {
                 val fos = FileOutputStream(file)
                 // 通过io流的方式来压缩保存图片
-                photo.compress(Bitmap.CompressFormat.JPEG, 70, fos)
+                photo.compress(Bitmap.CompressFormat.JPEG, 80, fos)
                 fos.flush()
                 fos.close()
                 // 保存图片后发送广播通知更新数据库
@@ -369,7 +369,7 @@ class MineFragment : BaseFragment(), PicGenerator {
             hints[EncodeHintType.CHARACTER_SET] = "utf-8"
             hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.H
             hints[EncodeHintType.DATA_MATRIX_SHAPE] = SymbolShapeHint.FORCE_SQUARE
-            val matrix = QRCodeWriter().encode(url, BarcodeFormat.QR_CODE, 130, 130, hints)
+            val matrix = QRCodeWriter().encode(url, BarcodeFormat.QR_CODE, 1080, 1080, hints)
             val width = matrix.width
             val height = matrix.height
             val pixels = IntArray(width * height)

@@ -49,7 +49,7 @@ class HomeHoleAdapter(
             binding.apply {
                 clItemHomepageFrame.setOnLongClickListener {
                     onItemClickListener?.generate(hole)
-                    false
+                    true
                 }
                 clItemHomepageReply.setOnClickListener {
                     onItemClickListener?.navigateWithReply(hole.holeId)
