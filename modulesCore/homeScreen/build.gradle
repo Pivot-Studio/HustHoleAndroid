@@ -96,4 +96,7 @@ dependencies {
     implementation 'com.google.zxing:core:3.3.0'
     //TencentQQ
     implementation 'com.tencent.tauth:qqopensdk:3.52.0'
+    //PermissionsDispatcher框架
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.9.2"
+    kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2"
 }

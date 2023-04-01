@@ -1,16 +1,11 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment
 
-import android.content.ContentValues
+import android.Manifest
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.system.Os.mkdir
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -31,6 +26,7 @@ import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
+import cn.pivotstudio.moduleb.libbase.util.store.IDeviceWriter
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.HomePageOptionBox
@@ -51,36 +47,25 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.datamatrix.encoder.SymbolShapeHint
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
-import com.tencent.connect.share.QQShare
-import com.tencent.tauth.IUiListener
-import com.tencent.tauth.Tencent
-import com.tencent.tauth.UiError
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.OutputStream
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.RuntimePermissions
 import java.text.SimpleDateFormat
 import java.util.*
 
-
-class HomeHoleFragment() : BaseFragment(), PicGenerator {
+@RuntimePermissions
+class HomeHoleFragment : BaseFragment(), PicGenerator {
     private lateinit var binding: FragmentHomeHoleBinding
     private val viewModel: HomePageViewModel by viewModels()
-    private var job: Job? = null
-    private var homeHoleAdapter: HomeHoleAdapter? = null
-    private var etText: EditText? = null
-    private var tbMode: TabLayout? = null
+    private var etText: EditText? = null   //homePageFragment中的搜索框
+    private var tbMode: TabLayout? = null  //父级tabLayout
     private var type = -1
+    private var writer: IDeviceWriter? = null //存储文件
+    private var ppw = SharePopupWindow()
 
-    //深浅色模式转换会重建Fragment，但是调用的是无参构造函数，因此需要借助ViewModel保存type
-    constructor(type: Int) : this() {
-        this.type = type
-    }
+    //深浅色模式转换会重建Fragment，但是调用的是无参构造函数！
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,29 +82,6 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
         super.onViewCreated(view, savedInstanceState)
         initView()
         initRefresh()
-    }
-
-    override fun onStart() {
-        super.onStart()
-        job = lifecycleScope.launch {
-            viewModel.holesV2.onEach {
-                finishRefreshAnim()
-            }.collectLatest {
-                if (it.isEmpty()) {
-                    binding.recyclerView.visibility = View.GONE
-                    binding.homepagePlaceholder.visibility = View.VISIBLE
-                } else {
-                    homeHoleAdapter?.submitList(it)
-                    binding.recyclerView.visibility = View.VISIBLE
-                    binding.homepagePlaceholder.visibility = View.GONE
-                }
-            }
-        }
-    }
-
-    override fun onStop() {
-        job?.cancel()
-        super.onStop()
     }
 
     /**
@@ -174,11 +136,8 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
     }
 
     private fun initData() {
-        if (type == -1) {
-            type = viewModel.type
-        } else {
-            viewModel.type = type
-        }
+        type = requireArguments().getInt("type")
+        writer = requireArguments().getSerializable("writer") as IDeviceWriter
         if (viewModel.holesV2.value.isEmpty()) {
             when (type) {
                 HOLE_LIST -> viewModel.loadHolesV2()
@@ -191,8 +150,8 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
     private fun initView() {
         etText = context.findViewById(R.id.et_homepage)
         tbMode = context.findViewById(R.id.tb_mode)
-        homeHoleAdapter = HomeHoleAdapter(viewModel)
-        homeHoleAdapter?.setOnItemClickListener(object : HomeHoleAdapter.OnItemClickListener {
+        val homeHoleAdapter = HomeHoleAdapter(viewModel)
+        homeHoleAdapter.setOnItemClickListener(object : HomeHoleAdapter.OnItemClickListener {
             override fun navigateWithReply(holeId: String) {
                 navToSpecificHoleWithReply(holeId)
             }
@@ -210,7 +169,8 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
             }
 
             override fun generate(hole: HoleV2) {
-                getPopUpWindows(hole)
+                ppw.initView(hole)
+                ppw.initAction(hole)
             }
         })
         binding.apply {
@@ -245,6 +205,21 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
                 })
                 (tbMode?.getTabAt(0)?.customView as HomePageOptionBox).setOptionsListener { v: View ->
                     onSelectModeClick(v)
+                }
+            }
+
+            lifecycleScope.launch {
+                holesV2.onEach {
+                    finishRefreshAnim()
+                }.collectLatest {
+                    if (it.isEmpty()) {
+                        binding.recyclerView.visibility = View.GONE
+                        binding.homepagePlaceholder.visibility = View.VISIBLE
+                    } else {
+                        homeHoleAdapter.submitList(it)
+                        binding.recyclerView.visibility = View.VISIBLE
+                        binding.homepagePlaceholder.visibility = View.GONE
+                    }
                 }
             }
 
@@ -387,114 +362,11 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
         requireActivity().window.attributes = lp
     }   //取消暗背景
 
-    private fun getPopUpWindows(data: HoleV2) {
-        val shareBind: HoleShareCardBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(context),
-            R.layout.hole_share_card,
-            null,
-            false
-        )
-
-        val funcBind: PpwBottomShareBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(context),
-            R.layout.ppw_bottom_share,
-            null,
-            false
-        )
-        var bitmap: Bitmap? = null
-        viewModel.viewModelScope.launch {
-            bitmap = generateQRCode("https://husthole.com/#/holeDetail/" + data.holeId)
-            shareBind.QRCode.setImageBitmap(bitmap)
-        }
-        val ppwShare = PopupWindow(shareBind.root)
-        val ppwFunc = PopupWindow(funcBind.root)
-        val window = requireActivity().window
-
-        setAttri(ppwShare)
-        with(ppwFunc) {
-            isFocusable = false
-            isOutsideTouchable = false
-            width = ViewGroup.LayoutParams.MATCH_PARENT
-            height = ViewGroup.LayoutParams.WRAP_CONTENT
-            animationStyle = R.style.Page2Anim
-        }
-
-        window.attributes.alpha = 0.6f
-        window.setWindowAnimations(R.style.darkScreenAnim)
-        ppwShare.showAtLocation(
-            window.decorView, Gravity.CENTER,
-            0, 0
-        )
-        ppwFunc.showAtLocation(
-            window.decorView, Gravity.BOTTOM,
-            0, 0
-        )
-        ppwShare.setOnDismissListener {
-            ppwFunc.dismiss()
-            cancelDarkBackGround()
-        }
-        shareBind.apply {
-            this.hole = data
-            createAt.text = getString(R.string.created_at).format(data.createAt.substring(0, 10))
-            funcBind.download.setOnClickListener {
-                val now = Date()
-                val ft2 = SimpleDateFormat("yyyyMMddhhmmss", Locale.CHINA)
-                viewModel.viewModelScope.launch {
-                    generate(this@apply.mainContent)?.let {
-                        save(it, data.holeId + ft2.format(now))
-                        bitmap?.recycle()
-                        ppwShare.dismiss()
-                    }
-                }
-            }
-        }
-        /*funcBind.shareToQq.setOnClickListener {
-            val params = Bundle()
-            params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT)
-            params.putString(QQShare.SHARE_TO_QQ_TITLE, '#' + data.holeId)
-            params.putString(QQShare.SHARE_TO_QQ_SUMMARY, if(data.content.length <= 40) data.content else data.content.substring(0..40))
-            params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://husthole.com/#/holeDetail/1" + data.holeId)
-            params.putString(
-                QQShare.SHARE_TO_QQ_IMAGE_URL,
-                "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif"
-            )
-            params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "1037树洞")
-            val mTencent = Tencent.createInstance("jjj", this.requireActivity().applicationContext, "${this.requireActivity().applicationContext.packageName}.fileprovider")
-            mTencent.shareToQQ(this.requireActivity(), params, object : IUiListener {
-                override fun onComplete(p0: Any?) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onError(p0: UiError?) {
-                    TODO("Not yet implemented")
-                }
-
-                override fun onCancel() {
-                    TODO("Not yet implemented")
-                }
-                override fun onWarning(p0: Int) {
-                    TODO("Not yet implemented")
-                }
-            })
-            ppwShare.dismiss()
-        }*/
-    }
-
-    private fun setAttri(ppw: PopupWindow) {
-        with(ppw) {
-            isOutsideTouchable = true
-            isFocusable = true
-            width = ViewGroup.LayoutParams.WRAP_CONTENT
-            height = ViewGroup.LayoutParams.WRAP_CONTENT
-            animationStyle = R.style.Page2Anim
-        }
-    }
-
     override suspend fun generate(view: View): Bitmap? {
         val bitmap: Bitmap?
         try {
-           bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        }catch (e: Exception) {
+            bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
+        } catch (e: RuntimeException) {
             e.printStackTrace()
             Toast.makeText(context, "图片生成失败！", Toast.LENGTH_SHORT).show()
             return null
@@ -504,65 +376,13 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
         return bitmap
     }
 
-    override suspend fun save(photo: Bitmap, fileName: String) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val imageSaveFilePath = Environment.DIRECTORY_DCIM + File.separator + "hustHole"
-            val file = File(imageSaveFilePath)
-            if(!file.exists()) {
-                file.mkdirs()
-            }
-            val contentValues = ContentValues()
-            contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-            contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-            contentValues.put(MediaStore.MediaColumns.DATE_TAKEN, System.currentTimeMillis())
-            contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, imageSaveFilePath)
-            var uri: Uri? = null
-            var fos: OutputStream? = null
-            val localContentResolver = context.contentResolver
-            try {
-                uri = localContentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-                fos = uri?.let { localContentResolver.openOutputStream(it) }
+    @NeedsPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun getPermission() {
+        ppw.onDownloadClick()
+    }
 
-                photo.compress(Bitmap.CompressFormat.JPEG, 80, fos)
-                fos?.flush()
-                fos?.close()
-                Toast.makeText(context, "保存成功！", Toast.LENGTH_SHORT).show()
-            }catch (e: IOException) {
-                e.printStackTrace()
-                uri?.let {
-                    localContentResolver.delete(it, null, null)
-                }
-                Toast.makeText(context, "文件保存失败！", Toast.LENGTH_SHORT).show()
-            }finally {
-                photo.recycle()
-                try {
-                    fos?.let {
-                        fos.close()
-                    }
-                } catch (e: IOException) {
-                    e.printStackTrace()
-                }
-            }
-        }else {
-            val path = Environment.getExternalStorageDirectory().absolutePath + File.separator + "hustHole"
-            // 创建文件夹
-            mkdir(path, 755)
-            val file = File(path, fileName)
-            try {
-                val fos = FileOutputStream(file)
-                // 通过io流的方式来压缩保存图片
-                photo.compress(Bitmap.CompressFormat.JPEG, 70, fos)
-                fos.flush()
-                fos.close()
-                // 保存图片后发送广播通知更新数据库
-                val uri = Uri.fromFile(file)
-                context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri))
-                Toast.makeText(context, "保存成功！", Toast.LENGTH_SHORT).show()
-            } catch (e: IOException) {
-                e.printStackTrace()
-                Toast.makeText(context, "文件保存失败！", Toast.LENGTH_SHORT).show()
-            }
-        }
+    override suspend fun save(photo: Bitmap, fileName: String) {
+        writer?.saveToDevice(photo, context, "hustHole", fileName)
     }
 
     override suspend fun generateQRCode(url: String): Bitmap? {
@@ -578,12 +398,12 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
             val pixels = IntArray(width * height)
             for (y in 0 until height) {
                 for (x in 0 until width) {
-                if (matrix.get(x, y)) {
-                    pixels[y * width + x] = Color.BLACK
-                } else {
-                    pixels[y * width + x] = Color.WHITE
+                    if (matrix.get(x, y)) {
+                        pixels[y * width + x] = Color.BLACK
+                    } else {
+                        pixels[y * width + x] = Color.WHITE
+                    }
                 }
-            }
             }
             bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
@@ -599,12 +419,135 @@ class HomeHoleFragment() : BaseFragment(), PicGenerator {
         const val TAG = "HomeHoleFragment"
 
         @JvmStatic
-        fun newInstance(type: Int): HomeHoleFragment {
-            return HomeHoleFragment(type)
+        fun newInstance(args: Bundle): HomeHoleFragment {
+            val newFragment = HomeHoleFragment()
+            newFragment.arguments = args
+            return newFragment
         }
 
         const val HOLE_LIST = 1
         const val FOLLOW = 2
         const val RECOMMEND = 3
+    }
+
+    inner class SharePopupWindow {
+        private var shareBind: HoleShareCardBinding? = null
+        private var funcBind: PpwBottomShareBinding? = null
+        private var ppwShare: PopupWindow? = null
+        private var ppwFunc: PopupWindow? = null
+        private var bitmap: Bitmap? = null
+        fun initView(data: HoleV2) {
+            funcBind = DataBindingUtil.inflate(
+                LayoutInflater.from(context),
+                R.layout.ppw_bottom_share,
+                null,
+                false
+            )
+            shareBind = DataBindingUtil.inflate(
+                LayoutInflater.from(context),
+                R.layout.hole_share_card,
+                null,
+                false
+            )
+
+            viewModel.viewModelScope.launch {
+                bitmap = generateQRCode("https://husthole.com/#/holeDetail/" + data.holeId)
+                shareBind!!.QRCode.setImageBitmap(bitmap)
+            }
+            ppwShare = PopupWindow(shareBind!!.root)
+            ppwFunc = PopupWindow(funcBind!!.root)
+            val window = requireActivity().window
+
+            with(ppwShare!!) {
+                setAttribute(this)
+                isOutsideTouchable = true
+                isFocusable = true
+                width = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+            with(ppwFunc!!) {
+                setAttribute(this)
+                isFocusable = false
+                isOutsideTouchable = false
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+            }
+
+            //背景亮度降低
+            window.attributes.alpha = 0.6f
+            window.setWindowAnimations(R.style.darkScreenAnim)
+            ppwShare!!.showAtLocation(
+                funcBind!!.container, Gravity.TOP,
+                0, 0
+            )
+            ppwFunc!!.showAtLocation(
+                window.decorView, Gravity.BOTTOM,
+                0, 0
+            )
+        }
+
+        fun initAction(data: HoleV2) {
+            ppwShare?.setOnDismissListener {
+                ppwFunc?.dismiss()
+                cancelDarkBackGround()
+            }
+            shareBind?.apply {
+                this.hole = data
+                createAt.text =
+                    getString(R.string.created_at).format(data.createAt.substring(0, 10))
+            }
+            funcBind?.download?.setOnClickListener {
+                getPermissionWithPermissionCheck()
+            }
+            /*funcBind.shareToQq.setOnClickListener {
+                val params = Bundle()
+                params.putInt(QQShare.SHARE_TO_QQ_KEY_TYPE, QQShare.SHARE_TO_QQ_TYPE_DEFAULT)
+                params.putString(QQShare.SHARE_TO_QQ_TITLE, '#' + data.holeId)
+                params.putString(QQShare.SHARE_TO_QQ_SUMMARY, if(data.content.length <= 40) data.content else data.content.substring(0..40))
+                params.putString(QQShare.SHARE_TO_QQ_TARGET_URL, "https://husthole.com/#/holeDetail/1" + data.holeId)
+                params.putString(
+                    QQShare.SHARE_TO_QQ_IMAGE_URL,
+                    "http://imgcache.qq.com/qzone/space_item/pre/0/66768.gif"
+                )
+                params.putString(QQShare.SHARE_TO_QQ_APP_NAME, "1037树洞")
+                val mTencent = Tencent.createInstance("jjj", this.requireActivity().applicationContext, "${this.requireActivity().applicationContext.packageName}.fileprovider")
+                mTencent.shareToQQ(this.requireActivity(), params, object : IUiListener {
+                    override fun onComplete(p0: Any?) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onError(p0: UiError?) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onCancel() {
+                        TODO("Not yet implemented")
+                    }
+                    override fun onWarning(p0: Int) {
+                        TODO("Not yet implemented")
+                    }
+                })
+                ppwShare.dismiss()
+            }*/
+        }
+
+        fun onDownloadClick() {
+            viewModel.viewModelScope.launch {
+                shareBind?.apply {
+                    val now = Date()
+                    val ft2 = SimpleDateFormat("yyyyMMddhhmmss", Locale.CHINA)
+                    generate(this.mainContent)?.let {
+                        save(it, hole?.holeId + ft2.format(now))
+                        bitmap?.recycle()
+                        ppwShare?.dismiss()
+                    }
+                }
+            }
+        }
+
+        private fun setAttribute(ppw: PopupWindow) {
+            with(ppw) {
+                height = ViewGroup.LayoutParams.WRAP_CONTENT
+                animationStyle = R.style.Page2Anim
+            }
+        }
     }
 }

@@ -50,7 +50,7 @@ public class BaseFragment extends Fragment {
         context = null;
     }
 
-    protected void showMsg(String msg) {
+    final protected void showMsg(String msg) {
         Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
     }
 }

@@ -50,7 +50,8 @@
             app:tabIndicatorAnimationMode="elastic"
             app:tabMode="scrollable"
             app:tabPaddingEnd="@dimen/dp_0"
-            app:tabPaddingStart="@dimen/dp_0" />
+            app:tabPaddingStart="@dimen/dp_0"
+            app:tabRippleColor="@color/transparent" />
 
 
         <androidx.viewpager2.widget.ViewPager2

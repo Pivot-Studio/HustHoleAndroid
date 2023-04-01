@@ -39,7 +39,6 @@ class HomePageViewModel : ViewModel() {
     val sortMode: LiveData<String> = _sortMode
 
     private var _loadLaterHoleId = ""
-    var type = 1
 
     fun getMyFollow() {
         viewModelScope.launch {

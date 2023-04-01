@@ -70,6 +70,7 @@
                 android:layout_height="@dimen/dp_44"
                 android:layout_marginStart="@dimen/dp_11"
                 android:background="@color/HH_Surface"
+                app:tabRippleColor="@color/transparent"
                 app:tabIndicator="@drawable/tab_indicator"
                 app:tabIndicatorAnimationMode="elastic"
                 app:tabMode="scrollable"
