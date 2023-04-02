@@ -56,9 +56,5 @@ class BaseApplication : Application() {
         @Deprecated("Java遗留")
         @JvmStatic
         var DB: HustHoleRoomDatabase? = null
-
-        @JvmStatic
-        val activityManager: ActivityManager
-            get() = ActivityManager.getInstance()
     }
 }

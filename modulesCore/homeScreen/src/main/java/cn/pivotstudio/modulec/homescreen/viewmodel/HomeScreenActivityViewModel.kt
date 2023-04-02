@@ -29,7 +29,7 @@ class HomeScreenActivityViewModel : ViewModel() {
                         _versionInfo.emit(it.data as VersionInfo)
                     }
                     is ApiResult.Error -> {
-                        _versionInfo.emit(null)
+                        _versionInfo.emit(VersionInfo(it.code.toString(), it.errorMessage.toString(), "", ""))
                         tip.value = it.errorMessage
                     }
                     else -> {}

@@ -25,7 +25,6 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         this.context = this;
 
-        BaseApplication.getActivityManager().addActivity(this);
         PermissionUtil.getInstance();
     }
 

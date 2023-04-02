@@ -3,9 +3,7 @@ package cn.pivotstudio.modulec.homescreen.ui.activity
 import android.content.*
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.content.res.Configuration
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -15,16 +13,12 @@ import androidx.activity.viewModels
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.model.VersionInfo
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.BuildConfig
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
@@ -34,18 +28,14 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.WelcomeDialog
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityHsHomescreenBinding
-import cn.pivotstudio.modulec.homescreen.repository.HomeScreenRepository
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
-import cn.pivotstudio.modulec.homescreen.ui.fragment.HomeHoleFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomeScreenActivityViewModel
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.android.material.navigation.NavigationBarView
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 
 /**
@@ -175,21 +165,30 @@ class HomeScreenActivity : BaseActivity() {
         lifecycleScope.launch {
             viewModel.versionInfo.collect {
                 it?.let {
-                    if (it.versionId.toLong() > oldCode || it.versionName != oldName!!) {
-                        if (checkNotification()) {
-                            val updateDialog = UpdateDialog(context, it)
-                            updateDialog.show()
-                        } else {
-                            runBlocking {
-                                Toast.makeText(context, "没有开启通知权限，请前往开启", Toast.LENGTH_SHORT).show()
-                                delay(1000L)
+                    if(it.versionId == "403") {
+                        Toast.makeText(context, "登录过期！", Toast.LENGTH_SHORT).show()
+                        if (BuildConfig.isRelease) {
+                            mmkvUtil.put(Constant.IS_LOGIN, false)
+                            ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation()
+                            finish()
+                        }
+                    }else {
+                        if (it.versionId.toLong() > oldCode || it.versionName != oldName!!) {
+                            if (checkNotification()) {
+                                val updateDialog = UpdateDialog(context, it)
+                                updateDialog.show()
+                            } else {
+                                runBlocking {
+                                    Toast.makeText(context, "没有开启通知权限，请前往开启", Toast.LENGTH_SHORT).show()
+                                    delay(1000L)
+                                }
+                                val localIntent = Intent()
+                                localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
+                                localIntent.data =
+                                    Uri.fromParts("package", this@HomeScreenActivity.packageName, null)
+                                startActivity(localIntent)
                             }
-                            val localIntent = Intent()
-                            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                            localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
-                            localIntent.data =
-                                Uri.fromParts("package", this@HomeScreenActivity.packageName, null)
-                            startActivity(localIntent)
                         }
                     }
                 }

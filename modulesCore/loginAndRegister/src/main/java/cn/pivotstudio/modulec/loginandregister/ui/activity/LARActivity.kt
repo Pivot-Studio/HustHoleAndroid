@@ -64,7 +64,6 @@ class LARActivity : AppCompatActivity() {
         mmkvUtil.apply {
             put(Constant.USER_TOKEN_V2, token)
             put(Constant.IS_LOGIN, true)
-            put(Constant.IS_DARK_MODE, 2)
             if (BuildConfig.isRelease) {
                 ARouter.getInstance().build("/homeScreen/HomeScreenActivity")
                     .navigation()

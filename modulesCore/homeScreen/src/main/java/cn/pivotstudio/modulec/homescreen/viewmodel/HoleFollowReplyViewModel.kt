@@ -174,7 +174,11 @@ class HoleFollowReplyViewModel : ViewModel() {
                         getMyHole()
                     }
                     is ApiResult.Error -> {
-                        tip.value = it.code.toString() + it.errorMessage
+                        if(it.code == 500) {
+                            tip.value = "服务器出错啦~"
+                        }else {
+                            tip.value = it.errorMessage
+                        }
                     }
                     else -> {}
                 }

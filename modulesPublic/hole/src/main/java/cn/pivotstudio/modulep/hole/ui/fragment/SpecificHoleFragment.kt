@@ -296,7 +296,6 @@ class SpecificHoleFragment : BaseFragment() {
     }
 
     private fun initListener() {
-
         binding.apply {
             etReplyPost.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(

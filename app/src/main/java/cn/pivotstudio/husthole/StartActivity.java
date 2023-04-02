@@ -27,29 +27,26 @@ public class StartActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         ARouter.getInstance().inject(this);
         setContentView(R.layout.activity_rl_preparation);
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                if (mvUtil.getBoolean(Constant.IS_LOGIN)) {
-                    switch (mvUtil.getInt(Constant.IS_DARK_MODE)) {
-                        case 0:
-                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                            break;
-                        case 1:
-                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                            break;
-                        case 2:
-                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
-                            break;
-                        default:
-                            break;
-                    }
-                    ARouter.getInstance().build("/homeScreen/HomeScreenActivity").navigation();
-                } else {
-                    ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation();
+        Runnable runnable = () -> {
+            if (mvUtil.getBoolean(Constant.IS_LOGIN)) {
+                switch (mvUtil.getInt(Constant.IS_DARK_MODE)) {
+                    case 0:
+                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                        break;
+                    case 1:
+                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                        break;
+                    case 2:
+                        AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                        break;
+                    default:
+                        break;
                 }
-                finish();
+                ARouter.getInstance().build("/homeScreen/HomeScreenActivity").navigation();
+            } else {
+                ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation();
             }
+            finish();
         };
         new Handler().postDelayed(runnable, 0);
     }
