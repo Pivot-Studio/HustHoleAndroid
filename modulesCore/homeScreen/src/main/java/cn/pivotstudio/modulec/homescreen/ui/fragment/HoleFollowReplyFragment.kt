@@ -59,7 +59,7 @@ class HoleFollowReplyFragment : BaseFragment() {
             }
         }
         TabLayoutMediator(binding.tlHoleStar, binding.vpHoleStar) { tab, position ->
-            val tabView = LayoutInflater.from(context).inflate(R.layout.tab_mine, null)
+            val tabView = LayoutInflater.from(context).inflate(R.layout.tab_mine, binding.tlHoleStar, false)
             val tv = tabView.findViewById(R.id.title) as TextView
             tv.text = requireContext().getString(titleList[position])
             tab.customView = tabView

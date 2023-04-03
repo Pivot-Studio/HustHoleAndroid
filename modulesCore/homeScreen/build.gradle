@@ -92,4 +92,11 @@ dependencies {
     implementation 'com.squareup.moshi:moshi-kotlin:1.9.3'
     // Retrofit with Moshi Converter
     implementation 'com.squareup.retrofit2:converter-moshi:2.9.0'
+    //QRCode
+    implementation 'com.google.zxing:core:3.3.0'
+    //TencentQQ
+    implementation 'com.tencent.tauth:qqopensdk:3.52.0'
+    //PermissionsDispatcher框架
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.9.2"
+    kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2"
 }

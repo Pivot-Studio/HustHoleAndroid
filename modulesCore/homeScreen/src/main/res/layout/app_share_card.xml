@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <ScrollView
+        android:id="@+id/main_content"
+        android:layout_width="@dimen/dp_281"
+        android:layout_height="wrap_content"
+        android:background="@color/HH_BandColor_3"
+        android:orientation="vertical">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/share_card_background"
+            android:padding="@dimen/dp_12">
+
+            <ImageView
+                android:id="@+id/pivot_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_18"
+                android:layout_marginTop="@dimen/dp_6"
+                android:src="@mipmap/ic_pivot_white"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_2"
+                android:text="@string/mobile_1037"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_18"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/pivot_logo" />
+
+            <View
+                android:layout_width="@dimen/dp_215"
+                android:layout_height="@dimen/dp_5"
+                android:background="@color/HH_BandColor_1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/blank"/>
+
+            <RelativeLayout
+                android:id="@+id/content"
+                android:layout_width="@dimen/dp_206"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_24"
+                android:layout_marginTop="@dimen/dp_13"
+                android:background="@drawable/standard_share_card_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/title">
+
+                <ImageView
+                    android:id="@+id/douhao"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_24"
+                    android:layout_marginTop="@dimen/dp_21"
+                    android:src="@drawable/ic_douhao"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/hole_1037"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/douhao"
+                    android:layout_marginStart="@dimen/dp_24"
+                    android:layout_marginTop="@dimen/dp_7"
+                    android:text="@string/default_string_zh_short"
+                    android:textColor="@color/HH_BandColor_5"
+                    android:textSize="@dimen/sp_11" />
+
+                <TextView
+                    android:id="@+id/purport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/hole_1037"
+                    android:layout_marginStart="@dimen/dp_24"
+                    android:text="@string/purport"
+                    android:textAppearance="@style/HustHoleTypography.Body4.Bold" />
+
+                <TextView
+                    android:id="@+id/mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/purport"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_15"
+                    android:text="移动版"
+                    android:textAppearance="@style/HustHoleTypography.Body2.Bold" />
+
+                <View
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_6"
+                    android:layout_below="@id/mobile"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_9"
+                    android:background="@drawable/version_code_background" />
+
+                <TextView
+                    android:id="@+id/version_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/mobile"
+                    android:layout_centerHorizontal="true"
+                    android:text="2.0"
+                    android:textAppearance="@style/HustHoleTypography.Body2.Bold" />
+
+                <ImageView
+                    android:id="@+id/img_shop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/version_code"
+                    android:layout_marginStart="@dimen/dp_40"
+                    android:src="@drawable/ic_shape"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/to_where"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/version_code"
+                    android:layout_marginStart="@dimen/dp_3"
+                    android:layout_toEndOf="@id/img_shop"
+                    android:text="可前往官方网站下载"
+                    android:textAppearance="@style/HustHoleTypography.Body4.Bold" />
+
+                <ImageView
+                    android:id="@+id/QR_code"
+                    android:layout_width="@dimen/dp_111"
+                    android:layout_height="@dimen/dp_111"
+                    android:layout_below="@id/to_where"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_7"
+                    android:background="@drawable/standard_qrcode"
+                    android:contentDescription="@string/QR_code" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_94"
+                    android:layout_below="@id/QR_code" />
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/blank"
+                android:layout_width="@dimen/dp_5"
+                android:layout_height="@dimen/dp_354"
+                app:layout_constraintBaseline_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/letter"
+                android:layout_width="@dimen/dp_228"
+                android:layout_height="@dimen/dp_135"
+                android:layout_marginHorizontal="@dimen/dp_14"
+                android:src="@drawable/share_card_letter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/blank"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_26"
+                android:layout_marginTop="@dimen/dp_62"
+                android:src="@drawable/letter_gap"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/blank"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_109"
+                android:layout_marginTop="@dimen/dp_41"
+                android:src="@mipmap/ic_orange_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/blank"
+                tools:ignore="ContentDescription" />
+
+            <View
+                android:layout_width="@dimen/dp_2"
+                android:layout_height="@dimen/dp_108"
+                android:layout_marginEnd="@dimen/dp_4"
+                android:layout_marginStart="@dimen/dp_32"
+                android:layout_marginTop="@dimen/dp_61"
+                android:background="@drawable/style_black_line"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/content"/>
+
+            <View
+                android:layout_width="@dimen/dp_2"
+                android:layout_height="@dimen/dp_8"
+                android:layout_marginEnd="@dimen/dp_4"
+                android:layout_marginStart="@dimen/dp_32"
+                android:layout_marginTop="@dimen/dp_46"
+                android:background="@drawable/style_black_line"
+                app:layout_constraintTop_toBottomOf="@id/title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/content"/>
+
+            <View
+                android:layout_width="@dimen/dp_2"
+                android:layout_height="@dimen/dp_108"
+                android:layout_marginStart="@dimen/dp_4"
+                android:layout_marginEnd="@dimen/dp_32"
+                android:layout_marginBottom="@dimen/dp_37"
+                android:background="@drawable/style_black_line"
+                app:layout_constraintBottom_toTopOf="@id/letter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/content" />
+
+            <View
+                android:layout_width="@dimen/dp_2"
+                android:layout_height="@dimen/dp_8"
+                android:layout_marginStart="@dimen/dp_4"
+                android:layout_marginEnd="@dimen/dp_32"
+                android:layout_marginBottom="@dimen/dp_22"
+                android:background="@drawable/style_black_line"
+                app:layout_constraintBottom_toTopOf="@id/letter"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/content" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/dp_19"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/letter">
+
+                <ImageView
+                    android:id="@+id/logo"
+                    android:layout_width="@dimen/dp_21"
+                    android:layout_height="@dimen/dp_21"
+                    android:layout_marginTop="@dimen/dp_3"
+                    android:src="@mipmap/ic_launcher_round"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/title_1037"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_3"
+                    android:layout_toEndOf="@id/logo"
+                    android:text="@string/hust_hole_1037_zh"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/title_1037"
+                    android:layout_marginStart="@dimen/dp_3"
+                    android:layout_toEndOf="@id/logo"
+                    android:text="@string/purport"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_10"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

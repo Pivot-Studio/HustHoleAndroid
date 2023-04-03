@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.libbase.util.store.SaveToShareFile
 import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.HomePageOptionBox
@@ -26,7 +27,7 @@ import com.google.android.material.tabs.TabLayoutMediator
  * @classname:HomePageFragment
  * @description:
  * @date:2022/5/2 22:56
- * @version:1.0
+ * @version:2.0
  * @author:
  */
 class HomePageFragment : BaseFragment() {
@@ -81,8 +82,12 @@ class HomePageFragment : BaseFragment() {
             vpHomescreenHole.adapter = object : FragmentStateAdapter(this@HomePageFragment) {
                 override fun getItemCount(): Int = 3
 
-                override fun createFragment(position: Int): Fragment =
-                    HomeHoleFragment.newInstance(position + 1)
+                override fun createFragment(position: Int): Fragment {
+                    val bundle = Bundle()
+                    bundle.putInt("type", position + 1)
+                    bundle.putSerializable("writer", SaveToShareFile())
+                    return HomeHoleFragment.newInstance(bundle)
+                }
             }
             TabLayoutMediator(tbMode, vpHomescreenHole) { tab, position ->
                 val tabView = if (position != 0) {
