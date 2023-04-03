@@ -4,6 +4,7 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.*
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
+import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
@@ -42,7 +43,7 @@ class HomePageViewModel : ViewModel() {
 
     fun getMyFollow() {
         viewModelScope.launch {
-            try{
+            try {
                 withTimeout(HoleFollowReplyViewModel.MAX_REQUEST_TIME) {
                     _loadingState.emit(ApiStatus.LOADING)
                     repository.getMyFollow().collect {
@@ -80,7 +81,13 @@ class HomePageViewModel : ViewModel() {
                     when (it) {
                         is ApiResult.Success<*> -> {
                             _loadingState.emit(ApiStatus.SUCCESSFUL)
-                            _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it.data as List<HoleV2>) })
+                            if((it.data as List<*>).isEmpty()) {
+                                tip.value = "到底了哟~"
+                            }else {
+                                _holesV2.emit(
+                                    _holesV2.value.toMutableList()
+                                        .apply { addAll(it.data as List<HoleV2>) })
+                            }
                         }
                         is ApiResult.Error -> {
                             _loadingState.emit(ApiStatus.ERROR)
@@ -130,10 +137,16 @@ class HomePageViewModel : ViewModel() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             repository.loadMoreRecHoles(sortMode).collect {
-                when(it) {
+                when (it) {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
-                        _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it.data as List<HoleV2>) })
+                        if ((it.data as List<HoleV2>).isEmpty()) {
+                            tip.value = "到底了哟~"
+                        } else {
+                            _holesV2.emit(
+                                _holesV2.value.toMutableList()
+                                    .apply { addAll(it.data as List<HoleV2>) })
+                        }
                     }
                     is ApiResult.Error -> {
                         _loadingState.emit(ApiStatus.ERROR)
@@ -158,7 +171,7 @@ class HomePageViewModel : ViewModel() {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
                         _sortMode.value = sortMode
-                        (it.data as List<HoleV2>).forEach {hole ->
+                        (it.data as List<HoleV2>).forEach { hole ->
                             hole.isLatestReply = isLatestReply.value
                         }
                         _holesV2.emit(it.data as List<HoleV2>)
@@ -182,10 +195,12 @@ class HomePageViewModel : ViewModel() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             repository.loadMoreHoles(sortMode).collect {
-                when(it) {
+                when (it) {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
-                        _holesV2.emit(_holesV2.value.toMutableList().apply { addAll(it.data as List<HoleV2>) })
+                        _holesV2.emit(
+                            _holesV2.value.toMutableList()
+                                .apply { addAll(it.data as List<HoleV2>) })
                     }
                     is ApiResult.Error -> {
                         _loadingState.emit(ApiStatus.ERROR)
@@ -203,7 +218,7 @@ class HomePageViewModel : ViewModel() {
                 _loadingState.emit(ApiStatus.LOADING)
                 if (queryKey.isDigitsOnly()) {
                     repository.loadTheHole(queryKey).collectLatest {
-                        when(it) {
+                        when (it) {
                             is ApiResult.Success<*> -> {
                                 _loadingState.emit(ApiStatus.SUCCESSFUL)
                                 _holesV2.emit(listOf(it.data as HoleV2))
@@ -390,11 +405,11 @@ class HomePageViewModel : ViewModel() {
         followNum: Long
     ) {
         viewModelScope.launch {
-            if(_holesV2.value.isNotEmpty()) {
+            if (_holesV2.value.isNotEmpty()) {
                 var i = _holesV2.value.indexOfFirst {
                     it.holeId == _loadLaterHoleId
                 }
-                if(i == -1) {
+                if (i == -1) {
                     i = 0
                     tip.value = _holesV2.value[0].holeId
                 }
