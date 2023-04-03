@@ -15,33 +15,34 @@
         android:id="@+id/main_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_24"
         android:background="@color/HH_BandColor_3"
-        android:padding="@dimen/dp_25">
+        android:padding="@dimen/dp_24">
 
         <RelativeLayout
             android:id="@+id/title"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_57"
+            android:layout_height="@dimen/dp_54"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/hole_id"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_36"
+                android:layout_height="@dimen/dp_35"
                 android:gravity="center"
                 android:text="@{@string/hole_id(hole.holeId), default = `#1037`}"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp_24"
+                android:textSize="@dimen/sp_23"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/create_at"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_21"
+                android:layout_height="@dimen/dp_20"
                 android:layout_below="@id/hole_id"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp_14"
+                android:textSize="@dimen/sp_13"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -50,7 +51,7 @@
             android:id="@+id/content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginTop="@dimen/dp_19"
             android:background="@drawable/standard_forest_hole"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -60,34 +61,32 @@
                 android:id="@+id/douhao"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/dp_25"
-                android:layout_marginTop="@dimen/dp_25"
+                android:layout_marginStart="@dimen/dp_24"
+                android:layout_marginTop="@dimen/dp_24"
                 android:src="@drawable/ic_douhao"
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/dp_264"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/douhao"
-                android:layout_marginHorizontal="@dimen/dp_25"
-                android:layout_marginTop="@dimen/dp_20"
-                android:layout_marginBottom="@dimen/dp_30"
+                android:layout_marginHorizontal="@dimen/dp_24"
+                android:layout_marginTop="@dimen/dp_19"
+                android:layout_marginBottom="@dimen/dp_29"
                 android:ellipsize="end"
                 android:maxLines="6"
-                android:minWidth="@dimen/dp_275"
-                android:minHeight="@dimen/dp_162"
+                android:minHeight="@dimen/dp_156"
                 android:text="@{hole.content}"
                 android:textAppearance="@style/HustHoleTypography.Body1"
                 tools:text="某天中午，一个人坐在东操足球场草坪上，边打着电话边抽泣。一个不认识的穿着球服的小哥哥从我身边走过时，悄悄地蹲下来，在我身边的草坪上，放了一块草莓味夹心饼干。" />
 
         </RelativeLayout>
 
-        <RelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/share"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_87"
-            android:layout_marginTop="@dimen/dp_20"
-            android:gravity="center_vertical"
+            android:layout_width="@dimen/dp_312"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_19"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/content">
@@ -95,12 +94,14 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/dp_26">
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/logo"
-                    android:layout_width="@dimen/dp_28"
-                    android:layout_height="@dimen/dp_28"
+                    android:layout_width="@dimen/dp_26"
+                    android:layout_height="@dimen/dp_26"
                     android:layout_marginTop="@dimen/dp_5"
                     android:src="@mipmap/ic_launcher_round"
                     tools:ignore="ContentDescription" />
@@ -113,7 +114,7 @@
                     android:layout_toEndOf="@id/logo"
                     android:text="@string/hust_hole_1037_zh"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/sp_14"
+                    android:textSize="@dimen/sp_13"
                     android:textStyle="bold" />
 
                 <TextView
@@ -130,19 +131,24 @@
 
             <ImageView
                 android:id="@+id/QR_code"
-                android:layout_width="@dimen/dp_70"
-                android:layout_height="@dimen/dp_70"
-                android:layout_alignParentEnd="true"
+                android:layout_width="@dimen/dp_67"
+                android:layout_height="@dimen/dp_67"
+                android:layout_marginTop="@dimen/dp_0"
                 android:layout_marginEnd="@dimen/dp_3"
+                android:contentDescription="@string/QR_code"
                 android:padding="@dimen/dp_3"
-                android:contentDescription="@string/QR_code" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
             <!-- 遮罩强行搞成圆弧 -->
             <View
-                android:layout_width="@dimen/dp_70"
-                android:layout_height="@dimen/dp_70"
+                android:layout_width="@dimen/dp_67"
+                android:layout_height="@dimen/dp_67"
                 android:layout_alignParentEnd="true"
+                android:layout_marginTop="@dimen/dp_0"
                 android:layout_marginEnd="@dimen/dp_3"
-                android:background="@drawable/share_code_style" />
+                android:background="@drawable/share_code_style"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -151,10 +157,11 @@
                 android:layout_alignParentEnd="true"
                 android:text="@string/long_click_scan"
                 android:textColor="@color/white"
-                android:textSize="@dimen/sp_10" />
+                android:textSize="@dimen/sp_10"
+                app:layout_constraintEnd_toEndOf="@id/QR_code"
+                app:layout_constraintStart_toStartOf="@id/QR_code"
+                app:layout_constraintTop_toBottomOf="@id/QR_code" />
 
-        </RelativeLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </layout>

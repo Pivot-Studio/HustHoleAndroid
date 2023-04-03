@@ -70,14 +70,16 @@
                 android:layout_height="@dimen/dp_44"
                 android:layout_marginStart="@dimen/dp_11"
                 android:background="@color/HH_Surface"
-                app:tabRippleColor="@color/transparent"
-                app:tabIndicator="@drawable/tab_indicator"
-                app:tabIndicatorAnimationMode="elastic"
+                app:tabIndicator="@drawable/home_screen_tab_indicator"
+                app:tabIndicatorAnimationDuration="@android:integer/config_longAnimTime"
+                app:tabIndicatorAnimationMode="linear"
+                app:tabIndicatorFullWidth="false"
+                app:tabMaxWidth="0dp"
+                app:tabMinWidth="0dp"
                 app:tabMode="scrollable"
                 app:tabPaddingEnd="@dimen/dp_10"
                 app:tabPaddingStart="@dimen/dp_11"
-                app:tabMinWidth="0dp"
-                app:tabMaxWidth="0dp"/>
+                app:tabRippleColor="@color/transparent" />
 
 
         </LinearLayout>
@@ -87,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/ll_hole_mode"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     </RelativeLayout>
 </layout>

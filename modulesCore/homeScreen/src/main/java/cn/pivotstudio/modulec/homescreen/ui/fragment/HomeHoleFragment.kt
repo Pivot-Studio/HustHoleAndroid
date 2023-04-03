@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -475,7 +476,7 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
             window.attributes.alpha = 0.6f
             window.setWindowAnimations(R.style.darkScreenAnim)
             ppwShare!!.showAtLocation(
-                funcBind!!.container, Gravity.TOP,
+                window.decorView, Gravity.CENTER,
                 0, 0
             )
             ppwFunc!!.showAtLocation(
@@ -495,7 +496,11 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
                     getString(R.string.created_at).format(data.createAt.substring(0, 10))
             }
             funcBind?.download?.setOnClickListener {
-                getPermissionWithPermissionCheck()
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    getPermission()
+                }else {
+                    getPermissionWithPermissionCheck()
+                }
             }
             /*funcBind.shareToQq.setOnClickListener {
                 val params = Bundle()
