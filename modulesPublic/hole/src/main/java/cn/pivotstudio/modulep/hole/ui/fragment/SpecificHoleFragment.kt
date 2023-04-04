@@ -214,6 +214,13 @@ class SpecificHoleFragment : BaseFragment() {
         }
 
         replyViewModel.apply {
+            tip.observe(viewLifecycleOwner) {
+                it?.let {
+                    showMsg(it)
+                    doneShowingTip()
+                }
+            }
+
             lifecycleScope.launchWhenStarted {
                 hole.collectLatest {
                     it?.let { hole ->

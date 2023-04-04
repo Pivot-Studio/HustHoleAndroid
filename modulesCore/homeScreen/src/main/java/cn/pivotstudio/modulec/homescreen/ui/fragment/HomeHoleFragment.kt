@@ -191,7 +191,7 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
             tip.observe(viewLifecycleOwner) {
                 it?.let {
                     showMsg(it)
-                    viewModel.doneShowingTip()
+                    doneShowingTip()
                 }
             }
             if (type == HOLE_LIST) {

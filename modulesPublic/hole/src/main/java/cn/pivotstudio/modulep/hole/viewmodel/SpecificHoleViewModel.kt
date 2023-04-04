@@ -114,6 +114,8 @@ class SpecificHoleViewModel(
     //进行数据请求的地方
     private val repository = HoleRepository(holeId)
 
+    val tip: MutableLiveData<String?> = repository.tip
+
     fun usedEmojiList() = repository.usedEmojiForLocalDB
 
     fun inputText() = repository.getInputTextForLocalDB(holeId.toInt())
@@ -153,17 +155,25 @@ class SpecificHoleViewModel(
         }
     }
 
+    fun doneShowingTip() {
+        tip.value = null
+    }
+
     fun loadMoreReplies() {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             repository.loadMoreReplies(descend.value).collect {
-                when(it) {
+                when (it) {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
                         _filteringOwner.emit(false)
-                        _replies.emit(_replies.value.toMutableList().apply {
-                            addAll(it.data as Collection<ReplyWrapper>)
-                        })
+                        if ((it.data as Collection<ReplyWrapper>).isEmpty()) {
+                            tip.value = "到底了~"
+                        } else {
+                            _replies.emit(_replies.value.toMutableList().apply {
+                                addAll(it.data as Collection<ReplyWrapper>)
+                            })
+                        }
                     }
                     is ApiResult.Error -> {
                         _loadingState.emit(ApiStatus.ERROR)
@@ -178,16 +188,16 @@ class SpecificHoleViewModel(
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             repository.apply {
-                loadHole().collect {loadHoleResult ->
-                    when(loadHoleResult) {
+                loadHole().collect { loadHoleResult ->
+                    when (loadHoleResult) {
                         is ApiResult.Success<*> -> {
                             _hole.emit(loadHoleResult.data as HoleV2)
-                            loadReplies(descend.value).collect {loadRepliesResult ->
-                                when(loadRepliesResult) {
+                            loadReplies(descend.value).collect { loadRepliesResult ->
+                                when (loadRepliesResult) {
                                     is ApiResult.Success<*> -> {
                                         _loadingState.emit(ApiStatus.SUCCESSFUL)
                                         _replies.emit(loadRepliesResult.data as List<ReplyWrapper>)
-                                        if(_replies.value.isEmpty()) {
+                                        if (_replies.value.isEmpty()) {
                                             _showingPlaceholder.emit(true)
                                         }
                                     }
@@ -200,7 +210,7 @@ class SpecificHoleViewModel(
                             }
                         }
                         is ApiResult.Error -> {
-                            if(loadHoleResult.code == 1006)
+                            if (loadHoleResult.code == 1006)
                                 finish()
                             _sendingState.emit(loadHoleResult)
                             _loadingState.emit(ApiStatus.ERROR)

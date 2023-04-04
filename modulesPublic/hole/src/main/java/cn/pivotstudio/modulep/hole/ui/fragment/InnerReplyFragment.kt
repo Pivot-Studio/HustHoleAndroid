@@ -184,6 +184,12 @@ class InnerReplyFragment : BaseFragment() {
     }
     private fun initObserver() {
         innerReplyViewModel.apply {
+            tip.observe(viewLifecycleOwner, Observer<String?> {
+                it?.let {
+                    showMsg(it)
+                    doneShowingTip()
+                }
+            })
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     reply.collectLatest {

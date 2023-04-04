@@ -29,20 +29,17 @@ import cn.pivotstudio.moduleb.libbase.R;
  */
 public class EmojiEdittext extends androidx.appcompat.widget.AppCompatEditText {
     private View view = null;
-    private int mEmojiconSize;
-    private int mEmojiconAlignment;
-    private int mEmojiconTextSize;
+    private int mEmojiIconSize;
+    private int mEmojiIconAlignment;
+    private int mEmojiIconTextSize;
     private boolean mUseSystemDefault = false;
     private final TextWatcher textWatcher = new TextWatcher() {
-        Boolean isDetele = false;
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
         }
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            isDetele = (before != 0);
         }
 
         @Override
@@ -50,10 +47,11 @@ public class EmojiEdittext extends androidx.appcompat.widget.AppCompatEditText {
             if (view != null) {
                 view.setEnabled(!editable.toString().isEmpty());//输入完不为空内容才可以点击
             }
+            /*
             int start = getSelectionStart();
             int end = getSelectionEnd();
             if(!isDetele) {
-                removeTextChangedListener(this);//取消监听
+                //removeTextChangedListener(this);//取消监听
 
                 SpannableString spannableString =
                     SpanStringUtil.getEmotionContent(0x0001, BaseApplication.context, EmojiEdittext.this,
@@ -61,8 +59,8 @@ public class EmojiEdittext extends androidx.appcompat.widget.AppCompatEditText {
                 setText(spannableString);
 
                 setSelection(start, end);
-                addTextChangedListener(this);
-            }
+                //addTextChangedListener(this);
+            }*/
         }
     };
 
@@ -82,12 +80,12 @@ public class EmojiEdittext extends androidx.appcompat.widget.AppCompatEditText {
     }
 
     private void initView(AttributeSet attrs) {
-        mEmojiconSize = (int) getTextSize();
-        mEmojiconTextSize = (int) getTextSize();
+        mEmojiIconSize = (int) getTextSize();
+        mEmojiIconTextSize = (int) getTextSize();
         if (attrs != null) {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.Emojicon);
-            mEmojiconSize = (int) a.getDimension(R.styleable.Emojicon_emojiSize, getTextSize());
-            mEmojiconAlignment =
+            mEmojiIconSize = (int) a.getDimension(R.styleable.Emojicon_emojiSize, getTextSize());
+            mEmojiIconAlignment =
                 a.getInt(R.styleable.Emojicon_emojiAlignment, DynamicDrawableSpan.ALIGN_BASELINE);
             mUseSystemDefault = a.getBoolean(R.styleable.Emojicon_emojiUseSystemDefault, false);
             a.recycle();
@@ -96,8 +94,8 @@ public class EmojiEdittext extends androidx.appcompat.widget.AppCompatEditText {
         addTextChangedListener(textWatcher);
     }
 
-    public void setEmojiconSize(int pixels) {
-        mEmojiconSize = pixels;
+    public void setEmojiIconSize(int pixels) {
+        mEmojiIconSize = pixels;
     }
 
     public void setUseSystemDefault(boolean useSystemDefault) {

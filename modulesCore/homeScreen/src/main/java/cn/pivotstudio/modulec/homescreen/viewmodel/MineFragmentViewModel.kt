@@ -43,7 +43,7 @@ import kotlinx.coroutines.launch
  * @version :1.0
  * @author
  */
-class MineFragmentViewModel : ViewModel(){
+class MineFragmentViewModel : ViewModel() {
     private val repository = MineRepository()
 
     val optSwitch = hashMapOf<Int, Boolean>()
@@ -111,11 +111,13 @@ class MineFragmentViewModel : ViewModel(){
 
     fun checkPrivacyState(
         binding: ActivitySecurityBinding
-    ) {}
+    ) {
+    }
 
     fun changePrivacyState(
         state: Boolean
-    ) {}
+    ) {
+    }
 
     fun initNorm() {
         _communityNorm.value = (
@@ -237,6 +239,35 @@ class MineFragmentViewModel : ViewModel(){
     fun initUpdateLog() {
         _updateLogList.value = listOf(
             ItemDetailFragment.Update(
+                "v 2.4", "2023-04-05", " 时隔一个学期，树洞再次迎来了更新，我们为洞友们带来更好的使用体验~~~\n"
+                        + "新增：\n"
+                        + "   -推荐列表：首页增加推荐和关注列表，方便洞友们发现和收藏更多的宝藏树洞！\n"
+                        + "   -树洞分享卡片：在首页长按单条树洞会弹出分享卡片，将看到的神贴分享给朋友吧！\n"
+                        + "   -检查更新：启动App时会检查版本信息，同时也可前往我的-更新处检查更新。\n"
+                        + "   -树洞跳转：在树洞内用#+树洞号的方式，如”#1037“（不要加空格哦~），可以快捷方便地跳转到对应的树洞。\n"
+                        + "   -深色模式：可以自由选择深浅色模式啦，目前仅支持安卓9以上的系统，设置入口在我的-个人设置。"
+                        + "修复：\n"
+                        + "   -树洞返回闪退问题，，，\n"
+                        + "   -跳转树洞时，树洞不存在而导致的闪退问题。\n"
+                        + "   -评论时不能连续删除、不能手写或者语音输入的问题。\n"
+                        + "   -优化了部分UI以及一些代码逻辑，同时增加了一些弹窗提示。\n"
+                        + "写在最后：\n"
+                        + "   因为太懒了所以之前没写更新日志，以后会尽量多写的！！\n"
+                        + "   现版本推出了更新功能，后续产品的迭代更新将会更加方便，我们会尽力为各位带来更多更好的功能，也欢迎大家在树洞群里提出自己的idea，非常感谢大家对树洞的支持~\n"
+                        + "   于此同时，我们也希望洞友们能珍惜这个互动交流的平台，少一份戾气暴躁，多一份宽容体量，希望大家能够维护和谐社区氛围，珍爱互动交流，共建友善树洞。\n"
+            ),
+            ItemDetailFragment.Update(
+                "v 2.0", "2022-10-31", " 树东东又长大了一岁！更新更好的1037树洞将继续陪伴Husters的每一天~\n"
+                        + "新增：\n"
+                        + "   -黑夜模式：支持跟随系统进入黑夜模式，极大改善夜间阅读体验\n"
+                        + "   -楼中楼：大幅优化内容列表，妈妈再也不用担心我找不到评论了~\n"
+                        + "   -表情包：专属树洞的表情正式上架！\n"
+                        + "改进：\n"
+                        + "   -我的页面整体重构，优化UI，我的树洞可长按删除。\n"
+                        + "   -小树林重构：优化UI，增加过渡动画。\n"
+                        + "   -底部导航栏UI优化。\n"
+            ),
+            ItemDetailFragment.Update(
                 "v 1.0", "2021-09-21", " 1037树洞是一个华科校内匿名社区，您不用担心被熟悉的人发现身份.\n"
                         + "-身份验证：允许在注册后通过华科校内邮箱来验证在校学生身份；\n"
                         + "-树洞发布：可匿名发布文字内容到所有人都能看到的树洞广场\n"
@@ -247,42 +278,36 @@ class MineFragmentViewModel : ViewModel(){
                         + "-只看洞主：浏览树洞内容时，您可以选择只看洞主发布的评论；\n"
                         + "-热门评论：浏览树洞内容时，您可以查看树洞下的最热评论；\n"
                         + "-我的：支持对我的树洞、我的关注、我的评论进行统一管理，您可以保存图片分享树洞给好友。"
-            ),
-            ItemDetailFragment.Update(
-                "v 2.0", "2022-10-31", " 树东东又长大了一岁！更新更好的1037树洞将继续陪伴Husters的每一天~\n"
-                        + "新增：\n"
-                        + "   -黑夜模式：支持跟随系统进入黑夜模式，极大改善夜间阅读模式\n"
-                        + "   -楼中楼：大幅优化内容列表，妈妈再也不用担心我找不到评论了~\n"
-                        + "   -表情包：专属树洞的表情正式上架！\n"
-                        + "改进：\n"
-                        + "   -我的页面整体重构，优化UI，我的树洞可长按删除。\n"
-                        + "   -小树林重构：优化UI，增加过渡动画。\n"
-                        + "   -底部导航栏UI优化。\n"
             )
         )
     }
 
     fun postShieldWord(
         binding: ItemLabelBinding
-    ) {}
+    ) {
+    }
 
     fun deleteShieldWord(
         text: String,
         dialog: Dialog,
         binding: ItemLabelBinding
-    ) {}
+    ) {
+    }
 
     fun getShieldList(
         binding: ItemLabelBinding
-    ) {}
+    ) {
+    }
 
     fun sendEmailVerify(
         binding: ActivityEmailVerify2Binding
-    ) {}
+    ) {
+    }
 
     fun sendEmailVerifyAgain(
         binding: ActivityEmailVerify2Binding
-    ) {}
+    ) {
+    }
 
     fun sendEvaluation(
         score: Int,
@@ -291,10 +316,14 @@ class MineFragmentViewModel : ViewModel(){
         viewModelScope.launch {
             repository.sendEvaluation(score)
                 .collect {
-                    when(it) {
+                    when (it) {
                         is Success<*> -> {
                             val chip = (binding.chipGroup.getChildAt(score - 1) as Chip)
-                            Toast.makeText(BaseApplication.context, "感谢亲的评分(づ￣3￣)づ╭❤～$score", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                BaseApplication.context,
+                                "感谢亲的评分(づ￣3￣)づ╭❤～$score",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             Log.d("em", chip.text.toString())
                             chip.isChecked = false
                         }
@@ -316,12 +345,16 @@ class MineFragmentViewModel : ViewModel(){
         viewModelScope.launch {
             repository.sendAdvice(content, fromValue(id))
                 .collect {
-                    when(it) {
+                    when (it) {
                         is Success<*> -> {
-                            Toast.makeText(BaseApplication.context, "感谢亲的反馈(づ￣3￣)づ╭❤～", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                BaseApplication.context,
+                                "感谢亲的反馈(づ￣3￣)づ╭❤～",
+                                Toast.LENGTH_SHORT
+                            ).show()
                             binding.etAdvice1.setText("")
                             val inputMethodManager = BaseApplication.context!!
-                                    .getSystemService(Context.INPUT_METHOD_SERVICE)
+                                .getSystemService(Context.INPUT_METHOD_SERVICE)
                                     as InputMethodManager
                             inputMethodManager.hideSoftInputFromWindow(
                                 binding.root.windowToken,

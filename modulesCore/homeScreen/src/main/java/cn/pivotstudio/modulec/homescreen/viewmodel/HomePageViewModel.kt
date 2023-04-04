@@ -4,7 +4,6 @@ import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.*
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
-import cn.pivotstudio.husthole.moduleb.network.model.Hole
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
@@ -140,7 +139,7 @@ class HomePageViewModel : ViewModel() {
                 when (it) {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
-                        if ((it.data as List<HoleV2>).isEmpty()) {
+                        if ((it.data as List<*>).isEmpty()) {
                             tip.value = "到底了哟~"
                         } else {
                             _holesV2.emit(

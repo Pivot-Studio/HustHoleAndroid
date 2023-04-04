@@ -47,6 +47,7 @@ class HoleRepository(
     var pInputText: MutableLiveData<ReplyResponse> = MutableLiveData()
     var pUsedEmojiList: MutableLiveData<LinkedList<Int>> = MutableLiveData()
     private var hole: Hole? = null
+    val tip = MutableLiveData<String?>()
     fun getInputTextForLocalDB(hole_id: Int?) {
         val flowable = DB!!.holeDao().findById(
             hole_id!!
