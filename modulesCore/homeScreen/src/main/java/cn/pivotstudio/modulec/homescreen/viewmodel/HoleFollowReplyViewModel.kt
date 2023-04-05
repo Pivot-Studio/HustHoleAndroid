@@ -7,11 +7,10 @@ import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
 import cn.pivotstudio.husthole.moduleb.network.model.Reply
+import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
-import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.repository.HoleFollowReplyRepository
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 
 /**
@@ -35,10 +34,12 @@ class HoleFollowReplyViewModel : ViewModel() {
     private val _myHole = MutableStateFlow<List<HoleV2>>(mutableListOf())
     private val _myFollow = MutableStateFlow<List<HoleV2>>(mutableListOf())
     private val _myReply = MutableStateFlow<List<Reply>>(mutableListOf())
+    private val _sortMode = MutableLiveData(NetworkConstant.SortMode.LATEST)
 
     val myHole: StateFlow<List<HoleV2>> = _myHole
     val myFollow: StateFlow<List<HoleV2>> = _myFollow
     val myReply: StateFlow<List<Reply>> = _myReply
+    val sortMode: LiveData<String> = _sortMode
 
 
     fun getMyHole() {
@@ -61,13 +62,14 @@ class HoleFollowReplyViewModel : ViewModel() {
         }
     }
 
-    fun getMyFollow() {
+    fun getMyFollow(sortMode: String = _sortMode.value!!) {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
-            repository.getMyFollow().collect {
+            repository.getMyFollow(sortMode).collect {
                 when (it) {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
+                        _sortMode.value = sortMode
                         _myFollow.emit(it.data as List<HoleV2>)
                         if (_myFollow.value.isEmpty())
                             _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
@@ -117,13 +119,14 @@ class HoleFollowReplyViewModel : ViewModel() {
         }
     }
 
-    fun loadMoreFollow() {
+    fun loadMoreFollow(sortMode: String = _sortMode.value!!) {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
-            repository.loadMoreFollow().collect {
+            repository.loadMoreFollow(sortMode).collect {
                 when (it) {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
+                        _sortMode.value = sortMode
                         if ((it.data as List<HoleV2>).isNotEmpty()) {
                             _myFollow.emit(
                                 _myFollow.value.toMutableList()

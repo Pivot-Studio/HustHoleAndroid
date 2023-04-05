@@ -7,26 +7,19 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.ApiResult.*
 import cn.pivotstudio.husthole.moduleb.network.model.ProFile
 import cn.pivotstudio.husthole.moduleb.network.model.Type.Companion.fromValue
-import cn.pivotstudio.husthole.moduleb.network.model.VersionInfo
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
 import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.modulec.homescreen.R
-import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
 import cn.pivotstudio.modulec.homescreen.databinding.*
-import cn.pivotstudio.modulec.homescreen.network.DownloadService
 import cn.pivotstudio.modulec.homescreen.repository.MineRepository
-import cn.pivotstudio.modulec.homescreen.ui.fragment.MyHoleFollowReplyFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.mine.ItemMineFragment
 import com.google.android.material.chip.Chip
@@ -46,21 +39,19 @@ import kotlinx.coroutines.launch
 class MineFragmentViewModel : ViewModel() {
     private val repository = MineRepository()
 
+    //控制设置是否可用的开关
     val optSwitch = hashMapOf<Int, Boolean>()
 
-    private val _status = MutableStateFlow(false)
     val tip: MutableLiveData<String?> = repository.tip
 
+    // 个人资料
     private val _myProFile = MutableStateFlow(ProFile("1037", "0", "0", "0"))
-
-
     val myProFile: StateFlow<ProFile> = _myProFile
 
     private val _myNameList = MutableLiveData<List<Int>>()  //设置栏标题名称
     private val _mySettingList = MutableLiveData<List<Int>>() //个人设置标题
     private val _shieldList = MutableLiveData<List<Int>>()  //屏蔽设置标题
     private val _updateList = MutableLiveData<List<Int>>()  //更新标题
-    private val _isPrivacy = MutableLiveData<Boolean>() //是否选择隐私安全
     private val _communityNorm = MutableLiveData<String>()
     private val _shieldWordList = MutableLiveData<MutableList<String>>()
     private val _evalAndAdvNameList = MutableLiveData<List<Int>>()
@@ -72,7 +63,6 @@ class MineFragmentViewModel : ViewModel() {
     val mySettingList: LiveData<List<Int>> = _mySettingList
     val shieldList: LiveData<List<Int>> = _shieldList
     val updateList: LiveData<List<Int>> = _updateList
-    val isPrivacy: LiveData<Boolean> = _isPrivacy
     val communityNorm: LiveData<String> = _communityNorm
     val shieldWordList: LiveData<MutableList<String>> = _shieldWordList
     val evalAndAdvNameList: LiveData<List<Int>> = _evalAndAdvNameList
@@ -239,22 +229,24 @@ class MineFragmentViewModel : ViewModel() {
     fun initUpdateLog() {
         _updateLogList.value = listOf(
             ItemDetailFragment.Update(
-                "v 2.4", "2023-04-05", " 时隔一个学期，树洞再次迎来了更新，我们为洞友们带来更好的使用体验~~~\n"
+                "v 2.4", "2023-04-05", " 时隔一个学期，树洞再次迎来了更新，船新版本为大家带来更好的使用体验~~~\n"
                         + "新增：\n"
                         + "   -推荐列表：首页增加推荐和关注列表，方便洞友们发现和收藏更多的宝藏树洞！\n"
                         + "   -树洞分享卡片：在首页长按单条树洞会弹出分享卡片，将看到的神贴分享给朋友吧！\n"
                         + "   -检查更新：启动App时会检查版本信息，同时也可前往我的-更新处检查更新。\n"
                         + "   -树洞跳转：在树洞内用#+树洞号的方式，如”#1037“（不要加空格哦~），可以快捷方便地跳转到对应的树洞。\n"
-                        + "   -深色模式：可以自由选择深浅色模式啦，目前仅支持安卓9以上的系统，设置入口在我的-个人设置。"
+                        + "   -深色模式：可以自由选择深浅色模式啦，目前仅支持安卓9以上的系统，设置入口在我的-个人设置。\n"
+                        + "   -关注展示：新增关注升降序展示，二次点击tab标签即可切换排序模式。\n"
                         + "修复：\n"
-                        + "   -树洞返回闪退问题，，，\n"
+                        + "   -树洞返回偶现的闪退问题——\n"
                         + "   -跳转树洞时，树洞不存在而导致的闪退问题。\n"
                         + "   -评论时不能连续删除、不能手写或者语音输入的问题。\n"
                         + "   -优化了部分UI以及一些代码逻辑，同时增加了一些弹窗提示。\n"
                         + "写在最后：\n"
                         + "   因为太懒了所以之前没写更新日志，以后会尽量多写的！！\n"
-                        + "   现版本推出了更新功能，后续产品的迭代更新将会更加方便，我们会尽力为各位带来更多更好的功能，也欢迎大家在树洞群里提出自己的idea，非常感谢大家对树洞的支持~\n"
-                        + "   于此同时，我们也希望洞友们能珍惜这个互动交流的平台，少一份戾气暴躁，多一份宽容体量，希望大家能够维护和谐社区氛围，珍爱互动交流，共建友善树洞。\n"
+                        + "   现版本推出了更新功能，后续产品的迭代更新将会更加方便，我们会尽力为各位带来更多更好的功能，也欢迎大家在树洞群里提出自己的想法和建议，非常感谢大家对树洞的支持~\n"
+                        + "   1037树洞致力于打造一个盛放温情、群策群力的和谐社区，拒绝个人极端情绪的宣泄、极度悖离主流价值理论以及掀动对立、矛盾的言论。\n"
+                        + "   树洞在为大家提供心灵慰藉、疑难解答、生活趣味的同时，希望洞友们能珍惜树洞，遵守树洞社区规范。在这里，我们相互倾听和理解，分享着各自的心声和快乐，记录生活的点点滴滴，愿树洞能带给大家一份美好的回忆。\n"
             ),
             ItemDetailFragment.Update(
                 "v 2.0", "2022-10-31", " 树东东又长大了一岁！更新更好的1037树洞将继续陪伴Husters的每一天~\n"
@@ -277,7 +269,7 @@ class MineFragmentViewModel : ViewModel() {
                         + "-关键词屏蔽：对您不感兴趣的树洞内容，支持自定义设置关键词进行屏蔽；\n"
                         + "-只看洞主：浏览树洞内容时，您可以选择只看洞主发布的评论；\n"
                         + "-热门评论：浏览树洞内容时，您可以查看树洞下的最热评论；\n"
-                        + "-我的：支持对我的树洞、我的关注、我的评论进行统一管理，您可以保存图片分享树洞给好友。"
+                        + "-我的：支持对我的树洞、我的关注、我的评论进行统一管理，您可以保存图片分享树洞给好友。\n"
             )
         )
     }
@@ -319,11 +311,7 @@ class MineFragmentViewModel : ViewModel() {
                     when (it) {
                         is Success<*> -> {
                             val chip = (binding.chipGroup.getChildAt(score - 1) as Chip)
-                            Toast.makeText(
-                                BaseApplication.context,
-                                "感谢亲的评分(づ￣3￣)づ╭❤～$score",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            tip.value = "感谢亲的评分(づ￣3￣)づ╭❤～"
                             Log.d("em", chip.text.toString())
                             chip.isChecked = false
                         }
@@ -347,13 +335,9 @@ class MineFragmentViewModel : ViewModel() {
                 .collect {
                     when (it) {
                         is Success<*> -> {
-                            Toast.makeText(
-                                BaseApplication.context,
-                                "感谢亲的反馈(づ￣3￣)づ╭❤～",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            tip.value = "感谢亲的反馈(づ￣3￣)づ╭❤～"
                             binding.etAdvice1.setText("")
-                            val inputMethodManager = BaseApplication.context!!
+                            val inputMethodManager = context!!
                                 .getSystemService(Context.INPUT_METHOD_SERVICE)
                                     as InputMethodManager
                             inputMethodManager.hideSoftInputFromWindow(
@@ -375,9 +359,7 @@ class MineFragmentViewModel : ViewModel() {
 
     fun getMineData() {
         viewModelScope.launch {
-            _status.emit(true)
             repository.getProfile()
-                .onEach { _status.emit(false) }
                 .collectLatest {
                     _myProFile.emit(it)
                 }

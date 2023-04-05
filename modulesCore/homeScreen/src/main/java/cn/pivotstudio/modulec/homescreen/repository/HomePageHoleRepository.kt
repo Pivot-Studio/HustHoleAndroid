@@ -40,9 +40,13 @@ class HomePageHoleRepository(
 
     var tip = MutableLiveData<String?>()
 
-    fun getMyFollow(): Flow<ApiResult> = flow {
+    fun getMyFollow(sortMode: String): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
-        val resp = hustHoleApiService.getMyFollow()
+        val resp = hustHoleApiService.getMyFollow(
+            offset = 0,
+            timestamp = lastTimeStamp,
+            mode = sortMode
+        )
         checkResponse(resp, this)
     }.flowOn(dispatcher).onEach {
         lastOffset = 0
@@ -50,10 +54,14 @@ class HomePageHoleRepository(
         it.printStackTrace()
     }
 
-    fun loadMoreFollow(): Flow<ApiResult> = flow {
+    fun loadMoreFollow(sortMode: String): Flow<ApiResult> = flow {
         lastOffset += NetworkConstant.CONSTANT_STANDARD_LOAD_SIZE
         emit(ApiResult.Loading())
-        val resp = hustHoleApiService.getMyFollow(lastOffset)
+        val resp = hustHoleApiService.getMyFollow(
+            lastOffset,
+            lastTimeStamp,
+            sortMode
+        )
         checkResponse(resp, this)
     }.flowOn(dispatcher).catch { e ->
         tip.value = e.message

@@ -66,7 +66,7 @@ fun bindDay(
 ) {
     val ss = SpannableString(text)
     ss.setSpan(
-        ForegroundColorSpan(Color.parseColor("#9966CC")),
+        ForegroundColorSpan(view.resources.getColor(R.color.star_dust)),
         7,
         text.lastIndexOf("天"),
         Spanned.SPAN_INCLUSIVE_EXCLUSIVE
@@ -99,15 +99,15 @@ class MineFragment : BaseFragment(), PicGenerator {
 
         binding.apply {
             myHole.setOnClickListener {
-                viewModel?.currentProfile!!.value = MyHoleFragmentViewModel.GET_HOLE
+                this@MineFragment.viewModel.currentProfile.value = MyHoleFragmentViewModel.GET_HOLE
                 navigate()
             }
             myStar.setOnClickListener {
-                viewModel?.currentProfile!!.value = MyHoleFragmentViewModel.GET_FOLLOW
+                this@MineFragment.viewModel.currentProfile.value = MyHoleFragmentViewModel.GET_FOLLOW
                 navigate()
             }
             myReply.setOnClickListener {
-                viewModel?.currentProfile!!.value = MyHoleFragmentViewModel.GET_REPLY
+                this@MineFragment.viewModel.currentProfile.value = MyHoleFragmentViewModel.GET_REPLY
                 navigate()
             }
         }

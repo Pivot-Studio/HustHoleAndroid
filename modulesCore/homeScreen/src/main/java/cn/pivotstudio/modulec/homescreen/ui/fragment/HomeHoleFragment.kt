@@ -142,7 +142,7 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
         if (viewModel.holesV2.value.isEmpty()) {
             when (type) {
                 HOLE_LIST -> viewModel.loadHolesV2()
-                FOLLOW -> viewModel.getMyFollow()
+                FOLLOW -> viewModel.getMyFollow(NetworkConstant.SortMode.LATEST)
                 RECOMMEND -> viewModel.loadRecHoles(NetworkConstant.SortMode.REC)
             }
         }
@@ -207,6 +207,17 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
                 (tbMode?.getTabAt(0)?.customView as HomePageOptionBox).setOptionsListener { v: View ->
                     onSelectModeClick(v)
                 }
+            }else if(type == FOLLOW) {
+                (parentFragment as HomePageFragment).setEditActionListener(object :
+                    HomePageFragment.EditActionListener {
+                    override fun changeMode() {
+                        if(viewModel.sortMode.value == NetworkConstant.SortMode.LATEST) {
+                            viewModel.getMyFollow(NetworkConstant.SortMode.ASC)
+                        }else {
+                            viewModel.getMyFollow(NetworkConstant.SortMode.LATEST)
+                        }
+                    }
+                })
             }
 
             lifecycleScope.launch {
@@ -258,7 +269,7 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
                     viewModel.loadHolesV2()
                 }
                 FOLLOW -> {
-                    viewModel.getMyFollow()
+                    viewModel.getMyFollow(NetworkConstant.SortMode.LATEST)
                 }
                 RECOMMEND -> {
                     viewModel.loadRecHoles(NetworkConstant.SortMode.REC)

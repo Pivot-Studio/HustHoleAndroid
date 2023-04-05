@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.RecyclerView
 import cn.pivotstudio.husthole.moduleb.network.ApiStatus
 import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
@@ -140,6 +141,19 @@ class MyHoleFollowReplyFragment() : BaseFragment() {
                     viewModel.doneShowingTip()
                 }
             }
+
+            if(type == GET_FOLLOW) {
+                (parentFragment as HoleFollowReplyFragment).setModeListener(object : HoleFollowReplyFragment.ModeListener {
+                    override fun changeMode() {
+                        if(sortMode.value == NetworkConstant.SortMode.LATEST) {
+                            viewModel.getMyFollow(NetworkConstant.SortMode.ASC)
+                        }else {
+                            viewModel.getMyFollow(NetworkConstant.SortMode.LATEST)
+                        }
+                    }
+                })
+            }
+
             lifecycleScope.launch {
                 lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     //依据页面的不同提交相应的List

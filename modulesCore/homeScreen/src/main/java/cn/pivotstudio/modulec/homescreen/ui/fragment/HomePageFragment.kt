@@ -130,6 +130,9 @@ class HomePageFragment : BaseFragment() {
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
+                    if(tab?.position == 1) {
+                        listener!!.changeMode()
+                    }
                 }
             })
 
@@ -155,6 +158,8 @@ class HomePageFragment : BaseFragment() {
     }
 
     interface EditActionListener {
-        fun onSend(text: String)
+        fun onSend(text: String) {}
+
+        fun changeMode() {}
     }
 }

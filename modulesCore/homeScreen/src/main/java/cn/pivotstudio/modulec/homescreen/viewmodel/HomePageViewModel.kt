@@ -40,15 +40,16 @@ class HomePageViewModel : ViewModel() {
 
     private var _loadLaterHoleId = ""
 
-    fun getMyFollow() {
+    fun getMyFollow(sortMode: String = _sortMode.value!!) {
         viewModelScope.launch {
             try {
                 withTimeout(HoleFollowReplyViewModel.MAX_REQUEST_TIME) {
                     _loadingState.emit(ApiStatus.LOADING)
-                    repository.getMyFollow().collect {
+                    repository.getMyFollow(sortMode).collect {
                         when (it) {
                             is ApiResult.Success<*> -> {
                                 _loadingState.emit(ApiStatus.SUCCESSFUL)
+                                _sortMode.value = sortMode
                                 _holesV2.emit(it.data as List<HoleV2>)
                                 if (_holesV2.value.isEmpty())
                                     _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
@@ -72,14 +73,15 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun loadMoreFollow() {
+    fun loadMoreFollow(sortMode: String = _sortMode.value!!) {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             withTimeoutOrNull(HoleFollowReplyViewModel.MAX_REQUEST_TIME) {
-                repository.loadMoreFollow().collect {
+                repository.loadMoreFollow(sortMode).collect {
                     when (it) {
                         is ApiResult.Success<*> -> {
                             _loadingState.emit(ApiStatus.SUCCESSFUL)
+                            _sortMode.value = sortMode
                             if((it.data as List<*>).isEmpty()) {
                                 tip.value = "到底了哟~"
                             }else {
