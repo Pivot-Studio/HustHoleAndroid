@@ -11,7 +11,6 @@ data class VersionInfo(
     val versionName: String,
 
     /** 更新内容**/
-    @Json(name = "update_content")
     val updateContent: String?,
 
     /** 下载链接 **/

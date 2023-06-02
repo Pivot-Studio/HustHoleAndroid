@@ -11,9 +11,7 @@ import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
 import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.withTimeoutOrNull
 import org.json.JSONObject
 import retrofit2.Response
 
@@ -29,7 +27,7 @@ class HomePageHoleRepository(
     private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private var lastTimeStamp: String = DateUtil.getDateTime(),
-    private var lastOffset: Int = INITIAL_OFFSET
+    var lastOffset: Int = INITIAL_OFFSET
 ) {
 
     companion object {
@@ -58,7 +56,7 @@ class HomePageHoleRepository(
         lastOffset += NetworkConstant.CONSTANT_STANDARD_LOAD_SIZE
         emit(ApiResult.Loading())
         val resp = hustHoleApiService.getMyFollow(
-            lastOffset,
+            lastOffset + HOLES_LIST_SIZE,
             lastTimeStamp,
             sortMode
         )
@@ -71,12 +69,13 @@ class HomePageHoleRepository(
     fun loadRecHoles(sortMode: String): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
         refreshTimestamp()
-        lastOffset = 0
         val response = hustHoleApiService.getRec(
             mode = sortMode,
             timestamp = lastTimeStamp
         )
         checkResponse(response, this)
+    }.onEach{
+        lastOffset = 0
     }.flowOn(dispatcher).catch {
         tip.value = it.message
         it.printStackTrace()
@@ -84,7 +83,6 @@ class HomePageHoleRepository(
 
     fun loadMoreRecHoles(sortMode: String): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
-        lastOffset += HOLES_LIST_SIZE
         val response = hustHoleApiService.getRec(
             timestamp = lastTimeStamp,
             offset = lastOffset,
@@ -99,7 +97,6 @@ class HomePageHoleRepository(
     fun loadHoles(sortMode: String): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
         refreshTimestamp()
-        lastOffset = 0
         val response = hustHoleApiService.getHoles(
                 limit = HOLES_LIST_SIZE,
                 mode = sortMode,
@@ -107,6 +104,8 @@ class HomePageHoleRepository(
                 timestamp = lastTimeStamp
         )
         checkResponse(response, this)
+    }.onEach {
+        lastOffset = 0
     }.flowOn(dispatcher).catch {
         tip.value = it.message
         it.printStackTrace()
@@ -114,11 +113,10 @@ class HomePageHoleRepository(
 
     fun loadMoreHoles(sortMode: String): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
-        lastOffset += HOLES_LIST_SIZE
         val response = hustHoleApiService.getHoles(
             limit = HOLES_LIST_SIZE,
             timestamp = lastTimeStamp,
-            offset = lastOffset,
+            offset = lastOffset + HOLES_LIST_SIZE,
             mode = sortMode
         )
         checkResponse(response, this)

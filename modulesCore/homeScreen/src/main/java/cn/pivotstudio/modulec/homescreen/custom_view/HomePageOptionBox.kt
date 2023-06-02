@@ -77,10 +77,10 @@ class HomePageOptionBox : LinearLayout {
      * @param context
      */
     private fun initView(context: Context) {
-        if(parent != null) {
+        if (parent != null) {
             LayoutInflater.from(context)
                 .inflate(R.layout.tab_hole_list, parent, false)
-        }else {
+        } else {
             LayoutInflater.from(context)
                 .inflate(R.layout.tab_hole_list, this, true)
         }
@@ -94,11 +94,12 @@ class HomePageOptionBox : LinearLayout {
         mSlideBoxPpw = PopupWindow(contentView)
 
         mDarkScreenPpw = PopupWindow(darkScreen)
-        mNewPublishBtn = contentView.findViewById<View>(R.id.btn_ppwhomepage_latest_reply) as Button
+        mNewPublishBtn =
+            contentView.findViewById<View>(R.id.btn_ppwhomepage_latest_reply) as Button
         mNewCommentBtn =
             contentView.findViewById<View>(R.id.btn_ppwhomepage_latest_publish) as Button
-        mNewPublishBtn!!.setOnClickListener { v: View -> onClick(v) }
-        mNewCommentBtn!!.setOnClickListener { v: View -> onClick(v) }
+        mNewPublishBtn?.setOnClickListener { v: View -> onClick(v) }
+        mNewCommentBtn?.setOnClickListener { v: View -> onClick(v) }
         darkScreen.setOnClickListener { v: View -> onClick(v) }
     }
 
@@ -118,28 +119,28 @@ class HomePageOptionBox : LinearLayout {
                 mFlag = !mFlag
             }
             R.id.btn_ppwhomepage_latest_reply -> {
-                mNewPublishBtn!!.setBackgroundResource(R.drawable.standard_button)
-                mNewPublishBtn!!.setTextAppearance(v.context, R.style.popupwindow_button_click)
-                mNewCommentBtn!!.setBackgroundResource(R.drawable.standard_button_g95)
-                mNewCommentBtn!!.setTextAppearance(v.context, R.style.popupwindow_button)
+                mNewPublishBtn?.setBackgroundResource(R.drawable.standard_button)
+                mNewPublishBtn?.setTextAppearance(v.context, R.style.popupwindow_button_click)
+                mNewCommentBtn?.setBackgroundResource(R.drawable.standard_button_g95)
+                mNewCommentBtn?.setTextAppearance(v.context, R.style.popupwindow_button)
                 endTriangleAnim()
                 mFlag = !mFlag
-                mOptionsListener!!.onClick(v)
+                mOptionsListener?.onClick(v)
             }
             R.id.btn_ppwhomepage_latest_publish -> {
-                mNewCommentBtn!!.setBackgroundResource(R.drawable.standard_button)
-                mNewCommentBtn!!.setTextAppearance(v.context, R.style.popupwindow_button_click)
-                mNewPublishBtn!!.setBackgroundResource(R.drawable.standard_button_g95)
-                mNewPublishBtn!!.setTextAppearance(v.context, R.style.popupwindow_button)
+                mNewCommentBtn?.setBackgroundResource(R.drawable.standard_button)
+                mNewCommentBtn?.setTextAppearance(v.context, R.style.popupwindow_button_click)
+                mNewPublishBtn?.setBackgroundResource(R.drawable.standard_button_g95)
+                mNewPublishBtn?.setTextAppearance(v.context, R.style.popupwindow_button)
                 endTriangleAnim()
                 mFlag = !mFlag
-                mOptionsListener!!.onClick(v)
+                mOptionsListener?.onClick(v)
             }
             R.id.ppw_homepagedarkscreen -> {
                 endTriangleAnim()
                 mFlag = !mFlag
-                mSlideBoxPpw!!.dismiss()
-                mDarkScreenPpw!!.dismiss()
+                mSlideBoxPpw?.dismiss()
+                mDarkScreenPpw?.dismiss()
             }
         }
     }
@@ -154,16 +155,24 @@ class HomePageOptionBox : LinearLayout {
         )
         rotate.duration = 200
         rotate.fillAfter = true
-        mTriangleIv!!.startAnimation(rotate)
+        mTriangleIv?.startAnimation(rotate)
 
-        mDarkScreenPpw!!.width = ViewGroup.LayoutParams.MATCH_PARENT
-        mDarkScreenPpw!!.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        mDarkScreenPpw!!.animationStyle = R.style.darkScreenAnim
-        mDarkScreenPpw!!.showAsDropDown(this)
-        mSlideBoxPpw!!.width = ViewGroup.LayoutParams.MATCH_PARENT
-        mSlideBoxPpw!!.height = ViewGroup.LayoutParams.WRAP_CONTENT
-        mSlideBoxPpw!!.animationStyle = R.style.contextMenuAnim
-        mSlideBoxPpw!!.showAsDropDown(this)
+        mDarkScreenPpw?.let {
+            with(it) {
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+                height = ViewGroup.LayoutParams.WRAP_CONTENT
+                animationStyle = R.style.darkScreenAnim
+                showAsDropDown(this@HomePageOptionBox)
+            }
+        }
+        mSlideBoxPpw?.let {
+            with(it) {
+                width = ViewGroup.LayoutParams.MATCH_PARENT
+                height = ViewGroup.LayoutParams.WRAP_CONTENT
+                animationStyle = R.style.contextMenuAnim
+                showAsDropDown(this@HomePageOptionBox)
+            }
+        }
     }
 
     /**
@@ -176,8 +185,8 @@ class HomePageOptionBox : LinearLayout {
         )
         rotate.duration = 200
         rotate.fillAfter = true
-        mTriangleIv!!.startAnimation(rotate)
-        mSlideBoxPpw!!.dismiss()
-        mDarkScreenPpw!!.dismiss()
+        mTriangleIv?.startAnimation(rotate)
+        mSlideBoxPpw?.dismiss()
+        mDarkScreenPpw?.dismiss()
     }
 }

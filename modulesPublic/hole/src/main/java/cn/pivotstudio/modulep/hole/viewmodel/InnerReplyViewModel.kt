@@ -91,7 +91,7 @@ class InnerReplyViewModel(private val baseReply: Reply) : ViewModel() {
             repo.deleteTheReply(reply).collect {
                 when (it) {
                     is ApiResult.Success<*> -> {
-
+                        tip.value = "删除成功！"
                     }
                     is ApiResult.Error -> {
                         _sendingState.emit(it)
@@ -118,7 +118,7 @@ class InnerReplyViewModel(private val baseReply: Reply) : ViewModel() {
 
     fun delayLoadReplies() {
         viewModelScope.launch {
-            delay(2000)
+            delay(3000)
             loadSecondLvReplies()
         }
     }

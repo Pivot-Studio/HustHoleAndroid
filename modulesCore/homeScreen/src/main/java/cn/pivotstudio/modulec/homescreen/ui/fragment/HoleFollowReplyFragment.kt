@@ -55,7 +55,9 @@ class HoleFollowReplyFragment : BaseFragment() {
             override fun getItemCount(): Int = titleList.size
 
             override fun createFragment(position: Int): Fragment {
-                return MyHoleFollowReplyFragment.newInstance(position + 1)
+                val bundle = Bundle()
+                bundle.putInt("type", position + 1)
+                return MyHoleFollowReplyFragment.newInstance(bundle)
             }
         }
         binding.tlHoleStar.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

@@ -35,12 +35,12 @@ class HomePageViewModel : ViewModel() {
     private var _showingPlaceholder = MutableStateFlow<PlaceholderType?>(null)
     val showingPlaceholder = _showingPlaceholder.asStateFlow()
 
-    private val _sortMode = MutableLiveData(NetworkConstant.SortMode.LATEST_REPLY)
-    val sortMode: LiveData<String> = _sortMode
+    //private val _sortMode = MutableLiveData(NetworkConstant.SortMode.LATEST_REPLY)
+    var sortModes: String = NetworkConstant.SortMode.LATEST_REPLY
 
     private var _loadLaterHoleId = ""
 
-    fun getMyFollow(sortMode: String = _sortMode.value!!) {
+    fun getMyFollow(sortMode: String = sortModes) {
         viewModelScope.launch {
             try {
                 withTimeout(HoleFollowReplyViewModel.MAX_REQUEST_TIME) {
@@ -49,7 +49,7 @@ class HomePageViewModel : ViewModel() {
                         when (it) {
                             is ApiResult.Success<*> -> {
                                 _loadingState.emit(ApiStatus.SUCCESSFUL)
-                                _sortMode.value = sortMode
+                                sortModes = sortMode
                                 _holesV2.emit(it.data as List<HoleV2>)
                                 if (_holesV2.value.isEmpty())
                                     _showingPlaceholder.emit(PlaceholderType.PLACEHOLDER_NO_CONTENT)
@@ -73,7 +73,7 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun loadMoreFollow(sortMode: String = _sortMode.value!!) {
+    fun loadMoreFollow(sortMode: String = sortModes) {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             withTimeoutOrNull(HoleFollowReplyViewModel.MAX_REQUEST_TIME) {
@@ -81,13 +81,14 @@ class HomePageViewModel : ViewModel() {
                     when (it) {
                         is ApiResult.Success<*> -> {
                             _loadingState.emit(ApiStatus.SUCCESSFUL)
-                            _sortMode.value = sortMode
+                            sortModes = sortMode
                             if((it.data as List<*>).isEmpty()) {
                                 tip.value = "到底了哟~"
                             }else {
                                 _holesV2.emit(
                                     _holesV2.value.toMutableList()
                                         .apply { addAll(it.data as List<HoleV2>) })
+                                repository.lastOffset += NetworkConstant.CONSTANT_STANDARD_LOAD_SIZE
                             }
                         }
                         is ApiResult.Error -> {
@@ -106,7 +107,7 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun loadRecHoles(sortMode: String = _sortMode.value!!) {
+    fun loadRecHoles(sortMode: String = sortModes) {
         when (sortMode) {
             NetworkConstant.SortMode.LATEST_REPLY -> _isLatestReply.value = true
             else -> _isLatestReply.value = false
@@ -117,7 +118,7 @@ class HomePageViewModel : ViewModel() {
                 when (it) {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
-                        _sortMode.value = sortMode
+                        sortModes = sortMode
                         (it.data as List<HoleV2>).forEach { hole ->
                             hole.isLatestReply = isLatestReply.value
                         }
@@ -134,7 +135,7 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun loadMoreRecHoles(sortMode: String = _sortMode.value!!) {
+    fun loadMoreRecHoles(sortMode: String = sortModes) {
         viewModelScope.launch {
             _loadingState.emit(ApiStatus.LOADING)
             repository.loadMoreRecHoles(sortMode).collect {
@@ -147,6 +148,7 @@ class HomePageViewModel : ViewModel() {
                             _holesV2.emit(
                                 _holesV2.value.toMutableList()
                                     .apply { addAll(it.data as List<HoleV2>) })
+                            repository.lastOffset += NetworkConstant.CONSTANT_STANDARD_LOAD_SIZE
                         }
                     }
                     is ApiResult.Error -> {
@@ -159,7 +161,7 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun loadHolesV2(sortMode: String = _sortMode.value!!) {
+    fun loadHolesV2(sortMode: String = sortModes) {
         isSearch = false
         when (sortMode) {
             NetworkConstant.SortMode.LATEST_REPLY -> _isLatestReply.value = true
@@ -171,7 +173,7 @@ class HomePageViewModel : ViewModel() {
                 when (it) {
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
-                        _sortMode.value = sortMode
+                        sortModes = sortMode
                         (it.data as List<HoleV2>).forEach { hole ->
                             hole.isLatestReply = isLatestReply.value
                         }
@@ -188,7 +190,7 @@ class HomePageViewModel : ViewModel() {
         }
     }
 
-    fun loadMoreHoles(sortMode: String = _sortMode.value!!) {
+    fun loadMoreHoles(sortMode: String = sortModes) {
         if (isSearch) {
             loadMoreSearchHoles()
             return
@@ -202,6 +204,7 @@ class HomePageViewModel : ViewModel() {
                         _holesV2.emit(
                             _holesV2.value.toMutableList()
                                 .apply { addAll(it.data as List<HoleV2>) })
+                        repository.lastOffset += NetworkConstant.CONSTANT_STANDARD_LOAD_SIZE
                     }
                     is ApiResult.Error -> {
                         _loadingState.emit(ApiStatus.ERROR)
@@ -407,23 +410,25 @@ class HomePageViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
             if (_holesV2.value.isNotEmpty()) {
-                var i = _holesV2.value.indexOfFirst {
+                val i = _holesV2.value.indexOfFirst {
                     it.holeId == _loadLaterHoleId
                 }
-                if (i == -1) {
-                    i = 0
-                    tip.value = _holesV2.value[0].holeId
+                try {
+                    val holes = _holesV2.value.toMutableList()
+                    holes[i] = holes[i].copy(
+                        liked = isThumb,
+                        isReply = replied,
+                        isFollow = followed,
+                        likeCount = thumbNum,
+                        replyCount = replyNum,
+                        followCount = followNum
+                    )
+                    _holesV2.emit(holes)
+                }catch (e: ArrayIndexOutOfBoundsException) {
+                    tip.value = e.message
                 }
-                val holes = _holesV2.value.toMutableList()
-                holes[i] = holes[i].copy(
-                    liked = isThumb,
-                    isReply = replied,
-                    isFollow = followed,
-                    likeCount = thumbNum,
-                    replyCount = replyNum,
-                    followCount = followNum
-                )
-                _holesV2.emit(holes)
+            }else {
+                tip.value = "列表为空！"
             }
         }
     }

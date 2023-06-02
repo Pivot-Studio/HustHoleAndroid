@@ -36,7 +36,7 @@ class HoleRepository(
     private val holeId: String,
     private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private var lastOffset: Int = 0,
+    var lastOffset: Int = 0,
     private var lastTimeStamp: String = DateUtil.getDateTime()
 ) {
 
@@ -170,8 +170,6 @@ class HoleRepository(
             descend = descend
         )
         checkResponse(response, this)
-    }.onEach {
-        lastOffset += LIST_SIZE
     }.flowOn(dispatcher)
 
     fun giveALikeToTheHole(hole: HoleV2): Flow<ApiResult> {

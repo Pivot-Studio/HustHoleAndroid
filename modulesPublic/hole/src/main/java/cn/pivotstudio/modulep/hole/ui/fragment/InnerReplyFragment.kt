@@ -242,6 +242,7 @@ class InnerReplyFragment : BaseFragment() {
                             showMsg(state.errorMessage)
                         }
                         is ApiResult.Success<*> -> {
+                            showMsg(getString(R.string.hole_sending_successfully))
                             clearSendingState()
                         }
                     }

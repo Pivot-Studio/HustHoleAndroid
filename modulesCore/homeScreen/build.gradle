@@ -69,6 +69,7 @@ dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation 'androidx.work:work-runtime-ktx:2.8.1'
 
     kapt "com.alibaba:arouter-compiler:$ARouter_version"
 

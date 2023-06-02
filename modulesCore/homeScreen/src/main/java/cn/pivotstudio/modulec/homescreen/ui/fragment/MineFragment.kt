@@ -13,7 +13,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.system.Os
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
@@ -26,8 +25,6 @@ import androidx.asynclayoutinflater.view.AsyncLayoutInflater
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -47,7 +44,6 @@ import com.google.zxing.EncodeHintType
 import com.google.zxing.datamatrix.encoder.SymbolShapeHint
 import com.google.zxing.qrcode.QRCodeWriter
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
-import com.google.zxing.qrcode.encoder.QRCode
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -66,7 +62,7 @@ fun bindDay(
 ) {
     val ss = SpannableString(text)
     ss.setSpan(
-        ForegroundColorSpan(view.resources.getColor(R.color.star_dust)),
+        ForegroundColorSpan(view.resources.getColor(R.color.star_dust, null)),
         7,
         text.lastIndexOf("天"),
         Spanned.SPAN_INCLUSIVE_EXCLUSIVE
@@ -234,8 +230,8 @@ class MineFragment : BaseFragment(), PicGenerator {
 
     @SuppressLint("InflateParams")
     private fun initLogOutDialog() {
-        val dialog = Dialog(this.requireContext())
-        val dialogView = this.requireActivity().layoutInflater.inflate(R.layout.dialog_logout, null)
+        val dialog = Dialog(requireContext())
+        val dialogView = requireActivity().layoutInflater.inflate(R.layout.dialog_logout, null)
         dialog.setContentView(dialogView)
         val btnCancel = dialogView.findViewById<Button>(R.id.cancel)
         val btnLogout = dialogView.findViewById<Button>(R.id.logout)
@@ -343,7 +339,6 @@ class MineFragment : BaseFragment(), PicGenerator {
         }else {
             val path = Environment.getExternalStorageDirectory().absolutePath + File.separator + "hustHole"
             // 创建文件夹
-            Os.mkdir(path, 755)
             val file = File(path, fileName)
             try {
                 val fos = FileOutputStream(file)

@@ -1,11 +1,11 @@
 package cn.pivotstudio.modulec.homescreen.ui.fragment.mine
 
 import android.content.Intent
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,14 +14,13 @@ import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate.*
-import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import cn.pivotstudio.husthole.moduleb.network.model.VersionInfo
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
@@ -35,9 +34,8 @@ import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.PERSONAL_SETTING
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHIELD_SETTING
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.UPDATE
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import java.io.File
 
 
 /**
@@ -84,13 +82,21 @@ class ItemMineFragment : Fragment() {
                 override fun onClick(view: View, position: Int, nameID: Int) {
                     when (nameID) {
                         R.string.check_update -> {
-                            val sharedViewModel = ViewModelProvider(requireActivity())[HomeScreenActivityViewModel::class.java]
+                            val sharedViewModel =
+                                ViewModelProvider(requireActivity())[HomeScreenActivityViewModel::class.java]
                             sharedViewModel.versionInfo.value?.let {
-                                if(getVersionCode() < it.versionId.toLong() || viewModel.getVersionName() != it.versionName) {
+                                if (getVersionCode() < it.versionId.toLong() || viewModel.getVersionName() != it.versionName) {
                                     lifecycleScope.launch {
-                                        check(it)
+                                        UpdateDialog(requireContext(), it) {
+                                            getInstallIntent(it.downloadUrl.let { str ->
+                                                str.substring(
+                                                    str.lastIndexOf("/") + 1,
+                                                    str.length
+                                                )
+                                            })
+                                        }.show()
                                     }
-                                }else {
+                                } else {
                                     Toast.makeText(context, "已经是最新版本", Toast.LENGTH_SHORT).show()
                                 }
                             }
@@ -134,14 +140,22 @@ class ItemMineFragment : Fragment() {
         super.onResume()
     }
 
-    private fun checkNotification(): Boolean =
-        NotificationManagerCompat.from(requireContext()).areNotificationsEnabled()
-
     private fun getVersionCode(): Long {
         val manager = requireContext().packageManager
         var code = 0L
         try {
-            val info: PackageInfo = manager.getPackageInfo(requireContext().packageName, 0)
+            val info =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    manager.getPackageInfo(
+                        requireActivity().packageName,
+                        PackageManager.PackageInfoFlags.of(0)
+                    )
+                } else {
+                    manager.getPackageInfo(
+                        requireActivity().packageName,
+                        0
+                    )
+                }
             code = info.longVersionCode
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
@@ -149,22 +163,41 @@ class ItemMineFragment : Fragment() {
         return code
     }
 
-    private fun check(info: VersionInfo) {
-        if (checkNotification()) {
-            val updateDialog = UpdateDialog(requireContext(), info)
-            updateDialog.show()
-        } else {
-            runBlocking {
-                Toast.makeText(context, "没有开启通知权限，请前往开启", Toast.LENGTH_SHORT).show()
-                delay(1000L)
+    /**
+     * 返回安装页面的intent
+     * @param fileName 要安装apk的文件名
+     * @return
+     */
+    private fun getInstallIntent(fileName: String): Intent? {
+        try {
+            val file = File(
+                requireActivity().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath,
+                fileName
+            )
+            if (!file.exists()) {
+                return null
             }
-            val localIntent = Intent()
-            localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
-            localIntent.data = Uri.fromParts("package", requireContext().packageName, null)
-            startActivity(localIntent)
+            val uri =
+                FileProvider.getUriForFile(
+                    requireContext(),
+                    "${requireActivity().packageName}.fileprovider",
+                    file
+                )
+            return Intent(Intent.ACTION_VIEW).setDataAndType(
+                uri,
+                "application/vnd.android.package-archive"
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        } catch (e: NullPointerException) {
+            Log.e(cn.pivotstudio.modulec.homescreen.ui.adapter.TAG, "file is not exists!")
+            e.printStackTrace()
+        } catch (e: java.lang.IllegalArgumentException) {
+            Log.e(cn.pivotstudio.modulec.homescreen.ui.adapter.TAG, "file can't be accessed!")
+            e.printStackTrace()
         }
+        return null
     }
+
 
     private fun cancelDarkBackGround() {
         val lp = this.requireActivity().window.attributes
@@ -200,26 +233,26 @@ class ItemMineFragment : Fragment() {
         darkBind.apply {
             this.mode = mmkvUtil.getInt(Constant.IS_DARK_MODE)
             rlDark.setOnClickListener {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     if (mode != DARK) {
                         ppwDark.dismiss()
                         mmkvUtil.put(Constant.IS_DARK_MODE, DARK)
                         mode = DARK
                         setDefaultNightMode(MODE_NIGHT_YES)
                     }
-                }else {
+                } else {
                     Toast.makeText(context, "非常抱歉，您手机不支持强制深色模式555~", Toast.LENGTH_SHORT).show()
                 }
             }
             rlLight.setOnClickListener {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     if (mode != LIGHT) {
                         ppwDark.dismiss()
                         mmkvUtil.put(Constant.IS_DARK_MODE, LIGHT)
                         mode = LIGHT
                         setDefaultNightMode(MODE_NIGHT_NO)
                     }
-                }else {
+                } else {
                     Toast.makeText(context, "非常抱歉，您手机不支持强制浅色模式555~", Toast.LENGTH_SHORT).show()
                 }
             }

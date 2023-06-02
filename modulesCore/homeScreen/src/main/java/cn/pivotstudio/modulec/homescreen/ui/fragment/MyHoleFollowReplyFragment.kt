@@ -40,14 +40,10 @@ import kotlinx.coroutines.launch
  * @author yuruop
  */
 
-class MyHoleFollowReplyFragment() : BaseFragment() {
+class MyHoleFollowReplyFragment : BaseFragment() {
     private val viewModel: HoleFollowReplyViewModel by viewModels()
     private lateinit var binding: FragmentMyholeBinding
     private var type: Int = -1
-
-    constructor(type: Int) : this() {
-        this.type = type
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,11 +71,7 @@ class MyHoleFollowReplyFragment() : BaseFragment() {
     }
 
     private fun initData() {
-        if(type == -1) {
-            type = viewModel.fragType
-        }else {
-            viewModel.fragType = type
-        }
+        type = requireArguments().getInt("type")
         when(type) {
             GET_HOLE -> viewModel.getMyHole()
             GET_FOLLOW -> viewModel.getMyFollow()
@@ -88,7 +80,7 @@ class MyHoleFollowReplyFragment() : BaseFragment() {
     }
 
     private fun initView() {
-        val adapter = MineRecycleViewAdapter(viewModel)
+        val adapter = MineRecycleViewAdapter(viewModel, type)
         adapter.setOnItemClickListener(object : MineRecycleViewAdapter.OnItemClickListener {
             override fun navigateToHole(dest: String) {
                 ARouter.getInstance()
@@ -268,8 +260,10 @@ class MyHoleFollowReplyFragment() : BaseFragment() {
         const val TAG = "MyHoleFollowReplyFragment"
 
         @JvmStatic
-        fun newInstance(type: Int): MyHoleFollowReplyFragment {
-            return MyHoleFollowReplyFragment(type)
+        fun newInstance(args: Bundle): MyHoleFollowReplyFragment {
+            val newFragment = MyHoleFollowReplyFragment()
+            newFragment.arguments = args
+            return newFragment
         }
     }
 }

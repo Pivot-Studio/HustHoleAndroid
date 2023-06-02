@@ -291,15 +291,6 @@ class MineFragmentViewModel : ViewModel() {
     ) {
     }
 
-    fun sendEmailVerify(
-        binding: ActivityEmailVerify2Binding
-    ) {
-    }
-
-    fun sendEmailVerifyAgain(
-        binding: ActivityEmailVerify2Binding
-    ) {
-    }
 
     fun sendEvaluation(
         score: Int,

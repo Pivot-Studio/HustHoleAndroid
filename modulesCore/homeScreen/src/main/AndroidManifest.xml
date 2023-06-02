@@ -5,10 +5,10 @@
         <activity
             android:name=".ui.activity.HomeScreenActivity"
             android:exported="true"
-            android:launchMode="singleTask"
+            android:launchMode="standard"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
-        <service android:name=".network.DownloadService" />
+        <service android:name=".network.DownloadServices" />
     </application>
 
 </manifest>

@@ -11,6 +11,7 @@ import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
 import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulep.hole.model.ReplyListResponse.ReplyResponse
 import cn.pivotstudio.modulep.hole.repository.HoleRepository
+import cn.pivotstudio.modulep.hole.repository.HoleRepository.Companion.LIST_SIZE
 import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
@@ -167,11 +168,12 @@ class SpecificHoleViewModel(
                     is ApiResult.Success<*> -> {
                         _loadingState.emit(ApiStatus.SUCCESSFUL)
                         _filteringOwner.emit(false)
-                        if ((it.data as Collection<ReplyWrapper>).isEmpty()) {
+                        if ((it.data as List<ReplyWrapper>).isEmpty()) {
                             tip.value = "到底了~"
                         } else {
+                            repository.lastOffset += LIST_SIZE
                             _replies.emit(_replies.value.toMutableList().apply {
-                                addAll(it.data as Collection<ReplyWrapper>)
+                                addAll(it.data as List<ReplyWrapper>)
                             })
                         }
                     }

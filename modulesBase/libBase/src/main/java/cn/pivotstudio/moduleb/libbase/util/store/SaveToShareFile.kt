@@ -41,7 +41,7 @@ class SaveToShareFile : IDeviceWriter {
                 uri = localContentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
                 fos = uri?.let { localContentResolver.openOutputStream(it) }
 
-                photo.compress(Bitmap.CompressFormat.JPEG, 80, fos)
+                photo.compress(Bitmap.CompressFormat.PNG, 80, fos)
                 Toast.makeText(context, "保存成功！", Toast.LENGTH_SHORT).show()
             }catch (e: IOException) {
                 e.printStackTrace()
