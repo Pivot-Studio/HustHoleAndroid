@@ -421,7 +421,7 @@ class HomeScreenActivity : BaseActivity() {
         return super.onKeyUp(keyCode, event)
     }
 
-    fun setOnBottomBarItemReselectedListener(listener: NavigationBarView.OnItemReselectedListener) {
+    fun setOnBottomBarItemReselectedListener(listener: NavigationBarView.OnItemReselectedListener?) {
         binding.bottomNavigationView.setOnItemReselectedListener(listener)
     }
 
