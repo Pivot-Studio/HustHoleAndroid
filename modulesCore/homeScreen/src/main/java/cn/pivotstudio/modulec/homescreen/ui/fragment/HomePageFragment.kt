@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -21,6 +22,7 @@ import cn.pivotstudio.modulec.homescreen.custom_view.HomePageOptionBox
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomepageBinding
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import java.util.Objects
 
 
 /**
@@ -41,7 +43,8 @@ class HomePageFragment : BaseFragment() {
     }
 
     private lateinit var binding: FragmentHomepageBinding
-    private var listener: EditActionListener? = null
+    private var editListener: EditActionListener? = null
+    private var tabSelectListener: TabSelectListener? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -130,6 +133,9 @@ class HomePageFragment : BaseFragment() {
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab?) {
+                    if (tab?.position == 1) {
+                        tabSelectListener?.alterMode()
+                    }
                 }
             })
 
@@ -140,9 +146,17 @@ class HomePageFragment : BaseFragment() {
                 }
                 // 这里用接口回调的原因是因为viewPager内的Fragment可能会被销毁重建
                 // 使用接口可以保证新的Fragment实例实现绑定了点击事件，避免点击时新的Fragment没有设置处理点击事件而无反应或者闪退
-                if (tbMode.selectedTabPosition == 0) {
-                    if (!v.text.isNullOrEmpty() && (actionId == EditorInfo.IME_ACTION_SEND || actionId == EditorInfo.IME_ACTION_DONE || event != null && KeyEvent.KEYCODE_ENTER == event.keyCode && KeyEvent.ACTION_DOWN == event.action)) {
-                        listener!!.onSend(v.text.toString())
+                tbMode.post {
+                    if (actionId == EditorInfo.IME_ACTION_SEND
+                        || actionId == EditorInfo.IME_ACTION_DONE
+                        || (Objects.equals(KeyEvent.KEYCODE_ENTER, event?.keyCode)
+                        && Objects.equals(KeyEvent.ACTION_DOWN, event?.action))
+                    ) {
+                        if (v.text.isNullOrEmpty()) {
+                            showMsg("内容不能为空！")
+                        }else {
+                            editListener?.onSend(v.text.toString())
+                        }
                     }
                 }
                 false
@@ -150,11 +164,18 @@ class HomePageFragment : BaseFragment() {
         }
     }
 
-    fun setEditActionListener(listener: EditActionListener) {
-        this.listener = listener
+    fun setTabSelectListener(tabSelectListener: TabSelectListener) {
+        this.tabSelectListener = tabSelectListener
+    }
+
+    fun setEditActionListener(editListener: EditActionListener) {
+        this.editListener = editListener
     }
 
     interface EditActionListener {
-        fun onSend(text: String)
+        fun onSend(text: String) {}
+    }
+    interface TabSelectListener {
+        fun alterMode()
     }
 }

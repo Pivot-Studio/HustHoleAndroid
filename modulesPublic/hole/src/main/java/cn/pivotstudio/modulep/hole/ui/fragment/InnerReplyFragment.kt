@@ -184,6 +184,12 @@ class InnerReplyFragment : BaseFragment() {
     }
     private fun initObserver() {
         innerReplyViewModel.apply {
+            tip.observe(viewLifecycleOwner, Observer<String?> {
+                it?.let {
+                    showMsg(it)
+                    doneShowingTip()
+                }
+            })
             lifecycleScope.launch {
                 repeatOnLifecycle(Lifecycle.State.STARTED) {
                     reply.collectLatest {
@@ -236,6 +242,7 @@ class InnerReplyFragment : BaseFragment() {
                             showMsg(state.errorMessage)
                         }
                         is ApiResult.Success<*> -> {
+                            showMsg(getString(R.string.hole_sending_successfully))
                             clearSendingState()
                         }
                     }

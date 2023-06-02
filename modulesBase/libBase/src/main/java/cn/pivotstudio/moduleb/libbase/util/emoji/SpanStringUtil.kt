@@ -5,16 +5,10 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.text.Spannable
 import android.text.SpannableString
-import android.text.Spanned
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import android.text.style.ImageSpan
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import com.alibaba.android.arouter.launcher.ARouter
 import java.util.regex.Pattern
 
 /**

@@ -1,16 +1,24 @@
 package cn.pivotstudio.modulec.homescreen.ui.activity
 
+import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.*
-import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
-import android.net.Uri
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -19,6 +27,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.*
+import cn.pivotstudio.husthole.moduleb.network.model.VersionInfo
 import cn.pivotstudio.moduleb.database.MMKVUtil
 import cn.pivotstudio.moduleb.libbase.BuildConfig
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
@@ -28,6 +38,8 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
 import cn.pivotstudio.modulec.homescreen.custom_view.dialog.WelcomeDialog
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityHsHomescreenBinding
+import cn.pivotstudio.modulec.homescreen.network.ApkDownload
+import cn.pivotstudio.modulec.homescreen.ui.adapter.TAG
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestFragment
 import cn.pivotstudio.modulec.homescreen.ui.fragment.HomePageFragment
@@ -36,6 +48,8 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.google.android.material.navigation.NavigationBarView
 import kotlinx.coroutines.*
+import java.io.File
+import java.util.*
 
 
 /**
@@ -61,6 +75,7 @@ class HomeScreenActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hs_homescreen)
+        registerInstallBroadcast()
         checkVersion()
         initView()
     }
@@ -112,9 +127,7 @@ class HomeScreenActivity : BaseActivity() {
                 )
             )
         }
-
-
-        navController.addOnDestinationChangedListener { _, destination, argument ->
+        navController.addOnDestinationChangedListener { _, destination, _ ->
             supportActionBar?.title = destination.label
 
             // BottomNavigationBar显示情况特判
@@ -136,59 +149,100 @@ class HomeScreenActivity : BaseActivity() {
             }
 
         }
-
-
     }
 
+    private fun registerInstallBroadcast() {
+        val intentFilter = IntentFilter()
+        // 监听安装广播
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED)
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REPLACED)
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED)
+        // 监听自定义广播
+        intentFilter.addAction("NOT_UPDATE")
+        // 注册应用安装需要设置这个参数
+        intentFilter.addDataScheme("package")
+        val receiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                if (!Objects.equals(intent.action, "NOT_UPDATE")) {
+                    val file =
+                        getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath?.let {
+                            File(it)
+                        }
+                    file?.apply {
+                        // 获取下载目录下的所有文件
+                        this.listFiles()?.apply {
+                            for (item in this) {
+                                if (item.name.endsWith(".apk")) {
+                                    item.delete()
+                                    Log.d(TAG, "APK is deleted")
+                                    // showMsg("已删除安装包")
+                                }
+                            }
+                        }
+                    }
+                }
+                context.unregisterReceiver(this)
+            }
+        }
+        registerReceiver(receiver, intentFilter)
+    }
 
     /**
      * 检查版本以及是否第一次使用
      */
     private fun checkVersion() {
         val mmkvUtil = MMKVUtil.getMMKV(this)
-        if (!mmkvUtil.getBoolean(Constant.IS_FIRST_USED)) { //是否第一次使用1037树洞,保证welcomeDialog只在第一使用时显式
+        //是否第一次使用1037树洞,保证welcomeDialog只在第一使用时显式
+        if (!mmkvUtil.getBoolean(Constant.IS_FIRST_USED)) {
             val welcomeDialog = WelcomeDialog(context)
             welcomeDialog.show()
             mmkvUtil.put(Constant.IS_FIRST_USED, true)
         }
-
-        val manager = this.packageManager
+        // 获取旧版本信息
         var oldCode = 0L
         var oldName: String? = null
         try {
-            val mInfo: PackageInfo = manager.getPackageInfo(this.packageName, 0)
+            val mInfo =
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    packageManager.getPackageInfo(
+                        packageName,
+                        PackageManager.PackageInfoFlags.of(0)
+                    )
+                } else {
+                    packageManager.getPackageInfo(packageName, 0)
+                }
             oldCode = mInfo.longVersionCode
             oldName = mInfo.versionName
         } catch (e: PackageManager.NameNotFoundException) {
+            Log.e(TAG, "don't have this package")
             e.printStackTrace()
         }
+
         lifecycleScope.launch {
             viewModel.versionInfo.collect {
                 it?.let {
-                    if(it.versionId == "403") {
-                        Toast.makeText(context, "登录过期！", Toast.LENGTH_SHORT).show()
+                    // token缓存过期会请求失败
+                    if (it.versionId == "403") {
+                        showMsg("登录过期！")
+                        delay(300L)
+                        // 回退到登录界面
                         if (BuildConfig.isRelease) {
                             mmkvUtil.put(Constant.IS_LOGIN, false)
-                            ARouter.getInstance().build("/loginAndRegister/LARActivity").navigation()
+                            ARouter.getInstance().build("/loginAndRegister/LARActivity")
+                                .navigation()
                             finish()
                         }
-                    }else {
-                        if (it.versionId.toLong() > oldCode || it.versionName != oldName!!) {
-                            if (checkNotification()) {
-                                val updateDialog = UpdateDialog(context, it)
-                                updateDialog.show()
-                            } else {
-                                runBlocking {
-                                    Toast.makeText(context, "没有开启通知权限，请前往开启", Toast.LENGTH_SHORT).show()
-                                    delay(1000L)
-                                }
-                                val localIntent = Intent()
-                                localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                localIntent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
-                                localIntent.data =
-                                    Uri.fromParts("package", this@HomeScreenActivity.packageName, null)
-                                startActivity(localIntent)
-                            }
+                    } else {
+                        // 检测到新版本信息
+                        if (it.versionId.toLong() > oldCode || !Objects.equals(
+                                it.versionName,
+                                oldName
+                            )
+                        ) {
+                            createDownloadWork(it)
+                        } else {
+                            // 没有新版本就直接注销BroadcastReceiver
+                            context.sendBroadcast(Intent("NOT_UPDATE"))
                         }
                     }
                 }
@@ -196,8 +250,131 @@ class HomeScreenActivity : BaseActivity() {
         }
     }
 
+    private fun createDownloadWork(infos: VersionInfo) {
+        // 设置相关约束（只在WIFI且内存充足环境下执行）
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.UNMETERED)
+            .setRequiresStorageNotLow(true)
+            .build()
+        // 配置工作请求
+        val downloadRequest = OneTimeWorkRequestBuilder<ApkDownload>()
+            .addTag("download")
+            .setConstraints(constraints)
+            .setInputData(workDataOf("baseUrl" to infos.downloadUrl))
+            .build()
+        // 将 WorkRequest 提交到 WorkManager。
+        WorkManager.getInstance(context).enqueueUniqueWork(
+            "download",
+            ExistingWorkPolicy.KEEP,
+            downloadRequest
+        )
+        // 监察任务是否完成
+        WorkManager.getInstance(context)
+            .getWorkInfoByIdLiveData(downloadRequest.id)
+            .observe(this@HomeScreenActivity) { info ->
+                //Toast.makeText(context, info?.state.toString(), Toast.LENGTH_SHORT).show()
+                if (info?.state == WorkInfo.State.SUCCEEDED) {
+                    val fileName = infos.downloadUrl.let {
+                        it.substring(
+                            it.lastIndexOf("/") + 1,
+                            it.length
+                        )
+                    }
+                    // 获取通知
+                    val notification = createNotification(fileName)
+                    // 通知栏显示通知
+                    notification?.let {
+                        val notificationManager: NotificationManager =
+                            this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                        notificationManager.notify(1, it)
+                    }
+                    // 显示更新Dialog
+                    UpdateDialog(context, infos) {
+                        getInstallIntent(fileName)
+                    }.show()
+                }
+            }
+    }
+
+    /**
+     * 创建更新的通知
+     */
+    private fun createNotification(fileName: String): Notification? {
+        val channelId = "INSTALL"
+        if (checkNotification()) {
+            val notificationManager: NotificationManager =
+                this.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notification = NotificationCompat.Builder(this, channelId)
+            //创建并设置NotificationChannel
+            val channel = NotificationChannel(
+                channelId,
+                "待办消息",
+                NotificationManager.IMPORTANCE_HIGH
+            )
+            notificationManager.createNotificationChannel(channel)
+            //设置notification的点击事件
+            val contentIntent: PendingIntent = PendingIntent.getActivity(
+                this,
+                0,
+                getInstallIntent(fileName),
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT
+            )
+
+            notification.setContentIntent(contentIntent)
+                .setSmallIcon(R.drawable.icon) //设置通知的小图标(有些手机设置Icon图标不管用，默认图标就是Manifest.xml里的图标)
+                .setLargeIcon(
+                    BitmapFactory.decodeResource(
+                        this.resources,
+                        R.drawable.icon
+                    )
+                ) //设置通知的大图标
+                .setDefaults(NotificationCompat.FLAG_ONLY_ALERT_ONCE) //设置通知的提醒方式： 呼吸灯
+                .setPriority(NotificationCompat.PRIORITY_MAX) //设置通知的优先级：最大
+                .setChannelId(channelId)
+                .setContentTitle("安装包下载完毕，点击安装...")
+                .setAutoCancel(false) //设置通知被点击一次是否自动取消
+            return notification.build()
+        }
+        return null
+    }
+
+
+    /**
+     * 检查是否有通知权限
+     */
     private fun checkNotification(): Boolean =
         NotificationManagerCompat.from(this).areNotificationsEnabled()
+
+    /**
+     * 返回安装页面的intent
+     * @param fileName 要安装apk的文件名
+     * @return
+     */
+    private fun getInstallIntent(fileName: String): Intent? {
+        try {
+            val file = File(
+                this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath,
+                fileName
+            )
+            if (!file.exists()) {
+                return null
+            }
+            val uri =
+                FileProvider.getUriForFile(this, "${packageName}.fileprovider", file)
+            return Intent(Intent.ACTION_VIEW).setDataAndType(
+                uri,
+                "application/vnd.android.package-archive"
+            ).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+        } catch (e: NullPointerException) {
+            Log.e(TAG, "file is not exists!")
+            e.printStackTrace()
+        } catch (e: java.lang.IllegalArgumentException) {
+            Log.e(TAG, "file can't be accessed!")
+            e.printStackTrace()
+        }
+        return null
+    }
 
     /**
      * 监听点击事件
@@ -230,7 +407,7 @@ class HomeScreenActivity : BaseActivity() {
                     return navController.popBackStack()
                 } else {
                     val secondTime = System.currentTimeMillis()
-                    if (secondTime - firstTime > 2000) {
+                    if (secondTime - firstTime > 2000L) {
                         Toast.makeText(this@HomeScreenActivity, "再按一次退出程序", Toast.LENGTH_SHORT)
                             .show()
                         firstTime = secondTime

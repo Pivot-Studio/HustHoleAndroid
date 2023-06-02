@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulep.hole.repository
 
+import androidx.lifecycle.MutableLiveData
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
 import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
@@ -22,6 +23,8 @@ class InnerReplyRepo(
     companion object {
         const val LIST_SIZE = 20
     }
+
+    val tip = MutableLiveData<String?>()
 
     fun loadInnerReplies(replyId: String): Flow<List<Reply>> = flow {
         emit(

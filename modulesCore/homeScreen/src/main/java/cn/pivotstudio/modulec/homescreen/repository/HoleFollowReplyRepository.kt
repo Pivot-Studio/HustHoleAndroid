@@ -42,9 +42,12 @@ class HoleFollowReplyRepository {
         holeOffset = 0
     }
 
-    fun getMyFollow(): Flow<ApiResult> = flow {
+    fun getMyFollow(sortMode: String): Flow<ApiResult> = flow {
         emit(ApiResult.Loading())
-        val resp = hustHoleApiService.getMyFollow()
+        val resp = hustHoleApiService.getMyFollow(
+            timestamp = refreshTimestamp(),
+            mode = sortMode
+        )
         checkResponse(resp, this)
     }.flowOn(dispatcher).onEach {
         followOffset = 0
@@ -73,10 +76,14 @@ class HoleFollowReplyRepository {
         e.printStackTrace()
     }
 
-    fun loadMoreFollow(): Flow<ApiResult> = flow {
+    fun loadMoreFollow(sortMode: String): Flow<ApiResult> = flow {
         followOffset += CONSTANT_STANDARD_LOAD_SIZE
         emit(ApiResult.Loading())
-        val resp = hustHoleApiService.getMyFollow(followOffset)
+        val resp = hustHoleApiService.getMyFollow(
+            followOffset,
+            refreshTimestamp(),
+            sortMode
+        )
         checkResponse(resp, this)
     }.flowOn(dispatcher).catch { e ->
         tip.value = e.message

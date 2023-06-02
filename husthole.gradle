@@ -3,11 +3,11 @@ ext {
     isMac = true
 
     androidID = [
-            compileSdkVersion: 31,
+            compileSdkVersion: 33,
             minSdkVersion    : 28,
-            targetSdkVersion : 31,
+            targetSdkVersion : 33,
             versionCode      : 3,//不能是非整数，无语子
-            versionName      : "v2.4.0"
+            versionName      : "v2.4.12"
     ]
 
     networkID = [

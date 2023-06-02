@@ -68,7 +68,7 @@ class LoginFragment : BaseFragment() {
             lifecycleScope.launchWhenStarted {
                 loginTokenV2.collect { token ->
                     token.takeIf { it.isNotBlank() }?.let {
-                        (activity as? LARActivity)?.loginWithUseToken(it)
+                        (requireActivity() as LARActivity).loginWithUseToken(it)
                     }
                 }
             }

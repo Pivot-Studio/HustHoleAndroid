@@ -1,5 +1,6 @@
 package cn.pivotstudio.modulep.hole.viewmodel
 
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import cn.pivotstudio.husthole.moduleb.network.ApiResult
@@ -33,11 +34,15 @@ class InnerReplyViewModel(private val baseReply: Reply) : ViewModel() {
     private var _loadingState = MutableStateFlow(ApiStatus.SUCCESSFUL)
     val loadingState: StateFlow<ApiStatus> = _loadingState
 
-
+    val tip: MutableLiveData<String?> = repo.tip
     fun triggerEmojiPad() {
         viewModelScope.launch {
             _showingEmojiPad.emit(showEmojiPad.value.not())
         }
+    }
+
+    fun doneShowingTip() {
+        tip.value = null
     }
 
     fun loadSecondLvReplies() {
@@ -63,7 +68,11 @@ class InnerReplyViewModel(private val baseReply: Reply) : ViewModel() {
                 }
                 .catch { it.printStackTrace() }
                 .collectLatest { newInnerReplies ->
-                    _innerReplies.emit(innerReplies.value.toMutableList() + newInnerReplies)
+                    if(newInnerReplies.isEmpty()) {
+                        tip.value = "没有更多内容啦~"
+                    }else {
+                        _innerReplies.emit(innerReplies.value.toMutableList() + newInnerReplies)
+                    }
                 }
         }
     }
@@ -82,7 +91,7 @@ class InnerReplyViewModel(private val baseReply: Reply) : ViewModel() {
             repo.deleteTheReply(reply).collect {
                 when (it) {
                     is ApiResult.Success<*> -> {
-
+                        tip.value = "删除成功！"
                     }
                     is ApiResult.Error -> {
                         _sendingState.emit(it)
@@ -109,7 +118,7 @@ class InnerReplyViewModel(private val baseReply: Reply) : ViewModel() {
 
     fun delayLoadReplies() {
         viewModelScope.launch {
-            delay(2000)
+            delay(3000)
             loadSecondLvReplies()
         }
     }

@@ -130,8 +130,8 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
                 binding.placeholderHomeNoContent.visibility = View.VISIBLE
                 binding.placeholderHomeNetError.visibility = View.GONE
                 binding.placeholderHomeNoResult.visibility = View.GONE
-                val tv = context.findViewById<TextView>(R.id.tv_no_content)
-                tv.text = getString(R.string.res_no_myfollow)
+                val tv: TextView? = requireView().findViewById(R.id.tv_no_content)
+                tv?.text = getString(R.string.res_no_myfollow)
             }
         }
     }
@@ -142,7 +142,7 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
         if (viewModel.holesV2.value.isEmpty()) {
             when (type) {
                 HOLE_LIST -> viewModel.loadHolesV2()
-                FOLLOW -> viewModel.getMyFollow()
+                FOLLOW -> viewModel.getMyFollow(NetworkConstant.SortMode.LATEST)
                 RECOMMEND -> viewModel.loadRecHoles(NetworkConstant.SortMode.REC)
             }
         }
@@ -191,21 +191,34 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
             tip.observe(viewLifecycleOwner) {
                 it?.let {
                     showMsg(it)
-                    viewModel.doneShowingTip()
+                    doneShowingTip()
                 }
             }
-            if (type == HOLE_LIST) {
-                (parentFragment as HomePageFragment).setEditActionListener(object :
-                    HomePageFragment.EditActionListener {
-                    override fun onSend(text: String) {
-                        viewModel.searchKeyword = text
-                        viewModel.isSearch = true
-                        viewModel.searchHolesV2(text)
+            when (type) {
+                HOLE_LIST -> {
+                    (parentFragment as HomePageFragment).setEditActionListener(object :
+                        HomePageFragment.EditActionListener {
+                        override fun onSend(text: String) {
+                            viewModel.searchKeyword = text
+                            viewModel.isSearch = true
+                            viewModel.searchHolesV2(text)
+                        }
+                    })
+                    (tbMode?.getTabAt(0)?.customView as HomePageOptionBox).setOptionsListener { v: View ->
+                        onSelectModeClick(v)
                     }
+                }
+                FOLLOW -> {
+                    (parentFragment as HomePageFragment).setTabSelectListener(object : HomePageFragment.TabSelectListener {
+                        override fun alterMode() {
+                            if (viewModel.sortModes == NetworkConstant.SortMode.LATEST) {
+                                viewModel.getMyFollow(NetworkConstant.SortMode.ASC)
+                            } else {
+                                viewModel.getMyFollow(NetworkConstant.SortMode.LATEST)
+                            }
+                        }
 
-                })
-                (tbMode?.getTabAt(0)?.customView as HomePageOptionBox).setOptionsListener { v: View ->
-                    onSelectModeClick(v)
+                    })
                 }
             }
 
@@ -258,7 +271,7 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
                     viewModel.loadHolesV2()
                 }
                 FOLLOW -> {
-                    viewModel.getMyFollow()
+                    viewModel.getMyFollow(NetworkConstant.SortMode.LATEST)
                 }
                 RECOMMEND -> {
                     viewModel.loadRecHoles(NetworkConstant.SortMode.REC)
@@ -296,7 +309,11 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
      * 刷新结束后动画的流程
      */
     private fun finishRefreshAnim() {
-        etText?.setText("")
+        etText?.let {
+            if(it.text.isNotEmpty()) {
+                it.setText("")
+            }
+        }
         binding.refreshLayout.finishRefresh() //结束下拉刷新动画
         binding.refreshLayout.finishLoadMore() //结束上拉加载动画
         binding.recyclerView.isEnabled = true
@@ -310,11 +327,11 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
     private fun onSelectModeClick(v: View) {
         val id = v.id
         if (id == R.id.btn_ppwhomepage_latest_reply) {
-            if (viewModel.sortMode.value != NetworkConstant.SortMode.LATEST_REPLY) {
+            if (viewModel.sortModes != NetworkConstant.SortMode.LATEST_REPLY) {
                 viewModel.loadHolesV2(sortMode = NetworkConstant.SortMode.LATEST_REPLY)
             }
         } else if (id == R.id.btn_ppwhomepage_latest_publish) {
-            if (viewModel.sortMode.value != NetworkConstant.SortMode.LATEST) {
+            if (viewModel.sortModes != NetworkConstant.SortMode.LATEST) {
                 viewModel.loadHolesV2(sortMode = NetworkConstant.SortMode.LATEST)
             }
         }
@@ -353,7 +370,7 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
             ARouter.getInstance().build("/hole/HoleActivity")
                 .withInt(Constant.HOLE_ID, holeId.toInt())
                 .withBoolean(Constant.IF_OPEN_KEYBOARD, true)
-                .navigation(requireActivity(), ResultCodeConstant.Hole)
+                .navigation(context, ResultCodeConstant.Hole)
         }
     }
 
@@ -496,9 +513,9 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
                     getString(R.string.created_at).format(data.createAt.substring(0, 10))
             }
             funcBind?.download?.setOnClickListener {
-                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                     getPermission()
-                }else {
+                } else {
                     getPermissionWithPermissionCheck()
                 }
             }

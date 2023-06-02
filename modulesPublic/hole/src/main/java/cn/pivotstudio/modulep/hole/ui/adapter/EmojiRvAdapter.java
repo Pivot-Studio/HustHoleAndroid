@@ -1,6 +1,7 @@
 package cn.pivotstudio.modulep.hole.ui.adapter;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication;
 import cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext;
 import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
 import cn.pivotstudio.moduleb.libbase.util.emoji.EmotionUtil;
@@ -19,11 +21,10 @@ import cn.pivotstudio.moduleb.libbase.util.emoji.EmotionUtil;
 import java.util.LinkedList;
 import java.util.List;
 
+import cn.pivotstudio.moduleb.libbase.util.emoji.SpanStringUtil;
 import cn.pivotstudio.modulep.hole.R;
-import cn.pivotstudio.modulep.hole.databinding.FragmentSpecificHoleBinding;
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity;
 import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel;
-import cn.pivotstudio.modulep.hole.viewmodel.SpecificHoleViewModel;
 
 /**
  * @classname: EmojiRecyclerViewAdapter
@@ -85,12 +86,12 @@ public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
             super(itemView);
             img = itemView.findViewById(R.id.iv_emoji);
             itemView.setOnClickListener(v -> {
-                emojiEdittext.
-                        getText().
-                        insert(emojiEdittext.getSelectionStart(), mEmojiName.get(position));
+                SpannableString spannableString =
+                        SpanStringUtil.getEmotionContent(0x0001, BaseApplication.context, emojiEdittext,
+                                mEmojiName.get(position));
+                emojiEdittext.getText().insert(emojiEdittext.getSelectionStart(), spannableString);
                 changeData(position);
             });
-
         }
 
         public void bind(int position) {
@@ -108,11 +109,13 @@ public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
             super(itemView);
             img = itemView.findViewById(R.id.iv_emoji);
             itemView.setOnClickListener(v -> {
+                SpannableString spannableString =
+                        SpanStringUtil.getEmotionContent(0x0001, BaseApplication.context, emojiEdittext,
+                                mEmojiName.get(mUsedEmoji.get(position)));
                 emojiEdittext.
                         getText().
-                        insert(emojiEdittext.getSelectionStart(), mEmojiName.get(mUsedEmoji.get(position)));
+                        insert(emojiEdittext.getSelectionStart(), spannableString);
                 changeData(mUsedEmoji.get(position));
-
             });
 
         }
@@ -144,7 +147,9 @@ public class EmojiRvAdapter extends BaseRecyclerViewAdapter {
         mEmojiName = EmotionUtil.getResourceName();
         mUsedEmoji = new LinkedList<>();
         mViewModel.pUsedEmojiList.observe((HoleActivity) context, usedEmojiList -> {
-            if (usedEmojiList != null) {mUsedEmoji.addAll(usedEmojiList);}
+            if (usedEmojiList != null) {
+                mUsedEmoji.addAll(usedEmojiList);
+            }
             mUsedEmojiCopy = usedEmojiList;
         });
     }

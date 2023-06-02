@@ -42,7 +42,7 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_hole_star"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_42"
+            android:layout_height="wrap_content"
             android:layout_below="@id/my_bar"
             android:layout_marginStart="@dimen/dp_10"
             android:background="@color/HH_Surface"

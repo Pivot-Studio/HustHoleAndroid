@@ -36,7 +36,7 @@ class HoleRepository(
     private val holeId: String,
     private val hustHoleApiService: HustHoleApiService = HustHoleApi.retrofitService,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
-    private var lastOffset: Int = 0,
+    var lastOffset: Int = 0,
     private var lastTimeStamp: String = DateUtil.getDateTime()
 ) {
 
@@ -47,6 +47,7 @@ class HoleRepository(
     var pInputText: MutableLiveData<ReplyResponse> = MutableLiveData()
     var pUsedEmojiList: MutableLiveData<LinkedList<Int>> = MutableLiveData()
     private var hole: Hole? = null
+    val tip = MutableLiveData<String?>()
     fun getInputTextForLocalDB(hole_id: Int?) {
         val flowable = DB!!.holeDao().findById(
             hole_id!!
@@ -169,8 +170,6 @@ class HoleRepository(
             descend = descend
         )
         checkResponse(response, this)
-    }.onEach {
-        lastOffset += LIST_SIZE
     }.flowOn(dispatcher)
 
     fun giveALikeToTheHole(hole: HoleV2): Flow<ApiResult> {

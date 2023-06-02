@@ -139,6 +139,8 @@ interface HustHoleApiService {
     @GET("user/follow")
     suspend fun getMyFollow(
         @Query("offset") offset: Int = 0,
+        @Query("timestamp") timestamp: String,
+        @Query("mode") mode: String = "LATEST",
         @Query("limit") limit: Int = CONSTANT_STANDARD_LOAD_SIZE
     ): Response<List<HoleV2>>
 

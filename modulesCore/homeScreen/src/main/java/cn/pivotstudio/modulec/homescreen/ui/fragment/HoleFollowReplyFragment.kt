@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -14,7 +13,7 @@ import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityHoleStarBinding
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**
@@ -27,6 +26,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 class HoleFollowReplyFragment : BaseFragment() {
     private val args by navArgs<HoleFollowReplyFragmentArgs>()
     lateinit var binding: ActivityHoleStarBinding
+    private var listener: ModeListener? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,9 +55,24 @@ class HoleFollowReplyFragment : BaseFragment() {
             override fun getItemCount(): Int = titleList.size
 
             override fun createFragment(position: Int): Fragment {
-                return MyHoleFollowReplyFragment.newInstance(position + 1)
+                val bundle = Bundle()
+                bundle.putInt("type", position + 1)
+                return MyHoleFollowReplyFragment.newInstance(bundle)
             }
         }
+        binding.tlHoleStar.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                if(tab?.position == 1) {
+                    listener?.changeMode()
+                }
+            }
+        })
         TabLayoutMediator(binding.tlHoleStar, binding.vpHoleStar) { tab, position ->
             val tabView = LayoutInflater.from(context).inflate(R.layout.tab_mine, binding.tlHoleStar, false)
             val tv = tabView.findViewById(R.id.title) as TextView
@@ -70,7 +85,13 @@ class HoleFollowReplyFragment : BaseFragment() {
         }
     }
 
+    fun setModeListener(listener: ModeListener) {
+        this.listener = listener
+    }
 
+    interface ModeListener {
+        fun changeMode() {}
+    }
     companion object {
         val titleList = listOf(
         R.string.tv_myHoles,
@@ -78,5 +99,4 @@ class HoleFollowReplyFragment : BaseFragment() {
         R.string.tv_myReply
         )
     }
-
 }

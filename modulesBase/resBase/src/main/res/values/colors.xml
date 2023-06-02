@@ -44,4 +44,11 @@
 
     <color name="darkscreen">#66000000</color>
     <color name="red">#FB9782</color>
+
+    //夹带点私货
+    <color name="star_dust">#9999FF</color>
+    <color name="jellyfish">#3399FF</color>
+    <color name="turkey">#FF4004</color>
+    <color name="pangolin">#F6BE71</color>
+    <color name="firmament">#33CC00</color>
 </resources>
