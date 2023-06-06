@@ -6,9 +6,11 @@
     <data>
 
         <import type="android.view.View" />
+
         <variable
             name="type"
             type="String" />
+
         <variable
             name="holeV2"
             type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
@@ -56,6 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_6"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+            android:textColor="@color/GrayScale_70"
             app:layout_constraintStart_toStartOf="@+id/tv_hole"
             app:layout_constraintTop_toBottomOf="@+id/tv_hole"
             app:time="@{holeV2.createAt}"
@@ -69,11 +72,11 @@
             android:layout_marginHorizontal="@dimen/dp_22"
             android:layout_marginTop="4dp"
             android:textAppearance="@style/HustHoleTypography.Body2"
+            app:currentId="@{holeV2.holeId}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_hole_time"
             app:markDownContent="@{holeV2.content}"
-            app:currentId="@{holeV2.holeId}"
             app:naviType="@{type}"
             tools:text="@string/default_string_zh_long" />
 
@@ -103,6 +106,7 @@
                 android:layout_marginBottom="@dimen/dp_13"
                 android:text="@{String.valueOf(holeV2.likeCount), default = `0`}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+                android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_hole_thumbup" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -134,6 +138,7 @@
                 android:layout_marginBottom="@dimen/dp_13"
                 android:text="@{String.valueOf(holeV2.replyCount), default = `0`}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+                android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_hole_reply" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -165,6 +170,7 @@
                 android:layout_marginBottom="@dimen/dp_13"
                 android:text="@{String.valueOf(holeV2.followCount), default = `0`}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+                android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_hole_follow" />
         </androidx.constraintlayout.widget.ConstraintLayout>
