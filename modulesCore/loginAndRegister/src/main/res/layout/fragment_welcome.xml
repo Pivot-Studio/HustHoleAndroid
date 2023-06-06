@@ -12,7 +12,6 @@
         android:layout_height="match_parent"
         android:background="@drawable/welcome">
 
-
         <Button
             android:id="@+id/btn_join"
             android:layout_width="@dimen/dp_311"

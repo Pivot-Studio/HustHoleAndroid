@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
 
         <variable
@@ -42,9 +43,9 @@
                 android:id="@+id/my_reply_created_timestamp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/GrayScale_80"
-                android:textSize="@dimen/sp_11"
                 android:text="@{TimeUtil.replyTime(reply.createAt)}"
+                android:textColor="@color/HH_OnSurface"
+                android:textSize="@dimen/sp_11"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/my_reply_alias" />
 
@@ -52,8 +53,8 @@
                 android:id="@+id/my_reply_alias"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/HustHoleTypography.Headline5"
                 android:text="@{reply.nickname}"
+                android:textAppearance="@style/HustHoleTypography.Headline5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -65,9 +66,9 @@
                 android:ellipsize="end"
                 android:lineSpacingExtra="@dimen/dp_4"
                 android:maxLines="2"
+                android:text="@{reply.content}"
                 android:textColor="@color/GrayScale_20"
                 android:textSize="@dimen/sp_14"
-                android:text="@{reply.content}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/my_reply_created_timestamp" />
 
@@ -76,8 +77,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/dp_5"
-                android:orientation="horizontal"
                 android:background="@drawable/standard_reply"
+                android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/my_reply_content">
 
@@ -86,9 +87,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_13"
+                    android:text="@{'#' + reply.holeId}"
                     android:textColor="@color/GrayScale_50"
-                    android:textSize="@dimen/sp_13"
-                    android:text="@{'#' + reply.holeId}"/>
+                    android:textSize="@dimen/sp_13" />
 
                 <TextView
                     android:id="@+id/my_reply_hole_content"
@@ -98,9 +99,9 @@
                     android:layout_marginEnd="@dimen/dp_6"
                     android:ellipsize="end"
                     android:maxLines="1"
+                    android:text="@{reply.hole == null ? reply.replied.content : reply.hole.content}"
                     android:textColor="@color/GrayScale_50"
-                    android:textSize="@dimen/sp_13"
-                    android:text="@{reply.hole == null ? reply.replied.content : reply.hole.content}"/>
+                    android:textSize="@dimen/sp_13" />
             </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -109,14 +110,14 @@
             android:id="@+id/my_reply_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:background="@drawable/more"
             android:clickable="true"
             android:elevation="@dimen/dp_20"
             android:focusable="true"
             android:paddingVertical="@dimen/dp_10"
             android:paddingEnd="@dimen/dp_80"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
             android:visibility="invisible">
 
             <ImageView
@@ -146,10 +147,10 @@
             android:id="@+id/bt_audit_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/dp_27"
             android:layout_alignParentEnd="true"
-            android:textSize="@dimen/sp_13"
+            android:layout_marginEnd="@dimen/dp_27"
             android:background="@color/transparent"
-            android:clickable="false"/>
+            android:clickable="false"
+            android:textSize="@dimen/sp_13" />
     </RelativeLayout>
 </layout>

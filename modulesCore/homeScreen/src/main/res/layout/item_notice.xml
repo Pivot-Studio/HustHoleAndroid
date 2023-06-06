@@ -32,7 +32,6 @@
                 android:layout_marginStart="@dimen/dp_22"
                 android:text="@{reply.nickname}"
                 android:textAppearance="@style/HustHoleTypography.Headline5"
-                android:textColor="@color/GrayScale_20"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="Alice" />
@@ -44,8 +43,7 @@
                 android:layout_marginStart="@dimen/dp_7"
                 android:layout_toEndOf="@id/name"
                 android:text="@{reply.type == reply.type.REPLY_TO_HOLE ? @string/reply_to_hole : @string/reply_to_reply}"
-                android:textAppearance="@style/HustHoleTypography.Headline5"
-                android:textColor="@color/GrayScale_50" />
+                android:textAppearance="@style/HustHoleTypography.Headline5" />
 
             <TextView
                 android:id="@+id/hole_id"
@@ -55,7 +53,6 @@
                 android:layout_marginEnd="@dimen/dp_19"
                 android:text="@{@string/hole_id(reply.holeId)}"
                 android:textAppearance="@style/HustHoleTypography.Headline5"
-                android:textColor="@color/GrayScale_20"
                 tools:text="# 1037" />
         </RelativeLayout>
 
@@ -66,7 +63,6 @@
             android:layout_marginStart="@dimen/dp_22"
             android:layout_marginTop="@dimen/dp_2"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
-            android:textColor="@color/GrayScale_80"
             app:time="@{reply.createAt}"
             app:timeSign="@{false}"
             tools:text="19:20 2021 09-16" />
@@ -82,7 +78,6 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textAppearance="@style/HustHoleTypography.Body2"
-            android:textColor="@color/GrayScale_20"
             tools:text="我好想买Airpods但是没有钱，梁老师可不可以资助呀呀呀" />
 
     </LinearLayout>

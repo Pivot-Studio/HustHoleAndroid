@@ -2,8 +2,6 @@
 <resources>
 
     <style name="LARTheme.Base" parent="@style/Theme.Base">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@color/translucent</item>
     </style>
 

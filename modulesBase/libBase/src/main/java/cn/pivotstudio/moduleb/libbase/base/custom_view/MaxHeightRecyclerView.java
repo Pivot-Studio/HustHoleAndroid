@@ -3,9 +3,11 @@ package cn.pivotstudio.moduleb.libbase.base.custom_view;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
 import cn.pivotstudio.moduleb.libbase.R;
 
 /**
@@ -40,7 +42,7 @@ public class MaxHeightRecyclerView extends RecyclerView {
 
     private void initAttr(Context context, AttributeSet attrs, int defStyle) {
         final TypedArray appearance =
-            context.obtainStyledAttributes(attrs, R.styleable.MaxHeightRecyclerView, defStyle, 0);
+                context.obtainStyledAttributes(attrs, R.styleable.MaxHeightRecyclerView, defStyle, 0);
         mHeight = appearance.getDimensionPixelSize(R.styleable.MaxHeightRecyclerView_maxHeight, 0);
     }
 

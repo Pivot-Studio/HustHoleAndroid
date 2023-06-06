@@ -36,7 +36,7 @@
             android:paddingVertical="@dimen/dp_14"
             android:paddingStart="@dimen/dp_20"
             android:text="@{context.getResources().getString(name)}"
-            android:textColor="@{context.getResources().getString(name) == @string/login_out ? @color/HH_Reminder_Warning : @color/GrayScale_20}"
+            android:textColor="@{context.getResources().getString(name) == @string/login_out ? @color/HH_Reminder_Warning : @color/HH_OnSurface}"
             android:textSize="@dimen/sp_14" />
 
         <TextView
@@ -47,7 +47,7 @@
             android:padding="@dimen/dp_12"
             android:paddingVertical="@dimen/dp_14"
             android:text=""
-            android:textColor="@color/GrayScale_50"
+            android:textColor="@color/HH_OnSurface"
             android:textSize="@dimen/sp_14" />
     </RelativeLayout>
 </layout>

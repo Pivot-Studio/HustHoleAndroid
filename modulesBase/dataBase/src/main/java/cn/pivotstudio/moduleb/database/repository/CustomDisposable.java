@@ -23,8 +23,8 @@ public class CustomDisposable {
      */
     public static <T> void addDisposable(Flowable<T> flowable, Consumer<T> consumer) {
         compositeDisposable.add(flowable.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(consumer));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(consumer));
     }
 
     /**
@@ -32,7 +32,7 @@ public class CustomDisposable {
      */
     public static <T> void addDisposable(Completable completable, Action action) {
         compositeDisposable.add(completable.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(action));
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(action));
     }
 }

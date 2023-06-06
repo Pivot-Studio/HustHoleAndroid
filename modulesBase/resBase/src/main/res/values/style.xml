@@ -12,8 +12,8 @@
         <item name="colorOnSecondary">@color/HH_OnSurface</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Customize your theme here. -->
-        <item name="android:forceDarkAllowed" tools:targetApi="q">true</item>
+
+<!--        <item name="android:forceDarkAllowed" tools:targetApi="q">true</item>-->
         <!--        <item name="colorOnSecondary">@color/white</item>-->
     </style>
 
@@ -52,7 +52,7 @@
         <item name="fontFamily">@font/noto_sans_regular</item>
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">@dimen/sp_18</item>
-        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:textColor">@color/HH_OnSurface</item>
         <item name="android:textFontWeight">700</item>
     </style>
 
@@ -66,7 +66,7 @@
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">@dimen/sp_15</item>
         <item name="android:textFontWeight">700</item>
-        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:textColor">@color/HH_OnSurface</item>
         <item name="android:lineSpacingExtra">0sp</item>
     </style>
 
@@ -80,7 +80,7 @@
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">@dimen/sp_13</item>
         <item name="android:textFontWeight">700</item>
-        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:textColor">@color/HH_OnSurface</item>
         <item name="android:lineSpacingExtra">0sp</item>
     </style>
 
@@ -88,7 +88,7 @@
         <item name="fontFamily">@font/noto_sans_regular</item>
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">@dimen/sp_11</item>
-        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:textColor">@color/HH_OnSurface</item>
         <item name="android:lineSpacingExtra">0sp</item>
     </style>
 
@@ -102,7 +102,7 @@
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textSize">@dimen/sp_13</item>
         <item name="android:textFontWeight">700</item>
-        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:textColor">@color/HH_OnSurface</item>
         <item name="android:lineSpacingExtra">-6sp</item>
     </style>
 
@@ -111,7 +111,7 @@
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textSize">@dimen/sp_15</item>
         <item name="android:textFontWeight">700</item>
-        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:textColor">@color/HH_OnSurface</item>
         <item name="android:lineSpacingExtra">-8sp</item>
     </style>
 
@@ -120,7 +120,7 @@
         <item name="android:fontFamily">@font/noto_sans_bold</item>
         <item name="android:textSize">@dimen/sp_18</item>
         <item name="android:textFontWeight">700</item>
-        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:textColor">@color/HH_OnSurface</item>
         <item name="android:lineSpacingExtra">-8sp</item>
     </style>
 
@@ -129,7 +129,7 @@
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">@dimen/sp_16</item>
         <item name="android:textFontWeight">700</item>
-        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:textColor">@color/HH_OnSurface</item>
         <item name="android:lineSpacingExtra">-8sp</item>
     </style>
 
@@ -138,6 +138,7 @@
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">@dimen/sp_14</item>
         <item name="android:textFontWeight">700</item>
+        <item name="android:textColor">@color/HH_OnSurface</item>
         <item name="android:lineSpacingExtra">-7sp</item>
     </style>
 
@@ -161,7 +162,7 @@
         <item name="fontFamily">@font/noto_sans_regular</item>
         <item name="android:fontFamily">@font/noto_sans_regular</item>
         <item name="android:textSize">@dimen/sp_14</item>
-        <item name="android:textColor">@color/GrayScale_20</item>
+        <item name="android:textColor">@color/HH_OnSurface</item>
         <item name="android:lineSpacingExtra">0sp</item>
     </style>
 
@@ -232,7 +233,7 @@
         <item name="android:paddingBottom">6dp</item>
         <item name="android:paddingStart">12dp</item>
         <item name="android:paddingEnd">12dp</item>
-        <item name="strokeColor">@color/GrayScale_80</item>
+        <item name="strokeColor">@color/HH_OnSurface</item>
         <item name="strokeWidth">1dp</item>
         <item name="iconSize">8dp</item>
         <item name="iconTint">@color/HH_BandColor_3</item>

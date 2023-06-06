@@ -12,7 +12,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-        buildConfigField("boolean","isRelease",String.valueOf(isRelease))
+        buildConfigField("boolean", "isRelease", String.valueOf(isRelease))
         javaCompileOptions {
             annotationProcessorOptions {
                 //指定数据库schema导出的位置
@@ -57,8 +57,8 @@ dependencies {
 
     api 'com.wang.avi:library:2.1.3'//中心旋转加载动画
 
-    api  'com.scwang.smart:refresh-layout-kernel:2.0.3'      //刷新框架
-    api  'com.scwang.smart:refresh-header-classics:2.0.3'
+    api 'com.scwang.smart:refresh-layout-kernel:2.0.3'      //刷新框架
+    api 'com.scwang.smart:refresh-header-classics:2.0.3'
 
     api 'com.githang:status-bar-compat:0.7'//经典刷新头
 
