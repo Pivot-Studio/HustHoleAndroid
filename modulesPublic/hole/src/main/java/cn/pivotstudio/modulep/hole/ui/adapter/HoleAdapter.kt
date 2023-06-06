@@ -148,7 +148,7 @@ fun setReplyToContent(
         view.text = " 该评论（or回复）已删除 "
         return
     } else {
-        val redSpan = ForegroundColorSpan(view.resources.getColor(R.color.GrayScale_0, null))
+        val redSpan = ForegroundColorSpan(view.resources.getColor(R.color.HH_OnSurface, null))
         val builder = SpannableStringBuilder("${relied.nickname} : ${relied.content}")
         //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
         builder.setSpan(
@@ -252,7 +252,7 @@ fun setInnerReplies(view: TextView, innerList: List<Reply>, position: Int = 0) {
             val builder = SpannableStringBuilder("$prefix ${it.content}")
             //ForegroundColorSpan 为文字前景色，BackgroundColorSpan为文字背景色
             builder.setSpan(
-                ForegroundColorSpan(view.resources.getColor(R.color.GrayScale_0, null)),
+                ForegroundColorSpan(view.resources.getColor(R.color.HH_OnSurface, null)),
                 0,
                 prefix.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
@@ -263,14 +263,14 @@ fun setInnerReplies(view: TextView, innerList: List<Reply>, position: Int = 0) {
             val prefix = "${it.nickname} 回复 @${it.replied!!.nickname}:"
             val builder = SpannableStringBuilder("$prefix ${it.content}")
             builder.setSpan(
-                ForegroundColorSpan(view.resources.getColor(R.color.GrayScale_0, null)),
+                ForegroundColorSpan(view.resources.getColor(R.color.HH_OnSurface, null)),
                 0,
                 it.nickname.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
 
             builder.setSpan(
-                ForegroundColorSpan(view.resources.getColor(R.color.GrayScale_0, null)),
+                ForegroundColorSpan(view.resources.getColor(R.color.HH_OnSurface, null)),
                 prefix.length - it.replied!!.nickname.length - 2,
                 prefix.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE

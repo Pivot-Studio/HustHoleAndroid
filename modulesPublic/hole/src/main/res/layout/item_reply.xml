@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_20"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+            android:textColor="@color/GrayScale_80"
             app:layout_constraintBottom_toBottomOf="@+id/tv_reply_title"
             app:layout_constraintStart_toEndOf="@+id/tv_reply_title"
             app:layout_constraintTop_toTopOf="@+id/tv_reply_title"
@@ -71,6 +72,7 @@
                 android:layout_marginVertical="@dimen/dp_4"
                 android:maxWidth="@dimen/dp_327"
                 android:textAppearance="@style/HustHoleTypography.Body3"
+                android:textColor="@color/GrayScale_50"
                 app:isMine="@{reply.mine}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -142,6 +144,7 @@
                 android:layout_marginBottom="@dimen/dp_13"
                 android:text="@{String.valueOf(reply.likeCount), default = `0`}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
+                android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_reply_thumbup" />
 
