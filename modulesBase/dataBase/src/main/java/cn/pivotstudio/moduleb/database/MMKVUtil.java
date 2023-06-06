@@ -2,8 +2,10 @@ package cn.pivotstudio.moduleb.database;
 
 import android.content.Context;
 import android.os.Parcelable;
+
 import com.google.gson.Gson;
 import com.tencent.mmkv.MMKV;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,7 +40,7 @@ public class MMKVUtil {
     /**
      * 写入基本数据类型缓存
      *
-     * @param key 键
+     * @param key    键
      * @param object 值
      */
     public void put(String key, Object object) {
@@ -163,7 +165,7 @@ public class MMKVUtil {
             if (mmkv.getString(name + i, null) != null) {
                 try {
                     list.add(
-                        (T) new Gson().fromJson(mmkv.getString(name + i, null), bean.getClass()));
+                            (T) new Gson().fromJson(mmkv.getString(name + i, null), bean.getClass()));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

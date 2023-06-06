@@ -95,15 +95,6 @@ fun setMDContent(
                     if (currentId == id) {
                         Toast.makeText(view.context, "你已经在这个树洞了", Toast.LENGTH_SHORT).show()
                     } else {
-                        /*
-                        ARouter.getInstance()
-                            .build("/hole/HoleActivity")
-                            .withInt(
-                                Constant.HOLE_ID,
-                                id.toInt()
-                            )
-                            .withBoolean(Constant.IF_OPEN_KEYBOARD, false)
-                            .navigation()*/
                         val action: NavDirections = if(naviType == "HoleToHole") {
                             SpecificHoleFragmentDirections.actionSpecificHoleFragmentSelf(id)
                         }else {

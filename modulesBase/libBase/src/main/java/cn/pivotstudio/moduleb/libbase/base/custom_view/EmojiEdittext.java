@@ -86,7 +86,7 @@ public class EmojiEdittext extends androidx.appcompat.widget.AppCompatEditText {
             TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.Emojicon);
             mEmojiIconSize = (int) a.getDimension(R.styleable.Emojicon_emojiSize, getTextSize());
             mEmojiIconAlignment =
-                a.getInt(R.styleable.Emojicon_emojiAlignment, DynamicDrawableSpan.ALIGN_BASELINE);
+                    a.getInt(R.styleable.Emojicon_emojiAlignment, DynamicDrawableSpan.ALIGN_BASELINE);
             mUseSystemDefault = a.getBoolean(R.styleable.Emojicon_emojiUseSystemDefault, false);
             a.recycle();
         }

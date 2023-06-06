@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  * @author:
  */
 public abstract class BaseRecyclerViewAdapter<T, VH extends RecyclerView.ViewHolder>
-    extends RecyclerView.Adapter<VH> {
+        extends RecyclerView.Adapter<VH> {
     public List<T> mDataList;
     public Context mContext;
 

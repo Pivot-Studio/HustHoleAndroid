@@ -2,6 +2,7 @@ package cn.pivotstudio.modulec.loginandregister.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.DataBindingUtil
@@ -30,6 +31,8 @@ class LARActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_lar)
         mmkvUtil = MMKVUtil.getMMKV(this)
+        checkNightMode()
+        checkHasTokenAlready()
 
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -69,6 +72,28 @@ class LARActivity : AppCompatActivity() {
                     .navigation()
                 finish()
             }
+        }
+    }
+
+    private fun checkHasTokenAlready() {
+        if (mmkvUtil.getBoolean(Constant.IS_LOGIN)) {
+            if (BuildConfig.isRelease) {
+                ARouter.getInstance().build("/homeScreen/HomeScreenActivity")
+                    .navigation()
+                finish()
+            }
+        }
+    }
+
+    private fun checkNightMode() {
+        when (mmkvUtil.getInt(Constant.IS_DARK_MODE)) {
+            0 -> AppCompatDelegate.setDefaultNightMode(
+                AppCompatDelegate.MODE_NIGHT_YES
+            )
+
+            1 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            2 -> AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            else -> {}
         }
     }
 

@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
-        android:background="@color/GrayScale_100">
+        android:background="@color/HH_Surface">
 
         <ImageView
             android:id="@+id/iv_publishholeforestype_icon"
@@ -24,7 +24,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_18"
             android:textAppearance="@style/HustHoleTypography.Headline6"
-            android:textColor="@color/GrayScale_0"
             android:textSize="@dimen/sp_14"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_publishholeforestype_icon"

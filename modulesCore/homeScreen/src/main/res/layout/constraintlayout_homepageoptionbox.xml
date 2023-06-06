@@ -40,7 +40,6 @@
             android:layout_marginStart="@dimen/dp_21"
             android:text="@string/page1fragment_2"
             android:textAppearance="@style/HustHoleTypography.Headline3"
-            android:textColor="@color/GrayScale_20"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

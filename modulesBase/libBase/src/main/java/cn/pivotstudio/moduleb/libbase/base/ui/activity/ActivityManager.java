@@ -1,6 +1,7 @@
 package cn.pivotstudio.moduleb.libbase.base.ui.activity;
 
 import android.app.Activity;
+
 import java.util.ArrayList;
 import java.util.List;
 

@@ -15,8 +15,7 @@
             android:layout_marginHorizontal="@dimen/dp_5"
             android:layout_marginTop="@dimen/dp_5"
             android:text="@{type, default = 1037}"
-            android:textColor="@color/GrayScale_20"
-            android:textAppearance="@style/HustHoleTypography.Headline2.Bold"/>
+            android:textAppearance="@style/HustHoleTypography.Headline2.Bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/item_recycler_view"

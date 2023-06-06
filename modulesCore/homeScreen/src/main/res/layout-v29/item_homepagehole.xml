@@ -91,7 +91,6 @@
             android:maxLines="5"
             android:text="@{homePageHole.content}"
             android:textAppearance="@style/HustHoleTypography.Body2"
-            android:forceDarkAllowed="true"
             app:layout_constraintStart_toStartOf="@+id/tv_item_homepage_time"
             app:layout_constraintTop_toBottomOf="@+id/tv_item_homepage_time"
             tools:text="@string/default_string_zh_long" />

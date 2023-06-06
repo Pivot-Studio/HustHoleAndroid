@@ -21,7 +21,7 @@
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
+                android:background="@color/HH_BandColor_1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:titleTextAppearance="@style/HustHoleTypography.Headline1.Bold"
                 app:titleTextColor="?attr/colorOnPrimary"
@@ -34,7 +34,7 @@
                 android:layout_height="0dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/home_screen_toolbar"
-                app:navGraph="@navigation/nav_graph" />
+                app:navGraph="@navigation/home_nav_graph" />
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:id="@+id/layout_bottom_bar"

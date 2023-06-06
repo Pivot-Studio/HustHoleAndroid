@@ -1,11 +1,13 @@
 package cn.pivotstudio.moduleb.database;
 
 import android.content.Context;
+
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
 import cn.pivotstudio.moduleb.database.bean.Hole;
 import cn.pivotstudio.moduleb.database.dao.HoleDao;
 
@@ -16,19 +18,19 @@ import cn.pivotstudio.moduleb.database.dao.HoleDao;
  * @version:1.0
  * @author:
  */
-@Database(entities = { Hole.class }, version = 2, exportSchema = false)
+@Database(entities = {Hole.class}, version = 2, exportSchema = false)
 public abstract class HustHoleRoomDatabase extends RoomDatabase {
 
     static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE `hole` "
-                + "(uid INTEGER NOT NULL, "
-                + "content TEXT, "
-                + "alias TEXT, "
-                + "is_mine BOOLEAN, "
-                + "reply_local_id INTEGER NOT NULL, "
-                + "PRIMARY KEY(`uid`))");
+                    + "(uid INTEGER NOT NULL, "
+                    + "content TEXT, "
+                    + "alias TEXT, "
+                    + "is_mine BOOLEAN, "
+                    + "reply_local_id INTEGER NOT NULL, "
+                    + "PRIMARY KEY(`uid`))");
         }
     };
     private static final String DATABASE_NAME = "hust_hole";
@@ -42,8 +44,8 @@ public abstract class HustHoleRoomDatabase extends RoomDatabase {
             synchronized (HustHoleRoomDatabase.class) {
                 if (mInstance == null) {
                     mInstance =
-                        Room.databaseBuilder(context.getApplicationContext(), HustHoleRoomDatabase.class,
-                            DATABASE_NAME).addMigrations(MIGRATION_1_2).build();
+                            Room.databaseBuilder(context.getApplicationContext(), HustHoleRoomDatabase.class,
+                                    DATABASE_NAME).addMigrations(MIGRATION_1_2).build();
                 }
             }
         }

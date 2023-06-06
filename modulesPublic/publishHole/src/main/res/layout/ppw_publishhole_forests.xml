@@ -41,7 +41,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/publishhole_popupwindow_1"
                 android:textAppearance="@style/HustHoleTypography.Headline1"
-                android:textColor="@color/GrayScale_0"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +58,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_50"
-            android:background="@color/GrayScale_100"
+            android:background="@color/HH_OnBackground"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -81,7 +80,7 @@
                 android:layout_marginStart="20dp"
                 android:text="不选择任何小树林"
                 android:textAppearance="@style/HustHoleTypography.Headline5"
-                android:textColor="@color/GrayScale_20"
+                android:textColor="@color/HH_OnSurface"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_publishholeforests_icon"
                 app:layout_constraintTop_toTopOf="parent" />

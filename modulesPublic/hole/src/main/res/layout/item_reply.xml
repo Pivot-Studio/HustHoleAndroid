@@ -4,10 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
+
         <variable
             name="type"
             type="String" />
+
         <variable
             name="reply"
             type="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
@@ -27,7 +30,6 @@
             android:layout_marginStart="@dimen/dp_20"
             android:layout_marginTop="@dimen/dp_12"
             android:textAppearance="@style/HustHoleTypography.Headline3"
-            android:textColor="@color/GrayScale_20"
             app:aliasName="@{reply.nickname}"
             app:aliasNameOwner="@{reply.mine}"
             app:layout_constraintStart_toStartOf="parent"
@@ -40,12 +42,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/dp_20"
             android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
-            android:textColor="@color/GrayScale_80"
-            app:time="@{reply.createAt}"
-            app:timeSign="@{false}"
             app:layout_constraintBottom_toBottomOf="@+id/tv_reply_title"
             app:layout_constraintStart_toEndOf="@+id/tv_reply_title"
             app:layout_constraintTop_toTopOf="@+id/tv_reply_title"
+            app:time="@{reply.createAt}"
+            app:timeSign="@{false}"
             tools:text="1920  2020-09-16" />
 
 
@@ -56,8 +57,8 @@
             android:layout_marginHorizontal="@dimen/dp_22"
             android:layout_marginTop="@dimen/dp_6"
             android:background="@drawable/reply_gray"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_reply_title"
             app:replyContentShow="@{reply.replyToInner}">
 
@@ -70,7 +71,6 @@
                 android:layout_marginVertical="@dimen/dp_4"
                 android:maxWidth="@dimen/dp_327"
                 android:textAppearance="@style/HustHoleTypography.Body3"
-                android:textColor="@color/GrayScale_50"
                 app:isMine="@{reply.mine}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -97,12 +97,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/dp_10"
                 android:textAppearance="@style/HustHoleTypography.Body2"
-                android:textColor="@color/GrayScale_20"
+                app:currentId="@{reply.holeId}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:markDownContent="@{reply.content}"
-                app:currentId="@{reply.holeId}"
                 app:naviType="@{type}"
                 tools:text="@string/default_string_zh_long" />
 
@@ -143,7 +142,6 @@
                 android:layout_marginBottom="@dimen/dp_13"
                 android:text="@{String.valueOf(reply.likeCount), default = `0`}"
                 android:textAppearance="@style/HustHoleTypography.Headline4.Bold"
-                android:textColor="@color/GrayScale_70"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_reply_thumbup" />
 
@@ -189,7 +187,6 @@
                 android:layout_marginStart="15dp"
                 android:text="@{reply.mine?`删除`:`举报`}"
                 android:textAppearance="@style/HustHoleTypography.Button2"
-                android:textColor="@color/GrayScale_20"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_reply_moreicon"
                 app:layout_constraintTop_toTopOf="parent" />
