@@ -20,6 +20,7 @@ import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.custom_view.HomePageOptionBox
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomepageBinding
+import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import java.util.Objects
@@ -92,6 +93,7 @@ class HomePageFragment : BaseFragment() {
                     return HomeHoleFragment.newInstance(bundle)
                 }
             }
+            vpHomescreenHole.isUserInputEnabled = false
             TabLayoutMediator(tbMode, vpHomescreenHole) { tab, position ->
                 val tabView = if (position != 0) {
                     LayoutInflater.from(context).inflate(R.layout.tab_mine, tbMode, false)
