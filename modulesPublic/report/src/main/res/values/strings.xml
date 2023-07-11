@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="report">确认举报</string>
     <string name="report_BloodyViolence">血腥暴力</string>
     <string name="report_CopyrightViolations">涉嫌侵权</string>
     <string name="report_Illegal">违法违禁</string>

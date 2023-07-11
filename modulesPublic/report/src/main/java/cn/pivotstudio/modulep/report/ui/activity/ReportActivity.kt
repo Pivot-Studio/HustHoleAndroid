@@ -4,6 +4,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.MaterialTheme
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -11,7 +17,6 @@ import cn.pivotstudio.husthole.moduleb.network.ApiResult
 import cn.pivotstudio.husthole.moduleb.network.model.ReportType
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
 import cn.pivotstudio.moduleb.libbase.util.ui.SoftKeyBoardUtil
 import cn.pivotstudio.modulep.report.BuildConfig
 import cn.pivotstudio.modulep.report.R
@@ -57,15 +62,40 @@ class ReportActivity : BaseActivity() {
     private fun initView() {
         StatusBarCompat.setStatusBarColor(this, resources.getColor(R.color.HH_BandColor_1, null), true)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_report)
+
+        binding.composeBtnReport.apply {
+            setViewCompositionStrategy(
+                ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed
+            )
+            setContent {
+                MaterialTheme {
+                    ReportButton(
+                        text = stringResource(id = R.string.report),
+                        onClick = {
+                            if (reportType != null) {
+                                mViewModel.report(
+                                    holeId,
+                                    binding.etReport.text.toString(),
+                                    replyId,
+                                    reportType!!
+                                )
+                            } else {
+                                showMsg("您还未选择举报类型")
+                            }
+                            SoftKeyBoardUtil.hideKeyboard(this@ReportActivity)
+                        },
+                        modifier = Modifier
+                            .size(width = 256.dp, height = 48.dp),
+                    )
+                }
+            }
+        }
+
         binding.tvReportHoleid.text = "#$holeId"
         binding.tvAlias.text = alias
         binding.tvTitlebargreenTitle.text = "举报"
         binding.titlebargreenAVLoadingIndicatorView.hide()
         binding.titlebargreenAVLoadingIndicatorView.visibility = View.GONE
-        EditTextUtil.ButtonReaction(
-            binding.etReport,
-            binding.btnReport
-        )
 
         mViewModel.apply {
             lifecycleScope.launchWhenStarted {
@@ -90,19 +120,6 @@ class ReportActivity : BaseActivity() {
 
     fun onClick(view: View) {
         when (view.id) {
-            R.id.btn_report -> {
-                if (reportType != null) {
-                    mViewModel.report(
-                        holeId,
-                        binding.etReport.text.toString(),
-                        replyId,
-                        reportType!!
-                    )
-                } else {
-                    showMsg("您还未选择举报类型")
-                }
-                SoftKeyBoardUtil.hideKeyboard(this)
-            }
             R.id.cl_titlebargreen_back -> {
                 if (BuildConfig.isRelease) {
                     SoftKeyBoardUtil.hideKeyboard(this)
