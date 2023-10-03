@@ -11,6 +11,7 @@ buildscript {
         navigation_version = '2.5.1'
         room_version = '2.4.2'
         material_version = '1.6.1'
+        material3_version = '1.1.2'
         coroutines = '1.6.4'
         constraintlayout_version = '2.1.2'
         paging_version = '3.1.1'
@@ -26,7 +27,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.1'
+        classpath 'com.android.tools.build:gradle:8.1.1'
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.42'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"

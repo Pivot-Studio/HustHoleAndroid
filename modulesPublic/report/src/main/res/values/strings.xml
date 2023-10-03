@@ -13,4 +13,6 @@
 
     <string name="report_successful">举报成功，感谢您对社区维护的贡献</string>
     <string name="report_failed">举报失败, 原因: %s</string>
+    <string name="report_content_hint">请详细描述你遇到的问题</string>
+    <string name="report_target">举报%s的%s涉及</string>
 </resources>

@@ -269,8 +269,8 @@ class ItemMineFragment : Fragment() {
 
     companion object {
         const val TAG = "ItemMineFragment"
-        const val DARK = 0
+        const val DARK = 2
         const val LIGHT = 1
-        const val FOLLOW_SYSTEM = 2
+        const val FOLLOW_SYSTEM = 0
     }
 }

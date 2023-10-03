@@ -572,4 +572,17 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
             }
         }
     }
+
+    override fun onResume() {
+        (activity as HomeScreenActivity).setOnBottomBarItemReselectedListener {
+            autoRefreshAndScrollToTop()
+        }
+        super.onResume()
+    }
+
+    override fun onStop() {
+        // 解决底部按键冲突问题
+        (activity as HomeScreenActivity).setOnBottomBarItemReselectedListener(null)
+        super.onStop()
+    }
 }

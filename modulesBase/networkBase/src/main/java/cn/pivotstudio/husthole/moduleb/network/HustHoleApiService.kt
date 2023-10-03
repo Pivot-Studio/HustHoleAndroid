@@ -18,7 +18,7 @@ import retrofit2.http.*
 import java.util.concurrent.TimeUnit
 
 
-private const val BASE_URL = "https://husthole.com/api/"
+private const val BASE_URL = "https://hole.hust.app/api/"
 
 object HustHoleApi {
     lateinit var retrofitService: HustHoleApiService

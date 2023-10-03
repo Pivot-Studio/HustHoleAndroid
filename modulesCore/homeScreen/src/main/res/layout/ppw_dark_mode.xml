@@ -30,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:contentDescription="@string/change_dark"
-                android:src="@{mode == 0 ? @drawable/ic_dark_click : @drawable/ic_dark}"
+                android:src="@{mode == 2 ? @drawable/ic_dark_click : @drawable/ic_dark}"
                 tools:src="@drawable/ic_dark" />
 
             <TextView
@@ -40,7 +40,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/dp_8"
                 android:text="@string/dark_mode"
-                android:textColor="@{mode == 0 ? @color/HH_Reminder_Link : @color/GrayScale_20}"/>
+                android:textColor="@{mode == 2 ? @color/HH_Reminder_Link : @color/GrayScale_20}"/>
 
         </RelativeLayout>
 
@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:contentDescription="@string/change_follow_system"
-                android:src="@{mode == 2 ? @drawable/ic_follow_system_click : @drawable/ic_follow_system}"
+                android:src="@{mode == 0 ? @drawable/ic_follow_system_click : @drawable/ic_follow_system}"
                 tools:src="@drawable/ic_follow_system" />
 
             <TextView
@@ -98,7 +98,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/dp_8"
                 android:text="@string/follow_mode"
-                android:textColor="@{mode == 2 ? @color/HH_Reminder_Link : @color/GrayScale_20}"/>
+                android:textColor="@{mode == 0 ? @color/HH_Reminder_Link : @color/GrayScale_20}"/>
         </RelativeLayout>
 
 
