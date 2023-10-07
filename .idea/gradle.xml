@@ -19,7 +19,6 @@
             <option value="$PROJECT_DIR$/modulesBase/resBase" />
             <option value="$PROJECT_DIR$/modulesCore" />
             <option value="$PROJECT_DIR$/modulesCore/homeScreen" />
-            <option value="$PROJECT_DIR$/modulesCore/loginAndRegister" />
             <option value="$PROJECT_DIR$/modulesPublic" />
             <option value="$PROJECT_DIR$/modulesPublic/hole" />
             <option value="$PROJECT_DIR$/modulesPublic/publishHole" />

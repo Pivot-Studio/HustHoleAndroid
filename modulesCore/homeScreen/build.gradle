@@ -52,7 +52,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                 'proguard-rules.pro'
         }
@@ -66,8 +66,10 @@ android {
 
 dependencies {
     implementation project(':modulesBase:libBase')
+    implementation project(':modulesBase:dataBase')
     implementation project(':modulesBase:networkBase')
     implementation project(':modulesBase:resBase')
+
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"

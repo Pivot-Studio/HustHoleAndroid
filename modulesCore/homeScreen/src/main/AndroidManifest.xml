@@ -9,6 +9,14 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
         <service android:name=".network.ApkDownload" />
+
+        <activity
+            android:name="cn.pivotstudio.modulec.homescreen.ui.activity.LARActivity"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:theme="@style/LARTheme.Base"
+            android:screenOrientation="portrait"/>
+
     </application>
 
 </manifest>

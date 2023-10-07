@@ -3,7 +3,7 @@ package cn.pivotstudio.husthole
 import android.content.Intent
 import android.os.Bundle
 import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
-import cn.pivotstudio.modulec.loginandregister.ui.activity.LARActivity
+import cn.pivotstudio.modulec.homescreen.ui.activity.LARActivity
 
 class StartActivity : BaseActivity() {
 

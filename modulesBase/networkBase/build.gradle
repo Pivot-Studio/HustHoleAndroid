@@ -23,7 +23,7 @@ android {
         release {
             buildConfigField "String", "VERSION_NAME", "\"1.0\""
             buildConfigField "int", "VERSION_CODE", "1"
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                 'proguard-rules.pro'
         }
