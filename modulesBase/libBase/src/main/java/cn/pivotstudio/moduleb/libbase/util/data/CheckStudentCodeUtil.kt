@@ -9,7 +9,7 @@ object CheckStudentCodeUtil {
             if (code.length != 10) return false
 
             // 学号开头不能是数字 V2登录不能是小写
-            if (code.first().isDigit() || code.first().isLowerCase()) return false
+            if (code.first().isDigit()) return false
 
             // 学号除了开头只能是数字
             code.substring(1).forEach {

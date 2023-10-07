@@ -4,7 +4,10 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         jcenter() // Warning: this repository is going to shut down soon
-        maven { url 'https://jitpack.io' }
+        maven {
+            url 'https://jitpack.io'
+        }
+
     }
 }
 
@@ -14,7 +17,6 @@ include ':modulesBase:libBase'
 include ':modulesCore:homeScreen'
 
 
-include ':modulesCore:loginAndRegister'
 include ':modulesBase:networkBase'
 
 include ':modulesBase:resBase'

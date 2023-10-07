@@ -54,7 +54,7 @@ android {
 dependencies {
     implementation project(':modulesBase:libBase')
     implementation project(':modulesBase:dataBase')
-    implementation project(':modulesCore:loginAndRegister')
+//    implementation project(':modulesCore:loginAndRegister')
     implementation project(':modulesCore:homeScreen')
     implementation project(':modulesPublic:publishHole')
     implementation project(':modulesPublic:hole')

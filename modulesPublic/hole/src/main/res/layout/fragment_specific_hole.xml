@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/dp_22"
                 android:layout_marginBottom="@dimen/dp_20"
-                android:backgroundTint="@color/GrayScale_100"
+                android:backgroundTint="@color/HH_Surface"
                 android:onClick="@{() -> viewModel.filterHoleOfOwner()}"
                 android:text="@string/hole_filter_owner"
                 android:textAppearance="@style/HustHoleTypography.Button3"
@@ -171,13 +171,14 @@
                 android:onClick="onClick"
                 android:paddingVertical="@dimen/dp_5"
                 android:paddingStart="@dimen/dp_10"
-                android:textColor="@color/GrayScale_0"
-                android:textColorHint="@color/GrayScale_70"
+                android:textColor="@color/HH_Common_Letter"
+                android:textColorHint="@color/HH_Common_Letter"
                 android:textSize="@dimen/sp_14"
                 app:hintText="@{viewModel.commentToReply}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="@string/hust_hole_1037_zh"/>
 
             <ImageView
                 android:id="@+id/iv_open_emoji"

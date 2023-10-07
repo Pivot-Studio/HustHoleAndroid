@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <color name="Title_GrayScale_20">#FFFFFF</color>
-    <color name="Background_GrayScale_100">#000000</color>
-    <color name="Button_GrayScale_100">#DDDDDD</color>
-
-</resources>

@@ -238,4 +238,13 @@
         <item name="iconSize">8dp</item>
         <item name="iconTint">@color/HH_BandColor_3</item>
     </style>
+
+    <style name="LARTheme.Base" parent="@style/Theme.Base">
+        <item name="android:statusBarColor">@color/translucent</item>
+    </style>
+
+    <style name="spCheckBox" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:button">@drawable/checkbox</item>
+        <item name="android:text">@string/display_password</item>
+    </style>
 </resources>
