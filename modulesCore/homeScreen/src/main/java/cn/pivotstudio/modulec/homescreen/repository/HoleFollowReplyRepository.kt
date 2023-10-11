@@ -1,16 +1,14 @@
 package cn.pivotstudio.modulec.homescreen.repository
 
-import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.husthole.moduleb.network.model.Reply
-import cn.pivotstudio.husthole.moduleb.network.util.DateUtil
-import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant.CONSTANT_STANDARD_LOAD_SIZE
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
+import cn.pivotstudio.moduleb.rebase.network.ApiResult
+import cn.pivotstudio.moduleb.rebase.network.HustHoleApi
+import cn.pivotstudio.moduleb.rebase.network.HustHoleApiService
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.model.RequestBody
+
+import cn.pivotstudio.moduleb.rebase.network.util.DateUtil
+import cn.pivotstudio.moduleb.rebase.network.util.NetworkConstant.CONSTANT_STANDARD_LOAD_SIZE
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -55,7 +53,7 @@ class HoleFollowReplyRepository {
         it.printStackTrace()
     }
 
-    fun getMyReply(): Flow<List<Reply>> = flow {
+    fun getMyReply(): Flow<List<RequestBody.Reply>> = flow {
         emit(
             hustHoleApiService.getMyReply(refreshTimestamp())
         )
@@ -90,7 +88,7 @@ class HoleFollowReplyRepository {
         e.printStackTrace()
     }
 
-    fun loadMoreReply(): Flow<List<Reply>> = flow {
+    fun loadMoreReply(): Flow<List<RequestBody.Reply>> = flow {
         replyOffset += CONSTANT_STANDARD_LOAD_SIZE
         emit(
             hustHoleApiService.getMyReply(

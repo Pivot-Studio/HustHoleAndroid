@@ -21,10 +21,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import cn.pivotstudio.moduleb.database.MMKVUtil
-import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.rebase.database.MMKVUtil
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
-import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.dialog.UpdateDialog
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentMineRecycleviewBinding
 import cn.pivotstudio.modulec.homescreen.databinding.PpwDarkModeBinding
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity

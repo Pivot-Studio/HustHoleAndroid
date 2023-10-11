@@ -12,16 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication;
-import cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext;
-import cn.pivotstudio.moduleb.libbase.base.ui.adapter.BaseRecyclerViewAdapter;
-import cn.pivotstudio.moduleb.libbase.util.emoji.EmotionUtil;
+import cn.pivotstudio.moduleb.rebase.lib.base.app.BaseApplication;
+import cn.pivotstudio.moduleb.rebase.lib.base.custom_view.EmojiEdittext;
+import cn.pivotstudio.moduleb.rebase.lib.base.ui.adapter.BaseRecyclerViewAdapter;
+import cn.pivotstudio.moduleb.rebase.lib.util.emoji.EmotionUtil;
 
 
 import java.util.LinkedList;
 import java.util.List;
 
-import cn.pivotstudio.moduleb.libbase.util.emoji.SpanStringUtil;
+import cn.pivotstudio.moduleb.rebase.lib.util.emoji.SpanStringUtil;
 import cn.pivotstudio.modulep.hole.R;
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity;
 import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel;

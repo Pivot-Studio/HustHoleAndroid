@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.husthole.moduleb.network.model.ReplyNotice
+import cn.pivotstudio.moduleb.rebase.network.model.ReplyNotice
 import cn.pivotstudio.modulec.homescreen.databinding.ItemNoticeBinding
 import cn.pivotstudio.modulec.homescreen.ui.fragment.NoticeFragment
 

@@ -21,18 +21,14 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import cn.pivotstudio.moduleb.database.MMKVUtil
-import cn.pivotstudio.moduleb.libbase.constant.Constant
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.*
-import cn.pivotstudio.modulec.homescreen.oldversion.model.CheckingToken
 import cn.pivotstudio.modulec.homescreen.oldversion.model.EditTextReaction
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.ABOUT
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.COMMUNITY_NORM
 import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.EVALUATION_AND_SUGGESTIONS
-import cn.pivotstudio.modulec.homescreen.viewmodel.MineFragmentViewModel.Companion.SHARE
 import com.google.android.material.tabs.TabLayoutMediator
 
 /**

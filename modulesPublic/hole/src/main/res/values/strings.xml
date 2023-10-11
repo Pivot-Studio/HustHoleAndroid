@@ -3,4 +3,25 @@
     <string name="hole_id"># %s</string>
     <string name="hole_sending_successfully">发送成功</string>
     <string name="hole_filter_owner">只看洞主</string>
+
+    <string name="publish_hole_successfully" translatable="false">发布成功！正在提交审核</string>
+    <string name="publish_hole_fifteen_words_at_least" translatable="false">输入内容至少需要15字</string>
+    <string name="publish_hole_choose_a_forest_first" translatable="false">你还未选择小树林\n无法发布哦～</string>
+    <string name="publish_hole_sensitive_word">输入内容包含敏感词</string>
+
+    <string name="report">确认举报</string>
+    <string name="report_BloodyViolence">血腥暴力</string>
+    <string name="report_CopyrightViolations">涉嫌侵权</string>
+    <string name="report_Illegal">违法违禁</string>
+    <string name="report_Other">其他行为</string>
+    <string name="report_PersonalAttack">人身攻击</string>
+    <string name="report_PlaceAd">发布广告</string>
+    <string name="report_Pron">涉黄信息</string>
+    <string name="report_ScamGambling">诈骗赌博</string>
+    <string name="report_Troll">钓鱼引战</string>
+
+    <string name="report_successful">举报成功，感谢您对社区维护的贡献</string>
+    <string name="report_failed">举报失败, 原因: %s</string>
+    <string name="report_content_hint">请详细描述你遇到的问题</string>
+    <string name="report_target">举报%s的%s涉及</string>
 </resources>

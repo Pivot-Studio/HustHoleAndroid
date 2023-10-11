@@ -5,13 +5,13 @@
 
     <data>
 
-        <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
+        <import type="cn.pivotstudio.moduleb.rebase.lib.util.data.TimeUtil" />
 
         <import type="android.view.View" />
 
         <variable
             name="homePageHole"
-            type="cn.pivotstudio.husthole.moduleb.network.model.HoleV2" />
+            type="cn.pivotstudio.moduleb.rebase.network.model.HoleV2" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

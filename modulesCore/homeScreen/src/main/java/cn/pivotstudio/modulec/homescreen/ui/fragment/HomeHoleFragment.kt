@@ -21,20 +21,20 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.husthole.moduleb.network.ApiStatus
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
-import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
-import cn.pivotstudio.moduleb.libbase.util.store.IDeviceWriter
+import cn.pivotstudio.moduleb.rebase.network.ApiStatus
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.util.NetworkConstant
+import cn.pivotstudio.moduleb.rebase.lib.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
+import cn.pivotstudio.moduleb.rebase.lib.constant.ResultCodeConstant
+import cn.pivotstudio.moduleb.rebase.lib.util.store.IDeviceWriter
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
-import cn.pivotstudio.modulec.homescreen.custom_view.HomePageOptionBox
-import cn.pivotstudio.modulec.homescreen.custom_view.PicGenerator
-import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
-import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
-import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.HomePageOptionBox
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.PicGenerator
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.dialog.DeleteDialog
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.refresh.StandardRefreshFooter
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentHomeHoleBinding
 import cn.pivotstudio.modulec.homescreen.databinding.HoleShareCardBinding
 import cn.pivotstudio.modulec.homescreen.databinding.PpwBottomShareBinding
@@ -350,7 +350,7 @@ class HomeHoleFragment : BaseFragment(), PicGenerator {
 
     // 举报树洞交给举报界面处理
     fun reportTheHole(hole: HoleV2) {
-        ARouter.getInstance().build("/report/ReportActivity")
+        ARouter.getInstance().build("/hole/ReportActivity")
             .withString(Constant.HOLE_ID, hole.holeId)
             .withString(Constant.ALIAS, "洞主")
             .navigation()

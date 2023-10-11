@@ -5,11 +5,11 @@
 
     <data>
 
-        <import type="cn.pivotstudio.moduleb.libbase.util.data.TimeUtil" />
+        <import type="cn.pivotstudio.moduleb.rebase.lib.util.data.TimeUtil" />
 
         <variable
             name="reply"
-            type="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
+            type="cn.pivotstudio.moduleb.rebase.network.model.Reply" />
     </data>
 
     <RelativeLayout

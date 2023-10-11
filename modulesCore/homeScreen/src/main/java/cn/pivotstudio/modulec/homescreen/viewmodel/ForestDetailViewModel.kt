@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.ApiResult
+import cn.pivotstudio.moduleb.rebase.network.model.ForestBrief
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailRepository
 import kotlinx.coroutines.delay

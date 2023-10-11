@@ -2,10 +2,10 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import androidx.core.text.isDigitsOnly
 import androidx.lifecycle.*
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.ApiStatus
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
+import cn.pivotstudio.moduleb.rebase.network.ApiResult
+import cn.pivotstudio.moduleb.rebase.network.ApiStatus
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.util.NetworkConstant
 import cn.pivotstudio.modulec.homescreen.repository.HomePageHoleRepository
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.*

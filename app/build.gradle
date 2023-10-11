@@ -14,7 +14,6 @@ android {
         applicationId "cn.pivotstudio.husthole"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         buildConfigField("boolean", "isRelease", String.valueOf(isRelease))
-        //保证isRelease能在中java代码被读取到
 
         javaCompileOptions {
             //Arouter提供服务
@@ -31,14 +30,14 @@ android {
     buildTypes {
 
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                'proguard-rules.pro'
+                    'proguard-rules.pro'
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
     }
     //MVVM
     dataBinding {
@@ -52,37 +51,18 @@ android {
 }
 
 dependencies {
-    implementation project(':modulesBase:libBase')
-    implementation project(':modulesBase:dataBase')
-//    implementation project(':modulesCore:loginAndRegister')
+    implementation project(':modulesBase:resBase')
     implementation project(':modulesCore:homeScreen')
-    implementation project(':modulesPublic:publishHole')
     implementation project(':modulesPublic:hole')
-    implementation project(':modulesPublic:report')
-    //okhttp网络请求
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:$okhttp_version"))
-    // define a BOM and its version
-    implementation("com.squareup.okhttp3:okhttp")
-    // define any required OkHttp artifacts without version
-    implementation("com.squareup.okhttp3:logging-interceptor")
-    //retrofit网络请求
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    //smartrefreshlayout刷新框架
+
     implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3' //核心必须依赖
     implementation 'com.scwang.smart:refresh-header-classics:2.0.3'
 
-    // Navigation
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
     kapt 'com.github.bumptech.glide:compiler:4.13.2'
 
     //初始配置
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
-    implementation "androidx.room:room-paging:$room_version"
-    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 }

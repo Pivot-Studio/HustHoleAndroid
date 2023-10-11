@@ -1,10 +1,10 @@
 package cn.pivotstudio.modulec.homescreen.repository
 
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApi
-import cn.pivotstudio.husthole.moduleb.network.HustHoleApiService
-import cn.pivotstudio.husthole.moduleb.network.model.RequestBody
-import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.rebase.network.ApiResult
+import cn.pivotstudio.moduleb.rebase.network.HustHoleApi
+import cn.pivotstudio.moduleb.rebase.network.HustHoleApiService
+import cn.pivotstudio.moduleb.rebase.network.model.RequestBody
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*

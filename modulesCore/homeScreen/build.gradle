@@ -52,28 +52,26 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                 'proguard-rules.pro'
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
     }
     namespace 'cn.pivotstudio.modulec.homescreen'
 }
 
 dependencies {
-    implementation project(':modulesBase:libBase')
-    implementation project(':modulesBase:dataBase')
-    implementation project(':modulesBase:networkBase')
     implementation project(':modulesBase:resBase')
+    implementation project(':modulesPublic:hole')
 
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "com.google.android.material:material:$material_version"
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
-    implementation 'androidx.work:work-runtime-ktx:2.8.1'
+    implementation "androidx.work:work-runtime-ktx:$work_version"
 
     kapt "com.alibaba:arouter-compiler:$ARouter_version"
 

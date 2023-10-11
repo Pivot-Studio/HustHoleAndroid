@@ -2,7 +2,7 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.model.ReplyNotice
+import cn.pivotstudio.moduleb.rebase.network.model.ReplyNotice
 import cn.pivotstudio.modulec.homescreen.repository.NoticeRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

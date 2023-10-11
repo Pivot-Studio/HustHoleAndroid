@@ -5,35 +5,24 @@ import android.os.Bundle
 import android.view.KeyEvent
 import android.view.MenuItem
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.lib.base.ui.activity.BaseActivity
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
+import cn.pivotstudio.moduleb.rebase.lib.constant.ResultCodeConstant
 import cn.pivotstudio.modulep.hole.R
 import cn.pivotstudio.modulep.hole.databinding.ActivityHoleBinding
-import cn.pivotstudio.modulep.hole.viewmodel.HoleViewModel
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.githang.statusbar.StatusBarCompat
 
-/**
- * @classname:HoleActivity
- * @description:
- * @date:2022/5/8 13:24
- * @version:1.0
- * @author:
- */
 @Route(path = "/hole/HoleActivity")
 class HoleActivity : BaseActivity() {
     @JvmField

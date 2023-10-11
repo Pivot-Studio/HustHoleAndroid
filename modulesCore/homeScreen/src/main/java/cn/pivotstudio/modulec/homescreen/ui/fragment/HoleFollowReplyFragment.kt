@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.rebase.lib.base.ui.fragment.BaseFragment
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityHoleStarBinding
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity

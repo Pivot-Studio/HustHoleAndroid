@@ -13,17 +13,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "HustHole"
 include ':app'
-include ':modulesBase:libBase'
 include ':modulesCore:homeScreen'
-
-
-include ':modulesBase:networkBase'
-
 include ':modulesBase:resBase'
-include ':modulesBase:dataBase'
-
-
 include ':modulesPublic:hole'
-include ':modulesPublic:publishHole'
-
-include ':modulesPublic:report'

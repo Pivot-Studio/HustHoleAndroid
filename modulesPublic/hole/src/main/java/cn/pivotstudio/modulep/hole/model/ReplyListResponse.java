@@ -6,14 +6,6 @@ import androidx.databinding.Bindable;
 import java.util.List;
 
 import cn.pivotstudio.modulep.hole.BR;
-
-/**
- * @classname:CommentListResponse
- * @description:
- * @date:2022/5/8 13:35
- * @version:1.0
- * @author:
- */
 public class ReplyListResponse {
     List<ReplyResponse> msg;
     private String mode;

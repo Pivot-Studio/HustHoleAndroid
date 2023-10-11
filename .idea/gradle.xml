@@ -13,16 +13,11 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/modulesBase" />
-            <option value="$PROJECT_DIR$/modulesBase/dataBase" />
-            <option value="$PROJECT_DIR$/modulesBase/libBase" />
-            <option value="$PROJECT_DIR$/modulesBase/networkBase" />
             <option value="$PROJECT_DIR$/modulesBase/resBase" />
             <option value="$PROJECT_DIR$/modulesCore" />
             <option value="$PROJECT_DIR$/modulesCore/homeScreen" />
             <option value="$PROJECT_DIR$/modulesPublic" />
             <option value="$PROJECT_DIR$/modulesPublic/hole" />
-            <option value="$PROJECT_DIR$/modulesPublic/publishHole" />
-            <option value="$PROJECT_DIR$/modulesPublic/report" />
           </set>
         </option>
       </GradleProjectSettings>

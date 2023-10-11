@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
-import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.rebase.lib.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
-import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
-import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.refresh.StandardRefreshFooter
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentNoticeBinding
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity

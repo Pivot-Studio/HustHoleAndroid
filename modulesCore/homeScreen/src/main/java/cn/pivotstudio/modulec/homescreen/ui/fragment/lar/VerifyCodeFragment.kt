@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
-import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
+import cn.pivotstudio.moduleb.rebase.lib.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.rebase.lib.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentVerifyCodeBinding
 import cn.pivotstudio.modulec.homescreen.viewmodel.LARState

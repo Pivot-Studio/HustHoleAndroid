@@ -32,7 +32,7 @@
         tools:layout="@layout/fragment_inner_reply">
         <argument
             android:name="reply"
-            app:argType="cn.pivotstudio.husthole.moduleb.network.model.Reply" />
+            app:argType="cn.pivotstudio.moduleb.rebase.network.model.Reply" />
         <action
             android:id="@+id/action_innerReplyFragment_to_specificHoleFragment"
             app:destination="@id/specificHoleFragment"

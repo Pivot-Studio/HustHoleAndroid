@@ -9,7 +9,7 @@
             type="String" />
         <variable
             name="replyWrapper"
-            type="cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper" />
+            type="cn.pivotstudio.moduleb.rebase.network.model.ReplyWrapper" />
 
     </data>
 
