@@ -232,7 +232,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext
+            <cn.pivotstudio.moduleb.rebase.lib.base.custom_view.EmojiEdittext
                 android:id="@+id/et_reply_post"
                 hintText="@{viewModel.commentToReply}"
                 android:layout_width="@dimen/dp_223"

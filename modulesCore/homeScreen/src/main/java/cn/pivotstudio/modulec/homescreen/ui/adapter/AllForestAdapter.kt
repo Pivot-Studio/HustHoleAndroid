@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.moduleb.rebase.network.model.ForestBrief
 import cn.pivotstudio.modulec.homescreen.databinding.ItemAllForestBinding
 
 class AllForestAdapter(

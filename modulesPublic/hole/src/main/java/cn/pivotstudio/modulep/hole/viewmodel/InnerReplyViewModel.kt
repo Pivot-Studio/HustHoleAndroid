@@ -3,9 +3,9 @@ package cn.pivotstudio.modulep.hole.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.ApiStatus
-import cn.pivotstudio.husthole.moduleb.network.model.Reply
+import cn.pivotstudio.moduleb.rebase.network.ApiResult
+import cn.pivotstudio.moduleb.rebase.network.ApiStatus
+import cn.pivotstudio.moduleb.rebase.network.model.Reply
 import cn.pivotstudio.modulep.hole.repository.InnerReplyRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay

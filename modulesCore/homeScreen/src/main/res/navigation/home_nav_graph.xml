@@ -74,7 +74,7 @@
             app:destination="@id/forest_fragment" />
         <argument
             android:name="forestBrief"
-            app:argType="cn.pivotstudio.husthole.moduleb.network.model.ForestBrief" />
+            app:argType="cn.pivotstudio.moduleb.rebase.network.model.ForestBrief" />
     </fragment>
     <fragment
         android:id="@+id/holeFollowReplyFragment"

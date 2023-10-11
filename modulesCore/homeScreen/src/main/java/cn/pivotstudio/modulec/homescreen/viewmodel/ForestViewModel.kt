@@ -3,9 +3,9 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.ApiResult
+import cn.pivotstudio.moduleb.rebase.network.model.ForestBrief
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.repository.ForestRepository
 import cn.pivotstudio.modulec.homescreen.repository.LoadStatus
 import kotlinx.coroutines.delay

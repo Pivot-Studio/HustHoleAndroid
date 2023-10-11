@@ -9,9 +9,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.husthole.moduleb.network.model.AuditType
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.husthole.moduleb.network.model.Reply
+import cn.pivotstudio.moduleb.rebase.network.model.AuditType
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.model.Reply
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineHoleFollowBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineReplyBinding

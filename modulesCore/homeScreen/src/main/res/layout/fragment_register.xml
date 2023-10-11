@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dp_20"
             android:text="@string/login_id_3"
-            android:textColor="@color/Title_GrayScale_20"
+            android:textColor="@color/HH_OnSurface"
             android:textAppearance="@style/HustHoleTypography.Body2"
             app:layout_constraintBottom_toBottomOf="@+id/et_register_student_code"
             app:layout_constraintEnd_toEndOf="@+id/et_register_student_code"

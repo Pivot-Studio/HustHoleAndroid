@@ -7,8 +7,8 @@ import android.text.SpannableString
 import android.text.style.AbsoluteSizeSpan
 import android.text.Spanned
 import ru.noties.markwon.Markwon
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
-import cn.pivotstudio.moduleb.libbase.util.emoji.SpanStringUtil
+import cn.pivotstudio.moduleb.rebase.lib.base.app.BaseApplication
+import cn.pivotstudio.moduleb.rebase.lib.util.emoji.SpanStringUtil
 import androidx.databinding.ObservableField
 import android.text.style.ForegroundColorSpan
 import android.text.SpannableStringBuilder
@@ -22,9 +22,9 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
-import cn.pivotstudio.husthole.moduleb.network.model.Reply
-import cn.pivotstudio.husthole.moduleb.network.model.ReplyDto
-import cn.pivotstudio.moduleb.libbase.base.custom_view.EmojiEdittext
+import cn.pivotstudio.moduleb.rebase.network.model.Reply
+import cn.pivotstudio.moduleb.rebase.network.model.ReplyDto
+import cn.pivotstudio.moduleb.rebase.lib.base.custom_view.EmojiEdittext
 import cn.pivotstudio.modulep.hole.ui.fragment.InnerReplyFragmentDirections
 import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragmentDirections
 import java.util.regex.Pattern

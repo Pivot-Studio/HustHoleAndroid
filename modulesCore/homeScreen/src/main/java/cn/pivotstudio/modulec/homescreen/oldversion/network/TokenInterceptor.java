@@ -1,7 +1,7 @@
 package cn.pivotstudio.modulec.homescreen.oldversion.network;
 
 import android.content.Context;
-import cn.pivotstudio.moduleb.database.MMKVUtil;
+import cn.pivotstudio.moduleb.rebase.database.MMKVUtil;
 import java.io.IOException;
 import okhttp3.Interceptor;
 import okhttp3.Request;

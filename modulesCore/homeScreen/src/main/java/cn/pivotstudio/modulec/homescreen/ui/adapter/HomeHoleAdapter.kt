@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.husthole.moduleb.network.model.Hole
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.model.Hole
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.databinding.ItemHomepageholeBinding
 import cn.pivotstudio.modulec.homescreen.viewmodel.HomePageViewModel
 

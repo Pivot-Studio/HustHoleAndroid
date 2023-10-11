@@ -1,11 +1,11 @@
 package cn.pivotstudio.husthole
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
 import cn.pivotstudio.modulec.homescreen.ui.activity.LARActivity
 
-class StartActivity : BaseActivity() {
+class StartActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

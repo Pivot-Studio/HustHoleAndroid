@@ -9,9 +9,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
-import cn.pivotstudio.moduleb.database.MMKVUtil
-import cn.pivotstudio.moduleb.libbase.BuildConfig
-import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.rebase.database.MMKVUtil
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
+import cn.pivotstudio.moduleb.resbase.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityLarBinding
 import com.alibaba.android.arouter.facade.annotation.Route

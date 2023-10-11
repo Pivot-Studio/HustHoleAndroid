@@ -14,15 +14,15 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.lib.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
+import cn.pivotstudio.moduleb.rebase.lib.constant.ResultCodeConstant
 import cn.pivotstudio.modulec.homescreen.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
-import cn.pivotstudio.modulec.homescreen.custom_view.dialog.DeleteDialog
-import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshFooter
-import cn.pivotstudio.modulec.homescreen.custom_view.refresh.StandardRefreshHeader
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.dialog.DeleteDialog
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.refresh.StandardRefreshFooter
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentForestDetailBinding
 import cn.pivotstudio.modulec.homescreen.repository.ForestDetailHolesLoadStatus
 import cn.pivotstudio.modulec.homescreen.ui.adapter.ForestDetailAdapter
@@ -158,7 +158,7 @@ class ForestDetailFragment : BaseFragment() {
     // 点击具体小树林 FloatingActionButton 跳转到发布树洞并填充小树林信息
     fun navToPublishHoleFromDetailForest(forestId: String) {
         if (BuildConfig.isRelease) {
-            ARouter.getInstance().build("/publishHole/PublishHoleActivity")
+            ARouter.getInstance().build("/hole/PublishHoleActivity")
                 .withBundle(Constant.FROM_DETAIL_FOREST, Bundle().apply {
                     putString(Constant.FOREST_ID, forestId)
                     putString(Constant.FOREST_NAME, viewModel.forestBrief.forestName)
@@ -190,7 +190,7 @@ class ForestDetailFragment : BaseFragment() {
     // 举报树洞交给举报界面处理
     fun reportTheHole(hole: HoleV2) {
         hole.let {
-            ARouter.getInstance().build("/report/ReportActivity")
+            ARouter.getInstance().build("/hole/ReportActivity")
                 .withString(Constant.HOLE_ID, it.holeId)
                 .withString(Constant.ALIAS, "洞主")
                 .navigation()

@@ -3,13 +3,7 @@ package cn.pivotstudio.modulep.hole.model;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import cn.pivotstudio.modulep.hole.BR;
-/**
- * @classname:HoleResponse
- * @description:
- * @date:2022/5/8 13:36
- * @version:1.0
- * @author:
- */
+
 public class HoleResponse extends BaseObservable {
 
     private String content;

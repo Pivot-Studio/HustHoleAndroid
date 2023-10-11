@@ -14,9 +14,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.husthole.moduleb.network.model.Reply
-import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
+import cn.pivotstudio.moduleb.rebase.network.model.Reply
+import cn.pivotstudio.moduleb.rebase.network.model.ReplyWrapper
+import cn.pivotstudio.moduleb.rebase.lib.base.app.BaseApplication
 import cn.pivotstudio.modulep.hole.databinding.ItemFirstLevelReplyBinding
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
 import cn.pivotstudio.modulep.hole.ui.fragment.SpecificHoleFragment

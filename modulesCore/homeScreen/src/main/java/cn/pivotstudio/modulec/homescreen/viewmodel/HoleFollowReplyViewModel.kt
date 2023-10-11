@@ -3,23 +3,17 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.*
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.ApiStatus
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.husthole.moduleb.network.model.Reply
-import cn.pivotstudio.husthole.moduleb.network.util.NetworkConstant
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
+import cn.pivotstudio.moduleb.rebase.network.ApiResult
+import cn.pivotstudio.moduleb.rebase.network.ApiStatus
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.util.NetworkConstant
+import cn.pivotstudio.moduleb.rebase.lib.base.app.BaseApplication.Companion.context
+import cn.pivotstudio.moduleb.rebase.network.model.RequestBody
 import cn.pivotstudio.modulec.homescreen.repository.HoleFollowReplyRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-/**
- *@classname HoleFollowReplyViewModel
- * @description:
- * @date :2022/10/12 21:38
- * @version :1.0
- * @author
- */
+
 class HoleFollowReplyViewModel : ViewModel() {
     val repository = HoleFollowReplyRepository()
     val tip: MutableLiveData<String?> = repository.tip
@@ -32,12 +26,12 @@ class HoleFollowReplyViewModel : ViewModel() {
 
     private val _myHole = MutableStateFlow<List<HoleV2>>(mutableListOf())
     private val _myFollow = MutableStateFlow<List<HoleV2>>(mutableListOf())
-    private val _myReply = MutableStateFlow<List<Reply>>(mutableListOf())
+    private val _myReply = MutableStateFlow<List<RequestBody.Reply>>(mutableListOf())
     private val _sortMode = MutableLiveData(NetworkConstant.SortMode.LATEST)
 
     val myHole: StateFlow<List<HoleV2>> = _myHole
     val myFollow: StateFlow<List<HoleV2>> = _myFollow
-    val myReply: StateFlow<List<Reply>> = _myReply
+    val myReply: StateFlow<List<RequestBody.Reply>> = _myReply
     val sortMode: LiveData<String> = _sortMode
 
 

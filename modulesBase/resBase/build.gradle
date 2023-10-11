@@ -12,13 +12,21 @@ android {
         targetSdkVersion androidID.targetSdkVersion
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        buildConfigField("boolean", "isRelease", String.valueOf(isRelease))
+        javaCompileOptions {
+            annotationProcessorOptions {
+                //指定数据库schema导出的位置
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
-                'proguard-rules.pro'
+                    'proguard-rules.pro'
         }
         customDebugType {}
     }
@@ -27,8 +35,12 @@ android {
         compose true
     }
 
+    dataBinding {
+        enabled = true
+    }
+
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.0"
     }
 
     kotlinOptions {
@@ -42,15 +54,66 @@ android {
     namespace 'cn.pivotstudio.moduleb.resbase'
 }
 
+
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.4.1'
-    api "com.google.android.material:material:$material_version"
-    implementation "androidx.compose.runtime:runtime"
+    // AndroidX and Compose
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
+    implementation "androidx.activity:activity-ktx:$activity_version"
     implementation "androidx.compose.ui:ui"
+    implementation "androidx.compose.material3:material3:$material3_version"
+    implementation "androidx.compose.material:material"
     implementation "androidx.compose.foundation:foundation"
     implementation "androidx.compose.foundation:foundation-layout"
-    implementation "androidx.compose.material:material"
+    implementation "androidx.compose.runtime:runtime"
     implementation "androidx.compose.runtime:runtime-livedata"
     implementation "androidx.compose.ui:ui-tooling"
-    implementation "androidx.compose.material3:material3:$material3_version"
+
+    api "com.google.android.material:material:$material_version"
+
+    // Networking (OkHttp, Retrofit, Moshi)
+    api platform("com.squareup.okhttp3:okhttp-bom:${okhttp_version}")
+    api "com.squareup.okhttp3:okhttp"
+    api "com.squareup.okhttp3:logging-interceptor"
+    api "com.squareup.retrofit2:retrofit:${retrofit_version}"
+    api "com.squareup.retrofit2:converter-gson:${retrofit_version}"
+    api "com.squareup.retrofit2:adapter-rxjava2:${retrofit_rxjava_adapter_version}"
+    api "com.squareup.retrofit2:converter-moshi:${retrofit_version}"
+    api "com.squareup.moshi:moshi-kotlin:${moshi_version}"
+
+    // Room Database
+    implementation "androidx.room:room-runtime:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
+    // MMKV for efficient, fast I/O and storage
+    implementation "com.tencent:mmkv:$mmkv_version"
+
+    // JSON Parsing
+    implementation "com.google.code.gson:gson:$gson_version"
+
+    // Reactive Programming (RxJava2)
+    implementation "io.reactivex.rxjava2:rxandroid:${rxandroid_version}"
+    implementation "io.reactivex.rxjava2:rxjava:${rxjava2_version}"
+
+    // UI libraries and Utilities
+    api 'com.wang.avi:library:2.1.3'
+    api "com.scwang.smart:refresh-layout-kernel:$refresh_version"
+    api "com.scwang.smart:refresh-header-classics:$refresh_version"
+    api 'com.githang:status-bar-compat:0.7'
+    api "com.github.bumptech.glide:glide:$glide_version"
+
+    // WorkManager for background work
+    implementation "androidx.work:work-runtime:$work_version"
+    implementation "androidx.work:work-runtime-ktx:$work_version"
+
+    // ARouter for easier navigation
+    api "com.alibaba:arouter-api:$ARouter_version"
+
+    // Kotlin Coroutines
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+
+    // Testing
+    testImplementation "junit:junit:$junit_version"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
 }

@@ -13,7 +13,7 @@ import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentAllFrorestBinding
 import cn.pivotstudio.modulec.homescreen.ui.adapter.AllForestAdapter
 import cn.pivotstudio.modulec.homescreen.viewmodel.AllForestViewModel
-import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.rebase.lib.base.ui.fragment.BaseFragment
 import kotlinx.coroutines.flow.collectLatest
 
 class AllForestFragment : BaseFragment() {

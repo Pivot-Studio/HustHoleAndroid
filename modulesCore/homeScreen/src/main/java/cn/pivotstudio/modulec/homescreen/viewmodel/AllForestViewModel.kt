@@ -2,7 +2,7 @@ package cn.pivotstudio.modulec.homescreen.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.moduleb.rebase.network.model.ForestBrief
 import cn.pivotstudio.modulec.homescreen.repository.AllForestRepository
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

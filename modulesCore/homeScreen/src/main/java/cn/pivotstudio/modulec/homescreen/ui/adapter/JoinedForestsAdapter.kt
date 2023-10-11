@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import cn.pivotstudio.husthole.moduleb.network.model.ForestBrief
+import cn.pivotstudio.moduleb.rebase.network.model.ForestBrief
 import cn.pivotstudio.modulec.homescreen.databinding.ItemDiscoverMoreBinding
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestHeadBinding
 

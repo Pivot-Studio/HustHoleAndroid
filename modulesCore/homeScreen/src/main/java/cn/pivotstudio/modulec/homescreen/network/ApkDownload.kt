@@ -2,10 +2,8 @@ package cn.pivotstudio.modulec.homescreen.network
 
 import android.content.Context
 import androidx.work.WorkerParameters
-import cn.pivotstudio.husthole.moduleb.network.DownloadApi
-import cn.pivotstudio.moduleb.libbase.util.download.DownloadService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import cn.pivotstudio.moduleb.rebase.network.DownloadApi
+import cn.pivotstudio.moduleb.rebase.lib.util.download.DownloadService
 import okhttp3.ResponseBody
 import retrofit2.HttpException
 import java.io.File

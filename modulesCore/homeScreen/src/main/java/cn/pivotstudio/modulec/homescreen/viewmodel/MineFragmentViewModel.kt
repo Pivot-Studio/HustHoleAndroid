@@ -13,10 +13,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.ApiResult.*
-import cn.pivotstudio.husthole.moduleb.network.model.ProFile
-import cn.pivotstudio.husthole.moduleb.network.model.Type.Companion.fromValue
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication.Companion.context
+import cn.pivotstudio.moduleb.rebase.network.ApiResult.*
+import cn.pivotstudio.moduleb.rebase.network.model.ProFile
+import cn.pivotstudio.moduleb.rebase.network.model.Type.Companion.fromValue
+import cn.pivotstudio.moduleb.rebase.lib.base.app.BaseApplication.Companion.context
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.*
 import cn.pivotstudio.modulec.homescreen.repository.MineRepository
@@ -26,7 +26,6 @@ import com.google.android.material.chip.Chip
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 /**

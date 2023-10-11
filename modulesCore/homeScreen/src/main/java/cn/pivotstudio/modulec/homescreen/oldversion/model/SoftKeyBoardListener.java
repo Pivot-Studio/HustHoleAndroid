@@ -50,7 +50,6 @@ public class SoftKeyBoardListener {
                                 visibleHeight - rootViewVisibleHeight);
                         }
                         rootViewVisibleHeight = visibleHeight;
-                        return;
                     }
                 }
             });

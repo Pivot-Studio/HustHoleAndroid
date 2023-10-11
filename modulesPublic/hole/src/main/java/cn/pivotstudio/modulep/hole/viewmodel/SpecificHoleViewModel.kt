@@ -3,12 +3,12 @@ package cn.pivotstudio.modulep.hole.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.ApiStatus
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.husthole.moduleb.network.model.Reply
-import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
-import cn.pivotstudio.moduleb.libbase.constant.Constant
+import cn.pivotstudio.moduleb.rebase.network.ApiResult
+import cn.pivotstudio.moduleb.rebase.network.ApiStatus
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.model.Reply
+import cn.pivotstudio.moduleb.rebase.network.model.ReplyWrapper
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
 import cn.pivotstudio.modulep.hole.model.ReplyListResponse.ReplyResponse
 import cn.pivotstudio.modulep.hole.repository.HoleRepository
 import cn.pivotstudio.modulep.hole.repository.HoleRepository.Companion.LIST_SIZE
@@ -16,7 +16,6 @@ import com.alibaba.android.arouter.launcher.ARouter
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import java.io.IOException
 import java.util.*
 
 /**
@@ -56,7 +55,7 @@ class SpecificHoleViewModel(
     val descend = _descend.asStateFlow()
 
     fun reportTheHole() {
-        ARouter.getInstance().build("/report/ReportActivity")
+        ARouter.getInstance().build("/hole/ReportActivity")
             .withString(Constant.HOLE_ID, _hole.value?.holeId)
             .withString(Constant.ALIAS, "洞主")
             .navigation()

@@ -21,19 +21,19 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.husthole.moduleb.network.ApiResult
-import cn.pivotstudio.husthole.moduleb.network.ApiStatus
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
-import cn.pivotstudio.husthole.moduleb.network.model.Reply
-import cn.pivotstudio.husthole.moduleb.network.model.ReplyWrapper
-import cn.pivotstudio.moduleb.libbase.base.app.BaseApplication
-import cn.pivotstudio.moduleb.libbase.base.ui.fragment.BaseFragment
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
-import cn.pivotstudio.moduleb.libbase.util.ui.SoftKeyBoardUtil
+import cn.pivotstudio.moduleb.rebase.network.ApiResult
+import cn.pivotstudio.moduleb.rebase.network.ApiStatus
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.model.Reply
+import cn.pivotstudio.moduleb.rebase.network.model.ReplyWrapper
+import cn.pivotstudio.moduleb.rebase.lib.base.app.BaseApplication
+import cn.pivotstudio.moduleb.rebase.lib.base.ui.fragment.BaseFragment
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
+import cn.pivotstudio.moduleb.rebase.lib.util.ui.EditTextUtil
+import cn.pivotstudio.moduleb.rebase.lib.util.ui.SoftKeyBoardUtil
 import cn.pivotstudio.modulep.hole.R
-import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshFooter
-import cn.pivotstudio.modulep.hole.custom_view.refresh.StandardRefreshHeader
+import cn.pivotstudio.modulep.hole.ui.custom_view.refresh.StandardRefreshFooter
+import cn.pivotstudio.modulep.hole.ui.custom_view.refresh.StandardRefreshHeader
 import cn.pivotstudio.modulep.hole.databinding.FragmentSpecificHoleBinding
 import cn.pivotstudio.modulep.hole.model.ReplyListResponse
 import cn.pivotstudio.modulep.hole.ui.activity.HoleActivity
@@ -64,7 +64,7 @@ class SpecificHoleFragment : BaseFragment() {
     }
 
     private val report: (Reply?) -> Unit = {
-        ARouter.getInstance().build("/report/ReportActivity")
+        ARouter.getInstance().build("/hole/ReportActivity")
             .withString(Constant.HOLE_ID, it?.holeId)
             .withString(Constant.REPLY_ID, it?.replyId)
             .withString(Constant.ALIAS, it?.nickname)

@@ -28,15 +28,15 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import androidx.work.*
-import cn.pivotstudio.husthole.moduleb.network.model.VersionInfo
-import cn.pivotstudio.moduleb.database.MMKVUtil
-import cn.pivotstudio.moduleb.libbase.BuildConfig
-import cn.pivotstudio.moduleb.libbase.base.ui.activity.BaseActivity
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.constant.ResultCodeConstant
+import cn.pivotstudio.moduleb.rebase.network.model.VersionInfo
+import cn.pivotstudio.moduleb.rebase.database.MMKVUtil
+import cn.pivotstudio.moduleb.rebase.lib.base.ui.activity.BaseActivity
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
+import cn.pivotstudio.moduleb.rebase.lib.constant.ResultCodeConstant
+import cn.pivotstudio.moduleb.resbase.BuildConfig
 import cn.pivotstudio.modulec.homescreen.R
-import cn.pivotstudio.modulec.homescreen.custom_view.dialog.UpdateDialog
-import cn.pivotstudio.modulec.homescreen.custom_view.dialog.WelcomeDialog
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.dialog.UpdateDialog
+import cn.pivotstudio.modulec.homescreen.ui.custom_view.dialog.WelcomeDialog
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityHsHomescreenBinding
 import cn.pivotstudio.modulec.homescreen.network.ApkDownload
 import cn.pivotstudio.modulec.homescreen.ui.adapter.TAG
@@ -381,9 +381,10 @@ class HomeScreenActivity : BaseActivity() {
      */
     fun jumpToPublishHoleByARouter(v: View) {
         val id = v.id
+
         if (id == R.id.fab_homescreen_publishhole) {
             if (BuildConfig.isRelease) {
-                ARouter.getInstance().build("/publishHole/PublishHoleActivity")
+                ARouter.getInstance().build("/hole/PublishHoleActivity")
                     .navigation(this, ResultCodeConstant.PUBLISH_HOLE)
             } else {
                 showMsg("当前为模块测试阶段")

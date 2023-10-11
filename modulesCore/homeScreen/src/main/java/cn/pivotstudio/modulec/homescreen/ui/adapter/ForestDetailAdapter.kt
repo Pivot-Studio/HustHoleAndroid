@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import cn.pivotstudio.husthole.moduleb.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
 import cn.pivotstudio.modulec.homescreen.databinding.ItemForestDetailBinding
 import cn.pivotstudio.modulec.homescreen.ui.fragment.ForestDetailFragment
 

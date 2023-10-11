@@ -12,7 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
-import cn.pivotstudio.moduleb.libbase.util.ui.EditTextUtil
+import cn.pivotstudio.moduleb.rebase.lib.util.ui.EditTextUtil
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.FragmentSetPasswordBinding
 import cn.pivotstudio.modulec.homescreen.viewmodel.LARViewModel

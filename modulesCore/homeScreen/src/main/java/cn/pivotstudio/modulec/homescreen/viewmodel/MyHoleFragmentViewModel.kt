@@ -9,7 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.moduleb.libbase.constant.Constant.CONSTANT_STANDARD_LOAD_SIZE
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant.CONSTANT_STANDARD_LOAD_SIZE
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ItemMineReplyBinding
 import cn.pivotstudio.modulec.homescreen.oldversion.network.RequestInterface

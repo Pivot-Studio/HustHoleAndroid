@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import cn.pivotstudio.husthole.moduleb.network.*
-import cn.pivotstudio.husthole.moduleb.network.model.TokenResponse
-import cn.pivotstudio.moduleb.libbase.constant.Constant
-import cn.pivotstudio.moduleb.libbase.util.data.CheckStudentCodeUtil
+import cn.pivotstudio.moduleb.rebase.network.model.TokenResponse
+import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
+import cn.pivotstudio.moduleb.rebase.lib.util.data.CheckStudentCodeUtil
+import cn.pivotstudio.moduleb.rebase.network.ApiResult
 import cn.pivotstudio.modulec.homescreen.repository.LARRepo
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
