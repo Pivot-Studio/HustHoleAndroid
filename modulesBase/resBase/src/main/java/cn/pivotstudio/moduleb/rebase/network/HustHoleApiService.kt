@@ -158,7 +158,7 @@ interface HustHoleApiService {
         @Query("offset") offset: Int = 0,
         @Query("descend") descend: Boolean = true,
         @Query("limit") limit: Int = CONSTANT_STANDARD_LOAD_SIZE
-    ): List<RequestBody.Reply>
+    ): List<Reply>
     //========================================================================================================
 
     /** 单个小树林树洞列表 */

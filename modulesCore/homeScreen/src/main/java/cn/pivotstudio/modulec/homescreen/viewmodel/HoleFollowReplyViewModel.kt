@@ -8,6 +8,7 @@ import cn.pivotstudio.moduleb.rebase.network.ApiStatus
 import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
 import cn.pivotstudio.moduleb.rebase.network.util.NetworkConstant
 import cn.pivotstudio.moduleb.rebase.lib.base.app.BaseApplication.Companion.context
+import cn.pivotstudio.moduleb.rebase.network.model.Reply
 import cn.pivotstudio.moduleb.rebase.network.model.RequestBody
 import cn.pivotstudio.modulec.homescreen.repository.HoleFollowReplyRepository
 import kotlinx.coroutines.*
@@ -26,12 +27,12 @@ class HoleFollowReplyViewModel : ViewModel() {
 
     private val _myHole = MutableStateFlow<List<HoleV2>>(mutableListOf())
     private val _myFollow = MutableStateFlow<List<HoleV2>>(mutableListOf())
-    private val _myReply = MutableStateFlow<List<RequestBody.Reply>>(mutableListOf())
+    private val _myReply = MutableStateFlow<List<Reply>>(mutableListOf())
     private val _sortMode = MutableLiveData(NetworkConstant.SortMode.LATEST)
 
     val myHole: StateFlow<List<HoleV2>> = _myHole
     val myFollow: StateFlow<List<HoleV2>> = _myFollow
-    val myReply: StateFlow<List<RequestBody.Reply>> = _myReply
+    val myReply: StateFlow<List<Reply>> = _myReply
     val sortMode: LiveData<String> = _sortMode
 
 

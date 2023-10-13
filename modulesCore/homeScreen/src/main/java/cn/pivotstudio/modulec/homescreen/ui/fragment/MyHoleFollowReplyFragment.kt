@@ -63,13 +63,6 @@ class MyHoleFollowReplyFragment : BaseFragment() {
         initRefresh()
     }
 
-    override fun onResume() {
-        if((requireActivity() as HomeScreenActivity).supportActionBar != null){
-            (requireActivity() as HomeScreenActivity).supportActionBar!!.hide()
-        }
-        super.onResume()
-    }
-
     private fun initData() {
         type = requireArguments().getInt("type")
         when(type) {

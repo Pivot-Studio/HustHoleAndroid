@@ -65,7 +65,7 @@ fun setHintText(view: EmojiEdittext, reply: Reply?) {
 
 }
 
-@BindingAdapter("markDownContent", "currentId", "naviType",requireAll = true)
+@BindingAdapter("markDownContent", "currentId", "naviType", requireAll = true)
 fun setMDContent(
     view: TextView,
     content: String?,
@@ -93,12 +93,15 @@ fun setMDContent(
                 override fun onClick(view: View) {
                     val id = key.substring(1, length)
                     if (currentId == id) {
-                        Toast.makeText(view.context, "你已经在这个树洞了", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(view.context, "你已经在这个树洞了", Toast.LENGTH_SHORT)
+                            .show()
                     } else {
-                        val action: NavDirections = if(naviType == "HoleToHole") {
+                        val action: NavDirections = if (naviType == "HoleToHole") {
                             SpecificHoleFragmentDirections.actionSpecificHoleFragmentSelf(id)
-                        }else {
-                            InnerReplyFragmentDirections.actionInnerReplyFragmentToSpecificHoleFragment(id)
+                        } else {
+                            InnerReplyFragmentDirections.actionInnerReplyFragmentToSpecificHoleFragment(
+                                id
+                            )
                         }
                         view.findNavController().navigate(action)
                     }
@@ -190,13 +193,14 @@ fun setForestIcon(view: Button, forestName: String, role: String?) {
             view.visibility = View.VISIBLE
             view.text = "  $forestName   "
         }
+
         "counseling_center" -> if (forestName == "") {
             view.visibility = View.VISIBLE
             view.setPadding(15, 5, 6, 6)
             view.setTextColor(view.context.resources.getColor(R.color.red))
             view.text = " 校心理中心  "
             val homepressed =
-                view.context.resources.getDrawable(R.mipmap.counselingcenter, null)
+                view.context.resources.getDrawable(R.mipmap.forbid, null)
             homepressed.setBounds(0, 0, homepressed.minimumWidth, homepressed.minimumHeight)
             view.setCompoundDrawables(homepressed, null, null, null)
             view.setBackgroundResource(R.drawable.tag_red)
@@ -205,6 +209,7 @@ fun setForestIcon(view: Button, forestName: String, role: String?) {
             view.visibility = View.VISIBLE
             view.text = "  $forestName   "
         }
+
         else -> view.visibility = View.INVISIBLE
     }
 }
@@ -229,12 +234,14 @@ fun setCircleIcon(view: ImageView, forestName: String, role: String?) {
             view.visibility = View.VISIBLE
             view.setImageResource(R.drawable.ic_pivot_studio_16dp)
         }
+
         "counseling_center" -> if (forestName == "") {
             view.visibility = View.INVISIBLE
         } else {
             view.visibility = View.VISIBLE
-            view.setImageResource(R.mipmap.counselingcenter)
+            view.setImageResource(R.mipmap.forbid)
         }
+
         else -> view.visibility = View.INVISIBLE
     }
 }

@@ -6,13 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import cn.pivotstudio.moduleb.rebase.lib.base.ui.fragment.BaseFragment
 import cn.pivotstudio.modulec.homescreen.R
 import cn.pivotstudio.modulec.homescreen.databinding.ActivityHoleStarBinding
-import cn.pivotstudio.modulec.homescreen.ui.activity.HomeScreenActivity
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -28,15 +26,6 @@ class HoleFollowReplyFragment : BaseFragment() {
     lateinit var binding: ActivityHoleStarBinding
     private var listener: ModeListener? = null
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        if((requireActivity() as HomeScreenActivity).supportActionBar != null){
-            (requireActivity() as HomeScreenActivity).supportActionBar!!.hide()
-        }
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -47,9 +36,6 @@ class HoleFollowReplyFragment : BaseFragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.myImg.setOnClickListener{
-            this.findNavController().popBackStack()
-        }
 
         binding.vpHoleStar.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int = titleList.size

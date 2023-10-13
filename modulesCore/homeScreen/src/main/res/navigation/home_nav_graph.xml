@@ -79,7 +79,8 @@
     <fragment
         android:id="@+id/holeFollowReplyFragment"
         android:name="cn.pivotstudio.modulec.homescreen.ui.fragment.HoleFollowReplyFragment"
-        android:label="HoleFollowReplyFragment" >
+        android:label="@string/mine"
+        tools:layout="@layout/item_mine_hole_follow">
         <argument
             android:name="fragType"
             app:argType="integer" />

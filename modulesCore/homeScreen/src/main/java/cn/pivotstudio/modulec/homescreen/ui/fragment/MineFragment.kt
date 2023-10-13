@@ -99,7 +99,8 @@ class MineFragment : BaseFragment(), PicGenerator {
                 navigate()
             }
             myStar.setOnClickListener {
-                this@MineFragment.viewModel.currentProfile.value = MyHoleFragmentViewModel.GET_FOLLOW
+                this@MineFragment.viewModel.currentProfile.value =
+                    MyHoleFragmentViewModel.GET_FOLLOW
                 navigate()
             }
             myReply.setOnClickListener {
@@ -110,7 +111,7 @@ class MineFragment : BaseFragment(), PicGenerator {
 
         val adapter = MineOthersAdapter()
         viewModel.myNameList.observe(viewLifecycleOwner) { list -> adapter.submitList(list) }
-        adapter.setOnItemClickListener(object :MineOthersAdapter.OnItemClickListener {
+        adapter.setOnItemClickListener(object : MineOthersAdapter.OnItemClickListener {
             override fun onClick(view: View, position: Int, nameID: Int) {
                 if (viewModel.optSwitch[position] == true) {
                     when (position) {
@@ -121,20 +122,25 @@ class MineFragment : BaseFragment(), PicGenerator {
                                 )
                             view.findNavController().navigate(action)
                         }
+
                         MineFragmentViewModel.SHARE -> {
                             initShareCardView()
                         }
+
                         MineFragmentViewModel.LOGOUT -> {
                             initLogOutDialog()
                         }
+
                         else -> {
                             val action =
-                                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(position)
+                                MineFragmentDirections.actionMineFragmentToItemDetailFragment2(
+                                    position
+                                )
                             this@MineFragment.findNavController().navigate(action)
                         }
                     }
                 } else {
-                    Toast.makeText(context,"功能正在维护！", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "功能正在维护！", Toast.LENGTH_SHORT).show()
                 }
             }
         })
@@ -145,8 +151,8 @@ class MineFragment : BaseFragment(), PicGenerator {
     }
 
     override fun onResume() {
-        viewModel.getMineData()
         super.onResume()
+        viewModel.getMineData()
     }
 
     private fun navigate() {
@@ -163,14 +169,15 @@ class MineFragment : BaseFragment(), PicGenerator {
     }   //取消暗背景
 
     private fun initShareCardView() {
-        AsyncLayoutInflater(context).inflate(R.layout.app_share_card,null
+        AsyncLayoutInflater(context).inflate(
+            R.layout.app_share_card, null
         ) { view, _, _ ->
             val ppwShare = PopupWindow(view)
             val shareCardView = View.inflate(context, R.layout.ppw_share, null)
             val shareCard = shareCardView.findViewById<LinearLayout>(R.id.share_card)
             val cancel = shareCardView.findViewById<TextView>(R.id.share_cancel_button)
             val mainContent = view.findViewById<ScrollView>(R.id.main_content)
-            val code =  view.findViewById<ImageView>(R.id.QR_code)
+            val code = view.findViewById<ImageView>(R.id.QR_code)
             val ppwFunc = PopupWindow(shareCardView)
 
             val window = this.requireActivity().window
@@ -248,6 +255,7 @@ class MineFragment : BaseFragment(), PicGenerator {
         }
         dialog.show()
     }
+
     class SpaceItemDecoration(
         private val leftRight: Int,
         private val topBottom: Int
@@ -264,7 +272,7 @@ class MineFragment : BaseFragment(), PicGenerator {
                 if (parent.getChildAdapterPosition(view) == layoutManager.itemCount - 1) {
                     outRect.bottom = topBottom
                 }
-                if(parent.getChildAdapterPosition(view) == 4 || parent.getChildAdapterPosition(view) == 7) {
+                if (parent.getChildAdapterPosition(view) == 4 || parent.getChildAdapterPosition(view) == 7) {
                     outRect.top = topBottom + 10
                 } else {
                     outRect.top = topBottom
@@ -287,7 +295,7 @@ class MineFragment : BaseFragment(), PicGenerator {
         val bitmap: Bitmap?
         try {
             bitmap = Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888)
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(context, "图片生成失败！", Toast.LENGTH_SHORT).show()
             return null
@@ -298,10 +306,10 @@ class MineFragment : BaseFragment(), PicGenerator {
     }
 
     override suspend fun save(photo: Bitmap, fileName: String) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val imageSaveFilePath = Environment.DIRECTORY_DCIM + File.separator + "hustHole"
             val file = File(imageSaveFilePath)
-            if(!file.exists()) {
+            if (!file.exists()) {
                 file.mkdirs()
             }
             val contentValues = ContentValues()
@@ -313,20 +321,23 @@ class MineFragment : BaseFragment(), PicGenerator {
             var fos: OutputStream? = null
             val localContentResolver = context.contentResolver
             try {
-                uri = localContentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+                uri = localContentResolver.insert(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    contentValues
+                )
                 fos = uri?.let { localContentResolver.openOutputStream(it) }
 
                 photo.compress(Bitmap.CompressFormat.JPEG, 100, fos)
                 fos?.flush()
                 fos?.close()
                 Toast.makeText(context, "保存成功！", Toast.LENGTH_SHORT).show()
-            }catch (e: IOException) {
+            } catch (e: IOException) {
                 e.printStackTrace()
                 uri?.let {
                     localContentResolver.delete(it, null, null)
                 }
                 Toast.makeText(context, "文件保存失败！", Toast.LENGTH_SHORT).show()
-            }finally {
+            } finally {
                 photo.recycle()
                 try {
                     fos?.let {
@@ -336,8 +347,9 @@ class MineFragment : BaseFragment(), PicGenerator {
                     e.printStackTrace()
                 }
             }
-        }else {
-            val path = Environment.getExternalStorageDirectory().absolutePath + File.separator + "hustHole"
+        } else {
+            val path =
+                Environment.getExternalStorageDirectory().absolutePath + File.separator + "hustHole"
             // 创建文件夹
             val file = File(path, fileName)
             try {

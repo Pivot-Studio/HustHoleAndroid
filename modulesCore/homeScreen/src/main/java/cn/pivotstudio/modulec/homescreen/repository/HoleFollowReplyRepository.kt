@@ -5,6 +5,7 @@ import cn.pivotstudio.moduleb.rebase.network.ApiResult
 import cn.pivotstudio.moduleb.rebase.network.HustHoleApi
 import cn.pivotstudio.moduleb.rebase.network.HustHoleApiService
 import cn.pivotstudio.moduleb.rebase.network.model.HoleV2
+import cn.pivotstudio.moduleb.rebase.network.model.Reply
 import cn.pivotstudio.moduleb.rebase.network.model.RequestBody
 
 import cn.pivotstudio.moduleb.rebase.network.util.DateUtil
@@ -53,7 +54,7 @@ class HoleFollowReplyRepository {
         it.printStackTrace()
     }
 
-    fun getMyReply(): Flow<List<RequestBody.Reply>> = flow {
+    fun getMyReply(): Flow<List<Reply>> = flow {
         emit(
             hustHoleApiService.getMyReply(refreshTimestamp())
         )
@@ -88,7 +89,7 @@ class HoleFollowReplyRepository {
         e.printStackTrace()
     }
 
-    fun loadMoreReply(): Flow<List<RequestBody.Reply>> = flow {
+    fun loadMoreReply(): Flow<List<Reply>> = flow {
         replyOffset += CONSTANT_STANDARD_LOAD_SIZE
         emit(
             hustHoleApiService.getMyReply(

@@ -10,11 +10,10 @@
         <item name="colorSecondary">@color/HH_BandColor_3</item>
         <item name="colorSecondaryVariant">@color/HH_BandColor_5</item>
         <item name="colorOnSecondary">@color/HH_OnSurface</item>
+        <item name="colorAccent">@color/HH_BandColor_1</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-
-<!--        <item name="android:forceDarkAllowed" tools:targetApi="q">true</item>-->
-        <!--        <item name="colorOnSecondary">@color/white</item>-->
+        <item name="android:navigationBarColor">@color/translucent</item>
     </style>
 
     <style name="TabRadioButton_center">

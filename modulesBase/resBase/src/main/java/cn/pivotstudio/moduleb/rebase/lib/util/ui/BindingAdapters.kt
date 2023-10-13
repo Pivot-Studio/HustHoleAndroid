@@ -104,7 +104,7 @@ fun onForestIconShow(view: Button, forestName: String, role: String?) {
             view.setTextColor(view.context.resources.getColor(R.color.red))
             view.text = " 校心理中心  "
             val homepressed =
-                view.context.resources.getDrawable(R.mipmap.counselingcenter, null)
+                view.context.resources.getDrawable(R.mipmap.forbid, null)
             homepressed.setBounds(0, 0, homepressed.minimumWidth, homepressed.minimumHeight)
             view.setCompoundDrawables(homepressed, null, null, null)
             view.setBackgroundResource(R.drawable.tag_red)
@@ -141,7 +141,7 @@ fun onPsIconShow(view: ImageView, forestName: String, role: String?) {
             view.visibility = View.INVISIBLE
         } else {
             view.visibility = View.VISIBLE
-            view.setImageResource(R.mipmap.counselingcenter)
+            view.setImageResource(R.mipmap.forbid)
         }
         else -> view.visibility = View.GONE
     }

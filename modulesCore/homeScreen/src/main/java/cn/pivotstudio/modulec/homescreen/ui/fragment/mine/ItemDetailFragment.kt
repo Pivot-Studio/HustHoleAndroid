@@ -178,10 +178,7 @@ class ItemDetailFragment : Fragment() {
             is ActivityHoleStarBinding -> {
                 val frag = this
                 (binding as ActivityHoleStarBinding).apply {
-                    myImg.setOnClickListener {
-                        hideSoftKeyboard(requireContext(), vpHoleStar)
-                        view.findNavController().popBackStack()
-                    }
+
                     vpHoleStar.adapter = object : FragmentStateAdapter(frag) {
                         override fun getItemCount(): Int =
                             viewModel.evalAndAdvFragmentList.value!!.size
