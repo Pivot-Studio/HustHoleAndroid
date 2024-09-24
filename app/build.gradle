@@ -55,8 +55,8 @@ dependencies {
     implementation project(':modulesCore:homeScreen')
     implementation project(':modulesPublic:hole')
 
-    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.3' //核心必须依赖
-    implementation 'com.scwang.smart:refresh-header-classics:2.0.3'
+    implementation 'io.github.scwang90:refresh-layout-kernel:2.1.0'
+    implementation 'io.github.scwang90:refresh-header-classics:2.1.0'
 
     kapt 'com.github.bumptech.glide:compiler:4.13.2'
 

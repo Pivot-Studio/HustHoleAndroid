@@ -25,11 +25,9 @@ import cn.pivotstudio.modulep.hole.R
 import cn.pivotstudio.modulep.hole.ui.custom_view.ForestsPopupWindow
 import cn.pivotstudio.modulep.hole.databinding.ActivityPublishholeBinding
 import cn.pivotstudio.modulep.hole.viewmodel.PublishHoleViewModel
-
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.githang.statusbar.StatusBarCompat
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -77,12 +75,6 @@ class PublishHoleActivity : BaseActivity() {
         binding.titlebargreenAVLoadingIndicatorView.visibility = View.GONE
 
         supportActionBar?.hide()
-
-        StatusBarCompat.setStatusBarColor(
-            this,
-            resources.getColor(R.color.HH_BandColor_1, null),
-            true
-        )
 
         EditTextUtil.ButtonReaction(
             binding.etPublishhole,

@@ -21,7 +21,6 @@ import cn.pivotstudio.modulep.hole.databinding.ActivityHoleBinding
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.githang.statusbar.StatusBarCompat
 
 @Route(path = "/hole/HoleActivity")
 class HoleActivity : BaseActivity() {
@@ -49,7 +48,6 @@ class HoleActivity : BaseActivity() {
 
 
     private fun initView() {
-        StatusBarCompat.setStatusBarColor(this, resources.getColor(R.color.HH_BandColor_1), true)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hole)
 
         setSupportActionBar(binding.topAppbar)

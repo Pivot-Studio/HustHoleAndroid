@@ -78,8 +78,8 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0' //圆形图片
 
     //老版本问题
-    implementation 'com.cdh.okone:okone:1.0.0' //messagefragment使用
-    implementation 'com.lovedise:permissiongen:0.0.6' //DetailUpdateActivity使用
+//    implementation 'com.cdh.okone:okone:1.0.0' //messagefragment使用
+//    implementation 'com.lovedise:permissiongen:0.0.6' //DetailUpdateActivity使用
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     implementation 'com.github.donkingliang:LabelsView:1.6.5' //SetScreenKeyWordActivity使用
@@ -98,7 +98,7 @@ dependencies {
     //QRCode
     implementation 'com.google.zxing:core:3.3.0'
     //TencentQQ
-    implementation 'com.tencent.tauth:qqopensdk:3.52.0'
+    implementation 'com.tencent.tauth:qqopensdk:9.9.5.4.2'
     //PermissionsDispatcher框架
     implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.9.2"
     kapt "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.9.2"

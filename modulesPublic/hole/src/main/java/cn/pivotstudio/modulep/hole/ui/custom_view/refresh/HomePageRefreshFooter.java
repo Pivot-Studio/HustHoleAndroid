@@ -159,6 +159,11 @@ public class HomePageRefreshFooter extends LinearLayout implements RefreshFooter
     public boolean isSupportHorizontalDrag() {
         return false;
     }
+
+    @Override
+    public boolean autoOpen(int duration, float dragRate, boolean animationOnly) {
+        return false;
+    }
 }
 
 

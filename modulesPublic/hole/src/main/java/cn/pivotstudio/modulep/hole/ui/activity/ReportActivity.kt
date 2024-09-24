@@ -19,7 +19,6 @@ import cn.pivotstudio.modulep.hole.viewmodel.ReportViewModel
 import com.alibaba.android.arouter.facade.annotation.Autowired
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
-import com.githang.statusbar.StatusBarCompat
 
 @Route(path = "/hole/ReportActivity")
 class ReportActivity : BaseActivity() {
@@ -49,11 +48,6 @@ class ReportActivity : BaseActivity() {
     }
 
     private fun initView() {
-        StatusBarCompat.setStatusBarColor(
-            this,
-            resources.getColor(R.color.HH_BandColor_1, null),
-            true
-        )
         binding = DataBindingUtil.setContentView(this, R.layout.activity_report)
         binding.composeReportScreen.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
