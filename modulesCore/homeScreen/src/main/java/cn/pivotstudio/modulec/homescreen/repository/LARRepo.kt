@@ -5,6 +5,7 @@ import cn.pivotstudio.moduleb.rebase.network.HustHoleApi
 import cn.pivotstudio.moduleb.rebase.network.HustHoleApiService
 import cn.pivotstudio.moduleb.rebase.network.model.RequestBody
 import cn.pivotstudio.moduleb.rebase.lib.constant.Constant
+import cn.pivotstudio.moduleb.rebase.network.model.TokenResponse
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
@@ -36,11 +37,11 @@ class LARRepo(
     }.flowOn(dispatcher)
 
     suspend fun login(id: String, password: String): Flow<ApiResult> = flow {
-        emit(ApiResult.Loading())
-        val response = HustHoleApi.retrofitService.signIn(
-            RequestBody.User(email = id + Constant.EMAIL_SUFFIX, password = password)
-        )
-        checkResponse(response, this)
+        emit(ApiResult.Success(data = TokenResponse(token = "服务器停止维护\nThe server is out of maintenance.")))
+//        val response = HustHoleApi.retrofitService.signIn(
+//            RequestBody.User(email = id + Constant.EMAIL_SUFFIX, password = password)
+//        )
+//        checkResponse(response, this)
     }.flowOn(dispatcher)
 
     suspend fun setNewPassword(

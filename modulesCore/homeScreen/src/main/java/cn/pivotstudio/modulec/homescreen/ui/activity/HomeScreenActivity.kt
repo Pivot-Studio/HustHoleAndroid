@@ -76,8 +76,8 @@ class HomeScreenActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_hs_homescreen)
-        registerInstallBroadcast()
-        checkVersion()
+//        registerInstallBroadcast()
+//        checkVersion()
         initView()
     }
 

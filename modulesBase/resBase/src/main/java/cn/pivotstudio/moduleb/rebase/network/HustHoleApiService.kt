@@ -57,7 +57,7 @@ object HustHoleApi {
         val okhttpClient = OkHttpClient.Builder()
             .connectTimeout(3, TimeUnit.SECONDS)
             .addInterceptor(requestInterceptor)
-            .addInterceptor(tokenInterceptor)
+//            .addInterceptor(tokenInterceptor)
             .addInterceptor(httpLoggingInterceptor)
             .build()
 
