@@ -29,6 +29,9 @@ https://github.com/outaink/husthole-backup
 - Kotlin
 - Java
 
+## 技术文档
+[✨HustHoleAndroid 新人入门文档](./doc/✨HustHoleAndroid%20新人入门文档✨.pdf)  
+
 ## 技术框架
 - RecyclerView: [官方文档](https://developer.android.com/guide/topics/ui/layout/recyclerview)
 - ViewPager2 + Tablayout: [官方文档](https://developer.android.com/guide/navigation/navigation-swipe-view-2)
