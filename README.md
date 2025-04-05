@@ -3,20 +3,17 @@
 
 曾经的帖子存档，可以尝试复现后端
 https://github.com/outaink/husthole-backup
+## 📱 截图展示
 
-## 📱截图
-![image](./doc/1037封面.jpg)
-![image](./doc/login.jpg)
-![image](./doc/homepage.png)
-![image](./doc/forest.png)
-![image](./doc/setup.png)
+### ☀️ 白天模式
+| 封面 | 登录 | 主页 | 森林 | 设置 |
+|------|------|------|------|------|
+| ![封面](./doc/1037封面.jpg) | ![登录](./doc/login.jpg) | ![主页](./doc/homepage.jpg) | ![森林](./doc/forest.jpg) | ![设置](./doc/setup.jpg) |
 
-🌛黑暗模式支持
-![image](./doc/1037封面-night.jpg)
-![image](./doc/login-night.jpg)
-![image](./doc/homepage-night.png)
-![image](./doc/forest-night.png)
-![image](./doc/setup-night.png)
+### 🌛 黑暗模式
+| 封面 | 登录 | 主页 | 森林 | 设置 |
+|------|------|------|------|------|
+| ![封面-黑暗](./doc/1037封面黑.jpg) | ![登录-黑暗](./doc/login-night.jpg) | ![主页-黑暗](./doc/homepage-night.jpg) | ![森林-黑暗](./doc/forest-night.jpg) | ![设置-黑暗](./doc/setup-night.jpg) |
 
 
 ## TODO LIST
