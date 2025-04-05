@@ -10,7 +10,7 @@ buildscript {
         coroutines = '1.6.4'
         gson_version = '2.9.0'
         junit_version = "4.13.2"
-        kotlin_version = '1.9.0'
+        kotlin_version = '1.9.25'
         lifecycle_version = '2.5.1'
         material3_version = '1.1.2'
         material_version = '1.6.1'
@@ -38,14 +38,12 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.1'
-        classpath("com.android.tools:r8:8.2.26")
+        classpath 'com.android.tools.build:gradle:8.1.4'
+        classpath("com.android.tools:r8:8.7.18")
         classpath 'com.google.dagger:hilt-android-gradle-plugin:2.42'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
         classpath "com.neenbedankt.gradle.plugins:android-apt:1.8"
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
     }
 }
 

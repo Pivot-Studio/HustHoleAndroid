@@ -4,6 +4,21 @@
 曾经的帖子存档，可以尝试复现后端
 https://github.com/outaink/husthole-backup
 
+## 📱截图
+![image](./doc/1037封面.jpg)
+![image](./doc/login.jpg)
+![image](./doc/homepage.png)
+![image](./doc/forest.png)
+![image](./doc/setup.png)
+
+🌛黑暗模式支持
+![image](./doc/1037封面-night.jpg)
+![image](./doc/login-night.jpg)
+![image](./doc/homepage-night.png)
+![image](./doc/forest-night.png)
+![image](./doc/setup-night.png)
+
+
 ## TODO LIST
 - [ ] ARouter（停止维护）迁移为Navigation
 - [ ] 100% Kotlin
